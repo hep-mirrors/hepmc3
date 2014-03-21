@@ -2,5 +2,5 @@ LD       = g++
 CC       = g++
 LDFLAGS  =
 SOFLAGS  = -shared
-CFLAGS   = -O2 -fPIC -Wall
+CFLAGS   = -g3 -O2 -fPIC -Wall
 

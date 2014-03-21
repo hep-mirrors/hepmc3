@@ -4,7 +4,7 @@ HEPMC3INC      = -I$(HEPMC3LOCATION)/include
 HEPMC3LIBS     = -L$(HEPMC3LOCATION)/lib -lHepMC
 
 UNIT_TESTS = catch/main.exe
-TESTS      = basic_tree.exe
+TESTS      = basic_tree.exe HepMC2_to_3_converter_test.exe
 
 all: $(TESTS) $(UNIT_TESTS)
 
