@@ -17,16 +17,12 @@ public:
     GenVertex();
     ~GenVertex();
 
-    void print( std::ostream& ostr = std::cout, int format = 0 ) const;
 
 //
 // Functions
 //
 public:
-    int barcode()                        const { return m_barcode; }
-
-    vector<GenParticle*>& particles_in()       { return m_particles_in; }
-    vector<GenParticle*>& particles_out()      { return m_particles_out; }
+    void print( std::ostream& ostr = std::cout, int format = 0 ) const;
 
     void add_particle_in (GenParticle *p);
     void add_particle_out(GenParticle *p);
@@ -35,7 +31,11 @@ public:
 // Accessors
 //
 public:
+    int barcode()                        const { return m_barcode; }
     void set_barcode(int barcode)              { m_barcode = barcode; }
+
+    vector<GenParticle*>& particles_in()       { return m_particles_in; }
+    vector<GenParticle*>& particles_out()      { return m_particles_out; }
 
 //
 // Fields

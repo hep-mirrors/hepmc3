@@ -24,39 +24,38 @@ void GenVertex::print( std::ostream& ostr, int format ) const {
         // find the current stream state
         std::ios_base::fmtflags orig = ostr.flags();
         std::streamsize prec = ostr.precision();
-        ostr << "GenVertex:";
+        ostr << "Vtx: ";
         ostr.width(9);
         ostr << barcode()
-             << " (X,cT):0" << endl;
+             << "  (X,cT): 0" << endl;
 
         // print out all the incoming, then outgoing particles
         for(unsigned int i=0;i<m_particles_in.size();++i) {
-            if(i==0) {
-                ostr << " I ";
-                ostr.width(2);
-                ostr << m_particles_in.size() <<": ";
-            }
-            else {
-                ostr << "       ";
-            }
+            ostr << "  I ";
             m_particles_in[i]->print(ostr,1);
         }
 
-        for(unsigned int i=0;i<m_particles_out.size();++i) {
-            if(i==0) {
-                ostr << " O ";
-                ostr.width(2);
-                ostr << m_particles_out.size() <<": ";
-            }
-            else ostr << "       ";
-            m_particles_out[i]->print(ostr,1);
-        }
         // restore the stream state
         ostr.flags(orig);
         ostr.precision(prec);
     }
     else if( format == 2 ) {
-        ostr<<"GenVertex: File IO format not ready"<<endl;
+        unsigned int in_size = m_particles_in.size();
+
+        ostr<<"V ";
+        ostr<<m_barcode<<" ";
+
+        ostr<<"[";
+        if(in_size) {
+            for( unsigned int i=0; i<in_size-1; ++i ) {
+                ostr<<m_particles_in[i]->barcode()<<",";
+            }
+            ostr<<m_particles_in.back()->barcode();
+        }
+        ostr<<"] ";
+
+        ostr<<"@ 0 0 0 0";
+        ostr<<endl;
     }
     else if( format == 3 ) {
         ostr<<"GenVertex: ROOT streamer format not ready"<<endl;
@@ -64,12 +63,11 @@ void GenVertex::print( std::ostream& ostr, int format ) const {
 }
 
 void GenVertex::add_particle_in(GenParticle *p) {
-    p->set_production_vertex_barcode(m_barcode);
     m_particles_in.push_back(p);
 }
 
 void GenVertex::add_particle_out(GenParticle *p) {
-    p->set_end_vertex_barcode(m_barcode);
+    p->set_production_vertex_barcode(m_barcode);
     m_particles_out.push_back(p);
 }
 

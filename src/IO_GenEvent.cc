@@ -14,7 +14,7 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
 	    cout << "err3" << endl; // :TODO: error handling
 	    return;
 	}
-    cout << "Write OK." << endl;
+    evt->print(m_file,2);
 }
 
 bool IO_GenEvent::fill_next_event(GenEvent *evt) {

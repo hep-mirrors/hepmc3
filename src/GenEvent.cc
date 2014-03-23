@@ -41,19 +41,53 @@ void GenEvent::print( ostream& ostr, int format ) const {
         ostr << "                                    GenParticle Legend" << endl;
         ostr << "        Barcode   PDG ID      "
            << "( Px,       Py,       Pz,     E )"
-           << " Stat  DecayVtx" << endl;
+           << " Stat  Prod V|P" << endl;
         ostr << "________________________________________________________________________________" << endl;
 
-        // Print all Vertices
-        for(unsigned int i=0;i<m_vertices.size();++i) m_vertices[i]->print(ostr,1);
+        // Print all particles and vertices in the event
+        // NOTE: assumption is made that barcodes of vertices and particles
+        //       are in topological order!
+        int highest_vertex_already_printed = 0;
+        for( unsigned int i=0; i<m_particles.size(); ++i) {
+            int production_vertex = m_particles[i]->production_vertex_barcode();
+            if( production_vertex < highest_vertex_already_printed ) {
+                highest_vertex_already_printed = production_vertex;
+                for( unsigned int j=0; j<m_vertices.size(); ++j ) {
+                    if( m_vertices[j]->barcode() == production_vertex ) {
+                        m_vertices[j]->print(ostr,1);
+                        break;
+                    }
+                }
+            }
+            ostr<<"    ";
+            m_particles[i]->print(ostr,1);
+        }
 
         ostr << "________________________________________________________________________________" << endl;
     }
     else if( format == 2 ) {
-        ostr<<"GenEvent: File IO format not ready"<<endl;
+        ostr << "E " << m_event_number << " " << m_vertices.size() << " " << m_particles.size() << endl;
+
+        // Print all particles and vertices in the event
+        // NOTE: assumption is made that barcodes of vertices and particles
+        //       are in topological order!
+        int highest_vertex_already_printed = 0;
+        for( unsigned int i=0; i<m_particles.size(); ++i) {
+            int production_vertex = m_particles[i]->production_vertex_barcode();
+            if( production_vertex < highest_vertex_already_printed ) {
+                highest_vertex_already_printed = production_vertex;
+                for( unsigned int j=0; j<m_vertices.size(); ++j ) {
+                    if( m_vertices[j]->barcode() == production_vertex ) {
+                        m_vertices[j]->print(ostr,2);
+                        break;
+                    }
+                }
+            }
+            m_particles[i]->print(ostr,2);
+        }
     }
     else if( format == 3 ) {
-        ostr<<"GenEvent: ROOT streamer format not ready"<<endl;
+        ostr << "GenEvent: ROOT streamer format not ready" << endl;
     }
 }
 

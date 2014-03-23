@@ -34,14 +34,13 @@ void GenParticle::print(ostream& ostr, int format) const {
     if( format == 0 ) {
         ostr << "GenParticle: "
              << barcode() << " ID:" << pdg_id()
-             << " (P,E)=" << momentum().px() << "," << momentum().py()
-             << "," << momentum().pz() << "," << momentum().e()
+             << " (P,E)=" << m_momentum.px() << "," << m_momentum.py()
+             << "," << m_momentum.pz() << "," << m_momentum.e()
              << " Stat:" << status()
              << " PV:" << production_vertex_barcode()
              << " EV:" << end_vertex_barcode() << endl;
     }
     else if( format == 1 ) {
-        // find the current stream state
         std::ios_base::fmtflags orig = ostr.flags();
         std::streamsize prec = ostr.precision();
         ostr << " ";
@@ -53,43 +52,40 @@ void GenParticle::print(ostream& ostr, int format) const {
         ostr.precision(2);
         ostr.setf(std::ios::scientific, std::ios::floatfield);
         ostr.setf(std::ios_base::showpos);
-        ostr << momentum().px() << ",";
+        ostr << m_momentum.px() << ",";
         ostr.width(9);
-        ostr << momentum().py() << ",";
+        ostr << m_momentum.py() << ",";
         ostr.width(9);
-        ostr << momentum().pz() << ",";
+        ostr << m_momentum.pz() << ",";
         ostr.width(9);
-        ostr << momentum().e() << " ";
+        ostr << m_momentum.e() << " ";
         ostr.setf(std::ios::fmtflags(0), std::ios::floatfield);
         ostr.unsetf(std::ios_base::showpos);
-        if ( end_vertex_barcode()) {
-            ostr.width(3);
-            ostr << status() << " ";
+        ostr.width(3);
+        ostr << status() << " ";
+
+        if( production_vertex_barcode() ) {
             ostr.width(9);
-            ostr << end_vertex_barcode();
+            ostr << production_vertex_barcode();
         }
-        else if ( !end_vertex_barcode() ) {
-            // There is no valid end_vertex
-            // For consistency across different compilers, do not print anything
-            ostr.width(3);
-            ostr << status();
-        }
+
         ostr << endl;
-        // restore the stream state
+
         ostr.flags(orig);
         ostr.precision(prec);
     }
     else if( format == 2 ) {
         std::ios_base::fmtflags orig = ostr.flags();
         std::streamsize prec = ostr.precision();
-
-        ostr<<barcode()<<" "<<pdg_id()<<" ";
         ostr.setf(std::ios::scientific, std::ios::floatfield);
-        ostr.precision(16);
-        ostr<<momentum().px()<<" "<<momentum().py()<<" "<<momentum().pz()<<" "<<momentum().e()<<" ";
+        ostr.precision(4); // :TODO: set precision option
+
+        ostr<<"P "<<m_barcode<<" "<<m_production_vertex<<" "<<m_pdgid<<" ";
+        ostr<<m_momentum.px()<<" "<<m_momentum.py()<<" "<<m_momentum.pz()<<" "<<m_momentum.e()<<" ";
         ostr<<generated_mass()<<" ";
-        ostr<<production_vertex_barcode()<<" "<<end_vertex_barcode()<<" ";
-        ostr<<status()<<endl;
+        ostr<<m_status;
+        ostr<<endl;
+
         ostr.flags(orig);
         ostr.precision(prec);
     }

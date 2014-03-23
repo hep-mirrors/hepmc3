@@ -13,25 +13,27 @@ using std::cout;
 using std::endl;
 
 int main() {
-    IO_HepMC2_adapter  adapter("benchmark_files/tau.W.Photos.hepmc");
+    IO_HepMC2_adapter  adapter("../../HepMC3-benchmark-files/tau.Z.Photos.hepmc");
     IO_GenEvent        output_file("test.hepmc",std::ios::out);
     int events_parsed = 0;
-    
+
     while(!adapter.rdstate()) {
         if(events_parsed%100==0) cout<<"Events parsed: "<<events_parsed<<endl;
-        
+
         GenEvent *evt = new GenEvent();
-        
+
         adapter.fill_next_event(evt);
-        //output_file.write_event(evt);
-        if(events_parsed<5) evt->print();
+        output_file.write_event(evt);
+        if(events_parsed==0) {
+            evt->print();
+            evt->print(cout,2);
+        }
 
         delete evt;
-        
+
         events_parsed++;
-        
     }
-    
+
     adapter.close();
     output_file.close();
 
