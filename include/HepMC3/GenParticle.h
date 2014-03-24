@@ -19,7 +19,10 @@ public:
 // Functions
 //
 public:
-    void print( std::ostream& ostr = std::cout, int format = 0 ) const;
+    /** Prints information about the particle
+        By default prints only particle-related information
+        event_listing_format = true is used by event for formatted output */
+    void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
 
 //
 // Accessors

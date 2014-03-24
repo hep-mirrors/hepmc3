@@ -37,7 +37,7 @@ IO_Base::~IO_Base() {
 }
 
 void IO_Base::close() {
-    if( m_mode == std::ios::out ) {
+    if( !m_io_error_state && !m_file.rdstate() && m_mode == std::ios::out ) {
         m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
     }
     m_file.close();

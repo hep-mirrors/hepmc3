@@ -30,8 +30,11 @@ m_generated_mass(0.0) {
 
 GenParticle::~GenParticle() {}
 
-void GenParticle::print(ostream& ostr, int format) const {
-    if( format == 0 ) {
+void GenParticle::print(ostream& ostr, bool event_listing_format) const {
+
+    // Standalone format. Used when calling:
+    // particle->print()
+    if( !event_listing_format ) {
         ostr << "GenParticle: "
              << barcode() << " ID:" << pdg_id()
              << " (P,E)=" << m_momentum.px() << "," << m_momentum.py()
@@ -40,7 +43,9 @@ void GenParticle::print(ostream& ostr, int format) const {
              << " PV:" << production_vertex_barcode()
              << " EV:" << end_vertex_barcode() << endl;
     }
-    else if( format == 1 ) {
+    // Event listing format. Used when calling:
+    // event->print()
+    else {
         std::ios_base::fmtflags orig = ostr.flags();
         std::streamsize prec = ostr.precision();
         ostr << " ";
@@ -73,24 +78,6 @@ void GenParticle::print(ostream& ostr, int format) const {
 
         ostr.flags(orig);
         ostr.precision(prec);
-    }
-    else if( format == 2 ) {
-        std::ios_base::fmtflags orig = ostr.flags();
-        std::streamsize prec = ostr.precision();
-        ostr.setf(std::ios::scientific, std::ios::floatfield);
-        ostr.precision(4); // :TODO: set precision option
-
-        ostr<<"P "<<m_barcode<<" "<<m_production_vertex<<" "<<m_pdgid<<" ";
-        ostr<<m_momentum.px()<<" "<<m_momentum.py()<<" "<<m_momentum.pz()<<" "<<m_momentum.e()<<" ";
-        ostr<<generated_mass()<<" ";
-        ostr<<m_status;
-        ostr<<endl;
-
-        ostr.flags(orig);
-        ostr.precision(prec);
-    }
-    else if( format == 3 ) {
-        ostr<<"GenParticle: ROOT streamer format not ready"<<endl;
     }
 }
 

@@ -20,13 +20,14 @@ public:
 // Functions
 //
 public:
-    void print( std::ostream& ostr = std::cout, int format = 1 ) const;
+    /** Prints information about the event and lists full event tree */
+    void print( std::ostream& ostr = std::cout ) const;
 
 //
 // Accessors
 //
 public:
-    int event_number() const              { return m_event_number; }
+    int event_number() const                      { return m_event_number; }
 
     vector<GenParticle*>& particles()             { return m_particles; }
     vector<GenVertex*>&   vertices()              { return m_vertices; }

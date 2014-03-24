@@ -26,7 +26,6 @@ int main() {
         output_file.write_event(evt);
         if(events_parsed==0) {
             evt->print();
-            evt->print(cout,2);
         }
 
         delete evt;

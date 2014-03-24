@@ -12,15 +12,19 @@ GenVertex::GenVertex():
 
 GenVertex::~GenVertex() {}
 
-void GenVertex::print( std::ostream& ostr, int format ) const {
+void GenVertex::print( std::ostream& ostr, bool event_listing_format  ) const {
 
-    if( format == 0 ) {
+    // Standalone format. Used when calling:
+    // vertex->print()
+    if( !event_listing_format ) {
         ostr << "GenVertex: " << barcode()
              << " (X,cT):0 "
              << "Pin: "  << m_particles_in.size()
              <<" Pout: " << m_particles_out.size() << endl;
     }
-    else if( format == 1 ) {
+    // Event listing format. Used when calling:
+    // event->print()
+    else {
         // find the current stream state
         std::ios_base::fmtflags orig = ostr.flags();
         std::streamsize prec = ostr.precision();
@@ -38,27 +42,6 @@ void GenVertex::print( std::ostream& ostr, int format ) const {
         // restore the stream state
         ostr.flags(orig);
         ostr.precision(prec);
-    }
-    else if( format == 2 ) {
-        unsigned int in_size = m_particles_in.size();
-
-        ostr<<"V ";
-        ostr<<m_barcode<<" ";
-
-        ostr<<"[";
-        if(in_size) {
-            for( unsigned int i=0; i<in_size-1; ++i ) {
-                ostr<<m_particles_in[i]->barcode()<<",";
-            }
-            ostr<<m_particles_in.back()->barcode();
-        }
-        ostr<<"] ";
-
-        ostr<<"@ 0 0 0 0";
-        ostr<<endl;
-    }
-    else if( format == 3 ) {
-        ostr<<"GenVertex: ROOT streamer format not ready"<<endl;
     }
 }
 

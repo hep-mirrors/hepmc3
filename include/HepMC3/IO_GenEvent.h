@@ -24,6 +24,13 @@ public:
 
     /// Get event from file
     bool fill_next_event(GenEvent *evt);
+
+private:
+    /// Write vertex
+    void write_vertex  (const GenVertex *v);
+
+    /// Write particle
+    void write_particle(const GenParticle *p);
 };
 
 } // namespace HepMC3
