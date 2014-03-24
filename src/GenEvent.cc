@@ -11,7 +11,12 @@ m_lowest_vertex(0) {
 }
 
 GenEvent::~GenEvent() {
-
+    for( unsigned int i=0; i<m_particles.size(); ++i) {
+        delete m_particles[i];
+    }
+    for( unsigned int i=0; i<m_vertices.size(); ++i) {
+        delete m_vertices[i];
+    }
 }
 
 void GenEvent::add_particle(GenParticle *p) {

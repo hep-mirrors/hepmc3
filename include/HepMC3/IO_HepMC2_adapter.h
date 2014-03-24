@@ -29,9 +29,9 @@ public:
     bool fill_next_event(GenEvent *evt);
 
 private:
-    unsigned int parse_event_information   (GenEvent  *evt, const char *buf);
-    unsigned int parse_vertex_information  (GenVertex   *v, const char *buf);
-    bool         parse_particle_information(GenParticle *p, const char *buf);
+    int parse_event_information   (GenEvent  *evt, const char *buf);
+    int parse_vertex_information  (GenVertex   *v, const char *buf);
+    int parse_particle_information(GenParticle *p, const char *buf);
 };
 
 } // namespace HepMC3
