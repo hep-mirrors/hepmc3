@@ -4,13 +4,12 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
-using std::cout;
-using std::endl;
+#include "HepMC3/Log.h"
 
 namespace HepMC3 {
 
 void IO_HepMC2_adapter::write_event(const GenEvent *evt) {
-    cout<<"adapter err1"<<endl;
+    WARNING( "IO_HepMC2_adapter: write_event not implemented for HepMC2 adapter" )
 }
 
 bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
@@ -36,8 +35,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 parsing_result = parse_event_information(evt,buf);
                 if(parsing_result<0) {
                     is_parsing_successful = false;
-                    cout<<"Errror parsing event line: "<<endl;
-                    cout<<buf<<endl;
+                    ERROR( "IO_HepMC2_adapter: error parsing event information" )
                 }
                 else {
                     vertices_count = parsing_result;
@@ -47,8 +45,8 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 break;
             case 'V':
                 // If starting new vertex: verify if previous was fully parsed
-                // :BUG: HepMC2 files produced with Pythia8 are known to have wrong
-                //       information about number of particles in vertex. Hence '<' sign
+                /* :BUG: HepMC2 files produced with Pythia8 are known to have wrong
+                         information about number of particles in vertex. Hence '<' sign */
                 if(current_vertex && current_vertex->particles_out().size() < current_vertex_particles_count) {
                     is_parsing_successful = false;
                     break;
@@ -59,8 +57,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 parsing_result = parse_vertex_information(current_vertex,buf);
                 if(parsing_result<0) {
                     is_parsing_successful = false;
-                    cout<<"Error parsing vertex line: "<<endl;
-                    cout<<buf<<endl;
+                    ERROR( "IO_HepMC2_adapter: error parsing vertex information" )
                 }
                 else {
                     current_vertex_particles_count = parsing_result;
@@ -74,22 +71,21 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 parsing_result = parse_particle_information(current_particle,buf);
                 if(parsing_result<0) {
                     is_parsing_successful = false;
-                    cout<<"Error parsing particle line: "<<endl;
-                    cout<<buf<<endl;
+                    ERROR( "IO_HepMC2_adapter: error parsing particle information" )
                 }
                 else is_parsing_successful = true;
                 break;
             case 'U':
-                //cout<<"U: units ignored (for now)"<<endl;
+                DEBUG( 10, "IO_HepMC2_adapter: U: skipping unit info (for now)" )
                 is_parsing_successful = true;
                 break;
             case 'H':
-                //cout<<"H: header/footer lines ignored (for now)"<<endl;
+                DEBUG( 10, "IO_HepMC2_adapter: H: skipping header info (for now)" )
                 is_parsing_successful = true;
                 break;
             default:
-                cout<<"WARNING! Unrecognised prefix: "<<buf[0]<<endl;
-                is_parsing_successful = false;
+                WARNING( "IO_HepMC2_adapter: skipping unrecognised prefix: " << buf[0] )
+                is_parsing_successful = true;
                 break;
         }
 
@@ -100,21 +96,23 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
         if( parsed_event_header && buf[0]=='E' ) break;
     }
 
-    // Check if all vertices and all particles in last vertex were parsed
-    // :BUG: HepMC2 files produced with Pythia8 are known to have wrong
-    //       information about number of particles in vertex. Hence '<' sign
-    if( current_vertex &&
+    // Check if all particles in last vertex were parsed
+    /* :BUG: HepMC2 files produced with Pythia8 are known to have wrong
+             information about number of particles in vertex. Hence '<' sign */
+    if( is_parsing_successful && current_vertex &&
         current_vertex->particles_out().size() < current_vertex_particles_count ) {
-        cout<<"Vertex: not all particles parsed"<<endl;
+        ERROR( "IO_HepMC2_adapter: not all particles parsed" )
         is_parsing_successful = false;
     }
-    else if( evt->vertices().size() != vertices_count ) {
-        cout<<"Event: not all vertices parsed "<<evt->vertices().size() <<" "<< vertices_count<<endl;
+    // Check if all vertices were parsed
+    else if( is_parsing_successful && evt->vertices().size() != vertices_count ) {
+        ERROR( "IO_HepMC2_adapter: not all vertices parsed" )
         is_parsing_successful = false;
     }
 
     if( !is_parsing_successful ) {
-        cout<<"Clearing event..."<<endl;
+        ERROR( "IO_HepMC2_adapter: event parsing failed. Returning empty event" )
+        DEBUG( 1, "Parsed failed at line:" << std::endl << buf )
         //event->clear();
         m_file.clear(std::ios::badbit);
         return 0;
@@ -135,8 +133,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
             }
         }
         if( buf != 0 ) {
-            cout<<"Error: problem rebuilding tree"<<i<<endl;
-            cout<<"Clearing event..."<<endl;
+            ERROR( "IO_HepMC2_adapter: problem rebuilding tree for particle with barcode: "<<evt->particles()[i]->barcode() )
             //event->clear();
             m_file.clear(std::ios::badbit);
             return 0;
@@ -233,7 +230,7 @@ int IO_HepMC2_adapter::parse_event_information(GenEvent *evt, const char *buf) {
         weights[i] = atof(cursor);
     }
 
-    //cout<<"E: "<<event_no<<" ("<<vertices_count<<"V, "<<weights_size<<"W, "<<random_states_size<<"RS)"<<endl;
+    DEBUG( 10, "E: "<<event_no<<" ("<<vertices_count<<"V, "<<weights_size<<"W, "<<random_states_size<<"RS)" )
 
     return vertices_count;
 }
@@ -271,7 +268,9 @@ int IO_HepMC2_adapter::parse_vertex_information(GenVertex *v, const char *buf) {
     num_particles_out = atoi(cursor);
 
     // SKIPPING: weights_size, weights
-    //cout<<"V: "<<barcode<<" ("<<num_particles_out<<"P)"<<endl;
+
+    DEBUG( 10, "V: "<<barcode<<" ("<<num_particles_out<<"P)" )
+
     return num_particles_out;
 }
 
@@ -307,6 +306,7 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
     // pe
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     momentum.setE(atof(cursor));
+    p->set_momentum(momentum);
 
     // m
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -329,8 +329,7 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
 
     // SKIPPING: flow_size, flow patterns
 
-    //cout<<"P: "<<barcode<<" (pdg_id: "<<pdg_id<<") in vertex: "<<end_vertex_barcode<<endl;
-    p->set_momentum(momentum);
+    DEBUG( 10, "P: "<<barcode<<" (pdg_id: "<<pdg_id<<") in vertex: "<<end_vertex_barcode )
 
     return 0;
 }

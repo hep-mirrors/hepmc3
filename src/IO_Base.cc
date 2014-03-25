@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include "HepMC3/IO_Base.h"
+#include "HepMC3/Log.h"
 using std::ostream;
-using std::cout;
 using std::endl;
 
 namespace HepMC3 {
@@ -14,13 +14,13 @@ m_io_error_state(0) {
     m_mode = mode;
 
     if( m_mode != std::ios::in && m_mode != std::ios::out ) {
-        cout<<"err1"<<endl; // :TODO: error handling
+        ERROR( "IO_Base: only ios::in and ios::out modes are supported" )
         m_io_error_state = 1;
         return;
     }
 
     if( !m_file.is_open() ) {
-        cout<<"err2"<<endl; // :TODO: error handling
+        ERROR( "IO_Base: couldn't open file: " << filename )
         m_io_error_state = 1;
         return;
     }

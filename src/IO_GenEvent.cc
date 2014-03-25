@@ -2,7 +2,7 @@
 #include <fstream>
 #include "HepMC3/IO_GenEvent.h"
 #include "HepMC3/GenEvent.h"
-using std::cout;
+#include "HepMC3/Log.h"
 using std::endl;
 
 namespace HepMC3 {
@@ -10,7 +10,7 @@ namespace HepMC3 {
 void IO_GenEvent::write_event(const GenEvent *evt) {
     if ( !evt || m_io_error_state ) return;
 	if ( m_mode != std::ios::out ) {
-	    cout << "err3" << endl; // :TODO: error handling
+	    ERROR( "IO_GenEvent: attempting to write to input file" )
 	    return;
 	}
 
@@ -44,10 +44,11 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
 bool IO_GenEvent::fill_next_event(GenEvent *evt) {
     if ( !evt || m_io_error_state ) return 0;
 	if ( m_mode != std::ios::in ) {
-	    cout << "err4" << endl; // :TODO: error handling
+	    ERROR( "IO_GenEvent: attempting to read from output file" )
 	    return 0;
 	}
-    cout << "Read OK." << endl;
+
+    WARNING( "IO_GenEvent: Reading not implemented (yet)" )
 
     return 1;
 }

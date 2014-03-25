@@ -1,7 +1,6 @@
 #include <iostream>
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
-using std::cout;
 using std::endl;
 
 namespace HepMC3 {

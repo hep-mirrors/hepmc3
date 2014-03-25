@@ -1,6 +1,5 @@
 #include <iostream>
 #include "HepMC3/GenParticle.h"
-using std::cout;
 using std::endl;
 using std::ostream;
 
