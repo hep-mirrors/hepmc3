@@ -1,3 +1,10 @@
+/**
+ *  @file IO_HepMC2_adapter.cc
+ *  @brief Implementation of \b class HepMC3::IO_HepMC2_adapter
+ *
+ *  @date Created       <b> 23th March 2014 </b>
+ *  @date Last modified <b> 25th March 2014 </b>
+ */
 #include <cstring>
 #include <cstdlib>
 #include "HepMC3/IO_HepMC2_adapter.h"
@@ -45,7 +52,8 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 break;
             case 'V':
                 // If starting new vertex: verify if previous was fully parsed
-                /* :BUG: HepMC2 files produced with Pythia8 are known to have wrong
+
+                /** @bug HepMC2 files produced with Pythia8 are known to have wrong
                          information about number of particles in vertex. Hence '<' sign */
                 if(current_vertex && current_vertex->particles_out().size() < current_vertex_particles_count) {
                     is_parsing_successful = false;
@@ -66,7 +74,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 break;
             case 'P':
                 current_particle = new GenParticle();
-                evt->add_particle(current_particle); // :TODO: this line shouldn't be needed!!
+                evt->add_particle(current_particle); // @todo this line shouldn't be needed!!
                 current_vertex->add_particle_out(current_particle);
                 parsing_result = parse_particle_information(current_particle,buf);
                 if(parsing_result<0) {
@@ -97,7 +105,8 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     }
 
     // Check if all particles in last vertex were parsed
-    /* :BUG: HepMC2 files produced with Pythia8 are known to have wrong
+
+    /** @bug HepMC2 files produced with Pythia8 are known to have wrong
              information about number of particles in vertex. Hence '<' sign */
     if( is_parsing_successful && current_vertex &&
         current_vertex->particles_out().size() < current_vertex_particles_count ) {

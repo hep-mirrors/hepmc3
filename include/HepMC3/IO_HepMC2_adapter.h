@@ -1,5 +1,15 @@
 #ifndef  HEPMC3_IO_HEPMC2_ADAPTER_H
 #define  HEPMC3_IO_HEPMC2_ADAPTER_H
+/**
+ *  @file  IO_HepMC2_adapter.h
+ *  @brief Definition of \b class HepMC3::IO_HepMC2_adapter
+ *
+ *  @class HepMC3::IO_HepMC2_adapter
+ *  @brief Parser for HepMC2 I/O files
+ *
+ *  @date Created       <b> 23th March 2014 </b>
+ *  @date Last modified <b> 25th March 2014 </b>
+ */
 #include <string>
 #include <fstream>
 #include "HepMC3/IO_Base.h"
@@ -15,22 +25,46 @@ class IO_HepMC2_adapter : public IO_Base {
 // Constructors
 //
 public:
+    /** Default constructor
+     *  @todo Accept mode parameter (for backward-compatibility) but force it to be ios::in
+     */
     IO_HepMC2_adapter(const std::string& filename):IO_Base(filename,std::ios::in) {}
 
 //
 // Functions
 //
 public:
-    /// Writes HepMC3::GenEvent in HepMC2 IO file format
-    /// NOT IMPLEMENTED!
+    /** Write HepMC3::GenEvent in HepMC2 IO file format
+     *  @warning Function not implemented. It will be implemented if
+     *           there is demand for it
+     */
     void write_event(const GenEvent *evt);
 
-    /// Reads HepMC2 event from IO file and converts it to HepMC3::GenEvent
+    /** Parse HepMC2 event and convert it to HepMC3::GenEvent
+     *  @param[out] evt Contains parsed event
+     */
     bool fill_next_event(GenEvent *evt);
 
 private:
+    /** Parse event
+     *  Helper routine for parsing event information
+     *  @param[out] evt Event that will be filled with new data
+     *  @param[in]  buf Line of text that needs to be parsed
+     */
     int parse_event_information   (GenEvent  *evt, const char *buf);
+
+    /** Parse vertex
+     *  Helper routine for parsing single event information
+     *  @param[out] v   Vertex that will be filled with new data
+     *  @param[in]  buf Line of text that needs to be parsed
+     */
     int parse_vertex_information  (GenVertex   *v, const char *buf);
+
+    /** Parse particle
+     *  Helper routine for parsing single particle information
+     *  @param[out] p   Particle that will be filled with new data
+     *  @param[in]  buf Line of text that needs to be parsed
+     */
     int parse_particle_information(GenParticle *p, const char *buf);
 };
 

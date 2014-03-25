@@ -1,3 +1,10 @@
+/**
+ *  @file IO_GenEvent.cc
+ *  @brief Implementation of \b class HepMC3::IO_GenEvent
+ *
+ *  @date Created       <b> 23th March 2014 </b>
+ *  @date Last modified <b> 25th March 2014 </b>
+ */
 #include <iostream>
 #include <fstream>
 #include "HepMC3/IO_GenEvent.h"
@@ -20,8 +27,9 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
            << endl;
 
     // Print all particles and vertices in the event
-    // NOTE: assumption is made that barcodes of vertices and particles
-    //       are in topological order!
+
+    /** @remark Assumption is made that barcodes of vertices and particles
+                are in topological order! */
     int highest_vertex_already_printed = 0;
 
     for( unsigned int i=0; i<evt->particles().size(); ++i) {
@@ -75,7 +83,7 @@ void IO_GenEvent::write_particle(const GenParticle *p) {
     std::ios_base::fmtflags orig = m_file.flags();
     std::streamsize prec = m_file.precision();
     m_file.setf(std::ios::scientific, std::ios::floatfield);
-    m_file.precision(4); // :TODO: set precision option
+    m_file.precision(4); //! @todo set precision option
 
     m_file << "P "<< p->barcode()
            << " " << p->production_vertex_barcode()

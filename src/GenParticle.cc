@@ -1,3 +1,10 @@
+/**
+ *  @file GenParticle.cc
+ *  @brief Implementation of \b class HepMC3::GenParticle
+ *
+ *  @date Created       <b> 19th March 2014 </b>
+ *  @date Last modified <b> 25th March 2014 </b>
+ */
 #include <iostream>
 #include "HepMC3/GenParticle.h"
 using std::endl;
@@ -27,7 +34,9 @@ m_generated_mass(0.0) {
 
 }
 
-GenParticle::~GenParticle() {}
+GenParticle::~GenParticle() {
+
+}
 
 void GenParticle::print(ostream& ostr, bool event_listing_format) const {
 
@@ -45,8 +54,10 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
     // Event listing format. Used when calling:
     // event->print()
     else {
+        // Find the current stream state
         std::ios_base::fmtflags orig = ostr.flags();
         std::streamsize prec = ostr.precision();
+
         ostr << " ";
         ostr.width(9);
         ostr << barcode();
@@ -75,6 +86,7 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
 
         ostr << endl;
 
+        // Restore the stream state
         ostr.flags(orig);
         ostr.precision(prec);
     }

@@ -1,3 +1,10 @@
+/**
+ *  @file GenVertex.cc
+ *  @brief Implementation of \b class HepMC3::GenVertex
+ *
+ *  @date Created       <b> 19th March 2014 </b>
+ *  @date Last modified <b> 25th March 2014 </b>
+ */
 #include <iostream>
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
@@ -24,7 +31,7 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format  ) const {
     // Event listing format. Used when calling:
     // event->print()
     else {
-        // find the current stream state
+        // Find the current stream state
         std::ios_base::fmtflags orig = ostr.flags();
         std::streamsize prec = ostr.precision();
         ostr << "Vtx: ";
@@ -32,13 +39,13 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format  ) const {
         ostr << barcode()
              << "  (X,cT): 0" << endl;
 
-        // print out all the incoming, then outgoing particles
+        // Print out all the incoming particles
         for(unsigned int i=0;i<m_particles_in.size();++i) {
             ostr << "  I ";
             m_particles_in[i]->print(ostr,1);
         }
 
-        // restore the stream state
+        // Restore the stream state
         ostr.flags(orig);
         ostr.precision(prec);
     }

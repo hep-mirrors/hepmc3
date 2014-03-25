@@ -1,3 +1,10 @@
+/**
+ *  @file GenEvent.cc
+ *  @brief Implementation of \b class HepMC3::GenEvent
+ *
+ *  @date Created       <b> 19th March 2014 </b>
+ *  @date Last modified <b> 25th March 2014 </b>
+ */
 #include "HepMC3/GenEvent.h"
 using std::ostream;
 using std::endl;
@@ -44,9 +51,11 @@ void GenEvent::print( ostream& ostr) const {
     ostr << "________________________________________________________________________________" << endl;
 
     // Print all particles and vertices in the event
-    // NOTE: assumption is made that barcodes of vertices and particles
-    //       are in topological order!
+
+    /** @remark Assumption is made that barcodes of vertices and particles
+                are in topological order! */
     int highest_vertex_already_printed = 0;
+
     for( unsigned int i=0; i<m_particles.size(); ++i) {
         int production_vertex = m_particles[i]->production_vertex_barcode();
         if( production_vertex < highest_vertex_already_printed ) {
