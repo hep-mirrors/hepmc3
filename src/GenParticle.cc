@@ -22,7 +22,8 @@ m_status_subcode(0),
 m_barcode(0),
 m_production_vertex(0),
 m_end_vertex(0),
-m_generated_mass(0.0) {
+m_generated_mass(0.0),
+m_is_generated_mass_set(false) {
 
 }
 
@@ -35,7 +36,8 @@ m_status_subcode(0),
 m_barcode(0),
 m_production_vertex(0),
 m_end_vertex(0),
-m_generated_mass(0.0) {
+m_generated_mass(0.0),
+m_is_generated_mass_set(false) {
 
 }
 
@@ -118,6 +120,11 @@ void GenParticle::set_parent_event(GenEvent *evt) {
         m_barcode      = 0;
         m_parent_event = NULL;
     }
+}
+
+double GenParticle::generated_mass() const {
+    if( m_is_generated_mass_set ) return m_generated_mass;
+    else                          return momentum().m();
 }
 
 } // namespace HepMC3

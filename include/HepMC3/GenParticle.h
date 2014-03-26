@@ -78,8 +78,15 @@ public:
     const  FourVector& momentum()               const { return m_momentum; }             //!< Get momentum
     void   set_momentum(FourVector& momentum)         { m_momentum  = momentum; }        //!< Set momentum
 
-    double generated_mass()                     const { return m_generated_mass; }       //!< Get generated mass
-    void   set_generated_mass(double m)               { m_generated_mass = m; }          //!< Set generated mass
+    /** Get generated mass
+     *  This function will return mass as set by a generator/tool.
+     *  If not set, it will return momentum().m()
+     */
+    double generated_mass() const;
+
+    void   set_generated_mass(double m)               { m_generated_mass = m;   m_is_generated_mass_set = true;  } //!< Set generated mass
+    void   unset_generated_mass()                     { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Unset generated mass
+    bool   is_generated_mass_set()                    { return m_is_generated_mass_set; }
 
 //
 // Fields
@@ -93,7 +100,8 @@ private:
     int m_barcode;            //!< Barcode
     int m_production_vertex;  //!< Production vertex barcode
     int m_end_vertex;         //!< End vertex barcode
-    double m_generated_mass;  //!< Generated mass @todo Add check if this value is set
+    double m_generated_mass;        //!< Generated mass
+    bool   m_is_generated_mass_set; //!< Check if generated mass is set
 };
 
 } // namespace HepMC3
