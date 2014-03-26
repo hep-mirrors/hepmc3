@@ -7,8 +7,7 @@
  *  @class HepMC3::GenVertex
  *  @brief Stores vertex-related information
  *
- *  Contains lists of descendants and ancestors.
- *  Does not own particles on these lists
+ *  Contains position in space and list of incoming/outgoing particles.
  *
  *  @date Created       <b> 19th March 2014 </b>
  *  @date Last modified <b> 25th March 2014 </b>
@@ -20,6 +19,7 @@ using std::vector;
 namespace HepMC3 {
 
 class GenParticle;
+class GenEvent;
 
 class GenVertex {
 //
@@ -42,19 +42,31 @@ public:
     void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
 
     /** Add incoming particle
-     *  Change ownership of the particle if needed
+     *  Also adds particle to the parent event
      */
     void add_particle_in (GenParticle *p);
 
     /** Add outgoing particle
-     *  Change ownership of the particle if needed
+     *  Also adds particle to the parent event
      */
     void add_particle_out(GenParticle *p);
+
+    /** Remove particle from incoming/outgoing list */
+    void remove_particle(GenParticle *p);
+
 
 //
 // Accessors
 //
 public:
+    GenEvent* parent_event()                    const { return m_parent_event; }   //!< Get parent event
+
+    /** Set parent event
+     *  This will also set the barcode of the vertex.
+     *  If this vertex was already in other event, it will be removed from that event
+     */
+    void set_parent_event(GenEvent *evt);
+
     int barcode()                               const { return m_barcode; }        //!< Get barcode
     void set_barcode(int barcode)                     { m_barcode = barcode; }     //!< Set barcode @todo Remove this function!!
 
@@ -66,6 +78,7 @@ public:
 // Fields
 //
 private:
+    GenEvent *m_parent_event;              //!< Parent event
     int m_barcode;                         //!< Barcode
 
     vector<GenParticle*> m_particles_in;   //!< Incoming particle list

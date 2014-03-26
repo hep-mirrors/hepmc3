@@ -66,6 +66,16 @@ private:
      *  @param[in]  buf Line of text that needs to be parsed
      */
     int parse_particle_information(GenParticle *p, const char *buf);
+
+//
+// Fields
+//
+private:
+    /** Vertex barcode cache.
+     *  Used to translate HepMC2 vertex barcodes to sequential barcodes
+     *  of HepMC3
+     */
+    vector<int> m_vertex_barcode_cache;
 };
 
 } // namespace HepMC3

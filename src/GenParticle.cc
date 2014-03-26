@@ -7,15 +7,18 @@
  */
 #include <iostream>
 #include "HepMC3/GenParticle.h"
+#include "HepMC3/GenEvent.h"
 using std::endl;
 using std::ostream;
 
 namespace HepMC3 {
 
 GenParticle::GenParticle():
+m_parent_event(NULL),
 m_momentum(0.0,0.0,0.0,0.0),
 m_pdgid(0),
 m_status(0),
+m_status_subcode(0),
 m_barcode(0),
 m_production_vertex(0),
 m_end_vertex(0),
@@ -24,9 +27,11 @@ m_generated_mass(0.0) {
 }
 
 GenParticle::GenParticle(FourVector momentum, int pdgid, int status):
+m_parent_event(NULL),
 m_momentum(momentum),
 m_pdgid(pdgid),
 m_status(status),
+m_status_subcode(0),
 m_barcode(0),
 m_production_vertex(0),
 m_end_vertex(0),
@@ -34,9 +39,7 @@ m_generated_mass(0.0) {
 
 }
 
-GenParticle::~GenParticle() {
-
-}
+GenParticle::~GenParticle() {}
 
 void GenParticle::print(ostream& ostr, bool event_listing_format) const {
 
@@ -59,7 +62,7 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
         std::streamsize prec = ostr.precision();
 
         ostr << " ";
-        ostr.width(9);
+        ostr.width(6);
         ostr << barcode();
         ostr.width(9);
         ostr << pdg_id() << " ";
@@ -77,10 +80,16 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
         ostr.setf(std::ios::fmtflags(0), std::ios::floatfield);
         ostr.unsetf(std::ios_base::showpos);
         ostr.width(3);
-        ostr << status() << " ";
+        ostr << status();
+        if( status_subcode() ) {
+            ostr << "-";
+            ostr.width(9);
+            ostr << std::left << status_subcode() << std::right;
+        }
+        else ostr << "          ";
 
         if( production_vertex_barcode() ) {
-            ostr.width(9);
+            ostr.width(6);
             ostr << production_vertex_barcode();
         }
 
@@ -89,6 +98,25 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
         // Restore the stream state
         ostr.flags(orig);
         ostr.precision(prec);
+    }
+}
+
+void GenParticle::set_parent_event(GenEvent *evt) {
+    // If particle already belongs to other event - remove it from that event
+    if( m_parent_event && m_parent_event != evt ) {
+        m_parent_event->remove_particle(this);
+    }
+
+    // Do not add if already part of this event
+    if( m_parent_event == evt) return;
+
+    if( evt ) {
+        m_barcode      = evt->get_highest_particle_barcode(); //!< @todo Not the best way to do it - fix it when versioning is ready
+        m_parent_event = evt;
+    }
+    else {
+        m_barcode      = 0;
+        m_parent_event = NULL;
     }
 }
 

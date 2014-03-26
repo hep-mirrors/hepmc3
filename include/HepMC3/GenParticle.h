@@ -7,7 +7,8 @@
  *  @class HepMC3::GenParticle
  *  @brief Stores particle-related information
  *
- *  Uses HepMC3::FourVector class to store momentum
+ *  Uses HepMC3::FourVector class to store momentum.
+ *  Deleting the particle will remove it from the event
  *
  *  @date Created       <b> 19th March 2014 </b>
  *  @date Last modified <b> 25th March 2014 </b>
@@ -16,6 +17,8 @@
 #include "HepMC3/FourVector.h"
 
 namespace HepMC3 {
+
+class GenEvent;
 
 class GenParticle {
 //
@@ -43,17 +46,27 @@ public:
 // Accessors
 //
 public:
+    GenEvent* parent_event()                    const { return m_parent_event; }         //!< Get parent event
+
+    /** Set parent event
+     *  This will also set the barcode of the particle.
+     *  If this particle was already in other event, it will be removed from that event
+     */
+    void   set_parent_event(GenEvent *evt);
+
     /** Get particle barcode
      *  Returns zero if particle does not belong to an event
      */
     int    barcode()                            const { return m_barcode; }
-    void   set_barcode(int barcode)                   { m_barcode = barcode; }           //!< Set barcode @todo Remove this function!!
 
     int    pdg_id()                             const { return m_pdgid; }                //!< Get PDG ID
     void   set_pdg_id(int id)                         { m_pdgid = id; }                  //!< Set PDG ID
 
     int    status()                             const { return m_status; }               //!< Get status code
     void   set_status(int status)                     { m_status = status; }             //!< Set status code
+
+    int    status_subcode()                     const { return m_status_subcode; }       //!< Get status subcode
+    void   set_status_subcode(int subcode)            { m_status_subcode = subcode; }    //!< Set status subcode
 
     int    production_vertex_barcode()          const { return m_production_vertex; }    //!< Get production vertex barcode
     void   set_production_vertex_barcode(int barcode) { m_production_vertex = barcode; } //!< Set production vertex barcode @todo Replace with proper ancestor setter
@@ -71,9 +84,11 @@ public:
 // Fields
 //
 private:
+    GenEvent  *m_parent_event;//!< Parent event
     FourVector m_momentum;    //!< Momentum
     int m_pdgid;              //!< PDG ID
-    int m_status;             //!< Status @todo Add second status code
+    int m_status;             //!< Status
+    int m_status_subcode;     //!< Status subcode
     int m_barcode;            //!< Barcode
     int m_production_vertex;  //!< Production vertex barcode
     int m_end_vertex;         //!< End vertex barcode

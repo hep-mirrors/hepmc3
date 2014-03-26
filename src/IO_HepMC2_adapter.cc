@@ -29,6 +29,8 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     GenVertex    *current_vertex                 = NULL;
     GenParticle  *current_particle               = NULL;
 
+    m_vertex_barcode_cache.clear();
+
     //
     // Parse event, vertex and particle information
     //
@@ -74,7 +76,6 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 break;
             case 'P':
                 current_particle = new GenParticle();
-                evt->add_particle(current_particle); // @todo this line shouldn't be needed!!
                 current_vertex->add_particle_out(current_particle);
                 parsing_result = parse_particle_information(current_particle,buf);
                 if(parsing_result<0) {
@@ -134,8 +135,8 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
         int buf = evt->particles()[i]->end_vertex_barcode();
         if( buf == 0 ) continue;
 
-        for( unsigned int j=0; j<evt->vertices().size(); ++j ) {
-            if( evt->vertices()[j]->barcode() == buf ) {
+        for( unsigned int j=0; j<m_vertex_barcode_cache.size(); ++j ) {
+            if( m_vertex_barcode_cache[j] == buf ) {
                 evt->vertices()[j]->add_particle_in(evt->particles()[i]);
                 buf = 0;
                 break;
@@ -252,7 +253,7 @@ int IO_HepMC2_adapter::parse_vertex_information(GenVertex *v, const char *buf) {
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     barcode = atoi(cursor);
-    v->set_barcode(barcode);
+    m_vertex_barcode_cache.push_back(barcode);
 
     // SKIPPED: id
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -278,7 +279,7 @@ int IO_HepMC2_adapter::parse_vertex_information(GenVertex *v, const char *buf) {
 
     // SKIPPING: weights_size, weights
 
-    DEBUG( 10, "V: "<<barcode<<" ("<<num_particles_out<<"P)" )
+    DEBUG( 10, "V: "<<v->barcode()<<" (old barcode: "<<barcode<<","<<num_particles_out<<"P)" )
 
     return num_particles_out;
 }
@@ -293,7 +294,7 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     barcode = atoi(cursor);
-    p->set_barcode(barcode);
+    p->set_status_subcode(barcode);
 
     // id
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -338,7 +339,7 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
 
     // SKIPPING: flow_size, flow patterns
 
-    DEBUG( 10, "P: "<<barcode<<" (pdg_id: "<<pdg_id<<") in vertex: "<<end_vertex_barcode )
+    DEBUG( 10, "P: "<<p->barcode()<<" (old barcode: "<<barcode<<", pdg_id: "<<pdg_id<<") in vertex: "<<end_vertex_barcode )
 
     return 0;
 }
