@@ -55,6 +55,7 @@ public:
     void   set_parent_event(GenEvent *evt);
 
     /** Get particle barcode
+     *  Barcodes are handled solely be events.
      *  Returns zero if particle does not belong to an event
      */
     int    barcode()                            const { return m_barcode; }

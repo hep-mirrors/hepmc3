@@ -67,8 +67,11 @@ public:
      */
     void set_parent_event(GenEvent *evt);
 
-    int barcode()                               const { return m_barcode; }        //!< Get barcode
-    void set_barcode(int barcode)                     { m_barcode = barcode; }     //!< Set barcode @todo Remove this function!!
+    /** Get particle barcode
+     *  Barcodes are handled solely be events.
+     *  Returns zero if particle does not belong to an event
+     */
+    int barcode()                               const { return m_barcode; }
 
     vector<GenParticle*>& particles_in()              { return m_particles_in; }   //!< Access incoming particle list
     vector<GenParticle*>& particles_out()             { return m_particles_out; }  //!< Access outgoing particle list
