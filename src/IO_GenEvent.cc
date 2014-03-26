@@ -15,7 +15,7 @@ using std::endl;
 namespace HepMC3 {
 
 void IO_GenEvent::write_event(const GenEvent *evt) {
-    if ( !evt || m_io_error_state ) return;
+    if ( !evt || m_file.rdstate() ) return;
 	if ( m_mode != std::ios::out ) {
 	    ERROR( "IO_GenEvent: attempting to write to input file" )
 	    return;
@@ -50,7 +50,7 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
 }
 
 bool IO_GenEvent::fill_next_event(GenEvent *evt) {
-    if ( !evt || m_io_error_state ) return 0;
+    if ( !evt || m_file.rdstate() ) return 0;
 	if ( m_mode != std::ios::in ) {
 	    ERROR( "IO_GenEvent: attempting to read from output file" )
 	    return 0;
@@ -83,7 +83,7 @@ void IO_GenEvent::write_particle(const GenParticle *p) {
     std::ios_base::fmtflags orig = m_file.flags();
     std::streamsize prec = m_file.precision();
     m_file.setf(std::ios::scientific, std::ios::floatfield);
-    m_file.precision(4); //! @todo set precision option
+    m_file.precision(m_precision);
 
     m_file << "P "<< p->barcode()
            << " " << p->production_vertex_barcode()

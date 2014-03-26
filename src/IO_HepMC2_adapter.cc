@@ -15,6 +15,14 @@
 
 namespace HepMC3 {
 
+IO_HepMC2_adapter::IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode = std::ios::in):
+IO_Base(filename,mode) {
+    if(mode != std::ios::in) {
+        ERROR( "IO_HepMC2_adapter can only accept ios::in mode" )
+        m_file.clear(std::ios::badbit);
+    }
+}
+
 void IO_HepMC2_adapter::write_event(const GenEvent *evt) {
     WARNING( "IO_HepMC2_adapter: write_event not implemented for HepMC2 adapter" )
 }

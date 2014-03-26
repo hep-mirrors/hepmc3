@@ -26,9 +26,9 @@ class IO_HepMC2_adapter : public IO_Base {
 //
 public:
     /** Default constructor
-     *  @todo Accept mode parameter (for backward-compatibility) but force it to be ios::in
+     *  Accepts only ios::in mode
      */
-    IO_HepMC2_adapter(const std::string& filename):IO_Base(filename,std::ios::in) {}
+    IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode);
 
 //
 // Functions

@@ -48,7 +48,9 @@ public:
 // Accessors
 //
 public:
-    std::ios::iostate rdstate()  { return m_file.rdstate(); } //!< Get IO stream error state
+
+    void clear (std::ios::iostate state = std::ios::goodbit) { m_file.clear(state); }     //!< Set new value of stream's internal error state flags
+    std::ios::iostate rdstate()                              { return m_file.rdstate(); } //!< Get stream's error state flags
 
 //
 // Fields
@@ -56,7 +58,6 @@ public:
 protected:
     std::fstream        m_file; //!< I/O stream
     std::ios::openmode  m_mode; //!< I/O stream mode
-    int m_io_error_state;       //!< Error state @todo Change to use m_file.rdstate() instead
 };
 
 } // namespace HepMC3

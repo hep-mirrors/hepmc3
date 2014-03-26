@@ -85,8 +85,8 @@ public:
     double generated_mass() const;
 
     void   set_generated_mass(double m)               { m_generated_mass = m;   m_is_generated_mass_set = true;  } //!< Set generated mass
-    void   unset_generated_mass()                     { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Unset generated mass
-    bool   is_generated_mass_set()                    { return m_is_generated_mass_set; }
+    void   unset_generated_mass()                     { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Declare that generated mass is not set
+    bool   is_generated_mass_set()                    { return m_is_generated_mass_set; }                          //!< Check if genereted mass is set
 
 //
 // Fields

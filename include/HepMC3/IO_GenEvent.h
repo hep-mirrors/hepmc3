@@ -27,7 +27,7 @@ public:
      *  Mode of operation determines if file is read-only or write-only
      *  @warning If file opened in write-only mode exists, it will be deleted
      */
-    IO_GenEvent(const std::string &filename, std::ios::openmode mode):IO_Base(filename,mode) {};
+    IO_GenEvent(const std::string &filename, std::ios::openmode mode):IO_Base(filename,mode),m_precision(16) {};
 
 //
 // Functions
@@ -42,6 +42,11 @@ public:
      *  @param[out] evt Contains parsed event
      */
     bool fill_next_event(GenEvent *evt);
+    
+    /** Set output precision
+     *  Default = 16
+     */
+    void set_precision(int prec)  { m_precision = prec; }
 
 private:
     /** Write vertex
@@ -53,6 +58,12 @@ private:
      *  Helper routine for writing single particle to file
      */
     void write_particle(const GenParticle *p);
+
+//
+// Fields
+//
+private:
+    int m_precision; //!< Output precision
 };
 
 } // namespace HepMC3
