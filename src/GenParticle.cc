@@ -103,23 +103,12 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
     }
 }
 
-void GenParticle::set_parent_event(GenEvent *evt) {
-    // If particle already belongs to other event - remove it from that event
-    if( m_parent_event && m_parent_event != evt ) {
-        m_parent_event->remove_particle(this);
-    }
+bool GenParticle::set_barcode(int barcode) {
+    if( m_barcode ) return false;
 
-    // Do not add if already part of this event
-    if( m_parent_event == evt) return;
+    m_barcode = barcode;
 
-    if( evt ) {
-        m_barcode      = evt->get_highest_particle_barcode(); //!< @todo Not the best way to do it - fix it when versioning is ready
-        m_parent_event = evt;
-    }
-    else {
-        m_barcode      = 0;
-        m_parent_event = NULL;
-    }
+    return true;
 }
 
 double GenParticle::generated_mass() const {

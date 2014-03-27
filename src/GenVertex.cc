@@ -15,7 +15,7 @@ using std::endl;
 namespace HepMC3 {
 
 GenVertex::GenVertex():
-m_parent_event(0),
+m_parent_event(NULL),
 m_barcode(0) {
 }
 
@@ -55,21 +55,17 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format  ) const {
 }
 
 void GenVertex::add_particle_in(GenParticle *p) {
-    // If vertex is part of the event, add particle to this event
-    if( m_parent_event && p->parent_event() != m_parent_event ) {
-        m_parent_event->add_particle(p);
-    }
     p->set_end_vertex_barcode(m_barcode);
     m_particles_in.push_back(p);
+
+    if(m_parent_event) m_parent_event->add_particle(p);
 }
 
 void GenVertex::add_particle_out(GenParticle *p) {
-    // If vertex is part of the event, add particle to this event
-    if( m_parent_event && p->parent_event() != m_parent_event ) {
-        m_parent_event->add_particle(p);
-    }
     p->set_production_vertex_barcode(m_barcode);
     m_particles_out.push_back(p);
+
+    if(m_parent_event) m_parent_event->add_particle(p);
 }
 
 void GenVertex::remove_particle(GenParticle *p) {
@@ -87,23 +83,12 @@ void GenVertex::remove_particle(GenParticle *p) {
     }
 }
 
-void GenVertex::set_parent_event(GenEvent *evt) {
-    // If vertex already belongs to other event - remove it from that event
-    if( m_parent_event && m_parent_event != evt ) {
-        m_parent_event->remove_vertex(this);
-    }
+bool GenVertex::set_barcode(int barcode) {
+    if( m_barcode ) return false;
 
-    // Do not add if already part of this event
-    if( m_parent_event == evt) return;
+    m_barcode = barcode;
 
-    if( evt ) {
-        m_barcode      = -evt->get_lowest_vertex_barcode(); //!< @todo Not the best way to do it - fix it when versioning is ready
-        m_parent_event = evt;
-    }
-    else {
-        m_barcode      = 0;
-        m_parent_event = NULL;
-    }
+    return true;
 }
 
 } // namespace HepMC3

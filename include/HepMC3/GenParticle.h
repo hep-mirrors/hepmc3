@@ -7,8 +7,7 @@
  *  @class HepMC3::GenParticle
  *  @brief Stores particle-related information
  *
- *  Uses HepMC3::FourVector class to store momentum.
- *  Deleting the particle will remove it from the event
+ *  Uses HepMC3::FourVector class to store momentum
  *
  *  @date Created       <b> 19th March 2014 </b>
  *  @date Last modified <b> 25th March 2014 </b>
@@ -29,7 +28,11 @@ public:
     GenParticle();
     /** Constructs particle from basic information */
     GenParticle(FourVector momentum, int pdgid, int status);
-    /** Default destructor */
+    /** Default destructor
+     *
+     *  @warning Deleting particle without first removing it from the event
+     *           is improper and may cause segmentation fault!
+     */
     ~GenParticle();
 
 //
@@ -46,19 +49,20 @@ public:
 // Accessors
 //
 public:
-    GenEvent* parent_event()                    const { return m_parent_event; }         //!< Get parent event
-
-    /** Set parent event
-     *  This will also set the barcode of the particle.
-     *  If this particle was already in other event, it will be removed from that event
-     */
-    void   set_parent_event(GenEvent *evt);
+    GenEvent* parent_event()                           { return m_parent_event; }          //!< Get parent event
+    void      set_parent_event(GenEvent *parent_event) { m_parent_event = parent_event; }  //!< Set parent event
 
     /** Get particle barcode
      *  Barcodes are handled solely be events.
      *  Returns zero if particle does not belong to an event
      */
     int    barcode()                            const { return m_barcode; }
+
+    /** Set particle barcode
+     *  This can be done only once, when particle is added to the event.
+     *  Returns false if barcode is already set.
+     */
+    bool   set_barcode(int barcode);
 
     int    pdg_id()                             const { return m_pdgid; }                //!< Get PDG ID
     void   set_pdg_id(int id)                         { m_pdgid = id; }                  //!< Set PDG ID

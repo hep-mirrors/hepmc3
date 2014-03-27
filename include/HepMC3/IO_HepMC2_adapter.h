@@ -28,7 +28,7 @@ public:
     /** Default constructor
      *  Accepts only ios::in mode
      */
-    IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode);
+    IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode = std::ios::in);
 
 //
 // Functions
@@ -42,6 +42,7 @@ public:
 
     /** Parse HepMC2 event and convert it to HepMC3::GenEvent
      *  @param[out] evt Contains parsed event
+     *  @todo fix parsing unsorted events
      */
     bool fill_next_event(GenEvent *evt);
 

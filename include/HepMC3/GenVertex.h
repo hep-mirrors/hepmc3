@@ -7,7 +7,8 @@
  *  @class HepMC3::GenVertex
  *  @brief Stores vertex-related information
  *
- *  Contains position in space and list of incoming/outgoing particles.
+ *  Contains list of incoming/outgoing particles
+ *  and optionally, position in timespace
  *
  *  @date Created       <b> 19th March 2014 </b>
  *  @date Last modified <b> 25th March 2014 </b>
@@ -28,7 +29,11 @@ class GenVertex {
 public:
     /** Default constructor */
     GenVertex();
-    /** Default destructor */
+    /** Default destructor
+     *
+     *  @warning Deleting vertex without first removing it from the event
+     *           is improper and may cause segmentation fault!
+     */
     ~GenVertex();
 
 //
@@ -54,24 +59,24 @@ public:
     /** Remove particle from incoming/outgoing list */
     void remove_particle(GenParticle *p);
 
-
 //
 // Accessors
 //
 public:
-    GenEvent* parent_event()                    const { return m_parent_event; }   //!< Get parent event
+    GenEvent* parent_event()                           { return m_parent_event; }          //!< Get parent event
+    void      set_parent_event(GenEvent *parent_event) { m_parent_event = parent_event; }  //!< Set parent event
 
-    /** Set parent event
-     *  This will also set the barcode of the vertex.
-     *  If this vertex was already in other event, it will be removed from that event
-     */
-    void set_parent_event(GenEvent *evt);
-
-    /** Get particle barcode
+    /** Get vertex barcode
      *  Barcodes are handled solely be events.
      *  Returns zero if particle does not belong to an event
      */
     int barcode()                               const { return m_barcode; }
+
+    /** Set particle barcode
+     *  This can be done only once, when particle is added to the event.
+     *  Returns false if barcode is already set.
+     */
+    bool   set_barcode(int barcode);
 
     vector<GenParticle*>& particles_in()              { return m_particles_in; }   //!< Access incoming particle list
     vector<GenParticle*>& particles_out()             { return m_particles_out; }  //!< Access outgoing particle list

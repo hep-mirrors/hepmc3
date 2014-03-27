@@ -15,7 +15,7 @@
 
 namespace HepMC3 {
 
-IO_HepMC2_adapter::IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode = std::ios::in):
+IO_HepMC2_adapter::IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode):
 IO_Base(filename,mode) {
     if(mode != std::ios::in) {
         ERROR( "IO_HepMC2_adapter can only accept ios::in mode" )
@@ -248,7 +248,7 @@ int IO_HepMC2_adapter::parse_event_information(GenEvent *evt, const char *buf) {
         weights[i] = atof(cursor);
     }
 
-    DEBUG( 10, "E: "<<event_no<<" ("<<vertices_count<<"V, "<<weights_size<<"W, "<<random_states_size<<"RS)" )
+    DEBUG( 10, "IO_HepMC2_adapter: E: "<<event_no<<" ("<<vertices_count<<"V, "<<weights_size<<"W, "<<random_states_size<<"RS)" )
 
     return vertices_count;
 }
@@ -287,7 +287,7 @@ int IO_HepMC2_adapter::parse_vertex_information(GenVertex *v, const char *buf) {
 
     // SKIPPING: weights_size, weights
 
-    DEBUG( 10, "V: "<<v->barcode()<<" (old barcode: "<<barcode<<","<<num_particles_out<<"P)" )
+    DEBUG( 10, "IO_HepMC2_adapter: V: "<<v->barcode()<<" (old barcode: "<<barcode<<","<<num_particles_out<<"P)" )
 
     return num_particles_out;
 }
@@ -347,7 +347,7 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
 
     // SKIPPING: flow_size, flow patterns
 
-    DEBUG( 10, "P: "<<p->barcode()<<" (old barcode: "<<barcode<<", pdg_id: "<<pdg_id<<") in vertex: "<<end_vertex_barcode )
+    DEBUG( 10, "IO_HepMC2_adapter: P: "<<p->barcode()<<" (old barcode: "<<barcode<<", pdg_id: "<<pdg_id<<") in vertex: "<<end_vertex_barcode )
 
     return 0;
 }
