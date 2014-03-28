@@ -80,7 +80,7 @@ void GenEvent::add_vertex(GenVertex *v) {
     // to check if they need to be added
     vector<GenParticle*> particles_to_be_added;
 
-    // Incomming particles
+    // Incoming particles
     for(unsigned int i=0; i<v->particles_in().size(); ++i) {
         GenEvent *parent_event = v->particles_in()[i]->parent_event();
         if( parent_event && parent_event != this) {
@@ -95,7 +95,7 @@ void GenEvent::add_vertex(GenVertex *v) {
         }
     }
 
-    // Incomming particles
+    // Outgoing particles
     for(unsigned int i=0; i<v->particles_out().size(); ++i) {
         GenEvent *parent_event = v->particles_out()[i]->parent_event();
         if( parent_event && parent_event != this) {
@@ -119,10 +119,10 @@ void GenEvent::add_vertex(GenVertex *v) {
 
     // Restore incoming/outgoing indexes
     for(unsigned int i=0; i<v->particles_in().size(); ++i) {
-        v->particles_in()[i]->set_end_vertex_barcode(m_lowest_vertex);
+        v->particles_in()[i]->set_end_vertex_barcode(v->barcode());
     }
     for(unsigned int i=0; i<v->particles_out().size(); ++i) {
-        v->particles_in()[i]->set_production_vertex_barcode(m_lowest_vertex);
+        v->particles_out()[i]->set_production_vertex_barcode(v->barcode());
     }
 
     v->set_parent_event(this);

@@ -3,10 +3,11 @@
  *  @brief Implementation of \b class HepMC3::IO_HepMC2_adapter
  *
  *  @date Created       <b> 23th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
+ *  @date Last modified <b> 28th March 2014 </b>
  */
 #include <cstring>
 #include <cstdlib>
+#include <algorithm>    // std::sort
 #include "HepMC3/IO_HepMC2_adapter.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenVertex.h"
@@ -38,6 +39,8 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     GenParticle  *current_particle               = NULL;
 
     m_vertex_barcode_cache.clear();
+    m_particle_cache.clear();
+    m_vertex_cache.clear();
 
     //
     // Parse event, vertex and particle information
@@ -71,7 +74,8 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 }
 
                 current_vertex = new GenVertex();
-                evt->add_vertex(current_vertex);
+                m_vertex_cache.push_back(current_vertex);
+
                 parsing_result = parse_vertex_information(current_vertex,buf);
                 if(parsing_result<0) {
                     is_parsing_successful = false;
@@ -84,6 +88,8 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 break;
             case 'P':
                 current_particle = new GenParticle();
+                m_particle_cache.push_back(current_particle);
+
                 current_vertex->add_particle_out(current_particle);
                 parsing_result = parse_particle_information(current_particle,buf);
                 if(parsing_result<0) {
@@ -123,7 +129,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
         is_parsing_successful = false;
     }
     // Check if all vertices were parsed
-    else if( is_parsing_successful && evt->vertices().size() != vertices_count ) {
+    else if( is_parsing_successful && m_vertex_cache.size() != vertices_count ) {
         ERROR( "IO_HepMC2_adapter: not all vertices parsed" )
         is_parsing_successful = false;
     }
@@ -139,19 +145,19 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     //
     // Rebuild incoming particle information | max O(V*P)
     //
-    for( unsigned int i=0; i<evt->particles().size(); ++i ) {
-        int buf = evt->particles()[i]->end_vertex_barcode();
-        if( buf == 0 ) continue;
+    for( unsigned int i=0; i<m_particle_cache.size(); ++i ) {
+        int barcode = m_particle_cache[i]->end_vertex_barcode();
+        if( barcode == 0 ) continue;
 
         for( unsigned int j=0; j<m_vertex_barcode_cache.size(); ++j ) {
-            if( m_vertex_barcode_cache[j] == buf ) {
-                evt->vertices()[j]->add_particle_in(evt->particles()[i]);
-                buf = 0;
+            if( m_vertex_barcode_cache[j] == barcode ) {
+                m_vertex_cache[j]->add_particle_in(m_particle_cache[i]);
+                barcode = 0;
                 break;
             }
         }
-        if( buf != 0 ) {
-            ERROR( "IO_HepMC2_adapter: problem rebuilding tree for particle with barcode: "<<evt->particles()[i]->barcode() )
+        if( barcode != 0 ) {
+            ERROR( "IO_HepMC2_adapter: problem rebuilding tree for particle with barcode: "<<m_particle_cache[i]->barcode() )
             //event->clear();
             m_file.clear(std::ios::badbit);
             return 0;
@@ -159,28 +165,48 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     }
 
     //
-    // Removing unnecessary vertices | max O(V)
+    // Sort
     //
-    for(int i=0; i<(int)evt->vertices().size(); ++i ) {
-        if( evt->vertices()[i]->particles_in().size()==0) {
-            for( unsigned int j=0; j<evt->vertices()[i]->particles_out().size(); ++j ) {
-                evt->vertices()[i]->particles_out()[j]->set_production_vertex_barcode(0);
+    GenVertex::topological_compare c;
+    std::sort( m_vertex_cache.begin(), m_vertex_cache.end(), c );
+
+    //
+    // Removing unnecessary vertices and adding the rest to the event | max O(V)
+    //
+    for(unsigned int i=0; i<m_vertex_cache.size(); ++i ) {
+        // No incoming particles
+        if( m_vertex_cache[i]->particles_in().size()==0) {
+            for( unsigned int j=0; j<m_vertex_cache[i]->particles_out().size(); ++j ) {
+                m_vertex_cache[i]->particles_out()[j]->set_production_vertex_barcode(0);
+
+                // Add outgoing particles to the event
+                evt->add_particle(m_vertex_cache[i]->particles_out()[j]);
             }
 
-            delete evt->vertices()[i];
-            evt->vertices().erase(evt->vertices().begin()+i);
-            i--;
+            delete m_vertex_cache[i];
         }
-        else if( evt->vertices()[i]->particles_in().size()==1) {
-            evt->vertices()[i]->particles_in()[0]->set_end_vertex_barcode(0);
-            for( unsigned int j=0; j<evt->vertices()[i]->particles_out().size(); ++j ) {
-                evt->vertices()[i]->particles_out()[j]->set_production_vertex_barcode(evt->vertices()[i]->particles_in()[0]->barcode());
+        // Has one incoming particle
+        else if( m_vertex_cache[i]->particles_in().size()==1) {
+            m_vertex_cache[i]->particles_in()[0]->set_end_vertex_barcode(0);
+            int barcode = m_vertex_cache[i]->particles_in()[0]->barcode();
+
+            // Add ancestors that are not in the event first
+            if( barcode==0 ) evt->add_particle(m_vertex_cache[i]->particles_in()[0]);
+
+            for( unsigned int j=0; j<m_vertex_cache[i]->particles_out().size(); ++j ) {
+                m_vertex_cache[i]->particles_out()[j]->set_production_vertex_barcode(m_vertex_cache[i]->particles_in()[0]->barcode());
+
+                if(m_vertex_cache[i]->particles_out()[j]->production_vertex_barcode()==m_vertex_cache[i]->particles_out()[j]->barcode() ) {
+                    m_vertex_cache[i]->particles_out()[j]->set_production_vertex_barcode(0);
+                }
+                // Add outgoing particles to the event
+                evt->add_particle(m_vertex_cache[i]->particles_out()[j]);
             }
 
-            delete evt->vertices()[i];
-            evt->vertices().erase(evt->vertices().begin()+i);
-            i--;
+            delete m_vertex_cache[i];
         }
+        // Has more than one incoming particle - add to the event
+        else evt->add_vertex(m_vertex_cache[i]);
     }
 
     return 1;
@@ -302,6 +328,7 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     barcode = atoi(cursor);
+    p->set_barcode(barcode);
     p->set_status_subcode(barcode);
 
     // id

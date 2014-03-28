@@ -42,7 +42,6 @@ public:
 
     /** Parse HepMC2 event and convert it to HepMC3::GenEvent
      *  @param[out] evt Contains parsed event
-     *  @todo fix parsing unsorted events
      */
     bool fill_next_event(GenEvent *evt);
 
@@ -72,11 +71,21 @@ private:
 // Fields
 //
 private:
-    /** Vertex barcode cache.
+    /** Vertex barcode cache
      *  Used to translate HepMC2 vertex barcodes to sequential barcodes
      *  of HepMC3
      */
     vector<int> m_vertex_barcode_cache;
+
+    /** Particle cache
+     *  Used to restore ancestor/descendant information
+     */
+    vector<GenParticle*> m_particle_cache;
+
+    /** Vertex cache
+     *  Used to filter vertices before adding them to the event
+     */
+    vector<GenVertex*> m_vertex_cache;
 };
 
 } // namespace HepMC3

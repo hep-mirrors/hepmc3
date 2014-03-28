@@ -96,16 +96,16 @@ public:
 // Fields
 //
 private:
-    GenEvent  *m_parent_event;//!< Parent event
-    FourVector m_momentum;    //!< Momentum
-    int m_pdgid;              //!< PDG ID
-    int m_status;             //!< Status
-    int m_status_subcode;     //!< Status subcode
-    int m_barcode;            //!< Barcode
-    int m_production_vertex;  //!< Production vertex barcode
-    int m_end_vertex;         //!< End vertex barcode
-    double m_generated_mass;        //!< Generated mass
-    bool   m_is_generated_mass_set; //!< Check if generated mass is set
+    GenEvent  *m_parent_event;          //!< Parent event
+    FourVector m_momentum;              //!< Momentum
+    int        m_pdgid;                 //!< PDG ID
+    int        m_status;                //!< Status
+    int        m_status_subcode;        //!< Status subcode
+    int        m_barcode;               //!< Barcode
+    int        m_production_vertex;     //!< Production vertex barcode
+    int        m_end_vertex;            //!< End vertex barcode
+    double     m_generated_mass;        //!< Generated mass
+    bool       m_is_generated_mass_set; //!< Check if generated mass is set
 };
 
 } // namespace HepMC3

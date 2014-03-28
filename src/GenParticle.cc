@@ -104,7 +104,7 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
 }
 
 bool GenParticle::set_barcode(int barcode) {
-    if( m_barcode ) return false;
+    if( m_parent_event ) return false;
 
     m_barcode = barcode;
 

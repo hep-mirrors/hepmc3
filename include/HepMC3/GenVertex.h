@@ -85,6 +85,15 @@ public:
 //
 // Fields
 //
+public:
+    /** GenVertex topological compare
+     *  Used for topological sort of GenVertex list.
+     *  Compares highest barcode of incoming particles
+     */
+    struct topological_compare {
+        /** Check if v1 < v2 in topological sense */
+        bool operator() (HepMC3::GenVertex *v1, HepMC3::GenVertex *v2);
+    };
 private:
     GenEvent *m_parent_event;              //!< Parent event
     int m_barcode;                         //!< Barcode

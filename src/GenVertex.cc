@@ -84,11 +84,30 @@ void GenVertex::remove_particle(GenParticle *p) {
 }
 
 bool GenVertex::set_barcode(int barcode) {
-    if( m_barcode ) return false;
+    if( m_parent_event ) return false;
 
     m_barcode = barcode;
 
     return true;
+}
+
+bool GenVertex::topological_compare::operator() (HepMC3::GenVertex *v1, HepMC3::GenVertex *v2) {
+    int highest_barcode1 = 0;
+    int highest_barcode2 = 0;
+
+    for(unsigned int i=0; i<v1->particles_in().size(); ++i) {
+        if( v1->particles_in()[i]->barcode() > highest_barcode1 ) {
+            highest_barcode1 = v1->particles_in()[i]->barcode();
+        }
+    }
+
+    for(unsigned int i=0; i<v2->particles_in().size(); ++i) {
+        if( v2->particles_in()[i]->barcode() > highest_barcode2 ) {
+            highest_barcode2 = v2->particles_in()[i]->barcode();
+        }
+    }
+
+    return ( highest_barcode1 < highest_barcode2 );
 }
 
 } // namespace HepMC3
