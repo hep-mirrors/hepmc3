@@ -32,20 +32,20 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
                 are in topological order! */
     int highest_vertex_already_printed = 0;
 
-    for( unsigned int i=0; i<evt->particles().size(); ++i) {
+    for( vector<GenParticle*>::const_iterator i = evt->particles().begin(); i != evt->particles().end(); ++i ) {
 
-        int production_vertex = evt->particles()[i]->production_vertex_barcode();
+        int production_vertex = (*i)->production_vertex_barcode();
         if( production_vertex < highest_vertex_already_printed ) {
 
             highest_vertex_already_printed = production_vertex;
-            for( unsigned int j=0; j<evt->vertices().size(); ++j ) {
-                if( evt->vertices()[j]->barcode() == production_vertex ) {
-                    write_vertex(evt->vertices()[j]);
+            for( vector<GenVertex*>::const_iterator j = evt->vertices().begin(); j != evt->vertices().end(); ++j ) {
+                if( (*j)->barcode() == production_vertex ) {
+                    write_vertex(*j);
                     break;
                 }
             }
         }
-        write_particle(evt->particles()[i]);
+        write_particle(*i);
     }
 }
 

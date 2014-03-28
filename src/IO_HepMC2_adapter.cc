@@ -145,19 +145,19 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     //
     // Rebuild incoming particle information | max O(V*P)
     //
-    for( unsigned int i=0; i<m_particle_cache.size(); ++i ) {
-        int barcode = m_particle_cache[i]->end_vertex_barcode();
+    for( vector<GenParticle*>::const_iterator i = m_particle_cache.begin(); i != m_particle_cache.end(); ++i ) {
+        int barcode = (*i)->end_vertex_barcode();
         if( barcode == 0 ) continue;
 
         for( unsigned int j=0; j<m_vertex_barcode_cache.size(); ++j ) {
             if( m_vertex_barcode_cache[j] == barcode ) {
-                m_vertex_cache[j]->add_particle_in(m_particle_cache[i]);
+                m_vertex_cache[j]->add_particle_in(*i);
                 barcode = 0;
                 break;
             }
         }
         if( barcode != 0 ) {
-            ERROR( "IO_HepMC2_adapter: problem rebuilding tree for particle with barcode: "<<m_particle_cache[i]->barcode() )
+            ERROR( "IO_HepMC2_adapter: problem rebuilding tree for particle with barcode: "<<(*i)->barcode() )
             //event->clear();
             m_file.clear(std::ios::badbit);
             return 0;
@@ -173,40 +173,47 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     //
     // Removing unnecessary vertices and adding the rest to the event | max O(V)
     //
-    for(unsigned int i=0; i<m_vertex_cache.size(); ++i ) {
+    for( vector<GenVertex*>::const_iterator i = m_vertex_cache.begin(); i != m_vertex_cache.end(); ++i ) {
         // No incoming particles
-        if( m_vertex_cache[i]->particles_in().size()==0) {
-            for( unsigned int j=0; j<m_vertex_cache[i]->particles_out().size(); ++j ) {
-                m_vertex_cache[i]->particles_out()[j]->set_production_vertex_barcode(0);
+        if( (*i)->particles_in().size()==0) {
+            for( vector<GenParticle*>::const_iterator j = (*i)->particles_out().begin(); j != (*i)->particles_out().end(); ++j ) {
+                (*j)->set_production_vertex_barcode(0);
 
                 // Add outgoing particles to the event
-                evt->add_particle(m_vertex_cache[i]->particles_out()[j]);
+                evt->add_particle(*j);
             }
 
-            delete m_vertex_cache[i];
+            delete (*i);
         }
         // Has one incoming particle
-        else if( m_vertex_cache[i]->particles_in().size()==1) {
-            m_vertex_cache[i]->particles_in()[0]->set_end_vertex_barcode(0);
-            int barcode = m_vertex_cache[i]->particles_in()[0]->barcode();
+        else if( (*i)->particles_in().size()==1) {
+            GenParticle *p = (*i)->particles_in()[0];
+            p->set_end_vertex_barcode(0);
+            int barcode = p->barcode();
 
             // Add ancestors that are not in the event first
-            if( barcode==0 ) evt->add_particle(m_vertex_cache[i]->particles_in()[0]);
-
-            for( unsigned int j=0; j<m_vertex_cache[i]->particles_out().size(); ++j ) {
-                m_vertex_cache[i]->particles_out()[j]->set_production_vertex_barcode(m_vertex_cache[i]->particles_in()[0]->barcode());
-
-                if(m_vertex_cache[i]->particles_out()[j]->production_vertex_barcode()==m_vertex_cache[i]->particles_out()[j]->barcode() ) {
-                    m_vertex_cache[i]->particles_out()[j]->set_production_vertex_barcode(0);
-                }
-                // Add outgoing particles to the event
-                evt->add_particle(m_vertex_cache[i]->particles_out()[j]);
+            if( barcode==0 ) {
+                evt->add_particle(p);
+                barcode = p->barcode();
             }
 
-            delete m_vertex_cache[i];
+            for( vector<GenParticle*>::const_iterator j = (*i)->particles_out().begin(); j != (*i)->particles_out().end(); ++j ) {
+                (*j)->set_production_vertex_barcode(barcode);
+
+                // In some cases beam particle is written with production vertex
+                // same as end vertex
+                if( (*j)->production_vertex_barcode()==(*j)->barcode() ) {
+                    (*j)->set_production_vertex_barcode(0);
+                }
+
+                // Add outgoing particles to the event
+                evt->add_particle(*j);
+            }
+
+            delete *i;
         }
         // Has more than one incoming particle - add to the event
-        else evt->add_vertex(m_vertex_cache[i]);
+        else evt->add_vertex(*i);
     }
 
     return 1;

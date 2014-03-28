@@ -57,7 +57,7 @@ public:
     void add_particle_out(GenParticle *p);
 
     /** Remove particle from incoming/outgoing list */
-    void remove_particle(GenParticle *p);
+    void delete_particle(GenParticle *p);
 
 //
 // Accessors

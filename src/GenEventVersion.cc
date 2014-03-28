@@ -17,40 +17,12 @@ m_name(name) {
 }
 
 GenEventVersion::~GenEventVersion() {
-    for( unsigned int i=0; i<m_particles.size(); ++i) {
-        delete m_particles[i];
+    for( vector<GenParticle*>::const_iterator i = m_particles.begin(); i != m_particles.end(); ++i ) {
+        delete (*i);
     }
-    for( unsigned int i=0; i<m_vertices.size(); ++i) {
-        delete m_vertices[i];
+    for( vector<GenVertex*>::const_iterator i = m_vertices.begin(); i != m_vertices.end(); ++i ) {
+        delete (*i);
     }
-}
-
-bool GenEventVersion::has_record(GenParticle *p) const {
-    if( m_deleted_particle_barcodes.size() ) {
-        if( p->barcode() >= m_deleted_particle_barcodes.front() &&
-            p->barcode() <= m_deleted_particle_barcodes.back() ) return true;
-    }
-
-    if( m_particles.size() ) {
-        if( p->barcode() >= m_particles.front()->barcode() &&
-            p->barcode() <= m_particles.back()->barcode() ) return true;
-    }
-
-    return false;
-}
-
-bool GenEventVersion::has_record(GenVertex *v) const {
-    if( m_deleted_vertex_barcodes.size() ) {
-        if( v->barcode() >= m_deleted_vertex_barcodes.front() &&
-            v->barcode() <= m_deleted_vertex_barcodes.back() ) return true;
-    }
-
-    if( m_vertices.size() ) {
-        if( v->barcode() >= m_vertices.front()->barcode() &&
-            v->barcode() <= m_vertices.back()->barcode() ) return true;
-    }
-
-    return false;
 }
 
 void GenEventVersion::record_change(GenParticle *p) {
@@ -72,14 +44,14 @@ void GenEventVersion::record_change(GenParticle *p) {
     }
 
     // Particle within the list range
-    for( unsigned int i=0; i<m_particles.size(); ++i ) {
+    for( vector<GenParticle*>::iterator i = m_particles.begin(); i != m_particles.end(); ++i ) {
 
         // Already exists on the list - do nothing
-        if (m_particles[i]->barcode() == p->barcode() ) return;
+        if ((*i)->barcode() == p->barcode() ) return;
 
         // Particle does not exist on the list - insert (max O(n))
-        if (m_particles[i]->barcode() >  p->barcode() ) {
-            m_particles.insert( m_particles.begin() + i, p );
+        if ((*i)->barcode() >  p->barcode() ) {
+            m_particles.insert( i, p );
             DEBUG( 10, "GenEventVersion: particle added in-between: "<<p->barcode()<<" ("<<p->pdg_id()<<") " )
             return;
         }
@@ -105,20 +77,19 @@ void GenEventVersion::record_change(GenVertex *v) {
     }
 
     // Particle within the list range
-    for( unsigned int i=0; i<m_vertices.size(); ++i ) {
+    for( vector<GenVertex*>::iterator i = m_vertices.begin(); i != m_vertices.end(); ++i  ) {
 
         // Already exists on the list - do nothing
-        if (m_vertices[i]->barcode() == v->barcode() ) return;
+        if ((*i)->barcode() == v->barcode() ) return;
 
         // Particle does not exist on the list - insert (max O(n))
-        if (m_vertices[i]->barcode() >  v->barcode() ) {
-            m_vertices.insert( m_vertices.begin() + i, v );
+        if ((*i)->barcode() >  v->barcode() ) {
+            m_vertices.insert( i, v );
             DEBUG( 10, "GenEventVersion: vertex added in-between: "<<v->barcode() )
             return;
         }
     }
 }
-
 
 void GenEventVersion::record_deleted(int barcode, vector<int> &container ) {
 
@@ -135,14 +106,14 @@ void GenEventVersion::record_deleted(int barcode, vector<int> &container ) {
     }
 
     // Particle within the list range
-    for( unsigned int i=0; i<container.size(); ++i ) {
+    for( vector<int>::iterator i = container.begin(); i != container.end(); ++i ) {
 
         // Already exists on the list - do nothing
-        if (container[i] == barcode ) return;
+        if ((*i) == barcode ) return;
 
         // Particle does not exist on the list - insert (max O(n))
-        if (container[i] >  barcode ) {
-            container.insert( container.begin() + i, barcode);
+        if ((*i) >  barcode ) {
+            container.insert( i, barcode);
             return;
         }
     }

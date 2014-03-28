@@ -56,23 +56,13 @@ public:
      *  This will not delete the particle but will remove it from
      *  the event and set its barcode to 0
      */
-    void remove_particle(GenParticle *p);
+    void delete_particle(GenParticle *p);
 
     /** Remove vertex from the event
      *  This will not delete the vertex but will remove it from
      *  the event and set its barcode to 0
      */
-    void remove_vertex(GenVertex *v);
-private:
-    /** Find index of the particle in the container
-     *  Returns -1 if particle does not exist in the container
-     */
-    int find_particle_index(GenParticle *p) const;
-
-    /** Find index of the vertex in the container
-     *  Returns -1 if vertex does not exist in the container
-     */
-    int find_vertex_index(GenVertex *p) const;
+    void delete_vertex(GenVertex *v);
 //
 // Accessors
 //

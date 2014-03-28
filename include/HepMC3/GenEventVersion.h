@@ -53,12 +53,6 @@ public:
     void record_deleted(GenParticle *p) { record_deleted(p->barcode(), m_deleted_particle_barcodes); } //!< Record deletion of a particle
     void record_deleted(GenVertex *v)   { record_deleted(v->barcode(), m_deleted_vertex_barcodes);   } //!< Record deletion of a vertex
 
-    /** Check if particle was modified/deleted in this version */
-    bool has_record(GenParticle *p) const;
-
-    /** Check if vertex was modified/deleted in this version */
-    bool has_record(GenVertex *v) const;
-
 private:
     /** Helper for record_deleted functions */
     void record_deleted(int barcode, vector<int> &container);

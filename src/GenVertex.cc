@@ -43,10 +43,20 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format  ) const {
              << "  (X,cT): 0" << endl;
 
         // Print out all the incoming particles
-        for(unsigned int i=0;i<m_particles_in.size();++i) {
-            ostr << "  I ";
-            m_particles_in[i]->print(ostr,1);
+        for( vector<GenParticle*>::const_iterator i = m_particles_in.begin(); i != m_particles_in.end(); ++i ) {
+            if( i == m_particles_in.begin() ) ostr << "|I: ";
+            else                              ostr << "|   ";
+            (*i)->print(ostr,1);
         }
+
+        // Print out all the outgoing particles
+        for( vector<GenParticle*>::const_iterator i = m_particles_out.begin(); i != m_particles_out.end(); ++i ) {
+            if( i == m_particles_out.begin() ) ostr << "|O: ";
+            else                               ostr << "|   ";
+            (*i)->print(ostr,1);
+        }
+
+        ostr << "Vtx end" << endl;
 
         // Restore the stream state
         ostr.flags(orig);
@@ -68,16 +78,16 @@ void GenVertex::add_particle_out(GenParticle *p) {
     if(m_parent_event) m_parent_event->add_particle(p);
 }
 
-void GenVertex::remove_particle(GenParticle *p) {
-    for( unsigned int i=0; i<m_particles_in.size(); ++i ) {
-        if( m_particles_in[i] == p ) {
-            m_particles_in.erase(m_particles_in.begin()+i);
+void GenVertex::delete_particle(GenParticle *p) {
+    for( vector<GenParticle*>::iterator i = m_particles_in.begin(); i != m_particles_in.end(); ++i ) {
+        if( (*i) == p ) {
+            m_particles_in.erase(i);
             return;
         }
     }
-    for( unsigned int i=0; i<m_particles_out.size(); ++i ) {
-        if( m_particles_out[i] == p ) {
-            m_particles_out.erase(m_particles_out.begin()+i);
+    for( vector<GenParticle*>::iterator i = m_particles_out.begin(); i != m_particles_out.end(); ++i ) {
+        if( (*i) == p ) {
+            m_particles_out.erase(i);
             return;
         }
     }
@@ -95,15 +105,15 @@ bool GenVertex::topological_compare::operator() (HepMC3::GenVertex *v1, HepMC3::
     int highest_barcode1 = 0;
     int highest_barcode2 = 0;
 
-    for(unsigned int i=0; i<v1->particles_in().size(); ++i) {
-        if( v1->particles_in()[i]->barcode() > highest_barcode1 ) {
-            highest_barcode1 = v1->particles_in()[i]->barcode();
+    for( vector<GenParticle*>::const_iterator i = v1->particles_in().begin(); i != v1->particles_in().end(); ++i ) {
+        if( (*i)->barcode() > highest_barcode1 ) {
+            highest_barcode1 = (*i)->barcode();
         }
     }
 
-    for(unsigned int i=0; i<v2->particles_in().size(); ++i) {
-        if( v2->particles_in()[i]->barcode() > highest_barcode2 ) {
-            highest_barcode2 = v2->particles_in()[i]->barcode();
+    for( vector<GenParticle*>::const_iterator i = v2->particles_in().begin(); i != v2->particles_in().end(); ++i ) {
+        if( (*i)->barcode() > highest_barcode2 ) {
+            highest_barcode2 = (*i)->barcode();
         }
     }
 
