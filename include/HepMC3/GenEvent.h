@@ -63,6 +63,11 @@ public:
      *  the event and set its barcode to 0
      */
     void delete_vertex(GenVertex *v);
+
+    /** Create new version
+     *  Sets new version as current version
+     */
+    void create_new_version(const char *name);
 //
 // Accessors
 //
@@ -70,23 +75,25 @@ public:
     int  event_number()                     const { return m_event_number; } //!< Get event number
     void set_event_number(int no)                 { m_event_number = no; }   //!< Set event number
 
-    int get_highest_particle_barcode()      const { return m_highest_particle; } //!< Get highest particle barcode
-    int get_lowest_vertex_barcode()         const { return m_lowest_vertex;    } //!< Get lowest vertex barcode
+    int get_last_particle_barcode()         const { return m_last_particle; } //!< Get barcode of last particle
+    int get_last_vertex_barcode()           const { return m_last_vertex;   } //!< Get barcode of last vertex
 
-    //! @todo Change particles() and vertices() to iterators when versioning is completed
-    vector<GenParticle*>& particles()             { return m_versions[m_current_version_id].particles(); } //!< Access particle list
-    vector<GenVertex*>&   vertices()              { return m_versions[m_current_version_id].vertices();  } //!< Access vertex list
+    const vector<GenParticle*>& particles() const { return m_versions[m_current_version].particles(); } //!< Access particle list
+    const vector<GenVertex*>&   vertices()  const { return m_versions[m_current_version].vertices();  } //!< Access vertex list
 
-    const vector<GenParticle*>& particles() const { return m_versions[m_current_version_id].particles(); } //!< Access particle list
-    const vector<GenVertex*>&   vertices()  const { return m_versions[m_current_version_id].vertices();  } //!< Access vertex list
+    int  current_version()                  const { return m_current_version; } //!< Get current version
+    void set_current_version(int ver);                                          //!< Set current version
+
+    int  last_version()                     const { return m_last_version; }    //!< Get last version
 //
 // Fields
 //
 private:
     int m_event_number;       //!< Event number
-    int m_highest_particle;   //!< Barcode of the last particle in the event
-    int m_lowest_vertex;      //!< Barcode of the last vertex in the event
-    int m_current_version_id; //!< index of current version used
+    int m_last_particle;      //!< Barcode of the last particle in the event
+    int m_last_vertex;        //!< Barcode of the last vertex in the event
+    int m_current_version;    //!< Index of current version used
+    int m_last_version;       //!< Index of the last version of the event
 
     vector<GenEventVersion> m_versions; //!< version list
 };

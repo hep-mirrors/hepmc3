@@ -12,7 +12,8 @@ using std::endl;
 
 namespace HepMC3 {
 
-GenEventVersion::GenEventVersion(const char *name):
+GenEventVersion::GenEventVersion(int number, const char *name):
+m_version(number),
 m_name(name) {
 }
 

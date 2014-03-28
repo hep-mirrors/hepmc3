@@ -30,7 +30,7 @@ class GenEventVersion {
 //
 public:
     /** Default constructor. */
-    GenEventVersion(const char *name);
+    GenEventVersion(int number, const char *name);
     /** Default destructor */
     ~GenEventVersion();
 
@@ -63,9 +63,6 @@ public:
     std::string name()                      const { return m_name; }         //!< Get name
     void        set_name(std::string name)        { m_name = name; }         //!< Set name
 
-    vector<GenParticle*>& particles()             { return m_particles; }    //!< Access particle list
-    vector<GenVertex*>&   vertices()              { return m_vertices; }     //!< Access vertex list
-
     const vector<GenParticle*>& particles() const { return m_particles; }    //!< Access particle list
     const vector<GenVertex*>&   vertices()  const { return m_vertices; }     //!< Access vertex list
 
@@ -73,6 +70,7 @@ public:
 // Fields
 //
 private:
+    int                   m_version;                   //!< Version number
     std::string           m_name;                      //!< Version name. Indicates what tool/generator created this version
     vector<GenParticle*>  m_particles;                 //!< List of particles modified/added in this version (sorted by barcode)
     vector<GenVertex*>    m_vertices;                  //!< List of vertices  modified/added in this version (sorted by barcode)

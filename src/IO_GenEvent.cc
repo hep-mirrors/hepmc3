@@ -28,8 +28,6 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
 
     // Print all particles and vertices in the event
 
-    /** @remark Assumption is made that barcodes of vertices and particles
-                are in topological order! */
     int highest_vertex_already_printed = 0;
 
     for( vector<GenParticle*>::const_iterator i = evt->particles().begin(); i != evt->particles().end(); ++i ) {
