@@ -151,7 +151,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     // Rebuild incoming particle information | max O(V*P)
     //
     for( vector<GenParticle*>::const_iterator i = m_particle_cache.begin(); i != m_particle_cache.end(); ++i ) {
-        int barcode = (*i)->end_vertex_barcode();
+        int barcode = (*i)->descendant();
         if( barcode == 0 ) continue;
 
         for( unsigned int j=0; j<m_vertex_barcode_cache.size(); ++j ) {
@@ -182,7 +182,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
         // No incoming particles
         if( (*i)->particles_in().size()==0) {
             for( vector<GenParticle*>::const_iterator j = (*i)->particles_out().begin(); j != (*i)->particles_out().end(); ++j ) {
-                (*j)->set_production_vertex_barcode(0);
+                (*j)->set_ancestor(0);
 
                 // Add outgoing particles to the event
                 evt->add_particle(*j);
@@ -193,7 +193,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
         // Has one incoming particle
         else if( (*i)->particles_in().size()==1) {
             GenParticle *p = (*i)->particles_in()[0];
-            p->set_end_vertex_barcode(0);
+            p->set_descendant(0);
             int barcode = p->barcode();
 
             // Add ancestors that are not in the event first
@@ -203,12 +203,12 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
             }
 
             for( vector<GenParticle*>::const_iterator j = (*i)->particles_out().begin(); j != (*i)->particles_out().end(); ++j ) {
-                (*j)->set_production_vertex_barcode(barcode);
+                (*j)->set_ancestor(barcode);
 
                 // In some cases beam particle is written with production vertex
                 // same as end vertex
-                if( (*j)->production_vertex_barcode()==(*j)->barcode() ) {
-                    (*j)->set_production_vertex_barcode(0);
+                if( (*j)->ancestor()==(*j)->barcode() ) {
+                    (*j)->set_ancestor(0);
                 }
 
                 // Add outgoing particles to the event
@@ -334,7 +334,7 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
     const char *cursor             = buf;
     int         barcode            = 0;
     int         pdg_id             = 0;
-    int         end_vertex_barcode = 0;
+    int         descendant         = 0;
     FourVector  momentum;
 
     // barcode
@@ -381,12 +381,12 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
 
     // end_vtx_code
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    end_vertex_barcode = atoi(cursor);
-    p->set_end_vertex_barcode(end_vertex_barcode);
+    descendant = atoi(cursor);
+    p->set_descendant(descendant);
 
     // SKIPPING: flow_size, flow patterns
 
-    DEBUG( 10, "IO_HepMC2_adapter: P: "<<p->barcode()<<" (old barcode: "<<barcode<<", pdg_id: "<<pdg_id<<") in vertex: "<<end_vertex_barcode )
+    DEBUG( 10, "IO_HepMC2_adapter: P: "<<p->barcode()<<" (old barcode: "<<barcode<<", pdg_id: "<<pdg_id<<") in vertex: "<<descendant )
 
     return 0;
 }

@@ -123,10 +123,10 @@ void GenEvent::add_vertex(GenVertex *v) {
 
     // Restore incoming/outgoing indexes
     for( vector<GenParticle*>::const_iterator i = v->particles_in().begin(); i != v->particles_in().end(); ++i ) {
-        (*i)->set_end_vertex_barcode(v->barcode());
+        (*i)->set_descendant(v->barcode());
     }
     for( vector<GenParticle*>::const_iterator i = v->particles_out().begin(); i != v->particles_out().end(); ++i ) {
-        (*i)->set_production_vertex_barcode(v->barcode());
+        (*i)->set_ancestor(v->barcode());
     }
 
     v->set_parent_event(this);
@@ -182,7 +182,7 @@ void GenEvent::print( ostream& ostr) const {
             while( (*p_iterators[i])->version_deleted() <= m_current_version ) ++p_iterators[i];
             GenParticle *p1 = *(p_iterators[i]);
 
-            int buf = p1->production_vertex_barcode();
+            int buf = p1->ancestor();
 
             if( std::abs(buf) < std::abs(production_vertex) ) {
                 production_vertex = buf;

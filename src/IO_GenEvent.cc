@@ -37,7 +37,7 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
 
         for( vector<GenParticle*>::const_iterator i  = (*v)->particles().begin(); i != (*v)->particles().end(); ++i ) {
 
-            int production_vertex = (*i)->production_vertex_barcode();
+            int production_vertex = (*i)->ancestor();
             if( production_vertex < highest_vertex_already_printed ) {
 
                 highest_vertex_already_printed = production_vertex;
@@ -90,7 +90,7 @@ void IO_GenEvent::write_particle(const GenParticle *p) {
     m_file.precision(m_precision);
 
     m_file << "P "<< p->barcode()
-           << " " << p->production_vertex_barcode()
+           << " " << p->ancestor()
            << " " << p->pdg_id()
            << " " << p->momentum().px()
            << " " << p->momentum().py()

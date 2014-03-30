@@ -73,11 +73,11 @@ public:
     int    status_subcode()                     const { return m_status_subcode; }       //!< Get status subcode
     void   set_status_subcode(int subcode)            { m_status_subcode = subcode; }    //!< Set status subcode
 
-    int    production_vertex_barcode()          const { return m_production_vertex; }    //!< Get production vertex barcode
-    void   set_production_vertex_barcode(int barcode) { m_production_vertex = barcode; } //!< Set production vertex barcode @todo Replace with proper ancestor setter
+    int    ancestor()                           const { return m_ancestor; }             //!< Get ancestor (vertex or particle) barcode
+    void   set_ancestor(int barcode)                  { m_ancestor = barcode; }          //!< Set ancestor (vertex or particle) barcode
 
-    int    end_vertex_barcode()                 const { return m_end_vertex; }           //!< Get end vertex barcode
-    void   set_end_vertex_barcode(int barcode)        { m_end_vertex = barcode; }        //!< Set end vertex barcode @todo Replace with proper child setter
+    int    descendant()                         const { return m_descendant; }           //!< Get descendant (vertex or particle) barcode
+    void   set_descendant(int barcode)                { m_descendant = barcode; }        //!< Set descendant (vertex or particle) barcode
 
     const  FourVector& momentum()               const { return m_momentum; }             //!< Get momentum
     void   set_momentum(FourVector& momentum)         { m_momentum  = momentum; }        //!< Set momentum
@@ -104,8 +104,8 @@ private:
     int        m_status;                //!< Status
     int        m_status_subcode;        //!< Status subcode
     int        m_barcode;               //!< Barcode
-    int        m_production_vertex;     //!< Production vertex barcode
-    int        m_end_vertex;            //!< End vertex barcode
+    int        m_ancestor;              //!< Ancestor (vertex or particle) barcode
+    int        m_descendant;            //!< Descendant (vertex or particle) barcode
     double     m_generated_mass;        //!< Generated mass
     bool       m_is_generated_mass_set; //!< Check if generated mass is set
     short int  m_version_deleted;       //!< Version number when this particle was deleted

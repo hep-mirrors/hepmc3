@@ -20,8 +20,8 @@ m_pdgid(0),
 m_status(0),
 m_status_subcode(0),
 m_barcode(0),
-m_production_vertex(0),
-m_end_vertex(0),
+m_ancestor(0),
+m_descendant(0),
 m_generated_mass(0.0),
 m_is_generated_mass_set(false),
 m_version_deleted(255) {
@@ -35,8 +35,8 @@ m_pdgid(pdgid),
 m_status(status),
 m_status_subcode(0),
 m_barcode(0),
-m_production_vertex(0),
-m_end_vertex(0),
+m_ancestor(0),
+m_descendant(0),
 m_generated_mass(0.0),
 m_is_generated_mass_set(false),
 m_version_deleted(255) {
@@ -55,8 +55,8 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
              << " (P,E)=" << m_momentum.px() << "," << m_momentum.py()
              << "," << m_momentum.pz() << "," << m_momentum.e()
              << " Stat:" << status()
-             << " PV:" << production_vertex_barcode()
-             << " EV:" << end_vertex_barcode() << endl;
+             << " PV:" << ancestor()
+             << " EV:" << descendant() << endl;
     }
     // Event listing format. Used when calling:
     // event->print()
@@ -92,9 +92,9 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
         }
         else ostr << "          ";
 
-        if( production_vertex_barcode() ) {
+        if( ancestor() ) {
             ostr.width(6);
-            ostr << production_vertex_barcode();
+            ostr << ancestor();
         }
 
         ostr << endl;
