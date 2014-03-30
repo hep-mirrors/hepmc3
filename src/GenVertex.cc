@@ -16,7 +16,8 @@ namespace HepMC3 {
 
 GenVertex::GenVertex():
 m_parent_event(NULL),
-m_barcode(0) {
+m_barcode(0),
+m_version_deleted(255) {
 }
 
 GenVertex::~GenVertex() {}
@@ -42,17 +43,29 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format  ) const {
         ostr << barcode()
              << "  (X,cT): 0" << endl;
 
+        bool printed_header = false;
         // Print out all the incoming particles
         for( vector<GenParticle*>::const_iterator i = m_particles_in.begin(); i != m_particles_in.end(); ++i ) {
-            if( i == m_particles_in.begin() ) ostr << "|I: ";
-            else                              ostr << "|   ";
+            if( (*i)->version_deleted() <= m_parent_event->current_version() ) continue;
+
+            if( !printed_header ) {
+                ostr << "|I: ";
+                printed_header = true;
+            }
+            else ostr << "|   ";
             (*i)->print(ostr,1);
         }
 
+        printed_header = false;
         // Print out all the outgoing particles
         for( vector<GenParticle*>::const_iterator i = m_particles_out.begin(); i != m_particles_out.end(); ++i ) {
-            if( i == m_particles_out.begin() ) ostr << "|O: ";
-            else                               ostr << "|   ";
+            if( (*i)->version_deleted() <= m_parent_event->current_version() ) continue;
+
+            if( !printed_header ) {
+                ostr << "|O: ";
+                printed_header = true;
+            }
+            else ostr << "|   ";
             (*i)->print(ostr,1);
         }
 

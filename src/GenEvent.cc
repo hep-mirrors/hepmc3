@@ -5,6 +5,7 @@
  *  @date Created       <b> 19th March 2014 </b>
  *  @date Last modified <b> 25th March 2014 </b>
  */
+#include <cmath>  // std::abs
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenEvent.h"
@@ -22,11 +23,13 @@ m_current_version(0),
 m_last_version(0) {
 
     // Create default version
-    m_versions.push_back(GenEventVersion(0, "Version 0"));
+    m_versions.push_back( new GenEventVersion(0, "Version 0"));
 }
 
 GenEvent::~GenEvent() {
-
+    for( vector<GenEventVersion*>::const_iterator i = m_versions.begin(); i != m_versions.end(); ++i ) {
+        delete (*i);
+    }
 }
 
 void GenEvent::add_particle(GenParticle *p) {
@@ -53,7 +56,7 @@ void GenEvent::add_particle(GenParticle *p) {
     ++m_last_particle;
 
     p->set_parent_event(this);
-    m_versions[m_current_version].record_change(p);
+    m_versions[m_current_version]->record_change(p);
 }
 
 void GenEvent::add_vertex(GenVertex *v) {
@@ -127,30 +130,27 @@ void GenEvent::add_vertex(GenVertex *v) {
     }
 
     v->set_parent_event(this);
-    m_versions[m_current_version].record_change(v);
+    m_versions[m_current_version]->record_change(v);
 }
 
 void GenEvent::delete_particle(GenParticle *p) {
 
-    m_versions[m_current_version].record_deleted(p);
+    p->set_version_deleted(m_last_version);
 }
 
 void GenEvent::delete_vertex(GenVertex *v) {
 
-    m_versions[m_current_version].record_deleted(v);
+    v->set_version_deleted(m_last_version);
 }
 
 void GenEvent::print( ostream& ostr) const {
 
-    const vector<GenParticle*> &particles = m_versions[m_current_version].particles();
-    const vector<GenVertex*>   &vertices  = m_versions[m_current_version].vertices();
-
     ostr << "________________________________________________________________________________" << endl;
     ostr << "GenEvent: #" << m_event_number << endl;
-    ostr << " Version: \"" << m_versions[m_current_version].name()
+    ostr << " Version: \"" << m_versions[m_current_version]->name()
          << "\" (version id: " << m_current_version << ", last version id: " << m_last_version << ")" <<endl;
-    ostr << " Entries in this event: " << vertices.size() << " vertices, "
-       << particles.size() << " particles." << endl;
+    ostr << " Entries in this event: " << -m_last_vertex << " vertices, "
+       << m_last_particle << " particles." << endl;
 
     // Print a legend to describe the particle info
     ostr << "                                    GenParticle Legend" << endl;
@@ -159,24 +159,55 @@ void GenEvent::print( ostream& ostr) const {
        << "   Stat-Subst  Prod V|P" << endl;
     ostr << "________________________________________________________________________________" << endl;
 
-    // Print all particles and vertices in the event
-    int highest_vertex_already_printed = 0;
+    // Prepare version iterators
+    vector< vector<GenParticle*>::const_iterator > p_iterators(m_current_version + 1);
+    vector< vector<GenVertex*>::const_iterator >   v_iterators(m_current_version + 1);
 
-    for( vector<GenParticle*>::const_iterator i = particles.begin(); i != particles.end(); ++i ) {
-        int production_vertex = (*i)->production_vertex_barcode();
+    for(int i=0; i<=m_current_version; ++i) {
+        p_iterators[i] = m_versions[i]->particles().begin();
+        v_iterators[i] = m_versions[i]->vertices().begin();
+    }
 
-        if( production_vertex < highest_vertex_already_printed ) {
-            highest_vertex_already_printed = production_vertex;
+    // Print all particles and vertices in the event in topological order
+    while(true) {
 
-            for( vector<GenVertex*>::const_iterator j = vertices.begin(); j != vertices.end(); ++j ) {
-                if( (*j)->barcode() == production_vertex ) {
-                    (*j)->print(ostr,true);
+        // Decide which particle to print
+        GenParticle *p = NULL;
+        int production_vertex = 65535;
+        int selected_iterator = -1;
+
+        for(int i=0; i<=m_current_version; ++i) {
+            if(p_iterators[i] == m_versions[i]->particles().end()) continue;
+
+            while( (*p_iterators[i])->version_deleted() <= m_current_version ) ++p_iterators[i];
+            GenParticle *p1 = *(p_iterators[i]);
+
+            int buf = p1->production_vertex_barcode();
+
+            if( std::abs(buf) < std::abs(production_vertex) ) {
+                production_vertex = buf;
+                p = p1;
+                selected_iterator = i;
+            }
+        }
+        if (!p) break;
+
+        ++p_iterators[selected_iterator];
+
+        // Print parent vertex if needed
+        if(production_vertex<0) {
+            for(int j=0; j<=m_current_version; ++j) {
+                if(  v_iterators[j] != m_versions[j]->vertices().end() &&
+                   (*v_iterators[j])->barcode() == production_vertex ) {
+                    (*v_iterators[j])->print(ostr,true);
+                    ++v_iterators[j];
                     break;
                 }
             }
         }
+
         ostr<<"    ";
-        (*i)->print(ostr,true);
+        p->print(ostr,true);
     }
 
     ostr << "________________________________________________________________________________" << endl;
@@ -184,7 +215,7 @@ void GenEvent::print( ostream& ostr) const {
 
 void GenEvent::create_new_version(const char *name) {
     m_last_version++;
-    m_versions.push_back( GenEventVersion(m_last_version,name) );
+    m_versions.push_back( new GenEventVersion(m_last_version,name) );
 
     m_current_version = m_last_version;
 }

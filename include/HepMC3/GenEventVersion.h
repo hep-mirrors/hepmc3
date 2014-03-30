@@ -50,9 +50,6 @@ public:
      */
     void record_change(GenVertex *v);
 
-    void record_deleted(GenParticle *p) { record_deleted(p->barcode(), m_deleted_particle_barcodes); } //!< Record deletion of a particle
-    void record_deleted(GenVertex *v)   { record_deleted(v->barcode(), m_deleted_vertex_barcodes);   } //!< Record deletion of a vertex
-
 private:
     /** Helper for record_deleted functions */
     void record_deleted(int barcode, vector<int> &container);
@@ -74,8 +71,6 @@ private:
     std::string           m_name;                      //!< Version name. Indicates what tool/generator created this version
     vector<GenParticle*>  m_particles;                 //!< List of particles modified/added in this version (sorted by barcode)
     vector<GenVertex*>    m_vertices;                  //!< List of vertices  modified/added in this version (sorted by barcode)
-    vector<int>           m_deleted_particle_barcodes; //!< List of particles deleted in this version (sorted by barcode)
-    vector<int>           m_deleted_vertex_barcodes;   //!< List of vertices  deleted in this version (sorted by barcode)
 };
 
 } // namespace HepMC3

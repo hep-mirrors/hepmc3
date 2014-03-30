@@ -8,6 +8,8 @@
  */
 #include <iostream>
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
 using namespace HepMC3;
 
 int main() {
@@ -57,18 +59,31 @@ int main() {
     evt->add_vertex( v3 );
     v3->add_particle_in( p3 );
     v3->add_particle_in( p4 );
-    v3->add_particle_out( new GenParticle( FourVector(-3.813,0.113,-1.833,4.233 ), 22, 1 ) );
-    GenParticle* p5 = new GenParticle( FourVector(1.517,-20.68,-20.605,85.925), -24,3);
+    GenParticle* p5 = new GenParticle( FourVector(-3.813,0.113,-1.833,4.233 ), 22, 1 );
+    GenParticle* p6 = new GenParticle( FourVector(1.517,-20.68,-20.605,85.925), -24,3);
     v3->add_particle_out( p5 );
+    v3->add_particle_out( p6 );
     //
     // create v4
     GenVertex* v4 = new GenVertex();
     evt->add_vertex( v4 );
-    v4->add_particle_in( p5 );
-    v4->add_particle_out( new GenParticle( FourVector(-2.445,28.816,6.082,29.552), 1,1 ) );
-    v4->add_particle_out( new GenParticle( FourVector(3.962,-49.498,-26.687,56.373), -2,1 )  );
+    v4->add_particle_in( p6 );
+    GenParticle* p7 = new GenParticle( FourVector(-2.445,28.816,6.082,29.552), 1,1 );
+    GenParticle* p8 = new GenParticle( FourVector(3.962,-49.498,-26.687,56.373), -2,1 );
+    v4->add_particle_out( p7 );
+    v4->add_particle_out( p8 );
 
     // the event is complete, we now print it out to the screen
+    evt->print();
+
+    // Versioning test
+    evt->create_new_version("Second tool");
+
+    evt->delete_particle( p7 );
+
+    GenParticle* p9 = new GenParticle( FourVector(1., 2., 3., 4.), 1,1 );
+    v4->add_particle_out( p9 );
+
     evt->print();
 
     // now clean-up by deleting all objects from memory

@@ -82,6 +82,9 @@ public:
     vector<GenParticle*>& particles_out()             { return m_particles_out; }  //!< Access outgoing particle list
     const vector<GenParticle*>& particles_in()  const { return m_particles_in; }   //!< Get incoming particle list
     const vector<GenParticle*>& particles_out() const { return m_particles_out; }  //!< Get outgoing particle list
+
+    short int version_deleted()                 const { return m_version_deleted; } //!< Get version number when this particle was deleted
+    void      set_version_deleted(short int v)        { m_version_deleted = v;    } //!< Set version number when this particle was deleted
 //
 // Fields
 //
@@ -100,6 +103,7 @@ private:
 
     vector<GenParticle*> m_particles_in;   //!< Incoming particle list
     vector<GenParticle*> m_particles_out;  //!< Outgoing particle list
+    short int            m_version_deleted;//!< Version number when this vertex was deleted
 };
 
 } // namespace HepMC3

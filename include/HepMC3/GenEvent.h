@@ -78,8 +78,9 @@ public:
     int get_last_particle_barcode()         const { return m_last_particle; } //!< Get barcode of last particle
     int get_last_vertex_barcode()           const { return m_last_vertex;   } //!< Get barcode of last vertex
 
-    const vector<GenParticle*>& particles() const { return m_versions[m_current_version].particles(); } //!< Access particle list
-    const vector<GenVertex*>&   vertices()  const { return m_versions[m_current_version].vertices();  } //!< Access vertex list
+    const vector<GenParticle*>&     particles() const { return m_versions[m_current_version]->particles(); } //!< Access particle list
+    const vector<GenVertex*>&       vertices()  const { return m_versions[m_current_version]->vertices();  } //!< Access vertex list
+    const vector<GenEventVersion*>& versions()  const { return m_versions;  }                                //!< Access version list
 
     int  current_version()                  const { return m_current_version; } //!< Get current version
     void set_current_version(int ver);                                          //!< Set current version
@@ -95,7 +96,7 @@ private:
     int m_current_version;    //!< Index of current version used
     int m_last_version;       //!< Index of the last version of the event
 
-    vector<GenEventVersion> m_versions; //!< version list
+    vector<GenEventVersion*> m_versions; //!< version list
 };
 
 } // namespace HepMC3

@@ -74,29 +74,34 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 }
 
                 current_vertex = new GenVertex();
-                m_vertex_cache.push_back(current_vertex);
 
                 parsing_result = parse_vertex_information(current_vertex,buf);
                 if(parsing_result<0) {
+                    delete current_vertex;
+                    current_vertex = NULL;
                     is_parsing_successful = false;
                     ERROR( "IO_HepMC2_adapter: error parsing vertex information" )
                 }
                 else {
+                    m_vertex_cache.push_back(current_vertex);
                     current_vertex_particles_count = parsing_result;
                     is_parsing_successful = true;
                 }
                 break;
             case 'P':
                 current_particle = new GenParticle();
-                m_particle_cache.push_back(current_particle);
-
-                current_vertex->add_particle_out(current_particle);
                 parsing_result = parse_particle_information(current_particle,buf);
                 if(parsing_result<0) {
+                    delete current_particle;
+                    current_particle = NULL;
                     is_parsing_successful = false;
                     ERROR( "IO_HepMC2_adapter: error parsing particle information" )
                 }
-                else is_parsing_successful = true;
+                else {
+                    m_particle_cache.push_back(current_particle);
+                    if(current_vertex) current_vertex->add_particle_out(current_particle);
+                    is_parsing_successful = true;
+                }
                 break;
             case 'U':
                 DEBUG( 10, "IO_HepMC2_adapter: U: skipping unit info (for now)" )

@@ -26,24 +26,30 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
            << " "  << evt->particles().size()
            << endl;
 
-    // Print all particles and vertices in the event
+    for( vector<GenEventVersion*>::const_iterator v  = evt->versions().begin();
+                                                  v != evt->versions().end();
+                                                  ++v ) {
+        // Version info
+        m_file << "T " << (*v)->name() << endl;
 
-    int highest_vertex_already_printed = 0;
+        // Print all particles and vertices in this version
+        int highest_vertex_already_printed = 0;
 
-    for( vector<GenParticle*>::const_iterator i = evt->particles().begin(); i != evt->particles().end(); ++i ) {
+        for( vector<GenParticle*>::const_iterator i  = (*v)->particles().begin(); i != (*v)->particles().end(); ++i ) {
 
-        int production_vertex = (*i)->production_vertex_barcode();
-        if( production_vertex < highest_vertex_already_printed ) {
+            int production_vertex = (*i)->production_vertex_barcode();
+            if( production_vertex < highest_vertex_already_printed ) {
 
-            highest_vertex_already_printed = production_vertex;
-            for( vector<GenVertex*>::const_iterator j = evt->vertices().begin(); j != evt->vertices().end(); ++j ) {
-                if( (*j)->barcode() == production_vertex ) {
-                    write_vertex(*j);
-                    break;
+                highest_vertex_already_printed = production_vertex;
+                for( vector<GenVertex*>::const_iterator j = evt->vertices().begin(); j != evt->vertices().end(); ++j ) {
+                    if( (*j)->barcode() == production_vertex ) {
+                        write_vertex(*j);
+                        break;
+                    }
                 }
             }
+            write_particle(*i);
         }
-        write_particle(*i);
     }
 }
 

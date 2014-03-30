@@ -92,6 +92,8 @@ public:
     void   unset_generated_mass()                     { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Declare that generated mass is not set
     bool   is_generated_mass_set()                    { return m_is_generated_mass_set; }                          //!< Check if genereted mass is set
 
+    short int version_deleted()                 const { return m_version_deleted; } //!< Get version number when this particle was deleted
+    void      set_version_deleted(short int v)        { m_version_deleted = v;    } //!< Set version number when this particle was deleted
 //
 // Fields
 //
@@ -106,6 +108,7 @@ private:
     int        m_end_vertex;            //!< End vertex barcode
     double     m_generated_mass;        //!< Generated mass
     bool       m_is_generated_mass_set; //!< Check if generated mass is set
+    short int  m_version_deleted;       //!< Version number when this particle was deleted
 };
 
 } // namespace HepMC3

@@ -92,32 +92,4 @@ void GenEventVersion::record_change(GenVertex *v) {
     }
 }
 
-void GenEventVersion::record_deleted(int barcode, vector<int> &container ) {
-
-    // First entry
-    if( container.size() == 0 ) {
-        container.push_back( barcode );
-        return;
-    }
-
-    // Entry not within the list range
-    if( container.back() > barcode ) {
-        container.push_back( barcode );
-        return;
-    }
-
-    // Particle within the list range
-    for( vector<int>::iterator i = container.begin(); i != container.end(); ++i ) {
-
-        // Already exists on the list - do nothing
-        if ((*i) == barcode ) return;
-
-        // Particle does not exist on the list - insert (max O(n))
-        if ((*i) >  barcode ) {
-            container.insert( i, barcode);
-            return;
-        }
-    }
-}
-
 } // namespace HepMC3
