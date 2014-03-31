@@ -3,10 +3,9 @@ HEPMC3LOCATION = ..
 HEPMC3INC      = -I$(HEPMC3LOCATION)/include
 HEPMC3LIBS     = -L$(HEPMC3LOCATION)/lib -lHepMC
 
-UNIT_TESTS = catch/main.exe
 TESTS      = basic_tree.exe HepMC2_to_3_converter_test.exe
 
-all: $(TESTS) $(UNIT_TESTS)
+all: $(TESTS)
 
 %.exe: %.o
 	$(LD) $(LDFLAGS) $< -o $@ $(HEPMC3LIBS) -Wl,-rpath,$(HEPMC3LOCATION)/lib
