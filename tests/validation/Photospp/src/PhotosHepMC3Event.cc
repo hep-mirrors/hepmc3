@@ -27,6 +27,8 @@ m_event(event) {
 		PhotosParticle *particle = new PhotosHepMC3Particle(*i);
 		m_particles.push_back(particle);
 	}
+
+    event->create_new_version("Photos++");
 }
 
 PhotosHepMC3Event::~PhotosHepMC3Event() {

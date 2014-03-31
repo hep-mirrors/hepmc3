@@ -81,7 +81,7 @@ void PhotosHepMC3Particle::addDaughter(PhotosParticle* daughter){
 
     // Add to internal list as well
     m_daughters.push_back(daughter);
-
+    
     HepMC3::GenParticle * daugh = (dynamic_cast<PhotosHepMC3Particle*>(daughter))->getHepMC();
     m_particle->end_vertex()->add_particle_out(daugh);
 }
@@ -127,6 +127,9 @@ void PhotosHepMC3Particle::setDaughters(vector<PhotosParticle*> daughters){
 
 std::vector<PhotosParticle*> PhotosHepMC3Particle::getMothers() {
 
+    // Ignore our new version
+    m_particle->parent_event()->set_current_version(m_particle->parent_event()->last_version()-1);
+
     if( m_mothers.size() == 0 ) {
         if( m_particle->production_vertex() ) {
             vector<HepMC3::GenParticle*>::const_iterator pcle_itr     = m_particle->production_vertex()->particles_in().begin();
@@ -141,10 +144,17 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getMothers() {
             m_mothers.push_back( new PhotosHepMC3Particle(p) );
         }
     }
+
+    // Go back to new version
+    m_particle->parent_event()->set_current_version(m_particle->parent_event()->last_version());
+
     return m_mothers;
 }
 
 std::vector<PhotosParticle*> PhotosHepMC3Particle::getDaughters() {
+
+    // Ignore our new version
+    m_particle->parent_event()->set_current_version(m_particle->parent_event()->last_version()-1);
 
     if( m_daughters.size() == 0 && m_particle->parent_event() ) {
         // Add outgoing particles of end vertex (if present)
@@ -167,6 +177,9 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getDaughters() {
             }
         }
     }
+
+    // Go back to new version
+    m_particle->parent_event()->set_current_version(m_particle->parent_event()->last_version());
 
     return m_daughters;
 }
