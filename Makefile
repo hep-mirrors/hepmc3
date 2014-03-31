@@ -10,6 +10,7 @@ LIB_HEPMC_OBJ = src/GenParticle.o src/GenEvent.o src/GenVertex.o \
 all: lib
 
 lib: $(LIB_HEPMC_OBJ)
+	mkdir -p lib
 	ar cr lib/$(LIB_HEPMC_A) $(LIB_HEPMC_OBJ)
 	$(LD) $(LDFLAGS) $(SOFLAGS) -o lib/$(LIB_HEPMC_SO).$(LIB_VER) $(LIB_HEPMC_OBJ)
 	ln -sf $(LIB_HEPMC_SO).$(LIB_VER) lib/$(LIB_HEPMC_SO)
