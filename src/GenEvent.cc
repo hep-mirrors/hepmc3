@@ -159,55 +159,22 @@ void GenEvent::print( ostream& ostr) const {
        << "   Stat-Subst  Prod V|P" << endl;
     ostr << "________________________________________________________________________________" << endl;
 
-    // Prepare version iterators
-    vector< vector<GenParticle*>::const_iterator > p_iterators(m_current_version + 1);
-    vector< vector<GenVertex*>::const_iterator >   v_iterators(m_current_version + 1);
+    int last_vertex_printed = 0;
 
     for(int i=0; i<=m_current_version; ++i) {
-        p_iterators[i] = m_versions[i]->particles().begin();
-        v_iterators[i] = m_versions[i]->vertices().begin();
-    }
+        vector<GenParticle*>::const_iterator p = m_versions[i]->particles().begin();
+        vector<GenVertex*>::const_iterator   v = m_versions[i]->vertices().begin();
 
-    // Print all particles and vertices in the event in topological order
-    while(true) {
-
-        // Decide which particle to print
-        GenParticle *p = NULL;
-        int production_vertex = 65535;
-        int selected_iterator = -1;
-
-        for(int i=0; i<=m_current_version; ++i) {
-            if(p_iterators[i] == m_versions[i]->particles().end()) continue;
-
-            while( (*p_iterators[i])->version_deleted() <= m_current_version ) ++p_iterators[i];
-            GenParticle *p1 = *(p_iterators[i]);
-
-            int buf = p1->ancestor();
-
-            if( std::abs(buf) < std::abs(production_vertex) ) {
-                production_vertex = buf;
-                p = p1;
-                selected_iterator = i;
+        for( ; p != m_versions[i]->particles().end(); ++p ) {
+            if( (*p)->ancestor()<0 && (*p)->ancestor()<last_vertex_printed && v != m_versions[i]->vertices().end() ) {
+                (*v)->print(ostr,true);
+                last_vertex_printed = (*v)->barcode();
+                ++v;
             }
+
+            ostr<<"    ";
+            (*p)->print(ostr,true);
         }
-        if (!p) break;
-
-        ++p_iterators[selected_iterator];
-
-        // Print parent vertex if needed
-        if(production_vertex<0) {
-            for(int j=0; j<=m_current_version; ++j) {
-                if(  v_iterators[j] != m_versions[j]->vertices().end() &&
-                   (*v_iterators[j])->barcode() == production_vertex ) {
-                    (*v_iterators[j])->print(ostr,true);
-                    ++v_iterators[j];
-                    break;
-                }
-            }
-        }
-
-        ostr<<"    ";
-        p->print(ostr,true);
     }
 
     ostr << "________________________________________________________________________________" << endl;

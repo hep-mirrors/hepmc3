@@ -29,6 +29,7 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
     for( vector<GenEventVersion*>::const_iterator v  = evt->versions().begin();
                                                   v != evt->versions().end();
                                                   ++v ) {
+
         // Version info
         m_file << "T " << (*v)->name() << endl;
 
@@ -41,7 +42,7 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
             if( production_vertex < highest_vertex_already_printed ) {
 
                 highest_vertex_already_printed = production_vertex;
-                for( vector<GenVertex*>::const_iterator j = evt->vertices().begin(); j != evt->vertices().end(); ++j ) {
+                for( vector<GenVertex*>::const_iterator j = (*v)->vertices().begin(); j != (*v)->vertices().end(); ++j ) {
                     if( (*j)->barcode() == production_vertex ) {
                         write_vertex(*j);
                         break;
