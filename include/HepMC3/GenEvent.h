@@ -68,6 +68,12 @@ public:
      *  Sets new version as current version
      */
     void create_new_version(const char *name);
+
+    /** Find vertex by barcode */
+    GenVertex* find_vertex(int barcode);
+
+    /** Find particle by barcode */
+    GenParticle* find_particle(int barcode);
 //
 // Accessors
 //

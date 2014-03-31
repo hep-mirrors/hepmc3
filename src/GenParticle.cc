@@ -8,6 +8,7 @@
 #include <iostream>
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/Log.h"
 using std::endl;
 using std::ostream;
 
@@ -44,6 +45,57 @@ m_version_deleted(255) {
 }
 
 GenParticle::~GenParticle() {}
+
+GenVertex* GenParticle::production_vertex() const {
+    if( m_ancestor < 0 ) return m_parent_event->find_vertex(m_ancestor);
+    else return NULL;
+}
+
+GenVertex* GenParticle::create_production_vertex() {
+    if( !m_parent_event ) {
+        ERROR( "GenParticle::create_production_vertex: particle must belong to an event" )
+        return NULL;
+    }
+
+    if( m_ancestor < 0 ) return m_parent_event->find_vertex(m_ancestor);
+
+    GenVertex *v = new GenVertex();
+
+    if( m_ancestor > 0 ) v->add_particle_in(m_parent_event->find_particle(m_ancestor));
+
+    v->add_particle_out(this);
+    m_parent_event->add_vertex(v);
+
+    return v;
+}
+
+GenVertex* GenParticle::end_vertex() const {
+    if( m_descendant < 0 ) return m_parent_event->find_vertex(m_descendant);
+    else return NULL;
+}
+
+GenVertex* GenParticle::create_end_vertex() {
+    if( !m_parent_event ) {
+        ERROR( "GenParticle::create_end_vertex: particle must belong to an event" )
+        return NULL;
+    }
+
+    if( m_descendant < 0 ) return m_parent_event->find_vertex(m_descendant);
+
+    GenVertex *v = new GenVertex();
+
+    // Do not trust descendants - find them yourself
+    for( vector<GenParticle*>::const_iterator i  = m_parent_event->particles().begin();
+                                              i != m_parent_event->particles().end();
+                                              ++i ) {
+        if( (*i)->ancestor() == m_barcode ) v->add_particle_out(*i);
+    }
+
+    v->add_particle_in(this);
+    m_parent_event->add_vertex(v);
+
+    return v;
+}
 
 void GenParticle::print(ostream& ostr, bool event_listing_format) const {
 

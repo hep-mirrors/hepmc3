@@ -229,4 +229,24 @@ void GenEvent::set_current_version(int ver) {
     m_current_version = ver;
 }
 
+GenVertex* GenEvent::find_vertex(int barcode) {
+    for(int i=m_current_version; i>=0; --i) {
+        for( vector<GenVertex*>::const_iterator j = m_versions[i]->vertices().begin(); j!=m_versions[i]->vertices().end(); ++j) {
+            if( (*j)->barcode() == barcode ) return *j;
+        }
+    }
+
+    return NULL;
+}
+
+GenParticle* GenEvent::find_particle(int barcode) {
+    for(int i=m_current_version; i>=0; --i) {
+        for( vector<GenParticle*>::const_iterator j = m_versions[i]->particles().begin(); j!=m_versions[i]->particles().end(); ++j) {
+            if( (*j)->barcode() == barcode ) return *j;
+        }
+    }
+
+    return NULL;
+}
+
 } // namespace HepMC3

@@ -17,6 +17,7 @@
 
 namespace HepMC3 {
 
+class GenVertex;
 class GenEvent;
 
 class GenParticle {
@@ -44,6 +45,32 @@ public:
      *  event_listing_format = true is used by event for formatted output
      */
     void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
+
+    /** Get production vertex
+     *  Returns the pointer to production vertex (if exists)
+     *  @note Particle can have an ancestor without having a production vertex!
+     */
+    GenVertex* production_vertex() const;
+
+    /** Create production vertex
+     *  This vertex will be automatically added to the event.
+     *  If particle already has an ancestor, it will be added to this vertex
+     *  incoming particle list
+     */
+    GenVertex* create_production_vertex();
+
+    /** Get end vertex
+     *  Returns the pointer to end vertex (if exists)
+     *  @note Particle can have a descendant without having end vertex!
+     */
+    GenVertex* end_vertex() const;
+
+    /** Create end vertex
+     *  This vertex will be automatically added to the event.
+     *  If particle already has a descendant, it will be added to this vertex
+     *  outgoing particle list
+     */
+    GenVertex* create_end_vertex();
 
 //
 // Accessors
@@ -80,6 +107,7 @@ public:
     void   set_descendant(int barcode)                { m_descendant = barcode; }        //!< Set descendant (vertex or particle) barcode
 
     const  FourVector& momentum()               const { return m_momentum; }             //!< Get momentum
+    FourVector&        momentum()                     { return m_momentum; }             //!< Set momentum by reference
     void   set_momentum(FourVector& momentum)         { m_momentum  = momentum; }        //!< Set momentum
 
     /** Get generated mass
