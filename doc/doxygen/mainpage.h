@@ -10,6 +10,10 @@
     - @subpage features
     - @subpage differences
 
+    @section diagram Class diagram
+
+    <img src="class_diagram.png">
+
     <hr>
-    Last update 28 March 2014
+    Last update 1 April 2014
 */
