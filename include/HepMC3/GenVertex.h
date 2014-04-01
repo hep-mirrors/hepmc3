@@ -70,8 +70,11 @@ public:
 protected:
     void set_barcode(int barcode)                     { m_barcode = barcode; }      //!< Set barcode
 
-    short int version_deleted()                 const { return m_version_deleted; } //!< Get version number when this particle was deleted
-    void      set_version_deleted(short int v)        { m_version_deleted = v;    } //!< Set version number when this particle was deleted
+    short int version_created()                 const { return m_version_created; } //!< Get creation version number
+    void      set_version_created(short int v)        { m_version_created = v;    } //!< Set creation version number
+
+    short int version_deleted()                 const { return m_version_deleted; } //!< Get deletion version number
+    void      set_version_deleted(short int v)        { m_version_deleted = v;    } //!< Set deletion version number
 //
 // Fields
 //
@@ -89,6 +92,7 @@ private:
 
     vector<GenParticle*> m_particles_in;   //!< Incoming particle list
     vector<GenParticle*> m_particles_out;  //!< Outgoing particle list
+    short int            m_version_created;//!< Version number when this vertex was created
     short int            m_version_deleted;//!< Version number when this vertex was deleted
 };
 

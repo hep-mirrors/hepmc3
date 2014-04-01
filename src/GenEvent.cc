@@ -39,7 +39,8 @@ void GenEvent::add_particle(GenParticle *p) {
     ++m_last_particle;
 
     p->set_barcode(m_last_particle);
-    m_versions[m_current_version]->record_change(p);
+    p->set_version_created(m_last_version);
+    m_versions[m_last_version]->record_change(p);
 }
 
 void GenEvent::add_vertex(GenVertex *v) {
@@ -58,17 +59,29 @@ void GenEvent::add_vertex(GenVertex *v) {
     --m_last_vertex;
 
     v->set_barcode(m_last_vertex);
-    m_versions[m_current_version]->record_change(v);
+    v->set_version_created(m_last_version);
+    m_versions[m_last_version]->record_change(v);
 }
 
 void GenEvent::delete_particle(GenParticle *p) {
 
     p->set_version_deleted(m_last_version);
+
+    // Removing incoming particle from the vertex makes this vertex
+    // and all subsequent vertices and particles invalid
+    if(p->end_vertex()) delete_vertex(p->end_vertex());
 }
 
 void GenEvent::delete_vertex(GenVertex *v) {
 
     v->set_version_deleted(m_last_version);
+
+    // Removing incoming particle from the vertex makes this vertex
+    // and all subsequent vertices and particles invalid
+    BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
+        p->set_version_deleted(m_last_version);
+        if(p->end_vertex()) delete_vertex(p->end_vertex());
+    }
 }
 
 void GenEvent::print( ostream& ostr) const {
@@ -87,33 +100,40 @@ void GenEvent::print( ostream& ostr) const {
        << "   Stat-Subst  ProdVtx" << endl;
     ostr << "________________________________________________________________________________" << endl;
 
-    BOOST_FOREACH( GenVertex *v, m_versions[m_current_version]->vertices() ) {
-        v->print(ostr,1);
+    BOOST_FOREACH( GenEventVersion *ver, boost::make_iterator_range(m_versions.begin(), m_versions.begin()+m_current_version+1) ) {
+        BOOST_FOREACH( GenVertex *v, ver->vertices() ) {
+            if( v->version_deleted() <= m_current_version ) continue;
+            if( v->version_created() >  m_current_version ) continue;
+            v->print(ostr,1);
 
-        bool printed_header = false;
+            bool printed_header = false;
 
-        // Print out all the incoming particles
-        BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
-            if( p->version_deleted() <= m_current_version ) continue;
-            if( !printed_header ) {
-                ostr << " I: ";
-                printed_header = true;
+            // Print out all the incoming particles
+            BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
+                if( p->version_deleted() <= m_current_version ) continue;
+                if( p->version_created() >  m_current_version ) continue;
+                if( !printed_header ) {
+                    ostr << " I: ";
+                    printed_header = true;
+                }
+                else ostr << "    ";
+                p->print(ostr,1);
             }
-            else ostr << "    ";
-            p->print(ostr,1);
-        }
 
-        printed_header = false;
+            printed_header = false;
 
-        // Print out all the outgoing particles
-        BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
-            if( p->version_deleted() <= m_current_version ) continue;
-            if( !printed_header ) {
-                ostr << " O: ";
-                printed_header = true;
+            // Print out all the outgoing particles
+            BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
+                if( p->version_deleted() <= m_current_version ) continue;
+                if( p->version_created() >  m_current_version ) continue;
+
+                if( !printed_header ) {
+                    ostr << " O: ";
+                    printed_header = true;
+                }
+                else ostr << "    ";
+                p->print(ostr,1);
             }
-            else ostr << "    ";
-            p->print(ostr,1);
         }
     }
 
@@ -134,26 +154,6 @@ void GenEvent::set_current_version(int ver) {
     }
 
     m_current_version = ver;
-}
-
-GenVertex* GenEvent::find_vertex(int barcode) {
-    for(int i=m_current_version; i>=0; --i) {
-        for( vector<GenVertex*>::const_iterator j = m_versions[i]->vertices().begin(); j!=m_versions[i]->vertices().end(); ++j) {
-            if( (*j)->barcode() == barcode ) return *j;
-        }
-    }
-
-    return NULL;
-}
-
-GenParticle* GenEvent::find_particle(int barcode) {
-    for(int i=m_current_version; i>=0; --i) {
-        for( vector<GenParticle*>::const_iterator j = m_versions[i]->particles().begin(); j!=m_versions[i]->particles().end(); ++j) {
-            if( (*j)->barcode() == barcode ) return *j;
-        }
-    }
-
-    return NULL;
 }
 
 } // namespace HepMC3

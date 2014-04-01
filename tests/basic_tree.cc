@@ -74,18 +74,33 @@ int main() {
     v4->add_particle_out( p8 );
     evt->add_vertex( v4 );
 
-    // the event is complete, we now print it out to the screen
-    evt->print();
-
-    // Versioning test
+    // versioning test
     evt->create_new_version("Second tool");
 
     evt->delete_particle( p7 );
 
     GenParticle* p9 = new GenParticle( FourVector(1., 2., 3., 4.), 1,1 );
+    evt->add_particle( p9 );
     v4->add_particle_out( p9 );
 
+    evt->create_new_version("Third tool");
+
+    evt->delete_particle(p4);
+
+    // printout
+    evt->set_current_version(0);
     evt->print();
+    evt->set_current_version(1);
+    evt->print();
+    evt->set_current_version(evt->last_version());
+    evt->print();
+
+    std::cout<<"Testing few errors: "<<std::endl;
+
+    GenParticle* p10 = new GenParticle( FourVector(5., 4., 3., 2.), 1,1 );
+    evt->add_particle(p10);
+    v4->add_particle_out(p10);
+    v4->add_particle_in(p10);
 
     // now clean-up by deleting all objects from memory
     //

@@ -24,6 +24,7 @@ m_status_subcode(0),
 m_barcode(0),
 m_generated_mass(0.0),
 m_is_generated_mass_set(false),
+m_version_created(0),
 m_version_deleted(255) {
 
 }
@@ -38,6 +39,7 @@ m_status_subcode(0),
 m_barcode(0),
 m_generated_mass(0.0),
 m_is_generated_mass_set(false),
+m_version_created(0),
 m_version_deleted(255) {
 
 }

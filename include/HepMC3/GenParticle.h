@@ -86,6 +86,9 @@ protected:
     void      set_production_vertex(GenVertex *v)     { m_production_vertex = v;    }    //!< Set production vertex
     void      set_end_vertex(GenVertex *v)            { m_end_vertex = v;    }           //!< Set end vertex
 
+    short int version_created()                 const { return m_version_created; }      //!< Get creation version number
+    void      set_version_created(short int v)        { m_version_created = v;    }      //!< Set creation version number
+
     short int version_deleted()                 const { return m_version_deleted; }      //!< Get deletion version number
     void      set_version_deleted(short int v)        { m_version_deleted = v;    }      //!< Set deletion version number
 
@@ -103,6 +106,7 @@ private:
     int        m_barcode;               //!< Barcode
     double     m_generated_mass;        //!< Generated mass
     bool       m_is_generated_mass_set; //!< Check if generated mass is set
+    short int  m_version_created;       //!< Version number when this particle was created
     short int  m_version_deleted;       //!< Version number when this particle was deleted
 };
 

@@ -16,6 +16,7 @@ namespace HepMC3 {
 
 GenVertex::GenVertex():
 m_barcode(0),
+m_version_created(0),
 m_version_deleted(255) {
 }
 
@@ -48,6 +49,10 @@ void GenVertex::add_particle_in(GenParticle *p) {
         WARNING( "GenVertex::add_particle_in:  particle must be added to the event first!" )
         return;
     }
+    if( m_version_created < p->version_created() ) {
+        WARNING( "GenVertex::add_particle_in:  cannot add incoming particle to vertex from older version!" )
+        return;
+    }
 
     p->set_end_vertex(this);
     m_particles_in.push_back(p);
@@ -58,6 +63,10 @@ void GenVertex::add_particle_out(GenParticle *p) {
 
     if( m_barcode && p->barcode()==0 ) {
         WARNING( "GenVertex::add_particle_out: particle must be added to the event first!" )
+        return;
+    }
+    if( m_version_deleted <= p->version_created() ) {
+        WARNING( "GenVertex::add_particle_out: cannot add particle to deleted vertex!" )
         return;
     }
 

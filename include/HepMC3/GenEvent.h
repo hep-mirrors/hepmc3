@@ -13,6 +13,8 @@
  *  @date Created       <b> 19th March 2014 </b>
  *  @date Last modified <b> 25th March 2014 </b>
  */
+#include <boost/range/iterator_range.hpp>
+#include <boost/foreach.hpp>
 #include <vector>
 #include "HepMC3/GenEventVersion.h"
 using std::vector;
@@ -68,12 +70,6 @@ public:
      *  Sets new version as current version
      */
     void create_new_version(const char *name);
-
-    /** Find vertex by barcode */
-    GenVertex* find_vertex(int barcode);
-
-    /** Find particle by barcode */
-    GenParticle* find_particle(int barcode);
 //
 // Accessors
 //
