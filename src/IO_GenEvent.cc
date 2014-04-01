@@ -5,6 +5,8 @@
  *  @date Created       <b> 23th March 2014 </b>
  *  @date Last modified <b> 25th March 2014 </b>
  */
+#include <boost/foreach.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <iostream>
 #include <fstream>
 #include "HepMC3/IO_GenEvent.h"
@@ -26,30 +28,14 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
            << " "  << evt->particles().size()
            << endl;
 
-    for( vector<GenEventVersion*>::const_iterator v  = evt->versions().begin();
-                                                  v != evt->versions().end();
-                                                  ++v ) {
+    BOOST_FOREACH( GenEventVersion *ver , evt->versions() ) {
 
         // Version info
-        m_file << "T " << (*v)->name() << endl;
+        m_file << "T " << ver->name() << endl;
 
-        // Print all particles and vertices in this version
-        int highest_vertex_already_printed = 0;
-
-        for( vector<GenParticle*>::const_iterator i  = (*v)->particles().begin(); i != (*v)->particles().end(); ++i ) {
-
-            int production_vertex = (*i)->ancestor();
-            if( production_vertex < highest_vertex_already_printed ) {
-
-                highest_vertex_already_printed = production_vertex;
-                for( vector<GenVertex*>::const_iterator j = (*v)->vertices().begin(); j != (*v)->vertices().end(); ++j ) {
-                    if( (*j)->barcode() == production_vertex ) {
-                        write_vertex(*j);
-                        break;
-                    }
-                }
-            }
-            write_particle(*i);
+        // Print vertices
+        BOOST_FOREACH( GenVertex *v, evt->vertices() ) {
+            write_vertex(v);
         }
     }
 }
@@ -67,21 +53,31 @@ bool IO_GenEvent::fill_next_event(GenEvent *evt) {
 }
 
 void IO_GenEvent::write_vertex(const GenVertex *v) {
-    unsigned int in_size = v->particles_in().size();
+
+    // Write all incoming particles
+    BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
+        write_particle(p);
+    }
 
     m_file << "V " << v->barcode()
            << " [";
 
-    if(in_size) {
-        for( unsigned int i=0; i<in_size-1; ++i ) {
-            m_file << v->particles_in()[i]->barcode() << ",";
+    if(v->particles_in().size()) {
+        BOOST_FOREACH( GenParticle *p, boost::make_iterator_range(v->particles_in().begin(), v->particles_in().end()-1) ) {
+            m_file << p->barcode() <<",";
         }
         m_file << v->particles_in().back()->barcode();
     }
+
     m_file << "] ";
 
     m_file << "@ 0 0 0 0";
     m_file << endl;
+
+    // Write outgoing particles without their end vertex
+    BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
+        if( !p->end_vertex() ) write_particle(p);
+    }
 }
 
 void IO_GenEvent::write_particle(const GenParticle *p) {
@@ -91,8 +87,11 @@ void IO_GenEvent::write_particle(const GenParticle *p) {
     m_file.precision(m_precision);
 
     m_file << "P "<< p->barcode()
-           << " " << p->ancestor()
-           << " " << p->pdg_id()
+           << " ";
+    if( p->production_vertex() ) m_file << p->production_vertex()->barcode();
+    else                         m_file << "0";
+
+    m_file << " " << p->pdg_id()
            << " " << p->momentum().px()
            << " " << p->momentum().py()
            << " " << p->momentum().pz()

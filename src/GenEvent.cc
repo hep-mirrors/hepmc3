@@ -5,6 +5,7 @@
  *  @date Created       <b> 19th March 2014 </b>
  *  @date Last modified <b> 25th March 2014 </b>
  */
+#include <boost/foreach.hpp>
 #include <cmath>  // std::abs
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
@@ -123,10 +124,10 @@ void GenEvent::add_vertex(GenVertex *v) {
 
     // Restore incoming/outgoing indexes
     for( vector<GenParticle*>::const_iterator i = v->particles_in().begin(); i != v->particles_in().end(); ++i ) {
-        (*i)->set_descendant(v->barcode());
+        (*i)->set_end_vertex(v);
     }
     for( vector<GenParticle*>::const_iterator i = v->particles_out().begin(); i != v->particles_out().end(); ++i ) {
-        (*i)->set_ancestor(v->barcode());
+        (*i)->set_production_vertex(v);
     }
 
     v->set_parent_event(this);
@@ -159,22 +160,8 @@ void GenEvent::print( ostream& ostr) const {
        << "   Stat-Subst  Prod V|P" << endl;
     ostr << "________________________________________________________________________________" << endl;
 
-    int last_vertex_printed = 0;
-
-    for(int i=0; i<=m_current_version; ++i) {
-        vector<GenParticle*>::const_iterator p = m_versions[i]->particles().begin();
-        vector<GenVertex*>::const_iterator   v = m_versions[i]->vertices().begin();
-
-        for( ; p != m_versions[i]->particles().end(); ++p ) {
-            if( (*p)->ancestor()<0 && (*p)->ancestor()<last_vertex_printed && v != m_versions[i]->vertices().end() ) {
-                (*v)->print(ostr,true);
-                last_vertex_printed = (*v)->barcode();
-                ++v;
-            }
-
-            ostr<<"    ";
-            (*p)->print(ostr,true);
-        }
+    BOOST_FOREACH( GenVertex *v, m_versions[m_current_version]->vertices() ) {
+        v->print(ostr,1);
     }
 
     ostr << "________________________________________________________________________________" << endl;

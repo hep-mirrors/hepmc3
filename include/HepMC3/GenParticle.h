@@ -46,38 +46,18 @@ public:
      */
     void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
 
-    /** Get production vertex
-     *  Returns the pointer to production vertex (if exists)
-     *  @note Particle can have an ancestor without having a production vertex!
-     */
-    GenVertex* production_vertex() const;
-
-    /** Create production vertex
-     *  This vertex will be automatically added to the event.
-     *  If particle already has an ancestor, it will be added to this vertex
-     *  incoming particle list
-     */
-    GenVertex* create_production_vertex();
-
-    /** Get end vertex
-     *  Returns the pointer to end vertex (if exists)
-     *  @note Particle can have a descendant without having end vertex!
-     */
-    GenVertex* end_vertex() const;
-
-    /** Create end vertex
-     *  This vertex will be automatically added to the event.
-     *  If particle already has a descendant, it will be added to this vertex
-     *  outgoing particle list
-     */
-    GenVertex* create_end_vertex();
-
 //
 // Accessors
 //
 public:
     GenEvent* parent_event()                           { return m_parent_event; }          //!< Get parent event
     void      set_parent_event(GenEvent *parent_event) { m_parent_event = parent_event; }  //!< Set parent event
+
+    GenVertex* production_vertex()               const { return m_production_vertex; }     //!< Get production vertex
+    void       set_production_vertex(GenVertex *v)     { m_production_vertex = v;    }     //!< Set production vertex
+
+    GenVertex* end_vertex()                      const { return m_end_vertex; }            //!< Get end vertex
+    void       set_end_vertex(GenVertex *v)            { m_end_vertex = v;    }            //!< Set end vertex
 
     /** Get particle barcode
      *  Barcodes are handled solely be events.
@@ -100,12 +80,6 @@ public:
     int    status_subcode()                     const { return m_status_subcode; }       //!< Get status subcode
     void   set_status_subcode(int subcode)            { m_status_subcode = subcode; }    //!< Set status subcode
 
-    int    ancestor()                           const { return m_ancestor; }             //!< Get ancestor (vertex or particle) barcode
-    void   set_ancestor(int barcode)                  { m_ancestor = barcode; }          //!< Set ancestor (vertex or particle) barcode
-
-    int    descendant()                         const { return m_descendant; }           //!< Get descendant (vertex or particle) barcode
-    void   set_descendant(int barcode)                { m_descendant = barcode; }        //!< Set descendant (vertex or particle) barcode
-
     const  FourVector& momentum()               const { return m_momentum; }             //!< Get momentum
     FourVector&        momentum()                     { return m_momentum; }             //!< Set momentum by reference
     void   set_momentum(FourVector& momentum)         { m_momentum  = momentum; }        //!< Set momentum
@@ -127,13 +101,13 @@ public:
 //
 private:
     GenEvent  *m_parent_event;          //!< Parent event
+    GenVertex *m_production_vertex;     //!< Production vertex
+    GenVertex *m_end_vertex;            //!< End vertex
     FourVector m_momentum;              //!< Momentum
     int        m_pdgid;                 //!< PDG ID
     int        m_status;                //!< Status
     int        m_status_subcode;        //!< Status subcode
     int        m_barcode;               //!< Barcode
-    int        m_ancestor;              //!< Ancestor (vertex or particle) barcode
-    int        m_descendant;            //!< Descendant (vertex or particle) barcode
     double     m_generated_mass;        //!< Generated mass
     bool       m_is_generated_mass_set; //!< Check if generated mass is set
     short int  m_version_deleted;       //!< Version number when this particle was deleted

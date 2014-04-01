@@ -32,10 +32,10 @@ PhotosHepMC3Particle::~PhotosHepMC3Particle() {
     clear(m_mothers);
     clear(m_daughters);
 
-    // Delete HepMC3 particle if it's not attached to any vertex
-    if( false && m_particle &&
-       !m_particle->ancestor() &&
-       !m_particle->descendant()) delete m_particle;
+    // Delete particle if it's not attached to any vertex
+    if( m_particle &&
+       !m_particle->production_vertex() &&
+       !m_particle->end_vertex()) delete m_particle;
 }
 
 void PhotosHepMC3Particle::setMothers(vector<PhotosParticle*> mothers) {
@@ -139,10 +139,6 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getMothers() {
                 m_mothers.push_back(new PhotosHepMC3Particle(*pcle_itr));
             }
         }
-        else if( m_particle->ancestor() ) {
-            HepMC3::GenParticle *p = m_particle->parent_event()->find_particle( m_particle->ancestor() );
-            m_mothers.push_back( new PhotosHepMC3Particle(p) );
-        }
     }
 
     // Go back to new version
@@ -157,23 +153,11 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getDaughters() {
     m_particle->parent_event()->set_current_version(m_particle->parent_event()->last_version()-1);
 
     if( m_daughters.size() == 0 && m_particle->parent_event() ) {
-        // Add outgoing particles of end vertex (if present)
         if( m_particle->end_vertex() ) {
             for( vector<HepMC3::GenParticle*>::const_iterator i  = m_particle->end_vertex()->particles_out().begin();
                                                               i != m_particle->end_vertex()->particles_out().end();
                                                               ++i ) {
                 m_daughters.push_back( new PhotosHepMC3Particle(*i) );
-            }
-        }
-        // Do not trust descendants - find them yourself
-        else {
-            const vector<HepMC3::GenParticle*> &particles = m_particle->parent_event()->particles();
-
-            for( vector<HepMC3::GenParticle*>::const_iterator i = particles.begin(); i != particles.end(); ++i ) {
-
-                if( (*i)->ancestor()>0 && (*i)->ancestor() == m_particle->barcode() ) {
-                    m_daughters.push_back( new PhotosHepMC3Particle(*i) );
-                }
             }
         }
     }
@@ -300,7 +284,7 @@ void PhotosHepMC3Particle::createHistoryEntry() {
 void PhotosHepMC3Particle::createSelfDecayVertex(PhotosParticle *out) {
     if(!m_particle) return;
 
-    if(m_particle->descendant()) {
+    if(m_particle->end_vertex()) {
         Log::Error()<<"PhotosHepMC3Particle::createSelfDecayVertex: particle already has end vertex!"<<endl;
         return;
     }

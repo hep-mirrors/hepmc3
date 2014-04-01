@@ -75,17 +75,12 @@ private:
      *  Used to translate HepMC2 vertex barcodes to sequential barcodes
      *  of HepMC3
      */
-    vector<int> m_vertex_barcode_cache;
+    vector< std::pair<GenVertex*,int> >   m_vertex_barcode_cache;
 
-    /** Particle cache
-     *  Used to restore ancestor/descendant information
+    /** End vertex barcode cache
+     *  Used to restore end vertex information
      */
-    vector<GenParticle*> m_particle_cache;
-
-    /** Vertex cache
-     *  Used to filter vertices before adding them to the event
-     */
-    vector<GenVertex*> m_vertex_cache;
+    vector< std::pair<GenParticle*,int> > m_end_vertex_barcode_cache;
 };
 
 } // namespace HepMC3

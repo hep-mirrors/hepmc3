@@ -80,7 +80,7 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format  ) const {
 void GenVertex::add_particle_in(GenParticle *p) {
     if(!p) return;
 
-    p->set_descendant(m_barcode);
+    p->set_end_vertex(this);
     m_particles_in.push_back(p);
 
     if(m_parent_event) m_parent_event->add_particle(p);
@@ -89,7 +89,7 @@ void GenVertex::add_particle_in(GenParticle *p) {
 void GenVertex::add_particle_out(GenParticle *p) {
     if(!p) return;
 
-    p->set_ancestor(m_barcode);
+    p->set_production_vertex(this);
     m_particles_out.push_back(p);
 
     if(m_parent_event) m_parent_event->add_particle(p);
