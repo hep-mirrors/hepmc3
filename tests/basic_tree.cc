@@ -42,10 +42,8 @@ int main() {
     //
     // create vertex 1 and vertex 2, together with their inparticles
     GenVertex* v1 = new GenVertex();
-    evt->add_vertex( v1 );
     v1->add_particle_in( new GenParticle( FourVector(0,0,7000,7000), 2212, 3 ) );
     GenVertex* v2 = new GenVertex();
-    evt->add_vertex( v2 );
     v2->add_particle_in( new GenParticle( FourVector(0,0,-7000,7000), 2212, 3 ) );
     //
     // create the outgoing particles of v1 and v2
@@ -53,25 +51,28 @@ int main() {
     v1->add_particle_out( p3 );
     GenParticle* p4 = new GenParticle( FourVector(-3.047,-19.,-54.629,57.920), -2, 3 );
     v2->add_particle_out( p4 );
+    // add v1 & v2 to the event
+    evt->add_vertex( v1 );
+    evt->add_vertex( v2 );
     //
     // create v3
     GenVertex* v3 = new GenVertex();
-    evt->add_vertex( v3 );
     v3->add_particle_in( p3 );
     v3->add_particle_in( p4 );
     GenParticle* p5 = new GenParticle( FourVector(-3.813,0.113,-1.833,4.233 ), 22, 1 );
     GenParticle* p6 = new GenParticle( FourVector(1.517,-20.68,-20.605,85.925), -24,3);
     v3->add_particle_out( p5 );
     v3->add_particle_out( p6 );
+    evt->add_vertex( v3 );
     //
     // create v4
     GenVertex* v4 = new GenVertex();
-    evt->add_vertex( v4 );
     v4->add_particle_in( p6 );
     GenParticle* p7 = new GenParticle( FourVector(-2.445,28.816,6.082,29.552), 1,1 );
     GenParticle* p8 = new GenParticle( FourVector(3.962,-49.498,-26.687,56.373), -2,1 );
     v4->add_particle_out( p7 );
     v4->add_particle_out( p8 );
+    evt->add_vertex( v4 );
 
     // the event is complete, we now print it out to the screen
     evt->print();

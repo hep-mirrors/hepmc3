@@ -21,6 +21,10 @@ class GenVertex;
 class GenEvent;
 
 class GenParticle {
+
+friend class GenVertex;
+friend class GenEvent;
+
 //
 // Constructors
 //
@@ -50,26 +54,10 @@ public:
 // Accessors
 //
 public:
-    GenEvent* parent_event()                           { return m_parent_event; }          //!< Get parent event
-    void      set_parent_event(GenEvent *parent_event) { m_parent_event = parent_event; }  //!< Set parent event
+    GenVertex* production_vertex()               const { return m_production_vertex; }   //!< Get production vertex
+    GenVertex* end_vertex()                      const { return m_end_vertex; }          //!< Get end vertex
 
-    GenVertex* production_vertex()               const { return m_production_vertex; }     //!< Get production vertex
-    void       set_production_vertex(GenVertex *v)     { m_production_vertex = v;    }     //!< Set production vertex
-
-    GenVertex* end_vertex()                      const { return m_end_vertex; }            //!< Get end vertex
-    void       set_end_vertex(GenVertex *v)            { m_end_vertex = v;    }            //!< Set end vertex
-
-    /** Get particle barcode
-     *  Barcodes are handled solely be events.
-     *  Returns zero if particle does not belong to an event
-     */
-    int    barcode()                            const { return m_barcode; }
-
-    /** Set particle barcode
-     *  This can be done only once, when particle is added to the event.
-     *  Returns false if barcode is already set.
-     */
-    bool   set_barcode(int barcode);
+    int    barcode()                            const { return m_barcode; }              //!< Get barcode
 
     int    pdg_id()                             const { return m_pdgid; }                //!< Get PDG ID
     void   set_pdg_id(int id)                         { m_pdgid = id; }                  //!< Set PDG ID
@@ -94,13 +82,18 @@ public:
     void   unset_generated_mass()                     { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Declare that generated mass is not set
     bool   is_generated_mass_set()                    { return m_is_generated_mass_set; }                          //!< Check if genereted mass is set
 
-    short int version_deleted()                 const { return m_version_deleted; } //!< Get version number when this particle was deleted
-    void      set_version_deleted(short int v)        { m_version_deleted = v;    } //!< Set version number when this particle was deleted
+protected:
+    void      set_production_vertex(GenVertex *v)     { m_production_vertex = v;    }    //!< Set production vertex
+    void      set_end_vertex(GenVertex *v)            { m_end_vertex = v;    }           //!< Set end vertex
+
+    short int version_deleted()                 const { return m_version_deleted; }      //!< Get deletion version number
+    void      set_version_deleted(short int v)        { m_version_deleted = v;    }      //!< Set deletion version number
+
+    void      set_barcode(int barcode)                { m_barcode = barcode; }           //!< Set barcode
 //
 // Fields
 //
 private:
-    GenEvent  *m_parent_event;          //!< Parent event
     GenVertex *m_production_vertex;     //!< Production vertex
     GenVertex *m_end_vertex;            //!< End vertex
     FourVector m_momentum;              //!< Momentum

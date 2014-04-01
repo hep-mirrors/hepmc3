@@ -98,6 +98,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                     ERROR( "IO_HepMC2_adapter: error parsing particle information" )
                 }
                 else {
+                    evt->add_particle(current_particle);
                     if(current_vertex) current_vertex->add_particle_out(current_particle);
                     is_parsing_successful = true;
                 }

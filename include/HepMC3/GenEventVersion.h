@@ -25,6 +25,9 @@ namespace HepMC3 {
 class GenEvent;
 
 class GenEventVersion {
+
+friend class GenEvent;
+
 //
 // Constructors
 //
@@ -38,6 +41,7 @@ public:
 // Functions
 //
 public:
+protected:
     /** Record change to a particle
      *  If it hasn't been changed in this version yet - create new entry for it
      *  If particle does not exist in the event - add it to the event
@@ -50,9 +54,6 @@ public:
      */
     void record_change(GenVertex *v);
 
-private:
-    /** Helper for record_deleted functions */
-    void record_deleted(int barcode, vector<int> &container);
 //
 // Accessors
 //

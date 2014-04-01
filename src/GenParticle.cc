@@ -15,7 +15,6 @@ using std::ostream;
 namespace HepMC3 {
 
 GenParticle::GenParticle():
-m_parent_event(NULL),
 m_production_vertex(NULL),
 m_end_vertex(NULL),
 m_momentum(0.0,0.0,0.0,0.0),
@@ -30,7 +29,6 @@ m_version_deleted(255) {
 }
 
 GenParticle::GenParticle(FourVector momentum, int pdgid, int status):
-m_parent_event(NULL),
 m_production_vertex(NULL),
 m_end_vertex(NULL),
 m_momentum(momentum),
@@ -109,14 +107,6 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
         ostr.flags(orig);
         ostr.precision(prec);
     }
-}
-
-bool GenParticle::set_barcode(int barcode) {
-    if( m_parent_event ) return false;
-
-    m_barcode = barcode;
-
-    return true;
 }
 
 double GenParticle::generated_mass() const {

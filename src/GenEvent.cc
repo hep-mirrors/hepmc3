@@ -34,103 +34,30 @@ GenEvent::~GenEvent() {
 }
 
 void GenEvent::add_particle(GenParticle *p) {
-
     if(!p) return;
-
-    if( p->parent_event() ) {
-
-        // Do not add if already present
-        if( p->parent_event() == this ) return;
-        else {
-            ERROR( "GenEvent::add_particle: already belongs to other event" )
-            return;
-        }
-    }
-
-    bool set_barcode = p->set_barcode(m_last_particle+1);
-
-    if(!set_barcode) {
-        ERROR( "GenEvent::add_particle: barcode already set!" )
-        return;
-    }
 
     ++m_last_particle;
 
-    p->set_parent_event(this);
+    p->set_barcode(m_last_particle);
     m_versions[m_current_version]->record_change(p);
 }
 
 void GenEvent::add_vertex(GenVertex *v) {
-
     if(!v) return;
 
-    if( v->parent_event() ) {
-
-        // Do not add if already present
-        if( v->parent_event() == this ) return;
-        else {
-            ERROR( "GenEvent::add_particle: already belongs to other event" )
-            return;
-        }
+    // Add all incoming particles
+    BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
+        if( !p->barcode() ) add_particle(p);
     }
 
-    bool set_barcode = v->set_barcode( m_last_vertex-1 );
-
-    if(!set_barcode) {
-        ERROR( "GenEvent::add_vertex: barcode already set!" )
-        return;
-    }
-
-    // Store status of the incoming/outgoing particles
-    // to check if they need to be added
-    vector<GenParticle*> particles_to_be_added;
-
-    // Incoming particles
-    for( vector<GenParticle*>::const_iterator i = v->particles_in().begin(); i != v->particles_in().end(); ++i ) {
-        GenEvent *parent_event = (*i)->parent_event();
-        if( parent_event && parent_event != this) {
-            ERROR( "GenEvent::add_vertex: one of the incoming particles belongs to other event" )
-            return;
-        }
-
-        // Particle does not belong to an event - add it and continue
-        if( !parent_event ) {
-            particles_to_be_added.push_back(*i);
-            continue;
-        }
-    }
-
-    // Outgoing particles
-    for( vector<GenParticle*>::const_iterator i = v->particles_out().begin(); i != v->particles_out().end(); ++i ) {
-        GenEvent *parent_event = (*i)->parent_event();
-        if( parent_event && parent_event != this) {
-            ERROR( "GenEvent::add_vertex: one of the outgoing particles belongs to other event" )
-            return;
-        }
-
-        // Particle does not belong to an event - add it and continue
-        if( !parent_event ) {
-            particles_to_be_added.push_back(*i);
-            continue;
-        }
+    // Add all outgoing particles
+    BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
+        if( !p->barcode() ) add_particle(p);
     }
 
     --m_last_vertex;
 
-    // Add all particles and only then add vertex
-    for( vector<GenParticle*>::const_iterator i = particles_to_be_added.begin(); i != particles_to_be_added.end(); ++i ) {
-        add_particle(*i);
-    }
-
-    // Restore incoming/outgoing indexes
-    for( vector<GenParticle*>::const_iterator i = v->particles_in().begin(); i != v->particles_in().end(); ++i ) {
-        (*i)->set_end_vertex(v);
-    }
-    for( vector<GenParticle*>::const_iterator i = v->particles_out().begin(); i != v->particles_out().end(); ++i ) {
-        (*i)->set_production_vertex(v);
-    }
-
-    v->set_parent_event(this);
+    v->set_barcode(m_last_vertex);
     m_versions[m_current_version]->record_change(v);
 }
 
@@ -157,11 +84,37 @@ void GenEvent::print( ostream& ostr) const {
     ostr << "                                    GenParticle Legend" << endl;
     ostr << "     Barcode   PDG ID   "
        << "( Px,       Py,       Pz,     E )"
-       << "   Stat-Subst  Prod V|P" << endl;
+       << "   Stat-Subst  ProdVtx" << endl;
     ostr << "________________________________________________________________________________" << endl;
 
     BOOST_FOREACH( GenVertex *v, m_versions[m_current_version]->vertices() ) {
         v->print(ostr,1);
+
+        bool printed_header = false;
+
+        // Print out all the incoming particles
+        BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
+            if( p->version_deleted() <= m_current_version ) continue;
+            if( !printed_header ) {
+                ostr << " I: ";
+                printed_header = true;
+            }
+            else ostr << "    ";
+            p->print(ostr,1);
+        }
+
+        printed_header = false;
+
+        // Print out all the outgoing particles
+        BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
+            if( p->version_deleted() <= m_current_version ) continue;
+            if( !printed_header ) {
+                ostr << " O: ";
+                printed_header = true;
+            }
+            else ostr << "    ";
+            p->print(ostr,1);
+        }
     }
 
     ostr << "________________________________________________________________________________" << endl;

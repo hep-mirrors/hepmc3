@@ -23,6 +23,9 @@ class GenParticle;
 class GenEvent;
 
 class GenVertex {
+
+friend class GenEvent;
+
 //
 // Constructors
 //
@@ -56,32 +59,16 @@ public:
      */
     void add_particle_out(GenParticle *p);
 
-    /** Remove particle from incoming/outgoing list */
-    void delete_particle(GenParticle *p);
-
 //
 // Accessors
 //
 public:
-    GenEvent* parent_event()                           { return m_parent_event; }          //!< Get parent event
-    void      set_parent_event(GenEvent *parent_event) { m_parent_event = parent_event; }  //!< Set parent event
+    int barcode()                               const { return m_barcode; }        //!< Get barcode
 
-    /** Get vertex barcode
-     *  Barcodes are handled solely be events.
-     *  Returns zero if particle does not belong to an event
-     */
-    int barcode()                               const { return m_barcode; }
-
-    /** Set particle barcode
-     *  This can be done only once, when particle is added to the event.
-     *  Returns false if barcode is already set.
-     */
-    bool   set_barcode(int barcode);
-
-    vector<GenParticle*>& particles_in()              { return m_particles_in; }   //!< Access incoming particle list
-    vector<GenParticle*>& particles_out()             { return m_particles_out; }  //!< Access outgoing particle list
     const vector<GenParticle*>& particles_in()  const { return m_particles_in; }   //!< Get incoming particle list
     const vector<GenParticle*>& particles_out() const { return m_particles_out; }  //!< Get outgoing particle list
+protected:
+    void set_barcode(int barcode)                     { m_barcode = barcode; }      //!< Set barcode
 
     short int version_deleted()                 const { return m_version_deleted; } //!< Get version number when this particle was deleted
     void      set_version_deleted(short int v)        { m_version_deleted = v;    } //!< Set version number when this particle was deleted
@@ -98,7 +85,6 @@ public:
         bool operator() (HepMC3::GenVertex *v1, HepMC3::GenVertex *v2);
     };
 private:
-    GenEvent *m_parent_event;              //!< Parent event
     int m_barcode;                         //!< Barcode
 
     vector<GenParticle*> m_particles_in;   //!< Incoming particle list

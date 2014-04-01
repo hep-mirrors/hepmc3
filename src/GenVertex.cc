@@ -15,7 +15,6 @@ using std::endl;
 namespace HepMC3 {
 
 GenVertex::GenVertex():
-m_parent_event(NULL),
 m_barcode(0),
 m_version_deleted(255) {
 }
@@ -35,87 +34,35 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format  ) const {
     // Event listing format. Used when calling:
     // event->print()
     else {
-        // Find the current stream state
-        std::ios_base::fmtflags orig = ostr.flags();
-        std::streamsize prec = ostr.precision();
         ostr << "Vtx: ";
         ostr.width(6);
         ostr << barcode()
              << "  (X,cT): 0" << endl;
-
-        bool printed_header = false;
-        // Print out all the incoming particles
-        for( vector<GenParticle*>::const_iterator i = m_particles_in.begin(); i != m_particles_in.end(); ++i ) {
-            if( (*i)->version_deleted() <= m_parent_event->current_version() ) continue;
-
-            if( !printed_header ) {
-                ostr << "|I: ";
-                printed_header = true;
-            }
-            else ostr << "|   ";
-            (*i)->print(ostr,1);
-        }
-
-        printed_header = false;
-        // Print out all the outgoing particles
-        for( vector<GenParticle*>::const_iterator i = m_particles_out.begin(); i != m_particles_out.end(); ++i ) {
-            if( (*i)->version_deleted() <= m_parent_event->current_version() ) continue;
-
-            if( !printed_header ) {
-                ostr << "|O: ";
-                printed_header = true;
-            }
-            else ostr << "|   ";
-            (*i)->print(ostr,1);
-        }
-
-        ostr << "Vtx end" << endl;
-
-        // Restore the stream state
-        ostr.flags(orig);
-        ostr.precision(prec);
     }
 }
 
 void GenVertex::add_particle_in(GenParticle *p) {
     if(!p) return;
 
+    if( m_barcode && p->barcode()==0 ) {
+        WARNING( "GenVertex::add_particle_in:  particle must be added to the event first!" )
+        return;
+    }
+
     p->set_end_vertex(this);
     m_particles_in.push_back(p);
-
-    if(m_parent_event) m_parent_event->add_particle(p);
 }
 
 void GenVertex::add_particle_out(GenParticle *p) {
     if(!p) return;
 
+    if( m_barcode && p->barcode()==0 ) {
+        WARNING( "GenVertex::add_particle_out: particle must be added to the event first!" )
+        return;
+    }
+
     p->set_production_vertex(this);
     m_particles_out.push_back(p);
-
-    if(m_parent_event) m_parent_event->add_particle(p);
-}
-
-void GenVertex::delete_particle(GenParticle *p) {
-    for( vector<GenParticle*>::iterator i = m_particles_in.begin(); i != m_particles_in.end(); ++i ) {
-        if( (*i) == p ) {
-            m_particles_in.erase(i);
-            return;
-        }
-    }
-    for( vector<GenParticle*>::iterator i = m_particles_out.begin(); i != m_particles_out.end(); ++i ) {
-        if( (*i) == p ) {
-            m_particles_out.erase(i);
-            return;
-        }
-    }
-}
-
-bool GenVertex::set_barcode(int barcode) {
-    if( m_parent_event ) return false;
-
-    m_barcode = barcode;
-
-    return true;
 }
 
 bool GenVertex::topological_compare::operator() (HepMC3::GenVertex *v1, HepMC3::GenVertex *v2) {
