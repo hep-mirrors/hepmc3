@@ -3,7 +3,7 @@
  *  @brief Implementation of \b class HepMC3::Filter
  *
  *  @date Created       <b> 1 April 2014 </b>
- *  @date Last modified <b> 1 April 2014 </b>
+ *  @date Last modified <b> 2 April 2014 </b>
  */
 #include "HepMC3/Search/Filter.h"
 #include "HepMC3/GenParticle.h"
@@ -35,7 +35,7 @@ bool Filter::passed_int_filter(const GenParticle *p) const {
             return false;
     };
 
-    DEBUG( 1, "Filter: checking barcode="<<p->barcode()<<" p="<<m_int<<" o="<<m_operator<<" v="<<value<<" r="<<m_int_value )
+    DEBUG( 10, "Filter: checking barcode="<<p->barcode()<<" param="<<m_int<<" operator="<<m_operator<<" value="<<value<<" compare to="<<m_int_value )
 
     switch(m_operator) {
         case EQUAL:            return (value==m_int_value);

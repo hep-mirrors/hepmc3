@@ -96,18 +96,33 @@ int main() {
     evt->set_current_version(evt->last_version());
     evt->print();
 
+    std::cout<<"Find all stable particles: "<<std::endl;
+    FindParticles search(evt, FIND_ALL, STATUS == 1 && STATUS_SUBCODE == 0 );
+
+    BOOST_FOREACH( GenParticle *p, search.results() ) {
+        p->print();
+    }
+
+    std::cout<<"Find all ancestors of particle with barcode "<<p5->barcode()<<": "<<std::endl;
+    FindParticles search2(p5, FIND_ANCESTORS );
+
+    BOOST_FOREACH( GenParticle *p, search2.results() ) {
+        p->print();
+    }
+
+    std::cout<<"Find unstable descendants of particle with barcode "<<p4->barcode()<<": "<<std::endl;
+    FindParticles search3(p4, FIND_DESCENDANTS, STATUS != 1 );
+
+    BOOST_FOREACH( GenParticle *p, search3.results() ) {
+        p->print();
+    }
+
     std::cout<<"Testing few errors: "<<std::endl;
 
     GenParticle* p10 = new GenParticle( FourVector(5., 4., 3., 2.), 1,1 );
     evt->add_particle(p10);
     v4->add_particle_out(p10);
     v4->add_particle_in(p10);
-
-    FindParticles search(evt, FIND_ALL, STATUS == 1 && STATUS_SUBCODE == 0 );
-
-    BOOST_FOREACH( GenParticle *p, search.results() ) {
-        p->print();
-    }
 
     // now clean-up by deleting all objects from memory
     //

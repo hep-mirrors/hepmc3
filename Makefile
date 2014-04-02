@@ -6,7 +6,7 @@ LIB_HEPMC_SO  = libHepMC.so
 LIB_HEPMC_OBJ = src/GenParticle.o src/GenEvent.o src/GenVertex.o \
                 src/Log.o src/GenEventVersion.o \
                 src/IO_Base.o src/IO_GenEvent.o src/IO_HepMC2_adapter.o \
-                src/Search/FindParticles.o src/Search/Filter.o src/Search/FilterList.o
+                src/Search/FindParticles.o src/Search/Filter.o src/Search/FilterList.o src/Search/FilterBase.o
 
 all: lib
 
@@ -20,4 +20,4 @@ lib: $(LIB_HEPMC_OBJ)
 	$(CC) $(CFLAGS) -Iinclude -c $< -o $@
 
 clean:
-	rm -f src/*.o lib/*
+	rm -f src/*.o src/Search/*.o lib/*
