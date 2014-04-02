@@ -19,11 +19,13 @@ namespace HepMC3 {
 
 class GenVertex;
 class GenEvent;
+class Filter;
 
 class GenParticle {
 
 friend class GenVertex;
 friend class GenEvent;
+friend class Filter;
 
 //
 // Constructors

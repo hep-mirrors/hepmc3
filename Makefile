@@ -5,7 +5,8 @@ LIB_HEPMC_A   = libHepMC.a
 LIB_HEPMC_SO  = libHepMC.so
 LIB_HEPMC_OBJ = src/GenParticle.o src/GenEvent.o src/GenVertex.o \
                 src/Log.o src/GenEventVersion.o \
-                src/IO_Base.o src/IO_GenEvent.o src/IO_HepMC2_adapter.o
+                src/IO_Base.o src/IO_GenEvent.o src/IO_HepMC2_adapter.o \
+                src/Search/FindParticles.o src/Search/Filter.o src/Search/FilterList.o
 
 all: lib
 

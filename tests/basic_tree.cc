@@ -10,6 +10,7 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
+#include "HepMC3/Search/FindParticles.h"
 using namespace HepMC3;
 
 int main() {
@@ -101,6 +102,12 @@ int main() {
     evt->add_particle(p10);
     v4->add_particle_out(p10);
     v4->add_particle_in(p10);
+
+    FindParticles search(evt, FIND_ALL, STATUS == 1 && STATUS_SUBCODE == 0 );
+
+    BOOST_FOREACH( GenParticle *p, search.results() ) {
+        p->print();
+    }
 
     // now clean-up by deleting all objects from memory
     //
