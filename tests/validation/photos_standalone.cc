@@ -1,12 +1,13 @@
 // HepMC header files
 #include "HepMC3/IO_HepMC2_adapter.h"
+#include "HepMC3/IO_GenEvent.h"
+#include "HepMC3/Search/FindParticles.h"
 
 // Photospp header files
 #include "Photos/Photos.h"
 #include "Photos/PhotosHepMC3Event.h"
 #include "Photos/Log.h"
-
-using namespace std;
+using namespace HepMC3;
 using namespace Photospp;
 
 int EventsToCheck=20;
@@ -15,27 +16,25 @@ int EventsToCheck=20;
 // detector simulation based on http://home.fnal.gov/~mrenna/HCPSS/HCPSShepmc.html
 // similar test was performed in Fortran
 // we perform it before and after Photos (for the first several events)
-void checkMomentumConservationInEvent(HepMC3::GenEvent *evt)
+void checkMomentumConservationInEvent(GenEvent *evt)
 {
         //cout<<"List of stable particles: "<<endl;
 
         double px=0.0,py=0.0,pz=0.0,e=0.0;
 
-        for ( vector<HepMC3::GenParticle*>::const_iterator p = evt->particles().begin();
-              p != evt->particles().end(); ++p )
-        {
-                if( (*p)->status() == 1 )
-                {
-                        HepMC3::FourVector m = (*p)->momentum();
-                        px+=m.px();
-                        py+=m.py();
-                        pz+=m.pz();
-                        e +=m.e();
-                        //(*p)->print();
-                }
+        FindParticles search( evt, FIND_ALL, STATUS == 1 );
+
+        BOOST_FOREACH( GenParticle *p, search.results() ) {
+            HepMC3::FourVector m = p->momentum();
+            px+=m.px();
+            py+=m.py();
+            pz+=m.pz();
+            e +=m.e();
+            //(*p)->print();
         }
+
         cout.precision(6);
-        cout.setf(ios_base::floatfield);
+        cout.setf(std::ios_base::floatfield);
         cout<<endl<<"Vector Sum: "<<px<<" "<<py<<" "<<pz<<" "<<e<<endl;
 }
 
@@ -46,6 +45,7 @@ int main()
         //Log::LogDebug();
 
         HepMC3::IO_HepMC2_adapter file("photos_standalone_example.dat",std::ios::in);
+        HepMC3::IO_GenEvent out("test.hepmc",std::ios::out);
 
         int photonAdded=0,twoAdded=0,moreAdded=0,evtCount=0;
         // Begin event loop. Generate event.
@@ -54,6 +54,8 @@ int main()
                 evtCount++;
                 // Create event
                 HepMC3::GenEvent *HepMCEvt = new HepMC3::GenEvent();
+
+                HepMCEvt->set_print_precision(8);
                 file.fill_next_event(HepMCEvt);
 
                 if(file.rdstate()) {
@@ -61,7 +63,7 @@ int main()
                     break;
                 }
 
-                int buf = -HepMCEvt->particles().size();
+                int buf = -HepMCEvt->particles_count();
 
                 //cout << "BEFORE:"<<endl;
                 //HepMCEvt->print();
@@ -82,7 +84,7 @@ int main()
                         checkMomentumConservationInEvent(HepMCEvt);
                 }
 
-                buf+=HepMCEvt->particles().size();
+                buf+=HepMCEvt->particles_count();
                 if(buf==1)      photonAdded++;
                 else if(buf==2) twoAdded++;
                 else if(buf>2)  moreAdded++;
@@ -90,13 +92,14 @@ int main()
                 //cout << "AFTER:"<<endl;
                 //HepMCEvt->print();
 
+                out.write_event(HepMCEvt);
                 //clean up
                 delete HepMCEvt;
         }
 
         // Print results
         cout.precision(2);
-        cout.setf(ios::fixed);
+        cout.setf(std::ios::fixed);
         cout<<endl;
         if(evtCount==0)
         {

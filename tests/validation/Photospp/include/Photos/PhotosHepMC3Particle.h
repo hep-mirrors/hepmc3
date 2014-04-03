@@ -10,16 +10,16 @@
  *  @implements Photospp::PhotosParticle
  *
  *  @date Created       <b> 31 March 2014 </b>
- *  @date Last modified <b> 31 March 2014 </b>
+ *  @date Last modified <b>  3 April 2014 </b>
  */
 #include <vector>
 #include "HepMC3/GenParticle.h"
 #include "Photos/PhotosParticle.h"
 
-using namespace std;
-
 namespace Photospp
 {
+
+class PhotosHepMC3Event;
 
 class PhotosHepMC3Particle: public PhotosParticle {
 //
@@ -66,13 +66,19 @@ public:
     /** Create a self-decay vertex for this particle
         with 'out' being the outgoing particle in new vertex */
     void createSelfDecayVertex(PhotosParticle *out);
-    
+
     /** Clear vector of Photospp::PhotosParticle */
     void clear(std::vector<PhotosParticle*> &vector);
 //
 // Accessors
 //
 public:
+    /** Get parent event */
+    PhotosHepMC3Event* parent_event()             { return m_parent_event; }
+
+    /** Set parent event */
+    void set_parent_event(PhotosHepMC3Event *evt) { m_parent_event = evt; }
+
     /** Set the mothers of this particle via a vector of PhotosParticle */
     void setMothers(std::vector<PhotosParticle*> mothers);
 
@@ -114,7 +120,7 @@ public:
     void   setMass(double mass)   { if(!m_particle) return;   m_particle->set_generated_mass(mass); } //!< Set mass
 
     int    getBarcode()           { if(!m_particle) return 0; return m_particle->barcode(); }         //!< Get barcode
-    
+
     HepMC3::GenParticle* getHepMC() { return m_particle; }                                            //!< Get HepMC particle
 
     /** Print some information about this particle to standard output */
@@ -123,6 +129,7 @@ public:
 // Fields
 //
 private:
+    PhotosHepMC3Event            *m_parent_event;   //!< Parent event
     HepMC3::GenParticle          *m_particle;       //!< Pointer to GenParticle
     std::vector<PhotosParticle*>  m_mothers;        //!< List of mothers
     std::vector<PhotosParticle*>  m_daughters;      //!< List of daughters

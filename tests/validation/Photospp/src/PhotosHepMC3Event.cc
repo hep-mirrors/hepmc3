@@ -3,13 +3,15 @@
  *  @brief Implementation of \b class Photospp::PhotosHepMC3Event
  *
  *  @date Created       <b> 31 March 2014 </b>
- *  @date Last modified <b> 31 March 2014 </b>
+ *  @date Last modified <b>  3 April 2014 </b>
  */
+#include <boost/foreach.hpp>
 #include <vector>
+#include "HepMC3/Search/FindParticles.h"
+
 #include "Photos/PhotosHepMC3Particle.h"
 #include "Photos/PhotosHepMC3Event.h"
 #include "Photos/Log.h"
-using namespace std;
 
 namespace Photospp
 {
@@ -19,23 +21,27 @@ m_event(event) {
 
     if(!event) return;
 
-    m_particles.reserve(event->particles().size());
+    m_last_version = event->last_version();
 
-	vector<HepMC3::GenParticle*>::const_iterator i = m_event->particles().begin();
-	for( ; i!=m_event->particles().end(); ++i)
-	{
-		PhotosParticle *particle = new PhotosHepMC3Particle(*i);
-		m_particles.push_back(particle);
-	}
+    // Find all particles that are not stable and were not deleted in the last version
+    HepMC3::FindParticles search( event, HepMC3::FIND_ALL, HepMC3::STATUS != 1 && HepMC3::VERSION_DELETED > m_last_version );
 
+    m_particles.reserve(search.results().size());
+
+    BOOST_FOREACH( HepMC3::GenParticle *p, search.results() ) {
+        PhotosHepMC3Particle *particle = new PhotosHepMC3Particle(p);
+        particle->set_parent_event(this);
+        m_particles.push_back( (PhotosParticle*) particle);
+    }
+
+    // Create new version
     event->create_new_version("Photos++");
 }
 
 PhotosHepMC3Event::~PhotosHepMC3Event() {
 
-    vector<PhotosParticle*>::const_iterator i  = m_particles.begin();
-    for( ; i != m_particles.end(); ++i ) {
-        if(*i) delete (*i);
+    BOOST_FOREACH( PhotosParticle *p, m_particles ) {
+        if(p) delete p;
     }
 }
 
