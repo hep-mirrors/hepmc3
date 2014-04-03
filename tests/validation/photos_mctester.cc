@@ -7,6 +7,10 @@
 #include "Photos/Photos.h"
 #include "Photos/PhotosHepMC3Event.h"
 #include "Photos/Log.h"
+
+// MC-TESTER header files
+#include "Generate.h"
+#include "HepMC3Event.h"
 using namespace HepMC3;
 using namespace Photospp;
 
@@ -47,10 +51,14 @@ int main()
         HepMC3::IO_HepMC2_adapter file("photos_standalone_example.dat",std::ios::in);
         HepMC3::IO_GenEvent out("test.hepmc",std::ios::out);
 
-        int photonAdded=0,twoAdded=0,moreAdded=0,evtCount=0;
-        // Begin event loop. Generate event.
+        MC_Initialize();
+
+        int evtCount = 0;
+
+        // Begin event loop
         while(true)
         {
+                evtCount++;
                 // Create event
                 HepMC3::GenEvent *HepMCEvt = new HepMC3::GenEvent();
 
@@ -61,8 +69,6 @@ int main()
                     delete HepMCEvt;
                     break;
                 }
-
-                int buf = -HepMCEvt->particles_count();
 
                 //cout << "BEFORE:"<<endl;
                 //HepMCEvt->print();
@@ -78,17 +84,14 @@ int main()
                 PhotosHepMC3Event evt(HepMCEvt);
                 evt.process();
 
+                // Run MC-TESTER on the event
+                HepMC3Event temp_event(*HepMCEvt,false);
+                MC_Analyze(&temp_event);
+
                 if(evtCount<EventsToCheck)
                 {
                         checkMomentumConservationInEvent(HepMCEvt);
                 }
-
-                buf+=HepMCEvt->particles_count();
-                if(buf==1)      photonAdded++;
-                else if(buf==2) twoAdded++;
-                else if(buf>2)  moreAdded++;
-
-                evtCount++;
 
                 //cout << "AFTER:"<<endl;
                 //HepMCEvt->print();
@@ -98,20 +101,5 @@ int main()
                 delete HepMCEvt;
         }
 
-        // Print results
-        cout.precision(2);
-        cout.setf(std::ios::fixed);
-        cout<<endl;
-        if(evtCount==0)
-        {
-                cout<<"Something went wrong with the input file: photos_standalone_example.dat"<<endl;
-                cout<<"No events were processed."<<endl<<endl;
-                return 0;
-        }
-        cout<<"Summary (whole event processing):"<<endl;
-        cout<<evtCount   <<"\tevents processed"<<endl;
-        cout<<photonAdded<<"\ttimes one photon added to the event           \t("<<(photonAdded*100./evtCount)<<"%)"<<endl;
-        cout<<twoAdded   <<"\ttimes two photons added to the event          \t("<<(twoAdded*100./evtCount)<<"%)"<<endl;
-        cout<<moreAdded  <<"\ttimes more than two photons added to the event\t("<<(moreAdded*100./evtCount)<<"%)"<<endl<<endl;
-        cout<<"(Contrary to results from MC-Tester, these values are technical and infrared unstable)"<<endl<<endl;
+        MC_Finalize();
 }
