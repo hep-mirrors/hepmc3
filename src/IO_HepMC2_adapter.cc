@@ -32,7 +32,7 @@ void IO_HepMC2_adapter::write_event(const GenEvent *evt) {
 bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     char          buf[512];
     bool          parsed_event_header            = false;
-    bool          is_parsing_successful          = false;
+    bool          is_parsing_successful          = true;
     int           parsing_result                 = 0;
     unsigned int  vertices_count                 = 0;
     unsigned int  current_vertex_particles_count = 0;
@@ -49,6 +49,15 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
         m_file.getline(buf,512);
 
         if( strlen(buf) == 0 ) continue;
+
+        // Check for IO_GenEvent header/footer
+        if( strncmp(buf,"HepMC",5) == 0 ) {
+            if(parsed_event_header) {
+                is_parsing_successful = true;
+                break;
+            }
+            continue;
+        }
 
         switch(buf[0]) {
             case 'E':
@@ -114,8 +123,12 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 DEBUG( 10, "IO_HepMC2_adapter: U: skipping unit info (for now)" )
                 is_parsing_successful = true;
                 break;
+            case 'F':
+                DEBUG( 10, "IO_HepMC2_adapter: F: skipping Flow" )
+                is_parsing_successful = true;
+                break;
             case 'H':
-                DEBUG( 10, "IO_HepMC2_adapter: H: skipping header info (for now)" )
+                DEBUG( 10, "IO_HepMC2_adapter: H: skipping Heavy Ions (for now)" )
                 is_parsing_successful = true;
                 break;
             default:
