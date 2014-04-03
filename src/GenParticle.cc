@@ -67,17 +67,12 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
     // Event listing format. Used when calling:
     // event->print()
     else {
-        // Find the current stream state
-        std::ios_base::fmtflags orig = ostr.flags();
-        std::streamsize prec = ostr.precision();
-
         ostr << " ";
         ostr.width(6);
         ostr << barcode();
         ostr.width(9);
         ostr << pdg_id() << " ";
         ostr.width(9);
-        ostr.precision(2);
         ostr.setf(std::ios::scientific, std::ios::floatfield);
         ostr.setf(std::ios_base::showpos);
         ostr << m_momentum.px() << ",";
@@ -104,10 +99,6 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
         }
 
         ostr << endl;
-
-        // Restore the stream state
-        ostr.flags(orig);
-        ostr.precision(prec);
     }
 }
 

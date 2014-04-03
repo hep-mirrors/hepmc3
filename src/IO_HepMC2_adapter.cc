@@ -68,7 +68,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
 
                 /** @bug HepMC2 files produced with Pythia8 are known to have wrong
                          information about number of particles in vertex. Hence '<' sign */
-                if(current_vertex && current_vertex->particles_out().size() < current_vertex_particles_count) {
+                if(current_vertex && (current_vertex->particles_out().size() + current_vertex->particles_in().size()) < current_vertex_particles_count) {
                     is_parsing_successful = false;
                     break;
                 }
@@ -99,7 +99,14 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 }
                 else {
                     evt->add_particle(current_particle);
-                    if(current_vertex) current_vertex->add_particle_out(current_particle);
+                    if(current_vertex) {
+                        // If particle belongs to this vertex
+                        if( m_end_vertex_barcode_cache.back().second == m_vertex_barcode_cache.back().second ) {
+                            current_vertex->add_particle_in(current_particle);
+                            m_end_vertex_barcode_cache.back().second = 0;
+                        }
+                        else current_vertex->add_particle_out(current_particle);
+                    }
                     is_parsing_successful = true;
                 }
                 break;
@@ -134,7 +141,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
         is_parsing_successful = false;
     }
     // Check if all vertices were parsed
-    else if( is_parsing_successful && evt->vertices().size() != vertices_count ) {
+    else if( is_parsing_successful && m_vertex_barcode_cache.size() != vertices_count ) {
         ERROR( "IO_HepMC2_adapter: not all vertices parsed" )
         is_parsing_successful = false;
     }
@@ -150,10 +157,11 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     // Restore production vertex barcodes
     typedef std::pair<GenParticle*,int> ___particle_int_pair___;
     typedef std::pair<GenVertex*,int>   ___vertex_int_pair___;
-    
+
     BOOST_FOREACH( ___particle_int_pair___ &p, m_end_vertex_barcode_cache ) {
         BOOST_FOREACH( ___vertex_int_pair___ &v, m_vertex_barcode_cache ) {
-            if( p.second == v.second ) {
+
+             if( p.second == v.second ) {
                 v.first->add_particle_in(p.first);
             }
         }
@@ -332,10 +340,7 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
 
     DEBUG( 10, "IO_HepMC2_adapter: P: "<<p->barcode()<<" (old barcode: "<<barcode<<", pdg_id: "<<pdg_id<<") in vertex: "<<end_vertex_barcode )
 
-    // If particle has end vertex - add its barcode to the cache
-    if(end_vertex_barcode<0) {
-        m_end_vertex_barcode_cache.push_back( std::pair<GenParticle*,int>(p,end_vertex_barcode) );
-    }
+    m_end_vertex_barcode_cache.push_back( std::pair<GenParticle*,int>(p,end_vertex_barcode) );
 
     return 0;
 }

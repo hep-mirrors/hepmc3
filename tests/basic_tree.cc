@@ -110,8 +110,15 @@ int main() {
         p->print();
     }
 
-    std::cout<<"Find unstable descendants of particle with barcode "<<p4->barcode()<<": "<<std::endl;
-    FindParticles search3(p4, FIND_DESCENDANTS, STATUS != 1 );
+    std::cout<<"Find stable descendants of particle with barcode "<<p4->barcode()<<": "<<std::endl;
+    FindParticles search3(p4, FIND_DESCENDANTS, STATUS == 1 );
+
+    BOOST_FOREACH( GenParticle *p, search3.results() ) {
+        p->print();
+    }
+
+    std::cout<<"Narrow down search results to quarks: "<<std::endl;
+    search3.narrow_down( PDG_ID >= -6 && PDG_ID <= 6 );
 
     BOOST_FOREACH( GenParticle *p, search3.results() ) {
         p->print();

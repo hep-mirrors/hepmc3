@@ -46,6 +46,8 @@ public:
     /** HepMC3::GenParticle-based constructor */
     FindParticles(const GenParticle *p, FilterParticle filter_type, FilterList filter_list = FilterList() );
 
+    /** Narrow down the results applying additional filters */
+    void narrow_down( FilterList filter_list );
 //
 // Functions
 //

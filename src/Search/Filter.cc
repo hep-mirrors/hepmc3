@@ -17,7 +17,8 @@ bool Filter::passed_filter(const GenParticle *p) const {
         if( m_value_type == INTEGER_PARAM )          return passed_int_filter(p);
         if( m_value_type == PARTICLE_POINTER_PARAM ) return passed_particle_pointer_filter(p);
 
-        // This will never happen
+        // This should never happen
+        ERROR( "Unsupported value type ("<<m_value_type<<")" )
         return false;
 }
 
@@ -30,8 +31,10 @@ bool Filter::passed_int_filter(const GenParticle *p) const {
         case STATUS_SUBCODE:  value = p->status_subcode();  break;
         case VERSION_CREATED: value = p->version_created(); break;
         case VERSION_DELETED: value = p->version_deleted(); break;
+        case PDG_ID:          value = p->pdg_id();          break;
         default:
-            // This will never happen
+            // This should never happen
+            ERROR( "Unsupported filter ("<<m_int<<")" )
             return false;
     };
 
@@ -44,9 +47,6 @@ bool Filter::passed_int_filter(const GenParticle *p) const {
         case GREATER_OR_EQUAL: return (value>=m_int_value);
         case LESS_OR_EQUAL:    return (value<=m_int_value);
         case NOT_EQUAL:        return (value!=m_int_value);
-        default:
-            // This will never happen
-            return false;
     };
 
     return false;

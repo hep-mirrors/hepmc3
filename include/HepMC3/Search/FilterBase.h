@@ -37,7 +37,8 @@ enum FilterIntegerParam {
     STATUS,
     STATUS_SUBCODE,
     VERSION_CREATED,
-    VERSION_DELETED
+    VERSION_DELETED,
+    PDG_ID
 };
 
 /** List of filters with particle pointer parameter */
@@ -64,6 +65,7 @@ public:
     static const FilterBase init_version_deleted() { return FilterBase(VERSION_DELETED); } //!< init static const VERSION_CREATED
     static const FilterBase init_status()          { return FilterBase(STATUS);          } //!< init static const STATUS
     static const FilterBase init_status_subcode()  { return FilterBase(STATUS_SUBCODE);  } //!< init static const STATUS_SUBCODE
+    static const FilterBase init_pdg_id()          { return FilterBase(PDG_ID);          } //!< init static const PDG_ID
 
 //
 // Constructors
@@ -102,6 +104,7 @@ static const FilterBase STATUS          = FilterBase::init_status();           /
 static const FilterBase STATUS_SUBCODE  = FilterBase::init_status_subcode();   //!< Filter base for filtering HepMC3::GenParticle::status_subcode()
 static const FilterBase VERSION_CREATED = FilterBase::init_version_created();  //!< Filter base for filtering HepMC3::GenParticle::version_created()
 static const FilterBase VERSION_DELETED = FilterBase::init_version_deleted();  //!< Filter base for filtering HepMC3::GenParticle::version_deleted()
+static const FilterBase PDG_ID          = FilterBase::init_pdg_id();           //!< Filter base for filtering HepMC3::GenParticle::pdg_id()
 
 } // namespace HepMC3
 

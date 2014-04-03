@@ -18,14 +18,14 @@ namespace HepMC3 {
 
 void IO_GenEvent::write_event(const GenEvent *evt) {
     if ( !evt || m_file.rdstate() ) return;
-	if ( m_mode != std::ios::out ) {
-	    ERROR( "IO_GenEvent: attempting to write to input file" )
-	    return;
-	}
+    if ( m_mode != std::ios::out ) {
+        ERROR( "IO_GenEvent: attempting to write to input file" )
+        return;
+    }
 
     m_file << "E " << evt->event_number()
-           << " "  << evt->vertices().size()
-           << " "  << evt->particles().size()
+           << " "  << evt->vertices_count()
+           << " "  << evt->particles_count()
            << endl;
 
     BOOST_FOREACH( GenEventVersion *ver , evt->versions() ) {
@@ -34,7 +34,7 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
         m_file << "T " << ver->name() << endl;
 
         // Print vertices
-        BOOST_FOREACH( GenVertex *v, evt->vertices() ) {
+        BOOST_FOREACH( GenVertex *v, ver->vertices() ) {
             write_vertex(v);
         }
     }
@@ -42,10 +42,10 @@ void IO_GenEvent::write_event(const GenEvent *evt) {
 
 bool IO_GenEvent::fill_next_event(GenEvent *evt) {
     if ( !evt || m_file.rdstate() ) return 0;
-	if ( m_mode != std::ios::in ) {
-	    ERROR( "IO_GenEvent: attempting to read from output file" )
-	    return 0;
-	}
+    if ( m_mode != std::ios::in ) {
+        ERROR( "IO_GenEvent: attempting to read from output file" )
+        return 0;
+    }
 
     WARNING( "IO_GenEvent: Reading not implemented (yet)" )
 

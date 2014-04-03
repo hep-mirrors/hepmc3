@@ -42,7 +42,7 @@ public:
      *  @param[out] evt Contains parsed event
      */
     bool fill_next_event(GenEvent *evt);
-    
+
     /** Set output precision
      *  Default = 16
      */

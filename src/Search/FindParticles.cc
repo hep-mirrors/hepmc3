@@ -23,6 +23,7 @@ FindParticles::FindParticles(const GenEvent *evt, FilterEvent filter_type, Filte
 
             if( passed_all_filters(p,filter_list) ) {
 
+                DEBUG( 10, "Filter: passed" )
                 if( filter_type == FIND_LAST && m_results.size()>0 ) m_results.clear();
                 m_results.push_back(p);
 
@@ -44,6 +45,33 @@ FindParticles::FindParticles(const GenParticle *p, FilterParticle filter_type, F
     }
 }
 
+void FindParticles::narrow_down( FilterList filter_list ) {
+
+    int first_null = -1;
+
+    // cost-efficient removing of particles that didn't pass filters
+    for(unsigned int i=0; i<m_results.size(); ++i) {
+
+        if( !passed_all_filters(m_results[i],filter_list) ) {
+
+            m_results[i] = NULL;
+
+            if( first_null < 0 ) first_null = i;
+        }
+        else {
+            DEBUG( 10, "Filter: passed" )
+
+            if( first_null >= 0 ) {
+                m_results[first_null] = m_results[i];
+                m_results[i] = NULL;
+                ++first_null;
+            }
+        }
+    }
+
+    if( first_null >= 0 ) m_results.resize( first_null );
+}
+
 bool FindParticles::passed_all_filters(GenParticle *p, FilterList &filter_list) {
     BOOST_FOREACH( const Filter &f, filter_list.filters() ) {
         if( f.passed_filter(p) == false ) return false;
@@ -57,7 +85,10 @@ void FindParticles::recursive_check_ancestors(GenVertex *v, FilterList &filter_l
 
     BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
 
-        if( passed_all_filters(p,filter_list) ) m_results.push_back(p);
+        if( passed_all_filters(p,filter_list) ) {
+            DEBUG( 10, "Filter: passed" )
+            m_results.push_back(p);
+        }
         recursive_check_ancestors(p->production_vertex(),filter_list);
     }
 }
@@ -67,7 +98,10 @@ void FindParticles::recursive_check_descendants(GenVertex *v, FilterList &filter
 
     BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
 
-        if( passed_all_filters(p,filter_list) ) m_results.push_back(p);
+        if( passed_all_filters(p,filter_list) ) {
+            DEBUG( 10, "Filter: passed" )
+            m_results.push_back(p);
+        }
         recursive_check_descendants(p->end_vertex(),filter_list);
     }
 }

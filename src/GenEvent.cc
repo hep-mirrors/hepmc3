@@ -21,7 +21,8 @@ m_event_number(0),
 m_last_particle(0),
 m_last_vertex(0),
 m_current_version(0),
-m_last_version(0) {
+m_last_version(0),
+m_print_precision(2) {
 
     // Create default version
     m_versions.push_back( new GenEventVersion(0, "Version 0"));
@@ -100,6 +101,13 @@ void GenEvent::print( ostream& ostr) const {
        << "   Stat-Subst  ProdVtx" << endl;
     ostr << "________________________________________________________________________________" << endl;
 
+    // Find the current stream state
+    std::ios_base::fmtflags orig = ostr.flags();
+    std::streamsize         prec = ostr.precision();
+
+    // Set precision
+    ostr.precision(m_print_precision);
+
     BOOST_FOREACH( GenEventVersion *ver, boost::make_iterator_range(m_versions.begin(), m_versions.begin()+m_current_version+1) ) {
         BOOST_FOREACH( GenVertex *v, ver->vertices() ) {
             if( v->version_deleted() <= m_current_version ) continue;
@@ -137,6 +145,9 @@ void GenEvent::print( ostream& ostr) const {
         }
     }
 
+    // Restore the stream state
+    ostr.flags(orig);
+    ostr.precision(prec);
     ostr << "________________________________________________________________________________" << endl;
 }
 

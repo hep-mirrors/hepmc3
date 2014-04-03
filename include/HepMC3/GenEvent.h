@@ -41,6 +41,9 @@ public:
     /** Print information about the event and list full event tree */
     void print( std::ostream& ostr = std::cout ) const;
 
+    /** Set printout precision. Default is 2 */
+    void set_print_precision(int precision)      { m_print_precision = precision; }
+
     /** Add particle to the event
      *  @note Results in an error if this particle already belongs to an event
      */
@@ -77,15 +80,13 @@ public:
     int  event_number()                     const { return m_event_number; } //!< Get event number
     void set_event_number(int no)                 { m_event_number = no; }   //!< Set event number
 
-    int get_last_particle_barcode()         const { return m_last_particle; } //!< Get barcode of last particle
-    int get_last_vertex_barcode()           const { return m_last_vertex;   } //!< Get barcode of last vertex
-
-    const vector<GenParticle*>&     particles() const { return m_versions[m_current_version]->particles(); } //!< Access particle list
-    const vector<GenVertex*>&       vertices()  const { return m_versions[m_current_version]->vertices();  } //!< Access vertex list
-    const vector<GenEventVersion*>& versions()  const { return m_versions;  }                                //!< Access version list
+    int particles_count()                   const { return m_last_particle; } //!< Get barcode of last particle
+    int vertices_count()                    const { return -m_last_vertex;  } //!< Get barcode of last vertex
 
     int  current_version()                  const { return m_current_version; } //!< Get current version
     void set_current_version(int ver);                                          //!< Set current version
+
+    const vector<GenEventVersion*>& versions()  const { return m_versions;  }                                //!< Access version list
 
     int  last_version()                     const { return m_last_version; }    //!< Get last version
 //
@@ -97,6 +98,7 @@ private:
     int m_last_vertex;        //!< Barcode of the last vertex in the event
     int m_current_version;    //!< Index of current version used
     int m_last_version;       //!< Index of the last version of the event
+    int m_print_precision;    //!< Printout precision
 
     vector<GenEventVersion*> m_versions; //!< version list
 };
