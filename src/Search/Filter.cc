@@ -5,8 +5,10 @@
  *  @date Created       <b> 1 April 2014 </b>
  *  @date Last modified <b> 2 April 2014 </b>
  */
+#include <boost/foreach.hpp>
 #include "HepMC3/Search/Filter.h"
 #include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
 #include "HepMC3/Log.h"
 
 namespace HepMC3 {
@@ -14,8 +16,8 @@ namespace HepMC3 {
 bool Filter::passed_filter(const GenParticle *p) const {
         if(!p) return false;
 
-        if( m_value_type == INTEGER_PARAM )          return passed_int_filter(p);
-        if( m_value_type == PARTICLE_POINTER_PARAM ) return passed_particle_pointer_filter(p);
+        if( m_value_type == INTEGER_PARAM ) return passed_int_filter(p);
+        if( m_value_type == BOOL_PARAM    ) return passed_bool_filter(p);
 
         // This should never happen
         ERROR( "Unsupported value type ("<<m_value_type<<")" )
@@ -32,6 +34,7 @@ bool Filter::passed_int_filter(const GenParticle *p) const {
         case VERSION_CREATED: value = p->version_created(); break;
         case VERSION_DELETED: value = p->version_deleted(); break;
         case PDG_ID:          value = p->pdg_id();          break;
+        case ABS_PDG_ID:      value = abs( p->pdg_id() );   break;
         default:
             // This should never happen
             ERROR( "Unsupported filter ("<<m_int<<")" )
@@ -52,8 +55,34 @@ bool Filter::passed_int_filter(const GenParticle *p) const {
     return false;
 }
 
-bool Filter::passed_particle_pointer_filter(const GenParticle *p) const {
-    return false;
+bool Filter::passed_bool_filter(const GenParticle *p) const {
+
+    bool result = false;
+
+    DEBUG( 10, "Filter: checking barcode="<<p->barcode()<<" param="<<m_bool<<" value="<<m_bool_value<<" (bool)" )
+
+    switch( m_bool ) {
+        case HAS_END_VERTEX:           result = (p->end_vertex()        != NULL); break;
+        case HAS_PRODUCTION_VERTEX:    result = (p->production_vertex() != NULL); break;
+        case HAS_SAME_PDG_ID_DAUGHTER:
+            if( !p->end_vertex() || p->end_vertex()->particles_out().size() == 0 ) {
+                result = true;
+                break;
+            }
+
+            BOOST_FOREACH( GenParticle *pp, p->end_vertex()->particles_out() ) {
+                if( pp->pdg_id() == p->pdg_id() ) {
+                    result = true;
+                    break;
+                }
+            }
+
+            break;
+    };
+
+    if( m_bool_value == false ) result = !result;
+
+    return result;
 }
 
 } // namespace HepMC3

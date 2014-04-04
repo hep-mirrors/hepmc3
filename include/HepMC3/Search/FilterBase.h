@@ -9,7 +9,7 @@
  *
  *  Objects of this class cannot be directly created by user.
  *  See @ref search_engine for details on how to use this class.
- *  
+ *
  *  @ingroup search_engine
  *
  *  @date Created       <b> 1 April 2014 </b>
@@ -29,7 +29,7 @@ protected:
 /** List of filter parameter types */
 enum FilterParamType {
     INTEGER_PARAM,
-    PARTICLE_POINTER_PARAM
+    BOOL_PARAM
 };
 
 /** List of filters with integer parameter */
@@ -38,13 +38,15 @@ enum FilterIntegerParam {
     STATUS_SUBCODE,
     VERSION_CREATED,
     VERSION_DELETED,
-    PDG_ID
+    PDG_ID,
+    ABS_PDG_ID
 };
 
-/** List of filters with particle pointer parameter */
-enum FilterParticlePointerParam {
+/** List of filters boolean parameter */
+enum FilterBoolParam {
     HAS_END_VERTEX,
-    HAS_PRODUCTION_VERTEX
+    HAS_PRODUCTION_VERTEX,
+    HAS_SAME_PDG_ID_DAUGHTER
 };
 
 /** List of operators on filter values */
@@ -66,6 +68,11 @@ public:
     static const FilterBase init_status()          { return FilterBase(STATUS);          } //!< init static const STATUS
     static const FilterBase init_status_subcode()  { return FilterBase(STATUS_SUBCODE);  } //!< init static const STATUS_SUBCODE
     static const FilterBase init_pdg_id()          { return FilterBase(PDG_ID);          } //!< init static const PDG_ID
+    static const FilterBase init_abs_pdg_id()      { return FilterBase(ABS_PDG_ID);      } //!< init static const ABS_PDG_ID
+
+    static const Filter     init_has_end_vertex();           //!< init static const HAS_END_VERTEX
+    static const Filter     init_has_production_vertex();    //!< init static const HAS_PRODUCTION_VERTEX
+    static const Filter     init_has_same_pdg_id_daughter(); //!< init static const HAS_SAME_PDG_ID_DAUGHTER
 
 //
 // Constructors
@@ -77,6 +84,10 @@ protected:
      */
     FilterBase(FilterIntegerParam p):m_value_type(INTEGER_PARAM),m_int(p) {}
 
+    /** Boolean-type internal constructor
+     *  Used by static const initializers to define filters.
+     */
+    FilterBase(FilterBoolParam p):m_value_type(BOOL_PARAM),m_bool(p) {}
 //
 // Functions
 //
@@ -95,8 +106,8 @@ protected:
     FilterParamType                m_value_type;       //!< Parameter type
 
     union {
-        FilterParticlePointerParam m_particle_pointer; //!< Pointer value (if pointer parameter type)
-        FilterIntegerParam         m_int;              //!< Integer value (if integer parameter type)
+        FilterIntegerParam  m_int;  //!< Integer value (if integer parameter type)
+        FilterBoolParam     m_bool; //!< Boolean value (if boolean parameter type)
     };
 };
 
@@ -105,6 +116,7 @@ static const FilterBase STATUS_SUBCODE  = FilterBase::init_status_subcode();   /
 static const FilterBase VERSION_CREATED = FilterBase::init_version_created();  //!< Filter base for filtering HepMC3::GenParticle::version_created()
 static const FilterBase VERSION_DELETED = FilterBase::init_version_deleted();  //!< Filter base for filtering HepMC3::GenParticle::version_deleted()
 static const FilterBase PDG_ID          = FilterBase::init_pdg_id();           //!< Filter base for filtering HepMC3::GenParticle::pdg_id()
+static const FilterBase ABS_PDG_ID      = FilterBase::init_abs_pdg_id();       //!< Filter base for filtering abs( HepMC3::GenParticle::pdg_id() )
 
 } // namespace HepMC3
 
