@@ -31,8 +31,10 @@ enum FilterEvent {
 
 /** List of methods of searching starting from particle pointer */
 enum FilterParticle {
-    FIND_ANCESTORS,
-    FIND_DESCENDANTS
+    FIND_ALL_ANCESTORS,
+    FIND_ALL_DESCENDANTS,
+    FIND_MOTHERS,
+    FIND_DAUGHTERS
 };
 
 class FindParticles {

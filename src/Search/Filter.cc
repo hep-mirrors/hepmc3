@@ -66,7 +66,7 @@ bool Filter::passed_bool_filter(const GenParticle *p) const {
         case HAS_PRODUCTION_VERTEX:    result = (p->production_vertex() != NULL); break;
         case HAS_SAME_PDG_ID_DAUGHTER:
             if( !p->end_vertex() || p->end_vertex()->particles_out().size() == 0 ) {
-                result = true;
+                result = false;
                 break;
             }
 

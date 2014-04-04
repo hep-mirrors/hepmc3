@@ -77,8 +77,7 @@ void GenEvent::delete_vertex(GenVertex *v) {
 
     v->set_version_deleted(m_last_version);
 
-    // Removing incoming particle from the vertex makes this vertex
-    // and all subsequent vertices and particles invalid
+    // Deleting the vertex makes all subsequent vertices and particles invalid
     BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
         p->set_version_deleted(m_last_version);
         if(p->end_vertex()) delete_vertex(p->end_vertex());

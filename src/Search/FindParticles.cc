@@ -22,8 +22,6 @@ FindParticles::FindParticles(const GenEvent *evt, FilterEvent filter_type, Filte
         BOOST_FOREACH( GenParticle *p, v->particles() ) {
 
             if( passed_all_filters(p,filter_list) ) {
-
-                DEBUG( 10, "Filter: passed" )
                 if( filter_type == FIND_LAST && m_results.size()>0 ) m_results.clear();
                 m_results.push_back(p);
 
@@ -37,12 +35,29 @@ FindParticles::FindParticles(const GenParticle *p, FilterParticle filter_type, F
 
     if(!p) return;
 
-    if( filter_type == FIND_ANCESTORS ) {
-        recursive_check_ancestors(p->production_vertex(), filter_list);
-    }
-    else if( filter_type == FIND_DESCENDANTS ) {
-        recursive_check_descendants(p->end_vertex(), filter_list);
-    }
+    switch(filter_type) {
+        case FIND_ALL_ANCESTORS:   recursive_check_ancestors(p->production_vertex(), filter_list); break;
+        case FIND_ALL_DESCENDANTS: recursive_check_descendants(p->end_vertex(), filter_list);      break;
+        case FIND_MOTHERS:
+            if( !p || !p->production_vertex() ) break;
+
+            BOOST_FOREACH( HepMC3::GenParticle *pp, p->production_vertex()->particles_in() ) {
+                if( passed_all_filters(pp,filter_list) ) {
+                    m_results.push_back(pp);
+                }
+            }
+            break;
+        case FIND_DAUGHTERS:
+            if( !p || !p->end_vertex() ) break;
+
+            BOOST_FOREACH( HepMC3::GenParticle *pp, p->end_vertex()->particles_out() ) {
+                if( passed_all_filters(pp,filter_list) ) {
+                    m_results.push_back(pp);
+                }
+            }
+            break;
+    };
+
 }
 
 void FindParticles::narrow_down( FilterList filter_list ) {
@@ -59,8 +74,6 @@ void FindParticles::narrow_down( FilterList filter_list ) {
             if( first_null < 0 ) first_null = i;
         }
         else {
-            DEBUG( 10, "Filter: passed" )
-
             if( first_null >= 0 ) {
                 m_results[first_null] = m_results[i];
                 m_results[i] = NULL;
@@ -73,9 +86,13 @@ void FindParticles::narrow_down( FilterList filter_list ) {
 }
 
 bool FindParticles::passed_all_filters(GenParticle *p, FilterList &filter_list) {
+    if( filter_list.filters().size() == 0 ) return true;
+
     BOOST_FOREACH( const Filter &f, filter_list.filters() ) {
         if( f.passed_filter(p) == false ) return false;
     }
+
+    DEBUG( 10, "Filter: passed" )
     return true;
 }
 
@@ -86,7 +103,6 @@ void FindParticles::recursive_check_ancestors(GenVertex *v, FilterList &filter_l
     BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
 
         if( passed_all_filters(p,filter_list) ) {
-            DEBUG( 10, "Filter: passed" )
             m_results.push_back(p);
         }
         recursive_check_ancestors(p->production_vertex(),filter_list);
@@ -99,7 +115,6 @@ void FindParticles::recursive_check_descendants(GenVertex *v, FilterList &filter
     BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
 
         if( passed_all_filters(p,filter_list) ) {
-            DEBUG( 10, "Filter: passed" )
             m_results.push_back(p);
         }
         recursive_check_descendants(p->end_vertex(),filter_list);

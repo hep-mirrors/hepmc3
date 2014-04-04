@@ -104,7 +104,7 @@ int main() {
     }
 
     std::cout<<"Find all ancestors of particle with barcode "<<p5->barcode()<<": "<<std::endl;
-    FindParticles search2(p5, FIND_ANCESTORS );
+    FindParticles search2(p5, FIND_ALL_ANCESTORS );
 
     BOOST_FOREACH( GenParticle *p, search2.results() ) {
         p->print();
@@ -112,7 +112,7 @@ int main() {
 
     std::cout<<"Find stable descendants of particle with barcode "<<p4->barcode()<<": "<<std::endl;
     std::cout<<"(just for test, we check both for status == 1 and no end vertex)"<<std::endl;
-    FindParticles search3(p4, FIND_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX );
+    FindParticles search3(p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX );
 
     BOOST_FOREACH( GenParticle *p, search3.results() ) {
         p->print();
