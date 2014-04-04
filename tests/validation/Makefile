@@ -9,9 +9,14 @@ LIB_PHOTOS_HEPMC3_INT_SO  = libPhotosHepMC3Interface.so
 LIB_PHOTOS_HEPMC3_INT_OBJ = $(PHOTOSINTERFACE)/src/PhotosHepMC3Event.o \
                             $(PHOTOSINTERFACE)/src/PhotosHepMC3Particle.o
 
+LIB_TAUOLA_HEPMC3_INT_SO  = libTauolaHepMC3Interface.so
+LIB_TAUOLA_HEPMC3_INT_OBJ = $(TAUOLAINTERFACE)/src/TauolaHepMC3Event.o \
+                            $(TAUOLAINTERFACE)/src/TauolaHepMC3Particle.o
+
 LIB_MCTESTER_HEPMC3_INT_SO  = libHepMC3Interface.so
 LIB_MCTESTER_HEPMC3_INT_OBJ = $(MCTESTERINTERFACE)/src/HepMC3Event.o \
                               $(MCTESTERINTERFACE)/src/HepMC3Particle.o
+
 
 LIBS     =
 TESTS    =
@@ -38,12 +43,29 @@ ifneq ($(MCTESTERLOCATION), )
 endif
 endif
 
+ifneq ($(TAUOLALOCATION), )
+
+  override LIBS     += $(LIB_TAUOLA_HEPMC3_INT_SO)
+  override INCLUDES += $(TAUOLAINC)
+  override LINKS    += $(TAUOLALIBS)
+  override RPATHS   += -Wl,-rpath,$(TAUOLALOCATION)/lib -Wl,-rpath,$(TAUOLAINTERFACE)/lib
+  override TESTS    += tauola_standalone.exe
+ifneq ($(MCTESTERLOCATION), )
+  override TESTS    += tauola_mctester.exe
+endif
+endif
+
 all: $(LIBS) $(TESTS)
 
 # Build Photos library
 $(LIB_PHOTOS_HEPMC3_INT_SO): $(LIB_PHOTOS_HEPMC3_INT_OBJ)
 	mkdir -p $(PHOTOSINTERFACE)/lib/
 	$(LD) $(LDFLAGS) $(SOFLAGS) -o $(PHOTOSINTERFACE)/lib/$@ $^
+
+# Build Tauola library
+$(LIB_TAUOLA_HEPMC3_INT_SO): $(LIB_TAUOLA_HEPMC3_INT_OBJ)
+	mkdir -p $(TAUOLAINTERFACE)/lib/
+	$(LD) $(LDFLAGS) $(SOFLAGS) -o $(TAUOLAINTERFACE)/lib/$@ $^
 
 # Build MC-TESTER library
 $(LIB_MCTESTER_HEPMC3_INT_SO): $(LIB_MCTESTER_HEPMC3_INT_OBJ)

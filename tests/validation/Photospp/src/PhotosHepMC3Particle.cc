@@ -166,7 +166,7 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getDaughters() {
 std::vector<PhotosParticle*> PhotosHepMC3Particle::getAllDecayProducts() {
 
     // Find all stable decay products that are not deleted
-    HepMC3::FindParticles search( m_particle, HepMC3::FIND_DESCENDANTS, HepMC3::STATUS == 1 && HepMC3::VERSION_DELETED > m_parent_event->last_version() );
+    HepMC3::FindParticles search( m_particle, HepMC3::FIND_ALL_DESCENDANTS, HepMC3::STATUS == 1 && HepMC3::VERSION_DELETED > m_parent_event->last_version() );
 
     // Check if nothing changed since last update
     if( m_decay_products.size() == search.results().size() ) return m_decay_products;
