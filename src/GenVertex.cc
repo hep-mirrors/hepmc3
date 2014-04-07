@@ -74,23 +74,4 @@ void GenVertex::add_particle_out(GenParticle *p) {
     m_particles_out.push_back(p);
 }
 
-bool GenVertex::topological_compare::operator() (HepMC3::GenVertex *v1, HepMC3::GenVertex *v2) {
-    int highest_barcode1 = 0;
-    int highest_barcode2 = 0;
-
-    for( vector<GenParticle*>::const_iterator i = v1->particles_in().begin(); i != v1->particles_in().end(); ++i ) {
-        if( (*i)->barcode() > highest_barcode1 ) {
-            highest_barcode1 = (*i)->barcode();
-        }
-    }
-
-    for( vector<GenParticle*>::const_iterator i = v2->particles_in().begin(); i != v2->particles_in().end(); ++i ) {
-        if( (*i)->barcode() > highest_barcode2 ) {
-            highest_barcode2 = (*i)->barcode();
-        }
-    }
-
-    return ( highest_barcode1 < highest_barcode2 );
-}
-
 } // namespace HepMC3

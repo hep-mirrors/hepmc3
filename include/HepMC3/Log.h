@@ -54,8 +54,19 @@ private:
 /** Macro for printing warning messages */
 #define WARNING(MESSAGE)     if( HepMC3::Log::print_warnings() )       { std::cout << "WARNING::HepMC3::"               << MESSAGE << std::endl; }
 
+// Debug messages and code that will not go to the release version
+#ifndef HEPMC3_RELEASE_VERSION
+
 /** Macro for printing debug messages with appropriate debug level */
 #define DEBUG(LEVEL,MESSAGE) if( HepMC3::Log::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::HepMC3::" << MESSAGE << std::endl; }
+
+/** Macro for storing code useful for debugging */
+#define DEBUG_CODE_BLOCK( x ) x
+
+#else
+#define DEBUG( x )
+#define DEBUG_CODE_BLOCK( x )
+#endif
 
 } // namespace HepMC3
 
