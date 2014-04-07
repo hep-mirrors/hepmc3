@@ -10,6 +10,7 @@
 
 // MC-TESTER header files
 #include "Generate.h"
+#include "Setup.H"
 #include "HepMC3Event.h"
 using namespace HepMC3;
 using namespace Photospp;
@@ -42,18 +43,27 @@ void checkMomentumConservationInEvent(GenEvent *evt)
         cout<<endl<<"Vector Sum: "<<px<<" "<<py<<" "<<pz<<" "<<e<<endl;
 }
 
-int main()
+int main(int argc, char **argv)
 {
+        if( argc<2 ) {
+                std::cout<<"Usage: "<<argv[0]<<" <input_file> [<events_limit>]"<<std::endl;
+                exit(-1);
+        }
+
         Photos::initialize();
         Photos::setInfraredCutOff(0.001/200);
         //Log::LogDebug();
 
-        HepMC3::IO_HepMC2_adapter file("photos_standalone_example.dat",std::ios::in);
+        HepMC3::IO_HepMC2_adapter file(argv[1],std::ios::in);
         HepMC3::IO_GenEvent out("test.hepmc",std::ios::out);
 
         MC_Initialize();
 
+        Setup::decay_particle = 23;
+
         int evtCount = 0;
+        int evtLimit = 0;
+        if( argc >= 3 ) evtLimit = atoi(argv[2]);
 
         // Begin event loop
         while(true)
@@ -99,6 +109,8 @@ int main()
                 out.write_event(HepMCEvt);
                 //clean up
                 delete HepMCEvt;
+
+                if( evtLimit && evtCount >= evtLimit ) break;
         }
 
         MC_Finalize();

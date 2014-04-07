@@ -26,9 +26,9 @@ RPATHS   = -Wl,-rpath,$(HEPMC3LOCATION)/lib
 
 ifneq ($(MCTESTERLOCATION), )
   override LIBS     += $(LIB_MCTESTER_HEPMC3_INT_SO)
-  override INCLUDES += $(MCTESTERINC)
-  override LINKS    += $(MCTESTERLIBS)
-  override RPATHS   += -Wl,-rpath,$(MCTESTERLOCATION)/lib -Wl,-rpath,$(MCTESTERINTERFACE)/lib
+  override INCLUDES += $(MCTESTERINC) $(ROOTINC)
+  override LINKS    += $(MCTESTERLIBS) $(ROOTLIBS)
+  override RPATHS   += -Wl,-rpath,$(MCTESTERLOCATION)/lib -Wl,-rpath,$(MCTESTERINTERFACE)/lib -Wl,-rpath,$(shell root-config --libdir)
 endif
 
 ifneq ($(PHOTOSLOCATION), )

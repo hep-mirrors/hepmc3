@@ -34,7 +34,8 @@ TAUOLALIBS      = -L$(TAUOLALOCATION)/lib  -lTauolaCxxInterface -lTauolaFortran 
 
 MCTESTERINTERFACE = mc-tester
 MCTESTERINC       = -I$(MCTESTERLOCATION)/include \
-                    -I$(MCTESTERINTERFACE)/include
+                    -I$(MCTESTERINTERFACE)/include \
+                    -I$(shell root-config --incdir)
 MCTESTERLIBS      = -L$(MCTESTERLOCATION)/lib  -lHEPEvent -lMCTester \
-                    -L$(MCTESTERINTERFACE)/lib -lHepMC3Interface
-
+                    -L$(MCTESTERINTERFACE)/lib -lHepMC3Interface \
+                    $(shell root-config --glibs)
