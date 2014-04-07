@@ -189,7 +189,9 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     )
     // Find all starting particles (particles that have no production vertex)
     BOOST_FOREACH( ___particle_int_pair___ &p, m_end_vertex_barcode_cache ) {
-        if( !p.first->production_vertex() && p.first->end_vertex() ) sorting.push_back(p.first->end_vertex());
+        if( !p.first->production_vertex() || p.first->production_vertex()->particles_in().size() == 0 ) {
+            if( p.first->end_vertex() ) sorting.push_back(p.first->end_vertex());
+        }
     }
 
     // Topological sort
