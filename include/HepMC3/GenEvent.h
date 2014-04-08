@@ -31,43 +31,37 @@ class GenEvent {
 public:
     /** Default constructor */
     GenEvent();
-    /** Default destructor */
-    ~GenEvent();
 
 //
 // Functions
 //
 public:
     /** Print information about the event and list full event tree */
-    void print( std::ostream& ostr = std::cout ) const;
+    void print( std::ostream& ostr = std::cout ) const { print_version( m_last_version, ostr ); }
+
+    /** Print information about the selected version of the event */
+    void print_version( int version, std::ostream& ostr = std::cout ) const;
 
     /** Set printout precision. Default is 2 */
     void set_print_precision(int precision)      { m_print_precision = precision; }
 
-    /** Add particle to the event
-     *  @note Results in an error if this particle already belongs to an event
-     */
-    void add_particle(GenParticle *p);
+    /** Get particle by barcode */
+    const GenParticle& get_particle(int barcode) const { return m_versions[m_last_version].get_particle(barcode); }
 
-    /** Add vertex to the event
-     *  Checks if all incoming/outgoing particles already belong to this
-     *  event and adds them if needed.
-     *  @note Results in an error if either this vertex or any particle that
-     *        needs to be added belongs to other event
-     */
-    void add_vertex(GenVertex *v);
+    /** Get vertex by barcode */
+    const GenVertex&   get_vertex(int barcode)   const { return m_versions[m_last_version].get_vertex(barcode); }
 
-    /** Remove particle from the event
-     *  This will not delete the particle but will remove it from
-     *  the event and set its barcode to 0
-     */
-    void delete_particle(GenParticle *p);
+    /** Create new particle and add it to this version of event */
+    GenParticle& create_particle()       { ++m_last_particle; return m_versions[m_last_version].create_particle(); }
 
-    /** Remove vertex from the event
-     *  This will not delete the vertex but will remove it from
-     *  the event and set its barcode to 0
-     */
-    void delete_vertex(GenVertex *v);
+    /** Create new vertex and add it to this version of event */
+    GenVertex&   create_vertex()         { --m_last_vertex;   return m_versions[m_last_version].create_vertex(); }
+
+    /** Delete vertex from this version of event */
+    void delete_particle(GenParticle &p) { m_versions[m_last_version].delete_particle(p); }
+
+    /** Delete vertex from this version of event */
+    void delete_vertex(GenVertex &v)     { m_versions[m_last_version].delete_vertex(v); }
 
     /** Create new version
      *  Sets new version as current version
@@ -77,18 +71,14 @@ public:
 // Accessors
 //
 public:
-    int  event_number()                     const { return m_event_number; } //!< Get event number
-    void set_event_number(int no)                 { m_event_number = no; }   //!< Set event number
+    int  event_number()                       const { return m_event_number;   } //!< Get event number
+    void set_event_number(int no)                   { m_event_number = no;     } //!< Set event number
 
-    int particles_count()                   const { return m_last_particle; } //!< Get barcode of last particle
-    int vertices_count()                    const { return -m_last_vertex;  } //!< Get barcode of last vertex
+    int  particles_count()                    const { return  m_last_particle; } //!< Get number of particles
+    int  vertices_count()                     const { return -m_last_vertex;   } //!< Get number of vertices
+    int  last_version()                       const { return  m_last_version;  } //!< Get last version
 
-    int  current_version()                  const { return m_current_version; } //!< Get current version
-    void set_current_version(int ver);                                          //!< Set current version
-
-    const vector<GenEventVersion*>& versions()  const { return m_versions;  }                                //!< Access version list
-
-    int  last_version()                     const { return m_last_version; }    //!< Get last version
+    const vector<GenEventVersion>& versions() const { return  m_versions;      } //!< Get list of versions
 //
 // Fields
 //
@@ -96,11 +86,10 @@ private:
     int m_event_number;       //!< Event number
     int m_last_particle;      //!< Barcode of the last particle in the event
     int m_last_vertex;        //!< Barcode of the last vertex in the event
-    int m_current_version;    //!< Index of current version used
     int m_last_version;       //!< Index of the last version of the event
     int m_print_precision;    //!< Printout precision
 
-    vector<GenEventVersion*> m_versions; //!< version list
+    vector<GenEventVersion> m_versions; //!< version list
 };
 
 } // namespace HepMC3

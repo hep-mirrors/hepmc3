@@ -42,36 +42,16 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format  ) const {
     }
 }
 
-void GenVertex::add_particle_in(GenParticle *p) {
-    if(!p) return;
+void GenVertex::add_particle_in(GenParticle &p) {
 
-    if( m_barcode && p->barcode()==0 ) {
-        WARNING( "GenVertex::add_particle_in:  particle must be added to the event first!" )
-        return;
-    }
-    if( m_version_created < p->version_created() ) {
-        WARNING( "GenVertex::add_particle_in:  cannot add incoming particle to vertex from older version!" )
-        return;
-    }
-
-    p->set_end_vertex(this);
-    m_particles_in.push_back(p);
+    p.set_end_vertex(barcode());
+    m_particles_in.push_back(p.barcode());
 }
 
-void GenVertex::add_particle_out(GenParticle *p) {
-    if(!p) return;
+void GenVertex::add_particle_out(GenParticle &p) {
 
-    if( m_barcode && p->barcode()==0 ) {
-        WARNING( "GenVertex::add_particle_out: particle must be added to the event first!" )
-        return;
-    }
-    if( m_version_deleted <= p->version_created() ) {
-        WARNING( "GenVertex::add_particle_out: cannot add particle to deleted vertex!" )
-        return;
-    }
-
-    p->set_production_vertex(this);
-    m_particles_out.push_back(p);
+    p.set_production_vertex(barcode());
+    m_particles_out.push_back(p.barcode());
 }
 
 } // namespace HepMC3

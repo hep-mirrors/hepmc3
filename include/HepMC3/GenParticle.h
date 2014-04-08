@@ -17,12 +17,14 @@
 
 namespace HepMC3 {
 
+class GenEventVersion;
 class GenVertex;
 class GenEvent;
 class Filter;
 
 class GenParticle {
 
+friend class GenEventVersion;
 friend class GenVertex;
 friend class GenEvent;
 friend class Filter;
@@ -56,8 +58,8 @@ public:
 // Accessors
 //
 public:
-    GenVertex* production_vertex()               const { return m_production_vertex; }   //!< Get production vertex
-    GenVertex* end_vertex()                      const { return m_end_vertex; }          //!< Get end vertex
+    int    production_vertex()               const { return m_production_vertex; }   //!< Get production vertex
+    int    end_vertex()                      const { return m_end_vertex; }          //!< Get end vertex
 
     int    barcode()                            const { return m_barcode; }              //!< Get barcode
 
@@ -72,7 +74,7 @@ public:
 
     const  FourVector& momentum()               const { return m_momentum; }             //!< Get momentum
     FourVector&        momentum()                     { return m_momentum; }             //!< Set momentum by reference
-    void   set_momentum(FourVector& momentum)         { m_momentum  = momentum; }        //!< Set momentum
+    void   set_momentum(const FourVector& momentum)   { m_momentum = momentum; }         //!< Set momentum
 
     /** Get generated mass
      *  This function will return mass as set by a generator/tool.
@@ -80,13 +82,13 @@ public:
      */
     double generated_mass() const;
 
-    void   set_generated_mass(double m)               { m_generated_mass = m;   m_is_generated_mass_set = true;  } //!< Set generated mass
-    void   unset_generated_mass()                     { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Declare that generated mass is not set
-    bool   is_generated_mass_set()                    { return m_is_generated_mass_set; }                          //!< Check if genereted mass is set
+    void      set_generated_mass(double m)            { m_generated_mass = m;   m_is_generated_mass_set = true;  } //!< Set generated mass
+    void      unset_generated_mass()                  { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Declare that generated mass is not set
+    bool      is_generated_mass_set()                 { return m_is_generated_mass_set; }                          //!< Check if genereted mass is set
 
 protected:
-    void      set_production_vertex(GenVertex *v)     { m_production_vertex = v;    }    //!< Set production vertex
-    void      set_end_vertex(GenVertex *v)            { m_end_vertex = v;    }           //!< Set end vertex
+    void      set_production_vertex(int v)            { m_production_vertex = v;    }    //!< Set production vertex
+    void      set_end_vertex(int v)                   { m_end_vertex = v;    }           //!< Set end vertex
 
     short int version_created()                 const { return m_version_created; }      //!< Get creation version number
     void      set_version_created(short int v)        { m_version_created = v;    }      //!< Set creation version number
@@ -99,8 +101,8 @@ protected:
 // Fields
 //
 private:
-    GenVertex *m_production_vertex;     //!< Production vertex
-    GenVertex *m_end_vertex;            //!< End vertex
+    int        m_production_vertex;     //!< Production vertex
+    int        m_end_vertex;            //!< End vertex
     FourVector m_momentum;              //!< Momentum
     int        m_pdgid;                 //!< PDG ID
     int        m_status;                //!< Status

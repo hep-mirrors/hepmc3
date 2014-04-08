@@ -25,11 +25,11 @@ IO_Base(filename,mode) {
     }
 }
 
-void IO_HepMC2_adapter::write_event(const GenEvent *evt) {
+void IO_HepMC2_adapter::write_event(const GenEvent &evt) {
     WARNING( "IO_HepMC2_adapter: write_event not implemented for HepMC2 adapter" )
 }
 
-bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
+bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
     char          buf[512];
     bool          parsed_event_header            = false;
     bool          is_parsing_successful          = true;
@@ -82,7 +82,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                     break;
                 }
 
-                current_vertex = new GenVertex();
+                current_vertex = &evt.create_vertex();
 
                 parsing_result = parse_vertex_information(current_vertex,buf);
                 if(parsing_result<0) {
@@ -97,7 +97,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                 }
                 break;
             case 'P':
-                current_particle = new GenParticle();
+                current_particle = &evt.create_particle();
                 parsing_result = parse_particle_information(current_particle,buf);
                 if(parsing_result<0) {
                     delete current_particle;
@@ -109,10 +109,10 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
                     if(current_vertex) {
                         // If particle belongs to this vertex
                         if( m_end_vertex_barcode_cache.back().second == m_vertex_barcode_cache.back().second ) {
-                            current_vertex->add_particle_in(current_particle);
+                            current_vertex->add_particle_in(*current_particle);
                             m_end_vertex_barcode_cache.back().second = 0;
                         }
-                        else current_vertex->add_particle_out(current_particle);
+                        else current_vertex->add_particle_out(*current_particle);
                     }
                     is_parsing_successful = true;
                 }
@@ -173,7 +173,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
         BOOST_FOREACH( ___vertex_int_pair___ &v, m_vertex_barcode_cache ) {
 
             if( p.second == v.second ) {
-                v.first->add_particle_in(p.first);
+                v.first->add_particle_in(*p.first);
             }
         }
     }
@@ -181,6 +181,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     // Add particles to the event in topological order
     //
 
+    /*
     std::deque<GenVertex*> sorting;
 
     DEBUG_CODE_BLOCK(
@@ -189,7 +190,8 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
     )
     // Find all starting particles (particles that have no production vertex)
     BOOST_FOREACH( ___particle_int_pair___ &p, m_end_vertex_barcode_cache ) {
-        if( !p.first->production_vertex() || p.first->production_vertex()->particles_in().size() == 0 ) {
+        int pv = p.first->production_vertex();
+        if( !pv || p.first->production_vertex()->particles_in().size() == 0 ) {
             if( p.first->end_vertex() ) sorting.push_back(p.first->end_vertex());
         }
     }
@@ -221,7 +223,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
         // If this vertex has not yet been added by any particle,
         // add this vertex to the event
         // (this will also add all incoming and outgoing particles)
-        if( !v->barcode() ) evt->add_vertex(v);
+        if( !v->barcode() ) evt.add_vertex(v);
 
         sorting.pop_front();
 
@@ -235,14 +237,14 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent *evt) {
 
     DEBUG_CODE_BLOCK(
         DEBUG( 6, "IO_HepMC2_adapter - vertices sorted: "
-                   <<evt->vertices_count()<<", max deque size: "
+                   <<evt.vertices_count()<<", max deque size: "
                    <<max_deque_size<<", iterations: "<<sorting_loop_count )
-    )
+    )*/
 
     return 1;
 }
 
-int IO_HepMC2_adapter::parse_event_information(GenEvent *evt, const char *buf) {
+int IO_HepMC2_adapter::parse_event_information(GenEvent &evt, const char *buf) {
     const char          *cursor             = buf;
     int                  event_no           = 0;
     int                  vertices_count     = 0;
@@ -254,7 +256,7 @@ int IO_HepMC2_adapter::parse_event_information(GenEvent *evt, const char *buf) {
     // event number
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     event_no = atoi(cursor);
-    evt->set_event_number(event_no);
+    evt.set_event_number(event_no);
 
     // SKIPPED: mpi
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;

@@ -1,6 +1,6 @@
 #ifndef  HEPMC3_IO_BASE_H
 #define  HEPMC3_IO_BASE_H
-/**
+/** 
  *  @file  IO_Base.h
  *  @brief Definition of \b class HepMC3::IO_Base
  *
@@ -36,10 +36,10 @@ public:
 //
 public:
     /** Write event to file */
-    virtual void write_event(const GenEvent *evt) = 0;
+    virtual void write_event(const GenEvent &evt) = 0;
 
     /** Get event from file */
-    virtual bool fill_next_event(GenEvent *evt)   = 0;
+    virtual bool fill_next_event(GenEvent &evt)   = 0;
 
     /** Close the I/O stream */
     void close();

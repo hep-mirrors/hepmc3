@@ -36,12 +36,12 @@ public:
     /** Write event to file
      *  @param[in] evt Event to be serialized
      */
-    void write_event(const GenEvent *evt);
+    void write_event(const GenEvent &evt);
 
     /** Load event from file
      *  @param[out] evt Contains parsed event
      */
-    bool fill_next_event(GenEvent *evt);
+    bool fill_next_event(GenEvent &evt);
 
     /** Set output precision
      *  Default = 16
@@ -52,12 +52,12 @@ private:
     /** Write vertex
      *  Helper routine for writing single vertex to file
      */
-    void write_vertex  (const GenVertex *v);
+    void write_vertex  (const GenEventVersion &ver, const GenVertex &v);
 
     /** Write particle
      *  Helper routine for writing single particle to file
      */
-    void write_particle(const GenParticle *p);
+    void write_particle(const GenParticle &p);
 
 //
 // Fields

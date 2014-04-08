@@ -20,15 +20,13 @@ int main() {
     while(!adapter.rdstate()) {
         if(events_parsed%100==0) cout<<"Events parsed: "<<events_parsed<<endl;
 
-        GenEvent *evt = new GenEvent();
+        GenEvent evt;
 
         adapter.fill_next_event(evt);
         output_file.write_event(evt);
         if(events_parsed==0) {
-            evt->print();
+            evt.print();
         }
-
-        delete evt;
 
         events_parsed++;
     }

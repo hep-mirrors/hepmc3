@@ -38,12 +38,12 @@ public:
      *  @warning Function not implemented. It will be implemented if
      *           there is demand for it
      */
-    void write_event(const GenEvent *evt);
+    void write_event(const GenEvent &evt);
 
     /** Parse HepMC2 event and convert it to HepMC3::GenEvent
      *  @param[out] evt Contains parsed event
      */
-    bool fill_next_event(GenEvent *evt);
+    bool fill_next_event(GenEvent &evt);
 
 private:
     /** Parse event
@@ -51,7 +51,7 @@ private:
      *  @param[out] evt Event that will be filled with new data
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    int parse_event_information   (GenEvent  *evt, const char *buf);
+    int parse_event_information   (GenEvent  &evt, const char *buf);
 
     /** Parse vertex
      *  Helper routine for parsing single event information

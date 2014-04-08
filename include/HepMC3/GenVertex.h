@@ -20,10 +20,12 @@ using std::vector;
 namespace HepMC3 {
 
 class GenParticle;
+class GenEventVersion;
 class GenEvent;
 
 class GenVertex {
 
+friend class GenEventVersion;
 friend class GenEvent;
 
 //
@@ -52,12 +54,12 @@ public:
     /** Add incoming particle
      *  Also adds particle to the parent event
      */
-    void add_particle_in (GenParticle *p);
+    void add_particle_in (GenParticle &p);
 
     /** Add outgoing particle
      *  Also adds particle to the parent event
      */
-    void add_particle_out(GenParticle *p);
+    void add_particle_out(GenParticle &p);
 
 //
 // Accessors
@@ -65,8 +67,8 @@ public:
 public:
     int barcode()                               const { return m_barcode; }        //!< Get barcode
 
-    const vector<GenParticle*>& particles_in()  const { return m_particles_in; }   //!< Get incoming particle list
-    const vector<GenParticle*>& particles_out() const { return m_particles_out; }  //!< Get outgoing particle list
+    const vector<int>&          particles_in()  const { return m_particles_in; }   //!< Get incoming particle list
+    const vector<int>&          particles_out() const { return m_particles_out; }  //!< Get outgoing particle list
 protected:
     void set_barcode(int barcode)                     { m_barcode = barcode; }      //!< Set barcode
 
@@ -81,8 +83,8 @@ protected:
 private:
     int m_barcode;                         //!< Barcode
 
-    vector<GenParticle*> m_particles_in;   //!< Incoming particle list
-    vector<GenParticle*> m_particles_out;  //!< Outgoing particle list
+    vector<int>          m_particles_in;   //!< Incoming particle list
+    vector<int>          m_particles_out;  //!< Outgoing particle list
     short int            m_version_created;//!< Version number when this vertex was created
     short int            m_version_deleted;//!< Version number when this vertex was deleted
 };

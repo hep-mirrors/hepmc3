@@ -43,10 +43,10 @@ class FindParticles {
 //
 public:
     /** HepMC3::GenEvent-based constructor */
-    FindParticles(const GenEvent *evt,  FilterEvent    filter_type, FilterList filter_list = FilterList() );
+    FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list = FilterList() );
 
     /** HepMC3::GenParticle-based constructor */
-    FindParticles(const GenParticle *p, FilterParticle filter_type, FilterList filter_list = FilterList() );
+    FindParticles(const GenEvent &evt, const GenParticle &p, FilterParticle filter_type, FilterList filter_list = FilterList() );
 
     /** Narrow down the results applying additional filters */
     void narrow_down( FilterList filter_list );
@@ -55,28 +55,29 @@ public:
 //
 private:
     /** Check if particle passed all filters */
-    bool passed_all_filters(GenParticle *p, FilterList &filter_list);
+    bool passed_all_filters(const GenParticle &p, FilterList &filter_list);
 
     /** Check if all ancestors passed the filter
      *  Recursively check all particles and production vertices of these particles
      */
-    void recursive_check_ancestors(GenVertex *v, FilterList &filter_list);
+    void recursive_check_ancestors(const GenVertex &v, FilterList &filter_list);
 
     /** Check if all descendants passed the filter
      *  Recursively check all particles and end vertices of these particles
      */
-    void recursive_check_descendants(GenVertex *v, FilterList &filter_list);
+    void recursive_check_descendants(const GenVertex &v, FilterList &filter_list);
 //
 // Accessors
 //
 public:
-    const vector<GenParticle*>& results() const { return m_results; } //!< Get results
+    const vector<const GenParticle*>& results() const { return m_results; } //!< Get results
 
 //
 // Fields
 //
 private:
-    vector<GenParticle*>  m_results; //!< List of results
+    const GenEvent       &m_event;   //!< Event
+    vector<const GenParticle*>  m_results; //!< List of results
 };
 
 } // namespace HepMC3

@@ -14,6 +14,7 @@
  *  @date Created       <b> 25th March 2014 </b>
  *  @date Last modified <b> 25th March 2014 </b>
  */
+#include <iostream>
 namespace HepMC3 {
 
 class Log {

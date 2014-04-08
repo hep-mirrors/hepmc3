@@ -18,6 +18,7 @@
 #include <string>
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
+#include "HepMC3/DataList.h"
 using std::vector;
 
 namespace HepMC3 {
@@ -33,27 +34,29 @@ friend class GenEvent;
 //
 public:
     /** Default constructor. */
-    GenEventVersion(int number, const char *name);
-    /** Default destructor */
-    ~GenEventVersion();
+    GenEventVersion(int number, int particle_barcode, int vertex_barcode, const char *name);
 
 //
 // Functions
 //
 public:
+    /** Get particle by barcode */
+    const GenParticle& get_particle(int barcode) const;
+
+    /** Get vertex by barcode */
+    const GenVertex&   get_vertex(int barcode) const;
 protected:
-    /** Record change to a particle
-     *  If it hasn't been changed in this version yet - create new entry for it
-     *  If particle does not exist in the event - add it to the event
-     */
-    void record_change(GenParticle *p);
+    /** Create new particle */
+    GenParticle& create_particle();
 
-    /** Record change to a vertex
-     *  If it hasn't been changed in this version yet - create new entry for it
-     *  If vertex does not exist in the event - add it to the event
-     */
-    void record_change(GenVertex *v);
+    /** Create new vertex */
+    GenVertex&   create_vertex();
 
+    /** Mark particle as deleted in this version */
+    void delete_particle(GenParticle &p);
+
+    /** Mark vertex as deleted in this version */
+    void delete_vertex(GenVertex &p);
 //
 // Accessors
 //
@@ -61,17 +64,19 @@ public:
     std::string name()                      const { return m_name; }         //!< Get name
     void        set_name(std::string name)        { m_name = name; }         //!< Set name
 
-    const vector<GenParticle*>& particles() const { return m_particles; }    //!< Access particle list
-    const vector<GenVertex*>&   vertices()  const { return m_vertices; }     //!< Access vertex list
+    const DataList<GenParticle,8>& particles()  const { return m_particles; }    //!< Get particle list
+    const DataList<GenVertex,8>&   vertices()   const { return m_vertices; }     //!< Get vertex list
 
 //
 // Fields
 //
 private:
-    int                   m_version;                   //!< Version number
-    std::string           m_name;                      //!< Version name. Indicates what tool/generator created this version
-    vector<GenParticle*>  m_particles;                 //!< List of particles modified/added in this version (sorted by barcode)
-    vector<GenVertex*>    m_vertices;                  //!< List of vertices  modified/added in this version (sorted by barcode)
+    int          m_version;                //!< Version number
+    int          m_first_particle_barcode; //!< Barcode of the first particle
+    int          m_first_vertex_barcode;   //!< Barcode of the first vertex
+    std::string  m_name;                   //!< Version name. Indicates what tool/generator created this version
+    DataList<GenParticle,8> m_particles;   //!< List of particles modified/added in this version (sorted by barcode)
+    DataList<GenVertex,8> m_vertices;      //!< List of vertices  modified/added in this version (sorted by barcode)
 };
 
 } // namespace HepMC3

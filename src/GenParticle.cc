@@ -15,8 +15,8 @@ using std::ostream;
 namespace HepMC3 {
 
 GenParticle::GenParticle():
-m_production_vertex(NULL),
-m_end_vertex(NULL),
+m_production_vertex(0),
+m_end_vertex(0),
 m_momentum(0.0,0.0,0.0,0.0),
 m_pdgid(0),
 m_status(0),
@@ -30,8 +30,8 @@ m_version_deleted(255) {
 }
 
 GenParticle::GenParticle(FourVector momentum, int pdgid, int status):
-m_production_vertex(NULL),
-m_end_vertex(NULL),
+m_production_vertex(0),
+m_end_vertex(0),
 m_momentum(momentum),
 m_pdgid(pdgid),
 m_status(status),
@@ -55,14 +55,10 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
              << barcode() << " ID:" << pdg_id()
              << " (P,E)=" << m_momentum.px() << "," << m_momentum.py()
              << "," << m_momentum.pz() << "," << m_momentum.e()
-             << " Stat:" << status()
-             << " PV:";
-        if( production_vertex() ) ostr << production_vertex()->barcode();
-        else                      ostr << 0;
-        ostr << " EV:";
-        if( end_vertex() )        ostr << end_vertex()->barcode();
-        else                      ostr << 0;
-        ostr << endl;
+             << " Stat: " << status()
+             << " PV: " << production_vertex()
+             << " EV: " << end_vertex()
+             << endl;
     }
     // Event listing format. Used when calling:
     // event->print()
@@ -95,7 +91,7 @@ void GenParticle::print(ostream& ostr, bool event_listing_format) const {
 
         if( production_vertex() ) {
             ostr.width(6);
-            ostr << production_vertex()->barcode();
+            ostr << production_vertex();
         }
 
         ostr << endl;
