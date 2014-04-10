@@ -2,16 +2,18 @@
  *  @file IO_GenEvent.cc
  *  @brief Implementation of \b class HepMC3::IO_GenEvent
  *
- *  @date Created       <b> 23th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
-#include <boost/foreach.hpp>
-#include <boost/range/iterator_range.hpp>
-#include <iostream>
-#include <fstream>
 #include "HepMC3/IO_GenEvent.h"
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
 #include "HepMC3/Log.h"
+
+#include <fstream>
+#include <iostream>
+
+#include <boost/range/iterator_range.hpp>
+#include <boost/foreach.hpp>
 using std::endl;
 
 namespace HepMC3 {
@@ -28,15 +30,9 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
            << " "  << evt.particles_count()
            << endl;
 
-    BOOST_FOREACH( const GenEventVersion &ver , evt.versions() ) {
-
-        // Version info
-        m_file << "T " << ver.name() << endl;
-
-        // Print vertices
-        for( unsigned int i=0; i<ver.vertices().size(); ++i ) {
-            write_vertex(ver, ver.vertices()[i]);
-        }
+    // Print vertices
+    for( unsigned int i=1; i<=evt.vertices_count(); ++i ) {
+        write_vertex( evt, evt.get_vertex(-i));
     }
 }
 
@@ -52,11 +48,11 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
     return 1;
 }
 
-void IO_GenEvent::write_vertex(const GenEventVersion &ver, const GenVertex &v) {
+void IO_GenEvent::write_vertex(const GenEvent &evt, const GenVertex &v) {
 
     // Write all incoming particles
     BOOST_FOREACH( int p_barcode, v.particles_in() ) {
-        write_particle( ver.get_particle(p_barcode) );
+        write_particle( evt.get_particle(p_barcode) );
     }
 
     m_file << "V " << v.barcode()
@@ -76,7 +72,7 @@ void IO_GenEvent::write_vertex(const GenEventVersion &ver, const GenVertex &v) {
 
     // Write outgoing particles without their end vertex
     BOOST_FOREACH( int p_barcode, v.particles_out() ) {
-        const GenParticle &p = ver.get_particle(p_barcode);
+        const GenParticle &p = evt.get_particle(p_barcode);
         if( !p.end_vertex() ) write_particle(p);
     }
 }

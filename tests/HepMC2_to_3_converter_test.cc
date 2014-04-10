@@ -1,8 +1,7 @@
 /**
+ * @file HepMC2_to_3_converter_test.cc
  * @brief Test of HepMC2 to 3 IO file converter
  *
- * @author Tomasz Przedzinski
- * @date 21th March 2014
  */
 #include <iostream>
 #include "HepMC3/IO_HepMC2_adapter.h"

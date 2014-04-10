@@ -2,8 +2,6 @@
  *  @file IO_Base.cc
  *  @brief Partial implementation of \b abstract \b class HepMC3::IO_Base
  *
- *  @date Created       <b> 23th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
 #include <iostream>
 #include <fstream>
@@ -45,7 +43,7 @@ void IO_Base::close() {
         m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
     }
     m_file.close();
-    
+
     // Just in case ...
     m_file.clear(std::ios::badbit);
 }

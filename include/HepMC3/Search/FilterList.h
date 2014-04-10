@@ -11,11 +11,10 @@
  *
  *  @ingroup search_engine
  *
- *  @date Created       <b> 2 April 2014 </b>
- *  @date Last modified <b> 2 April 2014 </b>
  */
-#include <vector>
 #include "HepMC3/Search/Filter.h"
+
+#include <vector>
 using std::vector;
 
 namespace HepMC3 {

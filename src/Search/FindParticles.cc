@@ -2,32 +2,30 @@
  *  @file FindParticles.cc
  *  @brief Implementation of \b class HepMC3::FindParticles
  *
- *  @date Created       <b> 1 April 2014 </b>
- *  @date Last modified <b> 1 April 2014 </b>
  */
-#include <boost/foreach.hpp>
 #include "HepMC3/Search/FindParticles.h"
-#include "HepMC3/Search/Filter.h"
 #include "HepMC3/Search/FilterList.h"
-#include "HepMC3/GenEventVersion.h"
-#include "HepMC3/GenVertex.h"
+#include "HepMC3/Search/Filter.h"
+
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
 #include "HepMC3/Log.h"
+
+#include <boost/foreach.hpp>
 
 namespace HepMC3 {
 
 FindParticles::FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list):
 m_event(evt) {
 
-    BOOST_FOREACH( const GenEventVersion &v, m_event.versions() ) {
-        for( unsigned int i=0; i<v.particles().size(); ++i ) {
-            GenParticle &p = v.particles()[i];
-            if( passed_all_filters(p,filter_list) ) {
-                if( filter_type == FIND_LAST && m_results.size()>0 ) m_results.clear();
-                m_results.push_back(&p);
+    for( unsigned int i=1; i<=evt.particles_count(); ++i ) {
+        const GenParticle &p = evt.get_particle(i);
+        if( passed_all_filters(p,filter_list) ) {
+            if( filter_type == FIND_LAST && m_results.size()>0 ) m_results.clear();
+            m_results.push_back(&p);
 
-                if( filter_type == FIND_FIRST ) return;
-            }
+            if( filter_type == FIND_FIRST ) return;
         }
     }
 }

@@ -10,8 +10,6 @@
  *  Contains few support operations on 4-vectors.
  *  Fully inlined
  *
- *  @date Created       <b> 19th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
 #include <cmath>
 

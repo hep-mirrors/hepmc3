@@ -2,11 +2,9 @@
  *  @file FilterList.cc
  *  @brief Implementation of \b class HepMC3::FilterList
  *
- *  @date Created       <b> 2 April 2014 </b>
- *  @date Last modified <b> 2 April 2014 </b>
  */
-#include "HepMC3/Search/Filter.h"
 #include "HepMC3/Search/FilterList.h"
+#include "HepMC3/Search/Filter.h"
 
 namespace HepMC3 {
 

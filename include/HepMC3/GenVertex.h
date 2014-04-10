@@ -10,8 +10,6 @@
  *  Contains list of incoming/outgoing particles
  *  and optionally, position in timespace
  *
- *  @date Created       <b> 19th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
 #include <iostream>
 #include <vector>
@@ -19,9 +17,9 @@ using std::vector;
 
 namespace HepMC3 {
 
+class GenEvent;
 class GenParticle;
 class GenEventVersion;
-class GenEvent;
 
 class GenVertex {
 
@@ -33,13 +31,7 @@ friend class GenEvent;
 //
 public:
     /** Default constructor */
-    GenVertex();
-    /** Default destructor
-     *
-     *  @warning Deleting vertex without first removing it from the event
-     *           is improper and may cause segmentation fault!
-     */
-    ~GenVertex();
+    GenVertex(GenEvent *event = NULL);
 
 //
 // Functions
@@ -72,21 +64,23 @@ public:
 protected:
     void set_barcode(int barcode)                     { m_barcode = barcode; }      //!< Set barcode
 
-    short int version_created()                 const { return m_version_created; } //!< Get creation version number
-    void      set_version_created(short int v)        { m_version_created = v;    } //!< Set creation version number
+    unsigned short int version_created()                     const { return m_version_created; } //!< Get creation version number
+    void           set_version_created(unsigned short int v)       { m_version_created = v;    } //!< Set creation version number
 
-    short int version_deleted()                 const { return m_version_deleted; } //!< Get deletion version number
-    void      set_version_deleted(short int v)        { m_version_deleted = v;    } //!< Set deletion version number
+    unsigned short int version_deleted()                         const { return m_version_deleted; } //!< Get deletion version number
+    void               set_version_deleted(unsigned short int v)       { m_version_deleted = v;    } //!< Set deletion version number
+
+    void               set_event( GenEvent *event) { m_event = event; }
 //
 // Fields
 //
 private:
-    int m_barcode;                         //!< Barcode
-
-    vector<int>          m_particles_in;   //!< Incoming particle list
-    vector<int>          m_particles_out;  //!< Outgoing particle list
-    short int            m_version_created;//!< Version number when this vertex was created
-    short int            m_version_deleted;//!< Version number when this vertex was deleted
+    GenEvent    *m_event;                 //!< Parent event
+    int          m_barcode;               //!< Barcode
+    vector<int>  m_particles_in;          //!< Incoming particle list
+    vector<int>  m_particles_out;         //!< Outgoing particle list
+    unsigned short int m_version_created; //!< Version number when this vertex was created
+    unsigned short int m_version_deleted; //!< Version number when this vertex was deleted
 };
 
 } // namespace HepMC3

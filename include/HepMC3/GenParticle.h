@@ -9,16 +9,13 @@
  *
  *  Uses HepMC3::FourVector class to store momentum
  *
- *  @date Created       <b> 19th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
-#include <iostream>
 #include "HepMC3/FourVector.h"
+
+#include <iostream>
 
 namespace HepMC3 {
 
-class GenEventVersion;
-class GenVertex;
 class GenEvent;
 class Filter;
 
@@ -34,16 +31,7 @@ friend class Filter;
 //
 public:
     /** Default constructor */
-    GenParticle();
-    /** Constructs particle from basic information */
-    GenParticle(FourVector momentum, int pdgid, int status);
-    /** Default destructor
-     *
-     *  @warning Deleting particle without first removing it from the event
-     *           is improper and may cause segmentation fault!
-     */
-    ~GenParticle();
-
+    GenParticle(GenEvent *event = NULL);
 //
 // Functions
 //
@@ -58,8 +46,8 @@ public:
 // Accessors
 //
 public:
-    int    production_vertex()               const { return m_production_vertex; }   //!< Get production vertex
-    int    end_vertex()                      const { return m_end_vertex; }          //!< Get end vertex
+    int    production_vertex()                  const { return m_production_vertex; }    //!< Get production vertex
+    int    end_vertex()                         const { return m_end_vertex; }           //!< Get end vertex
 
     int    barcode()                            const { return m_barcode; }              //!< Get barcode
 
@@ -82,25 +70,27 @@ public:
      */
     double generated_mass() const;
 
-    void      set_generated_mass(double m)            { m_generated_mass = m;   m_is_generated_mass_set = true;  } //!< Set generated mass
-    void      unset_generated_mass()                  { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Declare that generated mass is not set
-    bool      is_generated_mass_set()                 { return m_is_generated_mass_set; }                          //!< Check if genereted mass is set
+    void   set_generated_mass(double m)               { m_generated_mass = m;   m_is_generated_mass_set = true;  } //!< Set generated mass
+    void   unset_generated_mass()                     { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Declare that generated mass is not set
+    bool   is_generated_mass_set()                    { return m_is_generated_mass_set; }                          //!< Check if genereted mass is set
 
 protected:
-    void      set_production_vertex(int v)            { m_production_vertex = v;    }    //!< Set production vertex
-    void      set_end_vertex(int v)                   { m_end_vertex = v;    }           //!< Set end vertex
+    void               set_production_vertex(int v)                    { m_production_vertex = v;    }    //!< Set production vertex
+    void               set_end_vertex(int v)                           { m_end_vertex = v;    }           //!< Set end vertex
 
-    short int version_created()                 const { return m_version_created; }      //!< Get creation version number
-    void      set_version_created(short int v)        { m_version_created = v;    }      //!< Set creation version number
+    unsigned short int version_created()                         const { return m_version_created; } //!< Get creation version number
+    void               set_version_created(unsigned short int v)       { m_version_created = v;    } //!< Set creation version number
 
-    short int version_deleted()                 const { return m_version_deleted; }      //!< Get deletion version number
-    void      set_version_deleted(short int v)        { m_version_deleted = v;    }      //!< Set deletion version number
+    unsigned short int version_deleted()                         const { return m_version_deleted; } //!< Get deletion version number
+    void               set_version_deleted(unsigned short int v)       { m_version_deleted = v;    } //!< Set deletion version number
 
-    void      set_barcode(int barcode)                { m_barcode = barcode; }           //!< Set barcode
+    void               set_barcode(int barcode)                        { m_barcode = barcode; }           //!< Set barcode
+    void               set_event( GenEvent *event )                    { m_event = event; }
 //
 // Fields
 //
 private:
+    GenEvent  *m_event;                 //!< Parent event
     int        m_production_vertex;     //!< Production vertex
     int        m_end_vertex;            //!< End vertex
     FourVector m_momentum;              //!< Momentum

@@ -3,8 +3,6 @@
  *  @file Log.cc
  *  @brief Initialization of static fields of HepMC3::Log class
  *
- *  @date Created       <b> 25th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
 namespace HepMC3 {
 

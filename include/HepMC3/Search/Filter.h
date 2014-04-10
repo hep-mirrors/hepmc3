@@ -13,15 +13,13 @@
  *
  *  @ingroup search_engine
  *
- *  @date Created       <b> 1 April 2014 </b>
- *  @date Last modified <b> 2 April 2014 </b>
  */
 #include "HepMC3/Search/FilterBase.h"
 
 namespace HepMC3 {
 
-class GenParticle;
 class GenEvent;
+class GenParticle;
 
 class Filter : protected FilterBase {
 

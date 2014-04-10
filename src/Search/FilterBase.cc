@@ -2,11 +2,9 @@
  *  @file FilterBase.cc
  *  @brief Definition of \b class HepMC3::FilterBase
  *
- *  @date Created       <b> 2 April 2014 </b>
- *  @date Last modified <b> 2 April 2014 </b>
  */
-#include "HepMC3/Search/Filter.h"
 #include "HepMC3/Search/FilterBase.h"
+#include "HepMC3/Search/Filter.h"
 
 namespace HepMC3 {
 

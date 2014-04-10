@@ -6,21 +6,20 @@
  *
  *  @class HepMC3::FindParticles
  *  @brief Search engine for HepMC3::GenEvent class
- *  
+ *
  *  @ingroup search_engine
  *
- *  @date Created       <b> 1 April 2014 </b>
- *  @date Last modified <b> 2 April 2014 </b>
  */
-#include <vector>
 #include "HepMC3/Search/FilterList.h"
+
+#include <vector>
 using std::vector;
 
 namespace HepMC3 {
 
-class GenParticle;
 class GenEvent;
 class GenVertex;
+class GenParticle;
 
 /** List of methods of searching through all particles in the event */
 enum FilterEvent {
@@ -76,7 +75,7 @@ public:
 // Fields
 //
 private:
-    const GenEvent       &m_event;   //!< Event
+    const GenEvent             &m_event;   //!< Event
     vector<const GenParticle*>  m_results; //!< List of results
 };
 

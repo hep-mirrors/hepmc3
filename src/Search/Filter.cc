@@ -2,15 +2,15 @@
  *  @file Filter.cc
  *  @brief Implementation of \b class HepMC3::Filter
  *
- *  @date Created       <b> 1 April 2014 </b>
- *  @date Last modified <b> 2 April 2014 </b>
  */
-#include <boost/foreach.hpp>
 #include "HepMC3/Search/Filter.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
+
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
 #include "HepMC3/Log.h"
+
+#include <boost/foreach.hpp>
 
 namespace HepMC3 {
 
@@ -69,7 +69,7 @@ bool Filter::passed_bool_filter(const GenEvent &evt, const GenParticle &p) const
                 result = false;
                 break;
             }
-            
+
             const GenVertex &v = evt.get_vertex(p.end_vertex());
             if( v.particles_out().size() == 0 ) {
                 result = false;

@@ -2,18 +2,17 @@
  *  @file IO_HepMC2_adapter.cc
  *  @brief Implementation of \b class HepMC3::IO_HepMC2_adapter
  *
- *  @date Created       <b> 23th March 2014 </b>
- *  @date Last modified <b> 28th March 2014 </b>
  */
-#include <boost/foreach.hpp>
-#include <deque>
-#include <cstring>
-#include <cstdlib>
 #include "HepMC3/IO_HepMC2_adapter.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/Log.h"
+
+#include <cstring>
+#include <cstdlib>
+
+#include <boost/foreach.hpp>
 
 namespace HepMC3 {
 
@@ -82,7 +81,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
                     break;
                 }
 
-                current_vertex = &evt.create_vertex();
+                current_vertex = &evt.new_vertex();
 
                 parsing_result = parse_vertex_information(current_vertex,buf);
                 if(parsing_result<0) {
@@ -97,7 +96,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
                 }
                 break;
             case 'P':
-                current_particle = &evt.create_particle();
+                current_particle = &evt.new_particle();
                 parsing_result = parse_particle_information(current_particle,buf);
                 if(parsing_result<0) {
                     delete current_particle;

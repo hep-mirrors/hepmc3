@@ -1,17 +1,15 @@
 #ifndef  HEPMC3_IO_BASE_H
 #define  HEPMC3_IO_BASE_H
-/** 
+/**
  *  @file  IO_Base.h
  *  @brief Definition of \b class HepMC3::IO_Base
  *
  *  @class HepMC3::IO_Base
  *  @brief Abstract class serving as a base of I/O interfaces
  *
- *  Handles file-related issues leaving the actual
+ *  Serves as a file handler leaving the actual
  *  I/O operations to implementations
  *
- *  @date Created       <b> 23th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
 #include <string>
 #include <fstream>

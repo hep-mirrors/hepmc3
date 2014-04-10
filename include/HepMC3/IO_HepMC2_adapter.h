@@ -7,12 +7,11 @@
  *  @class HepMC3::IO_HepMC2_adapter
  *  @brief Parser for HepMC2 I/O files
  *
- *  @date Created       <b> 23th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
+#include "HepMC3/IO_Base.h"
+
 #include <string>
 #include <fstream>
-#include "HepMC3/IO_Base.h"
 
 namespace HepMC3 {
 

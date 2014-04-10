@@ -5,16 +5,15 @@
  *  @brief Definition of \b class HepMC3::FilterBase
  *
  *  @class HepMC3::FilterBase
- *  @brief Base for the HepMC3::Filter class
+ *  @brief Base class for HepMC3::Filter class
  *
  *  Objects of this class cannot be directly created by user.
- *  See @ref search_engine for details on how to use this class.
+ *  See @ref search_engine for details on how this class is used.
  *
  *  @ingroup search_engine
  *
- *  @date Created       <b> 1 April 2014 </b>
- *  @date Last modified <b> 2 April 2014 </b>
  */
+
 namespace HepMC3 {
 
 class GenParticle;

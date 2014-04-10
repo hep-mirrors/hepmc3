@@ -2,44 +2,43 @@
  *  @file GenEvent.cc
  *  @brief Implementation of \b class HepMC3::GenEvent
  *
- *  @date Created       <b> 19th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
-#include <boost/foreach.hpp>
-#include <cmath>  // std::abs
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Log.h"
-using std::ostream;
+
+#include <vector>
+#include <stdexcept> // std::out_of_range
+#include <cmath>     // std::abs
+
+#include <boost/range/iterator_range.hpp>
+#include <boost/foreach.hpp>
 using std::endl;
 
 namespace HepMC3 {
 
 GenEvent::GenEvent():
 m_event_number(0),
-m_last_particle(0),
-m_last_vertex(0),
-m_last_version(0),
 m_print_precision(2) {
 
     // Create default version
-    m_versions.push_back( GenEventVersion(0, 1, 1, "Version 0") );
+    m_versions.push_back( "Version 0" );
 }
 
-void GenEvent::print_version( int version, std::ostream& ostr ) const {
+void GenEvent::print_version( unsigned int version, std::ostream& ostr ) const {
     ostr << "________________________________________________________________________________" << endl;
     ostr << "GenEvent: #" << m_event_number << endl;
-    ostr << " Version: \"" << m_versions[m_last_version].name()
-         << "\" (version id: " << m_last_version << ", last version id: " << m_last_version << ")" <<endl;
-    ostr << " Entries in this event: " << -m_last_vertex << " vertices, "
-       << m_last_particle << " particles." << endl;
+    ostr << " Version: \"" << m_versions[version]
+         << "\" (version id: " << version << ", last version id: " << m_versions.size()-1 << ")" <<endl;
+    ostr << " Entries in this event: " << m_vertices.size() << " vertices, "
+         << m_particles.size() << " particles." << endl;
 
     // Print a legend to describe the particle info
     ostr << "                                    GenParticle Legend" << endl;
     ostr << "     Barcode   PDG ID   "
-       << "( Px,       Py,       Pz,     E )"
-       << "   Stat-Subst  ProdVtx" << endl;
+         << "( Px,       Py,       Pz,     E )"
+         << "   Stat-Subst  ProdVtx" << endl;
     ostr << "________________________________________________________________________________" << endl;
 
     // Find the current stream state
@@ -49,18 +48,19 @@ void GenEvent::print_version( int version, std::ostream& ostr ) const {
     // Set precision
     ostr.precision(m_print_precision);
 
-    for( unsigned int i=0; i<m_versions[m_last_version].vertices().size(); ++i ) {
-        GenVertex &v = m_versions[m_last_version].vertices()[i];
-        if( v.version_deleted() <= m_last_version ) continue;
+    for( unsigned int i=0; i<m_vertices.size(); ++i ) {
+        GenVertex &v = m_vertices[i];
+        if( v.version_deleted() <= version ) continue;
         v.print(ostr,1);
 
         bool printed_header = false;
 
+
         // Print out all the incoming particles
         BOOST_FOREACH( int barcode, v.particles_in() ) {
-            const GenParticle &p = m_versions[m_last_version].get_particle(barcode);
+            const GenParticle &p = m_particles[barcode-1];
 
-            if( p.version_deleted() <= m_last_version ) continue;
+            if( p.version_deleted() <= version ) continue;
             if( !printed_header ) {
                 ostr << " I: ";
                 printed_header = true;
@@ -73,9 +73,9 @@ void GenEvent::print_version( int version, std::ostream& ostr ) const {
 
         // Print out all the outgoing particles
         BOOST_FOREACH( int barcode, v.particles_out() ) {
-            const GenParticle &p = m_versions[m_last_version].get_particle(barcode);
+            const GenParticle &p = m_particles[barcode-1];
 
-            if( p.version_deleted() <= m_last_version ) continue;
+            if( p.version_deleted() <= version ) continue;
             if( !printed_header ) {
                 ostr << " O: ";
                 printed_header = true;
@@ -91,9 +91,51 @@ void GenEvent::print_version( int version, std::ostream& ostr ) const {
     ostr << "________________________________________________________________________________" << endl;
 }
 
-void GenEvent::create_new_version(const char *name) {
-    ++m_last_version;
-    m_versions.push_back( GenEventVersion( m_last_version, m_last_particle, m_last_vertex, name) );
+const GenParticle& GenEvent::get_particle(int barcode) const {
+    if ( barcode <= 0 || barcode > (int)m_particles.size() ) throw std::out_of_range( "GenEvent::get_particle" );
+
+    return m_particles[ barcode - 1 ];
+}
+
+const GenVertex&   GenEvent::get_vertex(int barcode) const {
+    barcode = -barcode;
+    if ( barcode <= 0 || barcode >  (int)m_vertices.size() ) throw std::out_of_range( "GenEvent::get_vertex" );
+
+    return m_vertices[ barcode - 1 ];
+}
+
+GenParticle& GenEvent::new_particle() {
+
+    unsigned int barcode = m_particles.size();
+
+    m_particles.increase_size();
+    m_particles[barcode].set_event( this );
+    m_particles[barcode].set_barcode( barcode+1 );
+
+    return m_particles[barcode];
+}
+
+GenVertex& GenEvent::new_vertex() {
+
+    unsigned int barcode = m_vertices.size();
+
+    m_vertices.increase_size();
+    m_vertices[barcode].set_event( this );
+    m_vertices[barcode].set_barcode( -(barcode+1) );
+
+    return m_vertices[barcode];
+}
+
+void GenEvent::delete_particle(GenParticle &p) {
+    p.set_version_deleted(m_versions.size());
+}
+
+void GenEvent::delete_vertex(GenVertex &v) {
+    v.set_version_deleted(m_versions.size());
+}
+
+void GenEvent::new_version( const std::string name ) {
+    m_versions.push_back( name );
 }
 
 } // namespace HepMC3

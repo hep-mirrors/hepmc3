@@ -11,8 +11,6 @@
  *  Static class - configuration is shared among all HepMC3 events
  *  and program threads
  *
- *  @date Created       <b> 25th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
 #include <iostream>
 namespace HepMC3 {

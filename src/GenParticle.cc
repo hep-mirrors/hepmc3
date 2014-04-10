@@ -2,19 +2,17 @@
  *  @file GenParticle.cc
  *  @brief Implementation of \b class HepMC3::GenParticle
  *
- *  @date Created       <b> 19th March 2014 </b>
- *  @date Last modified <b> 25th March 2014 </b>
  */
-#include <iostream>
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenEvent.h"
+
 #include "HepMC3/Log.h"
 using std::endl;
-using std::ostream;
 
 namespace HepMC3 {
 
-GenParticle::GenParticle():
+GenParticle::GenParticle(GenEvent *event):
+m_event(event),
 m_production_vertex(0),
 m_end_vertex(0),
 m_momentum(0.0,0.0,0.0,0.0),
@@ -29,24 +27,7 @@ m_version_deleted(255) {
 
 }
 
-GenParticle::GenParticle(FourVector momentum, int pdgid, int status):
-m_production_vertex(0),
-m_end_vertex(0),
-m_momentum(momentum),
-m_pdgid(pdgid),
-m_status(status),
-m_status_subcode(0),
-m_barcode(0),
-m_generated_mass(0.0),
-m_is_generated_mass_set(false),
-m_version_created(0),
-m_version_deleted(255) {
-
-}
-
-GenParticle::~GenParticle() {}
-
-void GenParticle::print(ostream& ostr, bool event_listing_format) const {
+void GenParticle::print( std::ostream& ostr, bool event_listing_format) const {
 
     // Standalone format. Used when calling:
     // particle->print()
