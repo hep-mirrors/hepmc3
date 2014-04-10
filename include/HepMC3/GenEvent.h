@@ -39,11 +39,13 @@ public:
     /** Print selected version of the event */
     void print_version( unsigned int version, std::ostream& ostr = std::cout ) const;
 
+    void dump() const;
+
     /** Get particle by barcode */
-    const GenParticle& get_particle(int barcode) const;
+    GenParticle& get_particle(int barcode) const;
 
     /** Get vertex by barcode */
-    const GenVertex&   get_vertex(int barcode) const;
+    GenVertex&   get_vertex(int barcode) const;
 
     /** Create new particle and add it to this version of event */
     GenParticle& new_particle();
@@ -59,6 +61,20 @@ public:
 
     /** Create new version */
     void new_version(const std::string name);
+
+    /** Record change of a particle
+     *  Create a copy if a new version has been created and this particle
+     *  has not yet been added to the new version
+     *  @return barcode of the particle that has to be changed
+     */
+    int record_change(GenParticle& p);
+
+    /** Record change of a vertex
+     *  Create a copy if a new version has been created and this vertex
+     *  has not yet been added to the new version
+     *  @return barcode of the vertex that has to be changed
+     */
+    int record_change(GenVertex& p);
 //
 // Accessors
 //
@@ -68,9 +84,9 @@ public:
     int  event_number()                    const { return m_event_number;   } //!< Get event number
     void set_event_number(int no)                { m_event_number = no;     } //!< Set event number
 
-    unsigned int  particles_count()        const { return  m_particles.size(); } //!< Get number of particles
-    unsigned int  vertices_count()         const { return  m_vertices.size();  } //!< Get number of vertices
-    unsigned int  last_version()           const { return  m_versions.size();  } //!< Get last version
+    unsigned int  particles_count()        const { return  m_particles.size();  } //!< Get number of particles
+    unsigned int  vertices_count()         const { return  m_vertices.size();   } //!< Get number of vertices
+    unsigned int  last_version()           const { return  m_versions.size()-1; } //!< Get last version number
 //
 // Fields
 //

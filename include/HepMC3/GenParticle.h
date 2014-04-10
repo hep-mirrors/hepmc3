@@ -48,7 +48,6 @@ public:
 public:
     int    production_vertex()                  const { return m_production_vertex; }    //!< Get production vertex
     int    end_vertex()                         const { return m_end_vertex; }           //!< Get end vertex
-
     int    barcode()                            const { return m_barcode; }              //!< Get barcode
 
     int    pdg_id()                             const { return m_pdgid; }                //!< Get PDG ID
@@ -62,7 +61,7 @@ public:
 
     const  FourVector& momentum()               const { return m_momentum; }             //!< Get momentum
     FourVector&        momentum()                     { return m_momentum; }             //!< Set momentum by reference
-    void   set_momentum(const FourVector& momentum)   { m_momentum = momentum; }         //!< Set momentum
+    void   set_momentum(const FourVector& momentum); //!< Set momentum
 
     /** Get generated mass
      *  This function will return mass as set by a generator/tool.
@@ -74,18 +73,6 @@ public:
     void   unset_generated_mass()                     { m_generated_mass = 0.0; m_is_generated_mass_set = false; } //!< Declare that generated mass is not set
     bool   is_generated_mass_set()                    { return m_is_generated_mass_set; }                          //!< Check if genereted mass is set
 
-protected:
-    void               set_production_vertex(int v)                    { m_production_vertex = v;    }    //!< Set production vertex
-    void               set_end_vertex(int v)                           { m_end_vertex = v;    }           //!< Set end vertex
-
-    unsigned short int version_created()                         const { return m_version_created; } //!< Get creation version number
-    void               set_version_created(unsigned short int v)       { m_version_created = v;    } //!< Set creation version number
-
-    unsigned short int version_deleted()                         const { return m_version_deleted; } //!< Get deletion version number
-    void               set_version_deleted(unsigned short int v)       { m_version_deleted = v;    } //!< Set deletion version number
-
-    void               set_barcode(int barcode)                        { m_barcode = barcode; }           //!< Set barcode
-    void               set_event( GenEvent *event )                    { m_event = event; }
 //
 // Fields
 //
@@ -100,8 +87,9 @@ private:
     int        m_barcode;               //!< Barcode
     double     m_generated_mass;        //!< Generated mass
     bool       m_is_generated_mass_set; //!< Check if generated mass is set
-    short int  m_version_created;       //!< Version number when this particle was created
-    short int  m_version_deleted;       //!< Version number when this particle was deleted
+    unsigned short int  m_version_created;  //!< Version number when this particle was created
+    unsigned short int  m_version_deleted;  //!< Version number when this particle was deleted
+    int                 m_next_version;     //!< Barcode of the next version of this particle
 };
 
 } // namespace HepMC3

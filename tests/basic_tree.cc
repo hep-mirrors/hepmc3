@@ -101,30 +101,24 @@ int main() {
     v4.add_particle_out( p7 );
     v4.add_particle_out( p8 );
 
-    evt.print();
+    evt.new_version("Second tool");
 
-/*
-    // versioning test
-    evt->create_new_version("Second tool");
+    // Change particle
+    p7.set_momentum( FourVector(1., 2., 3., 4.) );
 
-    evt->delete_particle( p7 );
+    GenParticle &p9 = evt.new_particle();
+    p9.set_momentum( FourVector(1., 2., 3., 4.) );
+    p9.set_pdg_id(1);
+    p9.set_status(1);
+    v4.add_particle_out( p9 );
 
-    GenParticle* p9 = new GenParticle( FourVector(1., 2., 3., 4.), 1,1 );
-    evt->add_particle( p9 );
-    v4->add_particle_out( p9 );
-
-    evt->create_new_version("Third tool");
-
-    evt->delete_particle(p4);
+    evt.new_version("Third tool");
+    evt.delete_particle(p4);
 
     // printout
-    evt->set_current_version(0);
-    evt->print();
-    evt->set_current_version(1);
-    evt->print();
-    evt->set_current_version(evt->last_version());
-    evt->print();
-*/
+    for(unsigned int i=0;i<=evt.last_version(); ++i) {
+        evt.print_version(i);
+    }
 
     std::cout<<std::endl<<"Find all stable particles: "<<std::endl;
     FindParticles search(evt, FIND_ALL, STATUS == 1 && STATUS_SUBCODE == 0 );
@@ -155,5 +149,7 @@ int main() {
         p->print();
     }
 
+    std::cout<<std::endl<<"Event dump:"<<std::endl;
+    evt.dump();
     return 0;
 }

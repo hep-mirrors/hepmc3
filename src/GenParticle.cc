@@ -23,7 +23,8 @@ m_barcode(0),
 m_generated_mass(0.0),
 m_is_generated_mass_set(false),
 m_version_created(0),
-m_version_deleted(255) {
+m_version_deleted(255),
+m_next_version(0) {
 
 }
 
@@ -33,7 +34,10 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format) const {
     // particle->print()
     if( !event_listing_format ) {
         ostr << "GenParticle: "
-             << barcode() << " ID:" << pdg_id()
+             << barcode() << " (ver.: ";
+        if(m_version_deleted==255) ostr<<" "<<m_version_created<<" ";
+        else                       ostr<<m_version_created<<"-"<<m_version_deleted;
+        ostr << ") ID:" << pdg_id()
              << " (P,E)=" << m_momentum.px() << "," << m_momentum.py()
              << "," << m_momentum.pz() << "," << m_momentum.e()
              << " Stat: " << status()
@@ -77,6 +81,11 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format) const {
 
         ostr << endl;
     }
+}
+
+void GenParticle::set_momentum( const FourVector& momentum) {
+    int barcode = m_event->record_change(*this);
+    if(barcode) m_event->get_particle(barcode).m_momentum = momentum;
 }
 
 double GenParticle::generated_mass() const {

@@ -31,8 +31,8 @@ bool Filter::passed_int_filter(const GenEvent &evt, const GenParticle &p) const 
     switch(m_int) {
         case STATUS:          value = p.status();          break;
         case STATUS_SUBCODE:  value = p.status_subcode();  break;
-        case VERSION_CREATED: value = p.version_created(); break;
-        case VERSION_DELETED: value = p.version_deleted(); break;
+        case VERSION_CREATED: value = p.m_version_created; break;
+        case VERSION_DELETED: value = p.m_version_deleted; break;
         case PDG_ID:          value = p.pdg_id();          break;
         case ABS_PDG_ID:      value = abs( p.pdg_id() );   break;
         default:

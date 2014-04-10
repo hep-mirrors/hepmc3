@@ -57,30 +57,22 @@ public:
 // Accessors
 //
 public:
-    int barcode()                               const { return m_barcode; }        //!< Get barcode
+    int barcode()                       const { return m_barcode; }        //!< Get barcode
 
-    const vector<int>&          particles_in()  const { return m_particles_in; }   //!< Get incoming particle list
-    const vector<int>&          particles_out() const { return m_particles_out; }  //!< Get outgoing particle list
-protected:
-    void set_barcode(int barcode)                     { m_barcode = barcode; }      //!< Set barcode
+    const vector<int>&  particles_in()  const { return m_particles_in; }   //!< Get incoming particle list
+    const vector<int>&  particles_out() const { return m_particles_out; }  //!< Get outgoing particle list
 
-    unsigned short int version_created()                     const { return m_version_created; } //!< Get creation version number
-    void           set_version_created(unsigned short int v)       { m_version_created = v;    } //!< Set creation version number
-
-    unsigned short int version_deleted()                         const { return m_version_deleted; } //!< Get deletion version number
-    void               set_version_deleted(unsigned short int v)       { m_version_deleted = v;    } //!< Set deletion version number
-
-    void               set_event( GenEvent *event) { m_event = event; }
 //
 // Fields
 //
 private:
-    GenEvent    *m_event;                 //!< Parent event
-    int          m_barcode;               //!< Barcode
-    vector<int>  m_particles_in;          //!< Incoming particle list
-    vector<int>  m_particles_out;         //!< Outgoing particle list
-    unsigned short int m_version_created; //!< Version number when this vertex was created
-    unsigned short int m_version_deleted; //!< Version number when this vertex was deleted
+    GenEvent    *m_event;         //!< Parent event
+    int          m_barcode;       //!< Barcode
+    vector<int>  m_particles_in;  //!< Incoming particle list
+    vector<int>  m_particles_out; //!< Outgoing particle list
+    unsigned short int m_version_created;  //!< Version number when this vertex was created
+    unsigned short int m_version_deleted;  //!< Version number when this vertex was deleted
+    int                m_next_version;     //!< Barcode of the next version of this vertex
 };
 
 } // namespace HepMC3
