@@ -3,10 +3,9 @@ include make.inc
 LIB_VER       = 3.00.00
 LIB_HEPMC_A   = libHepMC.a
 LIB_HEPMC_SO  = libHepMC.so
-LIB_HEPMC_OBJ = src/GenParticle.o src/GenEvent.o src/GenVertex.o \
-                src/Log.o \
+LIB_HEPMC_OBJ = src/Log.o src/GenParticle.o src/GenVertex.o src/GenEvent.o \
+                src/Search/FilterBase.o src/Search/Filter.o src/Search/FilterList.o src/Search/FindParticles.o \
                 src/IO_Base.o src/IO_GenEvent.o src/IO_HepMC2_adapter.o \
-                src/Search/FilterBase.o src/Search/Filter.o src/Search/FilterList.o src/Search/FindParticles.o
 
 all: lib
 

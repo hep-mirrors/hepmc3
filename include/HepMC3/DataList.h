@@ -35,11 +35,19 @@ public:
 
     /** Default destructor */
     ~DataList() {
-        for(unsigned int i=0; i<m_data.size(); ++i) delete[] m_data[i];
+        for(unsigned int i=0; i<m_data.size(); ++i) {
+            for(unsigned int j=0; j<m_block_size; ++j) {
+                if( m_size <= 0 ) break;
+                m_data[i][j].~T();
+                --m_size;
+            }
+
+            operator delete[](m_data[i]);
+        }
     }
 
     /** operator[]
-     *  Translates index to page|index pair
+     *  Translates index to pair <page,subindex>
      */
     T& operator[](unsigned int idx) const {
         unsigned int page = idx >> N;
@@ -47,16 +55,36 @@ public:
         return m_data[page][idx];
     }
 
-    /** Increase size
-     *  Registers that new object has been added.
-     *  Resizes the container if needed
+    /** Default initialization of the new object */
+    T* new_object() {
+        T *p = new_uninitialized_object();
+
+        new (p) T();
+
+        return p;
+    }
+
+    /** Initialize new object using copy constructor */
+    T* new_object(const T &o) {
+        T *p = new_uninitialized_object();
+
+        new (p) T(o);
+
+        return p;
+    }
+
+    /** Registers that new object has been added.
+     *  Reserves more memory if needed
+     *  @return Pointer to the new (uninitialized) object
      */
-    void increase_size() {
+    T* new_uninitialized_object() {
         ++m_size;
         if( m_size % m_block_size == 1 ) {
-            T *p = new T[m_block_size];
+            T *p = static_cast<T*>( operator new[](sizeof(T)*m_block_size) );
             m_data.push_back( p );
         }
+
+        return static_cast<T*>(m_data.back() + (m_size-1)%m_block_size);
     }
 
     /** Get size of the container */

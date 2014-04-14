@@ -11,6 +11,7 @@
 
 #include <cstring>
 #include <cstdlib>
+#include <deque>
 
 #include <boost/foreach.hpp>
 
@@ -40,6 +41,9 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
 
     m_vertex_barcode_cache.clear();
     m_end_vertex_barcode_cache.clear();
+
+    // Temporary event for storing particles and vertices
+    GenEvent temp_event;
 
     //
     // Parse event, vertex and particle information
@@ -81,11 +85,10 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
                     break;
                 }
 
-                current_vertex = &evt.new_vertex();
+                current_vertex = &temp_event.new_vertex();
 
                 parsing_result = parse_vertex_information(current_vertex,buf);
                 if(parsing_result<0) {
-                    delete current_vertex;
                     current_vertex = NULL;
                     is_parsing_successful = false;
                     ERROR( "IO_HepMC2_adapter: error parsing vertex information" )
@@ -96,10 +99,9 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
                 }
                 break;
             case 'P':
-                current_particle = &evt.new_particle();
+                current_particle = &temp_event.new_particle();
                 parsing_result = parse_particle_information(current_particle,buf);
                 if(parsing_result<0) {
-                    delete current_particle;
                     current_particle = NULL;
                     is_parsing_successful = false;
                     ERROR( "IO_HepMC2_adapter: error parsing particle information" )
@@ -169,28 +171,40 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
     typedef std::pair<GenVertex*,int>   ___vertex_int_pair___;
 
     BOOST_FOREACH( ___particle_int_pair___ &p, m_end_vertex_barcode_cache ) {
+
+        if(p.second==0) continue;
+
         BOOST_FOREACH( ___vertex_int_pair___ &v, m_vertex_barcode_cache ) {
 
+        //DEBUG( 1, "Pair: "<<p.second<<" "<<v.second<<" "<<p.first->barcode()<<" "<<v.first->barcode() )
             if( p.second == v.second ) {
                 v.first->add_particle_in(*p.first);
+                break;
             }
         }
     }
+
     //
     // Add particles to the event in topological order
     //
 
-    /*
-    std::deque<GenVertex*> sorting;
+    /** @todo Optimize sorting.
+     *
+     *  Currently the intermediate step is copying from temp_event to evt,
+     *  which costs twice as much time and memory than needed.
+     */
+    std::deque<const GenVertex*> sorting;
+    std::vector<int>             new_barcodes(temp_event.particles_count());
 
     DEBUG_CODE_BLOCK(
         unsigned int sorting_loop_count = 0;
         unsigned int max_deque_size     = 0;
     )
+
     // Find all starting particles (particles that have no production vertex)
     BOOST_FOREACH( ___particle_int_pair___ &p, m_end_vertex_barcode_cache ) {
-        int pv = p.first->production_vertex();
-        if( !pv || p.first->production_vertex()->particles_in().size() == 0 ) {
+        const GenVertex *v = p.first->production_vertex();
+        if( !v || v->particles_in().size() == 0 ) {
             if( p.first->end_vertex() ) sorting.push_back(p.first->end_vertex());
         }
     }
@@ -203,13 +217,13 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
             ++sorting_loop_count;
         )
 
-        GenVertex *v = sorting.front();
+        const GenVertex *v = sorting.front();
 
         bool added = false;
 
         // Add all production vertices to the front of the list
         BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
-            if( p->production_vertex() && p->production_vertex()->barcode() == 0 ) {
+            if( p->production_vertex() && !p->production_vertex()->is_deleted() ) {
                 sorting.push_front( p->production_vertex() );
                 added = true;
             }
@@ -219,16 +233,57 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
         // is not the first on the list
         if( added ) continue;
 
-        // If this vertex has not yet been added by any particle,
-        // add this vertex to the event
-        // (this will also add all incoming and outgoing particles)
-        if( !v->barcode() ) evt.add_vertex(v);
-
+        // Remove this vertex from the list to be sorted
         sorting.pop_front();
+
+        // If this vertex has not yet been added by any particle,
+        // add this vertex and all incoming/outgoing particles to the event
+        if( !v->is_deleted() ) {
+
+            GenVertex &new_v = evt.new_vertex(&v->data());
+
+            BOOST_FOREACH( const GenParticle *p, v->particles_in() ) {
+                if(p->is_deleted()) {
+                    // Use new barcode list to add incoming particle
+                    new_v.add_particle_in( evt.particle( new_barcodes[ p->barcode()-1 ] ) );
+                }
+                else {
+                    // Create new particle and add it as incoming particle
+                    GenParticle &new_p = evt.new_particle(&p->data());
+
+                    // Store new barcode
+                    new_barcodes[ p->barcode()-1 ] = new_p.barcode();
+
+                    new_v.add_particle_in(new_p);
+
+                    temp_event.particle( p->barcode() ).mark_deleted();
+                }
+            }
+
+            BOOST_FOREACH( const GenParticle *p, v->particles_out() ) {
+                if(p->is_deleted()) {
+                    // Use new barcode list to add outgoing particle
+                    new_v.add_particle_out( evt.particle( new_barcodes[ p->barcode()-1 ] ) );
+                }
+                else {
+                    // Create new particle and add it as outgoing particle
+                    GenParticle &new_p = evt.new_particle(&p->data());
+
+                    // Store new barcode
+                    new_barcodes[ p->barcode()-1 ] = new_p.barcode();
+
+                    new_v.add_particle_out(new_p);
+
+                    temp_event.particle( p->barcode() ).mark_deleted();
+                }
+            }
+
+            temp_event.vertex( v->barcode() ).mark_deleted();
+        }
 
         // Add all outgoing vertices to the end list
         BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
-            if( p->end_vertex() && p->end_vertex()->barcode() == 0 ) {
+            if( p->end_vertex() && !p->end_vertex()->is_deleted() ) {
                 sorting.push_back( p->end_vertex() );
             }
         }
@@ -238,7 +293,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
         DEBUG( 6, "IO_HepMC2_adapter - vertices sorted: "
                    <<evt.vertices_count()<<", max deque size: "
                    <<max_deque_size<<", iterations: "<<sorting_loop_count )
-    )*/
+    )
 
     return 1;
 }

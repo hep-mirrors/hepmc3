@@ -107,7 +107,7 @@ int main() {
     p7.set_momentum( FourVector(1., 2., 3., 4.) );
 
     GenParticle &p9 = evt.new_particle();
-    p9.set_momentum( FourVector(1., 2., 3., 4.) );
+    p9.set_momentum( FourVector(5., 6., 7., 8.) );
     p9.set_pdg_id(1);
     p9.set_status(1);
     v4.add_particle_out( p9 );
@@ -116,7 +116,7 @@ int main() {
     evt.delete_particle(p4);
 
     // printout
-    for(unsigned int i=0;i<=evt.last_version(); ++i) {
+    for(unsigned int i=1;i<=evt.last_version(); ++i) {
         evt.print_version(i);
     }
 
@@ -128,7 +128,7 @@ int main() {
     }
 
     std::cout<<std::endl<<"Find all ancestors of particle with barcode "<<p5.barcode()<<": "<<std::endl;
-    FindParticles search2(evt, p5, FIND_ALL_ANCESTORS );
+    FindParticles search2(p5, FIND_ALL_ANCESTORS );
 
     BOOST_FOREACH( const GenParticle *p, search2.results() ) {
         p->print();
@@ -136,7 +136,7 @@ int main() {
 
     std::cout<<std::endl<<"Find stable descendants of particle with barcode "<<p4.barcode()<<": "<<std::endl;
     std::cout<<"(just for test, we check both for status == 1 and no end vertex)"<<std::endl;
-    FindParticles search3(evt, p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX );
+    FindParticles search3(p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX );
 
     BOOST_FOREACH( const GenParticle *p, search3.results() ) {
         p->print();
@@ -149,7 +149,7 @@ int main() {
         p->print();
     }
 
-    std::cout<<std::endl<<"Event dump:"<<std::endl;
+    std::cout<<std::endl;
     evt.dump();
     return 0;
 }

@@ -16,7 +16,6 @@
 
 namespace HepMC3 {
 
-class GenParticle;
 class Filter;
 
 class FilterBase {

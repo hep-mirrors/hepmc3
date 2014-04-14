@@ -45,7 +45,7 @@ public:
     FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list = FilterList() );
 
     /** HepMC3::GenParticle-based constructor */
-    FindParticles(const GenEvent &evt, const GenParticle &p, FilterParticle filter_type, FilterList filter_list = FilterList() );
+    FindParticles(const GenParticle &p, FilterParticle filter_type, FilterList filter_list = FilterList() );
 
     /** Narrow down the results applying additional filters */
     void narrow_down( FilterList filter_list );
@@ -75,7 +75,6 @@ public:
 // Fields
 //
 private:
-    const GenEvent             &m_event;   //!< Event
     vector<const GenParticle*>  m_results; //!< List of results
 };
 

@@ -14,27 +14,27 @@
 
 namespace HepMC3 {
 
-bool Filter::passed_filter(const GenEvent &evt, const GenParticle &p) const {
+bool Filter::passed_filter(const GenParticle &p) const {
 
-        if( m_value_type == INTEGER_PARAM ) return passed_int_filter(evt, p);
-        if( m_value_type == BOOL_PARAM    ) return passed_bool_filter(evt, p);
+        if( m_value_type == INTEGER_PARAM ) return passed_int_filter (p);
+        if( m_value_type == BOOL_PARAM    ) return passed_bool_filter(p);
 
         // This should never happen
         ERROR( "Unsupported value type ("<<m_value_type<<")" )
         return false;
 }
 
-bool Filter::passed_int_filter(const GenEvent &evt, const GenParticle &p) const {
+bool Filter::passed_int_filter(const GenParticle &p ) const {
 
     int value = 0;
 
     switch(m_int) {
-        case STATUS:          value = p.status();          break;
-        case STATUS_SUBCODE:  value = p.status_subcode();  break;
-        case VERSION_CREATED: value = p.m_version_created; break;
-        case VERSION_DELETED: value = p.m_version_deleted; break;
-        case PDG_ID:          value = p.pdg_id();          break;
-        case ABS_PDG_ID:      value = abs( p.pdg_id() );   break;
+        case STATUS:          value = p.m_data.status;          break;
+        case STATUS_SUBCODE:  value = p.m_data.status_subcode;  break;
+        case VERSION_CREATED: value = p.m_version_created;      break;
+        case VERSION_DELETED: value = p.m_version_deleted;      break;
+        case PDG_ID:          value = p.m_data.pdg_id;          break;
+        case ABS_PDG_ID:      value = abs( p.m_data.pdg_id );   break;
         default:
             // This should never happen
             ERROR( "Unsupported filter ("<<m_int<<")" )
@@ -55,29 +55,29 @@ bool Filter::passed_int_filter(const GenEvent &evt, const GenParticle &p) const 
     return false;
 }
 
-bool Filter::passed_bool_filter(const GenEvent &evt, const GenParticle &p) const {
+bool Filter::passed_bool_filter(const GenParticle &p ) const {
 
     bool result = false;
 
     DEBUG( 10, "Filter: checking barcode="<<p.barcode()<<" param="<<m_bool<<" value="<<m_bool_value<<" (bool)" )
 
     switch( m_bool ) {
-        case HAS_END_VERTEX:           result = (p.end_vertex()        != 0); break;
-        case HAS_PRODUCTION_VERTEX:    result = (p.production_vertex() != 0); break;
+        case HAS_END_VERTEX:           result = (p.m_end_vertex        != 0); break;
+        case HAS_PRODUCTION_VERTEX:    result = (p.m_production_vertex != 0); break;
         case HAS_SAME_PDG_ID_DAUGHTER:
-            if( !p.end_vertex() ) {
+            if( !p.m_end_vertex ) {
                 result = false;
                 break;
             }
 
-            const GenVertex &v = evt.get_vertex(p.end_vertex());
-            if( v.particles_out().size() == 0 ) {
+            if( p.m_end_vertex->particles_out().size() == 0 ) {
                 result = false;
                 break;
             }
 
-            BOOST_FOREACH( int p_barcode, v.particles_out() ) {
-                if( evt.get_particle(p_barcode).pdg_id() == p.pdg_id() ) {
+            BOOST_FOREACH( GenParticle *p_out, p.m_end_vertex->particles_out() ) {
+
+                if( p_out->m_data.pdg_id == p.m_data.pdg_id ) {
                     result = true;
                     break;
                 }

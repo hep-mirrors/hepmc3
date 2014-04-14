@@ -31,8 +31,8 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
            << endl;
 
     // Print vertices
-    for( unsigned int i=1; i<=evt.vertices_count(); ++i ) {
-        write_vertex( evt, evt.get_vertex(-i));
+    for( unsigned int i=0; i<evt.vertices_count(); ++i ) {
+        write_vertex( evt.vertices()[i] );
     }
 }
 
@@ -48,32 +48,32 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
     return 1;
 }
 
-void IO_GenEvent::write_vertex(const GenEvent &evt, const GenVertex &v) {
+void IO_GenEvent::write_vertex(const GenVertex &v) {
 
-    // Write all incoming particles
-    BOOST_FOREACH( int p_barcode, v.particles_in() ) {
-        write_particle( evt.get_particle(p_barcode) );
+    // Write incoming particles
+    BOOST_FOREACH( const GenParticle *p, v.particles_in() ) {
+        write_particle( *p );
     }
 
-    m_file << "V " << v.barcode()
-           << " [";
+    // Write vertex information if needed
+    if(true) {
+        m_file << "V " << v.barcode()
+               << " [";
 
-    if(v.particles_in().size()) {
-        BOOST_FOREACH( int p_barcode, boost::make_iterator_range(v.particles_in().begin(), v.particles_in().end()-1) ) {
-            m_file << p_barcode <<",";
+        BOOST_FOREACH( const GenParticle *p, v.particles_in() ) {
+            m_file << p->barcode();
+            if(p!=v.particles_in().back()) m_file<<",";
         }
-        m_file << v.particles_in().back();
+
+        m_file << "] ";
+
+        m_file << "@ 0 0 0 0";
+        m_file << endl;
     }
 
-    m_file << "] ";
-
-    m_file << "@ 0 0 0 0";
-    m_file << endl;
-
-    // Write outgoing particles without their end vertex
-    BOOST_FOREACH( int p_barcode, v.particles_out() ) {
-        const GenParticle &p = evt.get_particle(p_barcode);
-        if( !p.end_vertex() ) write_particle(p);
+    // Write outgoing particles that don't have their end vertex
+    BOOST_FOREACH( const GenParticle *p, v.particles_out() ) {
+        if( !p->end_vertex() ) write_particle(*p);
     }
 }
 
@@ -84,7 +84,7 @@ void IO_GenEvent::write_particle(const GenParticle &p) {
     m_file.precision(m_precision);
 
     m_file << "P "<< p.barcode()
-           << " " << p.production_vertex()
+           << " " << ( (p.production_vertex()) ? p.production_vertex()->barcode() : 0 )
            << " " << p.pdg_id()
            << " " << p.momentum().px()
            << " " << p.momentum().py()

@@ -51,7 +51,7 @@ private:
     /** Write vertex
      *  Helper routine for writing single vertex to file
      */
-    void write_vertex  (const GenEvent &evt, const GenVertex &v);
+    void write_vertex  (const GenVertex &v);
 
     /** Write particle
      *  Helper routine for writing single particle to file

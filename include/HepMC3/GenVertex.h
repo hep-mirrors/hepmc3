@@ -21,17 +21,27 @@ class GenEvent;
 class GenParticle;
 class GenEventVersion;
 
+/**
+ *  @struct HepMC3::GenVertexData
+ *  @brief Stores serializable vertex information
+ */
+struct GenVertexData {
+    FourVector position; //!< Position in timespace. @note Currently unused
+
+    /** Print vertex data content */
+    void print() const;
+};
+
 class GenVertex {
 
-friend class GenEventVersion;
 friend class GenEvent;
 
 //
 // Constructors
 //
-public:
+protected:
     /** Default constructor */
-    GenVertex(GenEvent *event = NULL);
+    GenVertex(GenEvent &event, int data_index, GenVertexData &data);
 
 //
 // Functions
@@ -43,36 +53,33 @@ public:
      */
     void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
 
-    /** Add incoming particle
-     *  Also adds particle to the parent event
-     */
-    void add_particle_in (GenParticle &p);
-
-    /** Add outgoing particle
-     *  Also adds particle to the parent event
-     */
-    void add_particle_out(GenParticle &p);
-
+    bool is_deleted() const { return ( m_version_deleted != 255 ); } //!< Check if this vertex is deleted
+    void mark_deleted();                                             //!< Mark this vertex as deleted
 //
 // Accessors
 //
 public:
-    int barcode()                       const { return m_barcode; }        //!< Get barcode
+    int barcode()               const { return -(m_data_index+1);  } //!< Get barcode
+    const GenVertexData& data() const { return m_data;             } //!< Get vertex data
 
-    const vector<int>&  particles_in()  const { return m_particles_in; }   //!< Get incoming particle list
-    const vector<int>&  particles_out() const { return m_particles_out; }  //!< Get outgoing particle list
+    void add_particle_in (GenParticle &p); //!< Add incoming particle
+    void add_particle_out(GenParticle &p); //!< Add outgoing particle
+
+    const vector<GenParticle*> particles_in()  const { return m_particles_in;  } //!< Get list of incoming particles
+    const vector<GenParticle*> particles_out() const { return m_particles_out; } //!< Get list of outgoing particles
 
 //
 // Fields
 //
 private:
-    GenEvent    *m_event;         //!< Parent event
-    int          m_barcode;       //!< Barcode
-    vector<int>  m_particles_in;  //!< Incoming particle list
-    vector<int>  m_particles_out; //!< Outgoing particle list
-    unsigned short int m_version_created;  //!< Version number when this vertex was created
-    unsigned short int m_version_deleted;  //!< Version number when this vertex was deleted
-    int                m_next_version;     //!< Barcode of the next version of this vertex
+    GenEvent             &m_event;           //!< Parent event
+    unsigned short int    m_version_created; //!< Version created
+    unsigned short int    m_version_deleted; //!< Version deleted
+    unsigned int          m_data_index;      //!< Index in particle data container
+    GenVertexData        &m_data;            //!< Particle data
+    GenVertex            *m_last_version;    //!< Pointer to the last version of this vertex
+    vector<GenParticle*>  m_particles_in;    //!< Incoming particle list
+    vector<GenParticle*>  m_particles_out;   //!< Outgoing particle list
 };
 
 } // namespace HepMC3
