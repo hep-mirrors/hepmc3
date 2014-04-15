@@ -27,7 +27,8 @@ class Filter;
  */
 struct GenParticleData {
     int          pdg_id;            //!< PDG ID
-    int          ancestor;          //!< Ancestor of this particle
+    int          production_vertex; //!< Production vertex
+    int          end_vertex;        //!< End vertex
     FourVector   momentum;          //!< Momentum
     int          status;            //!< Status
     int          status_subcode;    //!< Status subcode
@@ -40,9 +41,7 @@ struct GenParticleData {
 
 class GenParticle {
 
-friend class GenVertex;
 friend class GenEvent;
-friend class Filter;
 
 //
 // Constructors
@@ -105,7 +104,6 @@ private:
     GenEvent           &m_event;                   //!< Parent event
     unsigned short int  m_version_created;         //!< Version created
     unsigned short int  m_version_deleted;         //!< Version deleted
-    int                 m_end_vertex_barcode;      //!< End vertex barcode
     unsigned int        m_data_index;              //!< Index in particle data container
     GenParticleData    &m_data;                    //!< Particle data
     GenParticle        *m_last_version;            //!< Pointer to the last version of this particle

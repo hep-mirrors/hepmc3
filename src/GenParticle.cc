@@ -15,7 +15,6 @@ GenParticle::GenParticle(GenEvent &event, int data_index, GenParticleData &data)
 m_event(event),
 m_version_created(m_event.last_version()),
 m_version_deleted(255),
-m_end_vertex_barcode(0),
 m_data_index(data_index),
 m_data(data),
 m_last_version(this) {
@@ -23,7 +22,8 @@ m_last_version(this) {
 
 void GenParticleData::print() const {
     std::cout<<pdg_id
-             <<" "<<ancestor
+             <<" "<<production_vertex
+             <<" "<<end_vertex
              <<" "<<momentum.px()
              <<" "<<momentum.py()
              <<" "<<momentum.pz()
@@ -50,8 +50,8 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
              << " (P,E)=" << m_data.momentum.px() << "," << m_data.momentum.py()
              << "," << m_data.momentum.pz() << "," << m_data.momentum.e()
              << " Stat: " << m_data.status
-             << " PV: " << m_data.ancestor
-             << " EV: " << m_end_vertex_barcode
+             << " PV: " << m_data.production_vertex
+             << " EV: " << m_data.end_vertex
              << endl;
     }
     // Event listing format. Used when calling:
@@ -84,9 +84,9 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
         }
         else ostr << "          ";
 
-        if( m_data.ancestor ) {
+        if( m_data.production_vertex ) {
             ostr.width(6);
-            ostr << m_data.ancestor;
+            ostr << m_data.production_vertex;
         }
 
         ostr << endl;
@@ -135,9 +135,9 @@ void GenParticle::unset_generated_mass() {
 }
 
 GenVertex* GenParticle::production_vertex() const {
-    if( m_data.ancestor >= 0 ) return NULL;
+    if( m_data.production_vertex >= 0 ) return NULL;
 
-    GenVertex &v = m_event.vertex(m_data.ancestor);
+    GenVertex &v = m_event.vertex(m_data.production_vertex);
 
     if( v.is_deleted() ) return NULL;
 
@@ -155,14 +155,14 @@ void GenParticle::set_production_vertex( const GenVertex *v ) {
         return;
     }
 
-    if(v) m_data.ancestor = v->barcode();
-    else  m_data.ancestor = 0;
+    if(v) m_data.production_vertex = v->barcode();
+    else  m_data.production_vertex = 0;
 }
 
 GenVertex* GenParticle::end_vertex() const {
-    if( m_end_vertex_barcode >= 0 ) return NULL;
+    if( m_data.end_vertex >= 0 ) return NULL;
 
-    GenVertex &v = m_event.vertex(m_end_vertex_barcode);
+    GenVertex &v = m_event.vertex(m_data.end_vertex);
 
     if( v.is_deleted() ) return NULL;
 
@@ -171,8 +171,8 @@ GenVertex* GenParticle::end_vertex() const {
 
 void GenParticle::set_end_vertex( const GenVertex *v ) {
     m_event.record_change(*this);
-    if(v) m_end_vertex_barcode = v->barcode();
-    else  m_end_vertex_barcode = 0;
+    if(v) m_data.end_vertex = v->barcode();
+    else  m_data.end_vertex = 0;
 }
 
 } // namespace HepMC3

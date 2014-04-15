@@ -113,15 +113,14 @@ public:
 private:
     int                          m_event_number;    //!< Event number
     int                          m_print_precision; //!< Printout precision
-    int                          m_current_version; //!< Current version of the event
     vector<VersionInfo>          m_versions;        //!< List of versions
-    vector< std::pair<int,int> > m_version_links;    //!< List of links to previous versions of the particles
+    vector<std::pair<int,int> >  m_version_links;   //!< List of links to previous versions of the particles
 
-    DataList<GenParticle,8>      m_particles;       //!< List of particles
-    DataList<GenVertex,8>        m_vertices;        //!< List of vertices
+    DataList<GenParticleData,8>  m_particle_data;   //!< Particle data
+    DataList<GenVertexData,8>    m_vertex_data;     //!< Vertex data
 
-    DataList<GenParticleData,8>  m_particle_data;   //!< Serializable particle data
-    DataList<GenVertexData,8>    m_vertex_data;     //!< Serializable vertex data
+    DataList<GenParticle,8>      m_particles;       //!< List of particles. @note This list is not serialized
+    DataList<GenVertex,8>        m_vertices;        //!< List of vertices. @note This list is not serialized
 };
 
 } // namespace HepMC3

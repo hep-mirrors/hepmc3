@@ -19,7 +19,6 @@ namespace HepMC3 {
 
 class GenEvent;
 class GenParticle;
-class GenEventVersion;
 
 /**
  *  @struct HepMC3::GenVertexData

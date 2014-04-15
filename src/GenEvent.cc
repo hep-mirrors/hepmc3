@@ -69,7 +69,7 @@ void GenEvent::print_version( unsigned short int version, std::ostream& ostr ) c
             // Print out all the incoming particles
             BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
 
-                if( p->m_version_created > version || p->m_version_deleted <= version) continue;
+                if( p->version_created() > version || p->version_deleted() <= version) continue;
 
                 if( !printed_header ) {
                     ostr << " I: ";
@@ -85,7 +85,7 @@ void GenEvent::print_version( unsigned short int version, std::ostream& ostr ) c
             // Print out all the outgoing particles
             BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
 
-                if( p->m_version_created > version || p->m_version_deleted <= version) continue;
+                if( p->version_created() > version || p->version_deleted() <= version) continue;
 
                 if( !printed_header ) {
                     ostr << " O: ";
@@ -209,7 +209,7 @@ void GenEvent::new_version( const std::string name ) {
 void GenEvent::record_change(GenParticle& p) {
 
     // Check if this particle already exists in the newest version
-    if( p.m_last_version->m_version_created == last_version() ) return;
+    if( p.m_last_version->version_created() == last_version() ) return;
 
     if( p.is_deleted() ) {
         WARNING( "GenEvent::record_change: Cannot change deleted particle" )
@@ -221,9 +221,6 @@ void GenEvent::record_change(GenParticle& p) {
     GenParticleData *new_pd = m_particle_data.new_object(p.m_data);
 
     new (new_p) GenParticle( *this, m_particle_data.size() - 1, *new_pd );
-
-    // Copy GenParticle information
-    new_p->m_end_vertex_barcode = p.m_end_vertex_barcode;
 
     // Mark this particle as deleted and update last version pointer
     if( !p.is_deleted() ) p.m_version_deleted = last_version();

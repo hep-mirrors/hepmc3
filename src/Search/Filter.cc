@@ -29,12 +29,12 @@ bool Filter::passed_int_filter(const GenParticle &p ) const {
     int value = 0;
 
     switch(m_int) {
-        case STATUS:          value = p.m_data.status;          break;
-        case STATUS_SUBCODE:  value = p.m_data.status_subcode;  break;
-        case VERSION_CREATED: value = p.m_version_created;      break;
-        case VERSION_DELETED: value = p.m_version_deleted;      break;
-        case PDG_ID:          value = p.m_data.pdg_id;          break;
-        case ABS_PDG_ID:      value = abs( p.m_data.pdg_id );   break;
+        case STATUS:          value = p.status();          break;
+        case STATUS_SUBCODE:  value = p.status_subcode();  break;
+        case VERSION_CREATED: value = p.version_created(); break;
+        case VERSION_DELETED: value = p.version_deleted(); break;
+        case PDG_ID:          value = p.pdg_id();          break;
+        case ABS_PDG_ID:      value = abs( p.pdg_id() );   break;
         default:
             // This should never happen
             ERROR( "Unsupported filter ("<<m_int<<")" )
@@ -63,8 +63,8 @@ bool Filter::passed_bool_filter(const GenParticle &p ) const {
     DEBUG( 10, "Filter: checking barcode="<<p.barcode()<<" param="<<m_bool<<" value="<<m_bool_value<<" (bool)" )
 
     switch( m_bool ) {
-        case HAS_END_VERTEX:           result = (p.m_end_vertex_barcode != 0); break;
-        case HAS_PRODUCTION_VERTEX:    result = (p.m_data.ancestor      != 0); break;
+        case HAS_END_VERTEX:           result = (p.end_vertex()        != 0); break;
+        case HAS_PRODUCTION_VERTEX:    result = (p.production_vertex() != 0); break;
         case HAS_SAME_PDG_ID_DAUGHTER:
             buf = p.end_vertex();
             if( !buf ) {
@@ -79,7 +79,7 @@ bool Filter::passed_bool_filter(const GenParticle &p ) const {
 
             BOOST_FOREACH( GenParticle *p_out, buf->particles_out() ) {
 
-                if( p_out->m_data.pdg_id == p.m_data.pdg_id ) {
+                if( p_out->pdg_id() == p.pdg_id() ) {
                     result = true;
                     break;
                 }

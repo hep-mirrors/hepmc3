@@ -78,14 +78,14 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
             if( p.version_deleted() == i+1 ) continue;
 
             // Check to see if we need to write a vertex first
-            int ancestor = p.data().ancestor;
+            int production_vertex = p.data().production_vertex;
 
-            if( ancestor < 0 ) {
-                GenVertex &v = evt.vertex( ancestor );
+            if( production_vertex < 0 ) {
+                GenVertex &v = evt.vertex( production_vertex );
 
-                ancestor = v.serialization_barcode();
+                production_vertex = v.serialization_barcode();
 
-                if (ancestor < lowest_vertex_barcode) {
+                if (production_vertex < lowest_vertex_barcode) {
                     write_vertex(v);
                     if( v.version_deleted()<255 && !v.has_new_version() ) {
                         deleted_barcodes.insert( pair<int,int>( v.version_deleted(),v.barcode() ) );
@@ -108,7 +108,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
             }
 
             if( old_version ) write_particle( p, old_version, true  );
-            else              write_particle( p, ancestor,    false );
+            else              write_particle( p, production_vertex,    false );
 
             if( p.version_deleted()<255 && !p.has_new_version() ) {
                 deleted_barcodes.insert( pair<int,int>( p.version_deleted(),p.barcode() ) );
