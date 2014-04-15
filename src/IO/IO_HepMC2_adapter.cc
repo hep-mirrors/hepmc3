@@ -3,7 +3,8 @@
  *  @brief Implementation of \b class HepMC3::IO_HepMC2_adapter
  *
  */
-#include "HepMC3/IO_HepMC2_adapter.h"
+#include "HepMC3/IO/IO_HepMC2_adapter.h"
+
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"

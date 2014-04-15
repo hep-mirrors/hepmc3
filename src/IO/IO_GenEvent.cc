@@ -3,7 +3,8 @@
  *  @brief Implementation of \b class HepMC3::IO_GenEvent
  *
  */
-#include "HepMC3/IO_GenEvent.h"
+#include "HepMC3/IO/IO_GenEvent.h"
+
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
@@ -40,19 +41,19 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
 
     set<pair<int,int> > deleted_barcodes;
 
-    for(unsigned int i=0; i<evt.versions().size(); ++i) {
+    for(unsigned int i=0; i<evt.data().versions.size(); ++i) {
 
-        const VersionInfo &v = evt.versions()[i];
-        m_file << "T " << evt.versions()[i].name
+        const GenEventVersionInfo &v = evt.data().versions[i];
+        m_file << "T " << evt.data().versions[i].name
                << endl;
 
         // Get the upper range of particles and vertices
         int last_particle_index = evt.particles_count() - 1;
         int last_vertex_index   = evt.vertices_count()  - 1;
 
-        if( i+1 < evt.versions().size() ) {
-            last_particle_index = evt.versions()[i+1].first_particle_index - 1;
-            last_vertex_index   = evt.versions()[i+1].first_vertex_index - 1;
+        if( i+1 < evt.data().versions.size() ) {
+            last_particle_index = evt.data().versions[i+1].first_particle_index - 1;
+            last_vertex_index   = evt.data().versions[i+1].first_vertex_index - 1;
         }
 
         // Print all particles/vertices deleted in this version
@@ -99,7 +100,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
             // Check if this is a new version of some other particle
             int old_version = 0;
 
-            BOOST_FOREACH( const ___int_int_pair___ &ver, evt.version_links() ) {
+            BOOST_FOREACH( const ___int_int_pair___ &ver, evt.data().version_links ) {
 
                 if( ver.first == p.barcode() ) {
                     old_version = ver.second;

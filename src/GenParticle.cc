@@ -20,21 +20,6 @@ m_data(data),
 m_last_version(this) {
 }
 
-void GenParticleData::print() const {
-    std::cout<<pdg_id
-             <<" "<<production_vertex
-             <<" "<<end_vertex
-             <<" "<<momentum.px()
-             <<" "<<momentum.py()
-             <<" "<<momentum.pz()
-             <<" "<<momentum.e()
-             <<" "<<status
-             <<" "<<status_subcode
-             <<" "<<mass
-             <<" "<<is_mass_set
-             <<std::endl;
-}
-
 void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
 
     // Standalone format. Used when calling:

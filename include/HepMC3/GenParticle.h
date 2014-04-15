@@ -7,11 +7,11 @@
  *  @class HepMC3::GenParticle
  *  @brief Stores particle-related information
  *
- *  Uses HepMC3::FourVector class to store momentum
+ *  Uses HepMC3::GenParticleData to store serializable particle information
  *
  */
-#include "HepMC3/FourVector.h"
-#include "HepMC3/GenVertex.h"
+#include "HepMC3/Data/GenParticleData.h"
+
 #include <iostream>
 #include <vector>
 
@@ -19,25 +19,6 @@ namespace HepMC3 {
 
 class GenVertex;
 class GenEvent;
-class Filter;
-
-/**
- *  @struct HepMC3::GenParticleData
- *  @brief Stores serializable particle information
- */
-struct GenParticleData {
-    int          pdg_id;            //!< PDG ID
-    int          production_vertex; //!< Production vertex
-    int          end_vertex;        //!< End vertex
-    FourVector   momentum;          //!< Momentum
-    int          status;            //!< Status
-    int          status_subcode;    //!< Status subcode
-    double       mass;              //!< Generated mass (if set)
-    bool         is_mass_set;       //!< Check if generated mass is set
-
-    /** Print particle data content */
-    void print() const;
-};
 
 class GenParticle {
 

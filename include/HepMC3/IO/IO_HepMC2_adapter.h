@@ -8,7 +8,7 @@
  *  @brief Parser for HepMC2 I/O files
  *
  */
-#include "HepMC3/IO_Base.h"
+#include "HepMC3/IO/IO_Base.h"
 
 #include <string>
 #include <fstream>

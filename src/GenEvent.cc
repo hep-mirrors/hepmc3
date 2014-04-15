@@ -21,8 +21,9 @@ using std::endl;
 namespace HepMC3 {
 
 GenEvent::GenEvent():
-m_event_number(0),
 m_print_precision(2) {
+
+    m_data.event_number = 0;
 
     // Create default version
     new_version("Version 0");
@@ -30,9 +31,9 @@ m_print_precision(2) {
 
 void GenEvent::print_version( unsigned short int version, std::ostream& ostr ) const {
     ostr << "________________________________________________________________________________" << endl;
-    ostr << "GenEvent: #" << m_event_number << endl;
-    ostr << " Version: \"" << m_versions[version-1].name
-         << "\" (version id: " << version << ", last version id: " << m_versions.size() << ")" <<endl;
+    ostr << "GenEvent: #" << m_data.event_number << endl;
+    ostr << " Version: \"" << m_data.versions[version-1].name
+         << "\" (version id: " << version << ", last version id: " << m_data.versions.size() << ")" <<endl;
     ostr << " Entries in this event: " << m_vertices.size() << " vertices, "
          << m_particles.size() << " particles." << endl;
 
@@ -115,9 +116,9 @@ void GenEvent::dump() const {
         m_particles[i].print();
     }
     std::cout<<"GenParticleData:"<<std::endl;
-    for(unsigned int i=0; i<m_particle_data.size(); ++i) {
+    for(unsigned int i=0; i<m_data.particle_data.size(); ++i) {
         std::cout<<i<<": ";
-        m_particle_data[i].print();
+        m_data.particle_data[i].print();
     }
     std::cout<<"GenVertex:"<<std::endl;
     for(unsigned int i=0; i<m_vertices.size(); ++i) {
@@ -125,9 +126,9 @@ void GenEvent::dump() const {
         m_vertices[i].print();
     }
     std::cout<<"GenVertexData:"<<std::endl;
-    for(unsigned int i=0; i<m_vertex_data.size(); ++i) {
+    for(unsigned int i=0; i<m_data.vertex_data.size(); ++i) {
         std::cout<<i<<": ";
-        m_vertex_data[i].print();
+        m_data.vertex_data[i].print();
     }
 }
 
@@ -147,9 +148,9 @@ GenVertex& GenEvent::vertex(int barcode) const {
 GenParticle& GenEvent::new_particle( const GenParticleData *data ) {
 
     GenParticle      *p = m_particles.new_uninitialized_object();
-    GenParticleData *pd = m_particle_data.new_object();
+    GenParticleData *pd = m_data.particle_data.new_object();
 
-    new (p) GenParticle( *this, m_particle_data.size() - 1, *pd );
+    new (p) GenParticle( *this, m_data.particle_data.size() - 1, *pd );
 
     if(data) *pd = *data; // copy
 
@@ -159,9 +160,9 @@ GenParticle& GenEvent::new_particle( const GenParticleData *data ) {
 GenVertex& GenEvent::new_vertex( const GenVertexData *data ) {
 
     GenVertex      *v = m_vertices.new_uninitialized_object();
-    GenVertexData *vd = m_vertex_data.new_object();
+    GenVertexData *vd = m_data.vertex_data.new_object();
 
-    new (v) GenVertex( *this, m_vertex_data.size() - 1, *vd );
+    new (v) GenVertex( *this, m_data.vertex_data.size() - 1, *vd );
 
     if(data) *vd = *data; // copy
 
@@ -198,12 +199,12 @@ void GenEvent::delete_vertex(GenVertex &v) {
 
 void GenEvent::new_version( const std::string name ) {
 
-    VersionInfo v;
+    GenEventVersionInfo v;
     v.name                 = name;
     v.first_particle_index = particles_count();
     v.first_vertex_index   = vertices_count();
 
-    m_versions.push_back(v);
+    m_data.versions.push_back(v);
 }
 
 void GenEvent::record_change(GenParticle& p) {
@@ -218,15 +219,15 @@ void GenEvent::record_change(GenParticle& p) {
 
     // Create new particle as a copy of previous one
     GenParticle      *new_p = m_particles.new_uninitialized_object();
-    GenParticleData *new_pd = m_particle_data.new_object(p.m_data);
+    GenParticleData *new_pd = m_data.particle_data.new_object(p.m_data);
 
-    new (new_p) GenParticle( *this, m_particle_data.size() - 1, *new_pd );
+    new (new_p) GenParticle( *this, m_data.particle_data.size() - 1, *new_pd );
 
     // Mark this particle as deleted and update last version pointer
     if( !p.is_deleted() ) p.m_version_deleted = last_version();
     p.m_last_version = new_p;
 
-    m_version_links.push_back( std::pair<int,int>(new_p->barcode(),p.barcode()) );
+    m_data.version_links.push_back( std::pair<int,int>(new_p->barcode(),p.barcode()) );
 
     // Add new particle to production/end vertices
     GenVertex *v = new_p->production_vertex();

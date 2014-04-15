@@ -21,10 +21,6 @@ m_last_version(this),
 m_is_required(false) {
 }
 
-void GenVertexData::print() const {
-    std::cout<<std::endl;
-}
-
 void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
 
     // Standalone format. Used when calling:

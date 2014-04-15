@@ -11,9 +11,10 @@
  *  that belong to this event
  *
  */
+#include "HepMC3/Data/GenEventData.h"
+
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
-#include "HepMC3/DataList.h"
 
 #include <iostream>
 #include <vector>
@@ -21,11 +22,6 @@ using std::vector;
 
 namespace HepMC3 {
 
-struct VersionInfo {
-    std::string name;
-    unsigned int first_particle_index;
-    unsigned int first_vertex_index;
-};
 
 class GenEvent {
 //
@@ -40,7 +36,7 @@ public:
 //
 public:
     /** Print current version of the event */
-    void print( std::ostream& ostr = std::cout ) const { print_version( m_versions.size(), ostr ); }
+    void print( std::ostream& ostr = std::cout ) const { print_version( m_data.versions.size(), ostr ); }
 
     /** Print selected version of the event */
     void print_version( unsigned short int version, std::ostream& ostr = std::cout ) const;
@@ -95,32 +91,27 @@ public:
 public:
     void set_print_precision(int precision)       { m_print_precision = precision; } //!< Set printout precision. Default is 2
 
-    int  event_number()                     const { return m_event_number;   } //!< Get event number
-    void set_event_number(int no)                 { m_event_number = no;     } //!< Set event number
+    int  event_number()                     const { return m_data.event_number;   } //!< Get event number
+    void set_event_number(int no)                 { m_data.event_number = no;     } //!< Set event number
 
     unsigned int particles_count()          const { return  m_particles.size(); } //!< Get number of particles
     unsigned int vertices_count()           const { return  m_vertices.size();  } //!< Get number of vertices
-    unsigned int last_version()             const { return  m_versions.size();  } //!< Get last version number
+    unsigned int last_version()             const { return  m_data.versions.size();  } //!< Get last version number
 
-    const vector<VersionInfo>          versions()      const { return m_versions;      } //!< Get list of versions
-    const vector< std::pair<int,int> > version_links() const { return m_version_links; } //!< Get list of version links
     const DataList<GenParticle,8>&     particles()     const { return m_particles;     } //!< Get list of particles
     const DataList<GenVertex,8>&       vertices()      const { return m_vertices;      } //!< Get list of vertices
 
+    const GenEventData&                data()          const { return m_data; } //!< Get event data
 //
 // Fields
 //
 private:
-    int                          m_event_number;    //!< Event number
-    int                          m_print_precision; //!< Printout precision
-    vector<VersionInfo>          m_versions;        //!< List of versions
-    vector<std::pair<int,int> >  m_version_links;   //!< List of links to previous versions of the particles
+    int                     m_print_precision; //!< Printout precision
 
-    DataList<GenParticleData,8>  m_particle_data;   //!< Particle data
-    DataList<GenVertexData,8>    m_vertex_data;     //!< Vertex data
+    DataList<GenParticle,8> m_particles;       //!< List of particles
+    DataList<GenVertex,8>   m_vertices;        //!< List of vertices
 
-    DataList<GenParticle,8>      m_particles;       //!< List of particles. @note This list is not serialized
-    DataList<GenVertex,8>        m_vertices;        //!< List of vertices. @note This list is not serialized
+    GenEventData            m_data;            //!< Event data
 };
 
 } // namespace HepMC3

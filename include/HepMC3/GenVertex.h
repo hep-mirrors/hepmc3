@@ -7,10 +7,11 @@
  *  @class HepMC3::GenVertex
  *  @brief Stores vertex-related information
  *
- *  Contains list of incoming/outgoing particles
- *  and optionally, position in timespace
+ *  Contains lists of incoming/outgoing particles
  *
  */
+#include "HepMC3/Data/GenVertexData.h"
+
 #include <iostream>
 #include <vector>
 using std::vector;
@@ -19,17 +20,6 @@ namespace HepMC3 {
 
 class GenEvent;
 class GenParticle;
-
-/**
- *  @struct HepMC3::GenVertexData
- *  @brief Stores serializable vertex information
- */
-struct GenVertexData {
-    FourVector position; //!< Position in timespace. @note Currently unused
-
-    /** Print vertex data content */
-    void print() const;
-};
 
 class GenVertex {
 

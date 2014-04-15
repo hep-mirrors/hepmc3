@@ -8,7 +8,7 @@
  *  @brief GenEvent I/O parsing and serialization for human-readable text files
  *
  */
-#include "HepMC3/IO_Base.h"
+#include "HepMC3/IO/IO_Base.h"
 
 #include <string>
 #include <fstream>
