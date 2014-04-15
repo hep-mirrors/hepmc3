@@ -25,13 +25,13 @@ m_event_number(0),
 m_print_precision(2) {
 
     // Create default version
-    m_versions.push_back( "Version 0" );
+    new_version("Version 0");
 }
 
 void GenEvent::print_version( unsigned short int version, std::ostream& ostr ) const {
     ostr << "________________________________________________________________________________" << endl;
     ostr << "GenEvent: #" << m_event_number << endl;
-    ostr << " Version: \"" << m_versions[version-1]
+    ostr << " Version: \"" << m_versions[version-1].name
          << "\" (version id: " << version << ", last version id: " << m_versions.size() << ")" <<endl;
     ostr << " Entries in this event: " << m_vertices.size() << " vertices, "
          << m_particles.size() << " particles." << endl;
@@ -171,25 +171,39 @@ GenVertex& GenEvent::new_vertex( const GenVertexData *data ) {
 void GenEvent::delete_particle(GenParticle &p) {
     if( p.is_deleted() ) return;
 
-    // Deleting particle invalidates rest of the decay tree
-    if( p.m_end_vertex ) delete_vertex( *p.m_end_vertex );
-
     p.mark_deleted();
+
+    GenVertex *v = p.end_vertex();
+
+    // Deleting particle invalidates rest of its decay tree
+    if(v) delete_vertex(*v);
 }
 
 void GenEvent::delete_vertex(GenVertex &v) {
     if( v.is_deleted() ) return;
+
+    v.mark_deleted();
+
+    // Deleting vertex invalidates end_vertices of incoming particles
+    BOOST_FOREACH( GenParticle *p, v.m_particles_in ) {
+        if( !p->is_deleted() ) p->set_end_vertex(NULL);
+    }
 
     // Deleting vertex invalidates rest of the decay tree
     BOOST_FOREACH( GenParticle *p, v.m_particles_out ) {
         delete_particle(*p);
     }
 
-    v.mark_deleted();
 }
 
 void GenEvent::new_version( const std::string name ) {
-    m_versions.push_back( name );
+
+    VersionInfo v;
+    v.name                 = name;
+    v.first_particle_index = particles_count();
+    v.first_vertex_index   = vertices_count();
+
+    m_versions.push_back(v);
 }
 
 void GenEvent::record_change(GenParticle& p) {
@@ -209,19 +223,24 @@ void GenEvent::record_change(GenParticle& p) {
     new (new_p) GenParticle( *this, m_particle_data.size() - 1, *new_pd );
 
     // Copy GenParticle information
-    new_p->m_production_vertex = p.m_production_vertex;
-    new_p->m_end_vertex        = p.m_end_vertex;
+    new_p->m_end_vertex_barcode = p.m_end_vertex_barcode;
 
     // Mark this particle as deleted and update last version pointer
     if( !p.is_deleted() ) p.m_version_deleted = last_version();
     p.m_last_version = new_p;
 
+    m_version_links.push_back( std::pair<int,int>(new_p->barcode(),p.barcode()) );
+
     // Add new particle to production/end vertices
-    if( new_p->m_production_vertex ) new_p->m_production_vertex->add_particle_out(*new_p);
-    if( new_p->m_end_vertex )        new_p->m_end_vertex->add_particle_in(*new_p);
+    GenVertex *v = new_p->production_vertex();
+    if(v) v->add_particle_out(*new_p);
+
+    v = new_p->end_vertex();
+    if(v) v->add_particle_in(*new_p);
 }
 
 void GenEvent::record_change(GenVertex& v) {
+    /** @todo Do we really need this? */
 }
 
 } // namespace HepMC3

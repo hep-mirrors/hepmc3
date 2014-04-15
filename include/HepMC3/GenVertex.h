@@ -59,14 +59,25 @@ public:
 // Accessors
 //
 public:
-    int barcode()               const { return -(m_data_index+1);  } //!< Get barcode
-    const GenVertexData& data() const { return m_data;             } //!< Get vertex data
+    int   barcode()               const { return -(m_data_index+1);  } //!< Get barcode
+
+    /** Return barcode used in serialization
+     *  If the vertex has at most one incoming particle, it might not be serialized
+     *  if it does not contain any data. In such cases, its barcode used for
+     *  serialization can be 0 or can be the barcode of its sole incoming particle
+     */
+    int serialization_barcode() const;
+
+    unsigned short int version_created() const { return m_version_created;      } //!< Version in which this particle was created
+    unsigned short int version_deleted() const { return m_version_deleted;      } //!< Version in which this particle was deleted
+    bool               has_new_version() const { return m_last_version != this; } //!< Check if this is the last version of this vertex
 
     void add_particle_in (GenParticle &p); //!< Add incoming particle
     void add_particle_out(GenParticle &p); //!< Add outgoing particle
 
     const vector<GenParticle*> particles_in()  const { return m_particles_in;  } //!< Get list of incoming particles
     const vector<GenParticle*> particles_out() const { return m_particles_out; } //!< Get list of outgoing particles
+    const GenVertexData& data()                const { return m_data;          } //!< Get vertex data
 
 //
 // Fields
@@ -80,6 +91,7 @@ private:
     GenVertex            *m_last_version;    //!< Pointer to the last version of this vertex
     vector<GenParticle*>  m_particles_in;    //!< Incoming particle list
     vector<GenParticle*>  m_particles_out;   //!< Outgoing particle list
+    bool                  m_is_required;     //!< Does this vertex needs to be serialized
 };
 
 } // namespace HepMC3

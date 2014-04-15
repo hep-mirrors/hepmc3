@@ -21,6 +21,12 @@ using std::vector;
 
 namespace HepMC3 {
 
+struct VersionInfo {
+    std::string name;
+    unsigned int first_particle_index;
+    unsigned int first_vertex_index;
+};
+
 class GenEvent {
 //
 // Constructors
@@ -96,23 +102,26 @@ public:
     unsigned int vertices_count()           const { return  m_vertices.size();  } //!< Get number of vertices
     unsigned int last_version()             const { return  m_versions.size();  } //!< Get last version number
 
-    const DataList<GenParticle,8>& particles() const { return m_particles; } //!< Get list of particles
-    const DataList<GenVertex,8>&   vertices()  const { return m_vertices;  } //!< Get list of vertices
+    const vector<VersionInfo>          versions()      const { return m_versions;      } //!< Get list of versions
+    const vector< std::pair<int,int> > version_links() const { return m_version_links; } //!< Get list of version links
+    const DataList<GenParticle,8>&     particles()     const { return m_particles;     } //!< Get list of particles
+    const DataList<GenVertex,8>&       vertices()      const { return m_vertices;      } //!< Get list of vertices
 
 //
 // Fields
 //
 private:
-    int                         m_event_number;    //!< Event number
-    int                         m_print_precision; //!< Printout precision
-    int                         m_current_version; //!< Current version of the event
-    vector<std::string>         m_versions;        //!< List of version names
+    int                          m_event_number;    //!< Event number
+    int                          m_print_precision; //!< Printout precision
+    int                          m_current_version; //!< Current version of the event
+    vector<VersionInfo>          m_versions;        //!< List of versions
+    vector< std::pair<int,int> > m_version_links;    //!< List of links to previous versions of the particles
 
-    DataList<GenParticle,8>     m_particles;       //!< List of particles
-    DataList<GenVertex,8>       m_vertices;        //!< List of vertices
+    DataList<GenParticle,8>      m_particles;       //!< List of particles
+    DataList<GenVertex,8>        m_vertices;        //!< List of vertices
 
-    DataList<GenParticleData,8> m_particle_data;   //!< Serializable particle data
-    DataList<GenVertexData,8>   m_vertex_data;     //!< Serializable vertex data
+    DataList<GenParticleData,8>  m_particle_data;   //!< Serializable particle data
+    DataList<GenVertexData,8>    m_vertex_data;     //!< Serializable vertex data
 };
 
 } // namespace HepMC3

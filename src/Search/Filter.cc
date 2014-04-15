@@ -57,25 +57,27 @@ bool Filter::passed_int_filter(const GenParticle &p ) const {
 
 bool Filter::passed_bool_filter(const GenParticle &p ) const {
 
-    bool result = false;
+    bool       result = false;
+    GenVertex *buf    = NULL;
 
     DEBUG( 10, "Filter: checking barcode="<<p.barcode()<<" param="<<m_bool<<" value="<<m_bool_value<<" (bool)" )
 
     switch( m_bool ) {
-        case HAS_END_VERTEX:           result = (p.m_end_vertex        != 0); break;
-        case HAS_PRODUCTION_VERTEX:    result = (p.m_production_vertex != 0); break;
+        case HAS_END_VERTEX:           result = (p.m_end_vertex_barcode != 0); break;
+        case HAS_PRODUCTION_VERTEX:    result = (p.m_data.ancestor      != 0); break;
         case HAS_SAME_PDG_ID_DAUGHTER:
-            if( !p.m_end_vertex ) {
+            buf = p.end_vertex();
+            if( !buf ) {
                 result = false;
                 break;
             }
 
-            if( p.m_end_vertex->particles_out().size() == 0 ) {
+            if( buf->particles_out().size() == 0 ) {
                 result = false;
                 break;
             }
 
-            BOOST_FOREACH( GenParticle *p_out, p.m_end_vertex->particles_out() ) {
+            BOOST_FOREACH( GenParticle *p_out, buf->particles_out() ) {
 
                 if( p_out->m_data.pdg_id == p.m_data.pdg_id ) {
                     result = true;

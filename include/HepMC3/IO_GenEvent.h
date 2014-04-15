@@ -56,7 +56,7 @@ private:
     /** Write particle
      *  Helper routine for writing single particle to file
      */
-    void write_particle(const GenParticle &p);
+    void write_particle(const GenParticle &p, int second_field, bool is_new_version);
 
 //
 // Fields

@@ -15,8 +15,7 @@ GenParticle::GenParticle(GenEvent &event, int data_index, GenParticleData &data)
 m_event(event),
 m_version_created(m_event.last_version()),
 m_version_deleted(255),
-m_production_vertex(NULL),
-m_end_vertex(NULL),
+m_end_vertex_barcode(0),
 m_data_index(data_index),
 m_data(data),
 m_last_version(this) {
@@ -24,6 +23,7 @@ m_last_version(this) {
 
 void GenParticleData::print() const {
     std::cout<<pdg_id
+             <<" "<<ancestor
              <<" "<<momentum.px()
              <<" "<<momentum.py()
              <<" "<<momentum.pz()
@@ -50,8 +50,8 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
              << " (P,E)=" << m_data.momentum.px() << "," << m_data.momentum.py()
              << "," << m_data.momentum.pz() << "," << m_data.momentum.e()
              << " Stat: " << m_data.status
-             << " PV: " << ( (m_production_vertex) ? m_production_vertex->barcode() : 0 )
-             << " EV: " << ( (m_end_vertex)        ? m_end_vertex->barcode() : 0 )
+             << " PV: " << m_data.ancestor
+             << " EV: " << m_end_vertex_barcode
              << endl;
     }
     // Event listing format. Used when calling:
@@ -84,9 +84,9 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
         }
         else ostr << "          ";
 
-        if( m_production_vertex ) {
+        if( m_data.ancestor ) {
             ostr.width(6);
-            ostr << m_production_vertex->barcode();
+            ostr << m_data.ancestor;
         }
 
         ostr << endl;
@@ -132,6 +132,47 @@ void GenParticle::unset_generated_mass() {
     m_event.record_change(*this);
     m_last_version->m_data.mass = 0.;
     m_last_version->m_data.is_mass_set = false;
+}
+
+GenVertex* GenParticle::production_vertex() const {
+    if( m_data.ancestor >= 0 ) return NULL;
+
+    GenVertex &v = m_event.vertex(m_data.ancestor);
+
+    if( v.is_deleted() ) return NULL;
+
+    return &v;
+}
+
+void GenParticle::set_production_vertex( const GenVertex *v ) {
+
+    /** @note HepMC3 format requires that all versions of the particle
+     *        have the same origin. Therefore changing production vertex
+     *        in new version is prohibited.
+     */
+    if( m_event.last_version() != m_version_created ) {
+        ERROR( "GenParticle: Cannot change production vertex. Create a copy of this particle instead")
+        return;
+    }
+
+    if(v) m_data.ancestor = v->barcode();
+    else  m_data.ancestor = 0;
+}
+
+GenVertex* GenParticle::end_vertex() const {
+    if( m_end_vertex_barcode >= 0 ) return NULL;
+
+    GenVertex &v = m_event.vertex(m_end_vertex_barcode);
+
+    if( v.is_deleted() ) return NULL;
+
+    return &v;
+}
+
+void GenParticle::set_end_vertex( const GenVertex *v ) {
+    m_event.record_change(*this);
+    if(v) m_end_vertex_barcode = v->barcode();
+    else  m_end_vertex_barcode = 0;
 }
 
 } // namespace HepMC3

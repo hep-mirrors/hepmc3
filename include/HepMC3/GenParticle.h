@@ -11,6 +11,7 @@
  *
  */
 #include "HepMC3/FourVector.h"
+#include "HepMC3/GenVertex.h"
 #include <iostream>
 #include <vector>
 
@@ -74,21 +75,28 @@ public:
     bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
     const GenParticleData& data() const { return m_data;                } //!< Get particle data
 
+    unsigned short int version_created() const { return m_version_created;      } //!< Version in which this particle was created
+    unsigned short int version_deleted() const { return m_version_deleted;      } //!< Version in which this particle was deleted
+    bool               has_new_version() const { return m_last_version != this; } //!< Check if this is the last version of this particle
+
     /** Get generated mass
      *  This function will return mass as set by a generator/tool.
      *  If not set, it will return momentum().m()
      */
     double generated_mass() const;
 
-    const GenVertex* production_vertex() const { return m_production_vertex; } //!< Get production vertex
-    const GenVertex* end_vertex()        const { return m_end_vertex;        } //!< Get end vertex
+    GenVertex* production_vertex() const;                   //!< Get production vertex
+    void       set_production_vertex( const GenVertex *v ); //!< Set production vertex
 
-    void  set_pdg_id(int pdg_id);                   //!< Set PDG ID
-    void  set_status(int status);                   //!< Set status code
-    void  set_status_subcode(int subcode);          //!< Set status subcode
-    void  set_momentum(const FourVector& momentum); //!< Set momentum
-    void  set_generated_mass(double m);             //!< Set generated mass
-    void  unset_generated_mass();                   //!< Declare that generated mass is not set
+    GenVertex* end_vertex() const;                          //!< Get end vertex
+    void       set_end_vertex( const GenVertex *v );        //!< Set end vertex
+
+    void set_pdg_id(int pdg_id);                   //!< Set PDG ID
+    void set_status(int status);                   //!< Set status code
+    void set_status_subcode(int subcode);          //!< Set status subcode
+    void set_momentum(const FourVector& momentum); //!< Set momentum
+    void set_generated_mass(double m);             //!< Set generated mass
+    void unset_generated_mass();                   //!< Declare that generated mass is not set
 
 //
 // Fields
@@ -97,8 +105,7 @@ private:
     GenEvent           &m_event;                   //!< Parent event
     unsigned short int  m_version_created;         //!< Version created
     unsigned short int  m_version_deleted;         //!< Version deleted
-    GenVertex          *m_production_vertex;       //!< Production vertex
-    GenVertex          *m_end_vertex;              //!< End vertex
+    int                 m_end_vertex_barcode;      //!< End vertex barcode
     unsigned int        m_data_index;              //!< Index in particle data container
     GenParticleData    &m_data;                    //!< Particle data
     GenParticle        *m_last_version;            //!< Pointer to the last version of this particle
