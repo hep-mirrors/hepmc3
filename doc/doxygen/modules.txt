@@ -1,0 +1,34 @@
+/**
+    @defgroup data Particle, Vertex and event serializable data
+    
+    This module contains structures used for serializing/deserializing
+    GenEvent objects.
+        
+    <hr>
+    Last update 15 April 2014
+*/
+
+
+
+/**
+    @defgroup IO IO-related classes and interfaces
+    
+    This module contains interfaces for different IO formats,
+    including an adapter for older version of \b HepMC files.
+    
+    <hr>
+    Last update 15 April 2014
+*/
+
+
+
+/**
+    @defgroup search_engine Search engine
+    
+    @section tutorial Using search engine module
+    
+    Examples will follow
+        
+    <hr>
+    Last update 2 April 2014
+*/

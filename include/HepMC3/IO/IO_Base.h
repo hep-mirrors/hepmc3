@@ -10,6 +10,8 @@
  *  Serves as a file handler leaving the actual
  *  I/O operations to implementations
  *
+ *  @ingroup IO
+ *
  */
 #include <string>
 #include <fstream>

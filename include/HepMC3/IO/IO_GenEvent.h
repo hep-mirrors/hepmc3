@@ -7,6 +7,8 @@
  *  @class HepMC3::IO_GenEvent
  *  @brief GenEvent I/O parsing and serialization for human-readable text files
  *
+ *  @ingroup IO
+ *
  */
 #include "HepMC3/IO/IO_Base.h"
 

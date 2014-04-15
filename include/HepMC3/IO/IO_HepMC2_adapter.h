@@ -7,6 +7,8 @@
  *  @class HepMC3::IO_HepMC2_adapter
  *  @brief Parser for HepMC2 I/O files
  *
+ *  @ingroup IO
+ *
  */
 #include "HepMC3/IO/IO_Base.h"
 

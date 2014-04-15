@@ -1,5 +1,5 @@
 
-all: Doxyfile mainpage.h 
+all: Doxyfile
 	doxygen Doxyfile
 	@echo "******************************************************"
 	@echo " Please load the doxygen documentation file           "

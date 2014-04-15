@@ -20,6 +20,8 @@
  *  @param T class that will be stored in the container
  *  @param N page size in terms of power of 2
  *
+ *  @ingroup data
+ *
  */
 #include <cmath>  // pow
 #include <vector>
