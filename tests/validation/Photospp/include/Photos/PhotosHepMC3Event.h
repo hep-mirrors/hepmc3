@@ -10,12 +10,12 @@
  *  @implements Photospp::PhotosEvent
  *
  *  @date Created       <b> 31 March 2014 </b>
- *  @date Last modified <b>  3 April 2014 </b>
+ *  @date Last modified <b> 16 April 2014 </b>
  */
-#include <vector>
-#include "HepMC3/GenEvent.h"
 #include "Photos/PhotosEvent.h"
 #include "Photos/PhotosParticle.h"
+#include "HepMC3/GenEvent.h"
+#include <vector>
 
 namespace Photospp
 {
@@ -43,18 +43,17 @@ public:
 // Accessors
 //
 public:
-    void add_particle(HepMC3::GenParticle *p)      { m_event->add_particle(p); } //!< Add particle to HepMC3 event
-    void add_vertex(HepMC3::GenVertex *v)          { m_event->add_vertex(v);   } //!< Add vertex to HepMC3 event
+    HepMC3::GenParticle& new_particle()      { return m_event->new_particle(); } //!< Create new particle
+    HepMC3::GenVertex&   new_vertex()        { return m_event->new_vertex();   } //!< Create new vertex
 
-    int  last_version()                            { return m_last_version; } //!< Get last version of HepMC3 event
-    std::vector<PhotosParticle*> getParticleList() { return m_particles; }          //!< Get particle list
+    int  last_version()                            { return m_event->last_version(); } //!< Get last version of HepMC3 event
+    std::vector<PhotosParticle*> getParticleList() { return m_particles; }    //!< Get particle list
 //
 // Fields
 //
 private:
-    HepMC3::GenEvent              *m_event;        //!< HepMC3 event pointer
-    int                            m_last_version; //!< Last version of HepMC3 event
-    std::vector<PhotosParticle *>  m_particles;    //!< List of particles
+    HepMC3::GenEvent              *m_event;          //!< HepMC3 event pointer
+    std::vector<PhotosParticle *>  m_particles;      //!< List of particles
 };
 
 } // namespace Photospp

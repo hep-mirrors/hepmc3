@@ -1,12 +1,14 @@
-// HepMC header files
-#include "HepMC3/IO_HepMC2_adapter.h"
-#include "HepMC3/IO_GenEvent.h"
-#include "HepMC3/Search/FindParticles.h"
-
 // Photospp header files
 #include "Photos/Photos.h"
 #include "Photos/PhotosHepMC3Event.h"
 #include "Photos/Log.h"
+
+// HepMC header files
+#include "HepMC3/IO/IO_HepMC2_adapter.h"
+#include "HepMC3/IO/IO_GenEvent.h"
+#include "HepMC3/Search/FindParticles.h"
+
+#include <boost/foreach.hpp>
 using namespace HepMC3;
 using namespace Photospp;
 
@@ -16,13 +18,13 @@ int EventsToCheck=20;
 // detector simulation based on http://home.fnal.gov/~mrenna/HCPSS/HCPSShepmc.html
 // similar test was performed in Fortran
 // we perform it before and after Photos (for the first several events)
-void checkMomentumConservationInEvent(GenEvent *evt)
+void checkMomentumConservationInEvent(GenEvent &evt)
 {
         //cout<<"List of stable particles: "<<endl;
 
         double px=0.0,py=0.0,pz=0.0,e=0.0;
 
-        FindParticles search( evt, FIND_ALL, STATUS == 1 );
+        FindParticles search( evt, FIND_ALL, STATUS == 1 && VERSION_DELETED > evt.last_version());
 
         BOOST_FOREACH( GenParticle *p, search.results() ) {
             HepMC3::FourVector m = p->momentum();
@@ -47,6 +49,7 @@ int main(int argc, char **argv)
 
         Photos::initialize();
         Photos::setInfraredCutOff(0.001/200);
+        Photos::createHistoryEntries(true,3);
         //Log::LogDebug();
 
         HepMC3::IO_HepMC2_adapter file(argv[1],std::ios::in);
@@ -61,17 +64,12 @@ int main(int argc, char **argv)
         while(true)
         {
                 // Create event
-                HepMC3::GenEvent *HepMCEvt = new HepMC3::GenEvent();
+                HepMC3::GenEvent HepMCEvt;
 
-                HepMCEvt->set_print_precision(8);
+                HepMCEvt.set_print_precision(8);
                 file.fill_next_event(HepMCEvt);
 
-                if(file.rdstate()) {
-                    delete HepMCEvt;
-                    break;
-                }
-
-                int buf = -HepMCEvt->particles_count();
+                if(file.rdstate()) break;
 
                 //cout << "BEFORE:"<<endl;
                 //HepMCEvt->print();
@@ -84,7 +82,7 @@ int main(int argc, char **argv)
                 }
 
                 // Process by photos
-                PhotosHepMC3Event evt(HepMCEvt);
+                PhotosHepMC3Event evt(&HepMCEvt);
                 evt.process();
 
                 if(evtCount<EventsToCheck)
@@ -92,7 +90,10 @@ int main(int argc, char **argv)
                         checkMomentumConservationInEvent(HepMCEvt);
                 }
 
-                buf+=HepMCEvt->particles_count();
+                FindParticles search(HepMCEvt, FIND_ALL, PDG_ID == 22 && VERSION_CREATED == HepMCEvt.last_version() );
+
+                int buf = search.results().size();
+
                 if(buf==1)      photonAdded++;
                 else if(buf==2) twoAdded++;
                 else if(buf>2)  moreAdded++;
@@ -103,8 +104,6 @@ int main(int argc, char **argv)
                 //HepMCEvt->print();
 
                 out.write_event(HepMCEvt);
-                //clean up
-                delete HepMCEvt;
 
                 if( evtLimit && evtCount >= evtLimit ) break;
         }

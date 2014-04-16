@@ -1,6 +1,10 @@
 #include "HepMC3Particle.h"
 #include "HepMC3Event.h"
+#include "HepMC3/Search/FindParticles.h"
+
 #include <iostream>
+
+#include <boost/foreach.hpp>
 using namespace std;
 
 HepMC3Particle::HepMC3Particle(){}
@@ -209,8 +213,11 @@ HEPParticleList* HepMC3Particle::GetDaughterList(HEPParticleList *list)
   if(!part->end_vertex()) //no daughters
     return list;
 
+  HepMC3::FindParticles search( *part, HepMC3::FIND_DAUGHTERS, HepMC3::VERSION_DELETED > event->GetVersion() );
+
   //iterate over daughters
-  BOOST_FOREACH( HepMC3::GenParticle *p, part->end_vertex()->particles_out() ) {
+  BOOST_FOREACH( HepMC3::GenParticle *p, search.results() ) {
+
     HepMC3Particle * daughter = event->GetParticleWithBarcode(p->barcode());
     if(!list->contains(daughter->GetId())){
       if(!daughter->IsHistoryEntry())
@@ -228,7 +235,10 @@ HEPParticleList* HepMC3Particle::GetMotherList(HEPParticleList *list)
    if(!part->production_vertex()) //no mothers
      return list;
 
-   BOOST_FOREACH( HepMC3::GenParticle *p, part->production_vertex()->particles_in() ) {
+   HepMC3::FindParticles search( *part, HepMC3::FIND_MOTHERS, HepMC3::VERSION_DELETED > event->GetVersion() );
+
+   //iterate over mothers
+   BOOST_FOREACH( HepMC3::GenParticle *p, search.results() ) {
 
       list->push_back(event->GetParticleWithBarcode(p->barcode()));
    }

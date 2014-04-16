@@ -9,14 +9,14 @@ class HepMC3Event;
 
 class HepMC3Particle : public HEPParticle
 {
-  
+
 private:
   /** Event which the particle belongs to.*/
   HepMC3Event *   event;
   /** ID number of particle as given by MC-TESTER (not the same as
     HepMC3::GenParticle pdg_id or barcode).*/
   int           id ;
- 
+
 public:
   /** Plain constructor.*/
   HepMC3Particle();
@@ -24,13 +24,13 @@ public:
   HepMC3Particle(HepMC3::GenParticle& particle, HEPEvent * e, int Id);
   /** Destructor*/
   ~HepMC3Particle();
-  
+
   /** Set all the particle properties of "p" to this particle.*/
   const HepMC3Particle operator=(HEPParticle &p);
 
   /** Returns the event that this particle belongs to.*/
   HEPEvent* GetEvent()            ;
-  /** returns the ID number of particle as used by MC-TESTER (not 
+  /** returns the ID number of particle as used by MC-TESTER (not
     the same as HepMC3::GenParticle pdg_id or barcode).*/
   int    const GetId()            ;
   /** Dummy function definition. Do not use.*/
@@ -42,14 +42,14 @@ public:
   /** Dummy function definition. Do not use.*/
   int    const GetLastDaughter()  ;
 
-  /** Returns the particle's energy */ 
+  /** Returns the particle's energy */
   double const     GetE ()        ;
   /** Returns the x component of the particle's momentum */
   double const     GetPx()        ;
   /** Returns the y component of the particle's momentum */
   double const     GetPy()        ;
   /** Returns the z component of the particle's momentum */
-  double const     GetPz()        ; 
+  double const     GetPz()        ;
   /** Returns the particle's mass */
   double const     GetM ()        ;
   /** Returns the particle's PDG ID code. */
@@ -58,7 +58,7 @@ public:
   int    const     GetStatus()    ;
   /** Returns true is the particle has status code 1. */
   int    const     IsStable()     ;
-  /** Returns true is the particle has status code 2 
+  /** Returns true is the particle has status code 2
     or (for pythia 8) if it has a status < 0, has an end vertex and
     does not have any daughters of the same PDG code.*/
   int    const     Decays();
@@ -66,11 +66,11 @@ public:
    if fails both IsStable() and Decays().*/
   int    const     IsHistoryEntry();
 
-  /** Returns the x value of the particle's production vertex */  
+  /** Returns the x value of the particle's production vertex */
   double const     GetVx  ()      ;
-  /** Returns the y value of the particle's production vertex */  
+  /** Returns the y value of the particle's production vertex */
   double const     GetVy  ()      ;
-  /** Returns the z value of the particle's production vertex */  
+  /** Returns the z value of the particle's production vertex */
   double const     GetVz  ()      ;
   /** Dummy function definition. Do not use.*/
   double const     GetTau ()      ;
@@ -95,7 +95,7 @@ public:
   /** Sets the x component of this particle's momentum */
   void   SetPy ( double py )      ;
   /** Sets the x component of this particle's momentum */
-  void   SetPz ( double pz )      ; 
+  void   SetPz ( double pz )      ;
   /** Dummy function definition. Do not use.*/
   void   SetM  ( double m  )      ;
 
@@ -112,15 +112,15 @@ public:
   /** Dummy function definition. Do not use.*/
   void   SetTau( double tau )     ;
 
-  /** Returns a list of daughter particles of this particle. 
+  /** Returns a list of daughter particles of this particle.
     If a list of particle is given as a parameter, the daughters
     are appended to the end. If the daughter is already found
-    in the list, it is not added. The function finds daughters by 
+    in the list, it is not added. The function finds daughters by
     iterating over the outgoing particles from the end vertex.
     The daughter particle must be stable of decaying to be added to
     the list. (for pythia 8) if the status code is negative, the
     daughter's daughters are searched recursively.*/
-   
+
   HEPParticleList*  GetDaughterList(HEPParticleList *list);
   /** Returns a list of daughter particles of this particle.*/
   HEPParticleList*  GetMotherList(HEPParticleList *list);

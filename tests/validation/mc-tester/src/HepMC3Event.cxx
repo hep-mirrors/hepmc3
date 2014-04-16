@@ -1,6 +1,9 @@
 #include "HepMC3Event.h"
 #include "HepMC3/Search/FindParticles.h"
+
 #include <iostream>
+
+#include <boost/foreach.hpp>
 using namespace std;
 using HepMC3::GenEvent;
 
@@ -13,7 +16,7 @@ HepMC3Event::HepMC3Event( HepMC3::GenEvent &e, bool include_self_decay){
   // (and may differ from "barcode" in the GenEvent)
   count_self_decays=include_self_decay;
 
-  HepMC3::FindParticles search( evt, HepMC3::FIND_ALL );
+  HepMC3::FindParticles search( e, HepMC3::FIND_ALL, HepMC3::VERSION_DELETED > e.last_version() );
 
   m_particle_count = search.results().size();
 
@@ -22,6 +25,10 @@ HepMC3Event::HepMC3Event( HepMC3::GenEvent &e, bool include_self_decay){
   for(int i=0; i<m_particle_count; ++i) {
     particles[i] = new HepMC3Particle(*search.results()[i],this,i+1);
   }
+}
+
+int HepMC3Event::GetVersion() {
+    return evt->last_version();
 }
 
 int HepMC3Event::GetNumOfParticles(){

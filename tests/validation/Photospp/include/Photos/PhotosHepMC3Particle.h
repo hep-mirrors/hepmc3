@@ -10,11 +10,11 @@
  *  @implements Photospp::PhotosParticle
  *
  *  @date Created       <b> 31 March 2014 </b>
- *  @date Last modified <b>  3 April 2014 </b>
+ *  @date Last modified <b> 16 April 2014 </b>
  */
-#include <vector>
-#include "HepMC3/GenParticle.h"
 #include "Photos/PhotosParticle.h"
+#include "HepMC3/GenParticle.h"
+#include <vector>
 
 namespace Photospp
 {
@@ -26,15 +26,8 @@ class PhotosHepMC3Particle: public PhotosParticle {
 // Constructors
 //
 public:
-    /** Default constructor */
-    PhotosHepMC3Particle();
-
     /** Constructor with HepMC3::GenParticle pointer */
     PhotosHepMC3Particle(HepMC3::GenParticle *particle);
-
-    /** Constructor which creates a new HepMC::GenParticle and
-        sets the properties pdg_id, statu and mass. */
-    PhotosHepMC3Particle(int pdg_id, int status, double mass);
 
     /** Default destructor */
     ~PhotosHepMC3Particle();
@@ -98,17 +91,15 @@ public:
         via a vector of PhotosParticle */
     std::vector<PhotosParticle*> getAllDecayProducts();
 
-    double getPx()                { if(!m_particle) return 0; return m_particle->momentum().px(); }   //!< Get px
-    void   setPx( double px )     { if(!m_particle) return;   m_particle->momentum().setPx(px); }     //!< Set px
+    double getPx()                { if(!m_particle) return 0; return m_particle->last_version()->momentum().px(); }   //!< Get px
+    double getPy()                { if(!m_particle) return 0; return m_particle->last_version()->momentum().py(); }   //!< Get py
+    double getPz()                { if(!m_particle) return 0; return m_particle->last_version()->momentum().pz(); }   //!< Get pz
+    double getE()                 { if(!m_particle) return 0; return m_particle->last_version()->momentum().e(); }    //!< Get energy
 
-    double getPy()                { if(!m_particle) return 0; return m_particle->momentum().py(); }   //!< Get py
-    void   setPy( double py )     { if(!m_particle) return;   m_particle->momentum().setPy(py); }     //!< Set py
-
-    double getPz()                { if(!m_particle) return 0; return m_particle->momentum().pz(); }   //!< Get pz
-    void   setPz( double pz )     { if(!m_particle) return;   m_particle->momentum().setPz(pz); }     //!< Set pz
-
-    double getE()                 { if(!m_particle) return 0; return m_particle->momentum().e(); }    //!< Get energy
-    void   setE( double e )       { if(!m_particle) return;   m_particle->momentum().setE(e); }       //!< Set energy
+    void   setPx( double px ); //!< Set px
+    void   setPy( double py ); //!< Set py
+    void   setPz( double pz ); //!< Set pz
+    void   setE ( double e );  //!< Set energy
 
     int    getPdgID()             { if(!m_particle) return 0; return m_particle->pdg_id(); }          //!< Get PDG ID
     void   setPdgID(int pdg_id)   { if(!m_particle) return;   m_particle->set_pdg_id(pdg_id); }       //!< Set PDG ID

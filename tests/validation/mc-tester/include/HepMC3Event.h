@@ -13,7 +13,7 @@ private:
 
   /** Flag for how particles decaying into there own type are treated */
   bool count_self_decays;
- 
+
 public:
   /** Constructor for HepMC3Event. Creates a new event using the
       event info from HepMC3::GenEvent e. Also copies each particle
@@ -22,29 +22,32 @@ public:
   /** Destructor for HepMC3Event */
   ~HepMC3Event();
 
+  /** return current version of the event */
+  int GetVersion();
+
   /** return the number of particles in the event */
   int GetNumOfParticles();
 
   /** returns the event number */
   int GetEventNumber();
-  
+
   /** Dummy function definition. Do not use */
   void SetNumOfParticles(int n);
 
   /** Dummy function definition. Do not use */
   void SetEventNumber(int ev);
-  
+
   /** Returns the HEPParticle with id "idx". This is the id number as used
    by MC-TESTER and not the id number from the original HepMC3::GenParticle.
    Note: Indecies begin at 1.*/
   HEPParticle* GetParticle( int idx);
 
-  /** Returns the HepMC3Particle with id "barcode". This is the barcode 
-    number from the original HepMC3::GenParticle and not the ID used by 
+  /** Returns the HepMC3Particle with id "barcode". This is the barcode
+    number from the original HepMC3::GenParticle and not the ID used by
     MC-TESTER. This function is not needed in HEPEvent, but is needed
     by HepMC3Particle::Get_Daughters(). */
   HepMC3Particle* GetParticleWithBarcode( int barcode );
-  
+
   /** Dummy function definition. Do not use */
   void  SetParticle( int idx, HEPParticle *particle) ;
 
@@ -53,10 +56,10 @@ public:
 
   /** Dummy function definition. Do not use */
   void  Clear (int fromIdx);
-  
+
   /** Dummy function definition. Do not use */
   void  InsertParticle(int at_idx,HEPParticle *p);
-  
+
   /** Dummy function definition. Do not use */
   void  AddParticle( int id, int pdgid, int status,
 			     int mother, int mother2,

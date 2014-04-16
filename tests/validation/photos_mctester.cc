@@ -1,8 +1,3 @@
-// HepMC header files
-#include "HepMC3/IO_HepMC2_adapter.h"
-#include "HepMC3/IO_GenEvent.h"
-#include "HepMC3/Search/FindParticles.h"
-
 // Photospp header files
 #include "Photos/Photos.h"
 #include "Photos/PhotosHepMC3Event.h"
@@ -12,6 +7,13 @@
 #include "Generate.h"
 #include "Setup.H"
 #include "HepMC3Event.h"
+
+// HepMC header files
+#include "HepMC3/IO/IO_HepMC2_adapter.h"
+#include "HepMC3/IO/IO_GenEvent.h"
+#include "HepMC3/Search/FindParticles.h"
+
+#include <boost/foreach.hpp>
 using namespace HepMC3;
 using namespace Photospp;
 
@@ -21,7 +23,7 @@ int EventsToCheck=20;
 // detector simulation based on http://home.fnal.gov/~mrenna/HCPSS/HCPSShepmc.html
 // similar test was performed in Fortran
 // we perform it before and after Photos (for the first several events)
-void checkMomentumConservationInEvent(GenEvent *evt)
+void checkMomentumConservationInEvent(GenEvent &evt)
 {
         //cout<<"List of stable particles: "<<endl;
 
@@ -70,15 +72,12 @@ int main(int argc, char **argv)
         {
                 evtCount++;
                 // Create event
-                HepMC3::GenEvent *HepMCEvt = new HepMC3::GenEvent();
+                HepMC3::GenEvent HepMCEvt;
 
-                HepMCEvt->set_print_precision(8);
+                HepMCEvt.set_print_precision(8);
                 file.fill_next_event(HepMCEvt);
 
-                if(file.rdstate()) {
-                    delete HepMCEvt;
-                    break;
-                }
+                if(file.rdstate()) break;
 
                 //cout << "BEFORE:"<<endl;
                 //HepMCEvt->print();
@@ -91,11 +90,11 @@ int main(int argc, char **argv)
                 }
 
                 // Process by photos
-                PhotosHepMC3Event evt(HepMCEvt);
+                PhotosHepMC3Event evt(&HepMCEvt);
                 evt.process();
 
                 // Run MC-TESTER on the event
-                HepMC3Event temp_event(*HepMCEvt,false);
+                HepMC3Event temp_event(HepMCEvt,false);
                 MC_Analyze(&temp_event);
 
                 if(evtCount<EventsToCheck)
@@ -104,11 +103,9 @@ int main(int argc, char **argv)
                 }
 
                 //cout << "AFTER:"<<endl;
-                //HepMCEvt->print();
+                //HepMCEvt.print();
 
                 out.write_event(HepMCEvt);
-                //clean up
-                delete HepMCEvt;
 
                 if( evtLimit && evtCount >= evtLimit ) break;
         }
