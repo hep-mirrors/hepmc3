@@ -7,6 +7,8 @@
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/Log.h"
+
+#include <boost/foreach.hpp>
 using std::endl;
 
 namespace HepMC3 {
@@ -21,7 +23,7 @@ m_last_version(this),
 m_is_required(false) {
 }
 
-void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
+void GenVertex::print( std::ostream& ostr, bool event_listing_format, int version ) const {
 
     // Standalone format. Used when calling:
     // vertex.print()
@@ -36,10 +38,45 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
     // Event listing format. Used when calling:
     // event.print()
     else {
+
+        if( version == 255) version = m_event.last_version();
+
         ostr << "Vtx: ";
         ostr.width(6);
         ostr << barcode()
              << "  (X,cT): 0" << endl;
+
+        bool printed_header = false;
+
+        // Print out all the incoming particles
+        BOOST_FOREACH( GenParticle *p, particles_in() ) {
+
+            if( p->version_created() > version || p->version_deleted() <= version) continue;
+
+            if( !printed_header ) {
+                ostr << " I: ";
+                printed_header = true;
+            }
+            else ostr << "    ";
+
+            p->print(ostr,1);
+        }
+
+        printed_header = false;
+
+        // Print out all the outgoing particles
+        BOOST_FOREACH( GenParticle *p, particles_out() ) {
+
+            if( p->version_created() > version || p->version_deleted() <= version) continue;
+
+            if( !printed_header ) {
+                ostr << " O: ";
+                printed_header = true;
+            }
+            else ostr << "    ";
+
+            p->print(ostr,1);
+        }
     }
 }
 
@@ -51,15 +88,6 @@ int GenVertex::serialization_barcode() const {
 }
 
 void GenVertex::add_particle_in(GenParticle &p) {
-
-    /** @note HepMC3 format requires that all versions of the particle
-     *        have the same origin. Therefore adding particle with
-     *        version newer than vertex version is prohibited.
-     */
-    if( p.version_created() > m_version_created ) {
-        ERROR( "GenVertex: Cannot add incoming particle from newer version. Create a copy of this vertex instead")
-        return;
-    }
 
     p.set_end_vertex(this);
     m_particles_in.push_back( &p );

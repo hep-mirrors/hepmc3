@@ -63,39 +63,7 @@ void GenEvent::print_version( unsigned short int version, std::ostream& ostr ) c
 
             last_vertex_barcode = v->barcode();
 
-            v->print(ostr,1);
-
-            bool printed_header = false;
-
-            // Print out all the incoming particles
-            BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
-
-                if( p->version_created() > version || p->version_deleted() <= version) continue;
-
-                if( !printed_header ) {
-                    ostr << " I: ";
-                    printed_header = true;
-                }
-                else ostr << "    ";
-
-                p->print(ostr,1);
-            }
-
-            printed_header = false;
-
-            // Print out all the outgoing particles
-            BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
-
-                if( p->version_created() > version || p->version_deleted() <= version) continue;
-
-                if( !printed_header ) {
-                    ostr << " O: ";
-                    printed_header = true;
-                }
-                else ostr << "    ";
-
-                p->print(ostr,1);
-            }
+            v->print(ostr,1,version);
         }
     }
 
@@ -238,7 +206,39 @@ void GenEvent::record_change(GenParticle& p) {
 }
 
 void GenEvent::record_change(GenVertex& v) {
-    /** @todo Do we really need this? */
+
+    // Check if this vertex already exists in the newest version
+    if( v.m_last_version->version_created() == last_version() ) return;
+
+    if( v.is_deleted() ) {
+        WARNING( "GenEvent::record_change: Cannot change deleted vertex" )
+        return;
+    }
+
+    // Create new particle as a copy of previous one
+    GenVertex      *new_v = m_vertices.new_uninitialized_object();
+    GenVertexData *new_vd = m_data.vertex_data.new_object(v.m_data);
+
+    new (new_v) GenVertex( *this, m_data.vertex_data.size() - 1, *new_vd );
+
+    // Mark this vertex as deleted and update last version pointer
+    if( !v.is_deleted() ) v.m_version_deleted = last_version();
+    v.m_last_version = new_v;
+
+    m_data.version_links.push_back( std::pair<int,int>(new_v->barcode(),v.barcode()) );
+
+    // Add all particles from previous vertex to new vertex
+
+    BOOST_FOREACH( GenParticle *p, v.particles_in() ) {
+        if( p->version_deleted() <= last_version() ) continue;
+        new_v->m_particles_in.push_back(p);
+    }
+
+    BOOST_FOREACH( GenParticle *p, v.particles_out() ) {
+        if( p->version_deleted() <= last_version() ) continue;
+        new_v->m_particles_out.push_back(p);
+    }
+
 }
 
 } // namespace HepMC3

@@ -57,7 +57,9 @@ public:
 
     unsigned short int version_created() const { return m_version_created;      } //!< Version in which this particle was created
     unsigned short int version_deleted() const { return m_version_deleted;      } //!< Version in which this particle was deleted
+    GenParticle*       last_version()    const { return m_last_version;         } //!< Get latest version of this particle
     bool               has_new_version() const { return m_last_version != this; } //!< Check if this is the last version of this particle
+
 
     /** Get generated mass
      *  This function will return mass as set by a generator/tool.
@@ -77,7 +79,7 @@ public:
     void set_momentum(const FourVector& momentum); //!< Set momentum
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
-
+    void set_data(const GenParticleData& data);    //!< Set particle data
 //
 // Fields
 //

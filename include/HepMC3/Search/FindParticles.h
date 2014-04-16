@@ -33,7 +33,8 @@ enum FilterParticle {
     FIND_ALL_ANCESTORS,
     FIND_ALL_DESCENDANTS,
     FIND_MOTHERS,
-    FIND_DAUGHTERS
+    FIND_DAUGHTERS,
+    FIND_PRODUCTION_SIBLINGS
 };
 
 class FindParticles {
@@ -69,13 +70,13 @@ private:
 // Accessors
 //
 public:
-    const vector<const GenParticle*>& results() const { return m_results; } //!< Get results
+    const vector<GenParticle*>& results() const { return m_results; } //!< Get results
 
 //
 // Fields
 //
 private:
-    vector<const GenParticle*>  m_results; //!< List of results
+    vector<GenParticle*>  m_results; //!< List of results
 };
 
 } // namespace HepMC3

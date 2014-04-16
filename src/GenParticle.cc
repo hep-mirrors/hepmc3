@@ -119,6 +119,11 @@ void GenParticle::unset_generated_mass() {
     m_last_version->m_data.is_mass_set = false;
 }
 
+void GenParticle::set_data(const GenParticleData& data) {
+    m_event.record_change(*this);
+    m_last_version->m_data = data; // copy
+}
+
 GenVertex* GenParticle::production_vertex() const {
     if( m_data.production_vertex >= 0 ) return NULL;
 

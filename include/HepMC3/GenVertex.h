@@ -40,7 +40,7 @@ public:
      *  By default prints only vertex-related information
      *  event_listing_format = true is used by event for formatted output
      */
-    void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
+    void print( std::ostream& ostr = std::cout, bool event_listing_format = false, int version = 255) const;
 
     bool is_deleted() const { return ( m_version_deleted != 255 ); } //!< Check if this vertex is deleted
     void mark_deleted();                                             //!< Mark this vertex as deleted

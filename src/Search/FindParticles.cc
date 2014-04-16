@@ -20,7 +20,7 @@ FindParticles::FindParticles(const GenEvent &evt, FilterEvent filter_type, Filte
 
     for( unsigned int i=0; i<evt.particles_count(); ++i ) {
 
-        const GenParticle &p = evt.particles()[i];
+        GenParticle &p = evt.particle(i+1);
         if( passed_all_filters(p,filter_list) ) {
             if( filter_type == FIND_LAST ) m_results.clear();
 
@@ -64,6 +64,16 @@ FindParticles::FindParticles(const GenParticle &p, FilterParticle filter_type, F
                 }
             }
             break;
+        case FIND_PRODUCTION_SIBLINGS:
+            if( !p.end_vertex() ) break;
+
+            BOOST_FOREACH( GenParticle *p_in, p.end_vertex()->particles_in() ) {
+
+                if( passed_all_filters(*p_in,filter_list) ) {
+                    m_results.push_back( p_in );
+                }
+            }
+            break;
     };
 }
 
@@ -102,7 +112,7 @@ bool FindParticles::passed_all_filters(const GenParticle &p, FilterList &filter_
 
 void FindParticles::recursive_check_ancestors(const GenVertex &v, FilterList &filter_list) {
 
-    BOOST_FOREACH( const GenParticle *p_in, v.particles_in() ) {
+    BOOST_FOREACH( GenParticle *p_in, v.particles_in() ) {
 
         if( passed_all_filters(*p_in,filter_list) ) {
             m_results.push_back(p_in);
@@ -115,7 +125,7 @@ void FindParticles::recursive_check_ancestors(const GenVertex &v, FilterList &fi
 
 void FindParticles::recursive_check_descendants(const GenVertex &v, FilterList &filter_list) {
 
-    BOOST_FOREACH( const GenParticle *p_out, v.particles_out() ) {
+    BOOST_FOREACH(GenParticle *p_out, v.particles_out() ) {
 
         if( passed_all_filters(*p_out,filter_list) ) {
             m_results.push_back(p_out);
