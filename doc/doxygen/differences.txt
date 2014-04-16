@@ -5,82 +5,37 @@
     account when transitioning from HepMC2 to HepMC3.
 
     ###########################################################################
-    @section interface Changes to the interface
-    ###########################################################################
-    ###########################################################################
-    @subsection deleting Function GenEvent::remove_particle() has been replaced
-                         by GenEvent::delete_particle() with different meaning
-    ###########################################################################
-
-    Particles (and vertices) cannot be permanently detached from the event.
-    Deleting a particle or vertex tags them as being deleted but keeps them
-    in the event.
-
-    @code{.cpp}
-        GenParticle *p = new GenParticle();
-
-        event->add_particle(p);
-        event->delete_particle(p); // tags particle as deleted
-
-        cout<<p->generated_mass()<<endl; // still valid as the pointer is valid
-
-        p->set_generated_mass(777.0); // will throw a warning because particle
-                                      // is marked as deleted
-    @endcode
-
-    ###########################################################################
     @section technical Technical changes
     ###########################################################################
     ###########################################################################
-    @subsection barcodes Barcodes can no longer be set for particles/vertices
-                         added to an event
+    @subsection memory GenEvent manages memory of particles and vertices
     ###########################################################################
-
-    Barcodes are now used solely by GenEvent. They can be set only for particle
-    or vertex that does not belong to an event. Adding particle or vertex
-    to the event will change the barcode.
-
-    @code{.cpp}
-        GenParticle *p = new GenParticle();
-
-        p->set_barcode(10001);    // can be done but should not be used
-        cout<<p->barcode()<<endl; // will print out '133'
-
-        event->add_particle(p);
-        cout<<p->barcode()<<endl; // will print out '1'
-
-        p->set_barcode(10001);    // will be ignored because particle already
-                                  // belongs to an event
-    @endcode
-
-    ###########################################################################
-    @subsection ownership Ownership can no longer be transferred between events
-    ###########################################################################
-
-    Due to the addition of the versioning algorithm, once particle or vertex
-    is added to the event it cannot be completely detached from this event
-    or moved to any other event.
+    Particles and vertices can no longer be created standalone. They have to
+    be created using methods form GenEvent class. They have no public
+    constructor, so they cannot be created through the call to 'new'.
 
     @code{.cpp}
-        event1->add_particle(p);
-        event2->add_particle(p); // will be ignored as particle p already
-                                 // belongs to an event
-    @endcode
+        GenEvent event;
 
-    will return an error and particle p will not be added to event2.\n
-    To add it to event2, create a copy of this particle:
+        // Create particles
+        // These particles will already be part of the event
+        // They don't have to be added to the event
+        GenParticle &p1 = event.new_particle();
+        GenParticle &p2 = event.new_particle();
+        GenParticle &p3 = event.new_particle();
 
-    @code{.cpp}
-        GenParticle *p2 = new GenParticle(*p);
-        event2->add_particle(p2);
-    @endcode
+        p1.set_pdg_id(23);
+        p2.set_pdg_id(15);
+        p3.set_pdg_id(-15);
 
-    In case of vertices, since copy constructor by default creates a shallow
-    copy, one has to create a deep copy using:
+        // Create vertex
+        GenVertex   &v1 = event.new_vertex();
+        v1.add_particle_in(p1);
+        v1.add_particle_out(p2);
+        v1.add_particle_out(p3);
 
-    @code{.cpp}
-        GenVertex *v2 = v1->create_deep_copy();
-        event2->add_vertex(v2);
+        GenParticle *p4 = new GenParticle(); // Will fail at compile time. No public constructor
+        GenParticle  p5;                     // Will fail for the same reason
     @endcode
 
     ###########################################################################
@@ -88,21 +43,76 @@
     ###########################################################################
 
     Particles and vertices in HepMC3 are stored in topological order. This means
-    that if a particle or vertex have an ancestor, this ancestor must already
-    exist in the event. Example:
+    that when creating vertices, incoming particles must have barcode lower than
+    any of the outgoing particles.
+
+    This forces the tree structure to be constructed top-to-bottom
+    and disallows creating loops.
 
     @code{.cpp}
-        GenParticle *p  = new GenParticle();
-        GenParticle *p2 = new GenParticle();
+        GenParticle &p1 = event.new_particle();
+        GenParticle &p2 = event.new_particle();
+        GenParticle &p3 = event.new_particle();
+        GenParticle &p4 = event.new_particle();
 
-        p2->set_ancestor(p);
+        GenVertex   &v1 = event.new_vertex();
+        GenVertex   &v2 = event.new_vertex();
+        GenVertex   &v3 = event.new_vertex();
 
-        event->add_particle(p2); // will cause an error
+        v1.add_particle_in (p2);
+        v1.add_particle_out(p3);
+        v1.add_particle_in (p4);  // will cause error, because p3 was created after p2
 
-        event->add_particle(p);  // OK because p has no ancestors
-        event->add_particle(p2); // OK because p already belongs to the event
+        v2.add_particle_in (p4);
+        v2.add_particle_out(p3);  // will also cause error
+
+        // Order of vertices does not matter. Barcode of end vertex
+        // can be lower than barcode of production vertex
+        v3.add_particle_in (p1);
+        v3.add_particle_out(p2);
+    @endcode
+
+    ###########################################################################
+    @section interface Changes to user interface
+    ###########################################################################
+    ###########################################################################
+    @subsection deleting Removed function GenEvent::remove_particle()
+    ###########################################################################
+
+    Function GenEvent::remove_particle() has been replaced by
+    HepMC3::GenEvent::delete_particle() with a different role
+    than previous function. Versioning scheme requires that deleting a particle
+    or vertex only tags it as being deleted without actually deleting its data.
+    See \ref versioning for a description on how to use deleted particles or
+    vertices or how to delete them permanently.
+
+    @code{.cpp}
+        GenParticle &p = event.new_particle();
+
+        event.delete_particle(p); // tags particle as deleted
+
+        cout<<p.generated_mass()<<endl; // still valid as the reference is valid
+
+        p.set_generated_mass(777.0); // will throw a warning because particle
+                                     // is marked as deleted
+    @endcode
+
+    ###########################################################################
+    @subsection barcodes Barcodes can no longer be set
+    ###########################################################################
+
+    Barcodes are now solely for internal use. To code information that
+    previously was stored as barcode use HepMC3::GenParticle::set_status_subcode()
+
+    @code{.cpp}
+        GenParticle &p = event.new_particle();
+
+        cout<<p.barcode()<<endl; // will print out '1'
+
+        // no GenParticle::set_barcode function use subcode instead
+        p.set_status_subcode(10001);
     @endcode
 
     <hr>
-    Last update 28 March 2014
+    Last update 16 April 2014
 */
