@@ -50,6 +50,9 @@ ifneq ($(TAUOLALOCATION), )
   override LINKS    += $(TAUOLALIBS)
   override RPATHS   += -Wl,-rpath,$(TAUOLALOCATION)/lib -Wl,-rpath,$(TAUOLAINTERFACE)/lib
   override TESTS    += tauola_standalone.exe
+ifneq ($(PHOTOSLOCATION), )
+  override TESTS    += tauola_photos.exe
+endif
 ifneq ($(MCTESTERLOCATION), )
   override TESTS    += tauola_mctester.exe
 ifneq ($(PHOTOSLOCATION), )
