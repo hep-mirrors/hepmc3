@@ -6,6 +6,8 @@
 #include "HepMC3/Search/FindParticles.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenEvent.h"
+
+#include <boost/foreach.hpp>
 using namespace std;
 
 namespace Tauolapp
@@ -29,6 +31,8 @@ TauolaHepMC3Event::TauolaHepMC3Event(HepMC3::GenEvent * event){
     m_event->use_units(HepMC3::Units::GEV,HepMC3::Units::MM);
     }
 */
+
+    event->new_version("Tauola++");
 }
 
 TauolaHepMC3Event::~TauolaHepMC3Event(){
@@ -48,7 +52,7 @@ std::vector<TauolaParticle*> TauolaHepMC3Event::findParticles(int pdg_id) {
 
 std::vector<TauolaParticle*> TauolaHepMC3Event::findStableParticles(int pdg_id){
 
-    HepMC3::FindParticles search( m_event, HepMC3::FIND_ALL, HepMC3::ABS_PDG_ID == pdg_id &&
+    HepMC3::FindParticles search(*m_event, HepMC3::FIND_ALL, HepMC3::ABS_PDG_ID == pdg_id &&
                                                              !HepMC3::HAS_END_VERTEX &&
                                                              !HepMC3::HAS_SAME_PDG_ID_DAUGHTER );
 

@@ -31,7 +31,7 @@ PhotosHepMC3Particle::~PhotosHepMC3Particle() {
 
 void PhotosHepMC3Particle::setMothers(std::vector<PhotosParticle*> mothers) {
 
-    Log::Fatal("PhotosHepMC3Particle::setMothers() should not be used. Please report this problem.");
+    Log::Fatal("PhotosHepMC3Particle::setMothers() is deprecated and should never be used. Please report this problem.");
 /*
     clear(m_mothers);
     // If there are mothers
@@ -81,7 +81,7 @@ void PhotosHepMC3Particle::addDaughter(PhotosParticle* daughter){
 
 void PhotosHepMC3Particle::setDaughters(std::vector<PhotosParticle*> daughters){
 
-    Log::Fatal("PhotosHepMC3Particle::setDaughters() should not be used. Please report this problem.");
+    Log::Fatal("PhotosHepMC3Particle::setDaughters() is deprecated and should never be used. Please report this problem.");
 /*
     clear(m_daughters);
     // If there are daughters

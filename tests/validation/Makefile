@@ -52,6 +52,9 @@ ifneq ($(TAUOLALOCATION), )
   override TESTS    += tauola_standalone.exe
 ifneq ($(MCTESTERLOCATION), )
   override TESTS    += tauola_mctester.exe
+ifneq ($(PHOTOSLOCATION), )
+  override TESTS    += tauola_photos_mctester.exe
+endif
 endif
 endif
 
@@ -83,4 +86,7 @@ $(LIB_MCTESTER_HEPMC3_INT_SO): $(LIB_MCTESTER_HEPMC3_INT_OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 clean:
-	rm -f *.o *.exe */src/*.o */lib/*.so
+	rm -f *.o *.exe
+
+Clean: clean
+	rm -f */src/*.o */lib/*.so

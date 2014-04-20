@@ -6,13 +6,10 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Search/FindParticles.h"
 
+#include <boost/foreach.hpp>
+
 namespace Tauolapp
 {
-
-TauolaHepMC3Particle::TauolaHepMC3Particle():
-m_parent_event(NULL) {
-    m_particle = new HepMC3::GenParticle();
-}
 
 TauolaHepMC3Particle::~TauolaHepMC3Particle() {
 
@@ -25,18 +22,12 @@ TauolaHepMC3Particle::~TauolaHepMC3Particle() {
     }
 
     BOOST_FOREACH( TauolaParticle *p, m_created_particles ) {
-        TauolaHepMC3Particle *temp = dynamic_cast<TauolaHepMC3Particle*>(p);
-        if( temp->getHepMC3() && temp->getHepMC3()->barcode()==0 ) delete temp->getHepMC3();
         delete p;
     }
 }
 
 TauolaHepMC3Particle::TauolaHepMC3Particle(HepMC3::GenParticle * particle) {
     m_particle = particle;
-}
-
-HepMC3::GenParticle* TauolaHepMC3Particle::getHepMC3() {
-    return m_particle;
 }
 
 void TauolaHepMC3Particle::undecay() {
@@ -62,13 +53,8 @@ void TauolaHepMC3Particle::setMothers(vector<TauolaParticle*> mothers){
         HepMC3::GenVertex *production_vertex = part->end_vertex();
         HepMC3::GenVertex *orig_production_vertex = production_vertex;
 
-        //If production_vertex does not exist - create it
-        //If it's tau decay - set the time and position including the tau lifetime correction
-        //otherwise - copy the time and position of decaying particle
-        if(!production_vertex){
-            production_vertex = new HepMC3::GenVertex();
-            m_parent_event->add_vertex(production_vertex);
-        }
+        // If production_vertex does not exist - create it
+        if(!production_vertex) production_vertex = &m_parent_event->new_vertex();
 
         // Loop over all mothers to check that the end points to the right place
         BOOST_FOREACH( TauolaParticle *p, mothers ) {
@@ -78,15 +64,14 @@ void TauolaHepMC3Particle::setMothers(vector<TauolaParticle*> mothers){
             if( moth->end_vertex() != orig_production_vertex )
                 Log::Fatal("Mother production_vertices point to difference places. Can not override. Please delete vertices first.",1);
             else if( !moth->end_vertex() )
-                production_vertex->add_particle_in(moth);
+                production_vertex->add_particle_in(*moth);
 
             // Update status info
             if( moth->status() == TauolaParticle::STABLE ) {
                 moth->set_status(TauolaParticle::DECAYED);
             }
         }
-        m_parent_event->add_particle(m_particle);
-        production_vertex->add_particle_out(m_particle);
+        production_vertex->add_particle_out(*m_particle);
     }
 }
 
@@ -94,14 +79,14 @@ void TauolaHepMC3Particle::setDaughters(vector<TauolaParticle*> daughters){
 
     if(daughters.size()==0) return;
 
-    Log::Fatal( "setDaughters should not be used" );
+    Log::Fatal( "setDaughters is deprecated and should never be used. Please report this problem." );
 }
 
 std::vector<TauolaParticle*> TauolaHepMC3Particle::getMothers() {
 
     if( m_mothers.size() != 0 ) return m_mothers;
 
-    HepMC3::FindParticles search( m_particle, HepMC3::FIND_MOTHERS );
+    HepMC3::FindParticles search( *m_particle, HepMC3::FIND_MOTHERS );
 
     BOOST_FOREACH( HepMC3::GenParticle *p, search.results() ) {
         TauolaHepMC3Particle *pp = new TauolaHepMC3Particle(p);
@@ -116,7 +101,7 @@ std::vector<TauolaParticle*> TauolaHepMC3Particle::getDaughters() {
 
     if( m_daughters.size() != 0 ) return m_daughters;
 
-    HepMC3::FindParticles search( m_particle, HepMC3::FIND_DAUGHTERS );
+    HepMC3::FindParticles search( *m_particle, HepMC3::FIND_DAUGHTERS );
 
     BOOST_FOREACH( HepMC3::GenParticle *p, search.results() ) {
         TauolaHepMC3Particle *pp = new TauolaHepMC3Particle(p);
@@ -136,7 +121,9 @@ void TauolaHepMC3Particle::checkMomentumConservation() {
 
     double sumpx = 0, sumpy = 0, sumpz = 0, sume = 0;
 
-    BOOST_FOREACH( HepMC3::GenParticle *p, m_particle->end_vertex()->particles_in() ) {
+    HepMC3::FindParticles search( *m_particle, HepMC3::FIND_PRODUCTION_SIBLINGS, HepMC3::VERSION_DELETED > m_parent_event->last_version() );
+
+    BOOST_FOREACH( HepMC3::GenParticle *p, search.results() ) {
 
         sumpx += p->momentum().px();
         sumpy += p->momentum().py();
@@ -144,7 +131,9 @@ void TauolaHepMC3Particle::checkMomentumConservation() {
         sume  += p->momentum().e();
     }
 
-    BOOST_FOREACH( HepMC3::GenParticle *p, m_particle->end_vertex()->particles_out() ) {
+    HepMC3::FindParticles search2( *m_particle, HepMC3::FIND_DAUGHTERS, HepMC3::VERSION_DELETED > m_parent_event->last_version() );
+
+    BOOST_FOREACH( HepMC3::GenParticle *p, search2.results() ) {
 
         sumpx -= p->momentum().px();
         sumpy -= p->momentum().py();
@@ -154,13 +143,8 @@ void TauolaHepMC3Particle::checkMomentumConservation() {
 
     if( sqrt( sumpx*sumpx + sumpy*sumpy + sumpz*sumpz + sume*sume) > Tauola::momentum_conservation_threshold ) {
         Log::Warning()<<"Momentum not conserved in the vertex:"<<endl;
-        Log::RedirectOutput(Log::Warning(false));
-        m_particle->end_vertex()->print();
-        Log::RevertOutput();
-        return;
+        m_particle->end_vertex()->print(Log::Warning(false),1);
     }
-
-    return;
 }
 
 // Set (X,T) Position of tau decay trees
@@ -193,18 +177,63 @@ TauolaHepMC3Particle * TauolaHepMC3Particle::createNewParticle(
                         int pdg_id, int status, double mass,
                         double px, double py, double pz, double e) {
 
-    TauolaHepMC3Particle * new_particle = new TauolaHepMC3Particle();
+    HepMC3::GenParticle &hepmc3 = m_parent_event->new_particle();
+    TauolaHepMC3Particle *new_particle = new TauolaHepMC3Particle(&hepmc3);
     new_particle->set_parent_event(m_parent_event);
-    new_particle->getHepMC3()->set_pdg_id(pdg_id);
-    new_particle->getHepMC3()->set_status(status);
-    new_particle->getHepMC3()->set_generated_mass(mass);
+    new_particle->setPdgID(pdg_id);
+    new_particle->setStatus(status);
+    new_particle->setMass(mass);
 
     HepMC3::FourVector momentum(px,py,pz,e);
-    new_particle->getHepMC3()->set_momentum(momentum);
+    new_particle->m_particle->set_momentum(momentum);
 
     m_created_particles.push_back(new_particle);
 
     return new_particle;
+}
+
+void TauolaHepMC3Particle::setPx( double px ) {
+    if(!m_particle) return;
+
+    HepMC3::FourVector m( m_particle->momentum() );
+    m.setPx(px);
+    m_particle->set_momentum( m );
+
+    // If versioning is used, we have to update pointer
+    m_particle = m_particle->last_version();
+}
+
+void TauolaHepMC3Particle::setPy( double py ) {
+    if(!m_particle) return;
+
+    HepMC3::FourVector m( m_particle->momentum() );
+    m.setPy(py);
+    m_particle->set_momentum( m );
+
+    // If versioning is used, we have to update pointer
+    m_particle = m_particle->last_version();
+}
+
+void TauolaHepMC3Particle::setPz( double pz ) {
+    if(!m_particle) return;
+
+    HepMC3::FourVector m( m_particle->momentum() );
+    m.setPz(pz);
+    m_particle->set_momentum( m );
+
+    // If versioning is used, we have to update pointer
+    m_particle = m_particle->last_version();
+}
+
+void TauolaHepMC3Particle::setE( double e ) {
+    if(!m_particle) return;
+
+    HepMC3::FourVector m( m_particle->momentum() );
+    m.setE(e);
+    m_particle->set_momentum( m );
+
+    // If versioning is used, we have to update pointer
+    m_particle = m_particle->last_version();
 }
 
 } // namespace Tauolapp

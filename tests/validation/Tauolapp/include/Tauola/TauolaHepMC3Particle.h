@@ -17,9 +17,6 @@ class TauolaHepMC3Particle: public TauolaParticle {
 // Constructors
 //
 public:
-    /** General constructor */
-    TauolaHepMC3Particle();
-
     /** Constructor which keeps a pointer to the HepMC3::GenParticle*/
     TauolaHepMC3Particle(HepMC3::GenParticle * particle);
 
@@ -30,7 +27,7 @@ public:
 //
 public:
     /** Returns the HepMC3::GenParticle */
-    HepMC3::GenParticle* getHepMC3();
+    HepMC3::GenParticle* getHepMC3() { return m_particle; }
 
     /** Remove the decay branch from the event record and reset the particle status code to stable. */
     void undecay();
@@ -78,16 +75,14 @@ public:
     void set_parent_event(TauolaHepMC3Event *evt) { m_parent_event = evt; }
 
     double getPx()                { if(!m_particle) return 0; return m_particle->momentum().px(); }   //!< Get px
-    void   setPx( double px )     { if(!m_particle) return;   m_particle->momentum().setPx(px); }     //!< Set px
-
     double getPy()                { if(!m_particle) return 0; return m_particle->momentum().py(); }   //!< Get py
-    void   setPy( double py )     { if(!m_particle) return;   m_particle->momentum().setPy(py); }     //!< Set py
-
     double getPz()                { if(!m_particle) return 0; return m_particle->momentum().pz(); }   //!< Get pz
-    void   setPz( double pz )     { if(!m_particle) return;   m_particle->momentum().setPz(pz); }     //!< Set pz
-
     double getE()                 { if(!m_particle) return 0; return m_particle->momentum().e(); }    //!< Get energy
-    void   setE( double e )       { if(!m_particle) return;   m_particle->momentum().setE(e); }       //!< Set energy
+
+    void   setPx( double px ); //!< Set px
+    void   setPy( double py ); //!< Set py
+    void   setPz( double pz ); //!< Set pz
+    void   setE( double e );   //!< Set energy
 
     int    getPdgID()             { if(!m_particle) return 0; return m_particle->pdg_id(); }          //!< Get PDG ID
     void   setPdgID(int pdg_id)   { if(!m_particle) return;   m_particle->set_pdg_id(pdg_id); }       //!< Set PDG ID

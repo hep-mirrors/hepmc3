@@ -41,11 +41,13 @@ public:
 // Accessors
 //
 public:
-    HepMC3::GenEvent* getEvent()                   { return m_event;           } //!< Get HepMC3 event
+    HepMC3::GenEvent* getEvent()                   { return m_event;           }       //!< Get HepMC3 event
 
-    void add_particle(HepMC3::GenParticle *p)      { m_event->add_particle(p);  } //!< Add particle to HepMC3 event
-    void add_vertex(HepMC3::GenVertex *v)          { m_event->add_vertex(v);    } //!< Add vertex to HepMC3 event
-    void delete_vertex(HepMC3::GenVertex *v)       { m_event->delete_vertex(v); } //!< Delete HepMC3 vertex
+    HepMC3::GenParticle& new_particle()            { return m_event->new_particle(); } //!< Create new particle
+    HepMC3::GenVertex&   new_vertex()              { return m_event->new_vertex();   } //!< Create new vertex
+
+    int  last_version()                            { return m_event->last_version(); } //!< Get last version of HepMC3 event
+    void delete_vertex(HepMC3::GenVertex *v)       { m_event->delete_vertex(*v); }     //!< Delete HepMC3 vertex
 
 //
 // Fields
