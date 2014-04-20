@@ -7,6 +7,7 @@
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/Search/FindParticles.h"
+#include "HepMC3/IO/IO_GenEvent.h"
 
 #include <iostream>
 
@@ -151,5 +152,10 @@ int main() {
 
     std::cout<<std::endl;
     evt.dump();
+
+    IO_GenEvent file("test.hepmc",std::ios::out);
+    file.set_precision(4);
+    file.write_event(evt);
+
     return 0;
 }
