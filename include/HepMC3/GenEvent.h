@@ -39,7 +39,7 @@ public:
     void print( std::ostream& ostr = std::cout ) const { print_version( m_data.versions.size(), ostr ); }
 
     /** Print selected version of the event */
-    void print_version( unsigned short int version, std::ostream& ostr = std::cout ) const;
+    void print_version( unsigned char version, std::ostream& ostr = std::cout ) const;
 
     /** Dump the whole content of the event memory. Useful for debugging */
     void dump() const;
@@ -77,13 +77,13 @@ public:
      *  Create a copy if a new version has been created and this particle
      *  has not yet been added to the new version
      */
-    void record_change(GenParticle& p);
+    bool record_change(GenParticle& p);
 
     /** Record change of a vertex
      *  Create a copy if a new version has been created and this vertex
      *  has not yet been added to the new version
      */
-    void record_change(GenVertex& p);
+    bool record_change(GenVertex& p);
 
 //
 // Accessors

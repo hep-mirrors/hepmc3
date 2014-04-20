@@ -14,6 +14,8 @@
 
 #include <iostream>
 #include <vector>
+#include <limits>
+
 using std::vector;
 
 namespace HepMC3 {
@@ -40,10 +42,10 @@ public:
      *  By default prints only vertex-related information
      *  event_listing_format = true is used by event for formatted output
      */
-    void print( std::ostream& ostr = std::cout, bool event_listing_format = false, int version = 255) const;
+    void print( std::ostream& ostr = std::cout, bool event_listing_format = false, unsigned char version = std::numeric_limits<unsigned char>::max() ) const;
 
-    bool is_deleted() const { return ( m_version_deleted != 255 ); } //!< Check if this vertex is deleted
-    void mark_deleted();                                             //!< Mark this vertex as deleted
+    bool is_deleted() const { return ( m_version_deleted != std::numeric_limits<unsigned char>::max() ); } //!< Check if this vertex is deleted
+    void mark_deleted();                                                                                   //!< Mark this vertex as deleted
 //
 // Accessors
 //
@@ -57,8 +59,8 @@ public:
      */
     int serialization_barcode() const;
 
-    unsigned short int version_created() const { return m_version_created;      } //!< Version in which this particle was created
-    unsigned short int version_deleted() const { return m_version_deleted;      } //!< Version in which this particle was deleted
+    unsigned char version_created() const { return m_version_created;      } //!< Version in which this particle was created
+    unsigned char version_deleted() const { return m_version_deleted;      } //!< Version in which this particle was deleted
     bool               has_new_version() const { return m_last_version != this; } //!< Check if this is the last version of this vertex
 
     void add_particle_in (GenParticle &p); //!< Add incoming particle
@@ -73,8 +75,8 @@ public:
 //
 private:
     GenEvent             &m_event;           //!< Parent event
-    unsigned short int    m_version_created; //!< Version created
-    unsigned short int    m_version_deleted; //!< Version deleted
+    unsigned char         m_version_created; //!< Version created
+    unsigned char         m_version_deleted; //!< Version deleted
     unsigned int          m_data_index;      //!< Index in particle data container
     GenVertexData        &m_data;            //!< Particle data
     GenVertex            *m_last_version;    //!< Pointer to the last version of this vertex

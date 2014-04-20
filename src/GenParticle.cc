@@ -14,7 +14,7 @@ namespace HepMC3 {
 GenParticle::GenParticle(GenEvent &event, int data_index, GenParticleData &data):
 m_event(event),
 m_version_created(m_event.last_version()),
-m_version_deleted(255),
+m_version_deleted(std::numeric_limits<unsigned char>::max()),
 m_data_index(data_index),
 m_data(data),
 m_last_version(this) {
@@ -28,8 +28,8 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
         ostr << "GenParticle: ";
         ostr.width(3);
         ostr << barcode() << " (v. ";
-        if( !is_deleted() ) ostr<<" "<<m_version_created<<" ) ";
-        else                ostr<<m_version_created<<"-"<<m_version_deleted<<") ";
+        if( !is_deleted() ) ostr<<" "<<(int)m_version_created<<" ) ";
+        else                ostr<<(int)m_version_created<<"-"<<(int)m_version_deleted<<") ";
 
         ostr << "ID:" << m_data.pdg_id
              << " (P,E)=" << m_data.momentum.px() << "," << m_data.momentum.py()
@@ -88,50 +88,46 @@ double GenParticle::generated_mass() const {
 }
 
 void GenParticle::set_pdg_id(int pdg_id) {
-    m_event.record_change(*this);
+    if( !m_event.record_change(*this) ) return;
     m_last_version->m_data.pdg_id = pdg_id;
 }
 
 void GenParticle::set_status(int status) {
-    m_event.record_change(*this);
+    if( !m_event.record_change(*this) ) return;
     m_last_version->m_data.status = status;
 }
 
 void GenParticle::set_status_subcode(int subcode) {
-    m_event.record_change(*this);
+    if( !m_event.record_change(*this) ) return;
     m_last_version->m_data.status_subcode = subcode;
 }
 
 void GenParticle::set_momentum(const FourVector& momentum) {
-    m_event.record_change(*this);
+    if( !m_event.record_change(*this) ) return;
     m_last_version->m_data.momentum = momentum;
 }
 
 void GenParticle::set_generated_mass(double m) {
-    m_event.record_change(*this);
+    if( !m_event.record_change(*this) ) return;
     m_last_version->m_data.mass = m;
     m_last_version->m_data.is_mass_set = true;
 }
 
 void GenParticle::unset_generated_mass() {
-    m_event.record_change(*this);
+    if( !m_event.record_change(*this) ) return;
     m_last_version->m_data.mass = 0.;
     m_last_version->m_data.is_mass_set = false;
 }
 
 void GenParticle::set_data(const GenParticleData& data) {
-    m_event.record_change(*this);
+    if( !m_event.record_change(*this) ) return;
     m_last_version->m_data = data; // copy
 }
 
 GenVertex* GenParticle::production_vertex() const {
     if( m_data.production_vertex >= 0 ) return NULL;
 
-    GenVertex &v = m_event.vertex(m_data.production_vertex);
-
-    if( v.is_deleted() ) return NULL;
-
-    return &v;
+    return &m_event.vertex(m_data.production_vertex);
 }
 
 void GenParticle::set_production_vertex( const GenVertex *v ) {
@@ -141,7 +137,7 @@ void GenParticle::set_production_vertex( const GenVertex *v ) {
      *        in new version is prohibited.
      */
     if( m_event.last_version() != m_version_created ) {
-        ERROR( "GenParticle: Cannot change production vertex. Create a copy of this particle instead")
+        ERROR( "GenParticle: Cannot change production vertex. Create a copy of this particle instead (barcode="<<barcode()<<")")
         return;
     }
 
@@ -152,15 +148,11 @@ void GenParticle::set_production_vertex( const GenVertex *v ) {
 GenVertex* GenParticle::end_vertex() const {
     if( m_data.end_vertex >= 0 ) return NULL;
 
-    GenVertex &v = m_event.vertex(m_data.end_vertex);
-
-    if( v.is_deleted() ) return NULL;
-
-    return &v;
+    return &m_event.vertex(m_data.end_vertex);
 }
 
 void GenParticle::set_end_vertex( const GenVertex *v ) {
-    m_event.record_change(*this);
+
     if(v) m_data.end_vertex = v->barcode();
     else  m_data.end_vertex = 0;
 }

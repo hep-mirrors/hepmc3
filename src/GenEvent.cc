@@ -29,7 +29,7 @@ m_print_precision(2) {
     new_version("Version 0");
 }
 
-void GenEvent::print_version( unsigned short int version, std::ostream& ostr ) const {
+void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const {
     ostr << "________________________________________________________________________________" << endl;
     ostr << "GenEvent: #" << m_data.event_number << endl;
     ostr << " Version: \"" << m_data.versions[version-1].name
@@ -51,20 +51,10 @@ void GenEvent::print_version( unsigned short int version, std::ostream& ostr ) c
     // Set precision
     ostr.precision(m_print_precision);
 
-    FindParticles search(*this, FIND_ALL, VERSION_CREATED <= version && VERSION_DELETED > version);
+    for(unsigned int i=0; i<m_vertices.size(); ++i) {
+        const GenVertex &v = m_vertices[i];
 
-    int last_vertex_barcode = 0;
-
-    BOOST_FOREACH( const GenParticle *p, search.results() ) {
-        if(p->end_vertex()) {
-            if( last_vertex_barcode <= p->end_vertex()->barcode() ) continue;
-
-            const GenVertex *v = p->end_vertex();
-
-            last_vertex_barcode = v->barcode();
-
-            v->print(ostr,1,version);
-        }
+        v.print(ostr,1,version);
     }
 
     // Restore the stream state
@@ -175,44 +165,48 @@ void GenEvent::new_version( const std::string name ) {
     m_data.versions.push_back(v);
 }
 
-void GenEvent::record_change(GenParticle& p) {
+bool GenEvent::record_change(GenParticle& p) {
 
     // Check if this particle already exists in the newest version
-    if( p.m_last_version->version_created() == last_version() ) return;
+    if( p.m_last_version->version_created() == last_version() ) return true;
 
-    if( p.is_deleted() ) {
-        WARNING( "GenEvent::record_change: Cannot change deleted particle" )
-        return;
+    if( p.m_last_version->is_deleted() ) {
+        ERROR( "GenEvent::record_change: Cannot change deleted particle (barcode="<<p.barcode()<<")" )
+        return false;
     }
 
     // Create new particle as a copy of previous one
     GenParticle      *new_p = m_particles.new_uninitialized_object();
-    GenParticleData *new_pd = m_data.particle_data.new_object(p.m_data);
+    GenParticleData *new_pd = m_data.particle_data.new_object(p.m_last_version->m_data);
 
     new (new_p) GenParticle( *this, m_data.particle_data.size() - 1, *new_pd );
 
     // Mark this particle as deleted and update last version pointer
-    if( !p.is_deleted() ) p.m_version_deleted = last_version();
-    p.m_last_version = new_p;
+    if( !p.m_last_version->is_deleted() ) p.m_last_version->m_version_deleted = last_version();
 
-    m_data.version_links.push_back( std::pair<int,int>(new_p->barcode(),p.barcode()) );
+    m_data.version_links.push_back( std::pair<int,int>(new_p->barcode(),p.m_last_version->barcode()) );
+
+    p.m_last_version->m_last_version = new_p;
+    p.m_last_version = new_p;
 
     // Add new particle to production/end vertices
     GenVertex *v = new_p->production_vertex();
-    if(v) v->add_particle_out(*new_p);
+    if(v) v->m_particles_out.push_back(new_p);
 
     v = new_p->end_vertex();
-    if(v) v->add_particle_in(*new_p);
+    if(v) v->m_particles_in.push_back(new_p);
+
+    return true;
 }
 
-void GenEvent::record_change(GenVertex& v) {
+bool GenEvent::record_change(GenVertex& v) {
 
     // Check if this vertex already exists in the newest version
-    if( v.m_last_version->version_created() == last_version() ) return;
+    if( v.m_last_version->version_created() == last_version() ) return true;
 
     if( v.is_deleted() ) {
-        WARNING( "GenEvent::record_change: Cannot change deleted vertex" )
-        return;
+        ERROR( "GenEvent::record_change: Cannot change deleted vertex (barcode="<<v.barcode()<<")" )
+        return false;
     }
 
     // Create new particle as a copy of previous one
@@ -239,6 +233,7 @@ void GenEvent::record_change(GenVertex& v) {
         new_v->m_particles_out.push_back(p);
     }
 
+    return true;
 }
 
 } // namespace HepMC3

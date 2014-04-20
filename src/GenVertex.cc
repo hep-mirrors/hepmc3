@@ -16,21 +16,21 @@ namespace HepMC3 {
 GenVertex::GenVertex(GenEvent &event, int data_index, GenVertexData &data):
 m_event(event),
 m_version_created(m_event.last_version()),
-m_version_deleted(255),
+m_version_deleted(std::numeric_limits<unsigned char>::max()),
 m_data_index(data_index),
 m_data(data),
 m_last_version(this),
 m_is_required(false) {
 }
 
-void GenVertex::print( std::ostream& ostr, bool event_listing_format, int version ) const {
+void GenVertex::print( std::ostream& ostr, bool event_listing_format, unsigned char version ) const {
 
     // Standalone format. Used when calling:
     // vertex.print()
     if( !event_listing_format ) {
         ostr << "GenVertex:  " << barcode() << " (ver. ";
-        if( !is_deleted() ) ostr<<" "<<m_version_created<<" ) ";
-        else                ostr<<m_version_created<<"-"<<m_version_deleted<<") ";
+        if( !is_deleted() ) ostr<<" "<<(int)m_version_created<<" ) ";
+        else                ostr<<(int)m_version_created<<"-"<<(int)m_version_deleted<<") ";
         ostr <<") (X,cT):0 "
              << "P in: "  << m_particles_in.size()
              <<" P out: " << m_particles_out.size() << endl;
@@ -39,7 +39,9 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format, int versio
     // event.print()
     else {
 
-        if( version == 255) version = m_event.last_version();
+        if( version == std::numeric_limits<unsigned char>::max() ) version = m_event.last_version();
+
+        if( version_created() > version || version_deleted() <= version) return;
 
         ostr << "Vtx: ";
         ostr.width(6);
@@ -88,6 +90,10 @@ int GenVertex::serialization_barcode() const {
 }
 
 void GenVertex::add_particle_in(GenParticle &p) {
+    if( p.version_created() > m_version_created ) {
+        ERROR( "GenVertex::add_particle_in: cannot add incoming particle from later version." )
+        return;
+    }
 
     p.set_end_vertex(this);
     m_particles_in.push_back( &p );
@@ -98,7 +104,7 @@ void GenVertex::add_particle_in(GenParticle &p) {
 
 void GenVertex::add_particle_out(GenParticle &p) {
 
-    p.set_production_vertex(this);
+    p.set_production_vertex(m_last_version);
     m_particles_out.push_back( &p );
 }
 

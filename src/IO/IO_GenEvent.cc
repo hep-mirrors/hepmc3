@@ -10,6 +10,7 @@
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Log.h"
 
+#include <limits>
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -88,7 +89,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
 
                 if (production_vertex < lowest_vertex_barcode) {
                     write_vertex(v);
-                    if( v.version_deleted()<255 && !v.has_new_version() ) {
+                    if( v.version_deleted()<std::numeric_limits<unsigned char>::max() && !v.has_new_version() ) {
                         deleted_barcodes.insert( pair<int,int>( v.version_deleted(),v.barcode() ) );
                     }
                 }
@@ -111,7 +112,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
             if( old_version ) write_particle( p, old_version, true  );
             else              write_particle( p, production_vertex,    false );
 
-            if( p.version_deleted()<255 && !p.has_new_version() ) {
+            if( p.version_deleted()<std::numeric_limits<unsigned char>::max() && !p.has_new_version() ) {
                 deleted_barcodes.insert( pair<int,int>( p.version_deleted(),p.barcode() ) );
             }
         }
@@ -124,7 +125,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
 
             if( barcode < 0 ) {
                 write_vertex( v );
-                if( v.version_deleted()<255 && !v.has_new_version() ) {
+                if( v.version_deleted()<std::numeric_limits<unsigned char>::max() && !v.has_new_version() ) {
                     deleted_barcodes.insert( pair<int,int>( v.version_deleted(),v.barcode() ) );
                 }
             }
@@ -152,9 +153,19 @@ void IO_GenEvent::write_vertex(const GenVertex &v) {
     m_file << "V " << v.barcode()
            << " [";
 
+    bool printed_first = false;
+
     BOOST_FOREACH( const GenParticle *p, v.particles_in() ) {
-        m_file << p->barcode();
-        if( p != v.particles_in().back() ) m_file << ",";
+        // NOTE: particles from higher version can only be added if they are
+        //       a new version of already existing incoming particle.
+        //       Therefore, we skip them
+        if( p->version_created() > v.version_created() ) continue;
+
+        if( !printed_first ) {
+            m_file << p->barcode();
+            printed_first = true;
+        }
+        else m_file << "," << p->barcode();
     }
 
     m_file << "] ";

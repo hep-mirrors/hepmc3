@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <vector>
+#include <limits>
 
 namespace HepMC3 {
 
@@ -55,10 +56,10 @@ public:
     bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
     const GenParticleData& data() const { return m_data;                } //!< Get particle data
 
-    unsigned short int version_created() const { return m_version_created;      } //!< Version in which this particle was created
-    unsigned short int version_deleted() const { return m_version_deleted;      } //!< Version in which this particle was deleted
-    GenParticle*       last_version()    const { return m_last_version;         } //!< Get latest version of this particle
-    bool               has_new_version() const { return m_last_version != this; } //!< Check if this is the last version of this particle
+    unsigned char version_created() const { return m_version_created;      } //!< Version in which this particle was created
+    unsigned char version_deleted() const { return m_version_deleted;      } //!< Version in which this particle was deleted
+    GenParticle*  last_version()    const { return m_last_version;         } //!< Get latest version of this particle
+    bool          has_new_version() const { return m_last_version != this; } //!< Check if this is the last version of this particle
 
 
     /** Get generated mass
@@ -85,8 +86,8 @@ public:
 //
 private:
     GenEvent           &m_event;                   //!< Parent event
-    unsigned short int  m_version_created;         //!< Version created
-    unsigned short int  m_version_deleted;         //!< Version deleted
+    unsigned char       m_version_created;         //!< Version created
+    unsigned char       m_version_deleted;         //!< Version deleted
     unsigned int        m_data_index;              //!< Index in particle data container
     GenParticleData    &m_data;                    //!< Particle data
     GenParticle        *m_last_version;            //!< Pointer to the last version of this particle
