@@ -184,7 +184,9 @@ TauolaHepMC3Particle * TauolaHepMC3Particle::createNewParticle(
 void TauolaHepMC3Particle::setPx( double px ) {
     if(!m_particle) return;
 
-    m_particle->momentum().setPx(px);
+    HepMC3::FourVector tmp(m_particle->momentum());
+    tmp.setPx(px);
+    m_particle->set_momentum(tmp);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
@@ -193,7 +195,9 @@ void TauolaHepMC3Particle::setPx( double px ) {
 void TauolaHepMC3Particle::setPy( double py ) {
     if(!m_particle) return;
 
-    m_particle->momentum().setPy(py);
+    HepMC3::FourVector tmp(m_particle->momentum());
+    tmp.setPy(py);
+    m_particle->set_momentum(tmp);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
@@ -202,7 +206,9 @@ void TauolaHepMC3Particle::setPy( double py ) {
 void TauolaHepMC3Particle::setPz( double pz ) {
     if(!m_particle) return;
 
-    m_particle->momentum().setPz(pz);
+    HepMC3::FourVector tmp(m_particle->momentum());
+    tmp.setPz(pz);
+    m_particle->set_momentum(tmp);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
@@ -211,7 +217,9 @@ void TauolaHepMC3Particle::setPz( double pz ) {
 void TauolaHepMC3Particle::setE( double e ) {
     if(!m_particle) return;
 
-    m_particle->momentum().setE(e);
+    HepMC3::FourVector tmp(m_particle->momentum());
+    tmp.setE(e);
+    m_particle->set_momentum(tmp);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();

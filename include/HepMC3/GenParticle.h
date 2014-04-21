@@ -52,7 +52,7 @@ public:
     int   pdg_id()                const { return m_data.pdg_id;         } //!< Get PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
     int   status_subcode()        const { return m_data.status_subcode; } //!< Get status subcode
-    FourVector& momentum()        const { return m_data.momentum;       } //!< Get momentum
+    const FourVector& momentum()  const { return m_data.momentum;       } //!< Get momentum
     bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
     const GenParticleData& data() const { return m_data;                } //!< Get particle data
 
