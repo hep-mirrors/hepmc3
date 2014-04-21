@@ -6,7 +6,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenEvent.h"
 
-#include "HepMC3/Log.h"
+#include "HepMC3/Setup.h"
 using std::endl;
 
 namespace HepMC3 {

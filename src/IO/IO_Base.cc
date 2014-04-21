@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "HepMC3/IO/IO_Base.h"
-#include "HepMC3/Log.h"
+#include "HepMC3/Setup.h"
 using std::ostream;
 using std::endl;
 
