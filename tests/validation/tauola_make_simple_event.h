@@ -22,8 +22,8 @@ HepMC3::GenEvent * tauola_make_simple_event(){
     HepMC3::FourVector momentum_tau2(-1.38605041e+00,-1.38605041e+00,+7.50000000e-01,+2.75000005e+00);
 
     //make particles
-    HepMC3::GenParticle &e1   = event->new_particle( momentum_e1,   -11, 3 );
-    HepMC3::GenParticle &e2   = event->new_particle( momentum_e2,    11, 3 );
+    HepMC3::GenParticle &e1   = event->new_particle( momentum_e1,   -11, 2 );
+    HepMC3::GenParticle &e2   = event->new_particle( momentum_e2,    11, 2 );
     HepMC3::GenParticle &tau1 = event->new_particle( momentum_tau1, -15, 1 );
     HepMC3::GenParticle &tau2 = event->new_particle( momentum_tau2,  15, 1 );
 

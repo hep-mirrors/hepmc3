@@ -370,6 +370,7 @@ int IO_HepMC2_adapter::parse_vertex_information(GenVertex *v, const char *buf) {
     const char *cursor            = buf;
     int         barcode           = 0;
     int         num_particles_out = 0;
+    FourVector  position;
 
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -378,17 +379,22 @@ int IO_HepMC2_adapter::parse_vertex_information(GenVertex *v, const char *buf) {
     // SKIPPED: id
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
 
-    // SKIPPED: x
+    // x
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    position.setX(atof(cursor));
 
-    // SKIPPED: y
+    // y
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    position.setY(atof(cursor));
 
-    // SKIPPED: z
+    // z
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    position.setZ(atof(cursor));
 
-    // SKIPPED: t
+    // t
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    position.setT(atof(cursor));
+    v->set_position(position);
 
     // SKIPPED: num_orphans_in
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;

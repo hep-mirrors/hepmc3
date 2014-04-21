@@ -50,7 +50,7 @@ public:
 // Accessors
 //
 public:
-    int   barcode()               const { return -(m_data_index+1);  } //!< Get barcode
+    int   barcode()               const { return -(((int)m_data_index)+1);  } //!< Get barcode
 
     /** Return barcode used in serialization
      *  If the vertex has at most one incoming particle, it might not be serialized
@@ -61,7 +61,7 @@ public:
 
     unsigned char version_created() const { return m_version_created;      } //!< Version in which this particle was created
     unsigned char version_deleted() const { return m_version_deleted;      } //!< Version in which this particle was deleted
-    bool               has_new_version() const { return m_last_version != this; } //!< Check if this is the last version of this vertex
+    bool          has_new_version() const { return m_last_version != this; } //!< Check if this is the last version of this vertex
 
     void add_particle_in (GenParticle &p); //!< Add incoming particle
     void add_particle_out(GenParticle &p); //!< Add outgoing particle
@@ -70,6 +70,13 @@ public:
     const vector<GenParticle*> particles_out() const { return m_particles_out; } //!< Get list of outgoing particles
     const GenVertexData& data()                const { return m_data;          } //!< Get vertex data
 
+    /** Get position
+     *  Returns position of this vertex. If position is not set, searches
+     *  production vertices of ancestors to find position.
+     *  Returns HepMC3::FourVector(0,0,0,0) if no position information found.
+     */
+    const FourVector& position()     const;
+    void              set_position(const FourVector& new_pos);                     //!< Set position
 //
 // Fields
 //
@@ -82,7 +89,6 @@ private:
     GenVertex            *m_last_version;    //!< Pointer to the last version of this vertex
     vector<GenParticle*>  m_particles_in;    //!< Incoming particle list
     vector<GenParticle*>  m_particles_out;   //!< Outgoing particle list
-    bool                  m_is_required;     //!< Does this vertex needs to be serialized
 };
 
 } // namespace HepMC3

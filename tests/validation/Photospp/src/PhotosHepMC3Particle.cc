@@ -32,37 +32,7 @@ PhotosHepMC3Particle::~PhotosHepMC3Particle() {
 void PhotosHepMC3Particle::setMothers(std::vector<PhotosParticle*> mothers) {
 
     Log::Fatal("PhotosHepMC3Particle::setMothers() is deprecated and should never be used. Please report this problem.");
-/*
-    clear(m_mothers);
-    // If there are mothers
-    if(mothers.size()>0) {
 
-        HepMC3::GenParticle * part;
-        part=dynamic_cast<PhotosHepMC3Particle*>(mothers.at(0))->getHepMC();
-
-        // Use end vertex of first mother as production vertex for particle
-        HepMC3::GenVertex *production_vertex = part->end_vertex();
-        HepMC3::GenVertex *orig_production_vertex = production_vertex;
-
-        if(!production_vertex) Log::Fatal("PhotosHepMC3Particle::setMothers(): no end_vertex??",1);
-
-        // Loop over all mothers to check that the end points to the right place
-        BOOST_FOREACH( PhotosParticle *p, mothers ) {
-
-            HepMC3::GenParticle *moth;
-            moth = dynamic_cast<PhotosHepMC3Particle*>(p)->getHepMC();
-
-            if(moth->end_vertex()!=orig_production_vertex)
-                Log::Fatal("PhotosHepMC3Particle::setMothers(): Mother production_vertices point to difference places. Can not override. Please delete vertices first.",1);
-            else
-                production_vertex->add_particle_in(moth);
-
-            // Update status info
-            if( moth->status() == PhotosParticle::STABLE )
-            moth->set_status(PhotosParticle::DECAYED);
-        }
-    }
-*/
 }
 
 void PhotosHepMC3Particle::addDaughter(PhotosParticle* daughter){
@@ -75,44 +45,12 @@ void PhotosHepMC3Particle::addDaughter(PhotosParticle* daughter){
 
     HepMC3::GenParticle * daugh = (dynamic_cast<PhotosHepMC3Particle*>(daughter))->getHepMC();
 
-    //m_parent_event->add_particle(daugh);
     m_particle->end_vertex()->add_particle_out(*daugh);
 }
 
 void PhotosHepMC3Particle::setDaughters(std::vector<PhotosParticle*> daughters){
 
     Log::Fatal("PhotosHepMC3Particle::setDaughters() is deprecated and should never be used. Please report this problem.");
-/*
-    clear(m_daughters);
-    // If there are daughters
-    if( daughters.size()>0 ) {
-
-        // Use production vertex of first daughter as end vertex for particle
-        HepMC3::GenParticle *first_daughter;
-        first_daughter = (dynamic_cast<PhotosHepMC3Particle*>(daughters.at(0)))->getHepMC();
-
-        HepMC3::GenVertex *end_vertex;
-        end_vertex = first_daughter->production_vertex();
-        HepMC3::GenVertex *orig_end_vertex = end_vertex;
-
-        // If it does not exist create it
-        if(!end_vertex) Log::Fatal("PhotosHepMC3Particle::setDaughters(): no end_vertex??",1);
-
-        // Loop over all daughters to check that the end points to the right place
-        BOOST_FOREACH( PhotosParticle *p, daughters ) {
-
-            HepMC3::GenParticle *daug;
-            daug = dynamic_cast<PhotosHepMC3Particle*>(p)->getHepMC();
-
-            if(daug->production_vertex()!=orig_end_vertex)
-                Log::Fatal("PhotosHepMC3Particle::setDaughters(): Daughter production_vertices point to difference places. Can not override. Please delete vertices first.",4);
-            else {
-                m_parent_event->add_particle(daug);
-                end_vertex->add_particle_out(daug);
-            }
-        }
-    }
-*/
 }
 
 std::vector<PhotosParticle*> PhotosHepMC3Particle::getMothers() {
@@ -164,7 +102,7 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getAllDecayProducts() {
     // If changed - add newly created particles
     int version_check = m_parent_event->last_version();
 
-    // NOTE: if history entreis option is used - we have created a new version
+    // NOTE: if history entries option is used we have to account for newly created version
     if( Photos::isCreateHistoryEntries ) --version_check;
 
     search.narrow_down( HepMC3::VERSION_CREATED >= version_check );
@@ -251,9 +189,6 @@ void PhotosHepMC3Particle::createSelfDecayVertex(PhotosParticle *out) {
     outgoing.set_data( dynamic_cast<PhotosHepMC3Particle*>(out)->m_particle->data() );
 
     HepMC3::GenVertex &v = m_parent_event->getEvent()->new_vertex();
-
-    //m_parent_event->add_vertex(v);
-    //m_parent_event->add_particle(outgoing);
 
     v.add_particle_in (*m_particle);
     v.add_particle_out(outgoing);

@@ -141,30 +141,24 @@ void TauolaHepMC3Particle::checkMomentumConservation() {
     }
 }
 
-// Set (X,T) Position of tau decay trees
-void TauolaHepMC3Particle::decayEndgame(){
-/* NO POSITION YET
-  double lifetime = Tauola::tau_lifetime * (-log( Tauola::randomDouble() ));
-  HepMC3::FourVector tau_momentum = m_particle->momentum();
+void TauolaHepMC3Particle::decayEndgame() {
+    double lifetime = Tauola::tau_lifetime * (-log( Tauola::randomDouble() ));
+    HepMC3::FourVector tau_momentum = m_particle->momentum();
 
-  double mass     = sqrt(abs(  tau_momentum.e()*tau_momentum.e()
-                             - tau_momentum.px()*tau_momentum.px()
-                             - tau_momentum.py()*tau_momentum.py()
-                             - tau_momentum.pz()*tau_momentum.pz()
-                            ) );
+    double mass = fabs( m_particle->generated_mass() );
 
-  // Get previous position
-  HepMC3::FourVector previous_position = m_particle->production_vertex()->position();
+    // Get previous position
+    const HepMC3::FourVector& previous_position = m_particle->production_vertex()->position();
 
-  // Calculate new position
-  HepMC3::FourVector new_position(previous_position.x()+tau_momentum.px()/mass*lifetime,
-                                 previous_position.y()+tau_momentum.py()/mass*lifetime,
-                                 previous_position.z()+tau_momentum.pz()/mass*lifetime,
-                                 previous_position.t()+tau_momentum.e() /mass*lifetime);
+    // Calculate new position
+    HepMC3::FourVector new_position(previous_position.x() + tau_momentum.px()/mass * lifetime,
+                                    previous_position.y() + tau_momentum.py()/mass * lifetime,
+                                    previous_position.z() + tau_momentum.pz()/mass * lifetime,
+                                    previous_position.t() + tau_momentum.e() /mass * lifetime);
 
-  // Set new position
-  m_particle->end_vertex()->set_position(new_position);
-*/
+    // Set new position
+    m_particle->end_vertex()->set_position(new_position);
+
 }
 
 TauolaHepMC3Particle * TauolaHepMC3Particle::createNewParticle(

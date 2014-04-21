@@ -33,7 +33,7 @@ void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const 
     ostr << "________________________________________________________________________________" << endl;
     ostr << "GenEvent: #" << m_data.event_number << endl;
     ostr << " Version: \"" << m_data.versions[version-1].name
-         << "\" (version id: " << version << ", last version id: " << m_data.versions.size() << ")" <<endl;
+         << "\" (version id: " << (int)version << ", last version id: " << m_data.versions.size() << ")" <<endl;
     ostr << " Entries in this event: " << m_vertices.size() << " vertices, "
          << m_particles.size() << " particles." << endl;
 

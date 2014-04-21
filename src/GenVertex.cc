@@ -19,8 +19,7 @@ m_version_created(m_event.last_version()),
 m_version_deleted(std::numeric_limits<unsigned char>::max()),
 m_data_index(data_index),
 m_data(data),
-m_last_version(this),
-m_is_required(false) {
+m_last_version(this) {
 }
 
 void GenVertex::print( std::ostream& ostr, bool event_listing_format, unsigned char version ) const {
@@ -31,9 +30,16 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format, unsigned c
         ostr << "GenVertex:  " << barcode() << " (ver. ";
         if( !is_deleted() ) ostr<<" "<<(int)m_version_created<<" ) ";
         else                ostr<<(int)m_version_created<<"-"<<(int)m_version_deleted<<") ";
-        ostr <<") (X,cT):0 "
-             << "P in: "  << m_particles_in.size()
-             <<" P out: " << m_particles_out.size() << endl;
+        ostr << ") in: "  << m_particles_in.size()
+             <<" out: " << m_particles_out.size();
+
+        const FourVector &pos = position();
+        if( !pos.is_zero() ) {
+            ostr << " @ " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
+        }
+        else ostr << " (X,cT): 0";
+
+        ostr << endl;
     }
     // Event listing format. Used when calling:
     // event.print()
@@ -45,8 +51,15 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format, unsigned c
 
         ostr << "Vtx: ";
         ostr.width(6);
-        ostr << barcode()
-             << "  (X,cT): 0" << endl;
+        ostr << barcode();
+
+        const FourVector &pos = position();
+        if( !pos.is_zero() ) {
+            ostr << " (X,cT): " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
+        }
+        else ostr << " (X,cT): 0";
+
+        ostr << endl;
 
         bool printed_header = false;
 
@@ -83,7 +96,7 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format, unsigned c
 }
 
 int GenVertex::serialization_barcode() const {
-    if( m_is_required )              return barcode();
+    if( m_particles_in.size() > 1 || !m_data.position.is_zero() ) return barcode();
     if( m_particles_in.size() == 0 ) return 0;
 
     return m_particles_in[0]->barcode();
@@ -97,9 +110,6 @@ void GenVertex::add_particle_in(GenParticle &p) {
 
     p.set_end_vertex(this);
     m_particles_in.push_back( &p );
-
-    // This vertex must be serialized if it has more than one incoming particle
-    if(m_particles_in.size()>1) m_is_required = true;
 }
 
 void GenVertex::add_particle_out(GenParticle &p) {
@@ -110,6 +120,31 @@ void GenVertex::add_particle_out(GenParticle &p) {
 
 void GenVertex::mark_deleted() {
     m_version_deleted = m_event.last_version();
+}
+
+const FourVector& GenVertex::position() const {
+
+    if( !m_data.position.is_zero() ) return m_data.position;
+
+    // No position information - search ancestors
+    BOOST_FOREACH( GenParticle *p, m_particles_in ) {
+        GenVertex *v = p->production_vertex();
+        if(v) {
+            const FourVector& pos = v->position();
+            return pos;
+        }
+    }
+
+    // No position found. Return FourVector(0,0,0,0)
+    static const FourVector ZERO_VECTOR;
+
+    return ZERO_VECTOR;
+}
+
+void GenVertex::set_position(const FourVector& new_pos) {
+    if( is_deleted() ) return;
+
+    m_data.position = new_pos;
 }
 
 } // namespace HepMC3

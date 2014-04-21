@@ -168,9 +168,13 @@ void IO_GenEvent::write_vertex(const GenVertex &v) {
         else m_file << "," << p->barcode();
     }
 
-    m_file << "] ";
+    m_file << "]";
 
-    m_file << "@ 0 0 0 0";
+    const FourVector &pos = v.position();
+    if( !pos.is_zero() ) {
+        m_file << " @ " <<pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
+    }
+
     m_file << endl;
 }
 
