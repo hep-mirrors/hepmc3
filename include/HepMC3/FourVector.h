@@ -5,13 +5,16 @@
  *  @brief Definition of \b class HepMC3::FourVector
  *
  *  @class HepMC3::FourVector
- *  @brief Stores 4-vector information
+ *  @brief Generic 4-vector
  *
- *  Contains few support operations on 4-vectors.
+ *  Interpretation of its content depends on accessors used.
+ *  Contains few support operations on 4-vectors and floating-point values.
  *  Fully inlined
  *
+ *  @todo Change notation to eta,phi,pT. Make proper accessors
+ *
  */
-#include <cmath>
+#include "HepMC3/Setup.h"
 
 namespace HepMC3 {
 
@@ -21,61 +24,94 @@ class FourVector {
 //
 public:
     /** Default constructor */
-    FourVector()                                      :m_px(0.0),   m_py(0.0),   m_pz(0.0),   m_e(0.0)   {}
+    FourVector()                                      :v1(0.0), v2(0.0), v3(0.0), v4(0.0)  {}
     /** Sets all FourVector fields */
-    FourVector(double x, double y, double z, double e):m_px(x),     m_py(y),     m_pz(z),     m_e(e)     {}
+    FourVector(double x, double y, double z, double e):v1(x),   v2(y),   v3(z),   v4(e)    {}
     /** Copy constructor */
-    FourVector(const FourVector & v)                  :m_px(v.px()),m_py(v.py()),m_pz(v.pz()),m_e(v.e()) {}
+    FourVector(const FourVector & v)                  :v1(v.v1),v2(v.v2),v3(v.v3),v4(v.v4) {}
 
 //
 // Functions
 //
 public:
-    /** Calculate mass
-     *  Returns -sqrt(-m) if e^2 - P^2 is negative
+
+    double m() const;       //!< Calculate mass. Returns -sqrt(-m) if e^2 - P^2 is negative
+    bool   is_zero() const; //!< Check if the length of this vertex is equivalent to zero
+
+    bool        operator==(const FourVector& rhs) const; //!< Boolean    operator ==
+    FourVector  operator+ (const FourVector& rhs) const; //!< Arithmetic operator +
+    FourVector  operator- (const FourVector& rhs) const; //!< Arithmetic operator -
+    void        operator+=(const FourVector& rhs);       //!< Assignment operator +=
+    void        operator-=(const FourVector& rhs);       //!< Assignment operator -=
+
+//
+// Functions related to floating-point operations
+//
+public:
+    /** Check if floating-point value is almost equal 0 */
+    static bool AlmostEqualZero(double A);
+
+    /** Compare floating-point numbers
+     *  Bruce Dawson algorithm for comparing floating-point numbers
+     *  Implementation for 64-bit double precision
+     *  Updated to remove strict-aliasing warnings
+     *
+     *  @see https://randomascii.wordpress.com/category/floating-point/
+     *
+     *  @param A first value
+     *  @param B second value
+     *  @param maxUlps maximum acceptable deviation in number of units in the last place
+     *                 maxUlps > 0 && maxUlps < 4 * 1024 * 1024
      */
-    double m() const {
-        double m = m_e*m_e - m_px*m_px - m_py*m_py - m_pz*m_pz;
-        if(m<0.0) return -sqrt(-m);
-        return sqrt(m);
-    }
+    static bool AlmostEqual2sComplement(double A, double B, unsigned int maxUlps = Setup::DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS);
 
 //
 // Accessors
 //
 public:
-    double px()        const { return m_px; } //!< Get px
-    void   setPx(double xin) { m_px=xin;    } //!< Set px
+    // As 4-momentum
+    double px()       const { return v1; } //!< Get px
+    void   setPx(double px) { v1 = px;   } //!< Set px
 
-    double py()        const { return m_py; } //!< Get py
-    void   setPy(double yin) { m_py=yin;    } //!< Set py
+    double py()       const { return v2; } //!< Get py
+    void   setPy(double py) { v2 = py;   } //!< Set py
 
-    double pz()        const { return m_pz; } //!< Get pz
-    void   setPz(double zin) { m_pz=zin;    } //!< Set pz
+    double pz()       const { return v3; } //!< Get pz
+    void   setPz(double pz) { v3 = pz;   } //!< Set pz
 
-    double e()         const { return m_e;  } //!< Get energy
-    void   setE (double ein) { m_e=ein;     } //!< Set energy
+    double e()        const { return v4; } //!< Get energy
+    void   setE (double e ) { v4 = e;    } //!< Set energy
+
+    // As time-space
+    double x()        const { return v1; } //!< Get x coordinate
+    void   setX(double x)   { v1 = x;    } //!< Set x coordinate
+
+    double y()        const { return v2; } //!< Get y coordinate
+    void   setY(double y)   { v2 = y;    } //!< Set y coordinate
+
+    double z()        const { return v3; } //!< Get z coordinate
+    void   setZ(double z)   { v3 = z;    } //!< Set z coordinate
+
+    double t()        const { return v4; } //!< Get time
+    void   setT(double t)   { v4 = t;    } //!< Set time
 
     /** Set all FourVector fields */
-    void set(double x, double y, double z, double e) {
-        m_px=x;
-        m_py=y;
-        m_pz=z;
-        m_e=e;
+    void set(double x1, double x2, double x3, double x4) {
+        v1 = x1;
+        v2 = x2;
+        v3 = x3;
+        v4 = x4;
     }
 
 //
 // Fields
 //
 private:
-    /** @todo Change notation to eta,phi,pT. Make proper accessors */
-    /** @todo Make FourVector able to represent (x,T) */
-    double m_px; //!< px
-    double m_py; //!< py
-    double m_pz; //!< pz
-    double m_e;  //!< e
+    double v1,v2,v3,v4; //!< Generic 4-vector data. Interpretation depends on accessors used
 };
 
 } // namespace HepMC3
+
+#include "HepMC3/FourVector.icc"
 
 #endif

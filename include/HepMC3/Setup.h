@@ -13,6 +13,7 @@
  *
  */
 #include <iostream>
+
 namespace HepMC3 {
 
 class Setup {
@@ -41,6 +42,10 @@ public:
 //
 // Fields
 //
+public:
+    static const unsigned int DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS; //!< Default maxUlps for AlmostEqual2sComplement function (double precision)
+    static const double       DOUBLE_EPSILON;                      //!< Default threshold for comparing double variables
+
 private:
     static bool m_is_printing_errors;   //!< Flag for printing error messages
     static bool m_is_printing_warnings; //!< Flag for printing warning messages
