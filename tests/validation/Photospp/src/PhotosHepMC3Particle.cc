@@ -189,7 +189,7 @@ bool PhotosHepMC3Particle::checkMomentumConservation() {
     // HepMC3 version of check_momentum_conservation
     // Omitting history entries (status == 3)
 
-    double sumpx = 0, sumpy = 0, sumpz = 0, sume = 0;
+    HepMC3::FourVector sum;
 
     HepMC3::FindParticles search( *m_particle, HepMC3::FIND_PRODUCTION_SIBLINGS, HepMC3::VERSION_DELETED > m_parent_event->last_version() );
 
@@ -197,10 +197,7 @@ bool PhotosHepMC3Particle::checkMomentumConservation() {
 
         if( Photos::isStatusCodeIgnored( p->status()) ) continue;
 
-        sumpx += p->momentum().px();
-        sumpy += p->momentum().py();
-        sumpz += p->momentum().pz();
-        sume  += p->momentum().e();
+        sum += p->momentum();
     }
 
     HepMC3::FindParticles search2( *m_particle, HepMC3::FIND_DAUGHTERS, HepMC3::VERSION_DELETED > m_parent_event->last_version() );
@@ -209,13 +206,10 @@ bool PhotosHepMC3Particle::checkMomentumConservation() {
 
         if( Photos::isStatusCodeIgnored( p->status()) ) continue;
 
-        sumpx -= p->momentum().px();
-        sumpy -= p->momentum().py();
-        sumpz -= p->momentum().pz();
-        sume  -= p->momentum().e();
+        sum -= p->momentum();
     }
 
-    if( sqrt( sumpx*sumpx + sumpy*sumpy + sumpz*sumpz + sume*sume) > Photos::momentum_conservation_threshold ) {
+    if( sum.length() > Photos::momentum_conservation_threshold ) {
         Log::Warning()<<"Momentum not conserved in the vertex:"<<endl;
         m_particle->end_vertex()->print(Log::Warning(false),1);
         return false;
@@ -228,16 +222,11 @@ PhotosParticle* PhotosHepMC3Particle::createNewParticle(
                 int pdg_id, int status, double mass,
                 double px, double py, double pz, double e) {
 
-    HepMC3::GenParticle &hepmc3 = m_parent_event->new_particle();
+    HepMC3::GenParticle  &hepmc3       = m_parent_event->getEvent()->new_particle( HepMC3::FourVector(px,py,pz,e), pdg_id, status );
     PhotosHepMC3Particle *new_particle = new PhotosHepMC3Particle(&hepmc3);
 
     new_particle->set_parent_event(m_parent_event);
-    new_particle->setPdgID(pdg_id);
-    new_particle->setStatus(status);
     new_particle->setMass(mass);
-
-    HepMC3::FourVector momentum(px,py,pz,e);
-    new_particle->m_particle->set_momentum(momentum);
 
     m_created_particles.push_back(new_particle);
     return (PhotosParticle*)new_particle;
@@ -257,11 +246,11 @@ void PhotosHepMC3Particle::createSelfDecayVertex(PhotosParticle *out) {
     }
 
     // Add new vertex and new particle to HepMC3
-    HepMC3::GenParticle &outgoing = m_parent_event->new_particle();
+    HepMC3::GenParticle &outgoing = m_parent_event->getEvent()->new_particle();
 
     outgoing.set_data( dynamic_cast<PhotosHepMC3Particle*>(out)->m_particle->data() );
 
-    HepMC3::GenVertex &v = m_parent_event->new_vertex();
+    HepMC3::GenVertex &v = m_parent_event->getEvent()->new_vertex();
 
     //m_parent_event->add_vertex(v);
     //m_parent_event->add_particle(outgoing);
@@ -277,9 +266,7 @@ void PhotosHepMC3Particle::createSelfDecayVertex(PhotosParticle *out) {
 void PhotosHepMC3Particle::setPx( double px ) {
     if(!m_particle) return;
 
-    HepMC3::FourVector m( m_particle->momentum() );
-    m.setPx(px);
-    m_particle->set_momentum( m );
+    m_particle->momentum().setPx(px);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
@@ -288,9 +275,7 @@ void PhotosHepMC3Particle::setPx( double px ) {
 void PhotosHepMC3Particle::setPy( double py ) {
     if(!m_particle) return;
 
-    HepMC3::FourVector m( m_particle->momentum() );
-    m.setPy(py);
-    m_particle->set_momentum( m );
+    m_particle->momentum().setPy(py);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
@@ -299,9 +284,7 @@ void PhotosHepMC3Particle::setPy( double py ) {
 void PhotosHepMC3Particle::setPz( double pz ) {
     if(!m_particle) return;
 
-    HepMC3::FourVector m( m_particle->momentum() );
-    m.setPz(pz);
-    m_particle->set_momentum( m );
+    m_particle->momentum().setPz(pz);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
@@ -310,9 +293,7 @@ void PhotosHepMC3Particle::setPz( double pz ) {
 void PhotosHepMC3Particle::setE( double e ) {
     if(!m_particle) return;
 
-    HepMC3::FourVector m( m_particle->momentum() );
-    m.setE(e);
-    m_particle->set_momentum( m );
+     m_particle->momentum().setE(e);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();

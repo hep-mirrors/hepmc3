@@ -35,7 +35,8 @@ public:
 //
 public:
 
-    double m() const;       //!< Calculate mass. Returns -sqrt(-m) if e^2 - P^2 is negative
+    double m()       const; //!< Calculate mass. Returns -sqrt(-m) if e^2 - P^2 is negative
+    double length()  const; //!< Calculate length
     bool   is_zero() const; //!< Check if the length of this vertex is equivalent to zero
 
     bool        operator==(const FourVector& rhs) const; //!< Boolean    operator ==

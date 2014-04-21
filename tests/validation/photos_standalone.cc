@@ -9,36 +9,12 @@
 #include "HepMC3/Search/FindParticles.h"
 
 #include <boost/foreach.hpp>
+
+#include "photos_check_momentum_conservation.h"
 using namespace HepMC3;
 using namespace Photospp;
 
 int EventsToCheck=20;
-
-// elementary test of HepMC typically executed before
-// detector simulation based on http://home.fnal.gov/~mrenna/HCPSS/HCPSShepmc.html
-// similar test was performed in Fortran
-// we perform it before and after Photos (for the first several events)
-void checkMomentumConservationInEvent(GenEvent &evt)
-{
-        //cout<<"List of stable particles: "<<endl;
-
-        double px=0.0,py=0.0,pz=0.0,e=0.0;
-
-        FindParticles search( evt, FIND_ALL, STATUS == 1 && VERSION_DELETED > evt.last_version());
-
-        BOOST_FOREACH( GenParticle *p, search.results() ) {
-            HepMC3::FourVector m = p->momentum();
-            px+=m.px();
-            py+=m.py();
-            pz+=m.pz();
-            e +=m.e();
-            //(*p)->print();
-        }
-
-        cout.precision(6);
-        cout.setf(std::ios_base::floatfield);
-        cout<<endl<<"Vector Sum: "<<px<<" "<<py<<" "<<pz<<" "<<e<<endl;
-}
 
 int main(int argc, char **argv)
 {
@@ -78,7 +54,7 @@ int main(int argc, char **argv)
                 {
                         cout<<"                                          "<<endl;
                         cout<<"Momentum conservation chceck BEFORE/AFTER Photos"<<endl;
-                        checkMomentumConservationInEvent(HepMCEvt);
+                        photos_check_momentum_conservation(HepMCEvt);
                 }
 
                 // Process by photos
@@ -87,7 +63,7 @@ int main(int argc, char **argv)
 
                 if(evtCount<EventsToCheck)
                 {
-                        checkMomentumConservationInEvent(HepMCEvt);
+                        photos_check_momentum_conservation(HepMCEvt);
                 }
 
                 FindParticles search(HepMCEvt, FIND_ALL, PDG_ID == 22 && VERSION_CREATED == HepMCEvt.last_version() );

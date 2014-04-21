@@ -14,6 +14,10 @@ inline double FourVector::m() const {
     return sqrt(mm);
 }
 
+inline double FourVector::length() const {
+    return sqrt( v1*v1 + v2*v2 + v3*v3 + v4*v4 );
+}
+
 inline bool FourVector::is_zero() const {
     return AlmostEqualZero(v1) &&
            AlmostEqualZero(v2) &&

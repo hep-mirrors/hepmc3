@@ -43,9 +43,7 @@ public:
 // Accessors
 //
 public:
-    HepMC3::GenParticle& new_particle()      { return m_event->new_particle(); } //!< Create new particle
-    HepMC3::GenVertex&   new_vertex()        { return m_event->new_vertex();   } //!< Create new vertex
-
+    HepMC3::GenEvent* getEvent()                   { return m_event; }
     int  last_version()                            { return m_event->last_version(); } //!< Get last version of HepMC3 event
     std::vector<PhotosParticle*> getParticleList() { return m_particles; }    //!< Get particle list
 //

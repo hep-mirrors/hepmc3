@@ -54,7 +54,7 @@ void TauolaHepMC3Particle::setMothers(vector<TauolaParticle*> mothers){
         HepMC3::GenVertex *orig_production_vertex = production_vertex;
 
         // If production_vertex does not exist - create it
-        if(!production_vertex) production_vertex = &m_parent_event->new_vertex();
+        if(!production_vertex) production_vertex = &m_parent_event->getEvent()->new_vertex();
 
         // Loop over all mothers to check that the end points to the right place
         BOOST_FOREACH( TauolaParticle *p, mothers ) {
@@ -119,29 +119,23 @@ void TauolaHepMC3Particle::checkMomentumConservation() {
 
     // HepMC3 version of check_momentum_conservation
 
-    double sumpx = 0, sumpy = 0, sumpz = 0, sume = 0;
+    HepMC3::FourVector sum;
 
     HepMC3::FindParticles search( *m_particle, HepMC3::FIND_PRODUCTION_SIBLINGS, HepMC3::VERSION_DELETED > m_parent_event->last_version() );
 
     BOOST_FOREACH( HepMC3::GenParticle *p, search.results() ) {
 
-        sumpx += p->momentum().px();
-        sumpy += p->momentum().py();
-        sumpz += p->momentum().pz();
-        sume  += p->momentum().e();
+        sum += p->momentum();
     }
 
     HepMC3::FindParticles search2( *m_particle, HepMC3::FIND_DAUGHTERS, HepMC3::VERSION_DELETED > m_parent_event->last_version() );
 
     BOOST_FOREACH( HepMC3::GenParticle *p, search2.results() ) {
 
-        sumpx -= p->momentum().px();
-        sumpy -= p->momentum().py();
-        sumpz -= p->momentum().pz();
-        sume  -= p->momentum().e();
+        sum -= p->momentum();
     }
 
-    if( sqrt( sumpx*sumpx + sumpy*sumpy + sumpz*sumpz + sume*sume) > Tauola::momentum_conservation_threshold ) {
+    if( sum.length() > Tauola::momentum_conservation_threshold ) {
         Log::Warning()<<"Momentum not conserved in the vertex:"<<endl;
         m_particle->end_vertex()->print(Log::Warning(false),1);
     }
@@ -177,15 +171,10 @@ TauolaHepMC3Particle * TauolaHepMC3Particle::createNewParticle(
                         int pdg_id, int status, double mass,
                         double px, double py, double pz, double e) {
 
-    HepMC3::GenParticle &hepmc3 = m_parent_event->new_particle();
+    HepMC3::GenParticle &hepmc3 = m_parent_event->getEvent()->new_particle( HepMC3::FourVector(px,py,pz,e), pdg_id, status );
     TauolaHepMC3Particle *new_particle = new TauolaHepMC3Particle(&hepmc3);
     new_particle->set_parent_event(m_parent_event);
-    new_particle->setPdgID(pdg_id);
-    new_particle->setStatus(status);
     new_particle->setMass(mass);
-
-    HepMC3::FourVector momentum(px,py,pz,e);
-    new_particle->m_particle->set_momentum(momentum);
 
     m_created_particles.push_back(new_particle);
 
@@ -195,9 +184,7 @@ TauolaHepMC3Particle * TauolaHepMC3Particle::createNewParticle(
 void TauolaHepMC3Particle::setPx( double px ) {
     if(!m_particle) return;
 
-    HepMC3::FourVector m( m_particle->momentum() );
-    m.setPx(px);
-    m_particle->set_momentum( m );
+    m_particle->momentum().setPx(px);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
@@ -206,9 +193,7 @@ void TauolaHepMC3Particle::setPx( double px ) {
 void TauolaHepMC3Particle::setPy( double py ) {
     if(!m_particle) return;
 
-    HepMC3::FourVector m( m_particle->momentum() );
-    m.setPy(py);
-    m_particle->set_momentum( m );
+    m_particle->momentum().setPy(py);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
@@ -217,9 +202,7 @@ void TauolaHepMC3Particle::setPy( double py ) {
 void TauolaHepMC3Particle::setPz( double pz ) {
     if(!m_particle) return;
 
-    HepMC3::FourVector m( m_particle->momentum() );
-    m.setPz(pz);
-    m_particle->set_momentum( m );
+    m_particle->momentum().setPz(pz);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
@@ -228,9 +211,7 @@ void TauolaHepMC3Particle::setPz( double pz ) {
 void TauolaHepMC3Particle::setE( double e ) {
     if(!m_particle) return;
 
-    HepMC3::FourVector m( m_particle->momentum() );
-    m.setE(e);
-    m_particle->set_momentum( m );
+    m_particle->momentum().setE(e);
 
     // If versioning is used, we have to update pointer
     m_particle = m_particle->last_version();
