@@ -57,6 +57,12 @@ public:
      */
     GenParticle& new_particle( const GenParticleData *data = NULL );
 
+    /** Create new particle
+     *  Particle data will be constructed from parameters provided by the user
+     *  @return Reference to newly created particle
+     */
+    GenParticle& new_particle( const FourVector& momentum, int pdg_id = 0, int status = 0 );
+    
     /** Create new vertex
      *  If pointer to vertex data is provided,
      *  it will be copied to the new vertex

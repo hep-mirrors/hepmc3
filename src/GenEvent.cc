@@ -115,6 +115,20 @@ GenParticle& GenEvent::new_particle( const GenParticleData *data ) {
     return *p;
 }
 
+GenParticle& GenEvent::new_particle( const FourVector& momentum, int pdg_id, int status ) {
+
+    GenParticle      *p = m_particles.new_uninitialized_object();
+    GenParticleData *pd = m_data.particle_data.new_object();
+
+    new (p) GenParticle( *this, m_data.particle_data.size() - 1, *pd );
+
+    pd->momentum = momentum;
+    pd->pdg_id   = pdg_id;
+    pd->status   = status;
+
+    return *p;
+}
+
 GenVertex& GenEvent::new_vertex( const GenVertexData *data ) {
 
     GenVertex      *v = m_vertices.new_uninitialized_object();

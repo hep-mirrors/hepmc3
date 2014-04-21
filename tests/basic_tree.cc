@@ -41,25 +41,10 @@ int main() {
     //                                                  #
     GenEvent evt;
 
-    GenParticle &p1 = evt.new_particle();
-    p1.set_momentum( FourVector(0,0,7000,700) );
-    p1.set_pdg_id(2212);
-    p1.set_status(3);
-
-    GenParticle &p2 = evt.new_particle();
-    p2.set_momentum( FourVector(0,0,-7000,700) );
-    p2.set_pdg_id(2212);
-    p2.set_status(3);
-
-    GenParticle &p3 = evt.new_particle();
-    p3.set_momentum( FourVector(.750,-1.569,32.191,32.238) );
-    p3.set_pdg_id(1);
-    p3.set_status(3);
-
-    GenParticle &p4 = evt.new_particle();
-    p4.set_momentum( FourVector(-3.047,-19.,-54.629,57.920) );
-    p4.set_pdg_id(-2);
-    p4.set_status(3);
+    GenParticle &p1 = evt.new_particle( FourVector(0,0,7000,700),                2212, 3 );
+    GenParticle &p2 = evt.new_particle( FourVector(0,0,-7000,700),               2212, 3 );
+    GenParticle &p3 = evt.new_particle( FourVector(.750,-1.569,32.191,32.238),   1,    3 );
+    GenParticle &p4 = evt.new_particle( FourVector(-3.047,-19.,-54.629,57.920), -2,    3 );
 
     GenVertex &v1 = evt.new_vertex();
     v1.add_particle_in ( p1 );
@@ -73,15 +58,8 @@ int main() {
     v3.add_particle_in( p3 );
     v3.add_particle_in( p4 );
 
-    GenParticle &p5 = evt.new_particle();
-    p5.set_momentum( FourVector(-3.813,0.113,-1.833,4.233 ) );
-    p5.set_pdg_id(22);
-    p5.set_status(1);
-
-    GenParticle &p6 = evt.new_particle();
-    p6.set_momentum( FourVector(1.517,-20.68,-20.605,85.925) );
-    p6.set_pdg_id(-24);
-    p6.set_status(3);
+    GenParticle &p5 = evt.new_particle( FourVector(-3.813,0.113,-1.833,4.233 ),   22, 1 );
+    GenParticle &p6 = evt.new_particle( FourVector(1.517,-20.68,-20.605,85.925), -24, 3 );
 
     v3.add_particle_out( p5 );
     v3.add_particle_out( p6 );
@@ -89,15 +67,8 @@ int main() {
     GenVertex &v4 = evt.new_vertex();
     v4.add_particle_in ( p6 );
 
-    GenParticle &p7 = evt.new_particle();
-    p7.set_momentum( FourVector(-2.445,28.816,6.082,29.552) );
-    p7.set_pdg_id(1);
-    p7.set_status(1);
-
-    GenParticle &p8 = evt.new_particle();
-    p8.set_momentum( FourVector(3.962,-49.498,-26.687,56.373) );
-    p8.set_pdg_id(-2);
-    p8.set_status(1);
+    GenParticle &p7 = evt.new_particle( FourVector(-2.445,28.816,6.082,29.552),    1, 1 );
+    GenParticle &p8 = evt.new_particle( FourVector(3.962,-49.498,-26.687,56.373), -2, 1 );
 
     v4.add_particle_out( p7 );
     v4.add_particle_out( p8 );
@@ -111,6 +82,7 @@ int main() {
     p9.set_momentum( FourVector(5., 6., 7., 8.) );
     p9.set_pdg_id(1);
     p9.set_status(1);
+
     v4.add_particle_out( p9 );
 
     evt.new_version("Third tool");
