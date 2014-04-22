@@ -6,16 +6,21 @@
 # Photos++ path. Interface tested with Photospp v3.54
 # wget http://photospp.web.cern.ch/photospp/resources/PHOTOS.3.54/PHOTOS.3.54.tar.gz
 # ./configure --without-hepmc
-PHOTOSLOCATION = ../../../Photospp.3.54/
+#PHOTOSLOCATION = ../../../Photospp.3.54/
 #
 # Tauola++ path. Interface tested with Tauola v1.1.4
 # wget http://tauolapp.web.cern.ch/tauolapp/resources/TAUOLA.1.1.4/TAUOLA.1.1.4.tar.gz
 # ./configure --without-hepmc
-TAUOLALOCATION = ../../../Tauola.1.1.4/
+#TAUOLALOCATION = ../../../Tauola.1.1.4/
+#
+# pythia8 path. Interface tested with pythia8.185
+# wget http://home.thep.lu.se/~torbjorn/pythia8/pythia8185.tgz
+# ./configure --enable-shared
+PYTHIA8LOCATION = ../../../pythia8185/
 #
 # MC-TESTER path. Interface tested with MC-TESTER v1.25.0
 # wget http://mc-tester.web.cern.ch/MC-TESTER/MC-TESTER-1.25.0.tar.gz
-MCTESTERLOCATION = ../../../mc-tester-1.25.0/
+#MCTESTERLOCATION = ../../../mc-tester-1.25.0/
 ###############################################################################
 
 
@@ -31,6 +36,12 @@ TAUOLAINC       = -I$(TAUOLALOCATION)/include \
                   -I$(TAUOLAINTERFACE)/include
 TAUOLALIBS      = -L$(TAUOLALOCATION)/lib  -lTauolaCxxInterface -lTauolaFortran \
                   -L$(TAUOLAINTERFACE)/lib -lTauolaHepMC3Interface
+
+PYTHIA8INTERFACE = pythia8
+PYTHIA8INC       = -I$(PYTHIA8LOCATION)/include \
+                   -I$(PYTHIA8INTERFACE)/include
+PYTHIA8LIBS      = -L$(PYTHIA8LOCATION)/lib   -lpythia8 -llhapdfdummy \
+                   -L$(PYTHIA8INTERFACE)/lib -lpythia8tohepmc3
 
 MCTESTERINTERFACE = mc-tester
 MCTESTERINC       = -I$(MCTESTERLOCATION)/include \
