@@ -39,9 +39,12 @@ public:
     double length()  const; //!< Calculate length
     bool   is_zero() const; //!< Check if the length of this vertex is equivalent to zero
 
-    bool        operator==(const FourVector& rhs) const; //!< Boolean    operator ==
+    bool        operator==(const FourVector& rhs) const;                            //!< Boolean operator ==
+    bool        operator!=(const FourVector& rhs) const { return !(*this == rhs); } //!< Boolean operator !=
+
     FourVector  operator+ (const FourVector& rhs) const; //!< Arithmetic operator +
     FourVector  operator- (const FourVector& rhs) const; //!< Arithmetic operator -
+
     void        operator+=(const FourVector& rhs);       //!< Assignment operator +=
     void        operator-=(const FourVector& rhs);       //!< Assignment operator -=
 
@@ -108,7 +111,10 @@ public:
 // Fields
 //
 private:
-    double v1,v2,v3,v4; //!< Generic 4-vector data. Interpretation depends on accessors used
+    double v1; //!< px or x. Interpretation depends on accessors used
+    double v2; //!< py or y. Interpretation depends on accessors used
+    double v3; //!< pz or z. Interpretation depends on accessors used
+    double v4; //!< e  or t. Interpretation depends on accessors used
 };
 
 } // namespace HepMC3

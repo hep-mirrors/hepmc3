@@ -30,7 +30,7 @@ public:
     /** Default destructor.
      *  Closes I/O stream (if opened)
      */
-    ~IO_Base();
+    virtual ~IO_Base();
 //
 // Functions
 //
