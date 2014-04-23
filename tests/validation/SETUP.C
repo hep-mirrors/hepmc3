@@ -1,9 +1,5 @@
-// Generic MC-TESTER Setup file
-// Analysing Z decays
-
 {
-//look at higgs decays
-Setup::decay_particle=23;
+Setup::decay_particle=-15;
 Setup::mass_power=1;
 Setup::mass_scale_on=true;
 
