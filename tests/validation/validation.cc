@@ -17,7 +17,7 @@ int main(int argc, char **argv)
     control.read_file(argv[1]);
 
     // Set additional options
-    control.print_events(3);
+    control.print_events(0);
     control.check_momentum_for_events(100);
 
     if( argc >= 3 ) control.set_event_limit(atoi(argv[2]));

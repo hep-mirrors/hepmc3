@@ -94,20 +94,13 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getDaughters() {
 std::vector<PhotosParticle*> PhotosHepMC3Particle::getAllDecayProducts() {
 
     // Find all stable decay products that are not deleted
-    HepMC3::FindParticles search( *m_particle, HepMC3::FIND_ALL_DESCENDANTS, HepMC3::STATUS == 1 && HepMC3::VERSION_DELETED > m_parent_event->last_version() );
+    HepMC3::FindParticles search( *m_particle, HepMC3::FIND_ALL_DESCENDANTS, HepMC3::VERSION_DELETED > m_parent_event->last_version() );
 
-    // Check if nothing changed since last update
+    // Check if no photons were added since last update
     if( m_decay_products.size() == search.results().size() ) return m_decay_products;
 
-    // If changed - add newly created particles
-    int version_check = m_parent_event->last_version();
-
-    // NOTE: if history entries option is used we have to account for newly created version
-    if( Photos::isCreateHistoryEntries ) --version_check;
-
-    search.narrow_down( HepMC3::VERSION_CREATED >= version_check );
-
-    m_decay_products.reserve( m_decay_products.size() + search.results().size() );
+    m_decay_products.clear();
+    m_decay_products.reserve( search.results().size() );
 
     BOOST_FOREACH( HepMC3::GenParticle *p, search.results() ) {
 

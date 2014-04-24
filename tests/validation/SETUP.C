@@ -13,14 +13,15 @@ Setup::SetHistogramDefaults(n_bins,default_min_bin,default_max_bin);
 //Setup::UserTreeAnalysis = "RhoRhoUserTreeAnalysis";
 
 // Description
+Setup::result1_path = "hepmc2.root";
 Setup::gen1_desc_1="HepMC3 validation";
 Setup::gen1_desc_2="Z decays";
 Setup::gen1_desc_3=" HepMC2 sample ";
 
+Setup::result2_path = "hepmc3.root";
 Setup::gen1_desc_1="HepMC3 validation";
 Setup::gen1_desc_2="Z decays";
 Setup::gen1_desc_3=" HepMC3 sample ";
-
 
 if (Setup::stage==0)
     printf("Setup loaded from SETUP.C, ANALYSIS stage.\n");

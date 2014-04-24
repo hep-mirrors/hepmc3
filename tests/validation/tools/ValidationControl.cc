@@ -217,8 +217,8 @@ void ValidationControl::process(GenEvent &hepmc) {
                 for ( GenEvent::particle_const_iterator p = hepmc.particles_begin();
                                                         p != hepmc.particles_end();  ++p ) {
                     if( (*p)->status() != 1 ) continue;
-
-                    HepMC::FourVector m = (*p)->momentum();
+                    //(*p)->print();
+                    FourVector m = (*p)->momentum();
                     sum.setPx( sum.px() + m.px() );
                     sum.setPy( sum.py() + m.py() );
                     sum.setPz( sum.pz() + m.pz() );
@@ -227,8 +227,10 @@ void ValidationControl::process(GenEvent &hepmc) {
             )
             HEPMC3CODE(
                 FindParticles search( hepmc, FIND_ALL, STATUS == 1 && VERSION_DELETED > hepmc.last_version());
+                //hepmc.set_print_precision(8);
 
                 BOOST_FOREACH( GenParticle *p, search.results() ) {
+                    //p->print();
                     sum += p->momentum();
                 }
 
