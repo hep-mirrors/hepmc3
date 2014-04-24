@@ -30,11 +30,27 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
         ostr << barcode() << " (v. ";
         if( !is_deleted() ) ostr<<" "<<(int)m_version_created<<" ) ";
         else                ostr<<(int)m_version_created<<"-"<<(int)m_version_deleted<<") ";
+        ostr << "ID:";
+        ostr.width(5);
+        ostr << m_data.pdg_id;
 
-        ostr << "ID:" << m_data.pdg_id
-             << " (P,E)=" << m_data.momentum.px() << "," << m_data.momentum.py()
-             << "," << m_data.momentum.pz() << "," << m_data.momentum.e()
-             << " Stat: " << m_data.status
+        // Find the current stream state
+        std::ios_base::fmtflags orig = ostr.flags();
+        std::streamsize         prec = ostr.precision();
+
+        ostr.precision(m_event.print_precision());
+        ostr.setf(std::ios::scientific, std::ios::floatfield);
+        ostr.setf(std::ios_base::showpos);
+        ostr << " (P,E)=" << m_data.momentum.px()
+                   << "," << m_data.momentum.py()
+                   << "," << m_data.momentum.pz()
+                   << "," << m_data.momentum.e();
+
+        // Restore the stream state
+        ostr.flags(orig);
+        ostr.precision(prec);
+
+        ostr << " Stat: " << m_data.status
              << " PV: " << m_data.production_vertex
              << " EV: " << m_data.end_vertex
              << endl;

@@ -95,6 +95,7 @@ public:
 // Accessors
 //
 public:
+    int  print_precision()                        { return m_print_precision;      } //!< Get printout precision. Default is 2
     void set_print_precision(int precision)       { m_print_precision = precision; } //!< Set printout precision. Default is 2
 
     int  event_number()                     const { return m_data.event_number;   } //!< Get event number

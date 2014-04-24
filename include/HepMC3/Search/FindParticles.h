@@ -76,7 +76,8 @@ public:
 // Fields
 //
 private:
-    vector<GenParticle*>  m_results; //!< List of results
+    vector<GenParticle*>     m_results;          //!< List of results
+    vector<const GenVertex*> m_checked_vertices; //!< List of already checked vertices
 };
 
 } // namespace HepMC3

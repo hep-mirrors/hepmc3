@@ -112,6 +112,12 @@ bool FindParticles::passed_all_filters(const GenParticle &p, FilterList &filter_
 
 void FindParticles::recursive_check_ancestors(const GenVertex &v, FilterList &filter_list) {
 
+    BOOST_FOREACH( const GenVertex *v_list, m_checked_vertices ) {
+        if( v_list == &v ) return;
+    }
+
+    m_checked_vertices.push_back( &v );
+
     BOOST_FOREACH( GenParticle *p_in, v.particles_in() ) {
 
         if( passed_all_filters(*p_in,filter_list) ) {
@@ -125,8 +131,13 @@ void FindParticles::recursive_check_ancestors(const GenVertex &v, FilterList &fi
 
 void FindParticles::recursive_check_descendants(const GenVertex &v, FilterList &filter_list) {
 
-    BOOST_FOREACH(GenParticle *p_out, v.particles_out() ) {
+    BOOST_FOREACH( const GenVertex *v_list, m_checked_vertices ) {
+        if( v_list == &v ) return;
+    }
 
+    m_checked_vertices.push_back( &v );
+
+    BOOST_FOREACH(GenParticle *p_out, v.particles_out() ) {
         if( passed_all_filters(*p_out,filter_list) ) {
             m_results.push_back(p_out);
         }
