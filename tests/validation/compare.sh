@@ -12,6 +12,7 @@ WORKING_DIR=`pwd`
 
 #change to MCTester directory and run macros
 mkdir -p /tmp/mc-tester
+cp SETUP.C /tmp/mc-tester/.
 cd $MCTESTER_ANALYZE_DIR 
 root -b -q "ANALYZE.C(\"/tmp/mc-tester\",\"${WORKING_DIR}/${FILE1}\",\"${WORKING_DIR}/${FILE2}\")" 
 root -b -q "BOOKLET.C(\"/tmp/mc-tester\")"

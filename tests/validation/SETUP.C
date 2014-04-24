@@ -1,3 +1,14 @@
+double AnyChange(TH1D *h1, TH1D *h2)
+{
+   int sum = 0;
+   for (int i=0 ; i<h1->GetNbinsX(); ++i) {
+        sum += abs(h1->GetBinContent(i)-h2->GetBinContent(i));
+   }
+
+   return sum;
+}
+
+SETUP()
 {
 Setup::decay_particle=-15;
 Setup::mass_power=1;
@@ -19,16 +30,18 @@ Setup::gen1_desc_2="Z decays";
 Setup::gen1_desc_3=" HepMC2 sample ";
 
 Setup::result2_path = "hepmc3.root";
-Setup::gen1_desc_1="HepMC3 validation";
-Setup::gen1_desc_2="Z decays";
-Setup::gen1_desc_3=" HepMC3 sample ";
+Setup::gen2_desc_1="HepMC3 validation";
+Setup::gen2_desc_2="Z decays";
+Setup::gen2_desc_3=" HepMC3 sample ";
 
-if (Setup::stage==0)
+if (Setup::stage==0) {
     printf("Setup loaded from SETUP.C, ANALYSIS stage.\n");
+    Setup::user_analysis = AnyChange;
+    Setup::scale_histograms = true;
+}
 else
     printf("Setup loaded from SETUP.C, GENERATION stage %i.\n",Setup::stage);
 
 Setup::SuppressDecay(111); // suppress pi0 decays
 
 };
-
