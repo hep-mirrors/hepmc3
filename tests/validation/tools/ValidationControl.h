@@ -10,6 +10,8 @@
 
 #include "ValidationTool.h"
 
+#include <vector>
+
 class ValidationControl {
 //
 // Constructors
@@ -31,18 +33,18 @@ public:
 // Accessors
 //
 public:
-    const vector<ValidationTool*>& toolchain() { return m_toolchain; }
-    int  event_limit()                         { return m_events;    }
-    void set_event_limit(int events)           { m_events = events;  }
+    const std::vector<ValidationTool*>& toolchain() { return m_toolchain; }
+    int   event_limit()                             { return m_events;    }
+    void  set_event_limit(int events)               { m_events = events;  }
 
-    void print_events(int events)              { m_print_events          = events; }
-    void check_momentum_for_events(int events) { m_momentum_check_events = events; }
+    void  print_events(int events)              { m_print_events          = events; }
+    void  check_momentum_for_events(int events) { m_momentum_check_events = events; }
 
 //
 // Fields
 //
 private:
-    vector<ValidationTool*> m_toolchain;
+    std::vector<ValidationTool*> m_toolchain;
 
     int m_events;
     int m_momentum_check_events;

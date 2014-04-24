@@ -2,10 +2,22 @@
 
 #include "FileValidationTool.h"
 #include "SimpleEventTool.h"
-#include "PythiaValidationTool.h"
+
+#ifdef PHOTOSPP
 #include "PhotosValidationTool.h"
+#endif
+
+#ifdef TAUOLAPP
 #include "TauolaValidationTool.h"
+#endif
+
+#ifdef MCTESTER
 #include "McTesterValidationTool.h"
+#endif
+
+#ifdef PYTHIA8
+#include "PythiaValidationTool.h"
+#endif
 
 #include <fstream>
 #include <cstdio>
@@ -29,7 +41,7 @@ ValidationControl::~ValidationControl() {
 void ValidationControl::read_file(const std::string &filename) {
 
     // Open config file
-    ifstream in(filename.c_str());
+    std::ifstream in(filename.c_str());
 
     if(!in.is_open()) {
         printf("ValidationControl: error reading file %s.\n",filename.c_str());
@@ -58,10 +70,10 @@ void ValidationControl::read_file(const std::string &filename) {
         }
         // Parse input source
         else if( strncmp(buf,"INPUT",5)==0 ) {
-            if( m_has_input_source ) status = -2;
-            else {
-                in >> buf;
+            in >> buf;
 
+            if( m_has_input_source ) status = 5;
+            else {
                 // Use tool as input source - currently only one supported tool
                 if( strncmp(buf,"tool",4)==0 ) {
                     m_toolchain.push_back( new SimpleEventTool() );
@@ -70,15 +82,19 @@ void ValidationControl::read_file(const std::string &filename) {
                     in >> buf;
 
                     FileValidationTool *tool = new FileValidationTool( buf, std::ios::in );
-                    if( tool->rdstate() ) status = -3;
+                    if( tool->rdstate() ) status = -2;
                     else m_toolchain.push_back(tool);
                 }
                 else if( strncmp(buf,"pythia8",7)==0) {
+#ifdef PYTHIA8
                     in >> buf;
                     m_toolchain.push_back( new PythiaValidationTool(buf) );
+#else
+                    status = 4;
+#endif
                 }
                 else status = 2;
-                
+
                 if(!status) m_has_input_source = true;
             }
         }
@@ -88,9 +104,27 @@ void ValidationControl::read_file(const std::string &filename) {
             else {
                 in >> buf;
 
-                if     ( strncmp(buf,"tauola",6)==0 )   m_toolchain.push_back( new TauolaValidationTool()   );
-                else if( strncmp(buf,"photos",6)==0 )   m_toolchain.push_back( new PhotosValidationTool()   );
-                else if( strncmp(buf,"mctester",8)==0 ) m_toolchain.push_back( new McTesterValidationTool() );
+                if     ( strncmp(buf,"tauola",6)==0 ) {
+#ifdef TAUOLAPP
+                    m_toolchain.push_back( new TauolaValidationTool()   );
+#else
+                    status = 4;
+#endif
+                }
+                else if( strncmp(buf,"photos",6)==0 ) {
+#ifdef PHOTOSPP
+                    m_toolchain.push_back( new PhotosValidationTool()   );
+#else
+                    status = 4;
+#endif
+                }
+                else if( strncmp(buf,"mctester",8)==0 ) {
+#ifdef MCTESTER
+                    m_toolchain.push_back( new McTesterValidationTool() );
+#else
+                    status = 4;
+#endif
+                }
                 else status = 3;
             }
         }
@@ -101,7 +135,7 @@ void ValidationControl::read_file(const std::string &filename) {
                 in >> buf;
 
                 FileValidationTool *tool = new FileValidationTool( buf, std::ios::out );
-                if( tool->rdstate() ) status = -3;
+                if( tool->rdstate() ) status = -2;
                 else m_toolchain.push_back(tool);
             }
         }
@@ -114,15 +148,13 @@ void ValidationControl::read_file(const std::string &filename) {
             case  1: printf("skipping unrecognised command:      '%s'\n",buf); break;
             case  2: printf("skipping unrecognised input source: '%s'\n",buf); break;
             case  3: printf("skipping unrecognised tool:         '%s'\n",buf); break;
+            case  4: printf("skipping unavailable tool:          '%s'\n",buf); break;
+            case  5: printf("ignoring additional input source:   '%s'\n",buf); break;
             case -1:
                 printf("add input source first!\n");
                 m_status = -1;
                 return;
             case -2:
-                printf("cannot add more than one input source!\n");
-                m_status = -1;
-                return;
-            case -3:
                 printf("could not open file: '%s'\n",buf);
                 m_status = -1;
                 return;
@@ -135,6 +167,7 @@ void ValidationControl::read_file(const std::string &filename) {
 
     // Having input source is enough to start validation
     if(m_has_input_source) m_status = 0;
+    else printf("ValidationControl: no input source defined.\n");
 }
 
 bool ValidationControl::new_event() {
@@ -148,12 +181,8 @@ bool ValidationControl::new_event() {
         else            printf("Event: %7i (%6.2f%%)\n",m_event_counter,m_event_counter*100./m_events);
     }
 
-    if( m_momentum_check_events ) {
-        printf("\n");
-        --m_momentum_check_events;
-    }
-
-    if( m_print_events ) --m_print_events;
+    if( m_momentum_check_events ) --m_momentum_check_events;
+    if( m_print_events )          --m_print_events;
 
     return true;
 }
@@ -184,11 +213,26 @@ void ValidationControl::process(GenEvent &hepmc) {
         if(t->tool_modifies_event() && m_momentum_check_events ) {
             FourVector sum;
 
-            FindParticles search( hepmc, FIND_ALL, STATUS == 1 && VERSION_DELETED > hepmc.last_version());
+            HEPMC2CODE(
+                for ( GenEvent::particle_const_iterator p = hepmc.particles_begin();
+                                                        p != hepmc.particles_end();  ++p ) {
+                    if( (*p)->status() != 1 ) continue;
 
-            BOOST_FOREACH( GenParticle *p, search.results() ) {
-                sum += p->momentum();
-            }
+                    HepMC::FourVector m = (*p)->momentum();
+                    sum.setPx( sum.px() + m.px() );
+                    sum.setPy( sum.py() + m.py() );
+                    sum.setPz( sum.pz() + m.pz() );
+                    sum.setE ( sum.e()  + m.e()  );
+                }
+            )
+            HEPMC3CODE(
+                FindParticles search( hepmc, FIND_ALL, STATUS == 1 && VERSION_DELETED > hepmc.last_version());
+
+                BOOST_FOREACH( GenParticle *p, search.results() ) {
+                    sum += p->momentum();
+                }
+
+            )
 
             printf("Vector sum: %+15.8e %+15.8e %+15.8e %+15.8e (evt: %7i, %s)\n",sum.px(),sum.py(),sum.pz(),sum.e(),m_event_counter,t->name().c_str());
         }

@@ -1,13 +1,13 @@
 #ifndef PYTHIA_VALIDATION_TOOL_H
 #define PYTHIA_VALIDATION_TOOL_H
 
-#ifdef HEPMC2
+#ifdef PYTHIA8_HEPMC2
 #include "HepMC/GenEvent.h"
 #include "Pythia8/Pythia8ToHepMC.h"
 #else
 #include "HepMC3/GenEvent.h"
 #include "Pythia8/Pythia8ToHepMC3.h"
-#endif // ifdef HEPMC2
+#endif // ifdef PYTHIA8_HEPMC2
 
 #include "ValidationTool.h"
 #include "Pythia8/Pythia.h"

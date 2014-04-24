@@ -1,14 +1,14 @@
 #ifndef PHOTOS_VALIDATION_TOOL_H
 #define PHOTOS_VALIDATION_TOOL_H
 
-#ifdef HEPMC2
+#ifdef PHOTOSPP_HEPMC2
 #include "Photos/PhotosHepMCEvent.h"
 #include "HepMC/GenEvent.h"
 #else
 #include "Photos/PhotosHepMC3Event.h"
 #include "HepMC3/Search/FindParticles.h"
 #include "HepMC3/GenEvent.h"
-#endif // ifdef HEPMC2
+#endif // ifdef PHOTOSPP_HEPMC2
 
 #include "ValidationTool.h"
 #include "Photos/Photos.h"

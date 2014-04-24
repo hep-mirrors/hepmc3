@@ -54,8 +54,10 @@ public:
     }
 
     void finalize() {
-        if(file_in)  file_in->close();
-        if(file_out) file_out->close();
+        HEPMC3CODE(
+            if(file_in)  file_in->close();
+            if(file_out) file_out->close();
+        )
     }
 
     bool rdstate() {
