@@ -1,4 +1,4 @@
-INTERFACEDIRECTORY = .
+INTERFACEDIRECTORY = interfaces/
 
 #
 # Photos++

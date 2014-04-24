@@ -5,7 +5,7 @@ include make.hepmclocation.inc
 
 LIBS     =
 TESTS    =
-INCLUDES = -I$(HEPMCLOCATION)/include -IValidationTools
+INCLUDES = -I$(HEPMCLOCATION)/include -Itools
 LINKS    = -L$(HEPMCLOCATION)/lib -lHepMC
 RPATHS   = -Wl,-rpath,$(HEPMCLOCATION)/lib
 
@@ -22,7 +22,7 @@ include make.tools.inc
 
 all: $(LIBS) validation.exe
 
-validation.exe: ValidationTools/ValidationControl.o validation.o
+validation.exe: tools/ValidationControl.o validation.o
 	$(LD) $(LDFLAGS) $^ -o $@ $(LINKS) $(LINKS_HEPMC3) $(RPATHS)
 
 %.o: %.cc
@@ -35,4 +35,4 @@ clean:
 	rm -f *.o *.exe
 
 Clean: clean
-	rm -f */src/*.o */lib/*.so
+	rm -f $(INTERFACEDIRECTORY)*/src/*.o  $(INTERFACEDIRECTORY)*/lib/*.so
