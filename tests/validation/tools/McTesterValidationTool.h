@@ -26,10 +26,10 @@ public:
     }
 
     int process(GenEvent &hepmc) {
-        HEPMC2CODE( HepMCEvent  mc_tester(hepmc); )
-        HEPMC3CODE( HepMC3Event mc_tester(hepmc); )
+        HEPMC2CODE( HepMCEvent  mc_tester(hepmc,false); )
+        HEPMC3CODE( HepMC3Event mc_tester(hepmc,false); )
 
-        MC_Analyze(&mc_tester,false);
+        MC_Analyze(&mc_tester);
 
         return 0;
     }
