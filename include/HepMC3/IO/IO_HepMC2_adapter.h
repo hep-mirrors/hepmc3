@@ -31,6 +31,8 @@ public:
      */
     IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode = std::ios::in);
 
+    /** Default destructor. Empties cache if something was left inside */
+    ~IO_HepMC2_adapter() { empty_cache(); }
 //
 // Functions
 //
@@ -52,36 +54,29 @@ private:
      *  @param[out] evt Event that will be filled with new data
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    int parse_event_information   (GenEvent  &evt, const char *buf);
+    int parse_event_information(GenEvent &evt, const char *buf);
 
     /** Parse vertex
      *  Helper routine for parsing single event information
-     *  @param[out] v   Vertex that will be filled with new data
-     *  @param[in]  buf Line of text that needs to be parsed
+     *  @param[in] buf Line of text that needs to be parsed
      */
-    int parse_vertex_information  (GenVertex   *v, const char *buf);
+    int parse_vertex_information(const char *buf);
 
     /** Parse particle
      *  Helper routine for parsing single particle information
-     *  @param[out] p   Particle that will be filled with new data
-     *  @param[in]  buf Line of text that needs to be parsed
+     *  @param[in] buf Line of text that needs to be parsed
      */
-    int parse_particle_information(GenParticle *p, const char *buf);
+    int parse_particle_information(const char *buf);
 
 //
 // Fields
 //
 private:
-    /** Vertex barcode cache
-     *  Used to translate HepMC2 vertex barcodes to sequential barcodes
-     *  of HepMC3
-     */
-    vector< std::pair<GenVertex*,int> >   m_vertex_barcode_cache;
+    void empty_cache(); //!< Empty cache
 
-    /** End vertex barcode cache
-     *  Used to restore end vertex information
-     */
-    vector< std::pair<GenParticle*,int> > m_end_vertex_barcode_cache;
+    vector< std::pair< vector<int>,vector<int> > > m_links_cache;    //!< Links cache
+    vector< std::pair< int,GenVertexData* > >      m_vertex_cache;   //!< Vertex data cache
+    vector<GenParticleData*>                       m_particle_cache; //!< Particle data cache
 };
 
 } // namespace HepMC3

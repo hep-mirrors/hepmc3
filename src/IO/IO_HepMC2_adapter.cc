@@ -37,14 +37,10 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
     int           parsing_result                 = 0;
     unsigned int  vertices_count                 = 0;
     unsigned int  current_vertex_particles_count = 0;
-    GenVertex    *current_vertex                 = NULL;
-    GenParticle  *current_particle               = NULL;
+    unsigned int  current_vertex_particles_parsed= 0;
 
-    m_vertex_barcode_cache.clear();
-    m_end_vertex_barcode_cache.clear();
-
-    // Temporary event for storing particles and vertices
-    GenEvent temp_event;
+    // Empty cache after last event
+    empty_cache();
 
     //
     // Parse event, vertex and particle information
@@ -81,16 +77,15 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
 
                 /** @bug HepMC2 files produced with Pythia8 are known to have wrong
                          information about number of particles in vertex. Hence '<' sign */
-                if(current_vertex && (current_vertex->particles_out().size() + current_vertex->particles_in().size()) < current_vertex_particles_count) {
+                if(current_vertex_particles_parsed < current_vertex_particles_count) {
                     is_parsing_successful = false;
                     break;
                 }
+                current_vertex_particles_parsed = 0;
 
-                current_vertex = &temp_event.new_vertex();
+                parsing_result = parse_vertex_information(buf);
 
-                parsing_result = parse_vertex_information(current_vertex,buf);
                 if(parsing_result<0) {
-                    current_vertex = NULL;
                     is_parsing_successful = false;
                     ERROR( "IO_HepMC2_adapter: error parsing vertex information" )
                 }
@@ -100,22 +95,15 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
                 }
                 break;
             case 'P':
-                current_particle = &temp_event.new_particle();
-                parsing_result = parse_particle_information(current_particle,buf);
+
+                parsing_result   = parse_particle_information(buf);
+
                 if(parsing_result<0) {
-                    current_particle = NULL;
                     is_parsing_successful = false;
                     ERROR( "IO_HepMC2_adapter: error parsing particle information" )
                 }
                 else {
-                    if(current_vertex) {
-                        // If particle belongs to this vertex
-                        if( m_end_vertex_barcode_cache.back().second == m_vertex_barcode_cache.back().second ) {
-                            current_vertex->add_particle_in(*current_particle);
-                            m_end_vertex_barcode_cache.back().second = 0;
-                        }
-                        else current_vertex->add_particle_out(*current_particle);
-                    }
+                    ++current_vertex_particles_parsed;
                     is_parsing_successful = true;
                 }
                 break;
@@ -148,13 +136,12 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
 
     /** @bug HepMC2 files produced with Pythia8 are known to have wrong
              information about number of particles in vertex. Hence '<' sign */
-    if( is_parsing_successful && current_vertex &&
-        current_vertex->particles_out().size() < current_vertex_particles_count ) {
+    if( is_parsing_successful && current_vertex_particles_parsed < current_vertex_particles_count ) {
         ERROR( "IO_HepMC2_adapter: not all particles parsed" )
         is_parsing_successful = false;
     }
     // Check if all vertices were parsed
-    else if( is_parsing_successful && m_vertex_barcode_cache.size() != vertices_count ) {
+    else if( is_parsing_successful && m_vertex_cache.size() != vertices_count ) {
         ERROR( "IO_HepMC2_adapter: not all vertices parsed" )
         is_parsing_successful = false;
     }
@@ -168,131 +155,112 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
     }
 
     // Restore production vertex pointers
-    typedef std::pair<GenParticle*,int> ___particle_int_pair___;
-    typedef std::pair<GenVertex*,int>   ___vertex_int_pair___;
+    for(unsigned int i=0; i<m_particle_cache.size(); ++i) {
+        if(!m_particle_cache[i]->end_vertex) continue;
 
-    BOOST_FOREACH( ___particle_int_pair___ &p, m_end_vertex_barcode_cache ) {
-
-        if(p.second==0) continue;
-
-        BOOST_FOREACH( ___vertex_int_pair___ &v, m_vertex_barcode_cache ) {
-
-        //DEBUG( 1, "Pair: "<<p.second<<" "<<v.second<<" "<<p.first->barcode()<<" "<<v.first->barcode() )
-            if( p.second == v.second ) {
-                v.first->add_particle_in(*p.first);
+        int index = -1;
+        for(unsigned int j=0; j<m_vertex_cache.size(); ++j) {
+            if(m_vertex_cache[j].first == m_particle_cache[i]->end_vertex) {
+                index = j;
                 break;
             }
+        }
+        if( index >= 0 ) {
+            m_links_cache[index].first.push_back( i+1 );
+            m_particle_cache[i]->end_vertex = index + 1;
         }
     }
 
     //
     // Add particles to the event in topological order
     //
+    std::deque<int>           sorting;
+    std::vector<GenParticle*> new_particles( m_particle_cache.size() );
 
-    /** @todo Optimize sorting.
-     *
-     *  Currently the intermediate step is copying from temp_event to evt,
-     *  which costs twice as much time and memory than needed.
-     */
-    std::deque<const GenVertex*> sorting;
-    std::vector<int>             new_barcodes(temp_event.particles_count());
+    // Find all starting particles (particles that have no production vertex)
+    for( unsigned int i=0; i<m_particle_cache.size(); ++i) {
+        const GenParticleData *p = m_particle_cache[i];
+
+        if( !p->production_vertex || m_links_cache[p->production_vertex-1].first.size() == 0 ) {
+            sorting.push_back(i);
+        }
+    }
 
     DEBUG_CODE_BLOCK(
         unsigned int sorting_loop_count = 0;
         unsigned int max_deque_size     = 0;
     )
 
-    // Find all starting particles (particles that have no production vertex)
-    BOOST_FOREACH( ___particle_int_pair___ &p, m_end_vertex_barcode_cache ) {
-        const GenVertex *v = p.first->production_vertex();
-        if( !v || v->particles_in().size() == 0 ) {
-            if( p.first->end_vertex() ) sorting.push_back(p.first->end_vertex());
-        }
-    }
-
-    // Topological sort
     while( !sorting.empty() ) {
-
         DEBUG_CODE_BLOCK(
             if( sorting.size() > max_deque_size ) max_deque_size = sorting.size();
             ++sorting_loop_count;
         )
 
-        const GenVertex *v = sorting.front();
+        int              i    = sorting.front();
+        GenParticleData *data = m_particle_cache[i];
 
         bool added = false;
 
-        // Add all production vertices to the front of the list
-        BOOST_FOREACH( GenParticle *p, v->particles_in() ) {
-            if( p->production_vertex() && !p->production_vertex()->is_deleted() ) {
-                sorting.push_front( p->production_vertex() );
+        // Add all mothers to the front of the list
+        if( data->production_vertex ) {
+            BOOST_FOREACH( int j, m_links_cache[data->production_vertex-1].first ) {
+                if( new_particles[j-1] ) continue;
+                sorting.push_front(j-1);
                 added = true;
             }
         }
 
-        // If at least one new vertex was added then our vertex
-        // is not the first on the list
+        // If we have added at least one mother, our particle is not the first particle on the list
         if( added ) continue;
 
-        // Remove this vertex from the list to be sorted
+        // Remove this particle from the list to be sorted
         sorting.pop_front();
 
-        // If this vertex has not yet been added by any particle,
-        // add this vertex and all incoming/outgoing particles to the event
-        if( !v->is_deleted() ) {
+        // Skip further processing if this particle was already added
+        if( new_particles[i] ) continue;
 
-            GenVertex &new_v = evt.new_vertex(&v->data());
+        // Add new particle to the event
+        // NOTE: particle data will be copied to the event container
+        new_particles[i] = &evt.new_particle(data);
 
-            BOOST_FOREACH( const GenParticle *p, v->particles_in() ) {
-                if(p->is_deleted()) {
-                    // Use new barcode list to add incoming particle
-                    new_v.add_particle_in( evt.particle( new_barcodes[ p->barcode()-1 ] ) );
-                }
-                else {
-                    // Create new particle and add it as incoming particle
-                    GenParticle &new_p = evt.new_particle(&p->data());
+        GenVertex *prod_vtx = NULL;
 
-                    // Store new barcode
-                    new_barcodes[ p->barcode()-1 ] = new_p.barcode();
+        // Check if production vertex for this particle already exist
+        if( data->production_vertex ) {
+            if( m_links_cache[data->production_vertex-1].first.size() ) {
+                prod_vtx = new_particles[ m_links_cache[data->production_vertex-1].first[0]-1 ]->end_vertex();
 
-                    new_v.add_particle_in(new_p);
+                // If not - create one
+                if(!prod_vtx) {
+                    // Add new vertex to the event
+                    // NOTE: vertex data will be copied to the event container
+                    prod_vtx = &evt.new_vertex( m_vertex_cache[data->production_vertex-1].second );
 
-                    temp_event.particle( p->barcode() ).mark_deleted();
-                }
-            }
-
-            BOOST_FOREACH( const GenParticle *p, v->particles_out() ) {
-                if(p->is_deleted()) {
-                    // Use new barcode list to add outgoing particle
-                    new_v.add_particle_out( evt.particle( new_barcodes[ p->barcode()-1 ] ) );
-                }
-                else {
-                    // Create new particle and add it as outgoing particle
-                    GenParticle &new_p = evt.new_particle(&p->data());
-
-                    // Store new barcode
-                    new_barcodes[ p->barcode()-1 ] = new_p.barcode();
-
-                    new_v.add_particle_out(new_p);
-
-                    temp_event.particle( p->barcode() ).mark_deleted();
+                    // Add all incoming particles
+                    BOOST_FOREACH( int j, m_links_cache[data->production_vertex-1].first ) {
+                        // NOTE: if sorting algorithm works correctly, all
+                        //       mothers have been added before this particle
+                        prod_vtx->add_particle_in( *new_particles[j-1] );
+                    }
                 }
             }
-
-            temp_event.vertex( v->barcode() ).mark_deleted();
         }
 
-        // Add all outgoing vertices to the end list
-        BOOST_FOREACH( GenParticle *p, v->particles_out() ) {
-            if( p->end_vertex() && !p->end_vertex()->is_deleted() ) {
-                sorting.push_back( p->end_vertex() );
+        if( prod_vtx ) prod_vtx->add_particle_out( *new_particles[i] );
+
+        // Add all daughters to the end of the list
+        if( data->end_vertex ) {
+            BOOST_FOREACH( int j, m_links_cache[data->end_vertex-1].second ) {
+                if( new_particles[j-1] ) continue;
+                sorting.push_back(j-1);
             }
         }
     }
 
     DEBUG_CODE_BLOCK(
-        DEBUG( 6, "IO_HepMC2_adapter - vertices sorted: "
-                   <<evt.vertices_count()<<", max deque size: "
+        DEBUG( 6, "IO_HepMC2_adapter - particles sorted: "
+                   <<evt.particles_count()<<", max deque size: "
                    <<max_deque_size<<", iterations: "<<sorting_loop_count )
     )
 
@@ -366,11 +334,11 @@ int IO_HepMC2_adapter::parse_event_information(GenEvent &evt, const char *buf) {
     return vertices_count;
 }
 
-int IO_HepMC2_adapter::parse_vertex_information(GenVertex *v, const char *buf) {
-    const char *cursor            = buf;
-    int         barcode           = 0;
-    int         num_particles_out = 0;
-    FourVector  position;
+int IO_HepMC2_adapter::parse_vertex_information(const char *buf) {
+    GenVertexData *data = new GenVertexData();
+    const char    *cursor            = buf;
+    int            barcode           = 0;
+    int            num_particles_out = 0;
 
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -381,20 +349,19 @@ int IO_HepMC2_adapter::parse_vertex_information(GenVertex *v, const char *buf) {
 
     // x
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    position.setX(atof(cursor));
+    data->position.setX(atof(cursor));
 
     // y
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    position.setY(atof(cursor));
+    data->position.setY(atof(cursor));
 
     // z
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    position.setZ(atof(cursor));
+    data->position.setZ(atof(cursor));
 
     // t
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    position.setT(atof(cursor));
-    v->set_position(position);
+    data->position.setT(atof(cursor));
 
     // SKIPPED: num_orphans_in
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -405,55 +372,51 @@ int IO_HepMC2_adapter::parse_vertex_information(GenVertex *v, const char *buf) {
 
     // SKIPPING: weights_size, weights
 
-    DEBUG( 10, "IO_HepMC2_adapter: V: "<<v->barcode()<<" (old barcode: "<<barcode<<","<<num_particles_out<<"P)" )
+    DEBUG( 10, "IO_HepMC2_adapter: V: "<<barcode<<", "<<num_particles_out<<" particles)" )
 
     // Add original vertex barcode to the cache
-    m_vertex_barcode_cache.push_back( std::pair<GenVertex*,int>(v,barcode) );
+    m_vertex_cache.push_back( std::pair<int,GenVertexData*>(barcode,data) );
+    m_links_cache.push_back( std::pair< vector<int>,vector<int> >() );
 
     return num_particles_out;
 }
 
-int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *buf) {
+int IO_HepMC2_adapter::parse_particle_information(const char *buf) {
+    GenParticleData *data = new GenParticleData();
     const char *cursor             = buf;
-    int         barcode            = 0;
-    int         pdg_id             = 0;
-    int         end_vertex_barcode = 0;
-    FourVector  momentum;
 
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    barcode = atoi(cursor);
-    p->set_status_subcode(barcode);
+    data->status_subcode = atoi(cursor);
 
     // id
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    pdg_id = atoi(cursor);
-    p->set_pdg_id(pdg_id);
+    data->pdg_id = atoi(cursor);
 
     // px
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    momentum.setPx(atof(cursor));
+    data->momentum.setPx(atof(cursor));
 
     // py
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    momentum.setPy(atof(cursor));
+    data->momentum.setPy(atof(cursor));
 
     // pz
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    momentum.setPz(atof(cursor));
+    data->momentum.setPz(atof(cursor));
 
     // pe
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    momentum.setE(atof(cursor));
-    p->set_momentum(momentum);
+    data->momentum.setE(atof(cursor));
 
     // m
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    p->set_generated_mass(atof(cursor));
+    data->mass = atof(cursor);
+    if(data->mass) data->is_mass_set = true;
 
     // status
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    p->set_status(atoi(cursor));
+    data->status = atoi(cursor);
 
     // SKIPPED: theta
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -463,15 +426,34 @@ int IO_HepMC2_adapter::parse_particle_information(GenParticle *p, const char *bu
 
     // end_vtx_code
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    end_vertex_barcode = atoi(cursor);
+    data->end_vertex = atoi(cursor);
 
     // SKIPPING: flow_size, flow patterns
 
-    DEBUG( 10, "IO_HepMC2_adapter: P: "<<p->barcode()<<" (old barcode: "<<barcode<<", pdg_id: "<<pdg_id<<") in vertex: "<<end_vertex_barcode )
+    m_particle_cache.push_back(data);
 
-    m_end_vertex_barcode_cache.push_back( std::pair<GenParticle*,int>(p,end_vertex_barcode) );
+    // Set links
+    if( data->end_vertex == m_vertex_cache.back().first ) {
+        m_links_cache.back().first.push_back( m_particle_cache.size() );
+        data->production_vertex = 0;
+    }
+    else {
+        m_links_cache.back().second.push_back( m_particle_cache.size() );
+        data->production_vertex = m_vertex_cache.size();
+    }
+
+    DEBUG( 10, "IO_HepMC2_adapter: P: "<<m_particle_cache.size()<<" ( old barcode: "<<data->status_subcode<<", pdg_id: "<<data->pdg_id<<") in vertex: "<<data->end_vertex )
 
     return 0;
+}
+
+void IO_HepMC2_adapter::empty_cache() {
+    for( unsigned int i=0;i< m_vertex_cache.size(); ++i)   delete m_vertex_cache[i].second;
+    for( unsigned int i=0;i< m_particle_cache.size(); ++i) delete m_particle_cache[i];
+
+    m_links_cache.clear();
+    m_vertex_cache.clear();
+    m_particle_cache.clear();
 }
 
 } // namespace HepMC3
