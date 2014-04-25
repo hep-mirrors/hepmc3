@@ -31,7 +31,7 @@ public:
     IO_GenEvent(const std::string &filename, std::ios::openmode mode);
 
     /** Default destructor */
-    ~IO_GenEvent() { if( m_buffer ) delete[] m_buffer; }
+    ~IO_GenEvent();
 
 //
 // Functions

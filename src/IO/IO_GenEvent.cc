@@ -33,6 +33,10 @@ m_cursor(NULL),
 m_buffer_size( 256*1024 ) {
 }
 
+IO_GenEvent::~IO_GenEvent() {
+    forced_flush();
+    if( m_buffer ) delete[] m_buffer;
+}
 
 void IO_GenEvent::write_event(const GenEvent &evt) {
     if ( m_file.rdstate() ) return;
@@ -157,7 +161,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     }
 
     // Flush rest of the buffer to file
-    forced_flush();
+    flush();
 }
 
 bool IO_GenEvent::fill_next_event(GenEvent &evt) {
@@ -259,7 +263,7 @@ inline void IO_GenEvent::write_string( const std::string &str ) {
     // First let's check if string will fit into the buffer
     unsigned long length = m_cursor-m_buffer;
 
-    if( m_buffer_size - length < str.length() ) {
+    if( m_buffer_size - length > str.length() ) {
         strncpy(m_cursor,str.data(),str.length());
         m_cursor += str.length();
         flush();
