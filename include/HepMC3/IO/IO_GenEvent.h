@@ -28,7 +28,10 @@ public:
      *  Mode of operation determines if file is read-only or write-only
      *  @warning If file opened in write-only mode exists, it will be deleted
      */
-    IO_GenEvent(const std::string &filename, std::ios::openmode mode):IO_Base(filename,mode),m_precision(16) {};
+    IO_GenEvent(const std::string &filename, std::ios::openmode mode);
+
+    /** Default destructor */
+    ~IO_GenEvent() { if( m_buffer ) delete[] m_buffer; }
 
 //
 // Functions
@@ -44,11 +47,23 @@ public:
      */
     bool fill_next_event(GenEvent &evt);
 
-    /** Set output precision
-     *  Default = 16
+    /** Attempts to allocate buffer of the chosen size
+     *  This function can be called manually by the user or will be called
+     *  before first read/write operation
+     *  @note If buffer size is to large it will be divided by 2
+     *        until it is small enough for system to allocate
      */
-    void set_precision(int prec)  { m_precision = prec; }
+    void allocate_buffer();
 
+private:
+    /** Inline function for writing strings
+     *  Since strings can be long (maybe even longer than buffer) they have to be delt
+     *  with separately.
+     */
+    void write_string( const std::string &str );
+
+    void flush();        //!< Inline function flushing buffer to output stream when close to buffer capacity
+    void forced_flush(); //!< Inline function forcing flush to the output stream
 private:
     /** Write vertex
      *  Helper routine for writing single vertex to file
@@ -61,10 +76,36 @@ private:
     void write_particle(const GenParticle &p, int second_field, bool is_new_version);
 
 //
+// Accessors
+//
+public:
+    /** Set output precision
+     *  Available range is [2,24]. Default is 16.
+     */
+    void set_precision( unsigned int prec ) {
+        if( prec < 2 || prec > 24 ) return;
+        m_precision = prec;
+    }
+
+    /** Set buffer size (in bytes)
+     *  Default is 256kb. Minimum is 256b.
+     *  Size can only be changed before first read/write operation.
+     */
+    void set_buffer_size( unsigned long size) {
+        if( m_buffer )   return;
+        if( size < 256 ) return;
+
+        m_buffer_size = size;
+    }
+
+//
 // Fields
 //
 private:
-    int m_precision; //!< Output precision
+    int            m_precision;   //!< Output precision
+    char          *m_buffer;      //!< Stream buffer
+    char          *m_cursor;      //!< Cursor inside stream buffer
+    unsigned long  m_buffer_size; //!< Buffer size
 };
 
 } // namespace HepMC3

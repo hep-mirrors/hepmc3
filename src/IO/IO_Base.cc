@@ -13,7 +13,7 @@ using std::endl;
 namespace HepMC3 {
 
 IO_Base::IO_Base(const std::string& filename, std::ios::openmode mode):
-m_file(filename.c_str(),mode) {
+m_file(filename.c_str(),mode | std::ios::binary) {
 
     m_mode = mode;
 

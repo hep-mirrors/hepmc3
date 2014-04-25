@@ -25,6 +25,15 @@ using std::set;
 
 namespace HepMC3 {
 
+IO_GenEvent::IO_GenEvent(const std::string &filename, std::ios::openmode mode):
+IO_Base(filename,mode),
+m_precision(16),
+m_buffer(NULL),
+m_cursor(NULL),
+m_buffer_size( 256*1024 ) {
+}
+
+
 void IO_GenEvent::write_event(const GenEvent &evt) {
     if ( m_file.rdstate() ) return;
     if ( m_mode != std::ios::out ) {
@@ -32,10 +41,14 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
         return;
     }
 
-    m_file << "E " << evt.event_number()
-           << " "  << evt.vertices_count()
-           << " "  << evt.particles_count()
-           << endl;
+    allocate_buffer();
+    if( !m_buffer ) return;
+
+    // Make sure nothing was left from previous event
+    flush();
+
+    m_cursor += sprintf(m_cursor, "E %i %i %i\n",evt.event_number(),evt.vertices_count(),evt.particles_count());
+    flush();
 
     int vertices_processed    = 0;
     int lowest_vertex_barcode = 0;
@@ -45,8 +58,14 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     for(unsigned int i=0; i<evt.data().versions.size(); ++i) {
 
         const GenEventVersionInfo &v = evt.data().versions[i];
-        m_file << "T " << evt.data().versions[i].name
-               << endl;
+
+        m_cursor += sprintf(m_cursor, "T ");
+        flush();
+
+        write_string( evt.data().versions[i].name );
+
+        m_cursor += sprintf(m_cursor, "\n");
+        flush();
 
         // Get the upper range of particles and vertices
         int last_particle_index = evt.particles_count() - 1;
@@ -67,8 +86,10 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
                 break;
             }
 
-            if( del.second > 0 ) m_file << "P "<<del.second<<" X"<<endl;
-            else                 m_file << "V "<<del.second<<" X"<<endl;
+            if( del.second > 0 ) m_cursor += sprintf(m_cursor, "P %i X\n", del.second);
+            else                 m_cursor += sprintf(m_cursor, "V %i X\n", del.second);
+
+            flush();
         }
 
         // Print particles
@@ -134,6 +155,9 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
             lowest_vertex_barcode = v.barcode();
         }
     }
+
+    // Flush rest of the buffer to file
+    forced_flush();
 }
 
 bool IO_GenEvent::fill_next_event(GenEvent &evt) {
@@ -148,10 +172,28 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
     return 1;
 }
 
+void IO_GenEvent::allocate_buffer() {
+    if( m_buffer ) return;
+    while( !m_buffer && m_buffer_size >= 256 ) {
+        m_buffer = new char[ m_buffer_size ]();
+        if(!m_buffer) {
+            m_buffer_size /= 2;
+            WARNING( "IO_GenEvent::allocate_buffer: buffer size too large. Dividing by 2. New size: "<<m_buffer_size )
+        }
+    }
+
+    if( !m_buffer ) {
+        ERROR( "IO_GenEvent::allocate_buffer: could not allocate buffer!" )
+        return;
+    }
+
+    m_cursor = m_buffer;
+}
+
 void IO_GenEvent::write_vertex(const GenVertex &v) {
 
-    m_file << "V " << v.barcode()
-           << " [";
+    m_cursor += sprintf( m_cursor, "V %i [",v.barcode() );
+    flush();
 
     bool printed_first = false;
 
@@ -162,44 +204,87 @@ void IO_GenEvent::write_vertex(const GenVertex &v) {
         if( p->version_created() > v.version_created() ) continue;
 
         if( !printed_first ) {
-            m_file << p->barcode();
+            m_cursor  += sprintf(m_cursor,"%i", p->barcode());
             printed_first = true;
         }
-        else m_file << "," << p->barcode();
-    }
+        else m_cursor += sprintf(m_cursor,",%i",p->barcode());
 
-    m_file << "]";
+        flush();
+    }
 
     const FourVector &pos = v.position();
     if( !pos.is_zero() ) {
-        m_file << " @ " <<pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
+        m_cursor += sprintf(m_cursor,"] @ %.*e",m_precision,pos.x());
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",   m_precision,pos.y());
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",   m_precision,pos.z());
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e\n", m_precision,pos.t());
+        flush();
     }
-
-    m_file << endl;
+    else {
+        m_cursor += sprintf(m_cursor,"]\n");
+        flush();
+    }
 }
 
 void IO_GenEvent::write_particle(const GenParticle &p, int second_field, bool is_new_version) {
-    std::ios_base::fmtflags orig = m_file.flags();
-    std::streamsize prec = m_file.precision();
-    m_file.setf(std::ios::scientific, std::ios::floatfield);
-    m_file.precision(m_precision);
 
-    m_file << "P "<< p.barcode();
+    m_cursor += sprintf(m_cursor,"P %i",p.barcode());
+    flush();
 
-    if ( is_new_version ) m_file << " X" << second_field;
-    else                  m_file << " "  << second_field;
+    if ( is_new_version ) m_cursor += sprintf(m_cursor," X%i",second_field);
+    else                  m_cursor += sprintf(m_cursor," %i",second_field);
+    flush();
 
-    m_file << " " << p.pdg_id()
-           << " " << p.momentum().px()
-           << " " << p.momentum().py()
-           << " " << p.momentum().pz()
-           << " " << p.momentum().e()
-           << " " << p.generated_mass()
-           << " " << p.status()
-           << endl;
+    m_cursor += sprintf(m_cursor," %i",   p.pdg_id() );
+    flush();
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.momentum().px() );
+    flush();
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.momentum().py());
+    flush();
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.momentum().pz() );
+    flush();
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.momentum().e() );
+    flush();
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.generated_mass() );
+    flush();
+    m_cursor += sprintf(m_cursor," %i\n", p.status() );
+    flush();
+}
 
-    m_file.flags(orig);
-    m_file.precision(prec);
+inline void IO_GenEvent::write_string( const std::string &str ) {
+
+    // First let's check if string will fit into the buffer
+    unsigned long length = m_cursor-m_buffer;
+
+    if( m_buffer_size - length < str.length() ) {
+        strncpy(m_cursor,str.data(),str.length());
+        m_cursor += str.length();
+        flush();
+    }
+    // If not, flush the buffer and write the string directly
+    else {
+        forced_flush();
+        m_file.write( str.data(), str.length() );
+    }
+}
+
+inline void IO_GenEvent::flush() {
+    // The maximum size of single add to the buffer (other than by
+    // using IO_GenEvent::write) is 32 bytes. This is a safe value as
+    // we will not allow precision larger than 24 anyway
+    unsigned long length = m_cursor-m_buffer;
+    if( m_buffer_size - length < 32 ) {
+        m_file.write( m_buffer, length );
+        m_cursor = m_buffer;
+    }
+}
+
+inline void IO_GenEvent::forced_flush() {
+    m_file.write( m_buffer, m_cursor-m_buffer );
+    m_cursor = m_buffer;
 }
 
 } // namespace HepMC3
