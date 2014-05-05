@@ -30,9 +30,6 @@ public:
      *  Accepts only ios::in mode
      */
     IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode = std::ios::in);
-
-    /** Default destructor. Empties cache if something was left inside */
-    ~IO_HepMC2_adapter() { empty_cache(); }
 //
 // Functions
 //
@@ -72,11 +69,8 @@ private:
 // Fields
 //
 private:
-    void empty_cache(); //!< Empty cache
-
-    vector< std::pair< vector<int>,vector<int> > > m_links_cache;    //!< Links cache
-    vector< std::pair< int,GenVertexData* > >      m_vertex_cache;   //!< Vertex data cache
-    vector<GenParticleData*>                       m_particle_cache; //!< Particle data cache
+    vector< std::pair< int,GenVertex >   > m_vertex_cache;   //!< Pairs: (old barcode,Vertex)
+    vector< std::pair< int,GenParticle > > m_particle_cache; //!< Pairs: (end vertex,Particle)
 };
 
 } // namespace HepMC3

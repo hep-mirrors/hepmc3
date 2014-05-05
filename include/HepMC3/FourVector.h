@@ -110,6 +110,8 @@ public:
 //
 // Fields
 //
+public:
+    static const FourVector& ZERO_VECTOR();
 private:
     double v1; //!< px or x. Interpretation depends on accessors used
     double v2; //!< py or y. Interpretation depends on accessors used

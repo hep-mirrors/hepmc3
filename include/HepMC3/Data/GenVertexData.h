@@ -5,28 +5,35 @@
  *  @brief Definition of \b class HepMC3::GenVertexData
  *
  *  @struct HepMC3::GenVertexData
- *  @brief Stores serializable vertex information
- *  
+ *  @brief Stores vertex information
+ *
  *  @ingroup data
- *  
+ *
+ *  @struct HepMC3::GenVertexSerializableData
+ *  @brief Stores serializable vertexe information
+ *
+ *  @ingroup data
  */
 #include "HepMC3/FourVector.h"
+#include "HepMC3/Setup.h"
 
-#include <iostream>
+#include <vector>
 
 namespace HepMC3 {
 
-struct GenVertexData {
-    FourVector position; //!< Position in time-space
+class GenEvent;
+class GenParticle;
 
-    /** Print vertex data content */
-    void print() const {
-        std::cout<<     position.px()
-                 <<" "<<position.py()
-                 <<" "<<position.pz()
-                 <<" "<<position.e()
-                 << std::endl;
-    }
+struct GenVertexData {
+    GenEvent                 *event;         //!< Parent event
+    unsigned int              index;         //!< Index
+    FourVector                position;      //!< Position in time-space
+    std::vector<GenParticle>  particles_in;  //!< Incoming particle list
+    std::vector<GenParticle>  particles_out; //!< Outgoing particle list
+};
+
+struct GenVertexSerializableData {
+    FourVector position; //!< Position in time-space
 };
 
 } // namespace HepMC3

@@ -7,30 +7,34 @@
  *  @class HepMC3::GenParticle
  *  @brief Stores particle-related information
  *
- *  Uses HepMC3::GenParticleData to store serializable particle information
+ *  Uses HepMC3::GenParticleData to store particle information
  *
  */
 #include "HepMC3/Data/GenParticleData.h"
 
 #include <iostream>
 #include <vector>
-#include <limits>
+
+#include <boost/shared_ptr.hpp>
+using boost::shared_ptr;
 
 namespace HepMC3 {
 
-class GenVertex;
 class GenEvent;
+class GenVertex;
 
 class GenParticle {
 
 friend class GenEvent;
+friend class GenVertex;
 
 //
 // Constructors
 //
-protected:
+public:
     /** Default constructor */
-    GenParticle(GenEvent &event, int data_index, GenParticleData &data);
+    GenParticle( const FourVector &momentum = FourVector::ZERO_VECTOR(), int pdg_id = 0, int status = 0 );
+
 //
 // Functions
 //
@@ -41,26 +45,21 @@ public:
      */
     void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
 
-    bool is_deleted() const { return ( m_version_deleted != 255 ); } //!< Check if this particle is deleted
-    void mark_deleted();                                             //!< Mark this particle as deleted
+    /** Check if this vertex belongs to an event */
+    bool in_event() const { return (bool)(m_data->event); }
 
+    /** Cast operator used to check if this is a null particle */
+    operator bool() const { return (bool)m_data; }
 //
 // Accessors
 //
 public:
-    int   barcode()               const { return m_data_index+1;        } //!< Get barcode
-    int   pdg_id()                const { return m_data.pdg_id;         } //!< Get PDG ID
-    int   status()                const { return m_data.status;         } //!< Get status code
-    int   status_subcode()        const { return m_data.status_subcode; } //!< Get status subcode
-    const FourVector& momentum()  const { return m_data.momentum;       } //!< Get momentum
-    bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
-    const GenParticleData& data() const { return m_data;                } //!< Get particle data
-
-    unsigned char version_created() const { return m_version_created;      } //!< Version in which this particle was created
-    unsigned char version_deleted() const { return m_version_deleted;      } //!< Version in which this particle was deleted
-    GenParticle*  last_version()    const { return m_last_version;         } //!< Get latest version of this particle
-    bool          has_new_version() const { return m_last_version != this; } //!< Check if this is the last version of this particle
-
+    int   barcode()               const { return m_data->index+1;        } //!< Get barcode
+    int   pdg_id()                const { return m_data->pdg_id;         } //!< Get PDG ID
+    int   status()                const { return m_data->status;         } //!< Get status code
+    int   status_subcode()        const { return m_data->status_subcode; } //!< Get status subcode
+    const FourVector& momentum()  const { return m_data->momentum;       } //!< Get momentum
+    bool  is_generated_mass_set() const { return m_data->is_mass_set;    } //!< Check if generated mass is set
 
     /** Get generated mass
      *  This function will return mass as set by a generator/tool.
@@ -68,11 +67,8 @@ public:
      */
     double generated_mass() const;
 
-    GenVertex* production_vertex() const;                   //!< Get production vertex
-    void       set_production_vertex( const GenVertex *v ); //!< Set production vertex
-
-    GenVertex* end_vertex() const;                          //!< Get end vertex
-    void       set_end_vertex( const GenVertex *v );        //!< Set end vertex
+    GenVertex production_vertex() const;           //!< Get production vertex
+    GenVertex end_vertex() const;                  //!< Get end vertex
 
     void set_pdg_id(int pdg_id);                   //!< Set PDG ID
     void set_status(int status);                   //!< Set status code
@@ -80,17 +76,11 @@ public:
     void set_momentum(const FourVector& momentum); //!< Set momentum
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
-    void set_data(const GenParticleData& data);    //!< Set particle data
 //
 // Fields
 //
 private:
-    GenEvent           &m_event;                   //!< Parent event
-    unsigned char       m_version_created;         //!< Version created
-    unsigned char       m_version_deleted;         //!< Version deleted
-    unsigned int        m_data_index;              //!< Index in particle data container
-    GenParticleData    &m_data;                    //!< Particle data
-    GenParticle        *m_last_version;            //!< Pointer to the last version of this particle
+    shared_ptr<GenParticleData> m_data; //!< Particle data
 };
 
 } // namespace HepMC3

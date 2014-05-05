@@ -8,6 +8,11 @@
 
 namespace HepMC3 {
 
+inline const FourVector& FourVector::ZERO_VECTOR() {
+    static const FourVector v;
+    return v;
+}
+
 inline double FourVector::m() const {
     double mm = v4*v4 - v1*v1 - v2*v2 - v3*v3;
     if( mm < 0.0 ) return -sqrt(-mm);

@@ -70,14 +70,14 @@ private:
 // Accessors
 //
 public:
-    const vector<GenParticle*>& results() const { return m_results; } //!< Get results
+    const vector<GenParticle>& results() const { return m_results; } //!< Get results
 
 //
 // Fields
 //
 private:
-    vector<GenParticle*>     m_results;          //!< List of results
-    vector<const GenVertex*> m_checked_vertices; //!< List of already checked vertices
+    vector<GenParticle>     m_results;          //!< List of results
+    vector<GenVertex> m_checked_vertices; //!< List of already checked vertices
 };
 
 } // namespace HepMC3

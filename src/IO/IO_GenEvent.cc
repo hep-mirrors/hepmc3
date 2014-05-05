@@ -57,107 +57,32 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     int vertices_processed    = 0;
     int lowest_vertex_barcode = 0;
 
-    set<pair<int,int> > deleted_barcodes;
+    m_cursor += sprintf(m_cursor, "T Version 0");
+    flush();
 
-    for(unsigned int i=0; i<evt.data().versions.size(); ++i) {
+    m_cursor += sprintf(m_cursor, "\n");
+    flush();
 
-        const GenEventVersionInfo &v = evt.data().versions[i];
+    // Print particles
+    BOOST_FOREACH( const GenParticle &p, evt.particles() ) {
 
-        m_cursor += sprintf(m_cursor, "T ");
-        flush();
+        // Check to see if we need to write a vertex first
+        const GenVertex &v = p.production_vertex();
+        int production_vertex = 0;
 
-        write_string( evt.data().versions[i].name );
+        if(v) {
 
-        m_cursor += sprintf(m_cursor, "\n");
-        flush();
+            production_vertex = v.serialization_barcode();
 
-        // Get the upper range of particles and vertices
-        int last_particle_index = evt.particles_count() - 1;
-        int last_vertex_index   = evt.vertices_count()  - 1;
-
-        if( i+1 < evt.data().versions.size() ) {
-            last_particle_index = evt.data().versions[i+1].first_particle_index - 1;
-            last_vertex_index   = evt.data().versions[i+1].first_vertex_index - 1;
-        }
-
-        // Print all particles/vertices deleted in this version
-        typedef std::pair<int,int> ___int_int_pair___;
-
-        BOOST_FOREACH( const ___int_int_pair___ &del, deleted_barcodes ) {
-
-            if(del.first>(int)i+1) {
-                deleted_barcodes.erase( deleted_barcodes.begin(), deleted_barcodes.find(del) );
-                break;
-            }
-
-            if( del.second > 0 ) m_cursor += sprintf(m_cursor, "P %i X\n", del.second);
-            else                 m_cursor += sprintf(m_cursor, "V %i X\n", del.second);
-
-            flush();
-        }
-
-        // Print particles
-        for( int j=v.first_particle_index; j<=last_particle_index; ++j ) {
-
-            const GenParticle &p = evt.particles()[j];
-
-            // Ignore particles that were added and removed in the same version
-            if( p.version_deleted() == i+1 ) continue;
-
-            // Check to see if we need to write a vertex first
-            int production_vertex = p.data().production_vertex;
-
-            if( production_vertex < 0 ) {
-                GenVertex &v = evt.vertex( production_vertex );
-
-                production_vertex = v.serialization_barcode();
-
-                if (production_vertex < lowest_vertex_barcode) {
-                    write_vertex(v);
-                    if( v.version_deleted()<std::numeric_limits<unsigned char>::max() && !v.has_new_version() ) {
-                        deleted_barcodes.insert( pair<int,int>( v.version_deleted(),v.barcode() ) );
-                    }
-                }
-
-                ++vertices_processed;
-                lowest_vertex_barcode = v.barcode();
-            }
-
-            // Check if this is a new version of some other particle
-            int old_version = 0;
-
-            BOOST_FOREACH( const ___int_int_pair___ &ver, evt.data().version_links ) {
-
-                if( ver.first == p.barcode() ) {
-                    old_version = ver.second;
-                    break;
-                }
-            }
-
-            if( old_version ) write_particle( p, old_version, true  );
-            else              write_particle( p, production_vertex,    false );
-
-            if( p.version_deleted()<std::numeric_limits<unsigned char>::max() && !p.has_new_version() ) {
-                deleted_barcodes.insert( pair<int,int>( p.version_deleted(),p.barcode() ) );
-            }
-        }
-
-        // Write any remaining vertices
-        while( vertices_processed<last_vertex_index ) {
-            GenVertex &v = evt.vertices()[vertices_processed];
-
-            int barcode = v.serialization_barcode();
-
-            if( barcode < 0 ) {
-                write_vertex( v );
-                if( v.version_deleted()<std::numeric_limits<unsigned char>::max() && !v.has_new_version() ) {
-                    deleted_barcodes.insert( pair<int,int>( v.version_deleted(),v.barcode() ) );
-                }
+            if (production_vertex < lowest_vertex_barcode) {
+                write_vertex(v);
             }
 
             ++vertices_processed;
             lowest_vertex_barcode = v.barcode();
         }
+
+        write_particle( p, production_vertex, false );
     }
 
     // Flush rest of the buffer to file
@@ -201,17 +126,13 @@ void IO_GenEvent::write_vertex(const GenVertex &v) {
 
     bool printed_first = false;
 
-    BOOST_FOREACH( const GenParticle *p, v.particles_in() ) {
-        // NOTE: particles from higher version can only be added if they are
-        //       a new version of already existing incoming particle.
-        //       Therefore, we skip them
-        if( p->version_created() > v.version_created() ) continue;
+    BOOST_FOREACH( const GenParticle &p, v.particles_in() ) {
 
         if( !printed_first ) {
-            m_cursor  += sprintf(m_cursor,"%i", p->barcode());
+            m_cursor  += sprintf(m_cursor,"%i", p.barcode());
             printed_first = true;
         }
-        else m_cursor += sprintf(m_cursor,",%i",p->barcode());
+        else m_cursor += sprintf(m_cursor,",%i",p.barcode());
 
         flush();
     }

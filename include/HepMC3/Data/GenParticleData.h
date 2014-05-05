@@ -5,42 +5,52 @@
  *  @brief Definition of \b class HepMC3::GenParticleData
  *
  *  @struct HepMC3::GenParticleData
- *  @brief Stores serializable particle information
- *  
+ *  @brief Stores particle information
+ *
  *  @ingroup data
- *  
+ *
+ *  @struct HepMC3::GenParticleSerializableData
+ *  @brief Stores serializable particle information
+ *
+ *  @ingroup data
+ *
  */
 #include "HepMC3/FourVector.h"
 
 #include <iostream>
 
+#include <boost/weak_ptr.hpp>
+using boost::weak_ptr;
+
 namespace HepMC3 {
 
-struct GenParticleData {
-    int          pdg_id;            //!< PDG ID
-    int          production_vertex; //!< Production vertex
-    int          end_vertex;        //!< End vertex
-    FourVector   momentum;          //!< Momentum
-    int          status;            //!< Status
-    int          status_subcode;    //!< Status subcode
-    double       mass;              //!< Generated mass (if set)
-    bool         is_mass_set;       //!< Check if generated mass is set
+class GenEvent;
+class GenVertexData;
 
-    /** Print particle data content */
-    void print() const {
-        std::cout<<pdg_id
-                 <<" "<<production_vertex
-                 <<" "<<end_vertex
-                 <<" "<<momentum.px()
-                 <<" "<<momentum.py()
-                 <<" "<<momentum.pz()
-                 <<" "<<momentum.e()
-                 <<" "<<status
-                 <<" "<<status_subcode
-                 <<" "<<mass
-                 <<" "<<is_mass_set
-                 <<std::endl;
-    }
+struct GenParticleData {
+    GenEvent     *event;          //!< Parent event
+    unsigned int  index;          //!< Index
+    int           pdg_id;         //!< PDG ID
+    FourVector    momentum;       //!< Momentum
+    int           status;         //!< Status
+    int           status_subcode; //!< Status subcode
+    double        mass;           //!< Generated mass (if set)
+    bool          is_mass_set;    //!< Check if generated mass is set
+
+    weak_ptr<GenVertexData> production_vertex; //!< Production vertex
+    weak_ptr<GenVertexData> end_vertex;        //!< End vertex
+};
+
+struct GenParticleSerializableData {
+    int        pdg_id;            //!< PDG ID
+    FourVector momentum;          //!< Momentum
+    int        status;            //!< Status
+    int        status_subcode;    //!< Status subcode
+    double     mass;              //!< Generated mass (if set)
+    bool       is_mass_set;       //!< Check if generated mass is set
+
+    int        production_vertex; //!< Production vertex
+    int        end_vertex;        //!< End vertex
 };
 
 } // namespace HepMC3

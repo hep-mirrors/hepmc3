@@ -31,8 +31,9 @@ bool Filter::passed_int_filter(const GenParticle &p ) const {
     switch(m_int) {
         case STATUS:          value = p.status();          break;
         case STATUS_SUBCODE:  value = p.status_subcode();  break;
-        case VERSION_CREATED: value = p.version_created(); break;
-        case VERSION_DELETED: value = p.version_deleted(); break;
+        /** @todo Version filters */
+        case VERSION_CREATED: value = true; break; //p.version_created(); break;
+        case VERSION_DELETED: value = true; break; //p.version_deleted(); break;
         case PDG_ID:          value = p.pdg_id();          break;
         case ABS_PDG_ID:      value = abs( p.pdg_id() );   break;
         default:
@@ -57,8 +58,8 @@ bool Filter::passed_int_filter(const GenParticle &p ) const {
 
 bool Filter::passed_bool_filter(const GenParticle &p ) const {
 
-    bool       result = false;
-    GenVertex *buf    = NULL;
+    bool      result = false;
+    GenVertex buf;
 
     DEBUG( 10, "Filter: checking barcode="<<p.barcode()<<" param="<<m_bool<<" value="<<m_bool_value<<" (bool)" )
 
@@ -72,14 +73,14 @@ bool Filter::passed_bool_filter(const GenParticle &p ) const {
                 break;
             }
 
-            if( buf->particles_out().size() == 0 ) {
+            if( buf.particles_out().size() == 0 ) {
                 result = false;
                 break;
             }
 
-            BOOST_FOREACH( GenParticle *p_out, buf->particles_out() ) {
+            BOOST_FOREACH( const GenParticle &p_out, buf.particles_out() ) {
 
-                if( p_out->pdg_id() == p.pdg_id() ) {
+                if( p_out.pdg_id() == p.pdg_id() ) {
                     result = true;
                     break;
                 }
