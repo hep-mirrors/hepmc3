@@ -9,12 +9,13 @@
 #include "HepMC3/Setup.h"
 
 #include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
 using std::endl;
 
 namespace HepMC3 {
 
 GenVertex::GenVertex( const FourVector& position ):
-m_data( new GenVertexData() ) {
+m_data( boost::make_shared<GenVertexData>() ) {
     m_data->event    = NULL;
     m_data->position = position;
 }

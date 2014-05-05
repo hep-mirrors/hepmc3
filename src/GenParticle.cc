@@ -7,12 +7,13 @@
 #include "HepMC3/GenEvent.h"
 
 #include "HepMC3/Setup.h"
+#include <boost/make_shared.hpp>
 using std::endl;
 
 namespace HepMC3 {
 
 GenParticle::GenParticle( const FourVector &momentum, int pdg_id, int status ):
-m_data( new GenParticleData() ) {
+m_data( boost::make_shared<GenParticleData>() ) {
     m_data->event             = NULL;
 
     m_data->momentum          = momentum;

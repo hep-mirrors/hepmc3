@@ -69,8 +69,11 @@ private:
 // Fields
 //
 private:
-    vector< std::pair< int,GenVertex >   > m_vertex_cache;   //!< Pairs: (old barcode,Vertex)
-    vector< std::pair< int,GenParticle > > m_particle_cache; //!< Pairs: (end vertex,Particle)
+    vector<GenVertex>   m_vertex_cache;        //!< Vertex cache
+    vector<int>         m_vertex_barcodes;     //!< Old vertex barcodes
+
+    vector<GenParticle> m_particle_cache;      //!< Particle cache
+    vector<int>         m_end_vertex_barcodes; //!< Old end vertex barcodes
 };
 
 } // namespace HepMC3

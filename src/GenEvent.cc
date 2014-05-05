@@ -9,6 +9,7 @@
 #include "HepMC3/Setup.h"
 
 #include <vector>
+#include <deque>
 
 #include <boost/foreach.hpp>
 using std::endl;
@@ -16,11 +17,6 @@ using std::endl;
 namespace HepMC3 {
 
 GenEvent::GenEvent() {
-    /** @bug Reallocation of vertices can change the pointer inside shared_ptr
-     *  which should never happen. Needs to be checked why.
-     */
-    m_particles.reserve(100000);
-    m_vertices.reserve(1000);
     set_print_precision(2);
     set_event_number(0);
 }
@@ -101,12 +97,84 @@ void GenEvent::add_vertex(GenVertex &v) {
     m_vertices.push_back(v);
 }
 
+void GenEvent::add_tree( const vector<GenParticle> &particles ) {
+
+    std::deque<GenVertex> sorting;
+
+    // Find all starting vertices (end vertex of particles that have no production vertex)
+    for( unsigned int i=0; i<particles.size(); ++i) {
+        const GenParticle &p = particles[i];
+        GenVertex v = p.production_vertex();
+        if( !v || v.particles_in().size()==0 ) {
+            GenVertex v2 = p.end_vertex();
+            if(v2) sorting.push_back(v2);
+        }
+    }
+
+    DEBUG_CODE_BLOCK(
+        unsigned int sorting_loop_count = 0;
+        unsigned int max_deque_size     = 0;
+    )
+
+    // Add vertices to the event in topological order
+    while( !sorting.empty() ) {
+        DEBUG_CODE_BLOCK(
+            if( sorting.size() > max_deque_size ) max_deque_size = sorting.size();
+            ++sorting_loop_count;
+        )
+
+        GenVertex &v = sorting.front();
+
+        bool added = false;
+
+        // Add all mothers to the front of the list
+        BOOST_FOREACH( const GenParticle &p, v.particles_in() ) {
+            GenVertex v2 = p.production_vertex();
+            if( v2 && !v2.in_event() ) {
+                sorting.push_front(v2);
+                added = true;
+            }
+        }
+
+        // If we have added at least one production vertex,
+        // our vertex is not the first one on the list
+        if( added ) continue;
+
+        // If vertex not yet added
+        if( !v.in_event() ) {
+
+            add_vertex(v);
+
+            // Add all end vertices to the end of the list
+            BOOST_FOREACH( const GenParticle &p, v.particles_out() ) {
+                GenVertex v2 = p.end_vertex();
+                if( v2 && !v2.in_event() ) {
+                    sorting.push_back(v2);
+                }
+            }
+        }
+
+        sorting.pop_front();
+    }
+
+    DEBUG_CODE_BLOCK(
+        DEBUG( 6, "IO_HepMC2_adapter - particles sorted: "
+                   <<particles_count()<<", max deque size: "
+                   <<max_deque_size<<", iterations: "<<sorting_loop_count )
+    )
+}
+
 void GenEvent::delete_particle(GenParticle &p) {
     return;
 }
 
 void GenEvent::delete_vertex(GenVertex &v) {
     return;
+}
+
+void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
+    m_particles.reserve(particles);
+    m_vertices.reserve(vertices);
 }
 
 } // namespace HepMC3

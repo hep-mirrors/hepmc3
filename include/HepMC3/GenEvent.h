@@ -46,12 +46,27 @@ public:
     /** Add vertex */
     void add_vertex(GenVertex &v);
 
+    /** Add whole tree in topological order
+     *  This function will find the beam particles (particles
+     *  that have no production vertices or their production vertices
+     *  have no particles) and will add the whole decay tree starting from
+     *  these particles.
+     *
+     *  @note Any particles on this list that do not belong to the tree
+     *        will be ignored.
+     */
+    void add_tree( const vector<GenParticle> &particles );
+
     /** Delete particle */
     void delete_particle(GenParticle &p);
 
     /** Delete vertex */
     void delete_vertex(GenVertex &v);
 
+    /** Reserve memory for particles and vertices
+     *  Helps optimize event creation when size of the event is known beforehand
+     */
+    void reserve(unsigned int particles, unsigned int vertices = 0);
 //
 // Accessors
 //
