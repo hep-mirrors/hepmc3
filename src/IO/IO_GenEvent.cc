@@ -86,7 +86,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     }
 
     // Flush rest of the buffer to file
-    flush();
+    forced_flush();
 }
 
 bool IO_GenEvent::fill_next_event(GenEvent &evt) {

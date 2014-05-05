@@ -44,9 +44,13 @@ public:
 
     FourVector  operator+ (const FourVector& rhs) const; //!< Arithmetic operator +
     FourVector  operator- (const FourVector& rhs) const; //!< Arithmetic operator -
+    FourVector  operator* (const double rhs)      const; //!< Arithmetic operator *
+    FourVector  operator/ (const double rhs)      const; //!< Arithmetic operator /
 
     void        operator+=(const FourVector& rhs);       //!< Assignment operator +=
     void        operator-=(const FourVector& rhs);       //!< Assignment operator -=
+    void        operator*=(const double rhs);            //!< Assignment operator *=
+    void        operator/=(const double rhs);            //!< Assignment operator /=
 
 //
 // Functions related to floating-point operations

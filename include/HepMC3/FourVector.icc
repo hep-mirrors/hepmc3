@@ -51,6 +51,20 @@ inline FourVector FourVector::operator-(const FourVector& rhs) const {
                        v4 - rhs.v4 );
 }
 
+inline FourVector FourVector::operator*(const double rhs) const {
+    return FourVector( v1 * rhs,
+                       v2 * rhs,
+                       v3 * rhs,
+                       v4 * rhs );
+}
+
+inline FourVector FourVector::operator/(const double rhs) const {
+    return FourVector( v1 / rhs,
+                       v2 / rhs,
+                       v3 / rhs,
+                       v4 / rhs );
+}
+
 inline void FourVector::operator+=(const FourVector& rhs) {
     v1 += rhs.v1;
     v2 += rhs.v2;
@@ -63,6 +77,20 @@ inline void FourVector::operator-=(const FourVector& rhs) {
     v2 -= rhs.v2;
     v3 -= rhs.v3;
     v4 -= rhs.v4;
+}
+
+inline void FourVector::operator*=(const double rhs) {
+    v1 *= rhs;
+    v2 *= rhs;
+    v3 *= rhs;
+    v4 *= rhs;
+}
+
+inline void FourVector::operator/=(const double rhs) {
+    v1 /= rhs;
+    v2 /= rhs;
+    v3 /= rhs;
+    v4 /= rhs;
 }
 
 inline bool FourVector::AlmostEqualZero(double A) {
