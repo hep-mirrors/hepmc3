@@ -3,6 +3,7 @@
 
 #include <deque>
 #include <cassert>
+#include <boost/foreach.hpp>
 
 namespace HepMC3 {
 
@@ -41,107 +42,72 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
     double lenFac = 1.;
 
     // 2. Fill particle information
+    std::vector<GenParticle> hepevt_particles;
+    hepevt_particles.reserve( pyev.size() );
+
+    for(int i=0;i<pyev.size(); ++i) {
+        hepevt_particles.push_back( GenParticle( FourVector( pyev[i].px(), pyev[i].py(),
+                                                 pyev[i].pz(), pyev[i].e() ) * momFac,
+                                                 pyev[i].id(), pyev.statusHepMC(i) )
+                                   );
+
+/*
+        hepevt_particles[i]->suggest_barcode(i);
+*/
+        hepevt_particles[i].set_generated_mass( momFac * pyev[i].m() );
+
+/*
+        // Colour flow uses index 1 and 2.
+        int colType = pyev[i].colType();
+        if (colType ==  1 || colType == 2)
+            hepevt_particles[i]->set_flow(1, pyev[i].col());
+        if (colType == -1 || colType == 2)
+            hepevt_particles[i]->set_flow(2, pyev[i].acol());
+*/
+    }
+
     // 3. Fill vertex information
-    // Create a particle instance for each that belongs to a decay tree and
-    // add these particles to HepMC3 event in topological order. Vertices will
-    // be created along the way and filled with mother/daughter information
-    // NOTE: 'hepevt_particles' stores pointers to GenParticles corresponding
-    //       to pyev Particles. This pointer is NULL for Particles not added
-    //       to the event
+    std::vector<GenVertex> vertex_cache;
 
-    std::vector<GenParticle*> hepevt_particles( pyev.size() );
-    std::deque<int>           particle_order;
+    for(int i=1;i<pyev.size(); ++i) {
 
-    // Here we assume that the first two particles are the incoming beam particles
-    particle_order.push_back(1);
-    particle_order.push_back(2);
-
-    // Add particles in topological order
-    while( !particle_order.empty() ) {
-
-        int i = particle_order.front();
-
-        bool added_to_front = false;
-
-        // Add mothers to the front of the list
         std::vector<int> mothers = pyev.motherList(i);
-        for(unsigned int j=0; j<mothers.size(); ++j) {
-            if(!mothers[j] || hepevt_particles[mothers[j]]) continue;
-            added_to_front = true;
-            particle_order.push_front(mothers[j]);
-        }
 
-        // If we have added at least one mother, our particle is not the first particle on the list
-        if( added_to_front ) continue;
+        if(mothers.size()) {
+            GenVertex prod_vtx = hepevt_particles[mothers[0]].end_vertex();
 
-        particle_order.pop_front();
+            if(!prod_vtx) {
+                prod_vtx = GenVertex();
+                vertex_cache.push_back(prod_vtx);
 
-        // If this particle has not yet been added to the event
-        if( hepevt_particles[i] == NULL ) {
-
-            // Fill the particle
-            hepevt_particles[i] = &evt->new_particle(
-                                   FourVector( momFac * pyev[i].px(), momFac * pyev[i].py(),
-                                   momFac * pyev[i].pz(), momFac * pyev[i].e()  ),
-                                   pyev[i].id(), pyev.statusHepMC(i) );
-
-/*
-            hepevt_particles[i]->suggest_barcode(i);
-*/
-            hepevt_particles[i]->set_generated_mass( momFac * pyev[i].m() );
-
-/*
-            // Colour flow uses index 1 and 2.
-            int colType = pyev[i].colType();
-            if (colType ==  1 || colType == 2)
-                hepevt_particles[i]->set_flow(1, pyev[i].col());
-            if (colType == -1 || colType == 2)
-                hepevt_particles[i]->set_flow(2, pyev[i].acol());
-*/
-            FourVector prod_pos( lenFac * pyev[i].xProd(), lenFac * pyev[i].yProd(), lenFac * pyev[i].zProd(), lenFac * pyev[i].tProd() );
-
-            bool has_position = !prod_pos.is_zero();
-
-            // Check if we need a production vertex
-            if( mothers.size() || has_position ) {
-
-                GenVertex *prod_vtx = NULL;
-                if( mothers.size() ) prod_vtx = hepevt_particles[mothers[0]]->end_vertex();
-
-                // No existing production vertex - create one
-                if(!prod_vtx) {
-                    prod_vtx = &evt->new_vertex();
-
-                    for(unsigned int j=0; j<mothers.size(); ++j) {
-                        // NOTE: if sorting algorithm is correct all mothers
-                        //       of any particle already exist in the event
-                        assert( hepevt_particles[mothers[j]] );
-
-                        prod_vtx->add_particle_in( *hepevt_particles[mothers[j]] );
-                    }
-
-                    if(has_position) prod_vtx->set_position(prod_pos);
+                for(unsigned int j=0; j<mothers.size(); ++j) {
+                    prod_vtx.add_particle_in( hepevt_particles[mothers[j]] );
                 }
-                // Production vertex exist - update its position if necessary
-                else if( has_position && !prod_vtx->position().is_zero()) {
-                    prod_vtx->set_position(prod_pos);
-                }
-
-                prod_vtx->add_particle_out( *hepevt_particles[i] );
             }
+            FourVector prod_pos( pyev[i].xProd(), pyev[i].yProd(),
+                                 pyev[i].zProd(), pyev[i].tProd() );
 
-            // Add daughters to the end of the list
-            std::vector<int> daughters = pyev[i].daughterList();
-            for(unsigned int j=0; j<daughters.size(); ++j) {
-                if(!daughters[j] || hepevt_particles[daughters[j]]) continue;
-                particle_order.push_back(daughters[j]);
-            }
+            prod_pos *= lenFac;
+
+            // Update vertex position if necessary
+            if(!prod_pos.is_zero() && prod_vtx.position().is_zero()) prod_vtx.set_position( prod_pos );
+
+            prod_vtx.add_particle_out( hepevt_particles[i] );
         }
     }
 
+    // Reserve memory for the event
+    evt->reserve( hepevt_particles.size(), vertex_cache.size() );
+
+    // Here we assume that the first two particles are the beam particles
+    vector<GenParticle> beam_particles;
+    beam_particles.push_back(hepevt_particles[0]);
+    beam_particles.push_back(hepevt_particles[1]);
+
+    // Add particles and vertices in topological order
+    evt->add_tree( beam_particles );
+
 /*
-    // Here we assume that the first two particles in the list
-    // are the incoming beam particles.
     evt->set_beam_particles( hepevt_particles[1], hepevt_particles[2] );
 */
 
@@ -157,23 +123,20 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
         // NOTE: We have to check if this step makes any sense in HepMC3 event standard
         if ( !hepevt_particles[i] ) {
             std::cerr << "hanging particle " << i << std::endl;
-            hepevt_particles[i] = &evt->new_particle(
-                                   FourVector( momFac * pyev[i].px(), momFac * pyev[i].py(),
-                                   momFac * pyev[i].pz(), momFac * pyev[i].e()  ),
-                                   pyev[i].id(), pyev.statusHepMC(i) );
 
-            GenVertex *prod_vtx = &evt->new_vertex();
+            GenVertex prod_vtx;
 
-            prod_vtx->add_particle_out( *hepevt_particles[i] );
+            prod_vtx.add_particle_out( hepevt_particles[i] );
+            evt->add_vertex(prod_vtx);
         }
 
         // Also check for free partons (= gluons and quarks; not diquarks?).
         if ( doHadr && m_free_parton_warnings ) {
-            if ( hepevt_particles[i]->pdg_id() == 21 && !hepevt_particles[i]->end_vertex() ) {
+            if ( hepevt_particles[i].pdg_id() == 21 && !hepevt_particles[i].end_vertex() ) {
                 std::cerr << "gluon without end vertex " << i << std::endl;
                 if ( m_crash_on_problem ) exit(1);
             }
-            if ( abs(hepevt_particles[i]->pdg_id()) <= 6 && !hepevt_particles[i]->end_vertex() ) {
+            if ( abs(hepevt_particles[i].pdg_id()) <= 6 && !hepevt_particles[i].end_vertex() ) {
                 std::cerr << "quark without end vertex " << i << std::endl;
                 if ( m_crash_on_problem ) exit(1);
             }

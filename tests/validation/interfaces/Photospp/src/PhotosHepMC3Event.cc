@@ -24,19 +24,14 @@ m_event(event) {
     if(!event) return;
 
     // Find all particles that are not stable and were not deleted in the last version
-    HepMC3::FindParticles search( *event, HepMC3::FIND_ALL, HepMC3::STATUS != 1 && HepMC3::VERSION_DELETED > event->last_version() );
+    HepMC3::FindParticles search( *event, HepMC3::FIND_ALL, HepMC3::STATUS != 1 );
 
     m_particles.reserve(search.results().size());
 
-    BOOST_FOREACH( HepMC3::GenParticle *p, search.results() ) {
+    BOOST_FOREACH( const HepMC3::GenParticle &p, search.results() ) {
         PhotosHepMC3Particle *particle = new PhotosHepMC3Particle(p);
         particle->set_parent_event(this);
         m_particles.push_back( (PhotosParticle*) particle);
-    }
-
-    if(Photos::isCreateHistoryEntries) {
-        // Create new version
-        event->new_version("Photos++");
     }
 }
 

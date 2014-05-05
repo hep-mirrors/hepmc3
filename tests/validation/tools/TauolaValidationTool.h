@@ -19,6 +19,8 @@ public:
     bool tool_modifies_event() { return true;       }
 
     void initialize() {
+        Tauolapp::Tauola::setSameParticleDecayMode(4);
+        Tauolapp::Tauola::setOppositeParticleDecayMode(4);
         Tauolapp::Tauola::initialize();
     }
 

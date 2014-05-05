@@ -44,7 +44,6 @@ public:
 //
 public:
     HepMC3::GenEvent* getEvent()                   { return m_event; }
-    int  last_version()                            { return m_event->last_version(); } //!< Get last version of HepMC3 event
     std::vector<PhotosParticle*> getParticleList() { return m_particles; }    //!< Get particle list
 //
 // Fields

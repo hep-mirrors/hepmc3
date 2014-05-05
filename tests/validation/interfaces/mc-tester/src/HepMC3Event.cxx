@@ -16,19 +16,15 @@ HepMC3Event::HepMC3Event( HepMC3::GenEvent &e, bool include_self_decay){
   // (and may differ from "barcode" in the GenEvent)
   count_self_decays=include_self_decay;
 
-  HepMC3::FindParticles search( e, HepMC3::FIND_ALL, HepMC3::VERSION_DELETED > e.last_version() );
+  HepMC3::FindParticles search( e, HepMC3::FIND_ALL );
 
   m_particle_count = search.results().size();
 
   particles = new HepMC3Particle*[m_particle_count];
 
   for(int i=0; i<m_particle_count; ++i) {
-    particles[i] = new HepMC3Particle(*search.results()[i],this,i+1);
+    particles[i] = new HepMC3Particle(search.results()[i],this,i+1);
   }
-}
-
-int HepMC3Event::GetVersion() {
-    return evt->last_version();
 }
 
 int HepMC3Event::GetNumOfParticles(){
@@ -61,7 +57,7 @@ HEPParticle* HepMC3Event::GetParticle(int idx){
 //Only implemented in HepMC3Event. Returns particle with GenEvent barcode.
 HepMC3Particle* HepMC3Event::GetParticleWithBarcode( int barcode ){
   for(int i=0; i <  GetNumOfParticles(); i++){
-    if(particles[i]->part->barcode()==barcode)
+    if(particles[i]->part.barcode()==barcode)
       return particles[i];
   }
   cout << "Could not find particle with barcode "<<barcode<<endl;
@@ -79,14 +75,14 @@ HEPParticleList* HepMC3Event::FindParticle(int pdg, HEPParticleList *list)
     HEPParticle * p = GetParticle(i);
     if(p->GetPDGId()==pdg){
       list->push_back(p);
-      HepMC3::GenVertex * end = ((HepMC3Particle *) p)->part->end_vertex();
+      HepMC3::GenVertex end = ((HepMC3Particle *) p)->part.end_vertex();
       //if we want to ignore cases like tau->tau+gamma:
       if(!CountSelfDecays()&&end){
         //Check for daughters that are the same particle type
-        BOOST_FOREACH( HepMC3::GenParticle *gen_p, end->particles_out() ) {
+        BOOST_FOREACH( const HepMC3::GenParticle &gen_p, end.particles_out() ) {
 
           //If found, remove from list.
-          if(gen_p->pdg_id() == pdg)
+          if(gen_p.pdg_id() == pdg)
             list->remove(p);
         }
       }

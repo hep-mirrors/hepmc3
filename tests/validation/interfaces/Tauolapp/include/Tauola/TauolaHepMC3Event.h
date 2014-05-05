@@ -14,7 +14,7 @@ class TauolaHepMC3Event : public TauolaEvent {
 // Constructors
 //
 public:
-    /** Constructor which keeps a pointer to the HepMC3::GenEvent*/
+    /** Constructor which keeps reference to the HepMC3::GenEvent*/
     TauolaHepMC3Event(HepMC3::GenEvent *event);
 
     ~TauolaHepMC3Event();
@@ -41,10 +41,10 @@ public:
 // Accessors
 //
 public:
-    HepMC3::GenEvent* getEvent()                   { return m_event;           }       //!< Get HepMC3 event
+    HepMC3::GenEvent* getEvent()             const { return m_event;            } //!< Get HepMC3 event
 
-    int  last_version()                            { return m_event->last_version(); } //!< Get last version of HepMC3 event
-    void delete_vertex(HepMC3::GenVertex *v)       { m_event->delete_vertex(*v); }     //!< Delete HepMC3 vertex
+    void delete_vertex(HepMC3::GenVertex &v)       { m_event->delete_vertex(v); } //!< Delete HepMC3 vertex
+    void add_vertex(HepMC3::GenVertex &v)          { m_event->add_vertex(v);    } //!< Add    HepMC3 vertex
 
 //
 // Fields

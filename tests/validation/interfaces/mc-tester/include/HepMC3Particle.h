@@ -21,7 +21,7 @@ public:
   /** Plain constructor.*/
   HepMC3Particle();
   /** Constructor which makes a HepMC3Particle from HepMC3::GenParticle. */
-  HepMC3Particle(HepMC3::GenParticle& particle, HEPEvent * e, int Id);
+  HepMC3Particle(const HepMC3::GenParticle &particle, HEPEvent * e, int Id);
   /** Destructor*/
   ~HepMC3Particle();
 
@@ -125,7 +125,7 @@ public:
   /** Returns a list of daughter particles of this particle.*/
   HEPParticleList*  GetMotherList(HEPParticleList *list);
 public:
-  HepMC3::GenParticle *part;
+  HepMC3::GenParticle part;
 };
 
 #endif // _HepMC3Particle_H

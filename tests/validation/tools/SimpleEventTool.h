@@ -37,42 +37,49 @@ public:
         FourVector momentum_tau1(+1.38605041e+00,+1.38605041e+00,+7.50000000e-01,+2.75000005e+00);
         FourVector momentum_tau2(-1.38605041e+00,-1.38605041e+00,+7.50000000e-01,+2.75000005e+00);
 
-        // Make particles
         HEPMC2CODE(
-            GenParticle &e1   = *new GenParticle( momentum_e1,   -11, 2 );
-            GenParticle &e2   = *new GenParticle( momentum_e2,    11, 2 );
-            GenParticle &tau1 = *new GenParticle( momentum_tau1, -15, 1 );
-            GenParticle &tau2 = *new GenParticle( momentum_tau2,  15, 1 );
+            // Make particles
+            GenParticle *e1     = new GenParticle( momentum_e1,   -11, 2 );
+            GenParticle *e2     = new GenParticle( momentum_e2,    11, 2 );
+            GenParticle *tau1   = new GenParticle( momentum_tau1, -15, 1 );
+            GenParticle *tau2   = new GenParticle( momentum_tau2,  15, 1 );
+            GenVertex   *vertex = new GenVertex();
+
+            // Set masses
+            e1->  set_generated_mass(0.000511);
+            e2->  set_generated_mass(0.000511);
+            tau1->set_generated_mass(1.777);
+            tau2->set_generated_mass(1.777);
+
+            // Make vertex
+            vertex->add_particle_in(e1);
+            vertex->add_particle_in(e2);
+            vertex->add_particle_out(tau1);
+            vertex->add_particle_out(tau2);
+
+            hepmc.add_vertex(vertex);
         )
         HEPMC3CODE(
-            GenParticle &e1   = hepmc.new_particle( momentum_e1,   -11, 2 );
-            GenParticle &e2   = hepmc.new_particle( momentum_e2,    11, 2 );
-            GenParticle &tau1 = hepmc.new_particle( momentum_tau1, -15, 1 );
-            GenParticle &tau2 = hepmc.new_particle( momentum_tau2,  15, 1 );
-        )
+            // Make particles
+            GenParticle e1  ( momentum_e1,   -11, 2 );
+            GenParticle e2  ( momentum_e2,    11, 2 );
+            GenParticle tau1( momentum_tau1, -15, 1 );
+            GenParticle tau2( momentum_tau2,  15, 1 );
 
-        // Set masses
-        e1.  set_generated_mass(0.000511);
-        e2.  set_generated_mass(0.000511);
-        tau1.set_generated_mass(1.777);
-        tau2.set_generated_mass(1.777);
+            // Set masses
+            e1.  set_generated_mass(0.000511);
+            e2.  set_generated_mass(0.000511);
+            tau1.set_generated_mass(1.777);
+            tau2.set_generated_mass(1.777);
 
-        // Make vertex
-        HEPMC2CODE(
-            GenVertex &vertex = *new GenVertex();
-            vertex.add_particle_in(&e1);
-            vertex.add_particle_in(&e2);
-            vertex.add_particle_out(&tau1);
-            vertex.add_particle_out(&tau2);
-
-            hepmc.add_vertex(&vertex);
-        )
-        HEPMC3CODE(
-            GenVertex &vertex = hepmc.new_vertex();
+            // Make vertex
+            GenVertex vertex;
             vertex.add_particle_in(e1);
             vertex.add_particle_in(e2);
             vertex.add_particle_out(tau1);
             vertex.add_particle_out(tau2);
+
+            hepmc.add_vertex(vertex);
         )
 
         return 0;

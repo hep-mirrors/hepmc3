@@ -226,12 +226,12 @@ void ValidationControl::process(GenEvent &hepmc) {
                 }
             )
             HEPMC3CODE(
-                FindParticles search( hepmc, FIND_ALL, STATUS == 1 && VERSION_DELETED > hepmc.last_version());
+                FindParticles search( hepmc, FIND_ALL, STATUS == 1 );
                 //hepmc.set_print_precision(8);
 
-                BOOST_FOREACH( GenParticle *p, search.results() ) {
-                    //p->print();
-                    sum += p->momentum();
+                BOOST_FOREACH( const GenParticle &p, search.results() ) {
+                    //p.print();
+                    sum += p.momentum();
                 }
 
             )

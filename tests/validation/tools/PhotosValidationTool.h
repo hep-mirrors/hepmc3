@@ -48,7 +48,7 @@ public:
         // Check number of photons created
         HEPMC2CODE( buf += hepmc.particles_size(); )
         HEPMC3CODE(
-            FindParticles search(hepmc, FIND_ALL, PDG_ID == 22 && VERSION_CREATED == hepmc.last_version() );
+            FindParticles search(hepmc, FIND_ALL, PDG_ID == 22 );
             buf = search.results().size();
         )
 

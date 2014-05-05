@@ -27,7 +27,7 @@ class PhotosHepMC3Particle: public PhotosParticle {
 //
 public:
     /** Constructor with HepMC3::GenParticle pointer */
-    PhotosHepMC3Particle(HepMC3::GenParticle *particle);
+    PhotosHepMC3Particle(const HepMC3::GenParticle &particle);
 
     /** Default destructor */
     ~PhotosHepMC3Particle();
@@ -91,37 +91,37 @@ public:
         via a vector of PhotosParticle */
     std::vector<PhotosParticle*> getAllDecayProducts();
 
-    double getPx()                { if(!m_particle) return 0; return m_particle->last_version()->momentum().px(); }   //!< Get px
-    double getPy()                { if(!m_particle) return 0; return m_particle->last_version()->momentum().py(); }   //!< Get py
-    double getPz()                { if(!m_particle) return 0; return m_particle->last_version()->momentum().pz(); }   //!< Get pz
-    double getE()                 { if(!m_particle) return 0; return m_particle->last_version()->momentum().e(); }    //!< Get energy
+    double getPx()                { if(!m_particle) return 0; return m_particle.momentum().px(); }   //!< Get px
+    double getPy()                { if(!m_particle) return 0; return m_particle.momentum().py(); }   //!< Get py
+    double getPz()                { if(!m_particle) return 0; return m_particle.momentum().pz(); }   //!< Get pz
+    double getE()                 { if(!m_particle) return 0; return m_particle.momentum().e(); }    //!< Get energy
 
     void   setPx( double px ); //!< Set px
     void   setPy( double py ); //!< Set py
     void   setPz( double pz ); //!< Set pz
     void   setE ( double e );  //!< Set energy
 
-    int    getPdgID()             { if(!m_particle) return 0; return m_particle->pdg_id(); }          //!< Get PDG ID
-    void   setPdgID(int pdg_id)   { if(!m_particle) return;   m_particle->set_pdg_id(pdg_id); }       //!< Set PDG ID
+    int    getPdgID()             { if(!m_particle) return 0; return m_particle.pdg_id(); }          //!< Get PDG ID
+    void   setPdgID(int pdg_id)   { if(!m_particle) return;   m_particle.set_pdg_id(pdg_id); }       //!< Set PDG ID
 
-    int    getStatus()            { if(!m_particle) return 0; return m_particle->status(); }          //!< Get status
-    void   setStatus(int status)  { if(!m_particle) return;   m_particle->set_status(status); }       //!< Set status
+    int    getStatus()            { if(!m_particle) return 0; return m_particle.status(); }          //!< Get status
+    void   setStatus(int status)  { if(!m_particle) return;   m_particle.set_status(status); }       //!< Set status
 
-    double getMass()              { if(!m_particle) return 0; return m_particle->generated_mass(); }  //!< Get mass
-    void   setMass(double mass)   { if(!m_particle) return;   m_particle->set_generated_mass(mass); } //!< Set mass
+    double getMass()              { if(!m_particle) return 0; return m_particle.generated_mass(); }  //!< Get mass
+    void   setMass(double mass)   { if(!m_particle) return;   m_particle.set_generated_mass(mass); } //!< Set mass
 
-    int    getBarcode()           { if(!m_particle) return 0; return m_particle->barcode(); }         //!< Get barcode
+    int    getBarcode()           { if(!m_particle) return 0; return m_particle.barcode(); }         //!< Get barcode
 
-    HepMC3::GenParticle* getHepMC() { return m_particle; }                                            //!< Get HepMC particle
+    const HepMC3::GenParticle& getHepMC() { return m_particle; }                                     //!< Get HepMC particle
 
     /** Print some information about this particle to standard output */
-    void   print()                { if(!m_particle) return; m_particle->print(); }
+    void   print()                { if(!m_particle) return; m_particle.print(); }
 //
 // Fields
 //
 private:
     PhotosHepMC3Event            *m_parent_event;   //!< Parent event
-    HepMC3::GenParticle          *m_particle;       //!< Pointer to GenParticle
+    HepMC3::GenParticle           m_particle;       //!< Pointer to GenParticle
     std::vector<PhotosParticle*>  m_mothers;        //!< List of mothers
     std::vector<PhotosParticle*>  m_daughters;      //!< List of daughters
     std::vector<PhotosParticle*>  m_decay_products; //!< List of decay products

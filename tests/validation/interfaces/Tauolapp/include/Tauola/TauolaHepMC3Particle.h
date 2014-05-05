@@ -18,7 +18,7 @@ class TauolaHepMC3Particle: public TauolaParticle {
 //
 public:
     /** Constructor which keeps a pointer to the HepMC3::GenParticle*/
-    TauolaHepMC3Particle(HepMC3::GenParticle * particle);
+    TauolaHepMC3Particle( const HepMC3::GenParticle &particle);
 
     ~TauolaHepMC3Particle();
 
@@ -27,7 +27,7 @@ public:
 //
 public:
     /** Returns the HepMC3::GenParticle */
-    HepMC3::GenParticle* getHepMC3() { return m_particle; }
+    HepMC3::GenParticle& getHepMC3() { return m_particle; }
 
     /** Remove the decay branch from the event record and reset the particle status code to stable. */
     void undecay();
@@ -74,38 +74,36 @@ public:
     /** Set parent event */
     void set_parent_event(TauolaHepMC3Event *evt) { m_parent_event = evt; }
 
-    double getPx()                { if(!m_particle) return 0; return m_particle->momentum().px(); }   //!< Get px
-    double getPy()                { if(!m_particle) return 0; return m_particle->momentum().py(); }   //!< Get py
-    double getPz()                { if(!m_particle) return 0; return m_particle->momentum().pz(); }   //!< Get pz
-    double getE()                 { if(!m_particle) return 0; return m_particle->momentum().e(); }    //!< Get energy
+    double getPx()                { if(!m_particle) return 0; return m_particle.momentum().px(); }   //!< Get px
+    double getPy()                { if(!m_particle) return 0; return m_particle.momentum().py(); }   //!< Get py
+    double getPz()                { if(!m_particle) return 0; return m_particle.momentum().pz(); }   //!< Get pz
+    double getE()                 { if(!m_particle) return 0; return m_particle.momentum().e(); }    //!< Get energy
 
     void   setPx( double px ); //!< Set px
     void   setPy( double py ); //!< Set py
     void   setPz( double pz ); //!< Set pz
     void   setE( double e );   //!< Set energy
 
-    int    getPdgID()             { if(!m_particle) return 0; return m_particle->pdg_id(); }          //!< Get PDG ID
-    void   setPdgID(int pdg_id)   { if(!m_particle) return;   m_particle->set_pdg_id(pdg_id); }       //!< Set PDG ID
+    int    getPdgID()             { if(!m_particle) return 0; return m_particle.pdg_id(); }          //!< Get PDG ID
+    void   setPdgID(int pdg_id)   { if(!m_particle) return;   m_particle.set_pdg_id(pdg_id); }       //!< Set PDG ID
 
-    int    getStatus()            { if(!m_particle) return 0; return m_particle->status(); }          //!< Get status
-    void   setStatus(int status)  { if(!m_particle) return;   m_particle->set_status(status); }       //!< Set status
+    int    getStatus()            { if(!m_particle) return 0; return m_particle.status(); }          //!< Get status
+    void   setStatus(int status)  { if(!m_particle) return;   m_particle.set_status(status); }       //!< Set status
 
-    double getMass()              { if(!m_particle) return 0; return m_particle->generated_mass(); }  //!< Get mass
-    void   setMass(double mass)   { if(!m_particle) return;   m_particle->set_generated_mass(mass); } //!< Set mass
+    double getMass()              { if(!m_particle) return 0; return m_particle.generated_mass(); }  //!< Get mass
+    void   setMass(double mass)   { if(!m_particle) return;   m_particle.set_generated_mass(mass); } //!< Set mass
 
-    int    getBarcode()           { if(!m_particle) return 0; return m_particle->barcode(); }         //!< Get barcode
-
-    HepMC3::GenParticle* getHepMC() { return m_particle; }                                            //!< Get HepMC particle
+    int    getBarcode()           { if(!m_particle) return 0; return m_particle.barcode(); }         //!< Get barcode
 
     /** Print some information about this particle to standard output */
-    void   print()                { if(!m_particle) return; m_particle->print(); }
+    void   print()                { if(!m_particle) return; m_particle.print(); }
 
 //
 // Fields
 //
 private:
     TauolaHepMC3Event            *m_parent_event; //!< Parent event
-    HepMC3::GenParticle          *m_particle;     //!< Pointer to the HepMC3::GenParticle particle
+    HepMC3::GenParticle           m_particle;     //!< HepMC3::GenParticle particle
     std::vector<TauolaParticle*>  m_mothers;      //!< List of mothers
     std::vector<TauolaParticle*>  m_daughters;    //!< List of daughters
 
