@@ -2,12 +2,12 @@
 #define  HEPMC3_GENEVENT_H
 /**
  *  @file GenEvent.h
- *  @brief Definition of \b class HepMC3::GenEvent
+ *  @brief Definition of \b class GenEvent
  *
  *  @class HepMC3::GenEvent
  *  @brief Stores event-related information
  *
- *  Manages HepMC3::GenParticle and HepMC3::GenVertex objects
+ *  Manages GenParticle and GenVertex objects
  *
  */
 #include "HepMC3/Data/SmartPointer.h"
@@ -25,26 +25,27 @@ class GenEvent {
 // Constructors
 //
 public:
-    /** Default constructor */
+    /** @brief Default constructor */
     GenEvent();
 
 //
 // Functions
 //
 public:
-    /** Print current version of the event */
+    /** @brief Print current version of the event */
     void print( std::ostream& ostr = std::cout ) const;
 
-    /** Dump the whole content of the event memory. Useful for debugging */
+    /** @brief Dump the whole content of the event memory. Useful for debugging */
     void dump() const;
 
-    /** Add particle */
+    /** @brief Add particle */
     void add_particle( const GenParticlePtr &p );
 
-    /** Add vertex */
+    /** @brief Add vertex */
     void add_vertex( const GenVertexPtr &v );
 
-    /** Add whole tree in topological order
+    /** @brief Add whole tree in topological order
+     *
      *  This function will find the beam particles (particles
      *  that have no production vertices or their production vertices
      *  have no particles) and will add the whole decay tree starting from
@@ -55,16 +56,18 @@ public:
      */
     void add_tree( const vector<GenParticlePtr> &particles );
 
-    /** Delete particle */
+    /** @brief Delete particle */
     void delete_particle( const GenParticlePtr &p );
 
-    /** Delete vertex */
+    /** @brief Delete vertex */
     void delete_vertex( const GenVertexPtr &v );
 
-    /** Reserve memory for particles and vertices
+    /** @brief Reserve memory for particles and vertices
+     *
      *  Helps optimize event creation when size of the event is known beforehand
      */
     void reserve(unsigned int particles, unsigned int vertices = 0);
+
 //
 // Accessors
 //
@@ -82,6 +85,14 @@ public:
     const vector<GenVertexPtr>&   vertices()   const { return m_vertices;             } //!< Get list of vertices
 
     GenEventData* serializable_data() const; //!< Create event data that can be used for serialization @todo This is temporary function for benchmarking. Change it to proper class
+
+//
+// Deprecated functions
+//
+public:
+    __attribute__((deprecated("Use GenParticlePtr instead of GenParticle*"))) void add_particle( GenParticle *p ); //!< Add particle by raw pointer @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
+    __attribute__((deprecated("Use GenVertexPtr instead of GenVertex*")))     void add_vertex  ( GenVertex *v );   //!< Add vertex by raw pointer   @deprecated Use GenEvent::add_vertex( const GenVertexPtr& ) instead
+
 //
 // Fields
 //

@@ -2,7 +2,7 @@
 #define  HEPMC3_IO_GENEVENT_H
 /**
  *  @file  IO_GenEvent.h
- *  @brief Definition of \b class HepMC3::IO_GenEvent
+ *  @brief Definition of \b class IO_GenEvent
  *
  *  @class HepMC3::IO_GenEvent
  *  @brief GenEvent I/O parsing and serialization for human-readable text files
@@ -24,30 +24,34 @@ class IO_GenEvent : public IO_Base {
 // Constructors
 //
 public:
-    /** Default constructor
+    /** @brief Default constructor
+     *
      *  Mode of operation determines if file is read-only or write-only
      *  @warning If file opened in write-only mode exists, it will be deleted
      */
     IO_GenEvent(const std::string &filename, std::ios::openmode mode);
 
-    /** Default destructor */
+    /** @brief Default destructor */
     ~IO_GenEvent();
 
 //
 // Functions
 //
 public:
-    /** Write event to file
+    /** @brief Write event to file
+     *
      *  @param[in] evt Event to be serialized
      */
     void write_event(const GenEvent &evt);
 
-    /** Load event from file
+    /** @brief Load event from file
+     *
      *  @param[out] evt Contains parsed event
      */
     bool fill_next_event(GenEvent &evt);
 
-    /** Attempts to allocate buffer of the chosen size
+    /** @brief Attempts to allocate buffer of the chosen size
+     *
      *  This function can be called manually by the user or will be called
      *  before first read/write operation
      *  @note If buffer size is to large it will be divided by 2
@@ -56,7 +60,8 @@ public:
     void allocate_buffer();
 
 private:
-    /** Inline function for writing strings
+    /** @brief Inline function for writing strings
+     *
      *  Since strings can be long (maybe even longer than buffer) they have to be delt
      *  with separately.
      */
@@ -65,12 +70,14 @@ private:
     void flush();        //!< Inline function flushing buffer to output stream when close to buffer capacity
     void forced_flush(); //!< Inline function forcing flush to the output stream
 private:
-    /** Write vertex
+    /** @brief Write vertex
+     *
      *  Helper routine for writing single vertex to file
      */
     void write_vertex  (const GenVertexPtr &v);
 
-    /** Write particle
+    /** @brief Write particle
+     *
      *  Helper routine for writing single particle to file
      */
     void write_particle(const GenParticlePtr &p, int second_field, bool is_new_version);
@@ -79,7 +86,8 @@ private:
 // Accessors
 //
 public:
-    /** Set output precision
+    /** @brief Set output precision
+     *
      *  Available range is [2,24]. Default is 16.
      */
     void set_precision( unsigned int prec ) {
@@ -87,7 +95,8 @@ public:
         m_precision = prec;
     }
 
-    /** Set buffer size (in bytes)
+    /** @brief Set buffer size (in bytes)
+     *
      *  Default is 256kb. Minimum is 256b.
      *  Size can only be changed before first read/write operation.
      */

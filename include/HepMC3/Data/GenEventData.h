@@ -2,7 +2,7 @@
 #define  HEPMC3_DATA_GENEVENTDATA_H
 /**
  *  @file GenEventData.h
- *  @brief Definition of \b struct HepMC3::GenEventData
+ *  @brief Definition of \b struct GenEventData
  *
  *  @struct HepMC3::GenEventData
  *  @brief Stores serializable event information

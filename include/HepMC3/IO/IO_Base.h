@@ -2,7 +2,7 @@
 #define  HEPMC3_IO_BASE_H
 /**
  *  @file  IO_Base.h
- *  @brief Definition of \b class HepMC3::IO_Base
+ *  @brief Definition of \b class IO_Base
  *
  *  @class HepMC3::IO_Base
  *  @brief Abstract class serving as a base of I/O interfaces
@@ -23,11 +23,12 @@ class IO_Base {
 // Constructors
 //
 public:
-    /** Default constructor
+    /** @brief Default constructor
      *  @warning Only ios::in or ios::out mode is allowed
      */
     IO_Base(const std::string &filename, std::ios::openmode mode);
-    /** Default destructor.
+    /** @brief Default destructor
+     *
      *  Closes I/O stream (if opened)
      */
     virtual ~IO_Base();
@@ -35,13 +36,13 @@ public:
 // Functions
 //
 public:
-    /** Write event to file */
+    /** @brief Write event to file */
     virtual void write_event(const GenEvent &evt) = 0;
 
-    /** Get event from file */
+    /** @brief Get event from file */
     virtual bool fill_next_event(GenEvent &evt)   = 0;
 
-    /** Close the I/O stream */
+    /** @brief Close the I/O stream */
     void close();
 
 //

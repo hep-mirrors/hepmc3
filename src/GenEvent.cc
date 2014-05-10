@@ -1,6 +1,6 @@
 /**
  *  @file GenEvent.cc
- *  @brief Implementation of \b class HepMC3::GenEvent
+ *  @brief Implementation of \b class GenEvent
  *
  */
 #include "HepMC3/GenEvent.h"
@@ -207,6 +207,18 @@ GenEventData* GenEvent::serializable_data() const {
     }
 
     return data;
+}
+
+//
+// Deprecated functions
+//
+
+inline void GenEvent::add_particle( GenParticle *p ) {
+    add_particle( GenParticlePtr(p) );
+}
+
+inline void GenEvent::add_vertex( GenVertex *v ) {
+    add_vertex( GenVertexPtr(v) );
 }
 
 } // namespace HepMC3

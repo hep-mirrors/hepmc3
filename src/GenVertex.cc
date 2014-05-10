@@ -1,6 +1,6 @@
 /**
  *  @file GenVertex.cc
- *  @brief Implementation of \b class HepMC3::GenVertex
+ *  @brief Implementation of \b class GenVertex
  *
  */
 #include "HepMC3/GenVertex.h"

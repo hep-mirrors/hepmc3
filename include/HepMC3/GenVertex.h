@@ -2,7 +2,7 @@
 #define  HEPMC3_GENVERTEX_H
 /**
  *  @file GenVertex.h
- *  @brief Definition of \b class HepMC3::GenVertex
+ *  @brief Definition of \b class GenVertex
  *
  *  @class HepMC3::GenVertex
  *  @brief Stores vertex-related information
@@ -28,20 +28,21 @@ friend class SmartPointer<GenVertex>;
 // Constructors
 //
 public:
-    /** Default constructor */
+    /** @brief Default constructor */
     GenVertex( const FourVector& position = FourVector::ZERO_VECTOR() );
 
 //
 // Functions
 //
 public:
-    /** Print information about the vertex
+    /** @brief Print information about the vertex
+     *
      *  By default prints only vertex-related information
      *  event_listing_format = true is used by event for formatted output
      */
     void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
 
-    /** Check if this vertex belongs to an event */
+    /** @brief Check if this vertex belongs to an event */
     bool in_event() const { return (bool)(m_event); }
 
 //
@@ -50,7 +51,8 @@ public:
 public:
     int barcode() const { return -(((int)m_index)+1);  } //!< Get barcode
 
-    /** Return barcode used in serialization
+    /** @brief Return barcode used in serialization
+     *
      *  If the vertex has at most one incoming particle, it might not be serialized
      *  if it does not contain any m_data. In such cases, its barcode used for
      *  serialization can be 0 or can be the barcode of its sole incoming particle
@@ -63,19 +65,28 @@ public:
     const vector<GenParticlePtr>& particles_in()  const { return m_particles_in;  } //!< Get list of incoming particles
     const vector<GenParticlePtr>& particles_out() const { return m_particles_out; } //!< Get list of outgoing particles
 
-    /** Get position
+    /** @brief Get position
+     *
      *  Returns position of this vertex. If position is not set, searches
      *  production vertices of ancestors to find position.
-     *  Returns HepMC3::FourVector(0,0,0,0) if no position information found.
+     *  Returns FourVector(0,0,0,0) if no position information found.
      */
     const FourVector& position() const;
     void              set_position(const FourVector& new_pos); //!< Set position
+
+//
+// Deprecated functions
+//
+public:
+    __attribute__((deprecated("Use GenParticlePtr instead of GenParticle*"))) void add_particle_in ( GenParticle *p ) { add_particle_in (GenParticlePtr(p)); } //!< Add incoming particle by raw pointer @deprecated Use GenVertex::add_particle_in( const GenParticlePtr &p ) instead
+    __attribute__((deprecated("Use GenVertexPtr instead of GenVertex*")))     void add_particle_out( GenParticle *p ) { add_particle_out(GenParticlePtr(p)); } //!< Add outgoing particle by raw pointer @deprecated Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead
+
 //
 // Fields
 //
 private:
     GenEvent               *m_event;         //!< Parent event
-    unsigned int            m_ref_count;     //!< Reference counter used by HepMC3::SmartPtr class
+    unsigned int            m_ref_count;     //!< Reference counter used by SmartPtr class
     unsigned int            m_index;         //!< Index
     FourVector              m_position;      //!< Position in time-space
     vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list

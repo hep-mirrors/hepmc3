@@ -2,7 +2,7 @@
 #define  HEPMC3_DATA_GENPARTICLEDATA_H
 /**
  *  @file GenParticleData.h
- *  @brief Definition of \b class HepMC3::GenParticleData
+ *  @brief Definition of \b class GenParticleData
  *
  *  @struct HepMC3::GenParticleData
  *  @brief Stores serializable particle information

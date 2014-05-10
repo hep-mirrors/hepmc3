@@ -1,6 +1,6 @@
 /**
  *  @file IO_GenEvent.cc
- *  @brief Implementation of \b class HepMC3::IO_GenEvent
+ *  @brief Implementation of \b class IO_GenEvent
  *
  */
 #include "HepMC3/IO/IO_GenEvent.h"

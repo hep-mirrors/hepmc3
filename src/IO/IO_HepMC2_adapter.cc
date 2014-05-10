@@ -1,6 +1,6 @@
 /**
  *  @file IO_HepMC2_adapter.cc
- *  @brief Implementation of \b class HepMC3::IO_HepMC2_adapter
+ *  @brief Implementation of \b class IO_HepMC2_adapter
  *
  */
 #include "HepMC3/IO/IO_HepMC2_adapter.h"

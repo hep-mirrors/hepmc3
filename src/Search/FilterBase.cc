@@ -1,6 +1,6 @@
 /**
  *  @file FilterBase.cc
- *  @brief Definition of \b class HepMC3::FilterBase
+ *  @brief Definition of \b class FilterBase
  *
  */
 #include "HepMC3/Search/FilterBase.h"

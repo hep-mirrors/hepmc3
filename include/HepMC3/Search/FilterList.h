@@ -2,12 +2,12 @@
 #define  HEPMC3_SEARCH_FILTERLIST_H
 /**
  *  @file FilterList.h
- *  @brief Definition of \b class HepMC3::FilterList
+ *  @brief Definition of \b class FilterList
  *
  *  @class HepMC3::FilterList
  *  @brief List of filters for the search engine
  *
- *  Constructs lists out of HepMC3::Filter objects
+ *  Constructs lists out of Filter objects
  *
  *  @ingroup search_engine
  *
@@ -24,23 +24,27 @@ class FilterList {
 // Constructors
 //
 public:
-    /** Default constructor
+    /** @brief Default constructor
+     *
      *  Used when no filters were passed to search enginge
      */
     FilterList() {}
 
-    /** Single filter constructor
+    /** @brief Single filter constructor
+     *
      *  Used as casting operator when just one filter
      *  was passed to search engine
      */
     FilterList(const Filter &f1);
 
-    /** Two filters constructor
-     *  Used by global HepMC3::Filter AND operator to quickly join pair of filters
+    /** @brief Two filters constructor
+     *
+     *  Used by global Filter AND operator to quickly join pair of filters
      */
     FilterList(const Filter &f1, const Filter &f2);
 
-    /** AND operator
+    /** @brief AND operator
+     *
      *  Used to join multiple filters
      */
     FilterList& operator&&(const Filter &f);
@@ -58,8 +62,9 @@ private:
     vector<Filter> m_filters; //!< List of filters
 };
 
-/** Filter AND operator
- *  Defined so that HepMC3::FilterList can be constructed
+/** @brief Filter AND operator
+ *
+ *  Defined so that FilterList can be constructed
  *  when there is more than one filter passed to search engine
  */
 FilterList operator&&(const Filter &f1, const Filter &f2);

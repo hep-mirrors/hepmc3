@@ -1,6 +1,6 @@
 /**
  *  @file FourVector.icc
- *  @brief Implementation of inline functions from \b class HepMC3::FourVector
+ *  @brief Implementation of inline functions from \b class FourVector
  *
  */
 #include <cmath> // sqrt, fabs

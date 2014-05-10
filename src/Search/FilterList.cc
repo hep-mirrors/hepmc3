@@ -1,6 +1,6 @@
 /**
  *  @file FilterList.cc
- *  @brief Implementation of \b class HepMC3::FilterList
+ *  @brief Implementation of \b class FilterList
  *
  */
 #include "HepMC3/Search/FilterList.h"

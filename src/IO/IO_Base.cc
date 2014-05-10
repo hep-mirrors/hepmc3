@@ -1,6 +1,6 @@
 /**
  *  @file IO_Base.cc
- *  @brief Partial implementation of \b abstract \b class HepMC3::IO_Base
+ *  @brief Partial implementation of \b abstract \b class IO_Base
  *
  */
 #include <iostream>

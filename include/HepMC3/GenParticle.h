@@ -2,7 +2,7 @@
 #define  HEPMC3_GENPARTICLE_H
 /**
  *  @file GenParticle.h
- *  @brief Definition of \b class HepMC3::GenParticle
+ *  @brief Definition of \b class GenParticle
  *
  *  @class HepMC3::GenParticle
  *  @brief Stores particle-related information
@@ -28,20 +28,21 @@ friend class SmartPointer<GenParticle>;
 // Constructors
 //
 public:
-    /** Default constructor */
+    /** @brief Default constructor */
     GenParticle( const FourVector &momentum = FourVector::ZERO_VECTOR(), int pdg_id = 0, int status = 0 );
 
 //
 // Functions
 //
 public:
-    /** Print information about the particle
+    /** @brief Print information about the particle
+     *
      *  By default prints only particle-related information
      *  event_listing_format = true is used by event for formatted output
      */
     void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
 
-    /** Check if this vertex belongs to an event */
+    /** @brief Check if this vertex belongs to an event */
     bool in_event() const { return (bool)(m_event); }
 
 //
@@ -55,7 +56,8 @@ public:
     const FourVector& momentum()  const { return m_momentum;       } //!< Get momentum
     bool  is_generated_mass_set() const { return m_is_mass_set;    } //!< Check if generated mass is set
 
-    /** Get generated mass
+    /** @brief Get generated mass
+     *
      *  This function will return mass as set by a generator/tool.
      *  If not set, it will return momentum().m()
      */

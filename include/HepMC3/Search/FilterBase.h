@@ -2,10 +2,10 @@
 #define  HEPMC3_SEARCH_FILTERBASE_H
 /**
  *  @file FilterBase.h
- *  @brief Definition of \b class HepMC3::FilterBase
+ *  @brief Definition of \b class FilterBase
  *
  *  @class HepMC3::FilterBase
- *  @brief Base class for HepMC3::Filter class
+ *  @brief Base class for Filter class
  *
  *  Objects of this class cannot be directly created by user.
  *  See @ref search_engine for details on how this class is used.
@@ -24,13 +24,13 @@ class FilterBase {
 //
 protected:
 
-/** List of filter parameter types */
+/** @brief List of filter parameter types */
 enum FilterParamType {
     INTEGER_PARAM,
     BOOL_PARAM
 };
 
-/** List of filters with integer parameter */
+/** @brief List of filters with integer parameter */
 enum FilterIntegerParam {
     STATUS,
     STATUS_SUBCODE,
@@ -40,14 +40,14 @@ enum FilterIntegerParam {
     ABS_PDG_ID
 };
 
-/** List of filters boolean parameter */
+/** @brief List of filters boolean parameter */
 enum FilterBoolParam {
     HAS_END_VERTEX,
     HAS_PRODUCTION_VERTEX,
     HAS_SAME_PDG_ID_DAUGHTER
 };
 
-/** List of operators on filter values */
+/** @brief List of operators on filter values */
 enum FilterOperator {
     EQUAL,
     GREATER,
@@ -77,12 +77,14 @@ public:
 //
 protected:
 
-    /** Integer-type internal constructor
+    /** @brief Integer-type internal constructor
+     *
      *  Used by static const initializers to define filters.
      */
     FilterBase(FilterIntegerParam p):m_value_type(INTEGER_PARAM),m_int(p) {}
 
-    /** Boolean-type internal constructor
+    /** @brief Boolean-type internal constructor
+     *
      *  Used by static const initializers to define filters.
      */
     FilterBase(FilterBoolParam p):m_value_type(BOOL_PARAM),m_bool(p) {}
@@ -109,12 +111,12 @@ protected:
     };
 };
 
-static const FilterBase STATUS          = FilterBase::init_status();           //!< Filter base for filtering HepMC3::GenParticle::status()
-static const FilterBase STATUS_SUBCODE  = FilterBase::init_status_subcode();   //!< Filter base for filtering HepMC3::GenParticle::status_subcode()
-static const FilterBase VERSION_CREATED = FilterBase::init_version_created();  //!< Filter base for filtering HepMC3::GenParticle::version_created()
-static const FilterBase VERSION_DELETED = FilterBase::init_version_deleted();  //!< Filter base for filtering HepMC3::GenParticle::version_deleted()
-static const FilterBase PDG_ID          = FilterBase::init_pdg_id();           //!< Filter base for filtering HepMC3::GenParticle::pdg_id()
-static const FilterBase ABS_PDG_ID      = FilterBase::init_abs_pdg_id();       //!< Filter base for filtering abs( HepMC3::GenParticle::pdg_id() )
+static const FilterBase STATUS          = FilterBase::init_status();           //!< Filter base for filtering GenParticle::status()
+static const FilterBase STATUS_SUBCODE  = FilterBase::init_status_subcode();   //!< Filter base for filtering GenParticle::status_subcode()
+static const FilterBase VERSION_CREATED = FilterBase::init_version_created();  //!< Filter base for filtering GenParticle::version_created()
+static const FilterBase VERSION_DELETED = FilterBase::init_version_deleted();  //!< Filter base for filtering GenParticle::version_deleted()
+static const FilterBase PDG_ID          = FilterBase::init_pdg_id();           //!< Filter base for filtering GenParticle::pdg_id()
+static const FilterBase ABS_PDG_ID      = FilterBase::init_abs_pdg_id();       //!< Filter base for filtering abs( GenParticle::pdg_id() )
 
 } // namespace HepMC3
 

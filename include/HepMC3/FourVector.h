@@ -2,7 +2,7 @@
 #define  HEPMC3_FOURVECTOR_H
 /**
  *  @file FourVector.h
- *  @brief Definition of \b class HepMC3::FourVector
+ *  @brief Definition of \b class FourVector
  *
  *  @class HepMC3::FourVector
  *  @brief Generic 4-vector
@@ -23,11 +23,11 @@ class FourVector {
 // Constructors
 //
 public:
-    /** Default constructor */
+    /** @brief Default constructor */
     FourVector()                                      :v1(0.0), v2(0.0), v3(0.0), v4(0.0)  {}
-    /** Sets all FourVector fields */
+    /** @brief Sets all FourVector fields */
     FourVector(double x, double y, double z, double e):v1(x),   v2(y),   v3(z),   v4(e)    {}
-    /** Copy constructor */
+    /** @brief Copy constructor */
     FourVector(const FourVector & v)                  :v1(v.v1),v2(v.v2),v3(v.v3),v4(v.v4) {}
 
 //
@@ -56,10 +56,11 @@ public:
 // Functions related to floating-point operations
 //
 public:
-    /** Check if floating-point value is almost equal 0 */
+    /** @brief Check if floating-point value is almost equal 0 */
     static bool AlmostEqualZero(double A);
 
-    /** Compare floating-point numbers
+    /** @brief Compare floating-point numbers
+     *
      *  Bruce Dawson algorithm for comparing floating-point numbers
      *  Implementation for 64-bit double precision
      *  Updated to remove strict-aliasing warnings
@@ -103,7 +104,7 @@ public:
     double t()        const { return v4; } //!< Get time
     void   setT(double t)   { v4 = t;    } //!< Set time
 
-    /** Set all FourVector fields */
+    /** @brief Set all FourVector fields */
     void set(double x1, double x2, double x3, double x4) {
         v1 = x1;
         v2 = x2;

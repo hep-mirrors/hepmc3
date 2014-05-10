@@ -2,10 +2,10 @@
 #define  HEPMC3_SEARCH_FINDPARTICLES_H
 /**
  *  @file FindParticles.h
- *  @brief Definition of \b class HepMC3::FindParticles
+ *  @brief Definition of \b class FindParticles
  *
  *  @class HepMC3::FindParticles
- *  @brief Search engine for HepMC3::GenEvent class
+ *  @brief Search engine for GenEvent class
  *
  *  @ingroup search_engine
  *
@@ -20,14 +20,14 @@ namespace HepMC3 {
 
 class GenEvent;
 
-/** List of methods of searching through all particles in the event */
+/** @brief List of methods of searching through all particles in the event */
 enum FilterEvent {
     FIND_ALL,
     FIND_FIRST,
     FIND_LAST
 };
 
-/** List of methods of searching starting from particle pointer */
+/** @brief List of methods of searching starting from particle pointer */
 enum FilterParticle {
     FIND_ALL_ANCESTORS,
     FIND_ALL_DESCENDANTS,
@@ -41,27 +41,29 @@ class FindParticles {
 // Constructors
 //
 public:
-    /** HepMC3::GenEvent-based constructor */
+    /** @brief GenEvent-based constructor */
     FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list = FilterList() );
 
-    /** HepMC3::GenParticle-based constructor */
+    /** @brief GenParticle-based constructor */
     FindParticles(const GenParticlePtr &p, FilterParticle filter_type, FilterList filter_list = FilterList() );
 
-    /** Narrow down the results applying additional filters */
+    /** @brief Narrow down the results applying additional filters */
     void narrow_down( FilterList filter_list );
 //
 // Functions
 //
 private:
-    /** Check if particle passed all filters */
+    /** @brief Check if particle passed all filters */
     bool passed_all_filters(const GenParticlePtr &p, FilterList &filter_list);
 
-    /** Check if all ancestors passed the filter
+    /** @brief Check if all ancestors passed the filter
+     *
      *  Recursively check all particles and production vertices of these particles
      */
     void recursive_check_ancestors(const GenVertexPtr &v, FilterList &filter_list);
 
-    /** Check if all descendants passed the filter
+    /** @brief Check if all descendants passed the filter
+     *
      *  Recursively check all particles and end vertices of these particles
      */
     void recursive_check_descendants(const GenVertexPtr &v, FilterList &filter_list);

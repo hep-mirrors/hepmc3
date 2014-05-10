@@ -1,6 +1,6 @@
 /**
  *  @file SmartPointer.icc
- *  @brief Implementation of inline functions from \b class HepMC3::SmartPointer
+ *  @brief Implementation of inline functions from \b class SmartPointer
  *
  */
 

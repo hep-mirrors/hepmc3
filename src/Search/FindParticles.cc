@@ -1,6 +1,6 @@
 /**
  *  @file FindParticles.cc
- *  @brief Implementation of \b class HepMC3::FindParticles
+ *  @brief Implementation of \b class FindParticles
  *
  */
 #include "HepMC3/Search/FindParticles.h"

@@ -1,6 +1,6 @@
 /**
  *  @file GenParticle.cc
- *  @brief Implementation of \b class HepMC3::GenParticle
+ *  @brief Implementation of \b class GenParticle
  *
  */
 #include "HepMC3/GenParticle.h"
