@@ -3,10 +3,13 @@
  *  @brief Implementation of \b class HepMC3::GenEvent
  *
  */
+#include "HepMC3/GenEvent.h"
+
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
-#include "HepMC3/GenEvent.h"
 #include "HepMC3/Setup.h"
+
+#include "HepMC3/Data/GenEventData.h"
 
 #include <vector>
 #include <deque>
@@ -42,8 +45,8 @@ void GenEvent::print( std::ostream& ostr ) const {
     ostr.precision( print_precision() );
 
     // Print all vertices
-    BOOST_FOREACH( const GenVertex &v, vertices() ) {
-        v.print(ostr,1);
+    BOOST_FOREACH( const GenVertexPtr &v, vertices() ) {
+        v->print(ostr,1);
     }
 
     // Restore the stream state
@@ -58,55 +61,61 @@ void GenEvent::dump() const {
     std::cout<<"-----------------------------"<<std::endl;
     std::cout<<std::endl;
 
-    std::cout<<"GenParticle ("<<particles().size()<<")"<<std::endl;
-    BOOST_FOREACH( const GenParticle &p, particles() ) {
-        p.print();
+    std::cout<<"GenParticlePtr ("<<particles().size()<<")"<<std::endl;
+    BOOST_FOREACH( const GenParticlePtr &p, particles() ) {
+        p->print();
     }
 
-    std::cout<<"GenVertex ("<<vertices().size()<<")"<<std::endl;
-    BOOST_FOREACH( const GenVertex &v, vertices() ) {
-        v.print();
+    std::cout<<"GenVertexPtr ("<<vertices().size()<<")"<<std::endl;
+    BOOST_FOREACH( const GenVertexPtr &v, vertices() ) {
+        v->print();
     }
     std::cout<<"-----------------------------"<<std::endl;
 }
 
-void GenEvent::add_particle(GenParticle &p) {
-    if( p.in_event() ) return;
+void GenEvent::add_particle( const GenParticlePtr &p ) {
+    if( p->in_event() ) return;
 
-    p.m_data->event = this;
-    p.m_data->index = particles().size();
+    p->m_event = this;
+    p->m_index = particles().size();
 
     m_particles.push_back(p);
 }
 
-void GenEvent::add_vertex(GenVertex &v) {
-    if( v.in_event() ) return;
+void GenEvent::add_vertex( const GenVertexPtr &v ) {
+    if( v->in_event() ) return;
 
-    // Add all incoming and outgoing particles
-    BOOST_FOREACH( GenParticle &p, v.m_data->particles_in ) {
-        add_particle(p);
-    }
-
-    BOOST_FOREACH( GenParticle &p, v.m_data->particles_out ) {
-        add_particle(p);
-    }
-
-    v.m_data->event = this;
-    v.m_data->index = vertices().size();
+    v->m_event = this;
+    v->m_index = vertices().size();
 
     m_vertices.push_back(v);
+
+    // Add all incoming and outgoing particles and restore their production/end vertices
+    BOOST_FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
+        if(!p->in_event()) {
+            add_particle(p);
+            p->m_end_vertex = v->m_this;
+        }
+    }
+
+    BOOST_FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
+        if(!p->in_event()) {
+            add_particle(p);
+            p->m_production_vertex = v->m_this;
+        }
+    }
+
 }
 
-void GenEvent::add_tree( const vector<GenParticle> &particles ) {
+void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
 
-    std::deque<GenVertex> sorting;
+    std::deque<GenVertexPtr> sorting;
 
     // Find all starting vertices (end vertex of particles that have no production vertex)
-    for( unsigned int i=0; i<particles.size(); ++i) {
-        const GenParticle &p = particles[i];
-        GenVertex v = p.production_vertex();
-        if( !v || v.particles_in().size()==0 ) {
-            GenVertex v2 = p.end_vertex();
+    BOOST_FOREACH( const GenParticlePtr &p, particles ) {
+        const GenVertexPtr &v = p->production_vertex();
+        if( !v || v->particles_in().size()==0 ) {
+            const GenVertexPtr &v2 = p->end_vertex();
             if(v2) sorting.push_back(v2);
         }
     }
@@ -123,14 +132,14 @@ void GenEvent::add_tree( const vector<GenParticle> &particles ) {
             ++sorting_loop_count;
         )
 
-        GenVertex &v = sorting.front();
+        GenVertexPtr &v = sorting.front();
 
         bool added = false;
 
         // Add all mothers to the front of the list
-        BOOST_FOREACH( const GenParticle &p, v.particles_in() ) {
-            GenVertex v2 = p.production_vertex();
-            if( v2 && !v2.in_event() ) {
+        BOOST_FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+            GenVertexPtr v2 = p->production_vertex();
+            if( v2 && !v2->in_event() ) {
                 sorting.push_front(v2);
                 added = true;
             }
@@ -141,14 +150,14 @@ void GenEvent::add_tree( const vector<GenParticle> &particles ) {
         if( added ) continue;
 
         // If vertex not yet added
-        if( !v.in_event() ) {
+        if( !v->in_event() ) {
 
             add_vertex(v);
 
             // Add all end vertices to the end of the list
-            BOOST_FOREACH( const GenParticle &p, v.particles_out() ) {
-                GenVertex v2 = p.end_vertex();
-                if( v2 && !v2.in_event() ) {
+            BOOST_FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+                GenVertexPtr v2 = p->end_vertex();
+                if( v2 && !v2->in_event() ) {
                     sorting.push_back(v2);
                 }
             }
@@ -158,23 +167,46 @@ void GenEvent::add_tree( const vector<GenParticle> &particles ) {
     }
 
     DEBUG_CODE_BLOCK(
-        DEBUG( 6, "IO_HepMC2_adapter - particles sorted: "
+        DEBUG( 6, "GenEvent - particles sorted: "
                    <<particles_count()<<", max deque size: "
                    <<max_deque_size<<", iterations: "<<sorting_loop_count )
     )
 }
 
-void GenEvent::delete_particle(GenParticle &p) {
+void GenEvent::delete_particle( const GenParticlePtr &p ) {
     return;
 }
 
-void GenEvent::delete_vertex(GenVertex &v) {
+void GenEvent::delete_vertex( const GenVertexPtr &v ) {
     return;
 }
 
 void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
     m_particles.reserve(particles);
     m_vertices.reserve(vertices);
+}
+
+GenEventData* GenEvent::serializable_data() const {
+    GenEventData* data = new GenEventData();
+
+    BOOST_FOREACH( const GenParticlePtr &p, particles() ) {
+        data->particles.push_back(*p);
+    }
+
+    BOOST_FOREACH( const GenVertexPtr &v, vertices() ) {
+        data->vertices.push_back(*v);
+
+        int barcode = v->barcode();
+        BOOST_FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+            data->links.push_back( std::pair<int,int>(p->barcode(),barcode) );
+        }
+
+        BOOST_FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+            data->links.push_back( std::pair<int,int>(barcode,p->barcode()) );
+        }
+    }
+
+    return data;
 }
 
 } // namespace HepMC3

@@ -11,6 +11,7 @@
  *
  */
 #include "HepMC3/Search/FilterList.h"
+#include "HepMC3/Data/SmartPointer.h"
 
 #include <vector>
 using std::vector;
@@ -18,8 +19,6 @@ using std::vector;
 namespace HepMC3 {
 
 class GenEvent;
-class GenVertex;
-class GenParticle;
 
 /** List of methods of searching through all particles in the event */
 enum FilterEvent {
@@ -46,7 +45,7 @@ public:
     FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list = FilterList() );
 
     /** HepMC3::GenParticle-based constructor */
-    FindParticles(const GenParticle &p, FilterParticle filter_type, FilterList filter_list = FilterList() );
+    FindParticles(const GenParticlePtr &p, FilterParticle filter_type, FilterList filter_list = FilterList() );
 
     /** Narrow down the results applying additional filters */
     void narrow_down( FilterList filter_list );
@@ -55,29 +54,29 @@ public:
 //
 private:
     /** Check if particle passed all filters */
-    bool passed_all_filters(const GenParticle &p, FilterList &filter_list);
+    bool passed_all_filters(const GenParticlePtr &p, FilterList &filter_list);
 
     /** Check if all ancestors passed the filter
      *  Recursively check all particles and production vertices of these particles
      */
-    void recursive_check_ancestors(const GenVertex &v, FilterList &filter_list);
+    void recursive_check_ancestors(const GenVertexPtr &v, FilterList &filter_list);
 
     /** Check if all descendants passed the filter
      *  Recursively check all particles and end vertices of these particles
      */
-    void recursive_check_descendants(const GenVertex &v, FilterList &filter_list);
+    void recursive_check_descendants(const GenVertexPtr &v, FilterList &filter_list);
 //
 // Accessors
 //
 public:
-    const vector<GenParticle>& results() const { return m_results; } //!< Get results
+    const vector<GenParticlePtr>& results() const { return m_results; } //!< Get results
 
 //
 // Fields
 //
 private:
-    vector<GenParticle>     m_results;          //!< List of results
-    vector<GenVertex> m_checked_vertices; //!< List of already checked vertices
+    vector<GenParticlePtr> m_results;          //!< List of results
+    vector<GenVertexPtr>   m_checked_vertices; //!< List of already checked vertices
 };
 
 } // namespace HepMC3

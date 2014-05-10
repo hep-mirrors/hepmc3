@@ -12,14 +12,14 @@
  */
 #include "HepMC3/IO/IO_Base.h"
 
+#include "HepMC3/Data/SmartPointer.h"
+
 #include <string>
 #include <fstream>
 
 namespace HepMC3 {
 
 class GenEvent;
-class GenVertex;
-class GenParticle;
 
 class IO_HepMC2_adapter : public IO_Base {
 //
@@ -69,11 +69,11 @@ private:
 // Fields
 //
 private:
-    vector<GenVertex>   m_vertex_cache;        //!< Vertex cache
-    vector<int>         m_vertex_barcodes;     //!< Old vertex barcodes
+    vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache
+    vector<int>            m_vertex_barcodes;     //!< Old vertex barcodes
 
-    vector<GenParticle> m_particle_cache;      //!< Particle cache
-    vector<int>         m_end_vertex_barcodes; //!< Old end vertex barcodes
+    vector<GenParticlePtr> m_particle_cache;      //!< Particle cache
+    vector<int>            m_end_vertex_barcodes; //!< Old end vertex barcodes
 };
 
 } // namespace HepMC3

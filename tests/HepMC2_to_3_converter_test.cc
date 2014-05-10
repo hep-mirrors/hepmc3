@@ -1,9 +1,10 @@
 /**
- * @file HepMC2_to_3_converter_test.cc
- * @brief Test of HepMC2 to 3 IO file converter
+ *  @file HepMC2_adapter_test.cc
+ *  @brief Test of HepMC2 to 3 IO file converter
  *
  */
 #include "HepMC3/GenEvent.h"
+
 #include "HepMC3/IO/IO_HepMC2_adapter.h"
 #include "HepMC3/IO/IO_GenEvent.h"
 
@@ -26,6 +27,7 @@ int main() {
         output_file.write_event(evt);
         if(events_parsed==0) {
             evt.print();
+            evt.dump();
         }
 
         events_parsed++;

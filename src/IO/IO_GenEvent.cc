@@ -10,18 +10,12 @@
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Setup.h"
 
-#include <limits>
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include <set>
 
-#include <boost/range/iterator_range.hpp>
 #include <boost/foreach.hpp>
-using std::endl;
 using std::vector;
-using std::pair;
-using std::set;
 
 namespace HepMC3 {
 
@@ -64,22 +58,22 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     flush();
 
     // Print particles
-    BOOST_FOREACH( const GenParticle &p, evt.particles() ) {
+    BOOST_FOREACH( const GenParticlePtr &p, evt.particles() ) {
 
         // Check to see if we need to write a vertex first
-        const GenVertex &v = p.production_vertex();
+        const GenVertexPtr &v = p->production_vertex();
         int production_vertex = 0;
 
         if(v) {
 
-            production_vertex = v.serialization_barcode();
+            production_vertex = v->serialization_barcode();
 
             if (production_vertex < lowest_vertex_barcode) {
                 write_vertex(v);
             }
 
             ++vertices_processed;
-            lowest_vertex_barcode = v.barcode();
+            lowest_vertex_barcode = v->barcode();
         }
 
         write_particle( p, production_vertex, false );
@@ -119,25 +113,25 @@ void IO_GenEvent::allocate_buffer() {
     m_cursor = m_buffer;
 }
 
-void IO_GenEvent::write_vertex(const GenVertex &v) {
+void IO_GenEvent::write_vertex(const GenVertexPtr &v) {
 
-    m_cursor += sprintf( m_cursor, "V %i [",v.barcode() );
+    m_cursor += sprintf( m_cursor, "V %i [",v->barcode() );
     flush();
 
     bool printed_first = false;
 
-    BOOST_FOREACH( const GenParticle &p, v.particles_in() ) {
+    BOOST_FOREACH( const GenParticlePtr &p, v->particles_in() ) {
 
         if( !printed_first ) {
-            m_cursor  += sprintf(m_cursor,"%i", p.barcode());
+            m_cursor  += sprintf(m_cursor,"%i", p->barcode());
             printed_first = true;
         }
-        else m_cursor += sprintf(m_cursor,",%i",p.barcode());
+        else m_cursor += sprintf(m_cursor,",%i",p->barcode());
 
         flush();
     }
 
-    const FourVector &pos = v.position();
+    const FourVector &pos = v->position();
     if( !pos.is_zero() ) {
         m_cursor += sprintf(m_cursor,"] @ %.*e",m_precision,pos.x());
         flush();
@@ -154,28 +148,28 @@ void IO_GenEvent::write_vertex(const GenVertex &v) {
     }
 }
 
-void IO_GenEvent::write_particle(const GenParticle &p, int second_field, bool is_new_version) {
+void IO_GenEvent::write_particle(const GenParticlePtr &p, int second_field, bool is_new_version) {
 
-    m_cursor += sprintf(m_cursor,"P %i",p.barcode());
+    m_cursor += sprintf(m_cursor,"P %i",p->barcode());
     flush();
 
     if ( is_new_version ) m_cursor += sprintf(m_cursor," X%i",second_field);
     else                  m_cursor += sprintf(m_cursor," %i",second_field);
     flush();
 
-    m_cursor += sprintf(m_cursor," %i",   p.pdg_id() );
+    m_cursor += sprintf(m_cursor," %i",   p->pdg_id() );
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.momentum().px() );
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().px() );
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.momentum().py());
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().py());
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.momentum().pz() );
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().pz() );
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.momentum().e() );
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().e() );
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p.generated_mass() );
+    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->generated_mass() );
     flush();
-    m_cursor += sprintf(m_cursor," %i\n", p.status() );
+    m_cursor += sprintf(m_cursor," %i\n", p->status() );
     flush();
 }
 

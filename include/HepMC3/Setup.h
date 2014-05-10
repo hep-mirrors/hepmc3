@@ -68,7 +68,7 @@ private:
 #define DEBUG_CODE_BLOCK( x ) x
 
 #else
-#define DEBUG( x )
+#define DEBUG( x,y )
 #define DEBUG_CODE_BLOCK( x )
 #endif
 

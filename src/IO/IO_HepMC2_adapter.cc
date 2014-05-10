@@ -165,7 +165,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
 
         for(unsigned int j=0; j<m_vertex_cache.size(); ++j) {
             if( m_vertex_barcodes[j] == m_end_vertex_barcodes[i] ) {
-                m_vertex_cache[j].add_particle_in(m_particle_cache[i]);
+                m_vertex_cache[j]->add_particle_in(m_particle_cache[i]);
                 break;
             }
         }
@@ -248,11 +248,11 @@ int IO_HepMC2_adapter::parse_event_information(GenEvent &evt, const char *buf) {
 }
 
 int IO_HepMC2_adapter::parse_vertex_information(const char *buf) {
-    GenVertex   data;
-    FourVector  position;
-    const char *cursor            = buf;
-    int         barcode           = 0;
-    int         num_particles_out = 0;
+    GenVertexPtr  data = make_shared<GenVertex>();
+    FourVector    position;
+    const char   *cursor            = buf;
+    int           barcode           = 0;
+    int           num_particles_out = 0;
 
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -276,7 +276,7 @@ int IO_HepMC2_adapter::parse_vertex_information(const char *buf) {
     // t
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     position.setT(atof(cursor));
-    data.set_position( position );
+    data->set_position( position );
 
     // SKIPPED: num_orphans_in
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -297,18 +297,18 @@ int IO_HepMC2_adapter::parse_vertex_information(const char *buf) {
 }
 
 int IO_HepMC2_adapter::parse_particle_information(const char *buf) {
-    GenParticle data;
-    FourVector  momentum;
-    const char *cursor  = buf;
-    int         end_vtx = 0;
+    GenParticlePtr  data = make_shared<GenParticle>();
+    FourVector      momentum;
+    const char     *cursor  = buf;
+    int             end_vtx = 0;
 
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    data.set_status_subcode( atoi(cursor) );
+    data->set_status_subcode( atoi(cursor) );
 
     // id
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    data.set_pdg_id( atoi(cursor) );
+    data->set_pdg_id( atoi(cursor) );
 
     // px
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -325,15 +325,15 @@ int IO_HepMC2_adapter::parse_particle_information(const char *buf) {
     // pe
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     momentum.setE(atof(cursor));
-    data.set_momentum(momentum);
+    data->set_momentum(momentum);
 
     // m
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    data.set_generated_mass( atof(cursor) );
+    data->set_generated_mass( atof(cursor) );
 
     // status
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    data.set_status( atoi(cursor) );
+    data->set_status( atoi(cursor) );
 
     // SKIPPED: theta
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -349,17 +349,17 @@ int IO_HepMC2_adapter::parse_particle_information(const char *buf) {
 
     // Set prod_vtx link
     if( end_vtx == m_vertex_barcodes.back() ) {
-        m_vertex_cache.back().add_particle_in(data);
+        m_vertex_cache.back()->add_particle_in(data);
         end_vtx = 0;
     }
     else {
-        m_vertex_cache.back().add_particle_out(data);
+        m_vertex_cache.back()->add_particle_out(data);
     }
 
     m_particle_cache.push_back( data );
     m_end_vertex_barcodes.push_back( end_vtx );
 
-    DEBUG( 10, "IO_HepMC2_adapter: P: "<<m_particle_cache.size()<<" ( old barcode: "<<data.status_subcode()<<", pdg_id: "<<data.pdg_id()<<") in vertex: "<<end_vtx )
+    DEBUG( 10, "IO_HepMC2_adapter: P: "<<m_particle_cache.size()<<" ( old barcode: "<<data->status_subcode()<<", pdg_id: "<<data->pdg_id()<<") end vertex: "<<end_vtx )
 
     return 0;
 }

@@ -15,12 +15,11 @@
  *
  */
 #include "HepMC3/Search/FilterBase.h"
+#include "HepMC3/Data/SmartPointer.h"
 
 namespace HepMC3 {
 
 class GenEvent;
-class GenParticle;
-class GenParticleData;
 
 class Filter : protected FilterBase {
 
@@ -46,18 +45,18 @@ protected:
 // Functions
 //
 public:
-    /** Check if HepMC3::genParticle passed this filter */
-    bool passed_filter(const GenParticle &p) const;
+    /** Check if HepMC3::GenParticle passed this filter */
+    bool passed_filter(const GenParticlePtr &p) const;
 
     /** Logical NOT operator for boolean filters */
     Filter operator!() const { return Filter(m_bool,!m_bool_value); }
 
 private:
     /** HepMC3::Filter::passed_filter helper for integer-type filters */
-    bool passed_int_filter(const GenParticle &p) const;
+    bool passed_int_filter(const GenParticlePtr &p) const;
 
     /** HepMC3::Filter::passed_filter helper for pointer-type filters */
-    bool passed_bool_filter(const GenParticle &p) const;
+    bool passed_bool_filter(const GenParticlePtr &p) const;
 
 //
 // Fields
