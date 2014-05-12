@@ -70,7 +70,7 @@ public:
 // Deprecated functions
 //
 public:
-    __attribute__((deprecated("Use smart pointers instead of raw pointers"))) operator T*() const { return m_data.get(); }
+    __attribute__((deprecated("Use smart pointers instead of raw pointers"))) operator T*() const { return m_data.get(); } //!< Cast to raw pointer @deprecated Should not be used at all
 //
 // Fields
 //
