@@ -62,9 +62,15 @@ public:
     bool operator!=(const SmartPointer &rhs)  const { return  m_data != rhs.m_data; } //!< != operator
 
     const shared_ptr<T>& operator->()         const { return  m_data; } //!< Shared pointer access operator
-    const T&             operator*()          const { return *m_data; } //!< Dereference operator
+    T&                   operator*()          const { return *m_data; } //!< Dereference operator
 
     operator bool() const { return m_data; } //!< Bool cast operator
+
+//
+// Deprecated functions
+//
+public:
+    __attribute__((deprecated("Use smart pointers instead of raw pointers"))) operator T*() const { return m_data.get(); }
 //
 // Fields
 //

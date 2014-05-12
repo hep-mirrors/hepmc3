@@ -92,6 +92,11 @@ int GenVertex::serialization_barcode() const {
 void GenVertex::add_particle_in( const GenParticlePtr &p ) {
     if(!p) return;
 
+    // Avoid duplicates
+    BOOST_FOREACH( const GenParticlePtr &pp, particles_in() ) {
+        if( pp == p ) return;
+    }
+
     m_particles_in.push_back(p);
 
     p->m_end_vertex = m_this;
@@ -101,6 +106,11 @@ void GenVertex::add_particle_in( const GenParticlePtr &p ) {
 
 void GenVertex::add_particle_out( const GenParticlePtr &p ) {
     if(!p) return;
+
+    // Avoid duplicates
+    BOOST_FOREACH( const GenParticlePtr &pp, particles_out() ) {
+        if( pp == p ) return;
+    }
 
     m_particles_out.push_back(p);
 

@@ -49,6 +49,8 @@ public:
 // Accessors
 //
 public:
+    GenEvent *parent_event()      const { return m_event;          } //!< Get parent event
+
     int   barcode()               const { return m_index+1;        } //!< Get barcode
     int   pdg_id()                const { return m_pdg_id;         } //!< Get PDG ID
     int   status()                const { return m_status;         } //!< Get status code

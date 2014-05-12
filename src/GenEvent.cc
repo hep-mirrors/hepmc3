@@ -213,11 +213,11 @@ GenEventData* GenEvent::serializable_data() const {
 // Deprecated functions
 //
 
-inline void GenEvent::add_particle( GenParticle *p ) {
+void GenEvent::add_particle( GenParticle *p ) {
     add_particle( GenParticlePtr(p) );
 }
 
-inline void GenEvent::add_vertex( GenVertex *v ) {
+void GenEvent::add_vertex( GenVertex *v ) {
     add_vertex( GenVertexPtr(v) );
 }
 

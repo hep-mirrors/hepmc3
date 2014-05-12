@@ -49,6 +49,8 @@ public:
 // Accessors
 //
 public:
+    GenEvent *parent_event()      const { return m_event;          } //!< Get parent event
+
     int barcode() const { return -(((int)m_index)+1);  } //!< Get barcode
 
     /** @brief Return barcode used in serialization
@@ -79,7 +81,7 @@ public:
 //
 public:
     __attribute__((deprecated("Use GenParticlePtr instead of GenParticle*"))) void add_particle_in ( GenParticle *p ) { add_particle_in (GenParticlePtr(p)); } //!< Add incoming particle by raw pointer @deprecated Use GenVertex::add_particle_in( const GenParticlePtr &p ) instead
-    __attribute__((deprecated("Use GenVertexPtr instead of GenVertex*")))     void add_particle_out( GenParticle *p ) { add_particle_out(GenParticlePtr(p)); } //!< Add outgoing particle by raw pointer @deprecated Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead
+    __attribute__((deprecated("Use GenParticlePtr instead of GenParticle*"))) void add_particle_out( GenParticle *p ) { add_particle_out(GenParticlePtr(p)); } //!< Add outgoing particle by raw pointer @deprecated Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead
 
 //
 // Fields
