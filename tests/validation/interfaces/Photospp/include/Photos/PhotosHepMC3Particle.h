@@ -1,135 +1,164 @@
 #ifndef _PhotosHepMC3Particle_h_included_
 #define _PhotosHepMC3Particle_h_included_
+
 /**
- *  @file PhotosHepMC3Particle.h
- *  @brief Definition of \b class Photospp::PhotosHepMC3Particle
+ * @class PhotosHepMC3Particle
  *
- *  @class PhotosHepMC3Particle
- *  @brief Interface to HepMC3::GenEvent objects
+ * @brief Interface to HepMC3::GenParticle objects
  *
- *  @implements Photospp::PhotosParticle
+ * This class implements the virtual methods of
+ * PhotosParticle. In this way it provides an
+ * interface between the generic PhotosParticle class
+ * and a HepMC3::GenParticle object.
  *
- *  @date Created       <b> 31 March 2014 </b>
- *  @date Last modified <b> 16 April 2014 </b>
+ * @author Nadia Davidson
+ * @date 17 June 2008
+ *
+ * This code is licensed under GNU General Public Licence.
+ * For more informations, see: http://www.gnu.org/licenses/
  */
-#include "Photos/PhotosParticle.h"
-#include "HepMC3/GenParticle.h"
+
 #include <vector>
+
+#include "HepMC3/GenParticle.h"
+#include "Photos/PhotosParticle.h"
+
+using namespace std;
 
 namespace Photospp
 {
 
-class PhotosHepMC3Event;
+class PhotosHepMC3Particle: public PhotosParticle{
 
-class PhotosHepMC3Particle: public PhotosParticle {
-//
-// Constructors
-//
-public:
-    /** Constructor with HepMC3::GenParticle pointer */
-    PhotosHepMC3Particle(const HepMC3::GenParticle &particle);
+ public:
+  /** General constructor */
+  PhotosHepMC3Particle();
 
-    /** Default destructor */
-    ~PhotosHepMC3Particle();
-//
-// Functions
-//
-public:
-    /** check that the 4 momentum in conserved at the vertices producing
-        and ending this particle */
-    bool checkMomentumConservation();
+  /** Constructor which keeps a pointer to the HepMC3::GenParticle*/
+  PhotosHepMC3Particle(HepMC3::GenParticlePtr particle);
 
-    /** Create a new particle of the same type, with the given
-        properties. The new particle bares no relations to this
-        particle, but it provides a way of creating a intance of
-        the derived class. eg. createNewParticle() is used inside
-        filhep_() so that an eg. PhotosHepMC3Particle is created without
-        the method having explicit knowledge of the PhotosHepMC3Particle
-        class */
-    PhotosParticle * createNewParticle(int pdg_id, int status,
-                                               double mass, double px,
-                                               double py, double pz,
-                                               double e);
+  /** Constructor which creates a new HepMC3::GenParticle and
+       sets the properties pdg_id, statu and mass. */
+  PhotosHepMC3Particle(int pdg_id, int status, double mass);
 
-    /** Create history entry of this particle before modifications
-    of PHOTOS. Implementation of this method depends strongly
-    on the event record. */
-    void createHistoryEntry();
+  /** Destructor */
+  ~PhotosHepMC3Particle();
 
-    /** Create a self-decay vertex for this particle
-        with 'out' being the outgoing particle in new vertex */
-    void createSelfDecayVertex(PhotosParticle *out);
+  /** return the HepMC3::GenParticlePtr */
+  HepMC3::GenParticlePtr getHepMC3();
 
-    /** Clear vector of Photospp::PhotosParticle */
-    void clear(std::vector<PhotosParticle*> &vector);
-//
-// Accessors
-//
-public:
-    /** Get parent event */
-    PhotosHepMC3Event* parent_event()             { return m_parent_event; }
+  /** Set the mothers of this particle via a vector of PhotosParticle*/
+  void setMothers(std::vector<PhotosParticle*> mothers);
 
-    /** Set parent event */
-    void set_parent_event(PhotosHepMC3Event *evt) { m_parent_event = evt; }
+  /** Set the daughters of this particle via a vector of PhotosParticle*/
+  void setDaughters(std::vector<PhotosParticle*> daughters);
 
-    /** Set the mothers of this particle via a vector of PhotosParticle */
-    void setMothers(std::vector<PhotosParticle*> mothers);
+  /** Add a new daughter to the end vertex of this particle */
+  void addDaughter(PhotosParticle* daughter);
 
-    /** Set the daughters of this particle via a vector of PhotosParticle */
-    void setDaughters(std::vector<PhotosParticle*> daughters);
+  /** Returns the mothers of this particle via a vector of PhotosParticle */
+  std::vector<PhotosParticle*> getMothers();
 
-    /** Add daughters of this particle to the list of its daughters */
-    void addDaughter(PhotosParticle* daughter);
+  /** Returns the daughters of this particle via a vector of PhotosParticle
+      IMPORTANT: this method will remeber list from the first call. Particles
+      (e.g. photons) added later will be ignored */
+  std::vector<PhotosParticle*> getDaughters();
 
-    /** Returns the mothers of this particle via a vector of PhotosParticle */
-    std::vector<PhotosParticle*> getMothers();
+  /** Returns all particles in the decay tree of this particle
+      via a vector of PhotosParticle */
+  std::vector<PhotosParticle*> getAllDecayProducts();
 
-    /** Returns the daughters of this particle via a vector of PhotosParticle */
-    std::vector<PhotosParticle*> getDaughters();
+  /** Set the PDG ID code of this particle */
+  void setPdgID(int pdg_id);
 
-    /** Returns all particles in the decay tree of this particle
-        via a vector of PhotosParticle */
-    std::vector<PhotosParticle*> getAllDecayProducts();
+  /** Set the status of this particle */
+  void setStatus(int statu);
 
-    double getPx()                { if(!m_particle) return 0; return m_particle.momentum().px(); }   //!< Get px
-    double getPy()                { if(!m_particle) return 0; return m_particle.momentum().py(); }   //!< Get py
-    double getPz()                { if(!m_particle) return 0; return m_particle.momentum().pz(); }   //!< Get pz
-    double getE()                 { if(!m_particle) return 0; return m_particle.momentum().e(); }    //!< Get energy
+  /** Set the mass of this particle */
+  void setMass(double mass);
 
-    void   setPx( double px ); //!< Set px
-    void   setPy( double py ); //!< Set py
-    void   setPz( double pz ); //!< Set pz
-    void   setE ( double e );  //!< Set energy
+  /** Get the PDG ID code of this particle */
+  int getPdgID();
 
-    int    getPdgID()             { if(!m_particle) return 0; return m_particle.pdg_id(); }          //!< Get PDG ID
-    void   setPdgID(int pdg_id)   { if(!m_particle) return;   m_particle.set_pdg_id(pdg_id); }       //!< Set PDG ID
+  /** Get the status of this particle */
+  int getStatus();
 
-    int    getStatus()            { if(!m_particle) return 0; return m_particle.status(); }          //!< Get status
-    void   setStatus(int status)  { if(!m_particle) return;   m_particle.set_status(status); }       //!< Set status
+  /** Get the barcode of this particle */
+  int getBarcode();
 
-    double getMass()              { if(!m_particle) return 0; return m_particle.generated_mass(); }  //!< Get mass
-    void   setMass(double mass)   { if(!m_particle) return;   m_particle.set_generated_mass(mass); } //!< Set mass
+  /** check that the 4 momentum in conserved at the vertices producing
+      and ending this particle */
+  bool checkMomentumConservation();
 
-    int    getBarcode()           { if(!m_particle) return 0; return m_particle.barcode(); }         //!< Get barcode
+  /** Create a new particle of type PhotosHepMC3Particle, with the given
+      properties. The new particle bares no relations to this
+      particle, but it provides a way of creating a instance of
+      this derived class. eg. createNewParticle() is used inside
+      filhep_() so that a PhotosHepMC3Particle can be created without
+      the method having explicit knowledge of the PhotosHepMC3Particle
+      class */
+  PhotosHepMC3Particle * createNewParticle(int pdg_id, int status, double mass,
+                                       double px, double py,
+                                       double pz, double e);
 
-    const HepMC3::GenParticle& getHepMC() { return m_particle; }                                     //!< Get HepMC particle
+  /** Create history entry for HepMC3 event record.
+      Creates copy of this particle with status = 3 */
+  void createHistoryEntry();
 
-    /** Print some information about this particle to standard output */
-    void   print()                { if(!m_particle) return; m_particle.print(); }
-//
-// Fields
-//
-private:
-    PhotosHepMC3Event            *m_parent_event;   //!< Parent event
-    HepMC3::GenParticle           m_particle;       //!< Pointer to GenParticle
-    std::vector<PhotosParticle*>  m_mothers;        //!< List of mothers
-    std::vector<PhotosParticle*>  m_daughters;      //!< List of daughters
-    std::vector<PhotosParticle*>  m_decay_products; //!< List of decay products
+  /** Create a self-decay vertex for this particle
+      with 'out' being the outgoing particle in new vertex */
+  void createSelfDecayVertex(PhotosParticle *out);
 
-    /** Created particles
-     *  Used to store temporary particles and to delete them later
-     */
-    std::vector<PhotosParticle*>  m_created_particles;
+  /** Print some information about this particle to standard output */
+  void print();
+
+  /** Returns the px component of the four vector*/
+  double getPx();
+
+  /** Returns the py component of the four vector */
+  double getPy();
+
+  /** Returns the pz component of the four vector */
+  double getPz();
+
+  /** Returns the energy component of the four vector */
+  double getE();
+
+  /** Returns the mass taken from event record */
+  double getMass();
+
+  /** Set the px component of the four vector */
+  void setPx( double px );
+
+  /** Set the px component of the four vector */
+  void setPy( double py );
+
+  /** Set the pz component of the four vector */
+  void setPz( double pz );
+
+  /** Set the energy component of the four vector */
+  void setE( double e );
+
+ private:
+  /** Internal function used to clear particles from the vector */
+  void clear(std::vector<PhotosParticle*> v);
+
+  /** A pointer to the HepMC3::GenParticle particle */
+  HepMC3::GenParticlePtr m_particle;
+
+  /** A vector of this particles mothers */
+  std::vector<PhotosParticle*> m_mothers;
+
+  /** A vector of this particles daughters */
+  std::vector<PhotosParticle*> m_daughters;
+
+  /** A vector of all decay products of this particle */
+  std::vector<PhotosParticle*> m_decay_products;
+
+  /** list to keep track of new particles which have been
+      created from this one, so we can call their destructor later */
+  std::vector<PhotosParticle*> m_created_particles;
+
 };
 
 } // namespace Photospp

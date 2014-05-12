@@ -1,11 +1,10 @@
 #include "HepMC3Event.h"
-#include "HepMC3/Search/FindParticles.h"
-
 #include <iostream>
-
-#include <boost/foreach.hpp>
 using namespace std;
-using HepMC3::GenEvent;
+
+#ifdef _USE_ROOT_
+ClassImp(HepMCEvent)
+#endif
 
 HepMC3Event::HepMC3Event( HepMC3::GenEvent &e, bool include_self_decay){
 
@@ -16,14 +15,12 @@ HepMC3Event::HepMC3Event( HepMC3::GenEvent &e, bool include_self_decay){
   // (and may differ from "barcode" in the GenEvent)
   count_self_decays=include_self_decay;
 
-  HepMC3::FindParticles search( e, HepMC3::FIND_ALL );
-
-  m_particle_count = search.results().size();
+  m_particle_count = e.particles().size();
 
   particles = new HepMC3Particle*[m_particle_count];
 
   for(int i=0; i<m_particle_count; ++i) {
-    particles[i] = new HepMC3Particle(search.results()[i],this,i+1);
+    particles[i] = new HepMC3Particle(*e.particles()[i],this,i+1);
   }
 }
 
@@ -33,7 +30,7 @@ int HepMC3Event::GetNumOfParticles(){
 
 void  HepMC3Event::SetNumOfParticles(int num){
   // Should throw some error as this can not be set
-  cout << "Warning, should not be doing this for HepMC3Event" << endl;
+  cout << "Warning, should not be doing this for HepMCEvent" << endl;
 }
 
 int HepMC3Event::GetEventNumber(){
@@ -54,10 +51,10 @@ HEPParticle* HepMC3Event::GetParticle(int idx){
   return particles[idx-1]; //Particle ID starts at 1
 }
 
-//Only implemented in HepMC3Event. Returns particle with GenEvent barcode.
+//Only implemented in HepMCEvent. Returns particle with GenEvent barcode.
 HepMC3Particle* HepMC3Event::GetParticleWithBarcode( int barcode ){
   for(int i=0; i <  GetNumOfParticles(); i++){
-    if(particles[i]->part.barcode()==barcode)
+    if(particles[i]->part->barcode()==barcode)
       return particles[i];
   }
   cout << "Could not find particle with barcode "<<barcode<<endl;
@@ -75,14 +72,13 @@ HEPParticleList* HepMC3Event::FindParticle(int pdg, HEPParticleList *list)
     HEPParticle * p = GetParticle(i);
     if(p->GetPDGId()==pdg){
       list->push_back(p);
-      HepMC3::GenVertex end = ((HepMC3Particle *) p)->part.end_vertex();
+      HepMC3::GenVertexPtr end = ((HepMC3Particle *) p)->part->end_vertex();
       //if we want to ignore cases like tau->tau+gamma:
       if(!CountSelfDecays()&&end){
         //Check for daughters that are the same particle type
-        BOOST_FOREACH( const HepMC3::GenParticle &gen_p, end.particles_out() ) {
-
-          //If found, remove from list.
-          if(gen_p.pdg_id() == pdg)
+        //If found, remove from list.
+        for(unsigned int i=0; i<end->particles_out().size(); ++i) {
+          if(end->particles_out()[i]->pdg_id() == pdg)
             list->remove(p);
         }
       }
@@ -98,21 +94,21 @@ void  HepMC3Event::SetParticle(int idx,HEPParticle *p){}
 void  HepMC3Event::InsertParticle(int at_idx,HEPParticle *p){}
 void  HepMC3Event::Clear(int fromIdx=1){}
 void  HepMC3Event::AddParticle( int id,
-					 int pdgid,
-					 int status,
-					 int mother,
-					 int mother2,
-					 int firstdaughter,
-					 int lastdaughter,
-					 double E,
-					 double px,
-					 double py,
-					 double pz,
-					 double m,
-					 double vx,
-					 double vy,
-					 double vz,
-			       double tau){}
+                                         int pdgid,
+                                         int status,
+                                         int mother,
+                                         int mother2,
+                                         int firstdaughter,
+                                         int lastdaughter,
+                                         double E,
+                                         double px,
+                                         double py,
+                                         double pz,
+                                         double m,
+                                         double vx,
+                                         double vy,
+                                         double vz,
+                               double tau){}
 
 vector<double> * HepMC3Event::Sum4Momentum(){
   vector<double> * sum = new vector<double>(4,0.0);
@@ -134,3 +130,10 @@ HepMC3Event::~HepMC3Event(){
   }
   delete[] particles;
 }
+
+#ifdef _USE_ROOT_
+void HepMC3Event::Streamer(TBuffer &)
+{
+  // streamer class for ROOT compatibility
+}
+#endif

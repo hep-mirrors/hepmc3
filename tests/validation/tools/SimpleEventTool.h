@@ -6,6 +6,8 @@
 #else
 #include "HepMC3/IO/IO_GenEvent.h"
 #include "HepMC3/IO/IO_HepMC2_adapter.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
 using namespace HepMC3;
 
 #endif // ifdef HEPMC2
@@ -37,51 +39,37 @@ public:
         FourVector momentum_tau1(+1.38605041e+00,+1.38605041e+00,+7.50000000e-01,+2.75000005e+00);
         FourVector momentum_tau2(-1.38605041e+00,-1.38605041e+00,+7.50000000e-01,+2.75000005e+00);
 
+        // Make particles
         HEPMC2CODE(
-            // Make particles
             GenParticle *e1     = new GenParticle( momentum_e1,   -11, 2 );
             GenParticle *e2     = new GenParticle( momentum_e2,    11, 2 );
             GenParticle *tau1   = new GenParticle( momentum_tau1, -15, 1 );
             GenParticle *tau2   = new GenParticle( momentum_tau2,  15, 1 );
             GenVertex   *vertex = new GenVertex();
-
-            // Set masses
-            e1->  set_generated_mass(0.000511);
-            e2->  set_generated_mass(0.000511);
-            tau1->set_generated_mass(1.777);
-            tau2->set_generated_mass(1.777);
-
-            // Make vertex
-            vertex->add_particle_in(e1);
-            vertex->add_particle_in(e2);
-            vertex->add_particle_out(tau1);
-            vertex->add_particle_out(tau2);
-
-            hepmc.add_vertex(vertex);
         )
         HEPMC3CODE(
-            // Make particles
-            GenParticle e1  ( momentum_e1,   -11, 2 );
-            GenParticle e2  ( momentum_e2,    11, 2 );
-            GenParticle tau1( momentum_tau1, -15, 1 );
-            GenParticle tau2( momentum_tau2,  15, 1 );
-
-            // Set masses
-            e1.  set_generated_mass(0.000511);
-            e2.  set_generated_mass(0.000511);
-            tau1.set_generated_mass(1.777);
-            tau2.set_generated_mass(1.777);
-
-            // Make vertex
-            GenVertex vertex;
-            vertex.add_particle_in(e1);
-            vertex.add_particle_in(e2);
-            vertex.add_particle_out(tau1);
-            vertex.add_particle_out(tau2);
-
-            hepmc.add_vertex(vertex);
+            // Although the code for HepMC2 would work (thanks to backward compatibility)
+            // we don't want to use deprecated functions
+            GenParticlePtr e1     = make_shared<GenParticle>( momentum_e1,   -11, 2 );
+            GenParticlePtr e2     = make_shared<GenParticle>( momentum_e2,    11, 2 );
+            GenParticlePtr tau1   = make_shared<GenParticle>( momentum_tau1, -15, 1 );
+            GenParticlePtr tau2   = make_shared<GenParticle>( momentum_tau2,  15, 1 );
+            GenVertexPtr   vertex = make_shared<GenVertex>();
         )
 
+        // Set masses
+        e1->  set_generated_mass(0.000511);
+        e2->  set_generated_mass(0.000511);
+        tau1->set_generated_mass(1.777);
+        tau2->set_generated_mass(1.777);
+
+        // Make vertex
+        vertex->add_particle_in(e1);
+        vertex->add_particle_in(e2);
+        vertex->add_particle_out(tau1);
+        vertex->add_particle_out(tau2);
+
+        hepmc.add_vertex(vertex);
         return 0;
     }
 };

@@ -31,7 +31,7 @@ public:
         Photospp::Photos::setInfraredCutOff(0.001/200);
 
         HEPMC2CODE( Photospp::Photos::createHistoryEntries(false,3); )
-        HEPMC3CODE( Photospp::Photos::createHistoryEntries(true,3);  )
+        HEPMC3CODE( Photospp::Photos::createHistoryEntries(false,3);  )
     }
 
     int process(GenEvent &hepmc) {

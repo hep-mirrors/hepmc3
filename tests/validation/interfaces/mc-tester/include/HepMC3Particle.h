@@ -1,9 +1,23 @@
+/**
+ * @class HepMC3Particle
+ * @brief HEPParticle interface to HepMC classes
+ *
+ * HepMC3Particle extends HepMC::GenParticle class, so that
+ * MC-TESTER can accesses the particle information through
+ * the common HEPEvent methods
+ *
+ */
+
 #ifndef _HepMC3Particle_H
 #define _HepMC3Particle_H
 
 #include "HEPParticle.H"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
+
+#ifdef _USE_ROOT_
+#include <TObject.h>
+#endif
 
 class HepMC3Event;
 
@@ -21,7 +35,7 @@ public:
   /** Plain constructor.*/
   HepMC3Particle();
   /** Constructor which makes a HepMC3Particle from HepMC3::GenParticle. */
-  HepMC3Particle(const HepMC3::GenParticle &particle, HEPEvent * e, int Id);
+  HepMC3Particle(HepMC3::GenParticle& particle, HEPEvent * e, int Id);
   /** Destructor*/
   ~HepMC3Particle();
 
@@ -125,12 +139,11 @@ public:
   /** Returns a list of daughter particles of this particle.*/
   HEPParticleList*  GetMotherList(HEPParticleList *list);
 public:
-  HepMC3::GenParticle part;
+  HepMC3::GenParticle *part;
+
+#ifdef _USE_ROOT_
+  ClassDef(HepMC3Particle,0)
+#endif
 };
 
 #endif // _HepMC3Particle_H
-
-
-
-
-

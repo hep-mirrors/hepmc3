@@ -1,9 +1,27 @@
+/**
+ * @class HepMC3Event
+ * @brief HEPEvent Interface to HepMC classes
+ *
+ * This class provides a set of methods that allow access to event data
+ * stored in HepMC format. The HepMC data structures are used by
+ * HEP programs as storage for event records in C++
+ *
+ * This class extends the HepMC::GenEvent class and implements the methods of
+ * HEPEvent used by MC-TESTER. Not all functions are needed by the MC-TESTER,
+ * so dummy defintion are introduced for these
+ *
+ */
+
 #ifndef _HepMC3Event_H
 #define _HepMC3Event_H
 
 #include "HepMC3/GenEvent.h"
 #include "HepMC3Particle.h"
 #include "HEPEvent.H"
+
+#ifdef _USE_ROOT_
+#include <TObject.h>
+#endif
 
 class HepMC3Event: public HEPEvent
 {
@@ -21,9 +39,6 @@ public:
   HepMC3Event(HepMC3::GenEvent &e, bool include_self_decay=true);
   /** Destructor for HepMC3Event */
   ~HepMC3Event();
-
-  /** return current version of the event */
-  int GetVersion();
 
   /** return the number of particles in the event */
   int GetNumOfParticles();
@@ -62,10 +77,10 @@ public:
 
   /** Dummy function definition. Do not use */
   void  AddParticle( int id, int pdgid, int status,
-			     int mother, int mother2,
-			     int firstdaughter, int lastdaughter,
-			     double E,double px, double py, double pz, double m,
-			     double vx, double vy, double vz, double tau);
+                             int mother, int mother2,
+                             int firstdaughter, int lastdaughter,
+                             double E,double px, double py, double pz, double m,
+                             double vx, double vy, double vz, double tau);
 
   std::vector<double> * Sum4Momentum();
 
@@ -77,6 +92,9 @@ public:
 private:
   HepMC3::GenEvent *evt;
   int m_particle_count;
+#ifdef _USE_ROOT_
+  ClassDef(HepMC3Event,1)  //Interface to HepMC event record
+#endif
 };
 
 #endif

@@ -1,17 +1,18 @@
 #include "HepMC3Particle.h"
 #include "HepMC3Event.h"
-#include "HepMC3/Search/FindParticles.h"
-
 #include <iostream>
 
-#include <boost/foreach.hpp>
 using namespace std;
+
+#ifdef _USE_ROOT_
+ClassImp(HepMC3Particle)
+#endif
 
 HepMC3Particle::HepMC3Particle(){}
 
-HepMC3Particle::HepMC3Particle( const HepMC3::GenParticle &particle, HEPEvent * e, int Id):
-part(particle) {
+HepMC3Particle::HepMC3Particle(HepMC3::GenParticle & particle, HEPEvent * e, int Id){
 
+  part = &particle;
   SetEvent(e);
   SetId(Id);
 }
@@ -74,35 +75,35 @@ int const HepMC3Particle::GetLastDaughter(){
 }
 
 double const HepMC3Particle::GetE(){
-  return part.momentum().e();
+  return part->momentum().e();
 }
 
 double const HepMC3Particle::GetPx(){
-  return part.momentum().px();
+  return part->momentum().px();
 }
 
 double const HepMC3Particle::GetPy(){
-  return part.momentum().py();
+  return part->momentum().py();
 }
 
 double const HepMC3Particle::GetPz(){
-  return part.momentum().pz();
+  return part->momentum().pz();
 }
 
 double const HepMC3Particle::GetM(){
-  return part.momentum().m();
+  return part->momentum().m();
 }
 
 int const HepMC3Particle::GetPDGId(){
-  return part.pdg_id();
+  return part->pdg_id();
 }
 
 int const HepMC3Particle::GetStatus(){
-  return part.status();
+  return part->status();
 }
 
 int const HepMC3Particle::IsStable(){
-  return (GetStatus() == 1 || !part.end_vertex());
+  return (GetStatus() == 1 || !part->end_vertex());
 }
 
 int const HepMC3Particle::Decays(){
@@ -114,28 +115,33 @@ int const HepMC3Particle::IsHistoryEntry(){
 }
 
 double const HepMC3Particle::GetVx(){
-  //if(part.production_vertex()) return part.production_vertex()->position().x();
+  if(part->production_vertex()) return part->production_vertex()->position().x();
   return 0.;
 }
 
 double const HepMC3Particle::GetVy(){
-  //if(part.production_vertex()) return part.production_vertex()->position().y();
+  if(part->production_vertex()) return part->production_vertex()->position().y();
   return 0.;
 }
 
 double const HepMC3Particle::GetVz(){
-  //if(part.production_vertex()) return part.production_vertex()->position().z();
+  if(part->production_vertex()) return part->production_vertex()->position().z();
   return 0.;
 }
 
-//methods not implemented. Not done for HepMC3.
+double const HepMC3Particle::GetTau(){
+  //Not implemented
+  if(part->end_vertex()&&part->production_vertex())
+    return (part->end_vertex()->position().t()-part->production_vertex()->position().t()); //not correct, but will see if it's empty
+  else
+    return 0;
+}
+
+//methods not implemented. Not done for HepMC.
 /**void HepMC3Particle::SetP4(MC4Vector &v){ }
 void HepMC3Particle::SetP3(MC3Vector &v){ }
 void HepMC3Particle::SetV3(MC3Vector &v){ }
 **/
-double const HepMC3Particle::GetTau(){
-    return 0;
-}
 
 void HepMC3Particle::SetEvent(HEPEvent * event){
   this->event=(HepMC3Event*)event;
@@ -145,34 +151,34 @@ void HepMC3Particle::SetId( int id ){
   this->id = id;
 }
 
-//Can not use these methods for HepMC3
+//Can not use these methods for HepMC
 void HepMC3Particle::SetMother( int mother ){}
 void HepMC3Particle::SetMother2( int mother ){}
 void HepMC3Particle::SetFirstDaughter( int daughter ){}
 void HepMC3Particle::SetLastDaughter ( int daughter ){}
 
 void HepMC3Particle::SetE( double E ){
-  HepMC3::FourVector temp_mom(part.momentum());
+  HepMC3::FourVector temp_mom(part->momentum());
   temp_mom.setE(E);
-  part.set_momentum(temp_mom);
+  part->set_momentum(temp_mom);
 }
 
 void HepMC3Particle::SetPx( double px ){
-  HepMC3::FourVector temp_mom(part.momentum());
+  HepMC3::FourVector temp_mom(part->momentum());
   temp_mom.setPx(px);
-  part.set_momentum(temp_mom);
+  part->set_momentum(temp_mom);
 }
 
 void HepMC3Particle::SetPy( double py ){
-  HepMC3::FourVector temp_mom(part.momentum());
+  HepMC3::FourVector temp_mom(part->momentum());
   temp_mom.setPy(py);
-  part.set_momentum(temp_mom);
+  part->set_momentum(temp_mom);
 }
 
 void HepMC3Particle::SetPz( double pz ){
-  HepMC3::FourVector temp_mom(part.momentum());
+  HepMC3::FourVector temp_mom(part->momentum());
   temp_mom.setPz(pz);
-  part.set_momentum(temp_mom);
+  part->set_momentum(temp_mom);
 }
 
 void HepMC3Particle::SetM( double m ){
@@ -181,23 +187,23 @@ void HepMC3Particle::SetM( double m ){
 }
 
 void HepMC3Particle::SetPDGId ( int pdg ){
-  part.set_pdg_id( pdg );
+  part->set_pdg_id( pdg );
 }
 
 void HepMC3Particle::SetStatus( int st){
-  part.set_status( st );
+  part->set_status( st );
 }
 
 void HepMC3Particle::SetVx ( double vx){
-  //if(part.production_vertex()) part.production_vertex()->point3d().setX(vx);
+  //Not implemented
 }
 
 void HepMC3Particle::SetVy ( double vy){
-  //if(part.production_vertex()) part.production_vertex()->point3d().setY(vy);
+  //Not implemented
 }
 
 void HepMC3Particle::SetVz ( double vz){
-  //if(part.production_vertex()) part.production_vertex()->point3d().setZ(vz);
+  //Not implemented
 }
 
 void HepMC3Particle::SetTau( double tau){
@@ -210,18 +216,17 @@ HEPParticleList* HepMC3Particle::GetDaughterList(HEPParticleList *list)
   // if list is not provided, it is created.
   if (!list) list=new HEPParticleList();
 
-  if(!part.end_vertex()) //no daughters
+  if(!part->end_vertex()) //no daughters
     return list;
 
-  HepMC3::FindParticles search( part, HepMC3::FIND_DAUGHTERS );
+  HepMC3::GenVertexPtr end = part->end_vertex();
 
   //iterate over daughters
-  BOOST_FOREACH( const HepMC3::GenParticle &p, search.results() ) {
-
-    HepMC3Particle * daughter = event->GetParticleWithBarcode(p.barcode());
+  for(unsigned int i=0; i<end->particles_out().size(); ++i) {
+    HepMC3Particle * daughter = event->GetParticleWithBarcode((end->particles_out()[i])->barcode());
     if(!list->contains(daughter->GetId())){
       if(!daughter->IsHistoryEntry())
-	list->push_back(daughter);
+        list->push_back(daughter);
     }
   }
   return list;
@@ -232,16 +237,24 @@ HEPParticleList* HepMC3Particle::GetMotherList(HEPParticleList *list)
    // if list is not provided, it is created.
    if (!list) list=new HEPParticleList();
 
-   if(!part.production_vertex()) //no mothers
+   if(!part->production_vertex()) //no mothers
      return list;
 
-   HepMC3::FindParticles search( part, HepMC3::FIND_MOTHERS );
+   HepMC3::GenVertexPtr prod = part->production_vertex();
 
-   //iterate over mothers
-   BOOST_FOREACH( const HepMC3::GenParticle &p, search.results() ) {
-
-      list->push_back(event->GetParticleWithBarcode(p.barcode()));
+   //iterate over daughters
+   for(unsigned int i=0; i<prod->particles_in().size(); ++i) {
+       list->push_back(event->GetParticleWithBarcode((prod->particles_in()[i])->barcode()));
    }
 
    return list;
 }
+
+
+#ifdef _USE_ROOT_
+void HepMC3Particle::Streamer(TBuffer &)
+{
+  // streamer class for ROOT compatibility
+}
+
+#endif

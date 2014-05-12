@@ -229,9 +229,9 @@ void ValidationControl::process(GenEvent &hepmc) {
                 FindParticles search( hepmc, FIND_ALL, STATUS == 1 );
                 //hepmc.set_print_precision(8);
 
-                BOOST_FOREACH( const GenParticle &p, search.results() ) {
+                BOOST_FOREACH( const GenParticlePtr &p, search.results() ) {
                     //p.print();
-                    sum += p.momentum();
+                    sum += p->momentum();
                 }
 
             )

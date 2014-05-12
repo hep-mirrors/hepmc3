@@ -1,117 +1,152 @@
 #ifndef _TauolaHepMC3Particle_h_included_
 #define _TauolaHepMC3Particle_h_included_
 
+/**
+ * @class TauolaHepMC3Particle
+ *
+ * @brief Interface to HepMC3::GenParticle objects
+ *
+ * This class implements the virtual methods of
+ * TauolaParticle. In this way it provides an
+ * interface between the generic TauolaParticle class
+ * and a HepMC3::GenParticle object.
+ *
+ * This code is licensed under GNU General Public Licence.
+ * For more informations, see: http://www.gnu.org/licenses/
+ */
+
+#include <iostream>
 #include <vector>
 
-#include "Tauola/TauolaParticle.h"
 #include "HepMC3/GenParticle.h"
+#include "HepMC3/FourVector.h"
+#include "HepMC3/GenEvent.h"
+
+//#include "DecayList.h"
+#include "Tauola/TauolaParticle.h"
+#include "Tauola/f_Decay.h"
 
 namespace Tauolapp
 {
 
-class TauolaHepMC3Event;
+class TauolaHepMC3Particle: public TauolaParticle{
 
-class TauolaHepMC3Particle: public TauolaParticle {
+ public:
+  /** General constructor */
+  TauolaHepMC3Particle();
 
-//
-// Constructors
-//
-public:
-    /** Constructor which keeps a pointer to the HepMC3::GenParticle*/
-    TauolaHepMC3Particle( const HepMC3::GenParticle &particle);
+  ~TauolaHepMC3Particle();
 
-    ~TauolaHepMC3Particle();
+  /** Constructor which keeps a pointer to the HepMC3::GenParticle*/
+  TauolaHepMC3Particle(HepMC3::GenParticlePtr particle);
 
-//
-// Functions
-//
-public:
-    /** Returns the HepMC3::GenParticle */
-    HepMC3::GenParticle& getHepMC3() { return m_particle; }
+  /** Constructor which creates a new HepMC3::GenParticle and
+       sets the properties pdg_id, statu and mass. */
+  TauolaHepMC3Particle(int pdg_id, int status, double mass);
 
-    /** Remove the decay branch from the event record and reset the particle status code to stable. */
-    void undecay();
+  /** Returns the HepMC3::GenParticlePtr */
+  HepMC3::GenParticlePtr getHepMC3();
 
-    /** Set the mothers of this particle via a vector of TauolaParticle*/
-    void setMothers(std::vector<TauolaParticle*> mothers);
+  /** Remove the decay branch from the event record and reset the particle status code to stable. */
+  void undecay();
 
-    /** Set the daughters of this particle via a vector of TauolaParticle*/
-    void setDaughters(std::vector<TauolaParticle*> daughters);
+  /** Set the mothers of this particle via a vector of TauolaParticle*/
+  void setMothers(std::vector<TauolaParticle*> mothers);
 
-    /** Returns the mothers of this particle via a vector of TauolaParticle */
-    std::vector<TauolaParticle*> getMothers();
+  /** Set the daughters of this particle via a vector of TauolaParticle*/
+  void setDaughters(std::vector<TauolaParticle*> daughters);
 
-    /** Returns the daughters of this particle via a vector of TauolaParticle */
-    std::vector<TauolaParticle*> getDaughters();
+  /** Returns the mothers of this particle via a vector of TauolaParticle */
+  std::vector<TauolaParticle*> getMothers();
 
-    /** Check that the 4 momentum in conserved at the vertices producing
+  /** Returns the daughters of this particle via a vector of TauolaParticle */
+  std::vector<TauolaParticle*> getDaughters();
+
+  /** Set the PDG ID code of this particle */
+  void setPdgID(int pdg_id);
+
+  /** Set the status of this particle */
+  void setStatus(int statu);
+
+  /** Set the mass of this particle */
+  void setMass(double mass);
+
+  /** Get the PDG ID code of this particle */
+  int getPdgID();
+
+  /** Get the status of this particle */
+  int getStatus();
+
+  /** Get the barcode of this particle */
+  int getBarcode();
+
+  /** Check that the 4 momentum in conserved at the vertices producing
       and ending this particle */
-    void checkMomentumConservation();
+  void checkMomentumConservation();
 
-    /** Overriding of TauolaParticle decayEndgame method.
+  /** Overriding of TauolaParticle decayEndgame method.
       Converts the momentum and length units
       and sets the vector (X,T) position */
-    void decayEndgame();
+  void decayEndgame();
 
-    /** Create a new particle of type TauolaHepMC3Particle, with the given
+  /** Create a new particle of type TauolaHepMC3Particle, with the given
       properties. The new particle bares no relations to this
       particle, but it provides a way of creating a instance of
       this derived class. eg. createNewParticle() is used inside
       filhep_() so that a TauolaHepMC3Particle can be created without
       the method having explicit knowledge of the TauolaHepMC3Particle
       class */
-    TauolaHepMC3Particle * createNewParticle(int pdg_id, int status, double mass,
-                                             double px, double py,
-                                             double pz, double e);
+  TauolaHepMC3Particle * createNewParticle(int pdg_id, int status, double mass,
+                                          double px, double py,
+                                          double pz, double e);
 
-//
-// Accessors
-//
-public:
-    /** Get parent event */
-    TauolaHepMC3Event* parent_event()             { return m_parent_event; }
+  /** Print some information about this particle to standard output */
+  void print();
 
-    /** Set parent event */
-    void set_parent_event(TauolaHepMC3Event *evt) { m_parent_event = evt; }
+  /** Returns the px component of the four vector*/
+  double getPx();
 
-    double getPx()                { if(!m_particle) return 0; return m_particle.momentum().px(); }   //!< Get px
-    double getPy()                { if(!m_particle) return 0; return m_particle.momentum().py(); }   //!< Get py
-    double getPz()                { if(!m_particle) return 0; return m_particle.momentum().pz(); }   //!< Get pz
-    double getE()                 { if(!m_particle) return 0; return m_particle.momentum().e(); }    //!< Get energy
+  /** Returns the py component of the four vector */
+  double getPy();
 
-    void   setPx( double px ); //!< Set px
-    void   setPy( double py ); //!< Set py
-    void   setPz( double pz ); //!< Set pz
-    void   setE( double e );   //!< Set energy
+  /** Returns the pz component of the four vector */
+  double getPz();
 
-    int    getPdgID()             { if(!m_particle) return 0; return m_particle.pdg_id(); }          //!< Get PDG ID
-    void   setPdgID(int pdg_id)   { if(!m_particle) return;   m_particle.set_pdg_id(pdg_id); }       //!< Set PDG ID
+  /** Returns the energy component of the four vector */
+  double getE();
 
-    int    getStatus()            { if(!m_particle) return 0; return m_particle.status(); }          //!< Get status
-    void   setStatus(int status)  { if(!m_particle) return;   m_particle.set_status(status); }       //!< Set status
+  /** Set the px component of the four vector */
+  void setPx( double px );
 
-    double getMass()              { if(!m_particle) return 0; return m_particle.generated_mass(); }  //!< Get mass
-    void   setMass(double mass)   { if(!m_particle) return;   m_particle.set_generated_mass(mass); } //!< Set mass
+  /** Set the px component of the four vector */
+  void setPy( double py );
 
-    int    getBarcode()           { if(!m_particle) return 0; return m_particle.barcode(); }         //!< Get barcode
+  /** Set the pz component of the four vector */
+  void setPz( double pz );
 
-    /** Print some information about this particle to standard output */
-    void   print()                { if(!m_particle) return; m_particle.print(); }
+  /** Set the energy component of the four vector */
+  void setE( double e );
 
-//
-// Fields
-//
+
 private:
-    TauolaHepMC3Event            *m_parent_event; //!< Parent event
-    HepMC3::GenParticle           m_particle;     //!< HepMC3::GenParticle particle
-    std::vector<TauolaParticle*>  m_mothers;      //!< List of mothers
-    std::vector<TauolaParticle*>  m_daughters;    //!< List of daughters
 
-    /** List to keep track of new particles which have been
+  /** Sets the position for whole decay tree starting from given particle */
+  void recursiveSetPosition(HepMC3::GenParticlePtr p,HepMC3::FourVector pos);
+
+  /** A pointer to the HepMC3::GenParticle particle */
+  HepMC3::GenParticlePtr m_particle;
+
+  /** A list of mothers */
+  std::vector<TauolaParticle*> m_mothers;
+
+  /** A list of daughters */
+  std::vector<TauolaParticle*> m_daughters;
+
+  /** List to keep track of new particles which have been
       created from this one, so we can call their destructor later */
-    std::vector<TauolaParticle*> m_created_particles;
+  std::vector<TauolaParticle*> m_created_particles;
+
 };
 
 } // namespace Tauolapp
 #endif
-

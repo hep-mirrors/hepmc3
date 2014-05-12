@@ -1,100 +1,124 @@
-#include "Tauola/TauolaHepMC3Particle.h"
 #include "Tauola/TauolaHepMC3Event.h"
-#include "Tauola/TauolaParticle.h"
 #include "Tauola/Log.h"
 
-#include "HepMC3/Search/FindParticles.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenEvent.h"
-
-#include <boost/foreach.hpp>
 using namespace std;
 
 namespace Tauolapp
 {
 
-TauolaHepMC3Event::TauolaHepMC3Event(HepMC3::GenEvent *event):
-m_event(event) {
-
-    // Default units
-    m_momentum_unit = "GEV";
-    m_length_unit   = "MM";
-
+TauolaHepMC3Event::TauolaHepMC3Event(HepMC3::GenEvent * event){
+  m_event=event;
 /* NO UNITS YET
-    if(m_event->momentum_unit() != HepMC3::Units::GEV) m_momentum_unit = "MEV";
-    if(m_event->length_unit()   != HepMC3::Units::MM ) m_length_unit   = "CM";
+  // Default units
+  m_momentum_unit = "GEV";
+  m_length_unit   = "MM";
 
-    // If needed - change units used by HepMC3 to GEV and MM
-    if( m_event->momentum_unit() != HepMC3::Units::GEV ||
+  if(m_event->momentum_unit() != HepMC3::Units::GEV) m_momentum_unit = "MEV";
+  if(m_event->length_unit()   != HepMC3::Units::MM ) m_length_unit   = "CM";
+
+  // If needed - change units used by HepMC3 to GEV and MM
+  if( m_event->momentum_unit() != HepMC3::Units::GEV ||
       m_event->length_unit()   != HepMC3::Units::MM     )
-    {
+  {
     m_event->use_units(HepMC3::Units::GEV,HepMC3::Units::MM);
-    }
+  }
 */
 }
 
 TauolaHepMC3Event::~TauolaHepMC3Event(){
 
-    BOOST_FOREACH( TauolaParticle *p, m_tau_list ) {
-        delete p;
-    }
+  while(m_tau_list.size()!=0){
+    TauolaParticle * temp = m_tau_list.back();
+    m_tau_list.pop_back();
+    delete temp;
+  }
 
 }
 
-std::vector<TauolaParticle*> TauolaHepMC3Event::findParticles(int pdg_id) {
+HepMC3::GenEvent * TauolaHepMC3Event::getEvent(){
+  return m_event;
+}
 
-    Log::Fatal( "findParticles should not be used" );
+std::vector<TauolaParticle*> TauolaHepMC3Event::findParticles(int pdg_id){
 
-    return m_tau_list;
+  if(m_tau_list.size()==0){
+
+    //loop over all particle in the event looking for taus (or other)
+    for( unsigned int i=0; i<m_event->particles().size(); ++i) {
+      if(abs((m_event->particles()[i])->pdg_id())==pdg_id)
+        m_tau_list.push_back(new TauolaHepMC3Particle(m_event->particles()[i]));
+    }
+  }
+  return m_tau_list;
 }
 
 std::vector<TauolaParticle*> TauolaHepMC3Event::findStableParticles(int pdg_id){
 
-    HepMC3::FindParticles search( *m_event, HepMC3::FIND_ALL, HepMC3::ABS_PDG_ID == pdg_id &&
-                                                              !HepMC3::HAS_END_VERTEX &&
-                                                              !HepMC3::HAS_SAME_PDG_ID_DAUGHTER );
-
-    BOOST_FOREACH( const HepMC3::GenParticle &p, search.results() ) {
-
-        TauolaHepMC3Particle *pp = new TauolaHepMC3Particle(p);
-        pp->set_parent_event(this);
-        m_tau_list.push_back( pp );
+  /**  HepMC3::GenEvent::particle_const_iterator part_itr = m_event->particles_begin();
+  //loop over all particle in the event looking for taus (or other)
+  for( ; part_itr!=m_event->particles_end(); part_itr++){
+    if(fabs((*part_itr)->pdg_id())==pdg_id){
+      if((*part_itr)->end_vertex()){
+        cout << "WARNING: Particle with pdg code " << (*part_itr)->pdg_id()
+             << " has end vertex" <<endl;
+      }
+      else
+        list.push_back(new TauolaHepMC3Particle(*part_itr));
     }
+    }**/
 
-  return m_tau_list;
+  std::vector<TauolaParticle*> tau_list = findParticles(pdg_id);
+  std::vector<TauolaParticle*> stable_tau_list;
+
+  for(int i=0; i<(int) tau_list.size(); i++){
+
+    if(!tau_list.at(i)->hasDaughters())
+      stable_tau_list.push_back(tau_list.at(i));
+    else
+    {
+      std::vector<TauolaParticle*> t = tau_list.at(i)->getDaughters();
+      //Ignore taus that we won't be decaying anyway
+      if(t.size()==1) continue;
+      if(t.size()==2 && (abs(t[0]->getPdgID())==15 || abs(t[1]->getPdgID())==15) ) continue;
+      Log::Warning()<<"Particle with pdg code "<<tau_list.at(i)->getPdgID()
+                    <<" already has daughters" <<endl;
+    }
+  }
+
+  return stable_tau_list;
 
 }
 
 void TauolaHepMC3Event::eventEndgame(){
 /* NO UNITS YET
-    //Set output units for the event
-    string momentum("GEV"),length("MM");
+  //Set output units for the event
+  string momentum("GEV"),length("MM");
 
-    switch(Tauola::momentumUnit)
-    {
+  switch(Tauola::momentumUnit)
+  {
     case Tauola::GEV:
-        momentum = "GEV";
-        break;
+      momentum = "GEV";
+      break;
     case Tauola::MEV:
-        momentum = "MEV";
-        break;
+      momentum = "MEV";
+      break;
     default:
-        momentum = m_momentum_unit;
-    }
+      momentum = m_momentum_unit;
+  }
 
-    switch(Tauola::lengthUnit)
-    {
+  switch(Tauola::lengthUnit)
+  {
     case Tauola::MM:
-        length = "MM";
-        break;
+      length = "MM";
+      break;
     case Tauola::CM:
-        length = "CM";
-        break;
+      length = "CM";
+      break;
     default:
-        length = m_length_unit;
-    }
+      length = m_length_unit;
+  }
 
-    m_event->use_units(momentum,length);
+  m_event->use_units(momentum,length);
 */
 }
 
