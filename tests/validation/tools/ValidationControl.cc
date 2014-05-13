@@ -26,6 +26,7 @@
 ValidationControl::ValidationControl():
 m_events(0),
 m_momentum_check_events(0),
+m_momentum_check_threshold(10e-6),
 m_print_events(0),
 m_event_counter(0),
 m_status(-1),
@@ -54,7 +55,7 @@ void ValidationControl::read_file(const std::string &filename) {
     int line = 0;
 
     while(!in.eof()) {
-        int status = 0;
+        PARSING_STATUS status = PARSING_OK;
         ++line;
 
         in >> buf;
@@ -72,92 +73,83 @@ void ValidationControl::read_file(const std::string &filename) {
         else if( strncmp(buf,"INPUT",5)==0 ) {
             in >> buf;
 
-            if( m_has_input_source ) status = 5;
+            if( m_has_input_source ) status = ADDITIONAL_INPUT;
             else {
+                ValidationTool *input = NULL;
                 // Use tool as input source - currently only one supported tool
                 if( strncmp(buf,"tool",4)==0 ) {
-                    m_toolchain.push_back( new SimpleEventTool() );
+                    input = new SimpleEventTool();
                 }
-                else if( strncmp(buf,"hepmc2",4)==0) {
+                else if( strncmp(buf,"hepmc2",6)==0) {
                     in >> buf;
 
                     FileValidationTool *tool = new FileValidationTool( buf, std::ios::in );
-                    if( tool->rdstate() ) status = -2;
-                    else m_toolchain.push_back(tool);
+                    if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                    else input = tool;
                 }
                 else if( strncmp(buf,"pythia8",7)==0) {
 #ifdef PYTHIA8
                     in >> buf;
-                    m_toolchain.push_back( new PythiaValidationTool(buf) );
+                    input = new PythiaValidationTool(buf);
 #else
-                    status = 4;
+                    status = UNAVAILABLE_TOOL;
 #endif
                 }
-                else status = 2;
+                else status = UNRECOGNIZED_INPUT;
 
-                if(!status) m_has_input_source = true;
+                if(!status) {
+                    m_has_input_source = true;
+                    m_toolchain.insert(m_toolchain.begin(),input);
+                }
             }
         }
         // Parse tools used
         else if( strncmp(buf,"TOOL",3)==0 ) {
-            if( !m_has_input_source ) status = -1;
-            else {
-                in >> buf;
+            in >> buf;
 
-                if     ( strncmp(buf,"tauola",6)==0 ) {
+            if     ( strncmp(buf,"tauola",6)==0 ) {
 #ifdef TAUOLAPP
-                    m_toolchain.push_back( new TauolaValidationTool()   );
+                m_toolchain.push_back( new TauolaValidationTool()   );
 #else
-                    status = 4;
+                status = UNAVAILABLE_TOOL;
 #endif
-                }
-                else if( strncmp(buf,"photos",6)==0 ) {
-#ifdef PHOTOSPP
-                    m_toolchain.push_back( new PhotosValidationTool()   );
-#else
-                    status = 4;
-#endif
-                }
-                else if( strncmp(buf,"mctester",8)==0 ) {
-#ifdef MCTESTER
-                    m_toolchain.push_back( new McTesterValidationTool() );
-#else
-                    status = 4;
-#endif
-                }
-                else status = 3;
             }
+            else if( strncmp(buf,"photos",6)==0 ) {
+#ifdef PHOTOSPP
+                m_toolchain.push_back( new PhotosValidationTool()   );
+#else
+                status = UNAVAILABLE_TOOL;
+#endif
+            }
+            else if( strncmp(buf,"mctester",8)==0 ) {
+#ifdef MCTESTER
+                m_toolchain.push_back( new McTesterValidationTool() );
+#else
+                status = UNAVAILABLE_TOOL;
+#endif
+            }
+            else status = UNRECOGNIZED_TOOL;
         }
         // Parse output file
         else if( strncmp(buf,"OUTPUT",6)==0 ) {
-            if( !m_has_input_source ) status = -1;
-            else {
-                in >> buf;
+            in >> buf;
 
-                FileValidationTool *tool = new FileValidationTool( buf, std::ios::out );
-                if( tool->rdstate() ) status = -2;
-                else m_toolchain.push_back(tool);
-            }
+            FileValidationTool *tool = new FileValidationTool( buf, std::ios::out );
+            if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+            else m_toolchain.push_back(tool);
         }
-        else status = 1;
+        else status = UNRECOGNIZED_COMMAND;
 
         // Error checking
-        if(status) printf("ValidationControl config file line %i: ",line);
+        if(status != PARSING_OK) printf("ValidationControl config file line %i: ",line);
 
         switch(status) {
-            case  1: printf("skipping unrecognised command:      '%s'\n",buf); break;
-            case  2: printf("skipping unrecognised input source: '%s'\n",buf); break;
-            case  3: printf("skipping unrecognised tool:         '%s'\n",buf); break;
-            case  4: printf("skipping unavailable tool:          '%s'\n",buf); break;
-            case  5: printf("ignoring additional input source:   '%s'\n",buf); break;
-            case -1:
-                printf("add input source first!\n");
-                m_status = -1;
-                return;
-            case -2:
-                printf("could not open file: '%s'\n",buf);
-                m_status = -1;
-                return;
+            case  UNRECOGNIZED_COMMAND: printf("skipping unrecognised command:      '%s'\n",buf); break;
+            case  UNRECOGNIZED_INPUT:   printf("skipping unrecognised input source: '%s'\n",buf); break;
+            case  UNRECOGNIZED_TOOL:    printf("skipping unrecognised tool:         '%s'\n",buf); break;
+            case  UNAVAILABLE_TOOL:     printf("skipping unavailable tool:          '%s'\n",buf); break;
+            case  ADDITIONAL_INPUT:     printf("skipping additional input source:   '%s'\n",buf); break;
+            case  CANNOT_OPEN_FILE:     printf("skipping tool (file not present):   '%s'\n",buf); break;
             default: break;
         }
 
@@ -167,7 +159,7 @@ void ValidationControl::read_file(const std::string &filename) {
 
     // Having input source is enough to start validation
     if(m_has_input_source) m_status = 0;
-    else printf("ValidationControl: no input source defined.\n");
+    else printf("ValidationControl: no valid input source\n");
 }
 
 bool ValidationControl::new_event() {
@@ -188,30 +180,40 @@ bool ValidationControl::new_event() {
 }
 
 void ValidationControl::initialize() {
-    BOOST_FOREACH( ValidationTool *t, m_toolchain ) {
-        t->initialize();
+    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+        tool->initialize();
     }
 }
 
 void ValidationControl::process(GenEvent &hepmc) {
+
     m_status = 0;
-    BOOST_FOREACH( ValidationTool *t, m_toolchain ) {
-        m_status = t->process(hepmc);
+
+    FourVector input_momentum;
+
+    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+
+        Timer *timer = tool->timer();
+
+        if(timer) timer->start();
+        m_status = tool->process(hepmc);
+        if(timer) timer->stop();
 
         // status != 0 means an error - stop processing current event
         if(m_status) return;
 
-        if(t->tool_modifies_event() && m_print_events) {
+        if(tool->tool_modifies_event() && m_print_events) {
             printf("--------------------------------------------------------------\n");
-            printf("   Print event: %s\n",t->name().c_str());
+            printf("   Print event: %s\n",tool->name().c_str());
             printf("--------------------------------------------------------------\n");
 
             HEPMC3CODE( hepmc.set_print_precision(8); )
             hepmc.print();
         }
 
-        if(t->tool_modifies_event() && m_momentum_check_events ) {
+        if(tool->tool_modifies_event() && m_momentum_check_events ) {
             FourVector sum;
+            double     delta = 0.0;
 
             HEPMC2CODE(
                 for ( GenEvent::particle_const_iterator p = hepmc.particles_begin();
@@ -230,22 +232,37 @@ void ValidationControl::process(GenEvent &hepmc) {
                 //hepmc.set_print_precision(8);
 
                 BOOST_FOREACH( const GenParticlePtr &p, search.results() ) {
-                    //p.print();
+                    //p->print();
                     sum += p->momentum();
                 }
 
+                if(!input_momentum.is_zero()) delta = (input_momentum - sum).length();
             )
 
-            printf("Vector sum: %+15.8e %+15.8e %+15.8e %+15.8e (evt: %7i, %s)\n",sum.px(),sum.py(),sum.pz(),sum.e(),m_event_counter,t->name().c_str());
+            printf("Momentum sum: %+15.8e %+15.8e %+15.8e %+15.8e (evt: %7i, %s)",sum.px(),sum.py(),sum.pz(),sum.e(),m_event_counter,tool->name().c_str());
+
+            if(delta<m_momentum_check_threshold) printf("\n");
+            else printf(" - WARNING! Difference = %+15.8e\n",delta);
+
+            input_momentum = sum;
         }
     }
 }
 
 void ValidationControl::finalize() {
-    BOOST_FOREACH( ValidationTool *t, m_toolchain ) {
-        t->finalize();
+
+    // Finalize
+    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+        tool->finalize();
     }
-    BOOST_FOREACH( ValidationTool *t, m_toolchain ) {
-        printf(" Finished processing: %s\n",t->name().c_str());
+
+    // Print timers
+    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+        if(tool->timer()) tool->timer()->print();
+    }
+
+    // List tools
+    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+        printf(" Finished processing: %s\n",tool->long_name().c_str());
     }
 }

@@ -18,14 +18,45 @@ using namespace HepMC3;
 #endif // ifdef HEPMC2
 
 class ValidationTool {
+//
+// Constructors
+//
 public:
+    /** Virtual destructor */
     virtual ~ValidationTool() {};
+
+//
+// Abstract functions
+//
 public:
-    virtual const std::string name()                   = 0;
-    virtual bool              tool_modifies_event()    = 0;
-    virtual void              initialize()             = 0;
-    virtual int               process(GenEvent &hepmc) = 0;
-    virtual void              finalize()               = 0;
+    /** @brief Get information if this tool modifies the event
+     *
+     *  Tools that do not modify event will be ignored during event printing
+     *  and momentum conservation checks
+     */
+    virtual bool  tool_modifies_event()    = 0;
+
+    /** @brief Get name of the tool */
+    virtual const std::string name()       = 0;
+
+    virtual void  initialize()             = 0; //!< Initialize
+    virtual int   process(GenEvent &hepmc) = 0; //!< Process event
+    virtual void  finalize()               = 0; //!< Finalize
+
+//
+// Virtual functions
+//
+public:
+    /** @brief Get long name of the tool */
+    virtual const std::string long_name()  { return name(); }
+
+    /** @brief Get timer for this tool (if this tool is being timed)
+     *
+     *  Note that normally the tool itself should not use the timer it provides
+     *  However, if one want to exclude some part of initialization
+     *  timer()->start() can be used to restart the timer per each event
+     */
+    virtual class Timer* timer() { return NULL; }
 };
 
 #endif

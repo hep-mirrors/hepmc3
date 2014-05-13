@@ -33,6 +33,14 @@ endif
 #                               LINKS_HEPMC2, RPATHS_HEPMC2, DEFS_HEPMC2
 include make.tools.inc
 
+VALIDATION_SRC= validation.cc tools/ValidationControl.cc \
+                tools/SimpleEventTool.cc \
+                tools/FileValidationTool.cc \
+                tools/PythiaValidationTool.cc \
+                tools/TauolaValidationTool.cc \
+                tools/PhotosValidationTool.cc  \
+                tools/McTesterValidationTool.cc
+
 all:
 ifneq ($(HEPMC3LOCATION), )
 	@make $(INTERFACES)
@@ -43,17 +51,13 @@ ifneq ($(HEPMC2LOCATION), )
 endif
 
 # Definitions for HepMC2 files
-validation_HEPMC2.exe: tools/ValidationControl_HEPMC2.o validation_HEPMC2.o
+validation_HEPMC2.exe: $(VALIDATION_SRC:.cc=.o_hepmc2)
 	$(LD) $(LDFLAGS) $^ -o $@ $(LINKS_HEPMC2) $(RPATHS_HEPMC2)
-
-validation_HEPMC2.o: validation.cc
-	$(CC) $(CFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(DEFS_HEPMC2) $(INCLUDES)
-
-tools/ValidationControl_HEPMC2.o: tools/ValidationControl.cc
+%.o_hepmc2: %.cc
 	$(CC) $(CFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(DEFS_HEPMC2) $(INCLUDES)
 
 # Definitions for HepMC3 files
-validation.exe: tools/ValidationControl.o validation.o
+validation.exe: $(VALIDATION_SRC:.cc=.o)
 	$(LD) $(LDFLAGS) $^ -o $@ $(LINKS_HEPMC3) $(RPATHS_HEPMC3)
 
 %.o: %.cc
@@ -63,7 +67,7 @@ validation.exe: tools/ValidationControl.o validation.o
 	$(CC) $(CFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(INCLUDES)
 
 clean:
-	rm -f tools/*.o *.o *.exe
+	rm -f tools/*.o *.o tools/*.o_hepmc2 *.o_hepmc2 *.exe
 
 Clean: clean
 	rm -f $(INTERFACEDIRECTORY)*/src/*.o  $(INTERFACEDIRECTORY)*/lib/*.so

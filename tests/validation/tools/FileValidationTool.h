@@ -9,70 +9,38 @@
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"
+#include "Timer.h"
 
 class FileValidationTool : public ValidationTool {
 public:
-    FileValidationTool(const std::string &filename, std::ios::openmode mode):file_in(NULL),file_out(NULL) {
-        if(mode == std::ios::in) {
-            HEPMC2CODE( file_in = new IO_GenEvent(filename, mode);       )
-            HEPMC3CODE( file_in = new IO_HepMC2_adapter(filename, mode); )
-        }
-        else {
-            file_out = new IO_GenEvent(filename, mode);
-        }
+    FileValidationTool(const std::string &filename, std::ios::openmode mode);
 
-        m_filename = filename;
+    ~FileValidationTool();
+
+public:
+    const std::string name() { return "FileValidationTool"; }
+
+    const std::string long_name() {
+        if(m_file_in) return name() + " input file:  " + m_filename;
+        else          return name() + " output file: " + m_filename;
     }
 
-    ~FileValidationTool() {
-        if(file_in)  delete file_in;
-        if(file_out) delete file_out;
-    }
+    bool   tool_modifies_event() { return (m_file_in) ? true : false; }
+    Timer* timer()               { return &m_timer; }
 
-    const std::string name() {
-        if(file_in) return "FileValidationTool: input file " + m_filename;
-        else        return "FileValidationTool: output file " + m_filename;
-    }
+    void initialize();
+    int  process(GenEvent &hepmc);
+    void finalize();
 
-    bool tool_modifies_event() { return (file_in) ? true : false; }
-
-    void initialize() {}
-
-    int process(GenEvent &hepmc) {
-        if(file_in) {
-            HEPMC2CODE( file_in->fill_next_event(&hepmc); )
-            HEPMC3CODE( file_in->fill_next_event( hepmc); )
-            if( file_in->rdstate() ) return -1;
-        }
-        else if(file_out) {
-            HEPMC2CODE( file_out->write_event(&hepmc); )
-            HEPMC3CODE( file_out->write_event( hepmc); )
-            if( file_out->rdstate() ) return -1;
-        }
-
-        return 0;
-    }
-
-    void finalize() {
-        HEPMC3CODE(
-            if(file_in)  file_in->close();
-            if(file_out) file_out->close();
-        )
-    }
-
-    bool rdstate() {
-        if(file_in)  return file_in->rdstate();
-        if(file_out) return file_out->rdstate();
-
-        return true;
-    }
+    bool rdstate();
 
 private:
-    HEPMC2CODE( IO_GenEvent       *file_in; )
-    HEPMC3CODE( IO_HepMC2_adapter *file_in; )
+    HEPMC2CODE( IO_GenEvent       *m_file_in; )
+    HEPMC3CODE( IO_HepMC2_adapter *m_file_in; )
 
-    IO_GenEvent *file_out;
-    std::string m_filename;
+    IO_GenEvent *m_file_out;
+    std::string  m_filename;
+    Timer        m_timer;
 };
 
 #endif

@@ -9,6 +9,7 @@
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"
+#include "Timer.h"
 
 #include <vector>
 
@@ -29,6 +30,7 @@ public:
     void initialize();
     void process(GenEvent &hepmc);
     void finalize();
+
 //
 // Accessors
 //
@@ -46,13 +48,24 @@ public:
 private:
     std::vector<ValidationTool*> m_toolchain;
 
-    int m_events;
-    int m_momentum_check_events;
-    int m_print_events;
-    int m_event_counter;
-    int m_status;
+    int    m_events;
+    int    m_momentum_check_events;
+    double m_momentum_check_threshold;
+    int    m_print_events;
+    int    m_event_counter;
+    int    m_status;
 
     bool m_has_input_source;
+
+    enum PARSING_STATUS {
+        PARSING_OK,
+        UNRECOGNIZED_COMMAND,
+        UNRECOGNIZED_INPUT,
+        UNRECOGNIZED_TOOL,
+        UNAVAILABLE_TOOL,
+        ADDITIONAL_INPUT,
+        CANNOT_OPEN_FILE
+    };
 };
 
 #endif

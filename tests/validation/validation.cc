@@ -1,8 +1,8 @@
 #include "ValidationControl.h"
+
+#include <iostream>
 using std::cout;
 using std::endl;
-
-int EventsToCheck=20;
 
 int main(int argc, char **argv)
 {
@@ -20,18 +20,19 @@ int main(int argc, char **argv)
     control.print_events(0);
     control.check_momentum_for_events(100);
 
+    // Override event limit
     if( argc >= 3 ) control.set_event_limit(atoi(argv[2]));
 
-    // Initialize
+    //
+    // Process events
+    //
     control.initialize();
 
-    // Event loop
     while( control.new_event() )
     {
         GenEvent HepMCEvt;
         control.process(HepMCEvt);
     }
 
-    // Finalize
     control.finalize();
 }

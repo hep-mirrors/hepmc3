@@ -10,35 +10,26 @@
 #endif // ifdef TAUOLAPP_HEPMC2
 
 #include "ValidationTool.h"
+#include "Timer.h"
+
 #include "Tauola/Tauola.h"
 #include "Tauola/Log.h"
 
 class TauolaValidationTool : public ValidationTool {
 public:
-    const std::string name()   { return "Tauola++"; }
-    bool tool_modifies_event() { return true;       }
+    TauolaValidationTool():m_timer("Tauola++ processing time") {}
 
-    void initialize() {
-        Tauolapp::Tauola::setSameParticleDecayMode(4);
-        Tauolapp::Tauola::setOppositeParticleDecayMode(4);
-        Tauolapp::Tauola::initialize();
-    }
+public:
+    const std::string name()     { return "Tauola++"; }
+    bool   tool_modifies_event() { return true;       }
+    Timer* timer()               { return &m_timer;   }
 
-    int process(GenEvent &hepmc) {
+    void initialize();
+    int  process(GenEvent &hepmc);
+    void finalize();
 
-        HEPMC2CODE( Tauolapp::TauolaHepMCEvent  t_event(&hepmc); )
-        HEPMC3CODE( Tauolapp::TauolaHepMC3Event t_event(&hepmc); )
-
-        //t_event.undecayTaus();
-        t_event.decayTaus();
-
-        return 0;
-    }
-
-    void finalize() {
-        Tauolapp::Tauola::summary();
-        Tauolapp::Log::Summary();
-    }
+private:
+    Timer m_timer;
 };
 
 #endif
