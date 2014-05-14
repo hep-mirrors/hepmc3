@@ -36,6 +36,7 @@ include make.tools.inc
 VALIDATION_SRC= validation.cc \
                 src/ValidationControl.cc \
                 src/SimpleEventTool.cc \
+                src/RootStreamerTool.cc \
                 src/FileValidationTool.cc \
                 src/PythiaValidationTool.cc \
                 src/TauolaValidationTool.cc \
@@ -54,6 +55,7 @@ endif
 # Definitions for HepMC2 files
 validation_HEPMC2.exe: $(VALIDATION_SRC:.cc=.o_hepmc2)
 	$(LD) $(LDFLAGS) $^ -o $@ $(LINKS_HEPMC2) $(RPATHS_HEPMC2)
+
 %.o_hepmc2: %.cc
 	$(CC) $(CFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(DEFS_HEPMC2) $(INCLUDES)
 

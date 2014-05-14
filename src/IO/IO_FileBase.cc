@@ -1,30 +1,31 @@
 /**
- *  @file IO_Base.cc
- *  @brief Partial implementation of \b abstract \b class IO_Base
+ *  @file IO_FileBase.cc
+ *  @brief Partial implementation of \b abstract \b class IO_FileBase
  *
  */
 #include <iostream>
 #include <fstream>
-#include "HepMC3/IO/IO_Base.h"
+#include "HepMC3/IO/IO_FileBase.h"
+#include "HepMC3/GenEvent.h"
 #include "HepMC3/Setup.h"
 using std::ostream;
 using std::endl;
 
 namespace HepMC3 {
 
-IO_Base::IO_Base(const std::string& filename, std::ios::openmode mode):
+IO_FileBase::IO_FileBase(const std::string& filename, std::ios::openmode mode):
 m_file(filename.c_str(),mode | std::ios::binary) {
 
     m_mode = mode;
 
     if( m_mode != std::ios::in && m_mode != std::ios::out ) {
-        ERROR( "IO_Base: only ios::in and ios::out modes are supported" )
+        ERROR( "IO_FileBase: only ios::in and ios::out modes are supported" )
         m_file.clear(std::ios::badbit);
         return;
     }
 
     if( !m_file.is_open() ) {
-        ERROR( "IO_Base: couldn't open file: " << filename )
+        ERROR( "IO_FileBase: couldn't open file: " << filename )
         m_file.clear(std::ios::badbit);
         return;
     }
@@ -34,11 +35,11 @@ m_file(filename.c_str(),mode | std::ios::binary) {
     }
 }
 
-IO_Base::~IO_Base() {
+IO_FileBase::~IO_FileBase() {
     close();
 }
 
-void IO_Base::close() {
+void IO_FileBase::close() {
     if( !m_file.rdstate() && m_mode == std::ios::out ) {
         m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
     }

@@ -16,7 +16,7 @@
 namespace HepMC3 {
 
 IO_HepMC2_adapter::IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode):
-IO_Base(filename,mode) {
+IO_FileBase(filename,mode) {
     if(mode != std::ios::in) {
         ERROR( "IO_HepMC2_adapter can only accept ios::in mode" )
         m_file.clear(std::ios::badbit);

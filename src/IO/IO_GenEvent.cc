@@ -20,7 +20,7 @@ using std::vector;
 namespace HepMC3 {
 
 IO_GenEvent::IO_GenEvent(const std::string &filename, std::ios::openmode mode):
-IO_Base(filename,mode),
+IO_FileBase(filename,mode),
 m_precision(16),
 m_buffer(NULL),
 m_cursor(NULL),

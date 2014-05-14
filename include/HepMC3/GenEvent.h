@@ -84,8 +84,6 @@ public:
     const vector<GenParticlePtr>& particles()  const { return m_particles;            } //!< Get list of particles
     const vector<GenVertexPtr>&   vertices()   const { return m_vertices;             } //!< Get list of vertices
 
-    GenEventData* serializable_data() const; //!< Create event data that can be used for serialization @todo This is temporary function for benchmarking. Change it to proper class
-
 //
 // Deprecated functions
 //

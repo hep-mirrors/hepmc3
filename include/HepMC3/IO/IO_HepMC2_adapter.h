@@ -10,18 +10,20 @@
  *  @ingroup IO
  *
  */
-#include "HepMC3/IO/IO_Base.h"
+#include "HepMC3/IO/IO_FileBase.h"
 
 #include "HepMC3/Data/SmartPointer.h"
 
 #include <string>
 #include <fstream>
+#include <vector>
+using std::vector;
 
 namespace HepMC3 {
 
 class GenEvent;
 
-class IO_HepMC2_adapter : public IO_Base {
+class IO_HepMC2_adapter : public IO_FileBase {
 //
 // Constructors
 //

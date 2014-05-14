@@ -186,29 +186,6 @@ void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
     m_vertices.reserve(vertices);
 }
 
-GenEventData* GenEvent::serializable_data() const {
-    GenEventData* data = new GenEventData();
-
-    BOOST_FOREACH( const GenParticlePtr &p, particles() ) {
-        data->particles.push_back(*p);
-    }
-
-    BOOST_FOREACH( const GenVertexPtr &v, vertices() ) {
-        data->vertices.push_back(*v);
-
-        int barcode = v->barcode();
-        BOOST_FOREACH( const GenParticlePtr &p, v->particles_in() ) {
-            data->links.push_back( std::pair<int,int>(p->barcode(),barcode) );
-        }
-
-        BOOST_FOREACH( const GenParticlePtr &p, v->particles_out() ) {
-            data->links.push_back( std::pair<int,int>(barcode,p->barcode()) );
-        }
-    }
-
-    return data;
-}
-
 //
 // Deprecated functions
 //

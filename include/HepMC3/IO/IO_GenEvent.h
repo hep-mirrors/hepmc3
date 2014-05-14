@@ -10,7 +10,9 @@
  *  @ingroup IO
  *
  */
-#include "HepMC3/IO/IO_Base.h"
+#include "HepMC3/IO/IO_FileBase.h"
+
+#include "HepMC3/GenEvent.h"
 
 #include <string>
 #include <fstream>
@@ -19,7 +21,7 @@ namespace HepMC3 {
 
 class GenEvent;
 
-class IO_GenEvent : public IO_Base {
+class IO_GenEvent : public IO_FileBase {
 //
 // Constructors
 //

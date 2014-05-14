@@ -11,15 +11,14 @@
  *
  */
 #include <vector>
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
+#include "HepMC3/Data/GenParticleData.h"
+#include "HepMC3/Data/GenVertexData.h"
 
 namespace HepMC3 {
 
 struct GenEventData {
-    std::vector<GenParticle>          particles; //!< List of particles
-    std::vector<GenVertex>            vertices;  //!< List of vertices
-    std::vector< std::pair<int,int> > links;     //!< List of links of incoming/outgoing particles
+    std::vector<GenParticleData> particles; //!< List of particles
+    std::vector<GenVertexData>   vertices;  //!< List of vertices
 };
 
 } // namespace HepMC3
