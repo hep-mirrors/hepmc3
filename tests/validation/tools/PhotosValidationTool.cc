@@ -18,19 +18,28 @@ void PhotosValidationTool::initialize() {
 int PhotosValidationTool::process(GenEvent &hepmc) {
 
     HEPMC2CODE( int buf = -hepmc.particles_size(); )
-    HEPMC3CODE( int buf = 0;                          )
+    HEPMC3CODE(
+        FindParticles search(hepmc, FIND_ALL, PDG_ID == 22 && STATUS == 1);
+        int buf = -search.results().size();
+    )
+
+    // Time only processing
+    m_timer.start();
 
     // Process by Photos++
-    HEPMC2CODE( Photospp::PhotosHepMCEvent  p_event(&hepmc); )
-    HEPMC3CODE( Photospp::PhotosHepMC3Event p_event(&hepmc); )
+    HEPMC2CODE( Photospp::PhotosHepMCEvent  *p_event = new Photospp::PhotosHepMCEvent (&hepmc); )
+    HEPMC3CODE( Photospp::PhotosHepMC3Event *p_event = new Photospp::PhotosHepMC3Event(&hepmc); )
 
-    p_event.process();
+    p_event->process();
+    delete p_event;
+
+    m_timer.stop();
 
     // Check number of photons created
     HEPMC2CODE( buf += hepmc.particles_size(); )
     HEPMC3CODE(
-        FindParticles search(hepmc, FIND_ALL, PDG_ID == 22 );
-        buf = search.results().size();
+        FindParticles search2(hepmc, FIND_ALL, PDG_ID == 22 && STATUS == 1);
+        buf += search2.results().size();
     )
 
     if(buf<MAX_PHOTONS_TO_KEEP_TRACK_OF) ++m_photons_added[buf];

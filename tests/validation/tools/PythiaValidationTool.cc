@@ -1,7 +1,7 @@
 #include "PythiaValidationTool.h"
 
-PythiaValidationTool::PythiaValidationTool( const string &filename ):m_timer("pythia8 conversion time") {
-    m_pythia.readFile(filename);
+PythiaValidationTool::PythiaValidationTool( const string &filename ):m_filename(filename),m_timer("pythia8 conversion time") {
+    m_pythia.readFile(m_filename);
 }
 
 void PythiaValidationTool::initialize() {

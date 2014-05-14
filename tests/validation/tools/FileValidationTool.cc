@@ -1,17 +1,21 @@
 #include "FileValidationTool.h"
 
 FileValidationTool::FileValidationTool(const std::string &filename, std::ios::openmode mode):m_file_in(NULL),m_file_out(NULL),m_timer("HepMC event writing time") {
+
+    m_filename = filename;
+
     if(mode == std::ios::in) {
-        HEPMC2CODE( m_file_in = new IO_GenEvent(filename, mode);       )
-        HEPMC3CODE( m_file_in = new IO_HepMC2_adapter(filename, mode); )
+        HEPMC2CODE( m_file_in = new IO_GenEvent(m_filename, mode);       )
+        HEPMC3CODE( m_file_in = new IO_HepMC2_adapter(m_filename, mode); )
 
         m_timer = Timer("HepMC event parsing time");
     }
     else {
-        m_file_out = new IO_GenEvent(filename, mode);
-    }
+        HEPMC2CODE( m_filename += "2"; )
+        HEPMC3CODE( m_filename += "3"; )
 
-    m_filename = filename;
+        m_file_out = new IO_GenEvent(m_filename, mode);
+    }
 }
 
 FileValidationTool::~FileValidationTool() {

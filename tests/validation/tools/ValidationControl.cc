@@ -138,6 +138,30 @@ void ValidationControl::read_file(const std::string &filename) {
             if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
             else m_toolchain.push_back(tool);
         }
+        // Parse option
+        else if( strncmp(buf,"SET",3)==0 ) {
+            in >> buf;
+
+            if     ( strncmp(buf,"print_events",12)==0 ) {
+                in >> buf;
+
+                int events = 0;
+                if( strncmp(buf,"ALL",3)==0 ) events = -1;
+                else                          events = atoi(buf);
+
+                print_events(events);
+            }
+            else if( strncmp(buf,"check_momentum",14)==0 ) {
+                in >> buf;
+
+                int events = 0;
+                if( strncmp(buf,"ALL",3)==0 ) events = -1;
+                else                          events = atoi(buf);
+
+                check_momentum_for_events(events);
+            }
+            else status = UNRECOGNIZED_OPTION;
+        }
         else status = UNRECOGNIZED_COMMAND;
 
         // Error checking
@@ -145,6 +169,7 @@ void ValidationControl::read_file(const std::string &filename) {
 
         switch(status) {
             case  UNRECOGNIZED_COMMAND: printf("skipping unrecognised command:      '%s'\n",buf); break;
+            case  UNRECOGNIZED_OPTION:  printf("skipping unrecognised option:       '%s'\n",buf); break;
             case  UNRECOGNIZED_INPUT:   printf("skipping unrecognised input source: '%s'\n",buf); break;
             case  UNRECOGNIZED_TOOL:    printf("skipping unrecognised tool:         '%s'\n",buf); break;
             case  UNAVAILABLE_TOOL:     printf("skipping unavailable tool:          '%s'\n",buf); break;
@@ -166,15 +191,17 @@ bool ValidationControl::new_event() {
     if( m_status ) return false;
     if( m_events && ( m_event_counter >= m_events ) ) return false;
 
+    if(m_event_counter) {
+        if( m_momentum_check_events>0 ) --m_momentum_check_events;
+        if( m_print_events>0 )          --m_print_events;
+    }
+
     ++m_event_counter;
 
     if( m_event_counter%1000 == 0) {
         if( !m_events ) printf("Event: %7i\n",m_event_counter);
         else            printf("Event: %7i (%6.2f%%)\n",m_event_counter,m_event_counter*100./m_events);
     }
-
-    if( m_momentum_check_events ) --m_momentum_check_events;
-    if( m_print_events )          --m_print_events;
 
     return true;
 }
@@ -226,6 +253,15 @@ void ValidationControl::process(GenEvent &hepmc) {
                     sum.setPz( sum.pz() + m.pz() );
                     sum.setE ( sum.e()  + m.e()  );
                 }
+
+                double momentum = input_momentum.px() + input_momentum.py() + input_momentum.pz() + input_momentum.e();
+                if( fabs(momentum) > 10e-12 ) {
+                    double px = input_momentum.px() - sum.px();
+                    double py = input_momentum.py() - sum.py();
+                    double pz = input_momentum.pz() - sum.pz();
+                    double e  = input_momentum.e()  - sum.e();
+                    delta = sqrt(px*px + py*py + pz*pz + e*e);
+                }
             )
             HEPMC3CODE(
                 FindParticles search( hepmc, FIND_ALL, STATUS == 1 );
@@ -241,8 +277,8 @@ void ValidationControl::process(GenEvent &hepmc) {
 
             printf("Momentum sum: %+15.8e %+15.8e %+15.8e %+15.8e (evt: %7i, %s)",sum.px(),sum.py(),sum.pz(),sum.e(),m_event_counter,tool->name().c_str());
 
-            if(delta<m_momentum_check_threshold) printf("\n");
-            else printf(" - WARNING! Difference = %+15.8e\n",delta);
+            if( delta < m_momentum_check_threshold ) printf("\n");
+            else                                     printf(" - WARNING! Difference = %+15.8e\n",delta);
 
             input_momentum = sum;
         }

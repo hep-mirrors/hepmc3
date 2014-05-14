@@ -18,12 +18,12 @@ public:
     ~FileValidationTool();
 
 public:
-    const std::string name() { return "FileValidationTool"; }
-
-    const std::string long_name() {
-        if(m_file_in) return name() + " input file:  " + m_filename;
-        else          return name() + " output file: " + m_filename;
+    const std::string name() {
+        if(m_file_in) return "input file";
+        else          return "output file";
     }
+
+    const std::string long_name() { return name() + ": " + m_filename; }
 
     bool   tool_modifies_event() { return (m_file_in) ? true : false; }
     Timer* timer()               { return &m_timer; }

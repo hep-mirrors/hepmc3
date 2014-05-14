@@ -16,14 +16,22 @@ public:
 
     /** Save end time and aggregate build-in clock */
     void stop() {
+        // Do nothing if timer has not been started
+        if(m_start.tms_utime == 0) return;
+
         times(&m_stop);
+
         m_stored.tms_utime += m_stop.tms_utime - m_start.tms_utime;
         m_stored.tms_stime += m_stop.tms_stime - m_start.tms_stime;
-        m_start = m_stop;
+
+        m_start.tms_utime = 0;
+        m_start.tms_stime = 0;
     }
 
     /** Reset the clock */
     void reset() {
+        m_start.tms_utime = 0;
+        m_start.tms_stime = 0;
         m_stored.tms_utime = 0;
         m_stored.tms_stime = 0;
     }

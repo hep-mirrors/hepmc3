@@ -213,7 +213,7 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getAllDecayProducts(){
 }
 
 bool PhotosHepMC3Particle::checkMomentumConservation(){
-return true;
+
   if(!m_particle->end_vertex()) return true;
 
   // HepMC3 version of check_momentum_conservation

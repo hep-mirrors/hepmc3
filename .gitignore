@@ -21,3 +21,17 @@
 *.out
 *.app
 
+# Other temp files
+*.o_hepmc2
+*.log
+*.out
+*.err
+
+# ROOT output files
+*.root
+
+# HepMC output files
+*.hepmc
+*.hepmc2
+*.hepmc3
+
