@@ -49,6 +49,7 @@ private:
     std::vector<ValidationTool*> m_toolchain;
 
     int    m_events;
+    int    m_events_print_step;
     int    m_momentum_check_events;
     double m_momentum_check_threshold;
     int    m_print_events;

@@ -45,10 +45,11 @@ void ValidationControl::read_file(const std::string &filename) {
     std::ifstream in(filename.c_str());
 
     if(!in.is_open()) {
-        printf("ValidationControl: error reading file %s.\n",filename.c_str());
+        printf("ValidationControl: error reading config file: %s\n",filename.c_str());
         m_status = -1;
         return;
     }
+    else printf("ValidationControl: parsing config file: %s\n",filename.c_str());
 
     // Parse config file
     char buf[256];
@@ -165,7 +166,7 @@ void ValidationControl::read_file(const std::string &filename) {
         else status = UNRECOGNIZED_COMMAND;
 
         // Error checking
-        if(status != PARSING_OK) printf("ValidationControl config file line %i: ",line);
+        if(status != PARSING_OK) printf("ValidationControl: config file line %i: ",line);
 
         switch(status) {
             case  UNRECOGNIZED_COMMAND: printf("skipping unrecognised command:      '%s'\n",buf); break;
@@ -174,7 +175,7 @@ void ValidationControl::read_file(const std::string &filename) {
             case  UNRECOGNIZED_TOOL:    printf("skipping unrecognised tool:         '%s'\n",buf); break;
             case  UNAVAILABLE_TOOL:     printf("skipping unavailable tool:          '%s'\n",buf); break;
             case  ADDITIONAL_INPUT:     printf("skipping additional input source:   '%s'\n",buf); break;
-            case  CANNOT_OPEN_FILE:     printf("skipping tool (file not present):   '%s'\n",buf); break;
+            case  CANNOT_OPEN_FILE:     printf("skipping input file:                '%s'\n",buf); break;
             default: break;
         }
 
@@ -198,15 +199,31 @@ bool ValidationControl::new_event() {
 
     ++m_event_counter;
 
-    if( m_event_counter%1000 == 0) {
-        if( !m_events ) printf("Event: %7i\n",m_event_counter);
-        else            printf("Event: %7i (%6.2f%%)\n",m_event_counter,m_event_counter*100./m_events);
+    if( m_events ) {
+        if( m_event_counter == 1 ) {
+            printf("ValidationControl: event       1 of %-7i\n",m_events);
+            m_events_print_step = m_events/10;
+        }
+        else if( m_event_counter%m_events_print_step == 0 ) {
+            printf("ValidationControl: event %7i (%6.2f%%)\n",m_event_counter,m_event_counter*100./m_events);
+        }
+    }
+    else {
+        if( m_event_counter == 1 ) {
+            printf("ValidationControl: event       1\n");
+            m_events_print_step = 1000;
+        }
+        else if( m_event_counter%m_events_print_step == 0 ) {
+            printf("ValidationControl: event %7i\n",m_event_counter);
+        }
     }
 
     return true;
 }
 
 void ValidationControl::initialize() {
+    printf("ValidationControl: initializing\n");
+
     BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
         tool->initialize();
     }
@@ -286,19 +303,24 @@ void ValidationControl::process(GenEvent &hepmc) {
 }
 
 void ValidationControl::finalize() {
+    printf("ValidationControl: finalizing\n");
 
     // Finalize
     BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
         tool->finalize();
     }
 
+    printf("ValidationControl: printing timers\n");
+
     // Print timers
     BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
         if(tool->timer()) tool->timer()->print();
     }
 
+    printf("ValidationControl: finished processing:\n");
+
     // List tools
     BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
-        printf(" Finished processing: %s\n",tool->long_name().c_str());
+        printf("  tool: %s\n",tool->long_name().c_str());
     }
 }
