@@ -3,7 +3,7 @@ include make.inc
 .DEFAULT_GOAL=all
 
 INTERFACES    =
-INCLUDES      =
+INCLUDES      = -Iinclude
 RPATHS_HEPMC3 =
 LINKS_HEPMC3  =
 DEFS_HEPMC3   =
@@ -16,7 +16,7 @@ DEFS_HEPMC2   =
 # Change paths in this file to include/exclude selected tools
 include make.toolslocation.inc
 
-override INCLUDES      += -I$(HEPMC3LOCATION)/include -Itools
+override INCLUDES      += -I$(HEPMC3LOCATION)/include
 override RPATHS_HEPMC3 += -Wl,-rpath,$(HEPMC3LOCATION)/lib
 override LINKS_HEPMC3  += -L$(HEPMC3LOCATION)/lib -lHepMC
 
@@ -33,13 +33,14 @@ endif
 #                               LINKS_HEPMC2, RPATHS_HEPMC2, DEFS_HEPMC2
 include make.tools.inc
 
-VALIDATION_SRC= validation.cc tools/ValidationControl.cc \
-                tools/SimpleEventTool.cc \
-                tools/FileValidationTool.cc \
-                tools/PythiaValidationTool.cc \
-                tools/TauolaValidationTool.cc \
-                tools/PhotosValidationTool.cc  \
-                tools/McTesterValidationTool.cc
+VALIDATION_SRC= validation.cc \
+                src/ValidationControl.cc \
+                src/SimpleEventTool.cc \
+                src/FileValidationTool.cc \
+                src/PythiaValidationTool.cc \
+                src/TauolaValidationTool.cc \
+                src/PhotosValidationTool.cc  \
+                src/McTesterValidationTool.cc
 
 all:
 ifneq ($(HEPMC3LOCATION), )
@@ -67,7 +68,7 @@ validation.exe: $(VALIDATION_SRC:.cc=.o)
 	$(CC) $(CFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(INCLUDES)
 
 clean:
-	rm -f tools/*.o *.o tools/*.o_hepmc2 *.o_hepmc2 *.exe
+	rm -f src/*.o *.o src/*.o_hepmc2 *.o_hepmc2 *.exe
 
 Clean: clean
 	rm -f $(INTERFACEDIRECTORY)*/src/*.o  $(INTERFACEDIRECTORY)*/lib/*.so
