@@ -94,14 +94,14 @@ void GenEvent::add_vertex( const GenVertexPtr &v ) {
     BOOST_FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
         if(!p->in_event()) {
             add_particle(p);
-            p->m_end_vertex = v->m_this;
+            p->set_end_vertex(v->m_this.lock());
         }
     }
 
     BOOST_FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
         if(!p->in_event()) {
             add_particle(p);
-            p->m_production_vertex = v->m_this;
+            p->set_production_vertex(v->m_this.lock());
         }
     }
 

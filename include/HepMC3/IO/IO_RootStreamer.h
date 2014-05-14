@@ -47,19 +47,6 @@ public:
 public:
     GenEventData& data() { return m_data; } //!< Get event data
 
-private:
-    /** @brief Write vertex
-     *
-     *  Helper routine for writing single vertex to file
-     */
-    void write_vertex  (const GenVertexPtr &v);
-
-    /** @brief Write particle
-     *
-     *  Helper routine for writing single particle to file
-     */
-    void write_particle(const GenParticlePtr &p);
-
 //
 // Fields
 //

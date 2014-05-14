@@ -15,12 +15,12 @@
 namespace HepMC3 {
 
 struct GenParticleData {
-    int        pdg_id;                //!< PDG ID
-    FourVector momentum;              //!< Momentum
-    int        status;                //!< Status
-    int        status_subcode;        //!< Status subcode
-    double     generated_mass;        //!< Generated mass (if set)
-    bool       is_generated_mass_set; //!< Check if generated mass is set
+    int        pdg_id;            //!< PDG ID
+    FourVector momentum;          //!< Momentum
+    int        status;            //!< Status
+    int        status_subcode;    //!< Status subcode
+    double     mass;              //!< Generated mass (if set)
+    bool       is_mass_set;       //!< Check if generated mass is set
 
     int        production_vertex; //!< Production vertex
     int        end_vertex;        //!< End vertex

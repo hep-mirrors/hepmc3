@@ -9,6 +9,7 @@
  *
  */
 #include "HepMC3/Data/SmartPointer.h"
+#include "HepMC3/Data/GenVertexData.h"
 #include "HepMC3/FourVector.h"
 
 #include <iostream>
@@ -49,9 +50,9 @@ public:
 // Accessors
 //
 public:
-    GenEvent *parent_event()      const { return m_event;          } //!< Get parent event
-
-    int barcode() const { return -(((int)m_index)+1);  } //!< Get barcode
+    GenEvent* parent_event()    const { return m_event;              } //!< Get parent event
+    int       barcode()         const { return -(((int)m_index)+1);  } //!< Get barcode
+    const GenVertexData& data() const { return m_data;               } //!< Get vertex data
 
     /** @brief Return barcode used in serialization
      *
@@ -88,9 +89,8 @@ public:
 //
 private:
     GenEvent               *m_event;         //!< Parent event
-    unsigned int            m_ref_count;     //!< Reference counter used by SmartPtr class
     unsigned int            m_index;         //!< Index
-    FourVector              m_position;      //!< Position in time-space
+    GenVertexData           m_data;          //!< Vertex data
     vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
     vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
     weak_ptr<GenVertex>     m_this;          //!< Pointer to shared pointer managing this vertex

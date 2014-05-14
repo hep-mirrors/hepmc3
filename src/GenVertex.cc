@@ -14,9 +14,8 @@ namespace HepMC3 {
 
 GenVertex::GenVertex( const FourVector& position ):
 m_event(NULL),
-m_ref_count(0),
-m_index(0),
-m_position(position) {
+m_index(0) {
+    m_data.position = position;
 }
 
 void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
@@ -83,7 +82,7 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
 }
 
 int GenVertex::serialization_barcode() const {
-    if( particles_in().size() > 1 || !m_position.is_zero() ) return barcode();
+    if( particles_in().size() > 1 || !m_data.position.is_zero() ) return barcode();
     if( particles_in().size() == 0 ) return 0;
 
     return particles_in()[0]->barcode();
@@ -99,7 +98,7 @@ void GenVertex::add_particle_in( const GenParticlePtr &p ) {
 
     m_particles_in.push_back(p);
 
-    p->m_end_vertex = m_this;
+    p->set_end_vertex( m_this.lock() );
 
     if(m_event) m_event->add_particle(p);
 }
@@ -114,14 +113,14 @@ void GenVertex::add_particle_out( const GenParticlePtr &p ) {
 
     m_particles_out.push_back(p);
 
-    p->m_production_vertex = m_this;
+    p->set_production_vertex( m_this.lock() );
 
     if(m_event) m_event->add_particle(p);
 }
 
 const FourVector& GenVertex::position() const {
 
-    if( !m_position.is_zero() ) return m_position;
+    if( !m_data.position.is_zero() ) return m_data.position;
 
     // No position information - search ancestors
     BOOST_FOREACH( const GenParticlePtr &p, particles_in() ) {
@@ -133,7 +132,7 @@ const FourVector& GenVertex::position() const {
 }
 
 void GenVertex::set_position(const FourVector& new_pos) {
-    m_position = new_pos;
+    m_data.position = new_pos;
 }
 
 } // namespace HepMC3
