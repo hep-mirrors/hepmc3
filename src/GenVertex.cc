@@ -23,7 +23,7 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
     // Standalone format. Used when calling:
     // vertex.print()
     if( !event_listing_format ) {
-        ostr << "GenVertex:  " << id() << " (barcode: " << barcode() << ")"
+        ostr << "GenVertex:  " << id() << " barcode: " << barcode()
              << " in: "  << particles_in().size()
              << " out: " << particles_out().size();
 

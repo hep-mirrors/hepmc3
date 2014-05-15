@@ -30,7 +30,9 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
     if( !event_listing_format ) {
         ostr << "GenParticle: ";
         ostr.width(3);
-        ostr << id() << " PDGID: ";
+        ostr << id() << " barcode: ";
+        ostr.width(5);
+        ostr << barcode() <<" PDGID: ";
         ostr.width(5);
         ostr << m_data.pdg_id;
 
