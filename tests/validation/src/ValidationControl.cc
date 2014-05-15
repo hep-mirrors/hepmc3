@@ -31,6 +31,7 @@ m_momentum_check_threshold(10e-6),
 m_print_events(0),
 m_event_counter(0),
 m_status(-1),
+m_timer("processing time"),
 m_has_input_source(0) {
 }
 
@@ -200,6 +201,7 @@ bool ValidationControl::new_event() {
         if( m_momentum_check_events>0 ) --m_momentum_check_events;
         if( m_print_events>0 )          --m_print_events;
     }
+    else m_timer.start();
 
     ++m_event_counter;
 
@@ -209,7 +211,11 @@ bool ValidationControl::new_event() {
             m_events_print_step = m_events/10;
         }
         else if( m_event_counter%m_events_print_step == 0 ) {
-            printf("ValidationControl: event %7i (%6.2f%%)\n",m_event_counter,m_event_counter*100./m_events);
+            int elapsed = m_timer.elapsed_time();
+            m_timer.stop();
+            int total   = m_timer.total_time();
+            printf("ValidationControl: event %7i (%6.2f%%, %7ims current, %7ims total)\n",m_event_counter,m_event_counter*100./m_events,elapsed,total);
+            m_timer.start();
         }
     }
     else {
@@ -218,7 +224,11 @@ bool ValidationControl::new_event() {
             m_events_print_step = 1000;
         }
         else if( m_event_counter%m_events_print_step == 0 ) {
-            printf("ValidationControl: event %7i\n",m_event_counter);
+            int elapsed = m_timer.elapsed_time();
+            m_timer.stop();
+            int total   = m_timer.total_time();
+            printf("ValidationControl: event %7i (%6ims current, %7ims total)\n",m_event_counter,elapsed,total);
+            m_timer.start();
         }
     }
 

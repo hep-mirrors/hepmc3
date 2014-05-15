@@ -14,6 +14,17 @@ public:
         times(&m_start);
     }
 
+    /** Get time elapsed since timer started */
+    int elapsed_time() {
+        times(&m_stop);
+        return 10*(m_stop.tms_utime - m_start.tms_utime + m_stop.tms_stime - m_start.tms_stime);
+    }
+
+    /** Get total time counted by the timer */
+    int total_time() {
+        return 10*(m_stored.tms_utime + m_stored.tms_stime);
+    }
+
     /** Save end time and aggregate build-in clock */
     void stop() {
         // Do nothing if timer has not been started

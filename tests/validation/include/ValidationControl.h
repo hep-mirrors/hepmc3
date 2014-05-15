@@ -55,6 +55,7 @@ private:
     int    m_print_events;
     int    m_event_counter;
     int    m_status;
+    Timer  m_timer;
 
     bool m_has_input_source;
 
