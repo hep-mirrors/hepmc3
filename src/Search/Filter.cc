@@ -42,7 +42,7 @@ bool Filter::passed_int_filter(const GenParticlePtr &p ) const {
             return false;
     };
 
-    DEBUG( 10, "Filter: checking barcode="<<p->barcode()<<" param="<<m_int<<" operator="<<m_operator<<" value="<<value<<" compare to="<<m_int_value )
+    DEBUG( 10, "Filter: checking id="<<p->id()<<" param="<<m_int<<" operator="<<m_operator<<" value="<<value<<" compare to="<<m_int_value )
 
     switch(m_operator) {
         case EQUAL:            return (value==m_int_value);
@@ -61,7 +61,7 @@ bool Filter::passed_bool_filter(const GenParticlePtr &p ) const {
     bool         result = false;
     GenVertexPtr buf;
 
-    DEBUG( 10, "Filter: checking barcode="<<p->barcode()<<" param="<<m_bool<<" value="<<m_bool_value<<" (bool)" )
+    DEBUG( 10, "Filter: checking id="<<p->id()<<" param="<<m_bool<<" value="<<m_bool_value<<" (bool)" )
 
     switch( m_bool ) {
         case HAS_END_VERTEX:           result = p->end_vertex();        break;

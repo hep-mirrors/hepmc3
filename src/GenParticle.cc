@@ -23,15 +23,14 @@ m_id(0) {
 
 void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
 
-    int prod_vtx_barcode = (!m_production_vertex.expired()) ? m_production_vertex.lock()->barcode() : 0;
+    int prod_vtx_id = (!m_production_vertex.expired()) ? m_production_vertex.lock()->id() : 0;
 
     // Standalone format. Used when calling:
     // particle->print()
     if( !event_listing_format ) {
         ostr << "GenParticle: ";
         ostr.width(3);
-        ostr << barcode();
-        ostr << " ID: ";
+        ostr << id() << " PDGID: ";
         ostr.width(5);
         ostr << m_data.pdg_id;
 
@@ -52,11 +51,11 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
         ostr.flags(orig);
         ostr.precision(prec);
 
-        int end_vtx_barcode = (!m_end_vertex.expired()) ? m_end_vertex.lock()->barcode() : 0;
+        int prod_vtx_id = (!m_end_vertex.expired()) ? m_end_vertex.lock()->id() : 0;
 
         ostr << " Stat: " << m_data.status
-             << " PV: " << prod_vtx_barcode
-             << " EV: " << end_vtx_barcode
+             << " PV: " << prod_vtx_id
+             << " EV: " << prod_vtx_id
              << std::endl;
     }
     // Event listing format. Used when calling:
@@ -64,10 +63,10 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
     else {
         ostr << " ";
         ostr.width(6);
-        ostr << barcode();
+        ostr << id();
 
         ostr.width(9);
-        ostr << m_data.pdg_id << " ";
+        ostr << pdg_id() << " ";
         ostr.width(9);
         ostr.setf(std::ios::scientific, std::ios::floatfield);
         ostr.setf(std::ios_base::showpos);
@@ -89,9 +88,9 @@ void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
         }
         else ostr << "          ";
 
-        if( prod_vtx_barcode ) {
+        if( prod_vtx_id ) {
             ostr.width(6);
-            ostr << prod_vtx_barcode;
+            ostr << prod_vtx_id;
         }
 
         ostr << std::endl;

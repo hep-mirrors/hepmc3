@@ -28,7 +28,7 @@ TauolaHepMC3Particle::~TauolaHepMC3Particle(){
   while(m_created_particles.size()!=0){
     TauolaHepMC3Particle * temp = (TauolaHepMC3Particle*) m_created_particles.back();
     m_created_particles.pop_back();
-    //if(temp->getHepMC3()->barcode()==0) delete temp->getHepMC3();
+    //if(temp->getHepMC3()->id()==0) delete temp->getHepMC3();
     delete temp;
   }
 

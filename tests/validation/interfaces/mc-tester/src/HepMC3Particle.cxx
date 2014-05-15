@@ -223,7 +223,7 @@ HEPParticleList* HepMC3Particle::GetDaughterList(HEPParticleList *list)
 
   //iterate over daughters
   for(unsigned int i=0; i<end->particles_out().size(); ++i) {
-    HepMC3Particle * daughter = event->GetParticleWithBarcode((end->particles_out()[i])->barcode());
+    HepMC3Particle * daughter = event->GetParticleWithId((end->particles_out()[i])->id());
     if(!list->contains(daughter->GetId())){
       if(!daughter->IsHistoryEntry())
         list->push_back(daughter);
@@ -244,7 +244,7 @@ HEPParticleList* HepMC3Particle::GetMotherList(HEPParticleList *list)
 
    //iterate over daughters
    for(unsigned int i=0; i<prod->particles_in().size(); ++i) {
-       list->push_back(event->GetParticleWithBarcode((prod->particles_in()[i])->barcode()));
+       list->push_back(event->GetParticleWithId((prod->particles_in()[i])->barcode()));
    }
 
    return list;

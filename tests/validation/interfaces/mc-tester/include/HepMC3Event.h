@@ -57,11 +57,10 @@ public:
    Note: Indecies begin at 1.*/
   HEPParticle* GetParticle( int idx);
 
-  /** Returns the HepMC3Particle with id "barcode". This is the barcode
+  /** Returns the HepMC3Particle by its id. This is the ID
     number from the original HepMC3::GenParticle and not the ID used by
-    MC-TESTER. This function is not needed in HEPEvent, but is needed
-    by HepMC3Particle::Get_Daughters(). */
-  HepMC3Particle* GetParticleWithBarcode( int barcode );
+    MC-TESTER. */
+  HepMC3Particle* GetParticleWithId( int id );
 
   /** Dummy function definition. Do not use */
   void  SetParticle( int idx, HEPParticle *particle) ;

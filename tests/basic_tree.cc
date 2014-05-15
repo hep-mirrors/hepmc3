@@ -8,6 +8,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/Search/FindParticles.h"
 #include "HepMC3/IO/IO_GenEvent.h"
+#include "HepMC3/IO/IO_RootStreamer.h"
 
 #include <iostream>
 #include <boost/foreach.hpp>
@@ -83,14 +84,14 @@ int main() {
         p->print();
     }
 
-    std::cout<<std::endl<<"Find all ancestors of particle with barcode "<<p5->barcode()<<": "<<std::endl;
+    std::cout<<std::endl<<"Find all ancestors of particle with id "<<p5->id()<<": "<<std::endl;
     FindParticles search2(p5, FIND_ALL_ANCESTORS);
 
     BOOST_FOREACH( const GenParticlePtr &p, search2.results() ) {
         p->print();
     }
 
-    std::cout<<std::endl<<"Find stable descendants of particle with barcode "<<p4->barcode()<<": "<<std::endl;
+    std::cout<<std::endl<<"Find stable descendants of particle with id "<<p4->id()<<": "<<std::endl;
     std::cout<<"(just for test, we check both for status == 1 and no end vertex)"<<std::endl;
     FindParticles search3(p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX);
 

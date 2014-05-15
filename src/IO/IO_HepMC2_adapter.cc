@@ -287,11 +287,11 @@ int IO_HepMC2_adapter::parse_vertex_information(const char *buf) {
 
     // SKIPPING: weights_size, weights
 
-    DEBUG( 10, "IO_HepMC2_adapter: V: "<<barcode<<", "<<num_particles_out<<" particles)" )
-
     // Add original vertex barcode to the cache
     m_vertex_cache.push_back( data );
     m_vertex_barcodes.push_back( barcode );
+
+    DEBUG( 10, "IO_HepMC2_adapter: V: "<<-(int)m_vertex_cache.size()<<" (old barcode"<<barcode<<") "<<num_particles_out<<" particles)" )
 
     return num_particles_out;
 }

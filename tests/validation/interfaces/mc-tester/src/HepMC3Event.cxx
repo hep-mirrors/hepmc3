@@ -12,7 +12,7 @@ HepMC3Event::HepMC3Event( HepMC3::GenEvent &e, bool include_self_decay){
   // Make a list of the particles in the event.
   // (Modifying these will not effect the GenParticles
   // in the HepMC3::GenEvent). The pcle IDs given start at 1
-  // (and may differ from "barcode" in the GenEvent)
+  // (and may differ from "id" in the GenEvent)
   count_self_decays=include_self_decay;
 
   m_particle_count = e.particles().size();
@@ -51,13 +51,13 @@ HEPParticle* HepMC3Event::GetParticle(int idx){
   return particles[idx-1]; //Particle ID starts at 1
 }
 
-//Only implemented in HepMCEvent. Returns particle with GenEvent barcode.
-HepMC3Particle* HepMC3Event::GetParticleWithBarcode( int barcode ){
+//Only implemented in HepMCEvent. Returns particle by HepMC id.
+HepMC3Particle* HepMC3Event::GetParticleWithId( int id ){
   for(int i=0; i <  GetNumOfParticles(); i++){
-    if(particles[i]->part->barcode()==barcode)
+    if(particles[i]->part->id()==id)
       return particles[i];
   }
-  cout << "Could not find particle with barcode "<<barcode<<endl;
+  cout << "Could not find particle with id "<<id<<endl;
   return 0; //and have some error about not finding the
             //particle
 }
