@@ -17,8 +17,19 @@
 namespace HepMC3 {
 
 struct GenEventData {
-    std::vector<GenParticleData> particles; //!< List of particles
-    std::vector<GenVertexData>   vertices;  //!< List of vertices
+    std::vector<GenParticleData> particles; //!< Particles
+    std::vector<GenVertexData>   vertices;  //!< Vertices
+
+    /** @brief First id of the vertex links
+     *
+     *  If this id is positive - it is the incoming particle id
+     *  of a vertex which id is written in GenEventData::links2
+     *
+     *  If this id is negative, it's the id of a vertex which
+     *  outgoing particle id is written in GenEventData::links2
+     */
+    std::vector<int> links1;
+    std::vector<int> links2; //!< Second id of the vertex links
 };
 
 } // namespace HepMC3

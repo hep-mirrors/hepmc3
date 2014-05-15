@@ -49,9 +49,9 @@ public:
 // Accessors
 //
 public:
-    GenEvent* parent_event()      const { return m_event;   } //!< Get parent event
-    int       barcode()           const { return m_index+1; } //!< Get barcode
-    const GenParticleData& data() const { return m_data;    } //!< Get particle data
+    GenEvent*              parent_event() const { return m_event; } //!< Get parent event
+    int                    id()           const { return m_id;    } //!< Get particle id
+    const GenParticleData& data()         const { return m_data;  } //!< Get particle data
 
     int   pdg_id()                const { return m_data.pdg_id;         } //!< Get PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
@@ -76,16 +76,23 @@ public:
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
 
+    /** @brief Get barcode
+     *
+     *  Currently barcode = id
+     *  @todo Write proper barcode once we decide how it should look like
+     */
+    int barcode() const { return m_id+1; }
+
 protected:
-    void set_production_vertex( const shared_ptr<GenVertex> &v ); //!< Set production vertex
-    void set_end_vertex       ( const shared_ptr<GenVertex> &v ); //!< Set end vertex
+    void set_production_vertex( const shared_ptr<GenVertex> &v ) { m_production_vertex = v; } //!< Set production vertex
+    void set_end_vertex       ( const shared_ptr<GenVertex> &v ) { m_end_vertex        = v; } //!< Set end vertex
 //
 // Fields
 //
 private:
-    GenEvent              *m_event; //!< Parent event
-    unsigned int           m_index; //!< Index
-    GenParticleData        m_data;  //!< Particle data
+    GenEvent        *m_event; //!< Parent event
+    int              m_id;    //!< Index
+    GenParticleData  m_data;  //!< Particle data
 
     weak_ptr<GenVertex>    m_production_vertex; //!< Production vertex
     weak_ptr<GenVertex>    m_end_vertex;        //!< End vertex

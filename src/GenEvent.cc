@@ -76,19 +76,19 @@ void GenEvent::dump() const {
 void GenEvent::add_particle( const GenParticlePtr &p ) {
     if( p->in_event() ) return;
 
-    p->m_event = this;
-    p->m_index = particles().size();
-
     m_particles.push_back(p);
+
+    p->m_event = this;
+    p->m_id    = particles().size();
 }
 
 void GenEvent::add_vertex( const GenVertexPtr &v ) {
     if( v->in_event() ) return;
 
-    v->m_event = this;
-    v->m_index = vertices().size();
-
     m_vertices.push_back(v);
+
+    v->m_event = this;
+    v->m_id    = -(int)vertices().size();
 
     // Add all incoming and outgoing particles and restore their production/end vertices
     BOOST_FOREACH( const GenParticlePtr &p, v->m_particles_in ) {

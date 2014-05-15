@@ -14,7 +14,7 @@ namespace HepMC3 {
 
 GenVertex::GenVertex( const FourVector& position ):
 m_event(NULL),
-m_index(0) {
+m_id(0) {
     m_data.position = position;
 }
 
@@ -23,7 +23,7 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
     // Standalone format. Used when calling:
     // vertex.print()
     if( !event_listing_format ) {
-        ostr << "GenVertex:  " << barcode()
+        ostr << "GenVertex:  " << id() << " (barcode: " << barcode() << ")"
              << " in: "  << particles_in().size()
              << " out: " << particles_out().size();
 
@@ -41,7 +41,7 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
 
         ostr << "Vtx: ";
         ostr.width(6);
-        ostr << barcode();
+        ostr << id() ;
 
         const FourVector &pos = position();
         if( !pos.is_zero() ) {
@@ -79,13 +79,6 @@ void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
             p->print(ostr,1);
         }
     }
-}
-
-int GenVertex::serialization_barcode() const {
-    if( particles_in().size() > 1 || !m_data.position.is_zero() ) return barcode();
-    if( particles_in().size() == 0 ) return 0;
-
-    return particles_in()[0]->barcode();
 }
 
 void GenVertex::add_particle_in( const GenParticlePtr &p ) {

@@ -48,8 +48,8 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     m_cursor += sprintf(m_cursor, "E %i %i %i\n",evt.event_number(),evt.vertices_count(),evt.particles_count());
     flush();
 
-    int vertices_processed    = 0;
-    int lowest_vertex_barcode = 0;
+    int vertices_processed = 0;
+    int lowest_vertex_id   = 0;
 
     m_cursor += sprintf(m_cursor, "T Version 0");
     flush();
@@ -66,14 +66,16 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
 
         if(v) {
 
-            production_vertex = v->serialization_barcode();
+            // Check if we need this vertex at all
+            if( v->particles_in().size() > 1 || !v->data().position.is_zero() ) production_vertex = v->id();
+            else if( v->particles_in().size() == 1 )                            production_vertex = v->particles_in()[0]->id();
 
-            if (production_vertex < lowest_vertex_barcode) {
+            if (production_vertex < lowest_vertex_id) {
                 write_vertex(v);
             }
 
             ++vertices_processed;
-            lowest_vertex_barcode = v->barcode();
+            lowest_vertex_id = v->id();
         }
 
         write_particle( p, production_vertex, false );
@@ -115,7 +117,7 @@ void IO_GenEvent::allocate_buffer() {
 
 void IO_GenEvent::write_vertex(const GenVertexPtr &v) {
 
-    m_cursor += sprintf( m_cursor, "V %i [",v->barcode() );
+    m_cursor += sprintf( m_cursor, "V %i [",v->id() );
     flush();
 
     bool printed_first = false;
@@ -123,10 +125,10 @@ void IO_GenEvent::write_vertex(const GenVertexPtr &v) {
     BOOST_FOREACH( const GenParticlePtr &p, v->particles_in() ) {
 
         if( !printed_first ) {
-            m_cursor  += sprintf(m_cursor,"%i", p->barcode());
+            m_cursor  += sprintf(m_cursor,"%i", p->id());
             printed_first = true;
         }
-        else m_cursor += sprintf(m_cursor,",%i",p->barcode());
+        else m_cursor += sprintf(m_cursor,",%i",p->id());
 
         flush();
     }
@@ -150,7 +152,7 @@ void IO_GenEvent::write_vertex(const GenVertexPtr &v) {
 
 void IO_GenEvent::write_particle(const GenParticlePtr &p, int second_field, bool is_new_version) {
 
-    m_cursor += sprintf(m_cursor,"P %i",p->barcode());
+    m_cursor += sprintf(m_cursor,"P %i",p->id());
     flush();
 
     if ( is_new_version ) m_cursor += sprintf(m_cursor," X%i",second_field);

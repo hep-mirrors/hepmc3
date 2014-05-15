@@ -12,15 +12,13 @@ namespace HepMC3 {
 
 GenParticle::GenParticle( const FourVector &momentum, int pdg_id, int status ):
 m_event(NULL),
-m_index(0) {
+m_id(0) {
     m_data.pdg_id            = pdg_id;
     m_data.momentum          = momentum;
     m_data.status            = status;
     m_data.status_subcode    = 0;
-    m_data.mass              = 0.0;
     m_data.is_mass_set       = false;
-    m_data.production_vertex = 0;
-    m_data.end_vertex        = 0;
+    m_data.mass              = 0.0;
 }
 
 void GenParticle::print( std::ostream& ostr, bool event_listing_format ) const {
@@ -137,16 +135,6 @@ GenVertexPtr GenParticle::production_vertex() const {
 
 GenVertexPtr GenParticle::end_vertex() const {
     return m_end_vertex.lock();
-}
-
-void GenParticle::set_production_vertex( const shared_ptr<GenVertex> &v ) {
-    m_production_vertex       = v;
-    m_data.production_vertex = (v) ? v->barcode() : 0;
-}
-
-void GenParticle::set_end_vertex( const shared_ptr<GenVertex> &v ) {
-    m_end_vertex       = v;
-    m_data.end_vertex = (v) ? v->barcode() : 0;
 }
 
 } // namespace HepMC3

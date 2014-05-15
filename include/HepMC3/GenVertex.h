@@ -50,17 +50,9 @@ public:
 // Accessors
 //
 public:
-    GenEvent* parent_event()    const { return m_event;              } //!< Get parent event
-    int       barcode()         const { return -(((int)m_index)+1);  } //!< Get barcode
-    const GenVertexData& data() const { return m_data;               } //!< Get vertex data
-
-    /** @brief Return barcode used in serialization
-     *
-     *  If the vertex has at most one incoming particle, it might not be serialized
-     *  if it does not contain any m_data. In such cases, its barcode used for
-     *  serialization can be 0 or can be the barcode of its sole incoming particle
-     */
-    int serialization_barcode() const;
+    GenEvent*            parent_event() const { return m_event; } //!< Get parent event
+    int                  id()           const { return m_id;    } //!< Get vertex id
+    const GenVertexData& data()         const { return m_data;  } //!< Get vertex data
 
     void add_particle_in ( const GenParticlePtr &p ); //!< Add incoming particle
     void add_particle_out( const GenParticlePtr &p ); //!< Add outgoing particle
@@ -77,6 +69,13 @@ public:
     const FourVector& position() const;
     void              set_position(const FourVector& new_pos); //!< Set position
 
+    /** @brief Get barcode
+     *
+     *  Currently barcode = id
+     *  @todo Write proper barcode once we decide how it should look like
+     */
+    int barcode() const { return m_id; }
+
 //
 // Deprecated functions
 //
@@ -88,9 +87,10 @@ public:
 // Fields
 //
 private:
-    GenEvent               *m_event;         //!< Parent event
-    unsigned int            m_index;         //!< Index
-    GenVertexData           m_data;          //!< Vertex data
+    GenEvent      *m_event; //!< Parent event
+    int            m_id;    //!< Vertex id
+    GenVertexData  m_data;  //!< Vertex data
+
     vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
     vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
     weak_ptr<GenVertex>     m_this;          //!< Pointer to shared pointer managing this vertex
