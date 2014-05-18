@@ -14,70 +14,86 @@ namespace HepMC3 {
 
 GenVertex::GenVertex( const FourVector& position ):
 m_event(NULL),
-m_id(0) {
+m_id(0),
+m_version_created(0),
+m_version_deleted(0) {
     m_data.position = position;
 }
 
-void GenVertex::print( std::ostream& ostr, bool event_listing_format ) const {
+GenVertex::GenVertex( const GenVertexData &data):
+m_event(NULL),
+m_id(0),
+m_data(data),
+m_version_created(0),
+m_version_deleted(0) {
+}
 
-    // Standalone format. Used when calling:
-    // vertex.print()
-    if( !event_listing_format ) {
-        ostr << "GenVertex:  " << id() << " barcode: " << barcode()
-             << " in: "  << particles_in().size()
-             << " out: " << particles_out().size();
+void GenVertex::print( std::ostream& ostr ) const {
+    ostr << "GenVertex:  ";
+    ostr << id() << " (versions: ";
 
-        const FourVector &pos = position();
-        if( !pos.is_zero() ) {
-            ostr << " @ " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
-        }
-        else ostr << " (X,cT): 0";
+    int vd = version_deleted();
+    if(vd) ostr<<(int)version_created()<<"-"<<vd;
+    else   ostr<<" "<<(int)version_created()<<" ";
 
-        ostr << std::endl;
+    ostr <<") barcode: ";
+    ostr << " in: "  << particles_in().size()
+         << " out: " << particles_out().size();
+
+    const FourVector &pos = position();
+    if( !pos.is_zero() ) {
+        ostr << " @ " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
     }
-    // Event listing format. Used when calling:
-    // event.print()
-    else {
+    else ostr << " (X,cT): 0";
 
-        ostr << "Vtx: ";
-        ostr.width(6);
-        ostr << id() ;
+    ostr << std::endl;
+}
 
-        const FourVector &pos = position();
-        if( !pos.is_zero() ) {
-            ostr << " (X,cT): " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
+void GenVertex::print_version( unsigned char version, std::ostream& ostr ) const {
+    if( !is_in_version(version) ) return;
+
+    ostr << "Vtx: ";
+    ostr.width(6);
+    ostr << id() ;
+
+    const FourVector &pos = position();
+    if( !pos.is_zero() ) {
+        ostr << " (X,cT): " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
+    }
+    else ostr << " (X,cT): 0";
+
+    ostr << std::endl;
+
+    bool printed_header = false;
+
+    // Print out all the incoming particles
+    BOOST_FOREACH( const GenParticlePtr &p, particles_in() ) {
+
+        if( !p->is_in_version(version) ) continue;
+
+        if( !printed_header ) {
+            ostr << " I: ";
+            printed_header = true;
         }
-        else ostr << " (X,cT): 0";
+        else ostr << "    ";
 
-        ostr << std::endl;
+        p->print_version(version,ostr);
+    }
 
-        bool printed_header = false;
+    printed_header = false;
 
-        // Print out all the incoming particles
-        BOOST_FOREACH( const GenParticlePtr &p, particles_in() ) {
+    // Print out all the outgoing particles
+    BOOST_FOREACH( const GenParticlePtr &p, particles_out() ) {
 
-            if( !printed_header ) {
-                ostr << " I: ";
-                printed_header = true;
-            }
-            else ostr << "    ";
+        if( !p->is_in_version(version) ) continue;
 
-            p->print(ostr,1);
+        if( !printed_header ) {
+            ostr << " O: ";
+            printed_header = true;
         }
+        else ostr << "    ";
 
-        printed_header = false;
-
-        // Print out all the outgoing particles
-        BOOST_FOREACH( const GenParticlePtr &p, particles_out() ) {
-
-            if( !printed_header ) {
-                ostr << " O: ";
-                printed_header = true;
-            }
-            else ostr << "    ";
-
-            p->print(ostr,1);
-        }
+        p->print_version(version,ostr);
     }
 }
 
@@ -109,6 +125,41 @@ void GenVertex::add_particle_out( const GenParticlePtr &p ) {
     p->set_production_vertex( m_this.lock() );
 
     if(m_event) m_event->add_particle(p);
+}
+
+
+GenVertexPtr GenVertex::new_version() {
+    if( !m_event ) return GenVertexPtr();
+
+    if( m_next_version ) {
+        WARNING( "GenVertex::new_version: newer version of this vertex exists" )
+        return GenVertexPtr();
+    }
+
+    if( version_created() == m_event->last_version() ) {
+        WARNING( "GenVertex::new_version: this vertex already belongs to last version" )
+        return GenVertexPtr();
+    }
+
+    if( version_deleted() != 0 ) {
+        WARNING( "GenVertex::new_version: vertex marked as deleted" )
+        return GenVertexPtr();
+    }
+
+    GenVertexPtr new_v = new GenVertex(data());
+    m_event->add_vertex(new_v);
+
+    m_next_version    = new_v;
+    m_version_deleted = m_event->last_version();
+
+    return new_v;
+}
+
+void GenVertex::mark_deleted() {
+    if( !m_event ) return;
+    if( m_version_deleted ) return;
+
+    m_version_deleted = m_event->last_version();
 }
 
 const FourVector& GenVertex::position() const {

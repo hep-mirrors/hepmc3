@@ -22,11 +22,13 @@ namespace HepMC3 {
 GenEvent::GenEvent() {
     set_print_precision(2);
     set_event_number(0);
+    m_versions.push_back("Version 1");
 }
 
-void GenEvent::print( std::ostream& ostr ) const {
+void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const {
     ostr << "________________________________________________________________________________" << endl;
     ostr << "GenEvent: #" << event_number() << endl;
+    ostr << "Version: '" << m_versions.back() <<"' (no "<< (int)version << "/"<< (int)last_version() << ")" << endl;
     ostr << "Entries in this event: " << vertices().size() << " vertices, "
          << particles().size() << " particles." << endl;
 
@@ -46,7 +48,7 @@ void GenEvent::print( std::ostream& ostr ) const {
 
     // Print all vertices
     BOOST_FOREACH( const GenVertexPtr &v, vertices() ) {
-        v->print(ostr,1);
+        v->print_version(version,ostr);
     }
 
     // Restore the stream state
@@ -70,6 +72,7 @@ void GenEvent::dump() const {
     BOOST_FOREACH( const GenVertexPtr &v, vertices() ) {
         v->print();
     }
+
     std::cout<<"-----------------------------"<<std::endl;
 }
 
@@ -80,6 +83,8 @@ void GenEvent::add_particle( const GenParticlePtr &p ) {
 
     p->m_event = this;
     p->m_id    = particles().size();
+
+    p->m_version_created = last_version();
 }
 
 void GenEvent::add_vertex( const GenVertexPtr &v ) {
@@ -92,19 +97,16 @@ void GenEvent::add_vertex( const GenVertexPtr &v ) {
 
     // Add all incoming and outgoing particles and restore their production/end vertices
     BOOST_FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
-        if(!p->in_event()) {
-            add_particle(p);
-            p->set_end_vertex(v->m_this.lock());
-        }
+        if(!p->in_event()) add_particle(p);
+        p->set_end_vertex(v->m_this.lock());
     }
 
     BOOST_FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
-        if(!p->in_event()) {
-            add_particle(p);
-            p->set_production_vertex(v->m_this.lock());
-        }
+        if(!p->in_event()) add_particle(p);
+        p->set_production_vertex(v->m_this.lock());
     }
 
+    v->m_version_created = last_version();
 }
 
 void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
@@ -173,12 +175,8 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
     )
 }
 
-void GenEvent::delete_particle( const GenParticlePtr &p ) {
-    return;
-}
-
-void GenEvent::delete_vertex( const GenVertexPtr &v ) {
-    return;
+void GenEvent::new_version( std::string name ) {
+    m_versions.push_back( name );
 }
 
 void GenEvent::reserve(unsigned int particles, unsigned int vertices) {

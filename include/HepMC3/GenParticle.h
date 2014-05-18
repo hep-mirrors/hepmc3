@@ -31,20 +31,34 @@ public:
     /** @brief Default constructor */
     GenParticle( const FourVector &momentum = FourVector::ZERO_VECTOR(), int pdg_id = 0, int status = 0 );
 
+    /** @brief Constructor based on particle data */
+    GenParticle( const GenParticleData &data );
+
 //
 // Functions
 //
 public:
-    /** @brief Print information about the particle
-     *
-     *  By default prints only particle-related information
-     *  event_listing_format = true is used by event for formatted output
-     */
-    void print( std::ostream& ostr = std::cout, bool event_listing_format = false ) const;
+    /** @brief Print information about the vertex */
+    void print( std::ostream& ostr = std::cout ) const;
 
-    /** @brief Check if this vertex belongs to an event */
+    /** @brief Print vertex content for selected version */
+    void print_version( unsigned char version, std::ostream& ostr = std::cout ) const;
+
+    /** @brief Check if this particle belongs to an event */
     bool in_event() const { return (bool)(m_event); }
 
+    /** @brief Create new version of this particle
+     *
+     *  @return Pointer to the new version of this particle or null pointer if:
+     *  - this particle does not belong to an event
+     *  - this particle already belongs to the last version
+     *  - newer version of this particle already exists
+     *  - particle has been marked as deleted
+     */
+    GenParticlePtr new_version();
+
+    /** @brief Mark particle as deleted */
+    void mark_deleted();
 //
 // Accessors
 //
@@ -81,7 +95,14 @@ public:
      *  Currently barcode = id
      *  @todo Write proper barcode once we decide how it should look like
      */
-    int barcode() const { return m_id+1; }
+    int barcode() const { return m_id; }
+
+    unsigned char version_created() const { return m_version_created; } //!< Get version created
+    unsigned char version_deleted() const { return m_version_deleted; } //!< Get version deleted
+
+    /** @brief Check if this particle exists in selected version */
+    bool is_in_version(unsigned char version) const { return   m_version_created <= version &&
+                                                             (!m_version_deleted || m_version_deleted>version); }
 
 protected:
     void set_production_vertex( const shared_ptr<GenVertex> &v ) { m_production_vertex = v; } //!< Set production vertex
@@ -93,6 +114,10 @@ private:
     GenEvent        *m_event; //!< Parent event
     int              m_id;    //!< Index
     GenParticleData  m_data;  //!< Particle data
+
+    unsigned char  m_version_created; //!< Version created
+    unsigned char  m_version_deleted; //!< Version deleted
+    GenParticlePtr m_next_version;    //!< Next version of this particle
 
     weak_ptr<GenVertex>    m_production_vertex; //!< Production vertex
     weak_ptr<GenVertex>    m_end_vertex;        //!< End vertex

@@ -21,6 +21,7 @@ namespace HepMC3 {
 class GenEventData;
 
 class GenEvent {
+
 //
 // Constructors
 //
@@ -33,7 +34,10 @@ public:
 //
 public:
     /** @brief Print current version of the event */
-    void print( std::ostream& ostr = std::cout ) const;
+    void print( std::ostream& ostr = std::cout ) const { print_version( last_version(),ostr ); }
+
+    /** @brief Print selected version of the event */
+    void print_version( unsigned char version, std::ostream& ostr = std::cout ) const;
 
     /** @brief Dump the whole content of the event memory. Useful for debugging */
     void dump() const;
@@ -56,18 +60,14 @@ public:
      */
     void add_tree( const vector<GenParticlePtr> &particles );
 
-    /** @brief Delete particle */
-    void delete_particle( const GenParticlePtr &p );
-
-    /** @brief Delete vertex */
-    void delete_vertex( const GenVertexPtr &v );
+    /** @brief Create new version */
+    void new_version( std::string name );
 
     /** @brief Reserve memory for particles and vertices
      *
      *  Helps optimize event creation when size of the event is known beforehand
      */
     void reserve(unsigned int particles, unsigned int vertices = 0);
-
 //
 // Accessors
 //
@@ -84,6 +84,7 @@ public:
     const vector<GenParticlePtr>& particles()  const { return m_particles;            } //!< Get list of particles
     const vector<GenVertexPtr>&   vertices()   const { return m_vertices;             } //!< Get list of vertices
 
+    unsigned char last_version() const { return m_versions.size(); }
 //
 // Deprecated functions
 //
@@ -99,6 +100,7 @@ private:
     int                         m_print_precision; //!< Printout precision
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
+    std::vector<std::string>    m_versions;        //!< List of versions
 };
 
 } // namespace HepMC3
