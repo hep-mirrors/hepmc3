@@ -11,11 +11,11 @@ namespace Photospp
 {
 
 PhotosHepMC3Particle::PhotosHepMC3Particle(){
-  m_particle = new HepMC3::GenParticle();
+  m_particle = make_shared<HepMC3::GenParticle>();
 }
 
 PhotosHepMC3Particle::PhotosHepMC3Particle(int pdg_id, int status, double mass){
-  m_particle = new HepMC3::GenParticle();
+  m_particle = make_shared<HepMC3::GenParticle>();
   m_particle->set_pdg_id(pdg_id);
   m_particle->set_status(status);
   m_particle->set_generated_mass(mass);
@@ -62,7 +62,7 @@ void PhotosHepMC3Particle::setMothers(vector<PhotosParticle*> mothers){
     HepMC3::GenVertexPtr orig_production_vertex = production_vertex;
 
     if(!production_vertex){ //if it does not exist create it
-      production_vertex = new HepMC3::GenVertex();
+      production_vertex = make_shared<HepMC3::GenVertex>();
       part->parent_event()->add_vertex(production_vertex);
     }
 
@@ -123,7 +123,7 @@ void PhotosHepMC3Particle::setDaughters(vector<PhotosParticle*> daughters){
     HepMC3::GenVertexPtr orig_end_vertex = end_vertex;
 
     if(!end_vertex){ //if it does not exist create it
-      end_vertex = new HepMC3::GenVertex();
+      end_vertex = make_shared<HepMC3::GenVertex>();
       m_particle->parent_event()->add_vertex(end_vertex);
     }
 
@@ -235,7 +235,7 @@ bool PhotosHepMC3Particle::checkMomentumConservation(){
   if( sum.length() > Photos::momentum_conservation_threshold ) {
     Log::Warning()<<"Momentum not conserved in the vertex:"<<endl;
     Log::RedirectOutput(Log::Warning(false));
-    m_particle->end_vertex()->print(cout,1);
+    m_particle->end_vertex()->print_version(m_particle->parent_event()->last_version(),cout);
     Log::RevertOutput();
     return false;
   }
@@ -292,7 +292,7 @@ void PhotosHepMC3Particle::createHistoryEntry(){
     return;
   }
 
-  HepMC3::GenParticlePtr part = new HepMC3::GenParticle(*m_particle);
+  HepMC3::GenParticlePtr part = make_shared<HepMC3::GenParticle>(*m_particle);
   part->set_status(Photos::historyEntriesStatus);
   m_particle->production_vertex()->add_particle_out(part);
 }
@@ -312,8 +312,8 @@ void PhotosHepMC3Particle::createSelfDecayVertex(PhotosParticle *out)
   }
 
   // Add new vertex and new particle to HepMC3
-  HepMC3::GenParticlePtr outgoing = new HepMC3::GenParticle( *(dynamic_cast<PhotosHepMC3Particle*>(out)->m_particle) );
-  HepMC3::GenVertexPtr v          = new HepMC3::GenVertex();
+  HepMC3::GenParticlePtr outgoing = make_shared<HepMC3::GenParticle>( *(dynamic_cast<PhotosHepMC3Particle*>(out)->m_particle) );
+  HepMC3::GenVertexPtr v          = make_shared<HepMC3::GenVertex>();
 
   // Copy vertex position from parent vertex
   v->set_position( m_particle->production_vertex()->position() );

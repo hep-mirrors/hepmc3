@@ -8,7 +8,7 @@ namespace Tauolapp
 {
 
 TauolaHepMC3Particle::TauolaHepMC3Particle(){
-  m_particle = new HepMC3::GenParticle();
+  m_particle = make_shared<HepMC3::GenParticle>();
 }
 
 TauolaHepMC3Particle::~TauolaHepMC3Particle(){
@@ -36,7 +36,7 @@ TauolaHepMC3Particle::~TauolaHepMC3Particle(){
 
 // NOTE: Not executed by release examples
 TauolaHepMC3Particle::TauolaHepMC3Particle(int pdg_id, int status, double mass){
-  m_particle = new HepMC3::GenParticle();
+  m_particle = make_shared<HepMC3::GenParticle>();
   m_particle->set_pdg_id(pdg_id);
   m_particle->set_status(status);
   m_particle->set_generated_mass(mass);
@@ -94,7 +94,7 @@ void TauolaHepMC3Particle::setMothers(vector<TauolaParticle*> mothers){
     //If it's tau decay - set the time and position including the tau lifetime correction
     //otherwise - copy the time and position of decaying particle
     if(!production_vertex){
-      production_vertex = new HepMC3::GenVertex();
+      production_vertex = make_shared<HepMC3::GenVertex>();
       HepMC3::FourVector point = part->production_vertex()->position();
       production_vertex->set_position(point);
       part->parent_event()->add_vertex(production_vertex);
@@ -140,7 +140,7 @@ void TauolaHepMC3Particle::setDaughters(vector<TauolaParticle*> daughters){
     HepMC3::GenVertexPtr orig_end_vertex = end_vertex;
 
     if(!end_vertex){ //if it does not exist create it
-      end_vertex = new HepMC3::GenVertex();
+      end_vertex = make_shared<HepMC3::GenVertex>();
       m_particle->parent_event()->add_vertex(end_vertex);
     }
 
@@ -201,7 +201,7 @@ void TauolaHepMC3Particle::checkMomentumConservation(){
   if( sum.length() > Tauola::momentum_conservation_threshold ) {
     Log::Warning()<<"Momentum not conserved in the vertex:"<<endl;
     Log::RedirectOutput(Log::Warning(false));
-    m_particle->end_vertex()->print(cout,1);
+    m_particle->end_vertex()->print_version(m_particle->parent_event()->last_version(),cout);
     Log::RevertOutput();
     return;
   }
