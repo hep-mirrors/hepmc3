@@ -41,38 +41,38 @@ int main() {
     //                                                  #
     GenEvent evt;
 
-    GenParticle *p1 = new GenParticle( FourVector(0,0,7000,700),                2212, 3 );
-    GenParticle *p2 = new GenParticle( FourVector(0,0,-7000,700),               2212, 3 );
-    GenParticle *p3 = new GenParticle( FourVector(.750,-1.569,32.191,32.238),   1,    3 );
-    GenParticle *p4 = new GenParticle( FourVector(-3.047,-19.,-54.629,57.920), -2,    3 );
+    GenParticlePtr p1 = make_shared<HepMC3::GenParticle>( FourVector(0,0,7000,700),                2212, 3 );
+    GenParticlePtr p2 = make_shared<HepMC3::GenParticle>( FourVector(0,0,-7000,700),               2212, 3 );
+    GenParticlePtr p3 = make_shared<HepMC3::GenParticle>( FourVector(.750,-1.569,32.191,32.238),   1,    3 );
+    GenParticlePtr p4 = make_shared<HepMC3::GenParticle>( FourVector(-3.047,-19.,-54.629,57.920), -2,    3 );
 
-    GenVertex *v1 = new GenVertex();
+    GenVertexPtr v1 = make_shared<HepMC3::GenVertex>();
     v1->add_particle_in (p1);
     v1->add_particle_out(p3);
     evt.add_vertex(v1);
 
-    GenVertex *v2 = new GenVertex();
+    GenVertexPtr v2 = make_shared<HepMC3::GenVertex>();
     v2->add_particle_in (p2);
     v2->add_particle_out(p4);
     evt.add_vertex(v2);
 
-    GenVertex *v3 = new GenVertex();
+    GenVertexPtr v3 = make_shared<HepMC3::GenVertex>();
     v3->add_particle_in(p3);
     v3->add_particle_in(p4);
     evt.add_vertex(v3);
 
-    GenParticle *p5 = new GenParticle( FourVector(-3.813,0.113,-1.833,4.233 ),   22, 1 );
-    GenParticle *p6 = new GenParticle( FourVector(1.517,-20.68,-20.605,85.925), -24, 3 );
+    GenParticlePtr p5 = make_shared<HepMC3::GenParticle>( FourVector(-3.813,0.113,-1.833,4.233 ),   22, 1 );
+    GenParticlePtr p6 = make_shared<HepMC3::GenParticle>( FourVector(1.517,-20.68,-20.605,85.925), -24, 3 );
 
     v3->add_particle_out(p5);
     v3->add_particle_out(p6);
 
-    GenVertex *v4 = new GenVertex();
+    GenVertexPtr v4 = make_shared<HepMC3::GenVertex>();
     v4->add_particle_in (p6);
     evt.add_vertex(v4);
 
-    GenParticle *p7 = new GenParticle( FourVector(-2.445,28.816,6.082,29.552),    1, 1 );
-    GenParticle *p8 = new GenParticle( FourVector(3.962,-49.498,-26.687,56.373), -2, 1 );
+    GenParticlePtr p7 = make_shared<HepMC3::GenParticle>( FourVector(-2.445,28.816,6.082,29.552),    1, 1 );
+    GenParticlePtr p8 = make_shared<HepMC3::GenParticle>( FourVector(3.962,-49.498,-26.687,56.373), -2, 1 );
 
     v4->add_particle_out(p7);
     v4->add_particle_out(p8);
@@ -100,7 +100,7 @@ int main() {
     }
 
     std::cout<<std::endl<<"Narrow down search results to quarks: "<<std::endl;
-    search3.narrow_down( PDG_ID >= -6 && PDG_ID <= 6);
+    search3.narrow_down( PDG_ID >= -6 && PDG_ID <= 6 );
 
     BOOST_FOREACH( const GenParticlePtr &p, search3.results() ) {
         p->print();
