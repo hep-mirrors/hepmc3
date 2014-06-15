@@ -18,8 +18,11 @@ namespace HepMC3 {
 
 class Units {
 public:
-    enum MomentumUnit { MEV, GEV }; //!< Momentum units
-    enum LengthUnit   { MM,  CM  }; //!< Position units
+    /** @brief Momentum units */
+    enum MomentumUnit { MEV, GEV };
+
+    /** @brief Position units */
+    enum LengthUnit   { MM,  CM  };
 
 public:
     static MomentumUnit default_momentum_unit() { return GEV; } //!< Default momentum unit
