@@ -23,6 +23,8 @@ GenEvent::GenEvent() {
     set_print_precision(2);
     set_event_number(0);
     m_versions.push_back("Version 1");
+    m_momentum_unit = Units::default_momentum_unit();
+    m_length_unit   = Units::default_length_unit();
 }
 
 void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const {
@@ -33,8 +35,10 @@ void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const 
 
     ostr << "________________________________________________________________________________" << endl;
     ostr << "GenEvent: #" << event_number() << endl;
-    ostr << "Version: '" << m_versions[version-1] <<"' (no. "<< (int)version << "/"<< (int)last_version() << ")" << endl;
-    ostr << "Entries in this event: " << vertices().size() << " vertices, "
+    ostr << " Momenutm units: " << Units::name(m_momentum_unit)
+         << " Position units: " << Units::name(m_length_unit) << endl;
+    ostr << " Version: '" << m_versions[version-1] <<"' (no. "<< (int)version << "/"<< (int)last_version() << ")" << endl;
+    ostr << " Entries in this event: " << vertices().size() << " vertices, "
          << particles().size() << " particles." << endl;
 
     // Print a legend to describe the particle info
@@ -187,6 +191,25 @@ void GenEvent::new_version( std::string name ) {
 void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
     m_particles.reserve(particles);
     m_vertices.reserve(vertices);
+}
+
+void GenEvent::change_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
+    if( new_momentum_unit != m_momentum_unit ) {
+        BOOST_FOREACH( GenParticlePtr &p, m_particles ) {
+            Units::convert( p->m_data.momentum, m_momentum_unit, new_momentum_unit );
+        }
+
+        m_momentum_unit = new_momentum_unit;
+    }
+
+    if( new_length_unit != m_length_unit ) {
+        BOOST_FOREACH( GenVertexPtr &v, m_vertices ) {
+            FourVector &fv = v->m_data.position;
+            if( !fv.is_zero() ) Units::convert( fv, m_length_unit, new_length_unit );
+        }
+
+        m_length_unit = new_length_unit;
+    }
 }
 
 //

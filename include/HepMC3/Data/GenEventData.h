@@ -13,10 +13,15 @@
 #include <vector>
 #include "HepMC3/Data/GenParticleData.h"
 #include "HepMC3/Data/GenVertexData.h"
+#include "HepMC3/Units.h"
 
 namespace HepMC3 {
 
 struct GenEventData {
+    int                 event_number;
+    Units::MomentumUnit momentum_unit;
+    Units::LengthUnit   length_unit;
+
     std::vector<GenParticleData> particles; //!< Particles
     std::vector<GenVertexData>   vertices;  //!< Vertices
 

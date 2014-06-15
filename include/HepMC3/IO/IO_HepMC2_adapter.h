@@ -59,6 +59,14 @@ private:
      */
     int parse_event_information(GenEvent &evt, const char *buf);
 
+    /** @brief Parse units
+     *
+     *  Helper routine for parsing unit information
+     *  @param[out] evt Event that will be filled with unit information
+     *  @param[in]  buf Line of text that needs to be parsed
+     */
+    bool parse_units(GenEvent &evt, const char *buf);
+
     /** @brief Parse vertex
      *
      *  Helper routine for parsing single event information

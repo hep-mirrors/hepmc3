@@ -9,6 +9,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Setup.h"
+#include "HepMC3/Units.h"
 
 #include <fstream>
 #include <iostream>
@@ -45,7 +46,12 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     // Make sure nothing was left from previous event
     flush();
 
+    // Write event info
     m_cursor += sprintf(m_cursor, "E %i %i %i\n",evt.event_number(),evt.vertices_count(),evt.particles_count());
+    flush();
+
+    // Write units
+    m_cursor += sprintf(m_cursor, "U %s %s\n",Units::name(evt.momentum_unit()),Units::name(evt.length_unit()));
     flush();
 
     int vertices_processed = 0;

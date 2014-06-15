@@ -28,11 +28,18 @@ void IO_RootStreamer::write_event(const GenEvent &evt) {
     m_data.links1.clear();
     m_data.links2.clear();
 
+    // Reserve memory for containers
     m_data.particles.reserve( evt.particles().size() );
     m_data.vertices.reserve( evt.vertices().size() );
     m_data.links1.reserve( evt.particles().size()*2 );
     m_data.links2.reserve( evt.particles().size()*2 );
 
+    // Fill event data
+    m_data.event_number  = evt.event_number();
+    m_data.momentum_unit = evt.momentum_unit();
+    m_data.length_unit   = evt.length_unit();
+
+    // Fill containers
     BOOST_FOREACH( const GenParticlePtr &p, evt.particles() ) {
         m_data.particles.push_back( p->data() );
     }

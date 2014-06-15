@@ -113,8 +113,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
                 }
                 break;
             case 'U':
-                DEBUG( 10, "IO_HepMC2_adapter: U: skipping unit info (for now)" )
-                is_parsing_successful = true;
+                is_parsing_successful = parse_units(evt,buf);
                 break;
             case 'F':
                 DEBUG( 10, "IO_HepMC2_adapter: F: skipping Flow" )
@@ -245,6 +244,26 @@ int IO_HepMC2_adapter::parse_event_information(GenEvent &evt, const char *buf) {
     DEBUG( 10, "IO_HepMC2_adapter: E: "<<event_no<<" ("<<vertices_count<<"V, "<<weights_size<<"W, "<<random_states_size<<"RS)" )
 
     return vertices_count;
+}
+
+bool IO_HepMC2_adapter::parse_units(GenEvent &evt, const char *buf) {
+    const char *cursor  = buf;
+
+    // momentum
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    ++cursor;
+    Units::MomentumUnit momentum_unit = Units::momentum_unit(cursor);
+
+    // length
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    ++cursor;
+    Units::LengthUnit length_unit = Units::length_unit(cursor);
+
+    evt.change_units(momentum_unit,length_unit);
+
+    DEBUG( 10, "IO_HepMC2_adapter: U: " << Units::name(evt.momentum_unit()) << " " << Units::name(evt.length_unit()) )
+
+    return true;
 }
 
 int IO_HepMC2_adapter::parse_vertex_information(const char *buf) {

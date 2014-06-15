@@ -11,6 +11,7 @@
  *
  */
 #include "HepMC3/Data/SmartPointer.h"
+#include "HepMC3/Units.h"
 
 #include <iostream>
 #include <vector>
@@ -68,6 +69,12 @@ public:
      *  Helps optimize event creation when size of the event is known beforehand
      */
     void reserve(unsigned int particles, unsigned int vertices = 0);
+
+    /** @brief Change event units
+     *
+     *  Converts event from current units to new ones
+     */
+    void change_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
 //
 // Accessors
 //
@@ -84,6 +91,9 @@ public:
     const vector<GenParticlePtr>& particles()  const { return m_particles;            } //!< Get list of particles
     const vector<GenVertexPtr>&   vertices()   const { return m_vertices;             } //!< Get list of vertices
 
+    const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit;        } //!< Get momentum unit
+    const Units::LengthUnit&   length_unit()   const { return m_length_unit;          } //!< Get length unit
+
     unsigned char last_version() const { return m_versions.size(); } //!< Get last version number
 //
 // Deprecated functions
@@ -98,6 +108,8 @@ public:
 private:
     int                         m_event_number;    //!< Event number
     int                         m_print_precision; //!< Printout precision
+    Units::MomentumUnit         m_momentum_unit;   //!< Momentum unit
+    Units::LengthUnit           m_length_unit;     //!< Length unit
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
     std::vector<std::string>    m_versions;        //!< List of versions
