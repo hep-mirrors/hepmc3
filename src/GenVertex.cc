@@ -33,8 +33,8 @@ void GenVertex::print( std::ostream& ostr ) const {
     ostr << id() << " (versions: ";
 
     int vd = version_deleted();
-    if(vd) ostr<<(int)version_created()<<"-"<<vd;
-    else   ostr<<" "<<(int)version_created()<<" ";
+    if(vd) ostr<<(int)version_created()<<"-"<<vd-1;
+    else   ostr<<(int)version_created()<<"-"<<(int)parent_event()->last_version();
 
     ostr <<") barcode: ";
     ostr << " in: "  << particles_in().size()

@@ -26,9 +26,14 @@ GenEvent::GenEvent() {
 }
 
 void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const {
+    if( version == 0 || version > last_version() ) {
+      ERROR( "GenEvent::print_version: version no. out of range: " << (int)version )
+      return;
+    }
+
     ostr << "________________________________________________________________________________" << endl;
     ostr << "GenEvent: #" << event_number() << endl;
-    ostr << "Version: '" << m_versions.back() <<"' (no "<< (int)version << "/"<< (int)last_version() << ")" << endl;
+    ostr << "Version: '" << m_versions[version-1] <<"' (no. "<< (int)version << "/"<< (int)last_version() << ")" << endl;
     ostr << "Entries in this event: " << vertices().size() << " vertices, "
          << particles().size() << " particles." << endl;
 

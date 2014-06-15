@@ -84,7 +84,7 @@ public:
     const vector<GenParticlePtr>& particles()  const { return m_particles;            } //!< Get list of particles
     const vector<GenVertexPtr>&   vertices()   const { return m_vertices;             } //!< Get list of vertices
 
-    unsigned char last_version() const { return m_versions.size(); }
+    unsigned char last_version() const { return m_versions.size(); } //!< Get last version number
 //
 // Deprecated functions
 //
