@@ -34,15 +34,16 @@
     of modifications added by different tools.
 
     @code{.cpp}
-        event.create_new_version("Second tool")
+        event.new_version("Second tool")
 
-        p.set_generated_mass(777.0); // Will trigger creating new version of particle
-        event.delete_particle(p2);   // Will mark particle as deleted in new version
+        GenParticlePtr new_p = old_p->new_version();  // Will create new version of particle
+        old_p->end_vertex()->add_particle_out(new_p); // Particle has to be added to end/production vertex by hand
+
+        event.mark_deleted(old_p);                    // Will mark particle as deleted in new version
     @endcode
 
-    New version will contain modified version of the first particle and
-    will not contain particle 'p2'. Both versions of these particles can be
-    accessed by the user.
+    New version will contain 'new_p' and will not contain particle 'old_p'.
+    Both versions of these particles can be accessed by the user.
 
     ###########################################################################
     @subsection versioning_accessing Accessing different versions of the event
@@ -137,5 +138,5 @@
     @endcode
 
     <hr>
-    Last update 16 April 2014
+    Last update 15 June 2014
 */

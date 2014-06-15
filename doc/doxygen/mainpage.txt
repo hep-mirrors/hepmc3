@@ -5,16 +5,22 @@
     @section links Links to project-related webpages
     - <a href="https://git.cern.ch/web/hepmc3.git">        <b>HepMC3 Git repository                  </b></a> (requires login)
     - <a href="https://sft.its.cern.ch/jira/browse/HEPMC"> <b>HepMC project JIRA instance            </b></a>
-    - <a href="../HepMC3-docs">                            <b>Slides from the status update meetings </b></a>
+    - <a href="resources/docs">                            <b>Slides from the status update meetings </b></a>
 
     @section documentation Sections of this documentation
     - @subpage features
     - @subpage differences
+
+    @section datafiles Test data files
+
+    - <a href="resources/datafiles"> <b>Sample test files </b></a>
+      - Note that paths provided in validation config files may need to be changed to use these files
+      - Note also that some of these files are purposely damaged (or cut-off in the middle) to test the I/O module
 
     @section diagram Class diagram
 
     <img src="class_diagram.png">
 
     <hr>
-    Last update 16 April 2014
+    Last update 15 June 2014
 */

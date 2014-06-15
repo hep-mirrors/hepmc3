@@ -1,9 +1,9 @@
 /**
     @defgroup data Particle, Vertex and event serializable data
-    
+
     This module contains structures used for serializing/deserializing
     GenEvent objects.
-        
+
     <hr>
     Last update 15 April 2014
 */
@@ -12,10 +12,10 @@
 
 /**
     @defgroup IO IO-related classes and interfaces
-    
+
     This module contains interfaces for different IO formats,
     including an adapter for older version of \b HepMC files.
-    
+
     <hr>
     Last update 15 April 2014
 */
@@ -24,11 +24,83 @@
 
 /**
     @defgroup search_engine Search engine
-    
+
     @section tutorial Using search engine module
-    
-    Examples will follow
-        
+
+    The aim of the search engine is to provide an unified way to search through
+    the event for any type of particles needed for the analysis without any need
+    of iterators or specific knowledge of event structure.
+
+    Particles can be filtered based on an event or particle pointer:
+
+    @code{.cpp}
+        FindParticles search( event,    FIND_ALL );
+        FindParticles search( event,    FIND_ALL,             STATUS == 1 );
+        FindParticles search( particle, FIND_ALL_DESCENDANTS, STATUS == 1 );
+    @endcode
+
+    Filters can be constructed using any natural operator:
+
+    @code{.cpp}
+        STATUS >= 1     STATUS <= 1     STATUS != 1     ...
+    @endcode
+
+    or boolean checks:
+
+    @code{.cpp}
+        HAS_PRODUCTION_VERTEX,     HAS_END_VERTEX,     !HAS_END_VERTEX     ...
+    @endcode
+
+    Filters are additive:
+
+    @code{.cpp}
+        FindParticles search( event, FIND_ALL, PDG_ID == 111 && !HAS_END_VERTEX && STATUS != 3);
+    @endcode
+
+    Sequence point of '&&' operator is kept - if particle does not pass a filter,
+    rest of the filters is not checked
+
+    Applying additional filters:
+
+    @code{.cpp}
+        // Narrow down results
+        // Linear operation equivalent to erase-remove idiom
+        search.narrow_down( PDG_ID >= -6 && PDG_ID <= 6 );
+    @endcode
+
+    Example of advanced search:
+
+    @code{.cpp}
+        // Find all tau's that have end vertex
+        // but this vertex is not a self-decay vertex (does not contain tau):
+        FindParticles search( event, FIND_ALL,  ABS_PDG_ID == 15 &&
+                                                HAS_END_VERTEX   &&
+                                               !HAS_SAME_PDG_ID_DAUGHTER )
+    @endcode
+
+    Getting the results:
+
+    @code{.cpp}
+        // search.results() returns const vector<GenParticlePtr>
+        BOOST_FOREACH( GenParticle *p, search.results() ) {
+        p->print();
+    @endcode
+
+    Filters are type-safe. Invalid searches will not compile:
+
+    @code{.cpp}
+        FindParticles search( event,    FIND_ALL_DESCENDANTS, ... ); // fails at compile time
+        FindParticles search( particle, FIND_ALL, ... );             // fails at compile time
+    @endcode
+
+    Similarly, following filters will fail at compile time:
+
+    @code{.cpp}
+        !STATUS                   // Variable filter 'STATUS' cannot be used with boolean operator
+        PDG_ID                    // Variable filter 'PDG_ID' cannot be used without an operator
+        HAS_END_VERTEX == vertex  // Boolean  filter 'HAS_END_VERTEX' cannot be used with an operator other than '!'
+    @endcode
+
     <hr>
-    Last update 2 April 2014
+    Last update 15 June 2014
 */

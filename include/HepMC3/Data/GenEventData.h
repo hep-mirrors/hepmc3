@@ -18,9 +18,9 @@
 namespace HepMC3 {
 
 struct GenEventData {
-    int                 event_number;
-    Units::MomentumUnit momentum_unit;
-    Units::LengthUnit   length_unit;
+    int                 event_number;  //!< Event number
+    Units::MomentumUnit momentum_unit; //!< Momentum unit
+    Units::LengthUnit   length_unit;   //!< Length unit
 
     std::vector<GenParticleData> particles; //!< Particles
     std::vector<GenVertexData>   vertices;  //!< Vertices
