@@ -13,6 +13,7 @@
 #include "HepMC3/Data/SmartPointer.h"
 #include "HepMC3/Units.h"
 #include "HepMC3/HeavyIon.h"
+#include "HepMC3/PdfInfo.h"
 
 #include <iostream>
 #include <vector>
@@ -99,6 +100,9 @@ public:
     const HeavyIon*            heavy_ion()     const { return m_heavy_ion;            } //!< Get heavy ion generator additional information
     void                       set_heavy_ion(HeavyIon *hi);                             //!< Set heavy ion generator additional information
 
+    const PdfInfo*             pdf_info()      const { return m_pdf_info;             } //!< Get pdf information
+    void                       set_pdf_info(PdfInfo *pi);                               //!< Set pdf information
+
     unsigned char last_version() const { return m_versions.size(); } //!< Get last version number
 //
 // Deprecated functions
@@ -116,6 +120,7 @@ private:
     Units::MomentumUnit         m_momentum_unit;   //!< Momentum unit
     Units::LengthUnit           m_length_unit;     //!< Length unit
     HeavyIon                   *m_heavy_ion;       //!< Heavy ion generator additional information
+    PdfInfo                    *m_pdf_info;        //!< Pdf information
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
     std::vector<std::string>    m_versions;        //!< List of versions

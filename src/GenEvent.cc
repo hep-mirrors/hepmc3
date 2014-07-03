@@ -218,6 +218,11 @@ void GenEvent::set_heavy_ion(HeavyIon *hi) {
      m_heavy_ion = hi;
 }
 
+void GenEvent::set_pdf_info(PdfInfo *pi) {
+     if(m_pdf_info) delete m_pdf_info;
+     m_pdf_info = pi;
+}
+
 //
 // Deprecated functions
 //
