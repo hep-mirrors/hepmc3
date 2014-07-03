@@ -259,7 +259,7 @@ bool IO_HepMC2_adapter::parse_units(GenEvent &evt, const char *buf) {
     ++cursor;
     Units::LengthUnit length_unit = Units::length_unit(cursor);
 
-    evt.change_units(momentum_unit,length_unit);
+    evt.set_units(momentum_unit,length_unit);
 
     DEBUG( 10, "IO_HepMC2_adapter: U: " << Units::name(evt.momentum_unit()) << " " << Units::name(evt.length_unit()) )
 

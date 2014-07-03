@@ -28,7 +28,7 @@ class GenEvent {
 //
 public:
     /** @brief Default constructor */
-    GenEvent();
+    GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit);
 
 //
 // Functions
@@ -74,7 +74,8 @@ public:
      *
      *  Converts event from current units to new ones
      */
-    void change_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
+    void set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
+
 //
 // Accessors
 //

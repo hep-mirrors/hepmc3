@@ -118,7 +118,7 @@
     @subsection units Units are no longer defined at compilation time
     ###########################################################################
 
-    Default units are GEV and CM. To change them use HepMC::GenEvent::change_units
+    Default units are GEV and CM. To change them use HepMC::GenEvent::set_units
 
     @code{.cpp}
         GenEvent event;
@@ -130,7 +130,7 @@
 
         event.print(); // event printed in GEV/CM
 
-        event.change_units(Units::MEV,Units::MM); // will trigger unit conversion for all particles and vertices
+        event.set_units(Units::MEV,Units::MM); // will trigger unit conversion for all particles and vertices
 
         event.print(); // event printed in MEV/MM
     @endcode

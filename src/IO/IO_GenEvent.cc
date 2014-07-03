@@ -51,7 +51,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     flush();
 
     // Write units
-    m_cursor += sprintf(m_cursor, "U %s %s\n",Units::name(evt.momentum_unit()),Units::name(evt.length_unit()));
+    m_cursor += sprintf(m_cursor, "U %s %s\n",Units::name(evt.momentum_unit()).c_str(),Units::name(evt.length_unit()).c_str());
     flush();
 
     int vertices_processed = 0;

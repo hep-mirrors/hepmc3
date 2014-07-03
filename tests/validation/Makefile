@@ -27,25 +27,24 @@ ifneq ($(HEPMC2LOCATION), )
   override DEFS_HEPMC2   += -DHEPMC2
 endif
 
-# Definitions for compiling interfaces to the tools
-# Uses paths set by make.toolslocation.inc
-# Updates INTERFACES, INCLUDES, LINKS_HEPMC3, RPATHS_HEPMC3, DEFS_HEPMC3,
-#                               LINKS_HEPMC2, RPATHS_HEPMC2, DEFS_HEPMC2
-include make.tools.inc
-
 VALIDATION_SRC= validation.cc \
                 src/ValidationControl.cc \
                 src/SimpleEventTool.cc \
                 src/RootStreamerTool.cc \
-                src/FileValidationTool.cc \
-                src/PythiaValidationTool.cc \
-                src/TauolaValidationTool.cc \
-                src/PhotosValidationTool.cc  \
-                src/McTesterValidationTool.cc
+                src/FileValidationTool.cc
+
+# Definitions for compiling interfaces to the tools
+# Uses paths set by make.toolslocation.inc
+# Updates INTERFACES, INCLUDES, VALIDATION_SRC
+#         LINKS_HEPMC3, RPATHS_HEPMC3, DEFS_HEPMC3,
+#         LINKS_HEPMC2, RPATHS_HEPMC2, DEFS_HEPMC2
+include make.tools.inc
 
 all:
 ifneq ($(HEPMC3LOCATION), )
+ifneq ($(INTERFACES), )
 	@make $(INTERFACES)
+endif
 	@make validation.exe
 endif
 ifneq ($(HEPMC2LOCATION), )

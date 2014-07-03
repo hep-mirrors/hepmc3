@@ -11,8 +11,9 @@
  *
  */
 #include <iostream>
-#include <cstring>
+#include <string>
 #include "HepMC3/FourVector.h"
+using std::string;
 
 namespace HepMC3 {
 
@@ -25,13 +26,10 @@ public:
     enum LengthUnit   { MM,  CM  };
 
 public:
-    static MomentumUnit default_momentum_unit() { return GEV; } //!< Default momentum unit
-    static LengthUnit   default_length_unit()   { return CM;  } //!< Default length unit
-
     /** @brief Get momentum unit based on its name*/
-    static MomentumUnit momentum_unit( const char *name ) {
-        if( strncmp(name,"GEV",3) == 0 ) return GEV;
-        if( strncmp(name,"MEV",3) == 0 ) return MEV;
+    static MomentumUnit momentum_unit( string name ) {
+        if( name.compare(0,3,"GEV") == 0 ) return GEV;
+        if( name.compare(0,3,"MEV") == 0 ) return MEV;
 
         ERROR("Units::momentum_unit: unrecognised unit name: '" << name <<"', setting to GEV" )
 
@@ -39,9 +37,9 @@ public:
     }
 
     /** @brief Get length unit based on its name*/
-    static LengthUnit length_unit( const char *name ) {
-        if( strncmp(name,"CM",2) == 0 ) return CM;
-        if( strncmp(name,"MM",2) == 0 ) return MM;
+    static LengthUnit length_unit( string name ) {
+        if( name.compare(0,2,"CM") == 0 ) return CM;
+        if( name.compare(0,2,"MM") == 0 ) return MM;
 
         ERROR("Units::length_unit: unrecognised unit name: '" << name <<"', setting to CM" )
 
@@ -49,7 +47,7 @@ public:
     }
 
     /** @brief Get name of momentum unit */
-    static const char* name( MomentumUnit u ) {
+    static string name( MomentumUnit u ) {
         switch(u) {
             case MEV: return "MEV";
             case GEV: return "GEV";
@@ -59,7 +57,7 @@ public:
     }
 
     /** @brief Get name of length unit */
-    static const char* name( LengthUnit u ) {
+    static string name( LengthUnit u ) {
         switch(u) {
             case MM: return "MM";
             case CM: return "CM";

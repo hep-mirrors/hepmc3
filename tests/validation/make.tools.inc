@@ -14,6 +14,7 @@ ifneq ($(PHOTOSLOCATION_HEPMC3), )
   override LINKS_HEPMC3  += -L$(PHOTOSLOCATION_HEPMC3)/lib -lPhotosCxxInterface -lPhotosFortran \
                             -L$(PHOTOSINTERFACE)/lib -lPhotosHepMC3Interface
   override DEFS_HEPMC3   += -DPHOTOSPP
+  override VALIDATION_SRC+= src/PhotosValidationTool.cc
 ifneq ($(PHOTOSLOCATION_HEPMC2), )
   override RPATHS_HEPMC2 += -Wl,-rpath,$(PHOTOSLOCATION_HEPMC2)/lib
   override LINKS_HEPMC2  += -L$(PHOTOSLOCATION_HEPMC2)/lib -lPhotosCxxInterface -lPhotosFortran
@@ -40,6 +41,7 @@ ifneq ($(TAUOLALOCATION_HEPMC3), )
   override LINKS_HEPMC3  += -L$(TAUOLALOCATION_HEPMC3)/lib -lTauolaCxxInterface -lTauolaFortran \
                             -L$(TAUOLAINTERFACE)/lib -lTauolaHepMC3Interface
   override DEFS_HEPMC3   += -DTAUOLAPP
+  override VALIDATION_SRC+= src/TauolaValidationTool.cc
 ifneq ($(TAUOLALOCATION_HEPMC2), )
   override RPATHS_HEPMC2 += -Wl,-rpath,$(TAUOLALOCATION_HEPMC2)/lib
   override LINKS_HEPMC2  += -L$(TAUOLALOCATION_HEPMC2)/lib -lTauolaCxxInterface -lTauolaFortran
@@ -66,6 +68,7 @@ ifneq ($(PYTHIA8LOCATION_HEPMC3), )
   override LINKS_HEPMC3  += -L$(PYTHIA8LOCATION_HEPMC3)/lib -lpythia8 -llhapdfdummy \
                             -L$(PYTHIA8INTERFACE)/lib -lpythia8tohepmc3
   override DEFS_HEPMC3   += -DPYTHIA8
+  override VALIDATION_SRC+= src/PythiaValidationTool.cc
 ifneq ($(PYTHIA8LOCATION_HEPMC2), )
   override RPATHS_HEPMC2 += -Wl,-rpath,$(PYTHIA8LOCATION_HEPMC2)/lib
   override LINKS_HEPMC2  += -L$(PYTHIA8LOCATION_HEPMC2)/lib -lpythia8 -llhapdfdummy \
@@ -95,6 +98,7 @@ ifneq ($(MCTESTERLOCATION_HEPMC3), )
                             -L$(MCTESTERINTERFACE)/lib -lHepMC3Interface \
                             $(shell root-config --glibs)
   override DEFS_HEPMC3   += -DMCTESTER
+  override VALIDATION_SRC+= src/McTesterValidationTool.cc
 ifneq ($(MCTESTERLOCATION_HEPMC2), )
   override RPATHS_HEPMC2 += -Wl,-rpath,$(MCTESTERLOCATION_HEPMC2)/lib \
                             -Wl,-rpath,$(shell root-config --libdir)

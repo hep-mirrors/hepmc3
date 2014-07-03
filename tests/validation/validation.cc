@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
     while( control.new_event() )
     {
-        GenEvent HepMCEvt;
+        GenEvent HepMCEvt(Units::GEV,Units::MM);
         control.process(HepMCEvt);
     }
 

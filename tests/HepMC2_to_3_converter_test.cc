@@ -21,7 +21,7 @@ int main() {
     while(!adapter.rdstate()) {
         if(events_parsed%100==0) cout<<"Events parsed: "<<events_parsed<<endl;
 
-        GenEvent evt;
+        GenEvent evt(Units::GEV,Units::MM);
 
         adapter.fill_next_event(evt);
         output_file.write_event(evt);

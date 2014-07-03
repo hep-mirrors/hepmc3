@@ -19,12 +19,12 @@ using std::endl;
 
 namespace HepMC3 {
 
-GenEvent::GenEvent() {
+GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit) {
     set_print_precision(2);
     set_event_number(0);
     m_versions.push_back("Version 1");
-    m_momentum_unit = Units::default_momentum_unit();
-    m_length_unit   = Units::default_length_unit();
+    m_momentum_unit = momentum_unit;
+    m_length_unit   = length_unit;
 }
 
 void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const {
@@ -193,7 +193,7 @@ void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
     m_vertices.reserve(vertices);
 }
 
-void GenEvent::change_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
+void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
     if( new_momentum_unit != m_momentum_unit ) {
         BOOST_FOREACH( GenParticlePtr &p, m_particles ) {
             Units::convert( p->m_data.momentum, m_momentum_unit, new_momentum_unit );

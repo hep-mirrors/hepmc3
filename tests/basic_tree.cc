@@ -39,7 +39,7 @@ int main() {
     //   /            p6                                #
     // p2                                               #
     //                                                  #
-    GenEvent evt;
+    GenEvent evt(Units::GEV,Units::MM);
 
     GenParticlePtr p1 = make_shared<HepMC3::GenParticle>( FourVector(0,0,7000,700),                2212, 3 );
     GenParticlePtr p2 = make_shared<HepMC3::GenParticle>( FourVector(0,0,-7000,700),               2212, 3 );
