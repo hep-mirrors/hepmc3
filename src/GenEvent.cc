@@ -19,7 +19,8 @@ using std::endl;
 
 namespace HepMC3 {
 
-GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit) {
+GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit):
+m_heavy_ion(NULL) {
     set_print_precision(2);
     set_event_number(0);
     m_versions.push_back("Version 1");
@@ -210,6 +211,11 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
 
         m_length_unit = new_length_unit;
     }
+}
+
+void GenEvent::set_heavy_ion(HeavyIon *hi) {
+     if(m_heavy_ion) delete m_heavy_ion;
+     m_heavy_ion = hi;
 }
 
 //
