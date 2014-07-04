@@ -20,12 +20,18 @@ using std::endl;
 namespace HepMC3 {
 
 GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit):
-m_heavy_ion(NULL) {
+m_heavy_ion(NULL),
+m_pdf_info(NULL) {
     set_print_precision(2);
     set_event_number(0);
     m_versions.push_back("Version 1");
     m_momentum_unit = momentum_unit;
     m_length_unit   = length_unit;
+}
+
+GenEvent::~GenEvent() {
+    if(m_heavy_ion) delete m_heavy_ion;
+    if(m_pdf_info)  delete m_pdf_info;
 }
 
 void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const {

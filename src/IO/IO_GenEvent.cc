@@ -10,6 +10,8 @@
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Setup.h"
 #include "HepMC3/Units.h"
+#include "HepMC3/HeavyIon.h"
+#include "HepMC3/PdfInfo.h"
 
 #include <fstream>
 #include <iostream>
@@ -53,6 +55,44 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     // Write units
     m_cursor += sprintf(m_cursor, "U %s %s\n",Units::name(evt.momentum_unit()).c_str(),Units::name(evt.length_unit()).c_str());
     flush();
+
+    // Write heavy ion information (if present)
+    const HeavyIon *hi = evt.heavy_ion();
+    if(hi) {
+        m_cursor += sprintf(m_cursor,"H %i %i %i",hi->Ncoll_hard,hi->Npart_proj,hi->Npart_targ);
+        flush();
+        m_cursor += sprintf(m_cursor," %i %i %i",hi->Ncoll,hi->spectator_neutrons,hi->spectator_protons);
+        flush();
+        m_cursor += sprintf(m_cursor," %i %i %i",hi->N_Nwounded_collisions,hi->Nwounded_N_collisions,hi->Nwounded_Nwounded_collisions);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,hi->impact_parameter);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,hi->event_plane_angle);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,hi->eccentricity);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e\n",m_precision,hi->sigma_inel_NN);
+        flush();
+    }
+
+    // Write pdf information (if present)
+    const PdfInfo *pi = evt.pdf_info();
+    if(pi) {
+        m_cursor += sprintf(m_cursor,"F %i %i",pi->id1,pi->id2);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x1);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x2);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->scalePDF);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->pdf1);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->pdf2);
+        flush();
+        m_cursor += sprintf(m_cursor," %i %i\n",pi->pdf_id1,pi->pdf_id2);
+        flush();
+    }
 
     int vertices_processed = 0;
     int lowest_vertex_id   = 0;

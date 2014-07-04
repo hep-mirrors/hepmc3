@@ -32,6 +32,9 @@ public:
     /** @brief Default constructor */
     GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit);
 
+    /** @brief Default destructor */
+    ~GenEvent();
+
 //
 // Functions
 //

@@ -43,12 +43,12 @@ include make.tools.inc
 all:
 ifneq ($(HEPMC3LOCATION), )
 ifneq ($(INTERFACES), )
-	@make $(INTERFACES)
+	+@make $(INTERFACES)
 endif
-	@make validation.exe
+	+@make validation.exe
 endif
 ifneq ($(HEPMC2LOCATION), )
-	@make validation_HEPMC2.exe
+	+@make validation_HEPMC2.exe
 endif
 
 # Definitions for HepMC2 files
