@@ -1,0 +1,9 @@
+2014-07-13  Andy Buckley  <andy.buckley@cern.ch>
+
+	* Adding HepMC.h and Version.h headers.
+
+	* Use CXX and CXXFLAGS in place of CC,CFLAGS
+
+	* Adding ChangeLog and TODO to track developments.
+
+TOMASZ PLEASE ADD SOME CHANGELOG ENTRIES TO COVER THE "EARLY" DEVELOPMENTS!

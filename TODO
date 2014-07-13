@@ -1,0 +1,10 @@
+3.0.0a1
+=======
+
+* Provide an empty libHepMCfio library
+
+* Hide headers only intended for internal use
+
+* Eliminate static setup class if we can -- what is the need?
+
+* Change namespace, lib name, etc. to HepMC for build system compat
