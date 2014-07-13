@@ -1,3 +1,6 @@
+# Backup Files
+*~
+
 # Compiled Object files
 *.slo
 *.lo
@@ -34,4 +37,3 @@
 *.hepmc
 *.hepmc2
 *.hepmc3
-
