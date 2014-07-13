@@ -17,7 +17,7 @@ lib: $(LIB_HEPMC_OBJ)
 	ln -sf $(LIB_HEPMC_SO).$(LIB_VER) lib/$(LIB_HEPMC_SO)
 
 %.o: %.cc
-	$(CC) $(CFLAGS) -Iinclude -c $< -o $@
+	$(CXX) $(CXXFLAGS) -Iinclude -c $< -o $@
 
 clean:
 	rm -f src/*.o src/Search/*.o src/IO/*.o src/Data/*.o lib/*
