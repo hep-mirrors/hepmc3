@@ -17,6 +17,9 @@
       - Note that paths provided in validation config files may need to be changed to use these files
       - Note also that some of these files are purposely damaged (or cut-off in the middle) to test the I/O module
 
+    @section contact Contact information
+    -  <a href="mailto:hepmc-dev@cern.ch"><b>hepmc-dev mailing list</b></a>
+
     @section diagram Class diagram
 
     <img src="class_diagram.png">
