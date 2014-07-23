@@ -30,8 +30,9 @@ m_pdf_info(NULL) {
 }
 
 GenEvent::~GenEvent() {
-    if(m_heavy_ion) delete m_heavy_ion;
-    if(m_pdf_info)  delete m_pdf_info;
+    if(m_heavy_ion)     delete m_heavy_ion;
+    if(m_pdf_info)      delete m_pdf_info;
+    if(m_cross_section) delete m_cross_section;
 }
 
 void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const {
@@ -227,6 +228,11 @@ void GenEvent::set_heavy_ion(HeavyIon *hi) {
 void GenEvent::set_pdf_info(PdfInfo *pi) {
      if(m_pdf_info) delete m_pdf_info;
      m_pdf_info = pi;
+}
+
+void GenEvent::set_cross_section(GenCrossSection *cs) {
+     if(m_cross_section) delete m_cross_section;
+     m_cross_section = cs;
 }
 
 //
