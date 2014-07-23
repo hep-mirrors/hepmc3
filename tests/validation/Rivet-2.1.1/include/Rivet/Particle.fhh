@@ -1,0 +1,40 @@
+// -*- C++ -*-
+#ifndef RIVET_Particle_FHH
+#define RIVET_Particle_FHH
+
+#include "Rivet/Tools/RivetSTL.hh"
+
+namespace Rivet {
+
+
+  /// @name Particle declarations
+  //@{
+
+  // Forward declaration
+  class Particle;
+
+  /// Typedefs for a vector of Particle objects.
+  typedef std::vector<Particle> Particles; //< New form, cf. Jets
+  typedef std::vector<Particle> ParticleVector; //< Old form
+
+  /// Typedef for a pair of Particle objects.
+  typedef std::pair<Particle, Particle> ParticlePair;
+
+  //@}
+
+
+  /// @name PdgId declarations
+  //@{
+
+  /// Typedef for a PDG ID code.
+  typedef int PdgId;
+
+  /// Typedef for a pair of particle names.
+  typedef std::pair<PdgId, PdgId> PdgIdPair;
+
+  //@}
+
+
+}
+
+#endif

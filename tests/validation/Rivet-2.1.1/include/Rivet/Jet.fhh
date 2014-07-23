@@ -1,0 +1,31 @@
+// -*- C++ -*-
+#ifndef RIVET_Jet_FHH
+#define RIVET_Jet_FHH
+
+#include "Rivet/Tools/RivetSTL.hh"
+
+
+// Forward declaration
+namespace fastjet {
+  class PseudoJet;
+}
+
+
+namespace Rivet {
+
+  // Forward declaration
+  class Jet;
+
+  /// Typedef for a collection of Jet objects.
+  typedef std::vector<Jet> Jets;
+
+  /// Unscoped awareness of FastJet's PseudoJet
+  using fastjet::PseudoJet;
+
+  /// Typedef for a collection of PseudoJet objects.
+  typedef std::vector<PseudoJet> PseudoJets;
+
+}
+
+
+#endif

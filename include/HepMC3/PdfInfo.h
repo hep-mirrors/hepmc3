@@ -48,7 +48,7 @@ public:
     bool      operator!=( const PdfInfo& ) const; //!< Operator !=
     bool      is_valid()                   const; //!< Verify that the instance contains non-zero information
 
-    void      print(std::ostream &ostr)    const; //!< Print the contents to output stream
+    void      print(std::ostream &ostr = std::cout) const; //!< Print the contents to output stream
 };
 
 } // namespace HepMC3

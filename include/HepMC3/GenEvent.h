@@ -19,6 +19,7 @@
 #include <iostream>
 #include <vector>
 using std::vector;
+using std::pair;
 
 namespace HepMC3 {
 
@@ -110,6 +111,16 @@ public:
     const GenCrossSection*     cross_section() const { return m_cross_section;        } //!< Get cross-section information
     void                       set_cross_section(GenCrossSection *cs);                  //!< Set cross-section information
 
+    vector<double>&            weights()             { return m_weights; }
+    const vector<double>&      weights()       const { return m_weights; }
+
+    bool                                valid_beam_particles() const;                                            //!< Test to see if we have two valid beam particles
+    pair<GenParticlePtr,GenParticlePtr> beam_particles()       const;                                            //!< Get beam particles
+    void                                set_beam_particles( const GenParticlePtr &p1, const GenParticlePtr &p2); //!< Set beam particles
+    void                                set_beam_particles( const pair<GenParticlePtr,GenParticlePtr> &p);       //!< Set beam particles
+
+    const GenParticlePtr                barcode_to_particle(int barcode) const; //!< Find particle based on its barcode
+
     unsigned char last_version() const { return m_versions.size(); } //!< Get last version number
 //
 // Deprecated functions
@@ -117,6 +128,21 @@ public:
 public:
     __attribute__((deprecated("Use GenParticlePtr instead of GenParticle*"))) void add_particle( GenParticle *p ); //!< Add particle by raw pointer @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
     __attribute__((deprecated("Use GenVertexPtr instead of GenVertex*")))     void add_vertex  ( GenVertex *v );   //!< Add vertex by raw pointer   @deprecated Use GenEvent::add_vertex( const GenVertexPtr& ) instead
+
+    typedef std::vector<GenParticlePtr>::iterator       particle_iterator;
+    typedef std::vector<GenParticlePtr>::const_iterator particle_const_iterator;
+
+    typedef std::vector<GenVertexPtr>::iterator         vertex_iterator;
+    typedef std::vector<GenVertexPtr>::const_iterator   vertex_const_iterator;
+
+    particle_iterator       particles_begin()       { return m_particles.begin(); }
+    particle_iterator       particles_end()         { return m_particles.end();   }
+    particle_const_iterator particles_begin() const { return m_particles.begin(); }
+    particle_const_iterator particles_end()   const { return m_particles.end();   }
+    vertex_iterator         vertices_begin()        { return m_vertices.begin();  }
+    vertex_iterator         vertices_end()          { return m_vertices.end();    }
+    vertex_const_iterator   vertices_begin()  const { return m_vertices.begin();  }
+    vertex_const_iterator   vertices_end()    const { return m_vertices.end();    }
 
 //
 // Fields
@@ -129,9 +155,12 @@ private:
     HeavyIon                   *m_heavy_ion;       //!< Heavy ion generator additional information
     PdfInfo                    *m_pdf_info;        //!< Pdf information
     GenCrossSection            *m_cross_section;   //!< Cross-section information
+    GenParticlePtr              m_beam_particle_1; //!< First beam particle
+    GenParticlePtr              m_beam_particle_2; //!< Second beam particle
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
     std::vector<std::string>    m_versions;        //!< List of versions
+    std::vector<double>         m_weights;         //!< List of weights
 };
 
 } // namespace HepMC3

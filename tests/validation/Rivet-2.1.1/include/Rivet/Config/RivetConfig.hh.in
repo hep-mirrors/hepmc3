@@ -1,0 +1,21 @@
+#ifndef RIVET_CONFIG_RIVETCONFIG_HH
+#define RIVET_CONFIG_RIVETCONFIG_HH
+
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef RIVET_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef RIVET_NAME
+
+/* Define to the full name and version of this package. */
+#undef RIVET_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef RIVET_TARNAME
+
+/* Define to the version of this package. */
+#undef RIVET_VERSION
+
+
+#endif

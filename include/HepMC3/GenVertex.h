@@ -18,6 +18,10 @@ using std::vector;
 
 namespace HepMC3 {
 
+/// type of iteration
+enum IteratorRange { parents, children, family,
+                     ancestors, descendants, relatives };
+
 class GenEvent;
 
 class GenVertex {
@@ -103,6 +107,35 @@ public:
 public:
     __attribute__((deprecated("Use GenParticlePtr instead of GenParticle*"))) void add_particle_in ( GenParticle *p ) { add_particle_in (GenParticlePtr(p)); } //!< Add incoming particle by raw pointer @deprecated Use GenVertex::add_particle_in( const GenParticlePtr &p ) instead
     __attribute__((deprecated("Use GenParticlePtr instead of GenParticle*"))) void add_particle_out( GenParticle *p ) { add_particle_out(GenParticlePtr(p)); } //!< Add outgoing particle by raw pointer @deprecated Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead
+
+    typedef std::vector<GenParticlePtr>::const_iterator particles_in_const_iterator;
+    typedef std::vector<GenParticlePtr>::const_iterator particles_out_const_iterator;
+    typedef std::vector<GenParticlePtr>::iterator       particle_iterator;
+
+    particles_in_const_iterator  particles_in_const_begin()  const { return m_particles_in.begin();  }
+    particles_in_const_iterator  particles_in_const_end()    const { return m_particles_in.end();    }
+    particles_out_const_iterator particles_out_const_begin() const { return m_particles_out.begin(); }
+    particles_out_const_iterator particles_out_const_end()   const { return m_particles_out.end();   }
+
+    particle_iterator            particles_begin(IteratorRange range) {
+        if( range == parents  ) return m_particles_in.begin();
+        if( range == children ) return m_particles_out.begin();
+
+        ERROR("GenVertex::particles_begin: Only 'parents' and 'children' ranges allowed.")
+        exit(-1);
+
+        return m_particles_in.begin();
+    }
+
+    particle_iterator            particles_end(IteratorRange range) {
+        if( range == parents  ) return m_particles_in.end();
+        if( range == children ) return m_particles_out.end();
+
+        ERROR("GenVertex::particles_begin: Only 'parents' and 'children' ranges allowed.")
+        exit(-1);
+
+        return m_particles_in.end();
+    }
 
 //
 // Fields

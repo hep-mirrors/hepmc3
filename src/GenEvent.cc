@@ -235,6 +235,37 @@ void GenEvent::set_cross_section(GenCrossSection *cs) {
      m_cross_section = cs;
 }
 
+bool GenEvent::valid_beam_particles() const {
+    if( !m_beam_particle_1 ||
+        !m_beam_particle_2 ||
+        m_beam_particle_1->parent_event() != this ||
+        m_beam_particle_2->parent_event() != this ) return false;
+
+    return true;
+}
+
+pair<GenParticlePtr,GenParticlePtr> GenEvent::beam_particles() const {
+    return pair<GenParticlePtr,GenParticlePtr>(m_beam_particle_1,m_beam_particle_2);
+}
+
+void GenEvent::set_beam_particles( const GenParticlePtr &p1, const GenParticlePtr &p2) {
+    m_beam_particle_1 = p1;
+    m_beam_particle_2 = p2;
+}
+
+void GenEvent::set_beam_particles( const pair<GenParticlePtr,GenParticlePtr> &p) {
+    m_beam_particle_1 = p.first;
+    m_beam_particle_2 = p.second;
+}
+
+const GenParticlePtr GenEvent::barcode_to_particle(int barcode) const {
+    BOOST_FOREACH( const GenParticlePtr p, m_particles ) {
+        if( p->barcode() == barcode ) return p;
+    }
+    
+    return GenParticlePtr();
+}
+
 //
 // Deprecated functions
 //

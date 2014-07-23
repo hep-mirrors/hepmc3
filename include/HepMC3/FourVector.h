@@ -39,6 +39,11 @@ public:
     double length()  const; //!< Calculate length
     bool   is_zero() const; //!< Check if the length of this vertex is equivalent to zero
 
+    double perp2()          const; //!< Transverse component of the spatial vector squared.
+    double perp()           const; //!< Transverse component of the spatial vector (R in cylindrical system).
+    double pseudoRapidity() const; //!< Returns the pseudo-rapidity (of the space part), i.e. -ln(tan(theta/2))
+    double eta()            const; //!< Returns the pseudo-rapidity (of the space part)
+
     bool        operator==(const FourVector& rhs) const;                            //!< Boolean operator ==
     bool        operator!=(const FourVector& rhs) const { return !(*this == rhs); } //!< Boolean operator !=
 

@@ -1,0 +1,46 @@
+// -*- C++ -*-
+#ifndef Rivet_Projection_FHH
+#define Rivet_Projection_FHH
+
+/// @todo Is there a reason that this stuff can't go into Projection.hh?
+
+#include "Rivet/Cmp.fhh"
+
+
+namespace Rivet {
+  class Projection;
+  typedef Projection* ProjectionPtr;
+  typedef const Projection* ConstProjectionPtr;
+}
+
+
+namespace std {
+
+  /// This is the function called when comparing two (const) pointers to Rivet::Projection.
+  template <>
+  struct less<const Rivet::Projection*>
+    : public binary_function<const Rivet::Projection*, const Rivet::Projection*, bool> {
+    bool operator()(const Rivet::Projection* x, const Rivet::Projection* y) const;
+  };
+
+}
+
+
+namespace Rivet {
+
+  /// Convenience method for casting to a const Projection reference.
+  template <typename PROJ>
+  inline const PROJ& pcast(const Projection& p) {
+    return dynamic_cast<const PROJ&>(p);
+  }
+
+
+  /// Convenience method for casting to a const Projection pointer.
+  template <typename PROJ>
+  inline const PROJ* pcast(const Projection* p) {
+    return dynamic_cast<const PROJ*>(p);
+  }
+
+}
+
+#endif
