@@ -25,14 +25,14 @@ namespace Rivet {
       : ParticleBase(),
         _original(0), _id(pid), _momentum(mom)
     { }
-/*
+
     /// Constructor from a HepMC3 GenParticle.
     Particle(const GenParticle& gp)
       : ParticleBase(),
-        _original(&gp), _id(gp.pdg_id()),
+        _original( const_cast<GenParticle*>(&gp) ), _id(gp.pdg_id()),
         _momentum(gp.momentum())
     { }
-*/
+
 
     /// Constructor from a HepMC3 GenParticle pointer.
     Particle(const GenParticlePtr gp)
