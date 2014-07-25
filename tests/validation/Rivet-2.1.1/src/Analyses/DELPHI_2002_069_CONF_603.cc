@@ -60,9 +60,9 @@ namespace Rivet {
       MSG_DEBUG("Avg beam momentum = " << meanBeamMom);
 
 
-      foreach (const GenParticle* p, particles(e.genEvent())) {
-        const GenVertex* pv = p->production_vertex();
-        const GenVertex* dv = p->end_vertex();
+      foreach (const GenParticlePtr p, particles(e.genEvent())) {
+        const GenVertexPtr pv = p->production_vertex();
+        const GenVertexPtr dv = p->end_vertex();
         if (IS_BHADRON_PDGID(p->pdg_id())) {
           const double xp = p->momentum().e()/meanBeamMom;
 

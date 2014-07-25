@@ -1,6 +1,5 @@
 // -*- C++ -*-
 #include "Rivet/Analysis.hh"
-#include "HepMC/HepMCDefs.h"
 
 namespace Rivet {
 

@@ -40,7 +40,7 @@ namespace Rivet {
               }
             }
           }
-          if (passed) upsilons.push_back(Particle(p*));
+          if (passed) upsilons.push_back(Particle(*p));
         }
       }
 
