@@ -1,3 +1,15 @@
+2014-09-10  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added README with coding standards for HepMC developers
+
+	* Added HEPEVT wrapper and sample test for it
+
+2014-07-25  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added cross-section sctruct
+
+	* Added prototype for Rivet interface on branch 'rivet'
+
 2014-07-13  Andy Buckley  <andy.buckley@cern.ch>
 
 	* Adding HepMC.h and Version.h headers.
@@ -6,4 +18,69 @@
 
 	* Adding ChangeLog and TODO to track developments.
 
-TOMASZ PLEASE ADD SOME CHANGELOG ENTRIES TO COVER THE "EARLY" DEVELOPMENTS!
+2014-07-04  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added PDFinfo and HeavyIon structs
+
+2014-06-20  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added Units class
+
+2014-05-20  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added serialization module for future ROOT interface
+
+2014-05-13  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Improved and optimized in-memory representation prototype
+
+2014-05-06  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Tested new in-memory representation prototype based on smart_ptr
+
+2014-04-29  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Changed validation framework. Now it can be configured through config
+	  files and can be used with selected with any (or none) of the tools
+	  for which interface to HepMC3 is prepared
+
+	* Tested new in-memory representation prototype based on classes
+	  acting like smart pointers
+
+2014-04-22  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added vertex position. Position accessor checks all vertices down the
+	  decay tree for first vertex that has position set
+
+	* I/O classes updated to read and store vertex positions
+
+2014-04-22  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added vertex position. Position accessor checks all vertices down the
+	  decay tree for first vertex that has position set
+
+2014-04-15  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Tested new in-memory representation prototype prioritizing serialization
+
+2014-04-08  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Validation framework expanded
+
+	* Added first version of search engine
+
+2014-04-01  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added validation framework prototype
+
+	* Added versioning prototype
+
+2014-03-25  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Project started
+
+	* Added first prototype for HepMC3 in-memory representation
+
+	* Added first version of HepMC2 plain text input file reader
+
+	* Added first version of HepMC3 plain text output file writer

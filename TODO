@@ -1,10 +1,23 @@
 3.0.0a1
 =======
 
+* HepMC3 file reader
+
 * Provide an empty libHepMCfio library
 
 * Hide headers only intended for internal use
 
 * Eliminate static setup class if we can -- what is the need?
+  TP: We have some global options that user may want to change.
+      They need to be kept somewhere.
 
 * Change namespace, lib name, etc. to HepMC for build system compat
+  TP: Do we prepare a script for user that does this or do we change
+      them permanently?
+
+* See also: http://hepmc.web.cern.ch/hepmc/todo.html
+  and:      https://sft.its.cern.ch/jira/browse/HEPMC
+
+NOTE: Do we really need this TODO file if we have JIRA and doxygen?
+      Do we also need ChangeLog, for the same reason? Shouldn't ChangeLog
+      document only release-related changes?
