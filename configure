@@ -6,6 +6,8 @@ echo
 
 export PREFIX=.
 export COMPMODE=Release
+export BOOST_PATH=""
+export BOOST_MINVERSION=""
 
 # check arguments
 for arg in $* ; do
@@ -15,6 +17,8 @@ for arg in $* ; do
     echo "--prefix=path      : path to install, default is ."
     echo "--enable-debug     : turns on build type Debug (debug flags, optimization off)"
     echo "--buildtype=value  : possible types: None, Release, Debug, MinSizeRel, RelWithDebInfo, D=Release, see CMakeLists.txt"
+    echo "--with-boost=path  : path to Boost root dir"
+    echo "--boost-minimum=v  : minimal Boost version. Needed to choose Boost in the specified path instead of the system Boost"
     echo
     echo "Note: to obtain complete library structure do make install"
     echo "to see the actual compilation commands add argument VERBOSE=1 to make"
@@ -44,6 +48,10 @@ for arg in $* ; do
         echo "${value}: wrong value for buildtype. Ignored." >&2
         echo
       fi
+    elif [ "x${option}" = "x--with-boost" ] ; then
+      BOOST_PATH=${value}
+    elif [ "x${option}" = "x--boost-minimum" ] ; then
+      BOOST_MINVERSION=${value}
     else
       echo "${arg}: wrong option. Ignored." >&2
       echo
@@ -65,4 +73,4 @@ echo
 
 rm -f ./CMakeCache.txt
 
-cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_BUILD_TYPE=${COMPMODE} .
+cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_BUILD_TYPE=${COMPMODE} -DBOOST_ROOT=${BOOST_PATH} -DBOOST_MINVERSION=${BOOST_MINVERSION} .

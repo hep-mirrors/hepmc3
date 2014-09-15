@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
+# earlier cmake versions are unable to find all Boost configurations
+#
 #----------------------------------------------------------------------------
 project(HepMC3)
 #----------------------------------------------------------------------------
@@ -6,24 +8,37 @@ project(HepMC3)
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 
-#---Compilation and Link options----------------------------------------------
-if(CMAKE_SYSTEM_NAME MATCHES Darwin)
-  set(CMAKE_SHARED_LIBRARY_CREATE_Fortran_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_Fortran_FLAGS} -flat_namespace -single_module -undefined dynamic_lookup")
+#---Find Boost---------------------------------------------------------------
+
+find_package(Boost ${BOOST_MINVERSION} REQUIRED)
+message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
+
+#---Compilation and Link options---------------------------------------------
+
+if(${CMAKE_BUILD_TYPE})
+  message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+else()
+  set(CMAKE_BUILD_TYPE "Release")
+  message(STATUS "Build type not specified, use: ${CMAKE_BUILD_TYPE}")
 endif()
 
-set(CMAKE_CXX_FLAGS_DEBUG          "-g3 -fPIC")
-set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -fPIC -DNDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -fPIC -DNDEBUG")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2 -fPIC")
-set(CMAKE_CXX_FLAGS                ${CMAKE_CXX_FLAGS_RELEASE})
+set(CMAKE_CXX_FLAGS                "-fPIC")
+set(CMAKE_CXX_FLAGS_DEBUG          "-g3")
+set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
 
+# Other options eventually used:
 # -pg
 # -DBOOST_DISABLE_ASSERTS   
 # -DBOOST_SP_DISABLE_THREADS
 
-add_definitions(-DBOOST_DISABLE_ASSERTS)
+# The way to add an option to all build types:
+#add_definitions(-DBOOST_DISABLE_ASSERTS)
 
-include_directories(include)
+#--------------------------------------------------------------------------
+
+include_directories(include ${Boost_INCLUDE_DIRS})
 
 #---Select sources for the various libraries---------------------------------
 file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc)
