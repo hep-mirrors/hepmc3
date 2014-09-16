@@ -21,7 +21,8 @@ namespace HepMC3 {
 
 GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit):
 m_heavy_ion(NULL),
-m_pdf_info(NULL) {
+m_pdf_info(NULL),
+m_cross_section(NULL) {
     set_print_precision(2);
     set_event_number(0);
     m_versions.push_back("Version 1");
