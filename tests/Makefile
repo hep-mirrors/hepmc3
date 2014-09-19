@@ -11,8 +11,8 @@ all: $(TESTS)
 
 # special case: for this example we have to compile Fortran code as well
 hepevt_wrapper_test_main.exe: hepevt_wrapper_test_main.o
-	gfortran -fno-automatic -fno-backslash -ffixed-line-length-132 -c hepevt_wrapper_test.f
-	$(LD) $(LDFLAGS) $< hepevt_wrapper_test.o -o $@ $(HEPMC3LIBS) -lgfortran -Wl,-rpath,$(HEPMC3LOCATION)/lib
+	gfortran -fno-automatic -fno-backslash -ffixed-line-length-132 -c hepevt_wrapper_test_fortran.f
+	$(LD) $(LDFLAGS) $< hepevt_wrapper_test_fortran.o -o $@ $(HEPMC3LIBS) -lgfortran -Wl,-rpath,$(HEPMC3LOCATION)/lib
 
 %.exe: %.o
 	$(LD) $(LDFLAGS) $< -o $@ $(HEPMC3LIBS) -Wl,-rpath,$(HEPMC3LOCATION)/lib
