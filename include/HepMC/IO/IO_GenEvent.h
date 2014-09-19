@@ -1,23 +1,23 @@
-#ifndef  HEPMC3_IO_GENEVENT_H
-#define  HEPMC3_IO_GENEVENT_H
+#ifndef  HEPMC_IO_GENEVENT_H
+#define  HEPMC_IO_GENEVENT_H
 /**
  *  @file  IO_GenEvent.h
  *  @brief Definition of \b class IO_GenEvent
  *
- *  @class HepMC3::IO_GenEvent
+ *  @class HepMC::IO_GenEvent
  *  @brief GenEvent I/O parsing and serialization for human-readable text files
  *
  *  @ingroup IO
  *
  */
-#include "HepMC3/IO/IO_FileBase.h"
+#include "HepMC/IO/IO_FileBase.h"
 
-#include "HepMC3/GenEvent.h"
+#include "HepMC/GenEvent.h"
 
 #include <string>
 #include <fstream>
 
-namespace HepMC3 {
+namespace HepMC {
 
 class GenEvent;
 
@@ -119,6 +119,6 @@ private:
     unsigned long  m_buffer_size; //!< Buffer size
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

@@ -3,13 +3,13 @@
  *  @brief Implementation of \b class GenEvent
  *
  */
-#include "HepMC3/GenEvent.h"
+#include "HepMC/GenEvent.h"
 
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/Setup.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/Setup.h"
 
-#include "HepMC3/Data/GenEventData.h"
+#include "HepMC/Data/GenEventData.h"
 
 #include <vector>
 #include <deque>
@@ -17,7 +17,7 @@
 #include <boost/foreach.hpp>
 using std::endl;
 
-namespace HepMC3 {
+namespace HepMC {
 
 GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit):
 m_heavy_ion(NULL),
@@ -248,4 +248,4 @@ void GenEvent::add_vertex( GenVertex *v ) {
     add_vertex( GenVertexPtr(v) );
 }
 
-} // namespace HepMC3
+} // namespace HepMC

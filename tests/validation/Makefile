@@ -16,15 +16,15 @@ DEFS_HEPMC2   =
 # Change paths in this file to include/exclude selected tools
 include make.toolslocation.inc
 
-override INCLUDES      += -I$(HEPMC3LOCATION)/include
-override RPATHS_HEPMC3 += -Wl,-rpath,$(HEPMC3LOCATION)/lib
-override LINKS_HEPMC3  += -L$(HEPMC3LOCATION)/lib -lHepMC
+override INCLUDES_HEPMC3 += -I$(HEPMC3LOCATION)/include
+override RPATHS_HEPMC3   += -Wl,-rpath,$(HEPMC3LOCATION)/lib
+override LINKS_HEPMC3    += -L$(HEPMC3LOCATION)/lib -lHepMC
 
 ifneq ($(HEPMC2LOCATION), )
-  override INCLUDES      += -I$(HEPMC2LOCATION)/include
-  override RPATHS_HEPMC2 += -Wl,-rpath,$(HEPMC2LOCATION)/lib
-  override LINKS_HEPMC2  += -L$(HEPMC2LOCATION)/lib -lHepMC
-  override DEFS_HEPMC2   += -DHEPMC2
+  override INCLUDES_HEPMC2 += -I$(HEPMC2LOCATION)/include
+  override RPATHS_HEPMC2   += -Wl,-rpath,$(HEPMC2LOCATION)/lib
+  override LINKS_HEPMC2    += -L$(HEPMC2LOCATION)/lib -lHepMC
+  override DEFS_HEPMC2     += -DHEPMC2
 endif
 
 VALIDATION_SRC= validation.cc \
@@ -56,17 +56,17 @@ validation_HEPMC2.exe: $(VALIDATION_SRC:.cc=.o_hepmc2)
 	$(LD) $(LDFLAGS) $^ -o $@ $(LINKS_HEPMC2) $(RPATHS_HEPMC2)
 
 %.o_hepmc2: %.cc
-	$(CC) $(CFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(DEFS_HEPMC2) $(INCLUDES)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(DEFS_HEPMC2) $(INCLUDES) $(INCLUDES_HEPMC2)
 
-# Definitions for HepMC3 files
+# Definitions for HepMC files
 validation.exe: $(VALIDATION_SRC:.cc=.o)
 	$(LD) $(LDFLAGS) $^ -o $@ $(LINKS_HEPMC3) $(RPATHS_HEPMC3)
 
 %.o: %.cc
-	$(CC) $(CFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(INCLUDES)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(INCLUDES) $(INCLUDES_HEPMC3)
 
 %.o: %.cxx
-	$(CC) $(CFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(INCLUDES)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(INCLUDES) $(INCLUDES_HEPMC3)
 
 clean:
 	rm -f src/*.o *.o src/*.o_hepmc2 *.o_hepmc2 *.exe

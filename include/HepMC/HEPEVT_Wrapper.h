@@ -1,10 +1,10 @@
-#ifndef HEPMC3_HEPEVT_WRAPPER_H
-#define HEPMC3_HEPEVT_WRAPPER_H
+#ifndef HEPMC_HEPEVT_WRAPPER_H
+#define HEPMC_HEPEVT_WRAPPER_H
 /**
  *  @file HEPEVT_Wrapper.h
  *  @brief Definition of \b class HEPEVT_Wrapper
  *
- *  @class HepMC3::HEPEVT_Wrapper
+ *  @class HepMC::HEPEVT_Wrapper
  *  @brief An interface to HEPEVT common block
  *
  *  @note This header file does not include HEPEVT definition, only declaration.
@@ -18,13 +18,13 @@
  */
 
 // NMXHEP
-#ifndef HEPMC3_HEPEVT_NMXHEP
-#define HEPMC3_HEPEVT_NMXHEP 10000
+#ifndef HEPMC_HEPEVT_NMXHEP
+#define HEPMC_HEPEVT_NMXHEP 10000
 #endif
 
 // momentum precision
-#ifndef HEPMC3_HEPEVT_PRECISION
-#define HEPMC3_HEPEVT_PRECISION double
+#ifndef HEPMC_HEPEVT_PRECISION
+#define HEPMC_HEPEVT_PRECISION double
 #endif
 
 /* This definition of HEPEVT corresponds to FORTRAN definition:
@@ -36,8 +36,8 @@
       DOUBLE PRECISION PHEP,VHEP
 */
 
-static const int NMXHEP = HEPMC3_HEPEVT_NMXHEP;
-typedef HEPMC3_HEPEVT_PRECISION momentum_t;
+static const int NMXHEP = HEPMC_HEPEVT_NMXHEP;
+typedef HEPMC_HEPEVT_PRECISION momentum_t;
 
 extern "C" struct HEPEVT
 {
@@ -56,7 +56,7 @@ extern "C" struct HEPEVT
 #include <cstring> // memset
 using std::endl;
 
-namespace HepMC3 {
+namespace HepMC {
 
 class HEPEVT_Wrapper {
 
@@ -196,6 +196,6 @@ inline void HEPEVT_Wrapper::set_position( int index, double x, double y, double 
     hepevt_.vhep[index-1][3] = t;
 }
 
-} // HepMC3
+} // namespace HepMC
 
 #endif

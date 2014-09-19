@@ -1,10 +1,10 @@
-#ifndef  HEPMC3_FOURVECTOR_H
-#define  HEPMC3_FOURVECTOR_H
+#ifndef  HEPMC_FOURVECTOR_H
+#define  HEPMC_FOURVECTOR_H
 /**
  *  @file FourVector.h
  *  @brief Definition of \b class FourVector
  *
- *  @class HepMC3::FourVector
+ *  @class HepMC::FourVector
  *  @brief Generic 4-vector
  *
  *  Interpretation of its content depends on accessors used.
@@ -14,9 +14,9 @@
  *  @todo Change notation to eta,phi,pT. Make proper accessors
  *
  */
-#include "HepMC3/Setup.h"
+#include "HepMC/Setup.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 class FourVector {
 //
@@ -124,8 +124,8 @@ private:
     double v4; //!< e  or t. Interpretation depends on accessors used
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
-#include "HepMC3/FourVector.icc"
+#include "HepMC/FourVector.icc"
 
 #endif

@@ -4,21 +4,21 @@
 /**
  * @class TauolaHepMC3Event
  *
- * @brief Interface to HepMC3::GenEvent objects
+ * @brief Interface to HepMC::GenEvent objects
  *
  * This class implements the virtual methods of
  * TauolaEvent. In this way it provides an
  * interface between the generic TauolaEvent class
- * and a HepMC3::GenEvent object.
+ * and a HepMC::GenEvent object.
  *
  * This code is licensed under GNU General Public Licence.
  * For more informations, see: http://www.gnu.org/licenses/
  */
 
 #include <iostream>
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/GenParticle.h"
 #include "Tauola/TauolaEvent.h"
 #include "Tauola/TauolaParticle.h"
 #include "Tauola/TauolaHepMC3Particle.h"
@@ -30,13 +30,13 @@ class TauolaHepMC3Event : public TauolaEvent{
 
  public:
 
-  /** Constructor which keeps a pointer to the HepMC3::GenEvent*/
-  TauolaHepMC3Event(HepMC3::GenEvent * event);
+  /** Constructor which keeps a pointer to the HepMC::GenEvent*/
+  TauolaHepMC3Event(HepMC::GenEvent * event);
 
   ~TauolaHepMC3Event();
 
-  /** Returns the HepMC3::GenEvent */
-  HepMC3::GenEvent * getEvent();
+  /** Returns the HepMC::GenEvent */
+  HepMC::GenEvent * getEvent();
 
   /** Implementation of TauolaEvent virtual method.
       This returns a list of particles in the event with
@@ -55,7 +55,7 @@ class TauolaHepMC3Event : public TauolaEvent{
  private:
 
   /** The event */
-  HepMC3::GenEvent * m_event;
+  HepMC::GenEvent * m_event;
   /** List of particles to be decayed */
   std::vector<TauolaParticle*> m_tau_list;
   /** Momentum unit name */

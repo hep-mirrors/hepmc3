@@ -1,20 +1,20 @@
-#ifndef  HEPMC3_IO_ROOT_STREAMER_H
-#define  HEPMC3_IO_ROOT_STREAMER_H
+#ifndef  HEPMC_IO_ROOT_STREAMER_H
+#define  HEPMC_IO_ROOT_STREAMER_H
 /**
  *  @file  IO_RootStreamer.h
  *  @brief Definition of \b class IO_RootStreamer
  *
- *  @class HepMC3::IO_RootStreamer
+ *  @class HepMC::IO_RootStreamer
  *  @brief GenEvent I/O parsing and serialization for root files
  *
  *  @ingroup IO
  *
  */
-#include "HepMC3/IO/IO_Base.h"
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/Data/GenEventData.h"
+#include "HepMC/IO/IO_Base.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/Data/GenEventData.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 
 class IO_RootStreamer : public IO_Base {
@@ -54,6 +54,6 @@ private:
     GenEventData m_data; //!< Event data
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

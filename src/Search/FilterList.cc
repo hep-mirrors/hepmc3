@@ -3,10 +3,10 @@
  *  @brief Implementation of \b class FilterList
  *
  */
-#include "HepMC3/Search/FilterList.h"
-#include "HepMC3/Search/Filter.h"
+#include "HepMC/Search/FilterList.h"
+#include "HepMC/Search/Filter.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 FilterList::FilterList(const Filter &f1) {
     m_filters.push_back(f1);
@@ -25,4 +25,4 @@ FilterList operator&&(const Filter &f1, const Filter &f2) {
     return FilterList(f1,f2);
 }
 
-} // namespace HepMC3
+} // namespace HepMC

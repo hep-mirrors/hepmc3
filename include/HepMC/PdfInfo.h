@@ -1,10 +1,10 @@
-#ifndef  HEPMC3_PDFINFO_H
-#define  HEPMC3_PDFINFO_H
+#ifndef  HEPMC_PDFINFO_H
+#define  HEPMC_PDFINFO_H
 /**
  *  @file PdfInfo.h
  *  @brief Definition of \b struct PdfInfo
  *
- *  @struct HepMC3::PdfInfo
+ *  @struct HepMC::PdfInfo
  *  @brief Stores additional information about PDFs
  *
  *  Creation and use of this information is optional
@@ -18,7 +18,7 @@
  */
 #include <iostream>
 
-namespace HepMC3 {
+namespace HepMC {
 
 struct PdfInfo {
 
@@ -51,6 +51,6 @@ public:
     void      print(std::ostream &ostr)    const; //!< Print the contents to output stream
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

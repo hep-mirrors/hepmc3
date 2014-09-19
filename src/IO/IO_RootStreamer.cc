@@ -3,19 +3,19 @@
  *  @brief Implementation of \b class IO_RootStreamer
  *
  */
-#include "HepMC3/IO/IO_RootStreamer.h"
+#include "HepMC/IO/IO_RootStreamer.h"
 
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/Setup.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/Setup.h"
 
 #include <vector>
 
 #include <boost/foreach.hpp>
 using std::vector;
 
-namespace HepMC3 {
+namespace HepMC {
 
 IO_RootStreamer::IO_RootStreamer() {
 }
@@ -67,4 +67,4 @@ bool IO_RootStreamer::fill_next_event(GenEvent &evt) {
     return true;
 }
 
-} // namespace HepMC3
+} // namespace HepMC

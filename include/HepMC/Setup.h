@@ -3,23 +3,23 @@
 // This file is part of HepMC
 // Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC3_SETUP_H
-#define  HEPMC3_SETUP_H
+#ifndef  HEPMC_SETUP_H
+#define  HEPMC_SETUP_H
 /**
  *  @file Setup.h
  *  @brief Definition of \b class Setup
  *
- *  @class HepMC3::Setup
- *  @brief Configuration for HepMC3
+ *  @class HepMC::Setup
+ *  @brief Configuration for HepMC
  *
  *  Contains macro definitions for printing debug output.
- *  Static class - configuration is shared among all HepMC3 events
+ *  Static class - configuration is shared among all HepMC events
  *  and program threads
  *
  */
 #include <iostream>
 
-namespace HepMC3 {
+namespace HepMC {
 
 class Setup {
 //
@@ -64,7 +64,7 @@ private:
 #define WARNING(MESSAGE)     if( Setup::print_warnings() )       { std::cout << "WARNING::"               << MESSAGE << std::endl; }
 
 // Debug messages and code that will not go to the release version
-#ifndef HEPMC3_RELEASE_VERSION
+#ifndef HEPMC_RELEASE_VERSION
 
 /** @brief Macro for printing debug messages with appropriate debug level */
 #define DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
@@ -77,6 +77,6 @@ private:
 #define DEBUG_CODE_BLOCK( x )
 #endif
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

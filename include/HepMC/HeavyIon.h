@@ -1,10 +1,10 @@
-#ifndef  HEPMC3_HEAVYION_H
-#define  HEPMC3_HEAVYION_H
+#ifndef  HEPMC_HEAVYION_H
+#define  HEPMC_HEAVYION_H
 /**
  *  @file HeavyIon.h
  *  @brief Definition of \b struct HeavyIon
  *
- *  @struct HepMC3::HeavyIon
+ *  @struct HepMC::HeavyIon
  *  @brief Stores additional information about Heavy Ion generator
  *
  *  Creation and use of this information is optional
@@ -12,7 +12,7 @@
  */
 #include <iostream>
 
-namespace HepMC3 {
+namespace HepMC {
 
 struct HeavyIon {
 
@@ -49,6 +49,6 @@ public:
     void      print(std::ostream &ostr)     const; //!< Print the contents to output stream
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

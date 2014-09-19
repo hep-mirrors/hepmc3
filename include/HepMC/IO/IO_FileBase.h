@@ -1,10 +1,10 @@
-#ifndef  HEPMC3_IO_FILE_BASE_H
-#define  HEPMC3_IO_FILE_BASE_H
+#ifndef  HEPMC_IO_FILE_BASE_H
+#define  HEPMC_IO_FILE_BASE_H
 /**
  *  @file  IO_FileBase.h
  *  @brief Definition of \b class IO_FileBase
  *
- *  @class HepMC3::IO_FileBase
+ *  @class HepMC::IO_FileBase
  *  @brief Base class for all file I/O classes
  *
  *  Serves as a file handler leaving the actual
@@ -14,8 +14,8 @@
  */
 #include <string>
 #include <fstream>
-#include "HepMC3/IO/IO_Base.h"
-namespace HepMC3 {
+#include "HepMC/IO/IO_Base.h"
+namespace HepMC {
 
 class GenEvent;
 
@@ -63,6 +63,6 @@ protected:
     std::ios::openmode  m_mode; //!< I/O stream mode
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

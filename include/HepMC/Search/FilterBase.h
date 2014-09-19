@@ -1,10 +1,10 @@
-#ifndef  HEPMC3_SEARCH_FILTERBASE_H
-#define  HEPMC3_SEARCH_FILTERBASE_H
+#ifndef  HEPMC_SEARCH_FILTERBASE_H
+#define  HEPMC_SEARCH_FILTERBASE_H
 /**
  *  @file FilterBase.h
  *  @brief Definition of \b class FilterBase
  *
- *  @class HepMC3::FilterBase
+ *  @class HepMC::FilterBase
  *  @brief Base class for Filter class
  *
  *  Objects of this class cannot be directly created by user.
@@ -14,7 +14,7 @@
  *
  */
 
-namespace HepMC3 {
+namespace HepMC {
 
 class Filter;
 
@@ -118,6 +118,6 @@ static const FilterBase VERSION_DELETED = FilterBase::init_version_deleted();  /
 static const FilterBase PDG_ID          = FilterBase::init_pdg_id();           //!< Filter base for filtering GenParticle::pdg_id()
 static const FilterBase ABS_PDG_ID      = FilterBase::init_abs_pdg_id();       //!< Filter base for filtering abs( GenParticle::pdg_id() )
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

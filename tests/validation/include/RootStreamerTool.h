@@ -4,7 +4,7 @@
 #ifdef HEPMC2
 #include "HepMC/GenEvent.h"
 #else
-#include "HepMC3/IO/IO_RootStreamer.h"
+#include "HepMC/IO/IO_RootStreamer.h"
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"

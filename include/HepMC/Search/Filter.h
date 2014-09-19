@@ -1,23 +1,23 @@
-#ifndef  HEPMC3_SEARCH_FILTER_H
-#define  HEPMC3_SEARCH_FILTER_H
+#ifndef  HEPMC_SEARCH_FILTER_H
+#define  HEPMC_SEARCH_FILTER_H
 /**
  *  @file Filter.h
  *  @brief Definition of \b class Filter
  *
- *  @class HepMC3::Filter
+ *  @class HepMC::Filter
  *  @brief Class used to define filters for search engine
  *
  *  Objects of this class cannot be directly created by user.
- *  Use predefined static const HepMC3::FilterBase objects to construct
+ *  Use predefined static const HepMC::FilterBase objects to construct
  *  appropriate filters. See @ref search_engine for more details.
  *
  *  @ingroup search_engine
  *
  */
-#include "HepMC3/Search/FilterBase.h"
-#include "HepMC3/Data/SmartPointer.h"
+#include "HepMC/Search/FilterBase.h"
+#include "HepMC/Data/SmartPointer.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 class GenEvent;
 
@@ -47,7 +47,7 @@ protected:
 // Functions
 //
 public:
-    /** @brief Check if HepMC3::GenParticle passed this filter */
+    /** @brief Check if HepMC::GenParticle passed this filter */
     bool passed_filter(const GenParticlePtr &p) const;
 
     /** @brief Logical NOT operator for boolean filters */
@@ -72,10 +72,10 @@ private:
     };
 };
 
-static const Filter HAS_END_VERTEX           = FilterBase::init_has_end_vertex();           //!< Filter for checking if HepMC3::GenParticle::end_vertex()        != NULL
-static const Filter HAS_PRODUCTION_VERTEX    = FilterBase::init_has_production_vertex();    //!< Filter for checking if HepMC3::GenParticle::production_vertex() != NULL
+static const Filter HAS_END_VERTEX           = FilterBase::init_has_end_vertex();           //!< Filter for checking if HepMC::GenParticle::end_vertex()        != NULL
+static const Filter HAS_PRODUCTION_VERTEX    = FilterBase::init_has_production_vertex();    //!< Filter for checking if HepMC::GenParticle::production_vertex() != NULL
 static const Filter HAS_SAME_PDG_ID_DAUGHTER = FilterBase::init_has_same_pdg_id_daughter(); //!< Filter for checking if end vertex has particle with same pdg_id
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

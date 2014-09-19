@@ -3,9 +3,9 @@
  *  @brief Implementation of \b struct HeavyIon
  *
  */
-#include "HepMC3/HeavyIon.h"
+#include "HepMC/HeavyIon.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 void HeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
                     int nnw, int nwn, int nwnw,
@@ -79,4 +79,4 @@ void HeavyIon::print( std::ostream &ostr ) const {
          << std::endl;
 }
 
-} // namespace HepMC3
+} // namespace HepMC

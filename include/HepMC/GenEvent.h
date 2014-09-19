@@ -1,26 +1,26 @@
-#ifndef  HEPMC3_GENEVENT_H
-#define  HEPMC3_GENEVENT_H
+#ifndef  HEPMC_GENEVENT_H
+#define  HEPMC_GENEVENT_H
 /**
  *  @file GenEvent.h
  *  @brief Definition of \b class GenEvent
  *
- *  @class HepMC3::GenEvent
+ *  @class HepMC::GenEvent
  *  @brief Stores event-related information
  *
  *  Manages GenParticle and GenVertex objects
  *
  */
-#include "HepMC3/Data/SmartPointer.h"
-#include "HepMC3/Units.h"
-#include "HepMC3/HeavyIon.h"
-#include "HepMC3/PdfInfo.h"
-#include "HepMC3/GenCrossSection.h"
+#include "HepMC/Data/SmartPointer.h"
+#include "HepMC/Units.h"
+#include "HepMC/HeavyIon.h"
+#include "HepMC/PdfInfo.h"
+#include "HepMC/GenCrossSection.h"
 
 #include <iostream>
 #include <vector>
 using std::vector;
 
-namespace HepMC3 {
+namespace HepMC {
 
 class GenEventData;
 
@@ -134,6 +134,6 @@ private:
     std::vector<std::string>    m_versions;        //!< List of versions
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

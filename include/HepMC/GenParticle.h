@@ -1,20 +1,20 @@
-#ifndef  HEPMC3_GENPARTICLE_H
-#define  HEPMC3_GENPARTICLE_H
+#ifndef  HEPMC_GENPARTICLE_H
+#define  HEPMC_GENPARTICLE_H
 /**
  *  @file GenParticle.h
  *  @brief Definition of \b class GenParticle
  *
- *  @class HepMC3::GenParticle
+ *  @class HepMC::GenParticle
  *  @brief Stores particle-related information
  *
  */
-#include "HepMC3/Data/SmartPointer.h"
-#include "HepMC3/Data/GenParticleData.h"
-#include "HepMC3/FourVector.h"
+#include "HepMC/Data/SmartPointer.h"
+#include "HepMC/Data/GenParticleData.h"
+#include "HepMC/FourVector.h"
 #include <iostream>
 #include <vector>
 
-namespace HepMC3 {
+namespace HepMC {
 
 class GenEvent;
 
@@ -124,6 +124,6 @@ private:
     weak_ptr<GenParticle>  m_this;              //!< Pointer to shared pointer managing this particle
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

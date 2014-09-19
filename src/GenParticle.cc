@@ -3,12 +3,12 @@
  *  @brief Implementation of \b class GenParticle
  *
  */
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/Setup.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/Setup.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 GenParticle::GenParticle( const FourVector &momentum, int pdg_id, int status ):
 m_event(NULL),
@@ -184,4 +184,4 @@ GenVertexPtr GenParticle::end_vertex() const {
     return m_end_vertex.lock();
 }
 
-} // namespace HepMC3
+} // namespace HepMC

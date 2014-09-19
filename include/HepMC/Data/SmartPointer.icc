@@ -4,7 +4,7 @@
  *
  */
 
-namespace HepMC3 {
+namespace HepMC {
 
 template<class T>
 SmartPointer<T>::SmartPointer() {
@@ -32,4 +32,4 @@ SmartPointer<T>::SmartPointer( T *raw_pointer ) {
     }
 }
 
-} // namespace HepMC3
+} // namespace HepMC

@@ -1,25 +1,25 @@
-#ifndef  HEPMC3_IO_HEPMC2_ADAPTER_H
-#define  HEPMC3_IO_HEPMC2_ADAPTER_H
+#ifndef  HEPMC_IO_HEPMC2_ADAPTER_H
+#define  HEPMC_IO_HEPMC2_ADAPTER_H
 /**
  *  @file  IO_HepMC2_adapter.h
  *  @brief Definition of \b class IO_HepMC2_adapter
  *
- *  @class HepMC3::IO_HepMC2_adapter
+ *  @class HepMC::IO_HepMC2_adapter
  *  @brief Parser for HepMC2 I/O files
  *
  *  @ingroup IO
  *
  */
-#include "HepMC3/IO/IO_FileBase.h"
+#include "HepMC/IO/IO_FileBase.h"
 
-#include "HepMC3/Data/SmartPointer.h"
+#include "HepMC/Data/SmartPointer.h"
 
 #include <string>
 #include <fstream>
 #include <vector>
 using std::vector;
 
-namespace HepMC3 {
+namespace HepMC {
 
 class GenEvent;
 
@@ -92,6 +92,6 @@ private:
     vector<int>            m_end_vertex_barcodes; //!< Old end vertex barcodes
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

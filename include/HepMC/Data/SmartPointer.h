@@ -1,17 +1,17 @@
-#ifndef  HEPMC3_DATA_SMARTPOINTER_H
-#define  HEPMC3_DATA_SMARTPOINTER_H
+#ifndef  HEPMC_DATA_SMARTPOINTER_H
+#define  HEPMC_DATA_SMARTPOINTER_H
 /**
  *  @file SmartPointer.h
  *  @brief Definition of \b template \b class SmartPointer
  *
- *  @class HepMC3::SmartPointer
- *  @brief Smart pointer for HepMC3 objects
+ *  @class HepMC::SmartPointer
+ *  @brief Smart pointer for HepMC objects
  *
  *  Uses shared_ptr to manage the object memory
  *
  *  @note SmartPointer can be created from raw pointer. This allows
  *        for implicit conversions when passing raw pointer as argument to
- *        the constructors or other functions in HepMC3 classes for backward compatibility.
+ *        the constructors or other functions in HepMC classes for backward compatibility.
  *        SmartPointer ensures only one shared_ptr manages
  *        the object in such conversions. Note, however, that use of such conversion is deprecated.
  *
@@ -28,7 +28,7 @@ using boost::weak_ptr;
 using boost::shared_ptr;
 using boost::make_shared;
 
-namespace HepMC3 {
+namespace HepMC {
 
 template<class T>
 class SmartPointer {
@@ -81,8 +81,8 @@ private:
 typedef SmartPointer<class GenVertex>   GenVertexPtr;   //!< Smart pointer to GenVertex
 typedef SmartPointer<class GenParticle> GenParticlePtr; //!< Smart pointer to GenParticle
 
-} // namespace HepMC3
+} // namespace HepMC
 
-#include "HepMC3/Data/SmartPointer.icc"
+#include "HepMC/Data/SmartPointer.icc"
 
 #endif

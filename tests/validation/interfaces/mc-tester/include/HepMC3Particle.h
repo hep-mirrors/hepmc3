@@ -12,8 +12,8 @@
 #define _HepMC3Particle_H
 
 #include "HEPParticle.H"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenVertex.h"
 
 #ifdef _USE_ROOT_
 #include <TObject.h>
@@ -28,14 +28,14 @@ private:
   /** Event which the particle belongs to.*/
   HepMC3Event *   event;
   /** ID number of particle as given by MC-TESTER (not the same as
-    HepMC3::GenParticle pdg_id or barcode).*/
+    HepMC::GenParticle pdg_id or barcode).*/
   int           id ;
 
 public:
   /** Plain constructor.*/
   HepMC3Particle();
-  /** Constructor which makes a HepMC3Particle from HepMC3::GenParticle. */
-  HepMC3Particle(HepMC3::GenParticle& particle, HEPEvent * e, int Id);
+  /** Constructor which makes a HepMC3Particle from HepMC::GenParticle. */
+  HepMC3Particle(HepMC::GenParticle& particle, HEPEvent * e, int Id);
   /** Destructor*/
   ~HepMC3Particle();
 
@@ -45,7 +45,7 @@ public:
   /** Returns the event that this particle belongs to.*/
   HEPEvent* GetEvent()            ;
   /** returns the ID number of particle as used by MC-TESTER (not
-    the same as HepMC3::GenParticle pdg_id or barcode).*/
+    the same as HepMC::GenParticle pdg_id or barcode).*/
   int    const GetId()            ;
   /** Dummy function definition. Do not use.*/
   int    const GetMother()        ;
@@ -139,7 +139,7 @@ public:
   /** Returns a list of daughter particles of this particle.*/
   HEPParticleList*  GetMotherList(HEPParticleList *list);
 public:
-  HepMC3::GenParticle *part;
+  HepMC::GenParticle *part;
 
 #ifdef _USE_ROOT_
   ClassDef(HepMC3Particle,0)

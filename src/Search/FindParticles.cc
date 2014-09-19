@@ -3,18 +3,18 @@
  *  @brief Implementation of \b class FindParticles
  *
  */
-#include "HepMC3/Search/FindParticles.h"
-#include "HepMC3/Search/FilterList.h"
-#include "HepMC3/Search/Filter.h"
+#include "HepMC/Search/FindParticles.h"
+#include "HepMC/Search/FilterList.h"
+#include "HepMC/Search/Filter.h"
 
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/Setup.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/Setup.h"
 
 #include <boost/foreach.hpp>
 
-namespace HepMC3 {
+namespace HepMC {
 
 FindParticles::FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list) {
 
@@ -146,4 +146,4 @@ void FindParticles::recursive_check_descendants(const GenVertexPtr &v, FilterLis
     }
 }
 
-} // namespace HepMC3
+} // namespace HepMC

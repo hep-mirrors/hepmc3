@@ -3,15 +3,15 @@
  *  @brief Implementation of \b class IO_GenEvent
  *
  */
-#include "HepMC3/IO/IO_GenEvent.h"
+#include "HepMC/IO/IO_GenEvent.h"
 
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/Setup.h"
-#include "HepMC3/Units.h"
-#include "HepMC3/HeavyIon.h"
-#include "HepMC3/PdfInfo.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/Setup.h"
+#include "HepMC/Units.h"
+#include "HepMC/HeavyIon.h"
+#include "HepMC/PdfInfo.h"
 
 #include <fstream>
 #include <iostream>
@@ -20,7 +20,7 @@
 #include <boost/foreach.hpp>
 using std::vector;
 
-namespace HepMC3 {
+namespace HepMC {
 
 IO_GenEvent::IO_GenEvent(const std::string &filename, std::ios::openmode mode):
 IO_FileBase(filename,mode),
@@ -254,4 +254,4 @@ inline void IO_GenEvent::forced_flush() {
     m_cursor = m_buffer;
 }
 
-} // namespace HepMC3
+} // namespace HepMC

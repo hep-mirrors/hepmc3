@@ -1,10 +1,10 @@
-#ifndef HEPMC3_UNITS_H
-#define HEPMC3_UNITS_H
+#ifndef HEPMC_UNITS_H
+#define HEPMC_UNITS_H
 /**
  *  @file Units.h
  *  @brief Definition of \b class Units
  *
- *  @class HepMC3::Units
+ *  @class HepMC::Units
  *  @brief Stores units-related enums and conversion functions
  *
  *  Manages units used by HepMC::GenEvent
@@ -12,10 +12,10 @@
  */
 #include <iostream>
 #include <string>
-#include "HepMC3/FourVector.h"
+#include "HepMC/FourVector.h"
 using std::string;
 
-namespace HepMC3 {
+namespace HepMC {
 
 class Units {
 public:
@@ -96,6 +96,6 @@ public:
 
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

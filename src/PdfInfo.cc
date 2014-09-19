@@ -3,9 +3,9 @@
  *  @brief Implementation of \b struct PdfInfo
  *
  */
-#include "HepMC3/PdfInfo.h"
+#include "HepMC/PdfInfo.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 void PdfInfo::set( int i1, int i2, double xin1, double xin2,
                    double q, double p1, double p2,
@@ -65,4 +65,4 @@ void PdfInfo::print( std::ostream & ostr) const {
          << " " << std::endl;
 }
 
-} // namespace HepMC3
+} // namespace HepMC

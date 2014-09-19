@@ -1,22 +1,22 @@
-#ifndef  HEPMC3_GENVERTEX_H
-#define  HEPMC3_GENVERTEX_H
+#ifndef  HEPMC_GENVERTEX_H
+#define  HEPMC_GENVERTEX_H
 /**
  *  @file GenVertex.h
  *  @brief Definition of \b class GenVertex
  *
- *  @class HepMC3::GenVertex
+ *  @class HepMC::GenVertex
  *  @brief Stores vertex-related information
  *
  */
-#include "HepMC3/Data/SmartPointer.h"
-#include "HepMC3/Data/GenVertexData.h"
-#include "HepMC3/FourVector.h"
+#include "HepMC/Data/SmartPointer.h"
+#include "HepMC/Data/GenVertexData.h"
+#include "HepMC/FourVector.h"
 
 #include <iostream>
 #include <vector>
 using std::vector;
 
-namespace HepMC3 {
+namespace HepMC {
 
 class GenEvent;
 
@@ -121,6 +121,6 @@ private:
     weak_ptr<GenVertex>     m_this;          //!< Pointer to shared pointer managing this vertex
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

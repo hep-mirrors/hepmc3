@@ -3,16 +3,16 @@
  *
  * Based on HepMC2/examples/example_BuildEventFromScratch.cc
  */
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/Search/FindParticles.h"
-#include "HepMC3/IO/IO_GenEvent.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/Search/FindParticles.h"
+#include "HepMC/IO/IO_GenEvent.h"
 
 #include <iostream>
 
 #include <boost/foreach.hpp>
-using namespace HepMC3;
+using namespace HepMC;
 
 int main() {
     //

@@ -21,7 +21,7 @@
 /// @todo Add feature detection macros (clearly version-related, and why proliferate headers?)
 
 
-namespace HepMC3 {
+namespace HepMC {
 
 
   /// Get the HepMC library version string

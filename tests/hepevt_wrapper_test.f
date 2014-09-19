@@ -31,7 +31,7 @@ C-----------------------------------------------------------------------------
 C COMMON HEPEVT
 C
 C IMPORTANT: The definition of HEPEVT is also present in:
-C            include/HepMC3/HEPEVT_wrapper.h
+C            include/HepMC/HEPEVT_wrapper.h
 C            If the definition changes (eg. different value of NMXHEP or REAL
 C            instead of REAL*8) it has to be updated in that file as well.
 C-----------------------------------------------------------------------------

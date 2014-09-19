@@ -1,6 +1,6 @@
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/GenParticle.h"
 #include "Photos/PhotosHepMC3Particle.h"
 #include "Photos/Log.h"
 #include "Photos/Photos.h"
@@ -11,17 +11,17 @@ namespace Photospp
 {
 
 PhotosHepMC3Particle::PhotosHepMC3Particle(){
-  m_particle = make_shared<HepMC3::GenParticle>();
+  m_particle = make_shared<HepMC::GenParticle>();
 }
 
 PhotosHepMC3Particle::PhotosHepMC3Particle(int pdg_id, int status, double mass){
-  m_particle = make_shared<HepMC3::GenParticle>();
+  m_particle = make_shared<HepMC::GenParticle>();
   m_particle->set_pdg_id(pdg_id);
   m_particle->set_status(status);
   m_particle->set_generated_mass(mass);
 }
 
-PhotosHepMC3Particle::PhotosHepMC3Particle(HepMC3::GenParticlePtr particle){
+PhotosHepMC3Particle::PhotosHepMC3Particle(HepMC::GenParticlePtr particle){
   m_particle = particle;
 }
 
@@ -41,7 +41,7 @@ void PhotosHepMC3Particle::clear(std::vector<PhotosParticle*> v){
   }
 }
 
-HepMC3::GenParticlePtr PhotosHepMC3Particle::getHepMC3(){
+HepMC::GenParticlePtr PhotosHepMC3Particle::getHepMC3(){
   return m_particle;
 }
 
@@ -54,15 +54,15 @@ void PhotosHepMC3Particle::setMothers(vector<PhotosParticle*> mothers){
   //If there are mothers
   if(mothers.size()>0){
 
-    HepMC3::GenParticlePtr part;
+    HepMC::GenParticlePtr part;
     part=dynamic_cast<PhotosHepMC3Particle*>(mothers.at(0))->getHepMC3();
 
     //Use end vertex of first mother as production vertex for particle
-    HepMC3::GenVertexPtr production_vertex = part->end_vertex();
-    HepMC3::GenVertexPtr orig_production_vertex = production_vertex;
+    HepMC::GenVertexPtr production_vertex = part->end_vertex();
+    HepMC::GenVertexPtr orig_production_vertex = production_vertex;
 
     if(!production_vertex){ //if it does not exist create it
-      production_vertex = make_shared<HepMC3::GenVertex>();
+      production_vertex = make_shared<HepMC::GenVertex>();
       part->parent_event()->add_vertex(production_vertex);
     }
 
@@ -71,7 +71,7 @@ void PhotosHepMC3Particle::setMothers(vector<PhotosParticle*> mothers){
     for(mother_itr = mothers.begin(); mother_itr != mothers.end();
         mother_itr++){
 
-      HepMC3::GenParticlePtr moth;
+      HepMC::GenParticlePtr moth;
       moth = dynamic_cast<PhotosHepMC3Particle*>(*mother_itr)->getHepMC3();
 
       if(moth->end_vertex()!=orig_production_vertex)
@@ -99,7 +99,7 @@ void PhotosHepMC3Particle::addDaughter(PhotosParticle* daughter){
   if(!m_particle->end_vertex())
     Log::Fatal("PhotosHepMC3Particle::addDaughter(): This method assumes an end_vertex exists. Maybe you really want to use setDaughters.",2);
 
-  HepMC3::GenParticlePtr daugh = (dynamic_cast<PhotosHepMC3Particle*>(daughter))->getHepMC3();
+  HepMC::GenParticlePtr daugh = (dynamic_cast<PhotosHepMC3Particle*>(daughter))->getHepMC3();
   m_particle->end_vertex()->add_particle_out(daugh);
 
 }
@@ -115,15 +115,15 @@ void PhotosHepMC3Particle::setDaughters(vector<PhotosParticle*> daughters){
   if(daughters.size()>0){
 
     //Use production vertex of first daughter as end vertex for particle
-    HepMC3::GenParticlePtr first_daughter;
+    HepMC::GenParticlePtr first_daughter;
     first_daughter = (dynamic_cast<PhotosHepMC3Particle*>(daughters.at(0)))->getHepMC3();
 
-    HepMC3::GenVertexPtr end_vertex;
+    HepMC::GenVertexPtr end_vertex;
     end_vertex=first_daughter->production_vertex();
-    HepMC3::GenVertexPtr orig_end_vertex = end_vertex;
+    HepMC::GenVertexPtr orig_end_vertex = end_vertex;
 
     if(!end_vertex){ //if it does not exist create it
-      end_vertex = make_shared<HepMC3::GenVertex>();
+      end_vertex = make_shared<HepMC::GenVertex>();
       m_particle->parent_event()->add_vertex(end_vertex);
     }
 
@@ -132,7 +132,7 @@ void PhotosHepMC3Particle::setDaughters(vector<PhotosParticle*> daughters){
     for(daughter_itr = daughters.begin(); daughter_itr != daughters.end();
         daughter_itr++){
 
-      HepMC3::GenParticlePtr daug;
+      HepMC::GenParticlePtr daug;
       daug = dynamic_cast<PhotosHepMC3Particle*>(*daughter_itr)->getHepMC3();
 
 
@@ -150,7 +150,7 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getMothers(){
 
   if(m_mothers.size()==0&&m_particle->production_vertex()){
 
-    BOOST_FOREACH( const HepMC3::GenParticlePtr &p, m_particle->production_vertex()->particles_in() ) {
+    BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->production_vertex()->particles_in() ) {
       m_mothers.push_back(new PhotosHepMC3Particle(p));
     }
   }
@@ -161,7 +161,7 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getDaughters(){
 
   if(m_daughters.size()==0&&m_particle->end_vertex()){
 
-    BOOST_FOREACH( const HepMC3::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
+    BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
 
       // ommit particles if their status code is ignored by Photos
       if( Photos::isStatusCodeIgnored( p->status() ) ) continue;
@@ -216,17 +216,17 @@ bool PhotosHepMC3Particle::checkMomentumConservation(){
 
   if(!m_particle->end_vertex()) return true;
 
-  // HepMC3 version of check_momentum_conservation
+  // HepMC version of check_momentum_conservation
   // with added energy check
-  HepMC3::FourVector sum;
+  HepMC::FourVector sum;
 
-  BOOST_FOREACH( const HepMC3::GenParticlePtr &p, m_particle->end_vertex()->particles_in() ) {
+  BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_in() ) {
     if( Photos::isStatusCodeIgnored(p->status()) ) continue;
 
     sum += p->momentum();
   }
 
-  BOOST_FOREACH( const HepMC3::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
+  BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
     if( Photos::isStatusCodeIgnored(p->status()) ) continue;
 
     sum -= p->momentum();
@@ -277,7 +277,7 @@ PhotosHepMC3Particle * PhotosHepMC3Particle::createNewParticle(
   new_particle->getHepMC3()->set_status(status);
   new_particle->getHepMC3()->set_generated_mass(mass);
 
-  HepMC3::FourVector momentum(px,py,pz,e);
+  HepMC::FourVector momentum(px,py,pz,e);
   new_particle->getHepMC3()->set_momentum(momentum);
 
   m_created_particles.push_back(new_particle);
@@ -292,7 +292,7 @@ void PhotosHepMC3Particle::createHistoryEntry(){
     return;
   }
 
-  HepMC3::GenParticlePtr part = make_shared<HepMC3::GenParticle>(*m_particle);
+  HepMC::GenParticlePtr part = make_shared<HepMC::GenParticle>(*m_particle);
   part->set_status(Photos::historyEntriesStatus);
   m_particle->production_vertex()->add_particle_out(part);
 }
@@ -307,13 +307,13 @@ void PhotosHepMC3Particle::createSelfDecayVertex(PhotosParticle *out)
 
   if(getHepMC3()->parent_event()==NULL)
   {
-    Log::Error()<<"PhotosHepMC3Particle::createSelfDecayVertex: particle not in the HepMC3 event!"<<endl;
+    Log::Error()<<"PhotosHepMC3Particle::createSelfDecayVertex: particle not in the HepMC event!"<<endl;
     return;
   }
 
-  // Add new vertex and new particle to HepMC3
-  HepMC3::GenParticlePtr outgoing = make_shared<HepMC3::GenParticle>( *(dynamic_cast<PhotosHepMC3Particle*>(out)->m_particle) );
-  HepMC3::GenVertexPtr v          = make_shared<HepMC3::GenVertex>();
+  // Add new vertex and new particle to HepMC
+  HepMC::GenParticlePtr outgoing = make_shared<HepMC::GenParticle>( *(dynamic_cast<PhotosHepMC3Particle*>(out)->m_particle) );
+  HepMC::GenVertexPtr v          = make_shared<HepMC::GenVertex>();
 
   // Copy vertex position from parent vertex
   v->set_position( m_particle->production_vertex()->position() );
@@ -352,28 +352,28 @@ double PhotosHepMC3Particle::getE(){
 
 void PhotosHepMC3Particle::setPx(double px){
   //make new momentum as something is wrong with
-  //the HepMC3 momentum setters
+  //the HepMC momentum setters
 
-  HepMC3::FourVector momentum(m_particle->momentum());
+  HepMC::FourVector momentum(m_particle->momentum());
   momentum.setPx(px);
   m_particle->set_momentum(momentum);
 }
 
 void PhotosHepMC3Particle::setPy(double py){
-  HepMC3::FourVector momentum(m_particle->momentum());
+  HepMC::FourVector momentum(m_particle->momentum());
   momentum.setPy(py);
   m_particle->set_momentum(momentum);
 }
 
 
 void PhotosHepMC3Particle::setPz(double pz){
-  HepMC3::FourVector momentum(m_particle->momentum());
+  HepMC::FourVector momentum(m_particle->momentum());
   momentum.setPz(pz);
   m_particle->set_momentum(momentum);
 }
 
 void PhotosHepMC3Particle::setE(double e){
-  HepMC3::FourVector momentum(m_particle->momentum());
+  HepMC::FourVector momentum(m_particle->momentum());
   momentum.setE(e);
   m_particle->set_momentum(momentum);
 }

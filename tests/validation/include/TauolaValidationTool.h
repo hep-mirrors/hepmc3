@@ -6,7 +6,7 @@
 #include "HepMC/GenEvent.h"
 #else
 #include "Tauola/TauolaHepMC3Event.h"
-#include "HepMC3/GenEvent.h"
+#include "HepMC/GenEvent.h"
 #endif // ifdef TAUOLAPP_HEPMC2
 
 #include "ValidationTool.h"

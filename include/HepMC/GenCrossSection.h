@@ -1,13 +1,13 @@
-#ifndef  HEPMC3_CROSS_SECTION_H
-#define  HEPMC3_CROSS_SECTION_H
+#ifndef  HEPMC_CROSS_SECTION_H
+#define  HEPMC_CROSS_SECTION_H
 /**
  *  @file GenCrossSection.h
  *  @brief Definition of \b struct GenCrossSection
  *
- *  @struct HepMC3::GenCrossSection
+ *  @struct HepMC::GenCrossSection
  *  @brief Stores additional information about cross-section
  *
- *  HepMC3::GenCrossSection is used to store the generated cross section.
+ *  HepMC::GenCrossSection is used to store the generated cross section.
  *  This class is meant to be used to pass, on an event by event basis,
  *  the current best guess of the total cross section.
  *  It is expected that the final cross section will be stored elsewhere.
@@ -23,7 +23,7 @@
  */
 #include <iostream>
 
-namespace HepMC3 {
+namespace HepMC {
 
 struct GenCrossSection {
 
@@ -50,6 +50,6 @@ public:
     void print(std::ostream &ostr) const; //!< Print the contents to output stream
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

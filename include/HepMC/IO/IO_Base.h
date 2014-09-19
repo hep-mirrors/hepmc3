@@ -1,17 +1,17 @@
-#ifndef  HEPMC3_IO_BASE_H
-#define  HEPMC3_IO_BASE_H
+#ifndef  HEPMC_IO_BASE_H
+#define  HEPMC_IO_BASE_H
 /**
  *  @file  IO_Base.h
  *  @brief Definition of \b class IO_Base
  *
- *  @class HepMC3::IO_Base
+ *  @class HepMC::IO_Base
  *  @brief Base class for all I/O interfaces
  *
  *  @ingroup IO
  *
  */
 
-namespace HepMC3 {
+namespace HepMC {
 
 class GenEvent;
 
@@ -34,6 +34,6 @@ public:
     virtual bool fill_next_event(GenEvent &evt)   = 0;
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

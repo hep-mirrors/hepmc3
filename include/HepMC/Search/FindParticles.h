@@ -1,22 +1,22 @@
-#ifndef  HEPMC3_SEARCH_FINDPARTICLES_H
-#define  HEPMC3_SEARCH_FINDPARTICLES_H
+#ifndef  HEPMC_SEARCH_FINDPARTICLES_H
+#define  HEPMC_SEARCH_FINDPARTICLES_H
 /**
  *  @file FindParticles.h
  *  @brief Definition of \b class FindParticles
  *
- *  @class HepMC3::FindParticles
+ *  @class HepMC::FindParticles
  *  @brief Search engine for GenEvent class
  *
  *  @ingroup search_engine
  *
  */
-#include "HepMC3/Search/FilterList.h"
-#include "HepMC3/Data/SmartPointer.h"
+#include "HepMC/Search/FilterList.h"
+#include "HepMC/Data/SmartPointer.h"
 
 #include <vector>
 using std::vector;
 
-namespace HepMC3 {
+namespace HepMC {
 
 class GenEvent;
 
@@ -81,6 +81,6 @@ private:
     vector<GenVertexPtr>   m_checked_vertices; //!< List of already checked vertices
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

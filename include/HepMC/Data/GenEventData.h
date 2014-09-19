@@ -1,21 +1,21 @@
-#ifndef  HEPMC3_DATA_GENEVENTDATA_H
-#define  HEPMC3_DATA_GENEVENTDATA_H
+#ifndef  HEPMC_DATA_GENEVENTDATA_H
+#define  HEPMC_DATA_GENEVENTDATA_H
 /**
  *  @file GenEventData.h
  *  @brief Definition of \b struct GenEventData
  *
- *  @struct HepMC3::GenEventData
+ *  @struct HepMC::GenEventData
  *  @brief Stores serializable event information
  *
  *  @ingroup data
  *
  */
 #include <vector>
-#include "HepMC3/Data/GenParticleData.h"
-#include "HepMC3/Data/GenVertexData.h"
-#include "HepMC3/Units.h"
+#include "HepMC/Data/GenParticleData.h"
+#include "HepMC/Data/GenVertexData.h"
+#include "HepMC/Units.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 struct GenEventData {
     int                 event_number;  //!< Event number
@@ -37,6 +37,6 @@ struct GenEventData {
     std::vector<int> links2; //!< Second id of the vertex links
 };
 
-} // namespace HepMC3
+} // namespace HepMC
 
 #endif

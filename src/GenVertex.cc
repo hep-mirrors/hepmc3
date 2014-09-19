@@ -3,14 +3,14 @@
  *  @brief Implementation of \b class GenVertex
  *
  */
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/Setup.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/Setup.h"
 
 #include <boost/foreach.hpp>
 
-namespace HepMC3 {
+namespace HepMC {
 
 GenVertex::GenVertex( const FourVector& position ):
 m_event(NULL),
@@ -179,4 +179,4 @@ void GenVertex::set_position(const FourVector& new_pos) {
     m_data.position = new_pos;
 }
 
-} // namespace HepMC3
+} // namespace HepMC

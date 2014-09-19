@@ -4,7 +4,7 @@
 #include "Pythia8/Pythia.h"
 
 #include <vector>
-namespace HepMC3 {
+namespace HepMC {
 
 class GenEvent;
 class GenVertex;

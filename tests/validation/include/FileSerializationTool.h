@@ -4,10 +4,10 @@
 #ifdef HEPMC2
 #include "HepMC/IO_GenEvent.h"
 #else
-#include "HepMC3/IO/IO_GenEvent.h"
-#include "HepMC3/IO/IO_HepMC2_adapter.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
+#include "HepMC/IO/IO_GenEvent.h"
+#include "HepMC/IO/IO_HepMC2_adapter.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/GenParticle.h"
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"

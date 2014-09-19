@@ -3,13 +3,13 @@
  *  @brief Test of HepMC2 to 3 IO file converter
  *
  */
-#include "HepMC3/GenEvent.h"
+#include "HepMC/GenEvent.h"
 
-#include "HepMC3/IO/IO_HepMC2_adapter.h"
-#include "HepMC3/IO/IO_GenEvent.h"
+#include "HepMC/IO/IO_HepMC2_adapter.h"
+#include "HepMC/IO/IO_GenEvent.h"
 
 #include <iostream>
-using namespace HepMC3;
+using namespace HepMC;
 using std::cout;
 using std::endl;
 

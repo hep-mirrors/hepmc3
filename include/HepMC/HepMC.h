@@ -6,9 +6,9 @@
 #ifndef HEPMC_HEPMC_H
 #define HEPMC_HEPMC_H
 
-#include "HepMC3/Version.h"
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
+#include "HepMC/Version.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenVertex.h"
 
 #endif
