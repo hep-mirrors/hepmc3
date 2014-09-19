@@ -1,13 +1,13 @@
 /**
- *  @file HeavyIon.cc
- *  @brief Implementation of \b struct HeavyIon
+ *  @file GenHeavyIon.cc
+ *  @brief Implementation of \b struct GenHeavyIon
  *
  */
-#include "HepMC/HeavyIon.h"
+#include "HepMC/GenHeavyIon.h"
 
 namespace HepMC {
 
-void HeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
+void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
                     int nnw, int nwn, int nwnw,
                     float im, float pl, float ec, float s ) {
     Ncoll_hard                   = nh;
@@ -25,7 +25,7 @@ void HeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
     sigma_inel_NN                = s;
 }
 
-bool HeavyIon::operator==( const HeavyIon& a ) const {
+bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
     return (    a.Ncoll_hard                   == this->Ncoll_hard
              && a.Npart_proj                   == this->Npart_proj
              && a.Npart_targ                   == this->Npart_targ
@@ -41,11 +41,11 @@ bool HeavyIon::operator==( const HeavyIon& a ) const {
              && a.sigma_inel_NN                == this->sigma_inel_NN );
 }
 
-bool HeavyIon::operator!=( const HeavyIon& a ) const {
+bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {
     return !( a == *this );
 }
 
-bool HeavyIon::is_valid() const {
+bool GenHeavyIon::is_valid() const {
     if( Ncoll_hard                   != 0 ) return true;
     if( Npart_proj                   != 0 ) return true;
     if( Npart_targ                   != 0 ) return true;
@@ -62,8 +62,8 @@ bool HeavyIon::is_valid() const {
     return false;
 }
 
-void HeavyIon::print( std::ostream &ostr ) const {
-    ostr << " HeavyIon: " << Ncoll_hard
+void GenHeavyIon::print( std::ostream &ostr ) const {
+    ostr << " GenHeavyIon: " << Ncoll_hard
          << " " << Npart_proj
          << " " << Npart_targ
          << " " << Ncoll

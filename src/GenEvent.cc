@@ -221,7 +221,7 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 }
 
-void GenEvent::set_heavy_ion(HeavyIon *hi) {
+void GenEvent::set_heavy_ion(GenHeavyIon *hi) {
      if(m_heavy_ion) delete m_heavy_ion;
      m_heavy_ion = hi;
 }

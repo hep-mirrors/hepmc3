@@ -12,7 +12,7 @@
  */
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Units.h"
-#include "HepMC/HeavyIon.h"
+#include "HepMC/GenHeavyIon.h"
 #include "HepMC/GenPdfInfo.h"
 #include "HepMC/GenCrossSection.h"
 
@@ -101,11 +101,11 @@ public:
     const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit;        } //!< Get momentum unit
     const Units::LengthUnit&   length_unit()   const { return m_length_unit;          } //!< Get length unit
 
-    const HeavyIon*            heavy_ion()     const { return m_heavy_ion;            } //!< Get heavy ion generator additional information
-    void                       set_heavy_ion(HeavyIon *hi);                             //!< Set heavy ion generator additional information
+    const GenHeavyIon*         heavy_ion()     const { return m_heavy_ion;            } //!< Get heavy ion generator additional information
+    void                       set_heavy_ion(GenHeavyIon *hi);                          //!< Set heavy ion generator additional information
 
     const GenPdfInfo*          pdf_info()      const { return m_pdf_info;             } //!< Get pdf information
-    void                       set_pdf_info(GenPdfInfo *pi);                               //!< Set pdf information
+    void                       set_pdf_info(GenPdfInfo *pi);                            //!< Set pdf information
 
     const GenCrossSection*     cross_section() const { return m_cross_section;        } //!< Get cross-section information
     void                       set_cross_section(GenCrossSection *cs);                  //!< Set cross-section information
@@ -126,7 +126,7 @@ private:
     int                         m_print_precision; //!< Printout precision
     Units::MomentumUnit         m_momentum_unit;   //!< Momentum unit
     Units::LengthUnit           m_length_unit;     //!< Length unit
-    HeavyIon                   *m_heavy_ion;       //!< Heavy ion generator additional information
+    GenHeavyIon                *m_heavy_ion;       //!< Heavy ion generator additional information
     GenPdfInfo                 *m_pdf_info;        //!< Pdf information
     GenCrossSection            *m_cross_section;   //!< Cross-section information
     std::vector<GenParticlePtr> m_particles;       //!< List of particles

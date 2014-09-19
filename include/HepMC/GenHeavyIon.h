@@ -1,10 +1,10 @@
 #ifndef  HEPMC_HEAVYION_H
 #define  HEPMC_HEAVYION_H
 /**
- *  @file HeavyIon.h
- *  @brief Definition of \b struct HeavyIon
+ *  @file GenHeavyIon.h
+ *  @brief Definition of \b struct GenHeavyIon
  *
- *  @struct HepMC::HeavyIon
+ *  @struct HepMC::GenHeavyIon
  *  @brief Stores additional information about Heavy Ion generator
  *
  *  Creation and use of this information is optional
@@ -14,7 +14,7 @@
 
 namespace HepMC {
 
-struct HeavyIon {
+struct GenHeavyIon {
 
 //
 // Fields
@@ -42,8 +42,8 @@ public:
                    int nnw=0, int nwn=0, int nwnw=0,
                    float im=0., float pl=0., float ec=0., float s=0. ); //!< Set all fields
 
-    bool      operator==( const HeavyIon& ) const; //!< Operator ==
-    bool      operator!=( const HeavyIon& ) const; //!< Operator !=
+    bool      operator==( const GenHeavyIon& ) const; //!< Operator ==
+    bool      operator!=( const GenHeavyIon& ) const; //!< Operator !=
     bool      is_valid()                    const; //!< Verify that the instance contains non-zero information
 
     void      print(std::ostream &ostr)     const; //!< Print the contents to output stream

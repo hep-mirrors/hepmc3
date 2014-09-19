@@ -10,7 +10,7 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/Setup.h"
 #include "HepMC/Units.h"
-#include "HepMC/HeavyIon.h"
+#include "HepMC/GenHeavyIon.h"
 #include "HepMC/GenPdfInfo.h"
 
 #include <fstream>
@@ -57,7 +57,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     flush();
 
     // Write heavy ion information (if present)
-    const HeavyIon *hi = evt.heavy_ion();
+    const GenHeavyIon *hi = evt.heavy_ion();
     if(hi) {
         m_cursor += sprintf(m_cursor,"H %i %i %i",hi->Ncoll_hard,hi->Npart_proj,hi->Npart_targ);
         flush();
