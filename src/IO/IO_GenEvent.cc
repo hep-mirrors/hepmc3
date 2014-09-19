@@ -11,7 +11,7 @@
 #include "HepMC/Setup.h"
 #include "HepMC/Units.h"
 #include "HepMC/HeavyIon.h"
-#include "HepMC/PdfInfo.h"
+#include "HepMC/GenPdfInfo.h"
 
 #include <fstream>
 #include <iostream>
@@ -76,21 +76,21 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     }
 
     // Write pdf information (if present)
-    const PdfInfo *pi = evt.pdf_info();
+    const GenPdfInfo *pi = evt.pdf_info();
     if(pi) {
-        m_cursor += sprintf(m_cursor,"F %i %i",pi->id1,pi->id2);
+        m_cursor += sprintf(m_cursor,"F %i %i",pi->parton_id[0],pi->parton_id[1]);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x1);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x[0]);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x2);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x[1]);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->scalePDF);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->scale);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->pdf1);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->xf[0]);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->pdf2);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->xf[1]);
         flush();
-        m_cursor += sprintf(m_cursor," %i %i\n",pi->pdf_id1,pi->pdf_id2);
+        m_cursor += sprintf(m_cursor," %i %i\n",pi->pdf_id[0],pi->pdf_id[1]);
         flush();
     }
 

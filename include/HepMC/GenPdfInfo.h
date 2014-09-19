@@ -1,10 +1,10 @@
-#ifndef  HEPMC_PDFINFO_H
-#define  HEPMC_PDFINFO_H
+#ifndef  HEPMC_GENPDFINFO_H
+#define  HEPMC_GENPDFINFO_H
 /**
- *  @file PdfInfo.h
- *  @brief Definition of \b struct PdfInfo
+ *  @file GenPdfInfo.h
+ *  @brief Definition of \b struct GenPdfInfo
  *
- *  @struct HepMC::PdfInfo
+ *  @struct HepMC::GenPdfInfo
  *  @brief Stores additional information about PDFs
  *
  *  Creation and use of this information is optional
@@ -20,32 +20,28 @@
 
 namespace HepMC {
 
-struct PdfInfo {
+struct GenPdfInfo {
 
 //
 // Fields
 //
 public:
-    int    id1;
-    int    id2;
-    int    pdf_id1;
-    int    pdf_id2;
-    double x1;
-    double x2;
-    double scalePDF;
-    double pdf1;
-    double pdf2;
+    int    parton_id[2];
+    int    pdf_id[2];
+    double scale;
+    double x[2];
+    double xf[2];
 
 //
 // Functions
 //
 public:
-    void set( int i1, int i2, double x1, double x2,
-              double q, double p1, double p2,
+    void set( int parton_id1, int parton_id2, double x1, double x2,
+              double scale_in, double xf1, double xf2,
               int pdf_id1 = 0, int pdf_id2 = 0 ); //!< Set all fields
 
-    bool      operator==( const PdfInfo& ) const; //!< Operator ==
-    bool      operator!=( const PdfInfo& ) const; //!< Operator !=
+    bool      operator==( const GenPdfInfo& ) const; //!< Operator ==
+    bool      operator!=( const GenPdfInfo& ) const; //!< Operator !=
     bool      is_valid()                   const; //!< Verify that the instance contains non-zero information
 
     void      print(std::ostream &ostr)    const; //!< Print the contents to output stream

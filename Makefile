@@ -6,7 +6,7 @@ LIB_HEPMC_SO  = libHepMC.so
 LIB_HEPMC_OBJ = src/Setup.o src/GenParticle.o src/GenVertex.o src/GenEvent.o \
                 src/Search/FilterBase.o src/Search/FilterList.o src/Search/Filter.o src/Search/FindParticles.o \
                 src/IO/IO_FileBase.o src/IO/IO_GenEvent.o src/IO/IO_HepMC2_adapter.o src/IO/IO_RootStreamer.o \
-                src/HeavyIon.o src/PdfInfo.o src/GenCrossSection.o
+                src/HeavyIon.o src/GenPdfInfo.o src/GenCrossSection.o
 
 all: lib
 
