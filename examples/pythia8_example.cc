@@ -3,6 +3,7 @@
  *
  */
 #include "HepMC/GenEvent.h"
+#include "HepMC/IO/IO_GenEvent.h"
 
 #include "Pythia8/Pythia.h"
 #include "Pythia8/Pythia8ToHepMC3.h"
@@ -17,7 +18,7 @@ int main() {
     pythia.readFile("pythia8_ee_to_Z_to_tautau.conf");
     pythia.init();
 
-    if( !pythia.next() ) return 1;
+    IO_GenEvent file("out.hepmc3",ios::out);
 
     for( int i = 0; i< 10000; ++i ) {
         if( !pythia.next() ) continue;
@@ -30,7 +31,10 @@ int main() {
             std::cout << "First event: " << std::endl;
             hepmc.print();
         }
+
+        file.write_event(hepmc);
     }
 
+    file.close();
     pythia.statistics();
 }
