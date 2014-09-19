@@ -1,3 +1,14 @@
+2014-09-19  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Changed naming convention from HepMC3 to HepMC (namespaces, comments, defines, etc.)
+
+	* Changed PdfInfo to GenPdfInfo and changed names of the fields
+
+	* Changed HeavyIon to GenHeavyIon
+
+	* Added 'examples' directory. Currently only with pythia8 example
+	  and with rushed Makefile that should be rewritten
+
 2014-09-10  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
 
 	* Added README with coding standards for HepMC developers
