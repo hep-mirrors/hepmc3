@@ -16,7 +16,7 @@ using std::cout;
 using std::endl;
 using HepMC3::HEPEVT_Wrapper;
 
-/* Defined in hepevt_wrapper_test.f */
+/* Defined in hepevt_wrapper_test_fortran.f */
 extern "C" void simple_tau_hepevt_event_();
 extern "C" void phodmp_();
 
