@@ -18,6 +18,7 @@ for arg in $* ; do
     echo "--enable-debug     : turns on build type Debug (debug flags, optimization off)"
     echo "--buildtype=value  : possible types: None, Release, Debug, MinSizeRel, RelWithDebInfo, D=Release, see CMakeLists.txt"
     echo "--with-boost=path  : path to Boost root dir"
+    echo "                     example of non-system boost: /afs/cern.ch/sw/lcg/external/Boost/1.55.0_python2.7/x86_64-slc6-gcc47-opt"
     echo "--boost-minimum=v  : minimal Boost version. Needed to choose Boost in the specified path instead of the system Boost"
     echo
     echo "Note: to obtain complete library structure do make install"
