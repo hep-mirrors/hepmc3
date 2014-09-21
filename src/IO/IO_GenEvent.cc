@@ -3,15 +3,15 @@
  *  @brief Implementation of \b class IO_GenEvent
  *
  */
-#include "HepMC3/IO/IO_GenEvent.h"
+#include "HepMC/IO/IO_GenEvent.h"
 
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/Setup.h"
-#include "HepMC3/Units.h"
-#include "HepMC3/HeavyIon.h"
-#include "HepMC3/PdfInfo.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/Setup.h"
+#include "HepMC/Units.h"
+#include "HepMC/GenHeavyIon.h"
+#include "HepMC/GenPdfInfo.h"
 
 #include <fstream>
 #include <iostream>
@@ -20,7 +20,7 @@
 #include <boost/foreach.hpp>
 using std::vector;
 
-namespace HepMC3 {
+namespace HepMC {
 
 IO_GenEvent::IO_GenEvent(const std::string &filename, std::ios::openmode mode):
 IO_FileBase(filename,mode),
@@ -57,7 +57,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     flush();
 
     // Write heavy ion information (if present)
-    const HeavyIon *hi = evt.heavy_ion();
+    const GenHeavyIon *hi = evt.heavy_ion();
     if(hi) {
         m_cursor += sprintf(m_cursor,"H %i %i %i",hi->Ncoll_hard,hi->Npart_proj,hi->Npart_targ);
         flush();
@@ -76,21 +76,21 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     }
 
     // Write pdf information (if present)
-    const PdfInfo *pi = evt.pdf_info();
+    const GenPdfInfo *pi = evt.pdf_info();
     if(pi) {
-        m_cursor += sprintf(m_cursor,"F %i %i",pi->id1,pi->id2);
+        m_cursor += sprintf(m_cursor,"F %i %i",pi->parton_id[0],pi->parton_id[1]);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x1);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x[0]);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x2);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x[1]);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->scalePDF);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->scale);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->pdf1);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->xf[0]);
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->pdf2);
+        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->xf[1]);
         flush();
-        m_cursor += sprintf(m_cursor," %i %i\n",pi->pdf_id1,pi->pdf_id2);
+        m_cursor += sprintf(m_cursor," %i %i\n",pi->pdf_id[0],pi->pdf_id[1]);
         flush();
     }
 
@@ -254,4 +254,4 @@ inline void IO_GenEvent::forced_flush() {
     m_cursor = m_buffer;
 }
 
-} // namespace HepMC3
+} // namespace HepMC

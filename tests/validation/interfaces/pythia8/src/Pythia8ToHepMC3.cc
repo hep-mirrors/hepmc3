@@ -1,16 +1,16 @@
 #include "Pythia8/Pythia8ToHepMC3.h"
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/FourVector.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/FourVector.h"
 
 #include <deque>
 #include <cassert>
 #include <boost/foreach.hpp>
 
-namespace HepMC3 {
+namespace HepMC {
 
-/** What is not in current HepMC3 implementation:
+/** What is not in current HepMC implementation:
  *  - units
  *  - color flow (will probably be removed altogether)
  *  - beam particles
@@ -123,7 +123,7 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
     for (int i = 1; i < pyev.size(); ++i) {
 
         // Check for particles not added to the event
-        // NOTE: We have to check if this step makes any sense in HepMC3 event standard
+        // NOTE: We have to check if this step makes any sense in HepMC event standard
         if ( !hepevt_particles[i] ) {
             std::cerr << "hanging particle " << i << std::endl;
 

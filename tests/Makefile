@@ -18,7 +18,7 @@ hepevt_wrapper_test_main.exe: hepevt_wrapper_test_main.o
 	$(LD) $(LDFLAGS) $< -o $@ $(HEPMC3LIBS) -Wl,-rpath,$(HEPMC3LOCATION)/lib
 
 %.o: %.cc
-	$(CC) $(CFLAGS) -c $< -o $@ $(HEPMC3INC)
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(HEPMC3INC)
 
 clean:
 	rm -f *.o *.exe catch/*.o catch/*.exe

@@ -4,19 +4,19 @@
  */
 
 /* NOTE: These two define statements can be used to change HEPEVT definition.
-         They must be defined before including HepMC3/HEPEVT_Wrapper.h
+         They must be defined before including HepMC/HEPEVT_Wrapper.h
          For this test, the same changes must be included in FORTRAN code */
 
-//#define HEPMC3_HEPEVT_NMXHEP 4000
-//#define HEPMC3_HEPEVT_PRECISION float
-#include "HepMC3/HEPEVT_Wrapper.h"
+//#define HEPMC_HEPEVT_NMXHEP 4000
+//#define HEPMC_HEPEVT_PRECISION float
+#include "HepMC/HEPEVT_Wrapper.h"
 
 #include <iostream>
 using std::cout;
 using std::endl;
-using HepMC3::HEPEVT_Wrapper;
+using HepMC::HEPEVT_Wrapper;
 
-/* Defined in hepevt_wrapper_test_fortran.f */
+/* Defined in hepevt_wrapper_test.f */
 extern "C" void simple_tau_hepevt_event_();
 extern "C" void phodmp_();
 

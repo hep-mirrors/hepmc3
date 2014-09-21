@@ -6,8 +6,8 @@
 #include "HepMC/GenEvent.h"
 #else
 #include "Photos/PhotosHepMC3Event.h"
-#include "HepMC3/Search/FindParticles.h"
-#include "HepMC3/GenEvent.h"
+#include "HepMC/Search/FindParticles.h"
+#include "HepMC/GenEvent.h"
 #endif // ifdef PHOTOSPP_HEPMC2
 
 #include "ValidationTool.h"

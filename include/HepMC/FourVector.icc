@@ -1,0 +1,129 @@
+/**
+ *  @file FourVector.icc
+ *  @brief Implementation of inline functions from \b class FourVector
+ *
+ */
+#include <cmath> // sqrt, fabs
+#include <boost/static_assert.hpp>
+
+namespace HepMC {
+
+inline const FourVector& FourVector::ZERO_VECTOR() {
+    static const FourVector v;
+    return v;
+}
+
+inline double FourVector::m() const {
+    double mm = v4*v4 - v1*v1 - v2*v2 - v3*v3;
+    if( mm < 0.0 ) return -sqrt(-mm);
+    return sqrt(mm);
+}
+
+inline double FourVector::length() const {
+    return sqrt( v1*v1 + v2*v2 + v3*v3 + v4*v4 );
+}
+
+inline bool FourVector::is_zero() const {
+    return AlmostEqualZero(v1) &&
+           AlmostEqualZero(v2) &&
+           AlmostEqualZero(v3) &&
+           AlmostEqualZero(v4);
+}
+
+inline bool FourVector::operator==(const FourVector& rhs) const {
+    return AlmostEqual2sComplement(v1,rhs.v1) &&
+           AlmostEqual2sComplement(v2,rhs.v2) &&
+           AlmostEqual2sComplement(v3,rhs.v3) &&
+           AlmostEqual2sComplement(v4,rhs.v4);
+}
+
+inline FourVector FourVector::operator+(const FourVector& rhs) const {
+    return FourVector( v1 + rhs.v1,
+                       v2 + rhs.v2,
+                       v3 + rhs.v3,
+                       v4 + rhs.v4 );
+}
+
+inline FourVector FourVector::operator-(const FourVector& rhs) const {
+    return FourVector( v1 - rhs.v1,
+                       v2 - rhs.v2,
+                       v3 - rhs.v3,
+                       v4 - rhs.v4 );
+}
+
+inline FourVector FourVector::operator*(const double rhs) const {
+    return FourVector( v1 * rhs,
+                       v2 * rhs,
+                       v3 * rhs,
+                       v4 * rhs );
+}
+
+inline FourVector FourVector::operator/(const double rhs) const {
+    return FourVector( v1 / rhs,
+                       v2 / rhs,
+                       v3 / rhs,
+                       v4 / rhs );
+}
+
+inline void FourVector::operator+=(const FourVector& rhs) {
+    v1 += rhs.v1;
+    v2 += rhs.v2;
+    v3 += rhs.v3;
+    v4 += rhs.v4;
+}
+
+inline void FourVector::operator-=(const FourVector& rhs) {
+    v1 -= rhs.v1;
+    v2 -= rhs.v2;
+    v3 -= rhs.v3;
+    v4 -= rhs.v4;
+}
+
+inline void FourVector::operator*=(const double rhs) {
+    v1 *= rhs;
+    v2 *= rhs;
+    v3 *= rhs;
+    v4 *= rhs;
+}
+
+inline void FourVector::operator/=(const double rhs) {
+    v1 /= rhs;
+    v2 /= rhs;
+    v3 /= rhs;
+    v4 /= rhs;
+}
+
+inline bool FourVector::AlmostEqualZero(double A) {
+    return fabs(A) < Setup::DOUBLE_EPSILON;
+}
+
+inline bool FourVector::AlmostEqual2sComplement(double A, double B, unsigned int maxUlps) {
+
+    /** @todo Currently only works on 64-bit machine */
+    BOOST_STATIC_ASSERT( sizeof(double)==8 && sizeof(long long)==8 );
+    static const long long MASK = 0x8000000000000000;
+
+    // Not equal if sign is not equal
+    bool isNegativeA = (A < 0);
+    bool isNegativeB = (B < 0);
+    if( isNegativeA != isNegativeB ) return false;
+
+    long long *aInt = reinterpret_cast<long long*>(&A);
+    // Make aInt lexicographically ordered as a twos-complement int
+    if( *aInt < 0 )
+        *aInt = MASK - *aInt;
+
+    // Make bInt lexicographically ordered as a twos-complement int
+    long long *bInt = reinterpret_cast<long long*>(&B);
+    if( *bInt < 0 )
+        *bInt = MASK - *bInt;
+
+    long long intDiff = aInt - bInt;
+    if( intDiff < 0 ) intDiff= intDiff*-1;
+
+    if( intDiff <= maxUlps ) return true;
+
+    return false;
+}
+
+} // namespace HepMC

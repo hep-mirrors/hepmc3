@@ -9,10 +9,10 @@ using namespace std;
 namespace Photospp
 {
 
-PhotosHepMC3Event::PhotosHepMC3Event(HepMC3::GenEvent * event)
+PhotosHepMC3Event::PhotosHepMC3Event(HepMC::GenEvent * event)
 {
         m_event=event;
-        BOOST_FOREACH( const HepMC3::GenParticlePtr &p, m_event->particles() )
+        BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_event->particles() )
         {
                 PhotosParticle *particle = new PhotosHepMC3Particle(p);
                 particles.push_back(particle);
@@ -29,7 +29,7 @@ PhotosHepMC3Event::~PhotosHepMC3Event()
         }
 }
 
-HepMC3::GenEvent * PhotosHepMC3Event::getEvent()
+HepMC::GenEvent * PhotosHepMC3Event::getEvent()
 {
         return m_event;
 }

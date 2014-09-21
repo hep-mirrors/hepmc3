@@ -5,7 +5,7 @@
 #include "HepMC/GenEvent.h"
 #include "Pythia8/Pythia8ToHepMC.h"
 #else
-#include "HepMC3/GenEvent.h"
+#include "HepMC/GenEvent.h"
 #include "Pythia8/Pythia8ToHepMC3.h"
 #endif // ifdef PYTHIA8_HEPMC2
 
@@ -33,7 +33,7 @@ private:
     std::string     m_filename;
     Timer           m_timer;
     HEPMC2CODE( HepMC::Pythia8ToHepMC   m_tohepmc; )
-    HEPMC3CODE( HepMC3::Pythia8ToHepMC3 m_tohepmc; )
+    HEPMC3CODE( HepMC::Pythia8ToHepMC3 m_tohepmc; )
 };
 
 #endif

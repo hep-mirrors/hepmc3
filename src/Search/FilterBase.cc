@@ -3,10 +3,10 @@
  *  @brief Definition of \b class FilterBase
  *
  */
-#include "HepMC3/Search/FilterBase.h"
-#include "HepMC3/Search/Filter.h"
+#include "HepMC/Search/FilterBase.h"
+#include "HepMC/Search/Filter.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 // Define operators for integer-type filters
 Filter FilterBase::operator==(int value) const { return Filter(m_int,EQUAL,           value); }
@@ -21,4 +21,4 @@ const Filter FilterBase::init_has_end_vertex()           { return Filter(HAS_END
 const Filter FilterBase::init_has_production_vertex()    { return Filter(HAS_PRODUCTION_VERTEX);    }
 const Filter FilterBase::init_has_same_pdg_id_daughter() { return Filter(HAS_SAME_PDG_ID_DAUGHTER); }
 
-} // namespace HepMC3
+} // namespace HepMC

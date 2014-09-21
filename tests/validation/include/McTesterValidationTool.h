@@ -5,7 +5,7 @@
 #include "HepMC/GenEvent.h"
 #include "HepMCEvent.H"
 #else
-#include "HepMC3/GenEvent.h"
+#include "HepMC/GenEvent.h"
 #include "HepMC3Event.h"
 #endif // ifdef MCTESTER_HEPMC2
 

@@ -3,16 +3,16 @@
  *  @brief Implementation of \b class Filter
  *
  */
-#include "HepMC3/Search/Filter.h"
+#include "HepMC/Search/Filter.h"
 
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/Setup.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/Setup.h"
 
 #include <boost/foreach.hpp>
 
-namespace HepMC3 {
+namespace HepMC {
 
 bool Filter::passed_filter(const GenParticlePtr &p) const {
 
@@ -93,4 +93,4 @@ bool Filter::passed_bool_filter(const GenParticlePtr &p ) const {
     return result;
 }
 
-} // namespace HepMC3
+} // namespace HepMC

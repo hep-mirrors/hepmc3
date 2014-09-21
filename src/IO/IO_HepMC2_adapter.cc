@@ -3,17 +3,17 @@
  *  @brief Implementation of \b class IO_HepMC2_adapter
  *
  */
-#include "HepMC3/IO/IO_HepMC2_adapter.h"
+#include "HepMC/IO/IO_HepMC2_adapter.h"
 
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/Setup.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenVertex.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/Setup.h"
 
 #include <cstring>
 #include <cstdlib>
 
-namespace HepMC3 {
+namespace HepMC {
 
 IO_HepMC2_adapter::IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode):
 IO_FileBase(filename,mode) {
@@ -383,4 +383,4 @@ int IO_HepMC2_adapter::parse_particle_information(const char *buf) {
     return 0;
 }
 
-} // namespace HepMC3
+} // namespace HepMC

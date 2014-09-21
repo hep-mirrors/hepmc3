@@ -4,12 +4,12 @@
 /**
  * @class TauolaHepMC3Particle
  *
- * @brief Interface to HepMC3::GenParticle objects
+ * @brief Interface to HepMC::GenParticle objects
  *
  * This class implements the virtual methods of
  * TauolaParticle. In this way it provides an
  * interface between the generic TauolaParticle class
- * and a HepMC3::GenParticle object.
+ * and a HepMC::GenParticle object.
  *
  * This code is licensed under GNU General Public Licence.
  * For more informations, see: http://www.gnu.org/licenses/
@@ -18,9 +18,9 @@
 #include <iostream>
 #include <vector>
 
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/FourVector.h"
-#include "HepMC3/GenEvent.h"
+#include "HepMC/GenParticle.h"
+#include "HepMC/FourVector.h"
+#include "HepMC/GenEvent.h"
 
 //#include "DecayList.h"
 #include "Tauola/TauolaParticle.h"
@@ -37,15 +37,15 @@ class TauolaHepMC3Particle: public TauolaParticle{
 
   ~TauolaHepMC3Particle();
 
-  /** Constructor which keeps a pointer to the HepMC3::GenParticle*/
-  TauolaHepMC3Particle(HepMC3::GenParticlePtr particle);
+  /** Constructor which keeps a pointer to the HepMC::GenParticle*/
+  TauolaHepMC3Particle(HepMC::GenParticlePtr particle);
 
-  /** Constructor which creates a new HepMC3::GenParticle and
+  /** Constructor which creates a new HepMC::GenParticle and
        sets the properties pdg_id, statu and mass. */
   TauolaHepMC3Particle(int pdg_id, int status, double mass);
 
-  /** Returns the HepMC3::GenParticlePtr */
-  HepMC3::GenParticlePtr getHepMC3();
+  /** Returns the HepMC::GenParticlePtr */
+  HepMC::GenParticlePtr getHepMC3();
 
   /** Remove the decay branch from the event record and reset the particle status code to stable. */
   void undecay();
@@ -131,10 +131,10 @@ class TauolaHepMC3Particle: public TauolaParticle{
 private:
 
   /** Sets the position for whole decay tree starting from given particle */
-  void recursiveSetPosition(HepMC3::GenParticlePtr p,HepMC3::FourVector pos);
+  void recursiveSetPosition(HepMC::GenParticlePtr p,HepMC::FourVector pos);
 
-  /** A pointer to the HepMC3::GenParticle particle */
-  HepMC3::GenParticlePtr m_particle;
+  /** A pointer to the HepMC::GenParticle particle */
+  HepMC::GenParticlePtr m_particle;
 
   /** A list of mothers */
   std::vector<TauolaParticle*> m_mothers;

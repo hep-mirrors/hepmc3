@@ -5,13 +5,13 @@
  */
 #include <iostream>
 #include <fstream>
-#include "HepMC3/IO/IO_FileBase.h"
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/Setup.h"
+#include "HepMC/IO/IO_FileBase.h"
+#include "HepMC/GenEvent.h"
+#include "HepMC/Setup.h"
 using std::ostream;
 using std::endl;
 
-namespace HepMC3 {
+namespace HepMC {
 
 IO_FileBase::IO_FileBase(const std::string& filename, std::ios::openmode mode):
 m_file(filename.c_str(),mode | std::ios::binary) {
@@ -49,4 +49,4 @@ void IO_FileBase::close() {
     m_file.clear(std::ios::badbit);
 }
 
-} // namespace HepMC3
+} // namespace HepMC

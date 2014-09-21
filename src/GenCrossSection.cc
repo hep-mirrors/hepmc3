@@ -3,9 +3,9 @@
  *  @brief Implementation of \b struct GenCrossSection
  *
  */
-#include "HepMC3/GenCrossSection.h"
+#include "HepMC/GenCrossSection.h"
 
-namespace HepMC3 {
+namespace HepMC {
 
 bool GenCrossSection::operator==( const GenCrossSection& a ) const {
     return (    a.cross_section       == this->cross_section
@@ -22,4 +22,4 @@ void GenCrossSection::print( std::ostream & ostr) const {
          << " " << std::endl;
 }
 
-} // namespace HepMC3
+} // namespace HepMC
