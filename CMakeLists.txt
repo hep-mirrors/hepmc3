@@ -10,7 +10,7 @@ project(HepMC3 CXX Fortran)
 
 #---Find Boost---------------------------------------------------------------
 
-find_package(Boost ${BOOST_MINVERSION} REQUIRED)
+find_package(Boost 1.40 REQUIRED)
 message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
 
 #---Compilation and Link options---------------------------------------------
