@@ -6,6 +6,16 @@ project(HepMC3 CXX Fortran)
 #----------------------------------------------------------------------------
 
 #----------------------------------------------------------------------------
+# - Prepend our own CMake Modules to the search path
+# This allows us to customize, add, and factor out functionality
+# NB: if our custom modules include others that we don't supply, those in the
+# base path will be used, so watch for incompatibilities!!
+#
+set(CMAKE_MODULE_PATH
+    ${PROJECT_SOURCE_DIR}/cmake/Modules
+    ${CMAKE_MODULE_PATH})
+
+#----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 
 #---Find Boost---------------------------------------------------------------
@@ -64,17 +74,17 @@ install(TARGETS HepMC DESTINATION lib)
 install(TARGETS HepMC_static DESTINATION lib)
 install(DIRECTORY include/ DESTINATION include)
 
-#---Add executables------------------------------------------------------------
 
-add_executable(basic_tree ${PROJECT_SOURCE_DIR}/tests/basic_tree.cc)
-target_link_libraries(basic_tree HepMC)
-set_target_properties(basic_tree PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/tests)
+#------------------------------------------------------------------------------
+# Add the examples and tests subdirectories
+if(HEPMC_ENABLE_TESTING)
+  add_subdirectory(tests)
+endif()
 
-add_executable(hepevt_wrapper_test ${PROJECT_SOURCE_DIR}/tests/hepevt_wrapper_test_main.cc ${PROJECT_SOURCE_DIR}/tests/hepevt_wrapper_test_fortran.f)
-target_link_libraries(hepevt_wrapper_test HepMC_static)
-set_target_properties(hepevt_wrapper_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/tests)
+if(HEPMC_BUILD_EXAMPLES)
+  set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
+  add_subdirectory(examples)
+endif()
 
-add_executable(HepMC2_to_3_converter_test ${PROJECT_SOURCE_DIR}/tests/HepMC2_to_3_converter_test.cc)
-target_link_libraries(HepMC2_to_3_converter_test HepMC_static)
-set_target_properties(HepMC2_to_3_converter_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/tests)
+
 
