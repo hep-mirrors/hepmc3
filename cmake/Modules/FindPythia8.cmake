@@ -13,6 +13,8 @@ find_library(PYTHIA8_LIBRARIES NAMES pythia8
              HINTS $ENV{PYTHIA8_ROOT_DIR}/lib ${PYTHIA8_ROOT_DIR}/lib
              HINTS $ENV{PYTHIA8_DIR}/lib ${PYTHIA8_DIR}/lib)
 
+message(STATUS "Pythia8 include directory: ${PYTHIA8_INCLUDE_DIR}")
+
 # handle the QUIETLY and REQUIRED arguments and set PYTHIA8_FOUND to TRUE if
 # all listed variables are TRUE
 INCLUDE(FindPackageHandleStandardArgs)
