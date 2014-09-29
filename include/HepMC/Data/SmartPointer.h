@@ -24,11 +24,12 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+
+namespace HepMC {
+
 using boost::weak_ptr;
 using boost::shared_ptr;
 using boost::make_shared;
-
-namespace HepMC {
 
 template<class T>
 class SmartPointer {
