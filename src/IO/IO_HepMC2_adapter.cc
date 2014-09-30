@@ -152,7 +152,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
 
     if( !is_parsing_successful ) {
         ERROR( "IO_HepMC2_adapter: event parsing failed. Returning empty event" )
-        DEBUG( 1, "Parsed failed at line:" << std::endl << buf )
+        DEBUG( 1, "Parsing failed at line:" << std::endl << buf )
         //event->clear();
         m_file.clear(std::ios::badbit);
         return 0;

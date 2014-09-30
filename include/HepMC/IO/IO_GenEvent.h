@@ -71,6 +71,7 @@ private:
 
     void flush();        //!< Inline function flushing buffer to output stream when close to buffer capacity
     void forced_flush(); //!< Inline function forcing flush to the output stream
+
 private:
     /** @brief Write vertex
      *
@@ -83,6 +84,40 @@ private:
      *  Helper routine for writing single particle to file
      */
     void write_particle(const GenParticlePtr &p, int second_field, bool is_new_version);
+
+private:
+    /** @brief Parse event
+     *
+     *  Helper routine for parsing event information
+     *  @param[out] evt Event that will be filled with new data
+     *  @param[in]  buf Line of text that needs to be parsed
+     *  @return vertices count and particles count for verification
+     */
+    std::pair<int,int> parse_event_information(GenEvent &evt, const char *buf);
+
+    /** @brief Parse units
+     *
+     *  Helper routine for parsing units information
+     *  @param[out] evt Event that will be filled with unit information
+     *  @param[in]  buf Line of text that needs to be parsed
+     */
+    bool parse_units(GenEvent &evt, const char *buf);
+
+    /** @brief Parse vertex
+     *
+     *  Helper routine for parsing single event information
+     *  @param[out] evt Event that will contain parsed vertex
+     *  @param[in] buf Line of text that needs to be parsed
+     */
+    bool parse_vertex_information(GenEvent &evt, const char *buf);
+
+    /** @brief Parse particle
+     *
+     *  Helper routine for parsing single particle information
+     *  @param[out] evt Event that will contain parsed particle
+     *  @param[in] buf Line of text that needs to be parsed
+     */
+    bool parse_particle_information(GenEvent &evt, const char *buf);
 
 //
 // Accessors

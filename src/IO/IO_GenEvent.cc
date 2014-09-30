@@ -131,18 +131,6 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     forced_flush();
 }
 
-bool IO_GenEvent::fill_next_event(GenEvent &evt) {
-    if ( m_file.rdstate() ) return 0;
-    if ( m_mode != std::ios::in ) {
-        ERROR( "IO_GenEvent: attempting to read from output file" )
-        return 0;
-    }
-
-    WARNING( "IO_GenEvent: Reading not implemented (yet)" )
-
-    return 1;
-}
-
 void IO_GenEvent::allocate_buffer() {
     if( m_buffer ) return;
     while( !m_buffer && m_buffer_size >= 256 ) {
@@ -236,6 +224,281 @@ inline void IO_GenEvent::write_string( const std::string &str ) {
         forced_flush();
         m_file.write( str.data(), str.length() );
     }
+}
+
+bool IO_GenEvent::fill_next_event(GenEvent &evt) {
+    if ( m_file.rdstate() ) return false;
+    if ( m_mode != std::ios::in ) {
+        ERROR( "IO_GenEvent: attempting to read from output file" )
+        return false;
+    }
+
+    char               buf[512];
+    bool               parsed_event_header    = false;
+    bool               is_parsing_successful  = true;
+    std::pair<int,int> vertices_and_particles(0,0);
+
+    //
+    // Parse event, vertex and particle information
+    //
+    while(!m_file.rdstate()) {
+        m_file.getline(buf,512);
+
+        if( strlen(buf) == 0 ) continue;
+
+        // Check for IO_GenEvent header/footer
+        if( strncmp(buf,"HepMC",5) == 0 ) {
+            if(parsed_event_header) {
+                is_parsing_successful = true;
+                break;
+            }
+            continue;
+        }
+
+        switch(buf[0]) {
+            case 'E':
+                vertices_and_particles = parse_event_information(evt,buf);
+                if(vertices_and_particles.second<0) {
+                    is_parsing_successful = false;
+                }
+                else {
+                    is_parsing_successful = true;
+                    parsed_event_header   = true;
+                }
+                break;
+            case 'V':
+                is_parsing_successful = parse_vertex_information(evt,buf);
+                break;
+            case 'P':
+                is_parsing_successful = parse_particle_information(evt,buf);
+                break;
+            case 'U':
+                is_parsing_successful = parse_units(evt,buf);
+                break;
+            case 'T':
+                DEBUG( 10, "IO_GenEvent: T: skipping version (for now)" )
+                is_parsing_successful = true;
+                break;
+            case 'F':
+                DEBUG( 10, "IO_GenEvent: F: skipping Flow" )
+                is_parsing_successful = true;
+                break;
+            case 'H':
+                DEBUG( 10, "IO_GenEvent: H: skipping Heavy Ions (for now)" )
+                is_parsing_successful = true;
+                break;
+            default:
+                WARNING( "IO_GenEvent: skipping unrecognised prefix: " << buf[0] )
+                is_parsing_successful = true;
+                break;
+        }
+
+        if( !is_parsing_successful ) break;
+
+        // Check for next event
+        buf[0] = m_file.peek();
+        if( parsed_event_header && buf[0]=='E' ) break;
+    }
+
+    // Check if all particles and vertices were parsed
+    if( (int)evt.vertices_count()  != vertices_and_particles.first ||
+        (int)evt.particles_count() != vertices_and_particles.second ) {
+        ERROR( "IO_GenEvent: not all particles or vertices were parsed" )
+        is_parsing_successful = false;
+    }
+
+    // Check if there were errors during parsing
+    if( !is_parsing_successful ) {
+        ERROR( "IO_GenEvent: event parsing failed. Returning empty event" )
+        DEBUG( 1, "Parsing failed at line:" << std::endl << buf )
+        //event->clear();
+        m_file.clear(std::ios::badbit);
+        return false;
+    }
+
+    return true;
+}
+
+std::pair<int,int> IO_GenEvent::parse_event_information(GenEvent &evt, const char *buf) {
+    static const std::pair<int,int>  err(-1,-1);
+    std::pair<int,int>               ret(-1,-1);
+    const char                      *cursor   = buf;
+    int                              event_no = 0;
+
+    // event number
+    if( !(cursor = strchr(cursor+1,' ')) ) return err;
+    event_no = atoi(cursor);
+    evt.set_event_number(event_no);
+
+    // num_vertices
+    if( !(cursor = strchr(cursor+1,' ')) ) return err;
+    ret.first = atoi(cursor);
+
+    // num_particles
+    if( !(cursor = strchr(cursor+1,' ')) ) return err;
+    ret.second = atoi(cursor);
+
+    DEBUG( 10, "IO_GenEvent: E: "<<event_no<<" ("<<ret.first<<"V, "<<ret.second<<"P)" )
+
+    return ret;
+}
+
+bool IO_GenEvent::parse_units(GenEvent &evt, const char *buf) {
+    const char *cursor  = buf;
+
+    // momentum
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    ++cursor;
+    Units::MomentumUnit momentum_unit = Units::momentum_unit(cursor);
+
+    // length
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    ++cursor;
+    Units::LengthUnit length_unit = Units::length_unit(cursor);
+
+    evt.set_units(momentum_unit,length_unit);
+
+    DEBUG( 10, "IO_GenEvent: U: " << Units::name(evt.momentum_unit()) << " " << Units::name(evt.length_unit()) )
+
+    return true;
+}
+
+bool IO_GenEvent::parse_vertex_information(GenEvent &evt, const char *buf) {
+    GenVertexPtr  data = make_shared<GenVertex>();
+    FourVector    position;
+    const char   *cursor          = buf;
+    const char   *cursor2         = NULL;
+    int           barcode         = 0;
+    int           particle_in     = 0;
+    int           highest_barcode = evt.particles_count();
+
+    // barcode
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    barcode = atoi(cursor);
+
+    // skip to the list of particles
+    if( !(cursor = strchr(cursor+1,'[')) ) return false;
+
+    while(true) {
+        ++cursor;             // skip the '[' or ',' character
+        cursor2     = cursor; // save cursor position
+        particle_in = atoi(cursor);
+
+        // add incoming particle to the vertex
+        if( particle_in > 0 && particle_in <= highest_barcode) {
+            data->add_particle_in( evt.particles()[particle_in-1] );
+        }
+        else {
+            return false;
+        }
+
+        // check for next particle or end of particle list
+        if( !(cursor = strchr(cursor+1,',')) ) {
+            if( !(cursor = strchr(cursor2+1,']')) ) return false;
+            break;
+        }
+    }
+
+    // check if there is position information
+    if( (cursor = strchr(cursor+1,'@')) ) {
+
+        // x
+        if( !(cursor = strchr(cursor+1,' ')) ) return false;
+        position.setX(atof(cursor));
+
+        // y
+        if( !(cursor = strchr(cursor+1,' ')) ) return false;
+        position.setY(atof(cursor));
+
+        // z
+        if( !(cursor = strchr(cursor+1,' ')) ) return false;
+        position.setZ(atof(cursor));
+
+        // t
+        if( !(cursor = strchr(cursor+1,' ')) ) return false;
+        position.setT(atof(cursor));
+        data->set_position( position );
+
+    }
+
+    DEBUG( 10, "IO_GenEvent: V: "<<barcode<<" with "<<data->particles_in().size()<<" particles)" )
+
+    evt.add_vertex(data);
+
+    return true;
+}
+
+bool IO_GenEvent::parse_particle_information(GenEvent &evt, const char *buf) {
+    GenParticlePtr  data = make_shared<GenParticle>();
+    FourVector      momentum;
+    const char     *cursor  = buf;
+    int             mother_barcode = 0;
+
+    // verify barcode
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+
+    if( atoi(cursor) != (int)evt.particles_count() + 1 ) {
+        ERROR( "IO_GenEvent: particle barcode mismatch" )
+        return false;
+    }
+
+    // mother barcode
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    mother_barcode = atoi(cursor);
+
+    // add particle to corresponding vertex
+    if( mother_barcode > 0 && mother_barcode <= (int)evt.particles_count() ) {
+
+        GenParticlePtr mother = evt.particles()[ mother_barcode-1 ];
+        GenVertexPtr   vertex = mother->end_vertex();
+
+        // create new vertex if needed
+        if( !vertex ) {
+            vertex = make_shared<GenVertex>();
+            vertex->add_particle_in(mother);
+        }
+
+        vertex->add_particle_out(data);
+        evt.add_vertex(vertex);
+    }
+    else if( mother_barcode < 0 && -mother_barcode <= (int)evt.vertices_count() ) {
+        evt.vertices()[ (-mother_barcode)-1 ]->add_particle_out(data);
+    }
+
+    // pdg id
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    data->set_pdg_id( atoi(cursor) );
+
+    // px
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    momentum.setPx(atof(cursor));
+
+    // py
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    momentum.setPy(atof(cursor));
+
+    // pz
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    momentum.setPz(atof(cursor));
+
+    // pe
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    momentum.setE(atof(cursor));
+    data->set_momentum(momentum);
+
+    // m
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    data->set_generated_mass( atof(cursor) );
+
+    // status
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    data->set_status( atoi(cursor) );
+
+    evt.add_particle(data);
+
+    DEBUG( 10, "IO_GenEvent: P: "<<data->barcode()<<" ( mother: "<<mother_barcode<<", pdg_id: "<<data->pdg_id()<<")" )
+
+    return true;
 }
 
 inline void IO_GenEvent::flush() {
