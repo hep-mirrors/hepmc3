@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 # earlier cmake versions are unable to find all Boost configurations
 #
 #----------------------------------------------------------------------------
-project(HepMC3 CXX Fortran)
+project(HepMC3)
 #----------------------------------------------------------------------------
 
 #----------------------------------------------------------------------------
@@ -22,6 +22,12 @@ set(CMAKE_MODULE_PATH
 
 find_package(Boost 1.40 REQUIRED)
 message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
+
+#---Enable FORTRAN (unfortunatelly is not not possible in all cases)-------------------------------
+if(NOT CMAKE_GENERATOR STREQUAL Xcode)
+enable_language(Fortran OPTIONAL)
+endif()
+
 
 #---Compilation and Link options---------------------------------------------
 
