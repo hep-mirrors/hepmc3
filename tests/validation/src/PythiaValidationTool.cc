@@ -14,7 +14,7 @@ int PythiaValidationTool::process(GenEvent &hepmc) {
     // Exclude generation time
     m_timer.start();
 
-    m_tohepmc.fill_next_event(m_pythia.event, &hepmc);
+    m_tohepmc.fill_next_event(m_pythia.event, &hepmc, -1, &m_pythia.info);
 
     return 0;
 }

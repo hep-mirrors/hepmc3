@@ -103,6 +103,8 @@ private:
      */
     bool parse_units(GenEvent &evt, const char *buf);
 
+    bool parse_pdf_info(GenEvent &evt, const char *buf);
+
     /** @brief Parse vertex
      *
      *  Helper routine for parsing single event information

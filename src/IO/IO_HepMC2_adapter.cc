@@ -116,7 +116,7 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
                 is_parsing_successful = parse_units(evt,buf);
                 break;
             case 'F':
-                DEBUG( 10, "IO_HepMC2_adapter: F: skipping Flow" )
+                DEBUG( 10, "IO_HepMC2_adapter: F: skipping PdfInfo" )
                 is_parsing_successful = true;
                 break;
             case 'H':
