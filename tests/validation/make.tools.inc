@@ -1,4 +1,4 @@
-INTERFACEDIRECTORY = interfaces/
+INTERFACEDIRECTORY = $(HEPMC3LOCATION)/interfaces/
 
 #
 # Photos++

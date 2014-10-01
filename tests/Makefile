@@ -5,6 +5,7 @@ HEPMC3LIBS     = -L$(HEPMC3LOCATION)/lib -lHepMC
 
 TESTS = basic_tree.exe \
         HepMC2_to_3_converter_test.exe \
+        HepMC3_fileIO_test.exe \
         hepevt_wrapper_test_main.exe
 
 all: $(TESTS)

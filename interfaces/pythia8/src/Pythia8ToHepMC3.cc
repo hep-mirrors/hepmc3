@@ -36,13 +36,8 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
         evt->set_event_number(m_internal_event_number);
         ++m_internal_event_number;
     }
-/*
-    // Conversion factors from Pythia units GeV and mm to HepMC ones.
-    double momFac = HepMC::Units::conversion_factor(HepMC::Units::GEV,evt->momentum_unit());
-    double lenFac = HepMC::Units::conversion_factor(HepMC::Units::MM,evt->length_unit());
-*/
-    double momFac = 1.;
-    double lenFac = 1.;
+
+    evt->set_units(HepMC::Units::GEV,HepMC::Units::MM);
 
     // 2. Fill particle information
     std::vector<GenParticlePtr> hepevt_particles;
@@ -50,14 +45,14 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
 
     for(int i=0;i<pyev.size(); ++i) {
         hepevt_particles.push_back( make_shared<GenParticle>( FourVector( pyev[i].px(), pyev[i].py(),
-                                                              pyev[i].pz(), pyev[i].e() ) * momFac,
+                                                              pyev[i].pz(), pyev[i].e() ),
                                                               pyev[i].id(), pyev.statusHepMC(i) )
                                   );
 
 /*
         hepevt_particles[i]->suggest_barcode(i);
 */
-        hepevt_particles[i]->set_generated_mass( momFac * pyev[i].m() );
+        hepevt_particles[i]->set_generated_mass( pyev[i].m() );
 
 /*
         // Colour flow uses index 1 and 2.
@@ -89,8 +84,6 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
             }
             FourVector prod_pos( pyev[i].xProd(), pyev[i].yProd(),
                                  pyev[i].zProd(), pyev[i].tProd() );
-
-            prod_pos *= lenFac;
 
             // Update vertex position if necessary
             if(!prod_pos.is_zero() && prod_vtx->position().is_zero()) prod_vtx->set_position( prod_pos );
@@ -146,7 +139,7 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
         }
     }
 
-/*
+
     // 5. Store PDF, weight, cross section and other event information.
     // Flavours of incoming partons.
     if (m_store_pdf && pyinfo != 0) {
@@ -157,11 +150,13 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
             if (id2pdf == 21) id2pdf = 0;
         }
 
+        GenPdfInfo *pdfinfo = new GenPdfInfo();
+        pdfinfo->set(id1pdf, id2pdf, pyinfo->x1pdf(),
+                     pyinfo->x2pdf(), pyinfo->QFac(), pyinfo->pdf1(), pyinfo->pdf2() );
         // Store PDF information.
-        evt->set_pdf_info( PdfInfo( id1pdf, id2pdf, pyinfo->x1pdf(),
-        pyinfo->x2pdf(), pyinfo->QFac(), pyinfo->pdf1(), pyinfo->pdf2() ) );
+        evt->set_pdf_info( pdfinfo );
     }
-
+/*
     // Store process code, scale, alpha_em, alpha_s.
     if (m_store_proc && pyinfo != 0) {
         evt->set_signal_process_id( pyinfo->code() );
@@ -169,17 +164,18 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
         if (evt->alphaQED() <= 0) evt->set_alphaQED( pyinfo->alphaEM() );
         if (evt->alphaQCD() <= 0) evt->set_alphaQCD( pyinfo->alphaS() );
     }
-
+*/
     // Store cross-section information in pb and event weight. The latter is
     // usually dimensionless, but in units of pb for Les Houches strategies +-4.
     if (m_store_xsec && pyinfo != 0) {
-        HepMC::GenCrossSection xsec;
-        xsec.set_cross_section( pyinfo->sigmaGen() * 1e9,
-        pyinfo->sigmaErr() * 1e9);
+        HepMC::GenCrossSection *xsec = new GenCrossSection();
+        xsec->set_cross_section( pyinfo->sigmaGen() * 1e9, pyinfo->sigmaErr() * 1e9);
         evt->set_cross_section(xsec);
+/*
         evt->weights().push_back( pyinfo->weight() );
-    }
 */
+    }
+
     // Done.
     return true;
 }
