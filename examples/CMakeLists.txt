@@ -14,6 +14,7 @@ if(PYTHIA8_FOUND)
   set_target_properties(pythia8_example PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/runtime)
 
 install(TARGETS pythia8_example DESTINATION bin)
+install(FILES pythia8_ee_to_Z_to_tautau.conf DESTINATION bin)
 
 else()
   message(STATUS "Examples: Pythia8 package not found. ") 
