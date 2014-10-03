@@ -80,7 +80,6 @@ install(TARGETS HepMC DESTINATION lib)
 install(TARGETS HepMC_static DESTINATION lib)
 install(DIRECTORY include/ DESTINATION include)
 
-
 #------------------------------------------------------------------------------
 # Add the examples and tests subdirectories
 if(HEPMC_ENABLE_TESTING)
