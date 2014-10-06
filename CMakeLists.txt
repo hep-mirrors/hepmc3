@@ -91,5 +91,7 @@ if(HEPMC_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
-
+if(HEPMC_BUILD_ROOTIO)
+  add_subdirectory(rootio)
+endif()
 
