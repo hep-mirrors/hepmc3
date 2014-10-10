@@ -72,13 +72,13 @@ file(GLOB hepmc3_sources_Search ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
 
 add_library(HepMC SHARED ${hepmc3_sources} ${hepmc3_sources_IO} ${hepmc3_sources_Search})
 add_library(HepMC_static STATIC ${hepmc3_sources} ${hepmc3_sources_IO} ${hepmc3_sources_Search})
-set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/library)
-set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/library)
+set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
+set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 
 #---Install build products---------------------------------------------------
 install(TARGETS HepMC DESTINATION lib)
 install(TARGETS HepMC_static DESTINATION lib)
-install(DIRECTORY include/ DESTINATION include)
+install(DIRECTORY include/ DESTINATION include COMPONENT headers)
 
 #------------------------------------------------------------------------------
 # Add the examples and tests subdirectories
@@ -95,3 +95,22 @@ if(HEPMC_BUILD_ROOTIO)
   add_subdirectory(rootio)
 endif()
 
+add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
+                                   -DCOMPONENTS="headers"
+                                   -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
+
+# Generate config CMake files to be used by other projects
+#
+
+include(CMakePackageConfigHelpers)
+
+set(INCLUDE_INSTALL_DIR include )
+set(LIB_INSTALL_DIR lib)
+set(CONFIG_INSTALL_DIR cmake )
+
+configure_package_config_file(cmake/Templates/HepMCConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/outputs/cmake/HepMCConfig.cmake
+                                 INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
+                                 PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/cmake/HepMCConfig.cmake 
+           DESTINATION ${CONFIG_INSTALL_DIR} )
