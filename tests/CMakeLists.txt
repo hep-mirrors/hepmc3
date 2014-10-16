@@ -27,3 +27,9 @@ target_link_libraries(HepMC2_to_3_converter_test HepMC_static)
 set_target_properties(HepMC2_to_3_converter_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/runtime)
 
 install(TARGETS HepMC2_to_3_converter_test DESTINATION bin)
+
+add_executable(HepMC3_fileIO_test ${PROJECT_SOURCE_DIR}/tests/HepMC3_fileIO_test.cc)
+target_link_libraries(HepMC3_fileIO_test HepMC_static)
+set_target_properties(HepMC3_fileIO_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/runtime)
+
+install(TARGETS HepMC3_fileIO_test DESTINATION bin)
