@@ -15,7 +15,7 @@
 namespace HepMC {
 
 struct GenVertexData {
-    FourVector position; //!< Position in time-space
+    FourVector position; // Position in time-space
 };
 
 } // namespace HepMC

@@ -45,13 +45,13 @@ public:
 // Accessors
 //
 public:
-    GenEventData& data() { return m_data; } //!< Get event data
+    GenEventData& data() { return m_data; } // Get event data
 
 //
 // Fields
 //
 private:
-    GenEventData m_data; //!< Event data
+    GenEventData m_data; // Event data
 };
 
 } // namespace HepMC

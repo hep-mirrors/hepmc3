@@ -91,10 +91,6 @@ if(HEPMC_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
-if(HEPMC_BUILD_ROOTIO)
-  add_subdirectory(rootio)
-endif()
-
 add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
                                    -DCOMPONENTS="headers"
                                    -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )

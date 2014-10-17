@@ -118,10 +118,10 @@ public:
 public:
     static const FourVector& ZERO_VECTOR(); //!< FourVector(0,0,0,0)
 private:
-    double v1; //!< px or x. Interpretation depends on accessors used
-    double v2; //!< py or y. Interpretation depends on accessors used
-    double v3; //!< pz or z. Interpretation depends on accessors used
-    double v4; //!< e  or t. Interpretation depends on accessors used
+    double v1; // px or x. Interpretation depends on accessors used
+    double v2; // py or y. Interpretation depends on accessors used
+    double v3; // pz or z. Interpretation depends on accessors used
+    double v4; //e  or t. Interpretation depends on accessors used
 };
 
 } // namespace HepMC
