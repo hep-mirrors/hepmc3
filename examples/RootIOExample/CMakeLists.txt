@@ -32,5 +32,6 @@ ${CMAKE_SOURCE_DIR}/examples/RootIOExample/rootIO_example_env.sh.in
 # installs 
 install(TARGETS rootIO_example DESTINATION bin)
 install(FILES hepmc.in DESTINATION bin)
+install(TARGETS rootIO_example_ClassesDict DESTINATION lib)
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin/ DESTINATION bin
         FILES_MATCHING PATTERN "*.sh")

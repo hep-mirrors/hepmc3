@@ -42,7 +42,6 @@ int main(int argc, char **argv) {
     int events_parsed = 0;
     
     while(!input_file.rdstate()) {
-        if(events_parsed%100==0) cout<<"Events parsed: "<<events_parsed<<endl;
         
         GenEvent evt(Units::GEV,Units::MM);
         
@@ -60,18 +59,12 @@ int main(int argc, char **argv) {
         cout << "writing " << stevt << endl;
         
         fFile->WriteObject(&(output.data()), chevt);
-
-        
-        if(events_parsed==0) {
-            evt.print();
-            evt.dump();
-        }
         
         events_parsed++;
     }
     
     input_file.close();
-//    output_file.close();
+    fFile->Close();
     
     return 0;
 }
