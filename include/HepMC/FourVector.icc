@@ -4,7 +4,6 @@
  *
  */
 #include <cmath> // sqrt, fabs
-//#include <boost/static_assert.hpp>
 
 namespace HepMC {
 
@@ -97,11 +96,10 @@ inline bool FourVector::AlmostEqualZero(double A) {
     return fabs(A) < Setup::DOUBLE_EPSILON;
 }
 
-    /*
 inline bool FourVector::AlmostEqual2sComplement(double A, double B, unsigned int maxUlps) {
 
     // @todo Currently only works on 64-bit machine 
-    BOOST_STATIC_ASSERT( sizeof(double)==8 && sizeof(long long)==8 );
+  //    BOOST_STATIC_ASSERT( sizeof(double)==8 && sizeof(long long)==8 );
     static const long long MASK = 0x8000000000000000;
 
     // Not equal if sign is not equal
@@ -126,6 +124,5 @@ inline bool FourVector::AlmostEqual2sComplement(double A, double B, unsigned int
 
     return false;
 }
-*/
 
 } // namespace HepMC

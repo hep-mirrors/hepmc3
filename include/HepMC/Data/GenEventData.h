@@ -18,12 +18,12 @@
 namespace HepMC {
 
 struct GenEventData {
-    int                 event_number;  // Event number
-    Units::MomentumUnit momentum_unit; // Momentum unit
-    Units::LengthUnit   length_unit;   // Length unit
+    int                 event_number;  ///< Event number
+    Units::MomentumUnit momentum_unit; ///< Momentum unit
+    Units::LengthUnit   length_unit;   ///< Length unit
 
-    std::vector<GenParticleData> particles; // Particles
-    std::vector<GenVertexData>   vertices;  // Vertices
+    std::vector<GenParticleData> particles; ///< Particles
+    std::vector<GenVertexData>   vertices;  ///< Vertices
 
     /** @brief First id of the vertex links
      *
@@ -34,7 +34,7 @@ struct GenEventData {
      *  outgoing particle id is written in GenEventData::links2
      */
     std::vector<int> links1;
-    std::vector<int> links2; // Second id of the vertex links
+    std::vector<int> links2; //</ Second id of the vertex links
 };
 
 } // namespace HepMC

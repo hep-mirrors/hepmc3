@@ -22,7 +22,7 @@ using std::vector;
 
 namespace HepMC {
 
-class GenEventData;
+struct GenEventData;
 
 class GenEvent {
 
