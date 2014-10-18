@@ -47,6 +47,9 @@ int main(int argc, char **argv) {
       fo.GetObject(key->GetName(), event);
  
       cout << "Event: " << key->GetName() << endl;
+      cout << "Number of particles: " << event->particles.size() << endl;
+      cout << "Number of vertices: " << event->vertices.size() << endl;
+      cout << "pz of particle 1 " << event->particles[1].momentum.z() << endl;
     }    
   return 0;
 }
