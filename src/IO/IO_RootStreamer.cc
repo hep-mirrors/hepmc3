@@ -60,7 +60,7 @@ void IO_RootStreamer::write_event(const GenEvent &evt) {
     }
 }
 
-bool IO_RootStreamer::fill_next_event(GenEvent &evt) {
+  bool IO_RootStreamer::fill_next_event(GenEvent &evt) {
 
     WARNING( "IO_RootStreamer: Reading not implemented (yet)" )
 

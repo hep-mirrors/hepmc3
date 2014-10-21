@@ -35,7 +35,8 @@ int main(int argc, char **argv) {
     
   TFile fo(argv[1]);
 
-  GenEventData* event;
+  IO_RootStreamer input;
+  GenEventData* eventdata;
 
   fo.GetListOfKeys()->Print();
  
@@ -44,12 +45,17 @@ int main(int argc, char **argv) {
 
   while ((key=(TKey*)next()))
     {
-      fo.GetObject(key->GetName(), event);
+      fo.GetObject(key->GetName(), eventdata);
  
       cout << "Event: " << key->GetName() << endl;
-      cout << "Number of particles: " << event->particles.size() << endl;
-      cout << "Number of vertices: " << event->vertices.size() << endl;
-      cout << "pz of particle 1 " << event->particles[1].momentum.z() << endl;
+      cout << "Number of particles: " << eventdata->particles.size() << endl;
+      cout << "Number of vertices: " << eventdata->vertices.size() << endl;
+      cout << "pz of particle 1 " << eventdata->particles[1].momentum.z() << endl;
+
+      GenEvent evt(Units::GEV,Units::MM);
+        
+      input.fill_next_event(evt);
+      evt.print();
     }    
   return 0;
 }
