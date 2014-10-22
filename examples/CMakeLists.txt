@@ -14,7 +14,10 @@ else()
 endif()
 
 find_package(ROOT QUIET)
-include(${ROOT_USE_FILE})
+
+if(ROOT_USE_FILE)
+  include(${ROOT_USE_FILE})
+endif()
 
 if(ROOT_FOUND)
   add_subdirectory(RootIOExample)
