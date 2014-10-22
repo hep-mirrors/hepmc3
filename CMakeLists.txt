@@ -18,27 +18,32 @@ set(CMAKE_MODULE_PATH
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 
-#---Find Boost---------------------------------------------------------------
+option(HEPMC_ENABLE_CPP11 "Enables building with C++11.")
 
-include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX11)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-	add_definitions(-DBUILD_WITH_11)
-elseif(COMPILER_SUPPORTS_CXX0X)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-	add_definitions(-DBUILD_WITH_11)
+if(HEPMC_ENABLE_CPP11)
+  include(CheckCXXCompilerFlag)
+  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+  if(COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+    add_definitions(-DBUILD_WITH_11)
+  elseif(COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+    add_definitions(-DBUILD_WITH_11)
+  else()
+    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. We need to use BOOST.")
+    
+    find_package(Boost 1.40 REQUIRED)
+    message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
+  endif()
 else()
-        message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. We need to use BOOST.")
-
-	find_package(Boost 1.40 REQUIRED)
-	message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
+  #---Find Boost---------------------------------------------------------------
+  find_package(Boost 1.40 REQUIRED)
+  message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
 endif()
 
 find_package(Boost 1.40 REQUIRED)
 message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
-
 
 #---Enable FORTRAN (unfortunatelly is not not possible in all cases)-------------------------------
 if(NOT CMAKE_GENERATOR STREQUAL Xcode)
@@ -59,7 +64,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Darwin)
   set(CMAKE_SHARED_LIBRARY_CREATE_Fortran_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_Fortran_FLAGS} -flat_namespace -single_module -undefined dynamic_lookup")
 endif()
 
-set(CMAKE_CXX_FLAGS                "-fPIC")
+set(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS_DEBUG          "-g3")
 set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG")
