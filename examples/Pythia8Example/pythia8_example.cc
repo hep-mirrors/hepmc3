@@ -25,7 +25,7 @@ int main() {
 
         HepMC::GenEvent hepmc( Units::GEV, Units::MM );
 
-        pythiaToHepMC.fill_next_event(pythia.event, &hepmc);
+        pythiaToHepMC.fill_next_event(pythia.event, &hepmc, -1, &pythia.info);
 
         if( i==0 ) {
             std::cout << "First event: " << std::endl;

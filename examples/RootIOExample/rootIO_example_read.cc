@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     TFile fo(argv[1]);
 
     IO_RootStreamer input;
-    GenEventData* eventdata;
+    GenEventData* eventdata = NULL;
 
     fo.GetListOfKeys()->Print();
 
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
     while ((key=(TKey*)next()))
     {
-        fo.GetObject(key->GetName(), eventdata);
+        eventdata = (GenEventData*)key->ReadObj();
 
         if( !eventdata ) break;
 
@@ -59,6 +59,8 @@ int main(int argc, char **argv) {
             cout << "First event: " << endl;
             evt.print();
         }
+
+        delete eventdata;
 
         ++events_parsed;
 

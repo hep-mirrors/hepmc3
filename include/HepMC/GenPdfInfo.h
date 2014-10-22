@@ -38,13 +38,13 @@ public:
 public:
     void set( int parton_id1, int parton_id2, double x1, double x2,
               double scale_in, double xf1, double xf2,
-              int pdf_id1 = 0, int pdf_id2 = 0 ); //!< Set all fields
+              int pdf_id1 = 0, int pdf_id2 = 0 ); ///< Set all fields
 
-    bool      operator==( const GenPdfInfo& ) const; //!< Operator ==
-    bool      operator!=( const GenPdfInfo& ) const; //!< Operator !=
-    bool      is_valid()                   const; //!< Verify that the instance contains non-zero information
+    bool operator==( const GenPdfInfo& ) const; ///< Operator ==
+    bool operator!=( const GenPdfInfo& ) const; ///< Operator !=
+    bool is_valid()                      const; ///< Verify that the instance contains non-zero information
 
-    void      print(std::ostream &ostr)    const; //!< Print the contents to output stream
+    void print(std::ostream &ostr = std::cout) const; ///< Print the contents to output stream
 };
 
 } // namespace HepMC

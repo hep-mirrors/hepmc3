@@ -94,6 +94,15 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
         flush();
     }
 
+    // Write cross-section information (if present)
+    const GenCrossSection *cs = evt.cross_section();
+    if(cs) {
+        m_cursor += sprintf(m_cursor,"C %.*e",m_precision,cs->cross_section);
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e\n",m_precision,cs->cross_section_error);
+        flush();
+    }
+
     int vertices_processed = 0;
     int lowest_vertex_id   = 0;
 
@@ -283,8 +292,10 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
                 is_parsing_successful = parse_pdf_info(evt,buf);
                 break;
             case 'H':
-                DEBUG( 10, "IO_GenEvent: H: skipping Heavy Ions (for now)" )
-                is_parsing_successful = true;
+                is_parsing_successful = parse_heavy_ion(evt,buf);
+                break;
+            case 'C':
+                is_parsing_successful = parse_cross_section(evt,buf);
                 break;
             default:
                 WARNING( "IO_GenEvent: skipping unrecognised prefix: " << buf[0] )
@@ -365,7 +376,7 @@ bool IO_GenEvent::parse_units(GenEvent &evt, const char *buf) {
 }
 
 bool IO_GenEvent::parse_pdf_info(GenEvent &evt, const char *buf) {
-    GenPdfInfo *pi     = new GenPdfInfo();
+    GenPdfInfoPtr pi = make_shared<GenPdfInfo>();
     const char *cursor = buf;
 
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
@@ -396,6 +407,69 @@ bool IO_GenEvent::parse_pdf_info(GenEvent &evt, const char *buf) {
     pi->pdf_id[1] = atoi(cursor);
 
     evt.set_pdf_info(pi);
+
+    return true;
+}
+
+bool IO_GenEvent::parse_heavy_ion(GenEvent &evt, const char *buf) {
+    GenHeavyIonPtr hi = make_shared<GenHeavyIon>();
+    const char *cursor = buf;
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Ncoll_hard = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Npart_proj = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Npart_targ = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Ncoll = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->spectator_neutrons = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->spectator_protons = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->N_Nwounded_collisions = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Nwounded_N_collisions = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Nwounded_Nwounded_collisions = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->impact_parameter = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->event_plane_angle = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->eccentricity = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->sigma_inel_NN = atof(cursor);
+
+    evt.set_heavy_ion(hi);
+
+    return true;
+}
+
+bool IO_GenEvent::parse_cross_section(GenEvent &evt, const char *buf) {
+    GenCrossSectionPtr cs = make_shared<GenCrossSection>();
+    const char *cursor = buf;
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    cs->cross_section = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    cs->cross_section_error = atof(cursor);
+
+    evt.set_cross_section(cs);
 
     return true;
 }
