@@ -45,14 +45,14 @@ public:
 // Accessors
 //
 public:
-    GenEventData& data()                                   { return m_data; } // Get event data
-    void          set_data(const GenEventData &data)       { m_data = data; } // Set event data
+    GenEventData& data()                             { return m_data; } //!< Get event data
+    void          set_data(const GenEventData &data) { m_data = data; } //!< Set event data
 
 //
 // Fields
 //
 private:
-    GenEventData m_data; // Event data
+    GenEventData m_data; //!< Event data
 };
 
 } // namespace HepMC

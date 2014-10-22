@@ -31,8 +31,8 @@ struct GenCrossSection {
 // Fields
 //
 public:
-    double cross_section;       //!< Generated cross-section
-    double cross_section_error; //!< Generated cross-section error
+    double cross_section;       ///< Generated cross-section
+    double cross_section_error; ///< Generated cross-section error
 
 //
 // Functions
@@ -44,10 +44,11 @@ public:
         cross_section_error = xs_err;
     }
 
-    bool operator==( const GenCrossSection& ) const; //!< Operator ==
-    bool operator!=( const GenCrossSection& ) const; //!< Operator !=
+    bool operator==( const GenCrossSection& ) const; ///< Operator ==
+    bool operator!=( const GenCrossSection& ) const; ///< Operator !=
+    bool is_valid()                           const; ///< Verify that the instance contains non-zero information
 
-    void print(std::ostream &ostr) const; //!< Print the contents to output stream
+    void print(std::ostream &ostr = std::cout) const; ///< Print the contents to output stream
 };
 
 } // namespace HepMC

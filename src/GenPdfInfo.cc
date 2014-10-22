@@ -46,7 +46,7 @@ bool GenPdfInfo::is_valid() const
 }
 
 void GenPdfInfo::print( std::ostream & ostr) const {
-    ostr << "GenPdfInfo: " << parton_id[0]
+    ostr << " GenPdfInfo: " << parton_id[0]
          << " " << parton_id[1]
          << " " << x[0]
          << " " << x[1]

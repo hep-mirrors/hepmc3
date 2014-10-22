@@ -1,3 +1,18 @@
+2014-10-22  Tomasz Przedzinski & Witold Pokorski
+
+	* Added ROOT I/O
+
+	* Added ROOT I/O examples
+
+	* CMake updated for use with ROOT
+
+	* Added check for C++11 to CMake. Now #ifndef BUILD_WITH_11 can be used in code
+
+	* GenPdfInfo, GenHeavyIon, GenCrossSection are now stored by shared_ptr not raw pointer
+
+	* GenPdfInfo, GenHeavyIon, GenCrossSection added to ROOT I/O and IO_GenEvent
+	  Now they're properly written and read from/to text files and root files
+
 2014-09-19  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
 
 	* Changed naming convention from HepMC3 to HepMC (namespaces, comments, defines, etc.)

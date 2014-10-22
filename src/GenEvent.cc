@@ -19,10 +19,7 @@ using std::endl;
 
 namespace HepMC {
 
-GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit):
-m_heavy_ion(NULL),
-m_pdf_info(NULL),
-m_cross_section(NULL) {
+GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit) {
     set_print_precision(2);
     set_event_number(0);
     m_versions.push_back("Version 1");
@@ -31,9 +28,6 @@ m_cross_section(NULL) {
 }
 
 GenEvent::~GenEvent() {
-    if(m_heavy_ion)     delete m_heavy_ion;
-    if(m_pdf_info)      delete m_pdf_info;
-    if(m_cross_section) delete m_cross_section;
 }
 
 void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const {
@@ -228,27 +222,12 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 }
 
-void GenEvent::set_heavy_ion(GenHeavyIon *hi) {
-     if(m_heavy_ion) delete m_heavy_ion;
-     m_heavy_ion = hi;
-}
-
-void GenEvent::set_pdf_info(GenPdfInfo *pi) {
-     if(m_pdf_info) delete m_pdf_info;
-     m_pdf_info = pi;
-}
-
-void GenEvent::set_cross_section(GenCrossSection *cs) {
-     if(m_cross_section) delete m_cross_section;
-     m_cross_section = cs;
-}
-
 void GenEvent::clear() {
     m_event_number = 0;
 
-    if(m_heavy_ion)     delete m_heavy_ion;
-    if(m_pdf_info)      delete m_pdf_info;
-    if(m_cross_section) delete m_cross_section;
+    m_heavy_ion.reset();
+    m_pdf_info.reset();
+    m_cross_section.reset();
 
     m_particles.clear();
     m_vertices.clear();
@@ -266,6 +245,18 @@ void GenEvent::add_particle( GenParticle *p ) {
 
 void GenEvent::add_vertex( GenVertex *v ) {
     add_vertex( GenVertexPtr(v) );
+}
+
+void GenEvent::set_heavy_ion(GenHeavyIon *hi) {
+     m_heavy_ion.reset(hi);
+}
+
+void GenEvent::set_pdf_info(GenPdfInfo *pi) {
+     m_pdf_info.reset(pi);
+}
+
+void GenEvent::set_cross_section(GenCrossSection *cs) {
+     m_cross_section.reset(cs);
 }
 
 } // namespace HepMC

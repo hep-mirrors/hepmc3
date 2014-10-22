@@ -4,6 +4,7 @@
  *
  */
 #include "HepMC/GenHeavyIon.h"
+#include <cstring> // memcmp
 
 namespace HepMC {
 
@@ -26,19 +27,7 @@ void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
 }
 
 bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
-    return (    a.Ncoll_hard                   == this->Ncoll_hard
-             && a.Npart_proj                   == this->Npart_proj
-             && a.Npart_targ                   == this->Npart_targ
-             && a.Ncoll                        == this->Ncoll
-             && a.N_Nwounded_collisions        == this->N_Nwounded_collisions
-             && a.Nwounded_N_collisions        == this->Nwounded_N_collisions
-             && a.Nwounded_Nwounded_collisions == this->Nwounded_Nwounded_collisions
-             && a.spectator_neutrons           == this->spectator_neutrons
-             && a.spectator_protons            == this->spectator_protons
-             && a.impact_parameter             == this->impact_parameter
-             && a.event_plane_angle            == this->event_plane_angle
-             && a.eccentricity                 == this->eccentricity
-             && a.sigma_inel_NN                == this->sigma_inel_NN );
+    return ( memcmp( this, &a, sizeof(struct GenHeavyIon) ) == 0 );
 }
 
 bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {

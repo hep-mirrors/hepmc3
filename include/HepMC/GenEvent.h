@@ -104,14 +104,14 @@ public:
     const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit;        } //!< Get momentum unit
     const Units::LengthUnit&   length_unit()   const { return m_length_unit;          } //!< Get length unit
 
-    const GenHeavyIon*         heavy_ion()     const { return m_heavy_ion;            } //!< Get heavy ion generator additional information
-    void                       set_heavy_ion(GenHeavyIon *hi);                          //!< Set heavy ion generator additional information
+    const GenHeavyIon*         heavy_ion()                      const { return m_heavy_ion.get(); } //!< Get heavy ion generator additional information
+    void                       set_heavy_ion(GenHeavyIonPtr hi)       { m_heavy_ion = hi;         } //!< Set heavy ion generator additional information
 
-    const GenPdfInfo*          pdf_info()      const { return m_pdf_info;             } //!< Get pdf information
-    void                       set_pdf_info(GenPdfInfo *pi);                            //!< Set pdf information
+    const GenPdfInfo*          pdf_info()                     const { return m_pdf_info.get(); } //!< Get pdf information
+    void                       set_pdf_info(GenPdfInfoPtr pi)       { m_pdf_info = pi;         } //!< Set pdf information
 
-    const GenCrossSection*     cross_section() const { return m_cross_section;        } //!< Get cross-section information
-    void                       set_cross_section(GenCrossSection *cs);                  //!< Set cross-section information
+    const GenCrossSection*     cross_section()                          const { return m_cross_section.get(); } //!< Get cross-section information
+    void                       set_cross_section(GenCrossSectionPtr cs)       { m_cross_section = cs;         } //!< Set cross-section information
 
     unsigned char last_version() const { return m_versions.size(); } //!< Get last version number
 //
@@ -121,6 +121,10 @@ public:
     __attribute__((deprecated("Use GenParticlePtr instead of GenParticle*"))) void add_particle( GenParticle *p ); //!< Add particle by raw pointer @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
     __attribute__((deprecated("Use GenVertexPtr instead of GenVertex*")))     void add_vertex  ( GenVertex *v );   //!< Add vertex by raw pointer   @deprecated Use GenEvent::add_vertex( const GenVertexPtr& ) instead
 
+    __attribute__((deprecated("Use GenHeavyIonPtr instead of GenHeavyIon*")))         void set_heavy_ion(GenHeavyIon *hi);         //!< Set heavy ion generator additional information by raw pointer @deprecated Use GenEvent::set_heavy_ion( GenHeavyIonPtr hi);         instead
+    __attribute__((deprecated("Use GenPdfInfoPtr instead of GenPdfInfo*")))           void set_pdf_info(GenPdfInfo *pi);           //!< Set pdf information by raw pointer                            @deprecated Use GenEvent::set_pdf_info( GenPdfInfoPtr pi);           instead
+    __attribute__((deprecated("Use GenCrossSectionPtr instead of GenCrossSection*"))) void set_cross_section(GenCrossSection *cs); //!< Set cross-section information by raw pointer                  @deprecated Use GenEvent::set_cross_section( GenCrossSectionPtr cs); instead
+
 //
 // Fields
 //
@@ -129,9 +133,9 @@ private:
     int                         m_print_precision; //!< Printout precision
     Units::MomentumUnit         m_momentum_unit;   //!< Momentum unit
     Units::LengthUnit           m_length_unit;     //!< Length unit
-    GenHeavyIon                *m_heavy_ion;       //!< Heavy ion generator additional information
-    GenPdfInfo                 *m_pdf_info;        //!< Pdf information
-    GenCrossSection            *m_cross_section;   //!< Cross-section information
+    GenHeavyIonPtr              m_heavy_ion;       //!< Heavy ion generator additional information
+    GenPdfInfoPtr               m_pdf_info;        //!< Pdf information
+    GenCrossSectionPtr          m_cross_section;   //!< Cross-section information
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
     std::vector<std::string>    m_versions;        //!< List of versions

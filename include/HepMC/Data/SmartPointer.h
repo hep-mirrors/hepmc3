@@ -82,6 +82,10 @@ private:
 typedef SmartPointer<class GenVertex>   GenVertexPtr;   //!< Smart pointer to GenVertex
 typedef SmartPointer<class GenParticle> GenParticlePtr; //!< Smart pointer to GenParticle
 
+typedef shared_ptr<class GenPdfInfo>      GenPdfInfoPtr;      //!< Shared pointer to GenPdfInfo
+typedef shared_ptr<class GenHeavyIon>     GenHeavyIonPtr;     //!< Shared pointer to GenPdfInfo
+typedef shared_ptr<class GenCrossSection> GenCrossSectionPtr; //!< Shared pointer to GenPdfInfo
+
 } // namespace HepMC
 
 #include "HepMC/Data/SmartPointer.icc"

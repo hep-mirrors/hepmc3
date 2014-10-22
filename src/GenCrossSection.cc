@@ -4,20 +4,26 @@
  *
  */
 #include "HepMC/GenCrossSection.h"
+#include <cstring> // memcmp
 
 namespace HepMC {
 
 bool GenCrossSection::operator==( const GenCrossSection& a ) const {
-    return (    a.cross_section       == this->cross_section
-             && a.cross_section_error == this->cross_section_error );
+    return ( memcmp( this, &a, sizeof(struct GenCrossSection) ) == 0 );
 }
 
 bool GenCrossSection::operator!=( const GenCrossSection& a ) const {
     return !( a == *this );
 }
 
+bool GenCrossSection::is_valid() const {
+    if( cross_section       != 0 ) return true;
+    if( cross_section_error != 0 ) return true;
+    return false;
+}
+
 void GenCrossSection::print( std::ostream & ostr) const {
-    ostr << "GenCrossSection: " << cross_section
+    ostr << " GenCrossSection: " << cross_section
          << " " << cross_section_error
          << " " << std::endl;
 }

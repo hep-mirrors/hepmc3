@@ -38,15 +38,15 @@ public:
 // Functions
 //
 public:
-    void      set( int nh, int np, int nt, int nc, int ns, int nsp,
-                   int nnw=0, int nwn=0, int nwnw=0,
-                   float im=0., float pl=0., float ec=0., float s=0. ); //!< Set all fields
+    void set( int nh, int np, int nt, int nc, int ns, int nsp,
+              int nnw=0, int nwn=0, int nwnw=0,
+              float im=0., float pl=0., float ec=0., float s=0. ); ///< Set all fields
 
-    bool      operator==( const GenHeavyIon& ) const; //!< Operator ==
-    bool      operator!=( const GenHeavyIon& ) const; //!< Operator !=
-    bool      is_valid()                    const; //!< Verify that the instance contains non-zero information
+    bool operator==( const GenHeavyIon& ) const; ///< Operator ==
+    bool operator!=( const GenHeavyIon& ) const; ///< Operator !=
+    bool is_valid()                       const; ///< Verify that the instance contains non-zero information
 
-    void      print(std::ostream &ostr)     const; //!< Print the contents to output stream
+    void print(std::ostream &ostr = std::cout) const; ///< Print the contents to output stream
 };
 
 } // namespace HepMC
