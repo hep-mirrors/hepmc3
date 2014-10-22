@@ -82,7 +82,14 @@ void GenEvent::dump() const {
     std::cout<<std::endl;
 
     std::cout<<"GenParticlePtr ("<<particles().size()<<")"<<std::endl;
-    BOOST_FOREACH( const GenParticlePtr &p, particles() ) {
+
+#ifdef BUILD_WITH_11
+    std::cout << "using C++11 for" << std::endl;
+    for( const GenParticlePtr &p : particles() ) 
+#else
+    BOOST_FOREACH( const GenParticlePtr &p, particles() ) 
+#endif
+    {
         p->print();
     }
 

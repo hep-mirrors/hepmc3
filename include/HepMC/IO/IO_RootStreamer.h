@@ -45,7 +45,7 @@ public:
 // Accessors
 //
 public:
-    GenEventData& data()                             const { return m_data; } // Get event data
+    GenEventData& data()                                   { return m_data; } // Get event data
     void          set_data(const GenEventData &data)       { m_data = data; } // Set event data
 
 //
