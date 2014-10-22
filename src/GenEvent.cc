@@ -236,6 +236,19 @@ void GenEvent::set_cross_section(GenCrossSection *cs) {
      m_cross_section = cs;
 }
 
+void GenEvent::clear() {
+    m_event_number = 0;
+
+    if(m_heavy_ion)     delete m_heavy_ion;
+    if(m_pdf_info)      delete m_pdf_info;
+    if(m_cross_section) delete m_cross_section;
+
+    m_particles.clear();
+    m_vertices.clear();
+    m_versions.clear();
+    m_versions.push_back("Version 1");
+}
+
 //
 // Deprecated functions
 //

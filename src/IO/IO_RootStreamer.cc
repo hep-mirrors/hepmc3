@@ -60,9 +60,34 @@ void IO_RootStreamer::write_event(const GenEvent &evt) {
     }
 }
 
-  bool IO_RootStreamer::fill_next_event(GenEvent &evt) {
+bool IO_RootStreamer::fill_next_event(GenEvent &evt) {
 
-    WARNING( "IO_RootStreamer: Reading not implemented (yet)" )
+    evt.clear();
+
+    // Fill event data
+    evt.set_event_number( m_data.event_number );
+    evt.set_units( m_data.momentum_unit, m_data.length_unit );
+
+    // Fill particle information
+    BOOST_FOREACH( const GenParticleData &pd, m_data.particles ) {
+        GenParticlePtr p = make_shared<GenParticle>(pd);
+        evt.add_particle(p);
+    }
+
+    // Fill vertex information
+    BOOST_FOREACH( const GenVertexData &vd, m_data.vertices ) {
+        GenVertexPtr v = make_shared<GenVertex>(vd);
+        evt.add_vertex(v);
+    }
+
+    // Restore links
+    for( unsigned int i=0; i<m_data.links1.size(); ++i) {
+        int id1 = m_data.links1[i];
+        int id2 = m_data.links2[i];
+
+        if( id1 > 0 ) evt.vertices()[ (-id2)-1 ]->add_particle_in ( evt.particles()[ id1-1 ] );
+        else          evt.vertices()[ (-id1)-1 ]->add_particle_out( evt.particles()[ id2-1 ] );
+    }
 
     return true;
 }

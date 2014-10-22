@@ -310,8 +310,10 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
     if( !is_parsing_successful ) {
         ERROR( "IO_GenEvent: event parsing failed. Returning empty event" )
         DEBUG( 1, "Parsing failed at line:" << std::endl << buf )
-        //event->clear();
+
+        evt.clear();
         m_file.clear(std::ios::badbit);
+
         return false;
     }
 

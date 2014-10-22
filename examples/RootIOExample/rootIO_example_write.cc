@@ -46,10 +46,13 @@ int main(int argc, char **argv) {
         GenEvent evt(Units::GEV,Units::MM);
         
         input_file.fill_next_event(evt);
-
-	evt.print();
         
         if(input_file.rdstate()) break;
+
+        if( events_parsed == 0 ) {
+            cout << "First event: " << endl;
+            evt.print();
+        }
         
         output.write_event(evt);
         

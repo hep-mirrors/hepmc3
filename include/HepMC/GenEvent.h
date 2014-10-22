@@ -82,6 +82,9 @@ public:
      */
     void set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
 
+    /** @brief Remove contents of this event */
+    void clear();
+
 //
 // Accessors
 //

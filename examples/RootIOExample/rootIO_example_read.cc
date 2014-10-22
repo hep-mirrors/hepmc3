@@ -7,7 +7,6 @@
 //
 
 #include "HepMC/GenEvent.h"
-#include "HepMC/IO/IO_GenEvent.h"
 #include "HepMC/IO/IO_RootStreamer.h"
 
 #include "TROOT.h"
@@ -23,39 +22,51 @@ using std::cout;
 using std::endl;
 
 int main(int argc, char **argv) {
-    
-  if( argc<2 ) {
-    cout << "Usage: " << argv[0] << " <input_file>" << endl;
-    exit(-1);
-  }
-    
-  // initialize ROOT
-  TSystem ts;
-  gSystem->Load("librootIO_example_ClassesDict");
-    
-  TFile fo(argv[1]);
 
-  IO_RootStreamer input;
-  GenEventData* eventdata;
+    if( argc<2 ) {
+        cout << "Usage: " << argv[0] << " <input_file>" << endl;
+        exit(-1);
+    }
 
-  fo.GetListOfKeys()->Print();
- 
-  TIter next(fo.GetListOfKeys());
-  TKey *key;
+    // initialize ROOT
+    TSystem ts;
+    gSystem->Load("librootIO_example_ClassesDict");
 
-  while ((key=(TKey*)next()))
+    TFile fo(argv[1]);
+
+    IO_RootStreamer input;
+    GenEventData* eventdata;
+
+    fo.GetListOfKeys()->Print();
+
+    TIter next(fo.GetListOfKeys());
+    TKey *key;
+
+    int events_parsed = 0;
+
+    while ((key=(TKey*)next()))
     {
-      fo.GetObject(key->GetName(), eventdata);
- 
-      cout << "Event: " << key->GetName() << endl;
-      cout << "Number of particles: " << eventdata->particles.size() << endl;
-      cout << "Number of vertices: " << eventdata->vertices.size() << endl;
-      cout << "pz of particle 1 " << eventdata->particles[1].momentum.z() << endl;
+        fo.GetObject(key->GetName(), eventdata);
 
-      GenEvent evt(Units::GEV,Units::MM);
-        
-      input.fill_next_event(evt);
-      evt.print();
-    }    
-  return 0;
+        if( !eventdata ) break;
+
+        GenEvent evt(Units::GEV,Units::MM);
+
+        input.set_data( *eventdata );
+        input.fill_next_event(evt);
+
+        if( events_parsed == 0 ) {
+            cout << "First event: " << endl;
+            evt.print();
+        }
+
+        ++events_parsed;
+
+        if( events_parsed%1000 == 0 ) {
+            cout << "Event: " << events_parsed << endl;
+        }
+    }
+
+    cout << "Events parsed: " << events_parsed << endl;
+    return 0;
 }
