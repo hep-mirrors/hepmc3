@@ -22,7 +22,7 @@
  *
  */
 
-#ifdef BUILD_WITH_11
+#if __cplusplus >= 201103L
 
 #include <memory>
 
