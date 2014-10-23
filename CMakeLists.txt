@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
-# earlier cmake versions are unable to find all Boost configurations
 #
 #----------------------------------------------------------------------------
 project(HepMC3)
@@ -35,15 +34,15 @@ if(HEPMC_ENABLE_CPP11)
     
     find_package(Boost 1.40 REQUIRED)
     message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
+    include_directories(${Boost_INCLUDE_DIRS})
+
   endif()
 else()
   #---Find Boost---------------------------------------------------------------
   find_package(Boost 1.40 REQUIRED)
   message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
+  include_directories(${Boost_INCLUDE_DIRS})
 endif()
-
-find_package(Boost 1.40 REQUIRED)
-message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
 
 #---Enable FORTRAN (unfortunatelly is not not possible in all cases)-------------------------------
 if(NOT CMAKE_GENERATOR STREQUAL Xcode)
@@ -73,17 +72,8 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
 # fortran flags needed for some tests and examples
 set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -ffixed-line-length-132")
 
-# Other options eventually used:
-# -pg
-# -DBOOST_DISABLE_ASSERTS   
-# -DBOOST_SP_DISABLE_THREADS
-
-# The way to add an option to all build types:
-#add_definitions(-DBOOST_DISABLE_ASSERTS)
-
 #--------------------------------------------------------------------------
-
-include_directories(include ${Boost_INCLUDE_DIRS})
+include_directories(include)
 
 #---Select sources for the various libraries---------------------------------
 file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc)

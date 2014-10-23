@@ -6,7 +6,6 @@
 
 #include <deque>
 #include <cassert>
-#include <boost/foreach.hpp>
 
 namespace HepMC {
 

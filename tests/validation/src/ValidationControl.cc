@@ -22,7 +22,7 @@
 
 #include <fstream>
 #include <cstdio>
-#include <boost/foreach.hpp>
+#include "HepMC/foreach.h"
 
 ValidationControl::ValidationControl():
 m_events(0),
@@ -36,7 +36,7 @@ m_has_input_source(0) {
 }
 
 ValidationControl::~ValidationControl() {
-    BOOST_FOREACH( ValidationTool *t, m_toolchain ) {
+    FOREACH( ValidationTool *t, m_toolchain ) {
         delete t;
     }
 }
@@ -238,7 +238,7 @@ bool ValidationControl::new_event() {
 void ValidationControl::initialize() {
     printf("ValidationControl: initializing\n");
 
-    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+    FOREACH( ValidationTool *tool, m_toolchain ) {
         tool->initialize();
     }
 }
@@ -249,7 +249,7 @@ void ValidationControl::process(GenEvent &hepmc) {
 
     FourVector input_momentum;
 
-    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+    FOREACH( ValidationTool *tool, m_toolchain ) {
 
         Timer *timer = tool->timer();
 
@@ -298,7 +298,7 @@ void ValidationControl::process(GenEvent &hepmc) {
                 FindParticles search( hepmc, FIND_ALL, STATUS == 1 );
                 //hepmc.set_print_precision(8);
 
-                BOOST_FOREACH( const GenParticlePtr &p, search.results() ) {
+                FOREACH( const GenParticlePtr &p, search.results() ) {
                     //p->print();
                     sum += p->momentum();
                 }
@@ -320,21 +320,21 @@ void ValidationControl::finalize() {
     printf("ValidationControl: finalizing\n");
 
     // Finalize
-    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+    FOREACH( ValidationTool *tool, m_toolchain ) {
         tool->finalize();
     }
 
     printf("ValidationControl: printing timers\n");
 
     // Print timers
-    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+    FOREACH( ValidationTool *tool, m_toolchain ) {
         if(tool->timer()) tool->timer()->print();
     }
 
     printf("ValidationControl: finished processing:\n");
 
     // List tools
-    BOOST_FOREACH( ValidationTool *tool, m_toolchain ) {
+    FOREACH( ValidationTool *tool, m_toolchain ) {
         printf("  tool: %s\n",tool->long_name().c_str());
     }
 }

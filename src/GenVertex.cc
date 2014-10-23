@@ -8,7 +8,7 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/Setup.h"
 
-#include <boost/foreach.hpp>
+#include "HepMC/foreach.h"
 
 namespace HepMC {
 
@@ -67,7 +67,7 @@ void GenVertex::print_version( unsigned char version, std::ostream& ostr ) const
     bool printed_header = false;
 
     // Print out all the incoming particles
-    BOOST_FOREACH( const GenParticlePtr &p, particles_in() ) {
+    FOREACH( const GenParticlePtr &p, particles_in() ) {
 
         if( !p->is_in_version(version) ) continue;
 
@@ -83,7 +83,7 @@ void GenVertex::print_version( unsigned char version, std::ostream& ostr ) const
     printed_header = false;
 
     // Print out all the outgoing particles
-    BOOST_FOREACH( const GenParticlePtr &p, particles_out() ) {
+    FOREACH( const GenParticlePtr &p, particles_out() ) {
 
         if( !p->is_in_version(version) ) continue;
 
@@ -101,7 +101,7 @@ void GenVertex::add_particle_in( const GenParticlePtr &p ) {
     if(!p) return;
 
     // Avoid duplicates
-    BOOST_FOREACH( const GenParticlePtr &pp, particles_in() ) {
+    FOREACH( const GenParticlePtr &pp, particles_in() ) {
         if( pp == p ) return;
     }
 
@@ -116,7 +116,7 @@ void GenVertex::add_particle_out( const GenParticlePtr &p ) {
     if(!p) return;
 
     // Avoid duplicates
-    BOOST_FOREACH( const GenParticlePtr &pp, particles_out() ) {
+    FOREACH( const GenParticlePtr &pp, particles_out() ) {
         if( pp == p ) return;
     }
 
@@ -167,7 +167,7 @@ const FourVector& GenVertex::position() const {
     if( !m_data.position.is_zero() ) return m_data.position;
 
     // No position information - search ancestors
-    BOOST_FOREACH( const GenParticlePtr &p, particles_in() ) {
+    FOREACH( const GenParticlePtr &p, particles_in() ) {
         const GenVertexPtr &v = p->production_vertex();
         if(v) return v->position();
     }

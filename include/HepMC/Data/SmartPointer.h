@@ -21,15 +21,30 @@
  *  @ingroup data
  *
  */
+
+#ifdef BUILD_WITH_11
+
+#include <memory>
+
+#else
+
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
+#endif
+
 namespace HepMC {
 
+#ifdef BUILD_WITH_11
+using std::weak_ptr;
+using std::shared_ptr;
+using std::make_shared;
+#else
 using boost::weak_ptr;
 using boost::shared_ptr;
 using boost::make_shared;
+#endif
 
 template<class T>
 class SmartPointer {
@@ -65,7 +80,7 @@ public:
     const shared_ptr<T>& operator->()         const { return  m_data; } //!< Shared pointer access operator
     T&                   operator*()          const { return *m_data; } //!< Dereference operator
 
-    operator bool() const { return m_data; } //!< Bool cast operator
+    operator bool() const { return (bool)m_data; } //!< Bool cast operator
 
 //
 // Deprecated functions
@@ -82,9 +97,9 @@ private:
 typedef SmartPointer<class GenVertex>   GenVertexPtr;   //!< Smart pointer to GenVertex
 typedef SmartPointer<class GenParticle> GenParticlePtr; //!< Smart pointer to GenParticle
 
-typedef shared_ptr<class GenPdfInfo>      GenPdfInfoPtr;      //!< Shared pointer to GenPdfInfo
-typedef shared_ptr<class GenHeavyIon>     GenHeavyIonPtr;     //!< Shared pointer to GenPdfInfo
-typedef shared_ptr<class GenCrossSection> GenCrossSectionPtr; //!< Shared pointer to GenPdfInfo
+typedef shared_ptr<struct GenPdfInfo>      GenPdfInfoPtr;      //!< Shared pointer to GenPdfInfo
+typedef shared_ptr<struct GenHeavyIon>     GenHeavyIonPtr;     //!< Shared pointer to GenPdfInfo
+typedef shared_ptr<struct GenCrossSection> GenCrossSectionPtr; //!< Shared pointer to GenPdfInfo
 
 } // namespace HepMC
 

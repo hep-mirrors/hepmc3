@@ -17,7 +17,8 @@
 #include <iostream>
 #include <vector>
 
-#include <boost/foreach.hpp>
+#include <HepMC/foreach.h>
+
 using std::vector;
 
 namespace HepMC {
@@ -113,7 +114,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     flush();
 
     // Print particles
-    BOOST_FOREACH( const GenParticlePtr &p, evt.particles() ) {
+    FOREACH( const GenParticlePtr &p, evt.particles() ) {
 
         // Check to see if we need to write a vertex first
         const GenVertexPtr &v = p->production_vertex();
@@ -165,7 +166,7 @@ void IO_GenEvent::write_vertex(const GenVertexPtr &v) {
 
     bool printed_first = false;
 
-    BOOST_FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+    FOREACH( const GenParticlePtr &p, v->particles_in() ) {
 
         if( !printed_first ) {
             m_cursor  += sprintf(m_cursor,"%i", p->id());

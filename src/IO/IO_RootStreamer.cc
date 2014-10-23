@@ -12,7 +12,7 @@
 
 #include <vector>
 
-#include <boost/foreach.hpp>
+#include <HepMC/foreach.h>
 using std::vector;
 
 namespace HepMC {
@@ -40,20 +40,20 @@ void IO_RootStreamer::write_event(const GenEvent &evt) {
     m_data.length_unit   = evt.length_unit();
 
     // Fill containers
-    BOOST_FOREACH( const GenParticlePtr &p, evt.particles() ) {
+    FOREACH( const GenParticlePtr &p, evt.particles() ) {
         m_data.particles.push_back( p->data() );
     }
 
-    BOOST_FOREACH( const GenVertexPtr &v, evt.vertices() ) {
+    FOREACH( const GenVertexPtr &v, evt.vertices() ) {
         m_data.vertices.push_back( v->data() );
         int v_id = v->id();
 
-        BOOST_FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+        FOREACH( const GenParticlePtr &p, v->particles_in() ) {
             m_data.links1.push_back( p->id() );
             m_data.links2.push_back( v_id    );
         }
 
-        BOOST_FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+        FOREACH( const GenParticlePtr &p, v->particles_out() ) {
             m_data.links1.push_back( v_id    );
             m_data.links2.push_back( p->id() );
         }
@@ -79,13 +79,13 @@ bool IO_RootStreamer::fill_next_event(GenEvent &evt) {
     evt.set_units( m_data.momentum_unit, m_data.length_unit );
 
     // Fill particle information
-    BOOST_FOREACH( const GenParticleData &pd, m_data.particles ) {
+    FOREACH( const GenParticleData &pd, m_data.particles ) {
         GenParticlePtr p = make_shared<GenParticle>(pd);
         evt.add_particle(p);
     }
 
     // Fill vertex information
-    BOOST_FOREACH( const GenVertexData &vd, m_data.vertices ) {
+    FOREACH( const GenVertexData &vd, m_data.vertices ) {
         GenVertexPtr v = make_shared<GenVertex>(vd);
         evt.add_vertex(v);
     }

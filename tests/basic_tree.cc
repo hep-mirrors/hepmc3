@@ -11,7 +11,8 @@
 #include "HepMC/IO/IO_RootStreamer.h"
 
 #include <iostream>
-#include <boost/foreach.hpp>
+#include "HepMC/foreach.h"
+
 using namespace HepMC;
 
 int main() {
@@ -80,14 +81,14 @@ int main() {
     std::cout<<std::endl<<"Find all stable particles: "<<std::endl;
     FindParticles search(evt, FIND_ALL, STATUS == 1 && STATUS_SUBCODE == 0);
 
-    BOOST_FOREACH( const GenParticlePtr &p, search.results() ) {
+    FOREACH( const GenParticlePtr &p, search.results() ) {
         p->print();
     }
 
     std::cout<<std::endl<<"Find all ancestors of particle with id "<<p5->id()<<": "<<std::endl;
     FindParticles search2(p5, FIND_ALL_ANCESTORS);
 
-    BOOST_FOREACH( const GenParticlePtr &p, search2.results() ) {
+    FOREACH( const GenParticlePtr &p, search2.results() ) {
         p->print();
     }
 
@@ -95,14 +96,14 @@ int main() {
     std::cout<<"(just for test, we check both for status == 1 and no end vertex)"<<std::endl;
     FindParticles search3(p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX);
 
-    BOOST_FOREACH( const GenParticlePtr &p, search3.results() ) {
+    FOREACH( const GenParticlePtr &p, search3.results() ) {
         p->print();
     }
 
     std::cout<<std::endl<<"Narrow down search results to quarks: "<<std::endl;
     search3.narrow_down( PDG_ID >= -6 && PDG_ID <= 6 );
 
-    BOOST_FOREACH( const GenParticlePtr &p, search3.results() ) {
+    FOREACH( const GenParticlePtr &p, search3.results() ) {
         p->print();
     }
 

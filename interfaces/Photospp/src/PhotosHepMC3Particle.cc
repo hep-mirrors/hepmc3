@@ -5,7 +5,7 @@
 #include "Photos/Log.h"
 #include "Photos/Photos.h"
 
-#include <boost/foreach.hpp>
+#include "HepMC/foreach.h"
 
 namespace Photospp
 {
@@ -150,7 +150,7 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getMothers(){
 
   if(m_mothers.size()==0&&m_particle->production_vertex()){
 
-    BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->production_vertex()->particles_in() ) {
+    FOREACH( const HepMC::GenParticlePtr &p, m_particle->production_vertex()->particles_in() ) {
       m_mothers.push_back(new PhotosHepMC3Particle(p));
     }
   }
@@ -161,7 +161,7 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getDaughters(){
 
   if(m_daughters.size()==0&&m_particle->end_vertex()){
 
-    BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
+    FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
 
       // ommit particles if their status code is ignored by Photos
       if( Photos::isStatusCodeIgnored( p->status() ) ) continue;
@@ -220,13 +220,13 @@ bool PhotosHepMC3Particle::checkMomentumConservation(){
   // with added energy check
   HepMC::FourVector sum;
 
-  BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_in() ) {
+  FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_in() ) {
     if( Photos::isStatusCodeIgnored(p->status()) ) continue;
 
     sum += p->momentum();
   }
 
-  BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
+  FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
     if( Photos::isStatusCodeIgnored(p->status()) ) continue;
 
     sum -= p->momentum();

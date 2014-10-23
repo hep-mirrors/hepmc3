@@ -10,7 +10,7 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/Setup.h"
 
-#include <boost/foreach.hpp>
+#include "HepMC/foreach.h"
 
 namespace HepMC {
 
@@ -77,7 +77,7 @@ bool Filter::passed_bool_filter(const GenParticlePtr &p ) const {
                 break;
             }
 
-            BOOST_FOREACH( const GenParticlePtr &p_out, buf->particles_out() ) {
+            FOREACH( const GenParticlePtr &p_out, buf->particles_out() ) {
 
                 if( p_out->pdg_id() == p->pdg_id() ) {
                     result = true;

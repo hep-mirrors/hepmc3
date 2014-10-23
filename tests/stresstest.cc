@@ -11,7 +11,6 @@
 
 #include <iostream>
 
-#include <boost/foreach.hpp>
 using namespace HepMC;
 
 int main() {

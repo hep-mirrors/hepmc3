@@ -12,13 +12,13 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/Setup.h"
 
-#include <boost/foreach.hpp>
+#include <HepMC/foreach.h>
 
 namespace HepMC {
 
 FindParticles::FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list) {
 
-    BOOST_FOREACH( const GenParticlePtr &p, evt.particles() ) {
+    FOREACH( const GenParticlePtr &p, evt.particles() ) {
 
         if( passed_all_filters(p,filter_list) ) {
             if( filter_type == FIND_LAST ) m_results.clear();
@@ -46,7 +46,7 @@ FindParticles::FindParticles(const GenParticlePtr &p, FilterParticle filter_type
         case FIND_MOTHERS:
             if( !p->production_vertex() ) break;
 
-            BOOST_FOREACH( const GenParticlePtr &p_in, p->production_vertex()->particles_in() ) {
+            FOREACH( const GenParticlePtr &p_in, p->production_vertex()->particles_in() ) {
 
                 if( passed_all_filters(p_in,filter_list) ) {
                     m_results.push_back( p_in );
@@ -56,7 +56,7 @@ FindParticles::FindParticles(const GenParticlePtr &p, FilterParticle filter_type
         case FIND_DAUGHTERS:
             if( !p->end_vertex() ) break;
 
-            BOOST_FOREACH( const GenParticlePtr &p_out, p->end_vertex()->particles_out() ) {
+            FOREACH( const GenParticlePtr &p_out, p->end_vertex()->particles_out() ) {
 
                 if( passed_all_filters(p_out,filter_list) ) {
                     m_results.push_back( p_out );
@@ -66,7 +66,7 @@ FindParticles::FindParticles(const GenParticlePtr &p, FilterParticle filter_type
         case FIND_PRODUCTION_SIBLINGS:
             if( !p->end_vertex() ) break;
 
-            BOOST_FOREACH( const GenParticlePtr &p_in, p->end_vertex()->particles_in() ) {
+            FOREACH( const GenParticlePtr &p_in, p->end_vertex()->particles_in() ) {
 
                 if( passed_all_filters(p_in,filter_list) ) {
                     m_results.push_back( p_in );
@@ -101,7 +101,7 @@ void FindParticles::narrow_down( FilterList filter_list ) {
 bool FindParticles::passed_all_filters(const GenParticlePtr &p, FilterList &filter_list) {
     if( filter_list.filters().size() == 0 ) return true;
 
-    BOOST_FOREACH( const Filter &f, filter_list.filters() ) {
+    FOREACH( const Filter &f, filter_list.filters() ) {
         if( f.passed_filter(p) == false ) return false;
     }
 
@@ -111,13 +111,13 @@ bool FindParticles::passed_all_filters(const GenParticlePtr &p, FilterList &filt
 
 void FindParticles::recursive_check_ancestors(const GenVertexPtr &v, FilterList &filter_list) {
 
-    BOOST_FOREACH( const GenVertexPtr &v_list, m_checked_vertices ) {
+    FOREACH( const GenVertexPtr &v_list, m_checked_vertices ) {
         if( v_list->id() == v->id() ) return;
     }
 
     m_checked_vertices.push_back(v);
 
-    BOOST_FOREACH( const GenParticlePtr &p_in, v->particles_in() ) {
+    FOREACH( const GenParticlePtr &p_in, v->particles_in() ) {
 
         if( passed_all_filters(p_in,filter_list) ) {
             m_results.push_back(p_in);
@@ -130,13 +130,13 @@ void FindParticles::recursive_check_ancestors(const GenVertexPtr &v, FilterList 
 
 void FindParticles::recursive_check_descendants(const GenVertexPtr &v, FilterList &filter_list) {
 
-    BOOST_FOREACH( const GenVertexPtr &v_list, m_checked_vertices ) {
+    FOREACH( const GenVertexPtr &v_list, m_checked_vertices ) {
         if( v_list->id() == v->id() ) return;
     }
 
     m_checked_vertices.push_back(v);
 
-    BOOST_FOREACH( const GenParticlePtr &p_out, v->particles_out() ) {
+    FOREACH( const GenParticlePtr &p_out, v->particles_out() ) {
         if( passed_all_filters(p_out,filter_list) ) {
             m_results.push_back(p_out);
         }

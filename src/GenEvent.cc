@@ -14,7 +14,8 @@
 #include <vector>
 #include <deque>
 
-#include <boost/foreach.hpp>
+#include "HepMC/foreach.h"
+
 using std::endl;
 
 namespace HepMC {
@@ -59,7 +60,7 @@ void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const 
     ostr.precision( print_precision() );
 
     // Print all vertices
-    BOOST_FOREACH( const GenVertexPtr &v, vertices() ) {
+    FOREACH( const GenVertexPtr &v, vertices() ) {
         v->print_version(version,ostr);
     }
 
@@ -77,18 +78,13 @@ void GenEvent::dump() const {
 
     std::cout<<"GenParticlePtr ("<<particles().size()<<")"<<std::endl;
 
-#ifdef BUILD_WITH_11
-    std::cout << "using C++11 for" << std::endl;
-    for( const GenParticlePtr &p : particles() ) 
-#else
-    BOOST_FOREACH( const GenParticlePtr &p, particles() ) 
-#endif
+    FOREACH( const GenParticlePtr &p, particles() ) 
     {
         p->print();
     }
 
     std::cout<<"GenVertexPtr ("<<vertices().size()<<")"<<std::endl;
-    BOOST_FOREACH( const GenVertexPtr &v, vertices() ) {
+    FOREACH( const GenVertexPtr &v, vertices() ) {
         v->print();
     }
 
@@ -115,12 +111,12 @@ void GenEvent::add_vertex( const GenVertexPtr &v ) {
     v->m_id    = -(int)vertices().size();
 
     // Add all incoming and outgoing particles and restore their production/end vertices
-    BOOST_FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
+    FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
         if(!p->in_event()) add_particle(p);
         p->set_end_vertex(v->m_this.lock());
     }
 
-    BOOST_FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
+    FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
         if(!p->in_event()) add_particle(p);
         p->set_production_vertex(v->m_this.lock());
     }
@@ -133,7 +129,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
     std::deque<GenVertexPtr> sorting;
 
     // Find all starting vertices (end vertex of particles that have no production vertex)
-    BOOST_FOREACH( const GenParticlePtr &p, particles ) {
+    FOREACH( const GenParticlePtr &p, particles ) {
         const GenVertexPtr &v = p->production_vertex();
         if( !v || v->particles_in().size()==0 ) {
             const GenVertexPtr &v2 = p->end_vertex();
@@ -158,7 +154,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
         bool added = false;
 
         // Add all mothers to the front of the list
-        BOOST_FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+        FOREACH( const GenParticlePtr &p, v->particles_in() ) {
             GenVertexPtr v2 = p->production_vertex();
             if( v2 && !v2->in_event() ) {
                 sorting.push_front(v2);
@@ -176,7 +172,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
             add_vertex(v);
 
             // Add all end vertices to the end of the list
-            BOOST_FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+            FOREACH( const GenParticlePtr &p, v->particles_out() ) {
                 GenVertexPtr v2 = p->end_vertex();
                 if( v2 && !v2->in_event() ) {
                     sorting.push_back(v2);
@@ -205,7 +201,7 @@ void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
 
 void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
     if( new_momentum_unit != m_momentum_unit ) {
-        BOOST_FOREACH( GenParticlePtr &p, m_particles ) {
+        FOREACH( GenParticlePtr &p, m_particles ) {
             Units::convert( p->m_data.momentum, m_momentum_unit, new_momentum_unit );
         }
 
@@ -213,7 +209,7 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 
     if( new_length_unit != m_length_unit ) {
-        BOOST_FOREACH( GenVertexPtr &v, m_vertices ) {
+        FOREACH( GenVertexPtr &v, m_vertices ) {
             FourVector &fv = v->m_data.position;
             if( !fv.is_zero() ) Units::convert( fv, m_length_unit, new_length_unit );
         }

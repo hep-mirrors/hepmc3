@@ -3,7 +3,8 @@
 #include "Photos/PhotosHepMC3Event.h"
 #include "Photos/Log.h"
 
-#include <boost/foreach.hpp>
+#include "HepMC/foreach.h"
+
 using namespace std;
 
 namespace Photospp
@@ -12,7 +13,7 @@ namespace Photospp
 PhotosHepMC3Event::PhotosHepMC3Event(HepMC::GenEvent * event)
 {
         m_event=event;
-        BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_event->particles() )
+        FOREACH( const HepMC::GenParticlePtr &p, m_event->particles() )
         {
                 PhotosParticle *particle = new PhotosHepMC3Particle(p);
                 particles.push_back(particle);

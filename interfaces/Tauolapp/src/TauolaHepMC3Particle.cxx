@@ -3,7 +3,8 @@
 
 #include "HepMC/GenVertex.h"
 
-#include <boost/foreach.hpp>
+#include "HepMC/foreach.h"
+
 namespace Tauolapp
 {
 
@@ -165,7 +166,7 @@ void TauolaHepMC3Particle::setDaughters(vector<TauolaParticle*> daughters){
 std::vector<TauolaParticle*> TauolaHepMC3Particle::getMothers(){
 
   if(m_mothers.size()==0&&m_particle->production_vertex()){
-    BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->production_vertex()->particles_in() ) {
+    FOREACH( const HepMC::GenParticlePtr &p, m_particle->production_vertex()->particles_in() ) {
       m_mothers.push_back(new TauolaHepMC3Particle(p));
     }
   }
@@ -175,7 +176,7 @@ std::vector<TauolaParticle*> TauolaHepMC3Particle::getMothers(){
 std::vector<TauolaParticle*> TauolaHepMC3Particle::getDaughters(){
 
   if(m_daughters.size()==0&&m_particle->end_vertex()){
-    BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
+    FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
       m_daughters.push_back(new TauolaHepMC3Particle(p));
     }
   }
@@ -190,11 +191,11 @@ void TauolaHepMC3Particle::checkMomentumConservation(){
   // with added energy check
 
   HepMC::FourVector sum;
-  BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_in() ) {
+  FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_in() ) {
     sum += p->momentum();
   }
 
-  BOOST_FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
+  FOREACH( const HepMC::GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
     sum -= p->momentum();
   }
 
@@ -266,7 +267,7 @@ void TauolaHepMC3Particle::recursiveSetPosition(HepMC::GenParticlePtr p, HepMC::
   if(!p->end_vertex()) return;
 
   // Iterate over all outgoing particles
-  BOOST_FOREACH( const HepMC::GenParticlePtr &pp, p->end_vertex()->particles_out() ) {
+  FOREACH( const HepMC::GenParticlePtr &pp, p->end_vertex()->particles_out() ) {
     if( !pp->end_vertex() ) continue;
 
     // Set position
