@@ -7,7 +7,7 @@
 #define HEPMC_FOREACH_H
 
 
-#ifdef BUILD_WITH_11
+#ifdef __cplusplus >= 201103L
 
       #define FOREACH( iterator, container ) for( iterator: container )
  
