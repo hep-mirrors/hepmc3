@@ -1,5 +1,6 @@
 /**
- *  @brief Basic test of installation
+ *  @file basic_tree.cc
+ *  @brief Basic example of building HepMC3 tree by hand
  *
  *  Based on HepMC2/examples/example_BuildEventFromScratch.cc
  */
@@ -7,13 +8,15 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/Search/FindParticles.h"
-#include "HepMC/IO/IO_GenEvent.h"
-#include "HepMC/IO/IO_RootStreamer.h"
 
-#include <iostream>
+// Useful definition of a FORACH loop that either uses BOOST_FOREACH
+// or c++11 'foreach' loop depending on the HepMC installation options
 #include "HepMC/foreach.h"
 
+#include <iostream>
 using namespace HepMC;
+using std::cout;
+using std::endl;
 
 int main() {
     //
@@ -42,10 +45,11 @@ int main() {
     //                                                  #
     GenEvent evt(Units::GEV,Units::MM);
 
-    GenParticlePtr p1 = make_shared<HepMC::GenParticle>( FourVector(0,0,7000,700),                2212, 3 );
-    GenParticlePtr p2 = make_shared<HepMC::GenParticle>( FourVector(0,0,-7000,700),               2212, 3 );
-    GenParticlePtr p3 = make_shared<HepMC::GenParticle>( FourVector(.750,-1.569,32.191,32.238),   1,    3 );
-    GenParticlePtr p4 = make_shared<HepMC::GenParticle>( FourVector(-3.047,-19.,-54.629,57.920), -2,    3 );
+    //                                                               px      py        pz       e     pdgid status
+    GenParticlePtr p1 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
+    GenParticlePtr p2 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
+    GenParticlePtr p3 = make_shared<HepMC::GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
+    GenParticlePtr p4 = make_shared<HepMC::GenParticle>( FourVector(-3.047,-19.0,    -54.629,  57.920),  -2,  3 );
 
     GenVertexPtr v1 = make_shared<HepMC::GenVertex>();
     v1->add_particle_in (p1);
@@ -62,8 +66,8 @@ int main() {
     v3->add_particle_in(p4);
     evt.add_vertex(v3);
 
-    GenParticlePtr p5 = make_shared<HepMC::GenParticle>( FourVector(-3.813,0.113,-1.833,4.233 ),   22, 1 );
-    GenParticlePtr p6 = make_shared<HepMC::GenParticle>( FourVector(1.517,-20.68,-20.605,85.925), -24, 3 );
+    GenParticlePtr p5 = make_shared<HepMC::GenParticle>( FourVector(-3.813,  0.113, -1.833, 4.233),  22, 1 );
+    GenParticlePtr p6 = make_shared<HepMC::GenParticle>( FourVector( 1.517,-20.68, -20.605,85.925), -24, 3 );
 
     v3->add_particle_out(p5);
     v3->add_particle_out(p6);
@@ -72,42 +76,58 @@ int main() {
     v4->add_particle_in (p6);
     evt.add_vertex(v4);
 
-    GenParticlePtr p7 = make_shared<HepMC::GenParticle>( FourVector(-2.445,28.816,6.082,29.552),    1, 1 );
-    GenParticlePtr p8 = make_shared<HepMC::GenParticle>( FourVector(3.962,-49.498,-26.687,56.373), -2, 1 );
+    GenParticlePtr p7 = make_shared<HepMC::GenParticle>( FourVector(-2.445, 28.816,  6.082,29.552),  1, 1 );
+    GenParticlePtr p8 = make_shared<HepMC::GenParticle>( FourVector( 3.962,-49.498,-26.687,56.373), -2, 1 );
 
     v4->add_particle_out(p7);
     v4->add_particle_out(p8);
 
-    std::cout<<std::endl<<"Find all stable particles: "<<std::endl;
+    //
+    // Example of use of the search engine
+    //
+
+    // 1)
+    cout << endl << "Find all stable particles: " << endl;
+
     FindParticles search(evt, FIND_ALL, STATUS == 1 && STATUS_SUBCODE == 0);
 
     FOREACH( const GenParticlePtr &p, search.results() ) {
         p->print();
     }
 
-    std::cout<<std::endl<<"Find all ancestors of particle with id "<<p5->id()<<": "<<std::endl;
+    // 3)
+    cout << endl << "Find all ancestors of particle with id " << p5->id() << ": " << endl;
+
     FindParticles search2(p5, FIND_ALL_ANCESTORS);
 
     FOREACH( const GenParticlePtr &p, search2.results() ) {
         p->print();
     }
 
-    std::cout<<std::endl<<"Find stable descendants of particle with id "<<p4->id()<<": "<<std::endl;
-    std::cout<<"(just for test, we check both for status == 1 and no end vertex)"<<std::endl;
+    // 3)
+    cout << endl << "Find stable descendants of particle with id " << p4->id() << ": " << endl;
+    cout<<"(we check both for status == 1 and no end vertex just to be safe)" << endl;
+
     FindParticles search3(p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX);
 
     FOREACH( const GenParticlePtr &p, search3.results() ) {
         p->print();
     }
 
-    std::cout<<std::endl<<"Narrow down search results to quarks: "<<std::endl;
+    // 3b)
+    cout << endl << "Narrow down results of previous search to quarks only: " << endl;
+
     search3.narrow_down( PDG_ID >= -6 && PDG_ID <= 6 );
 
     FOREACH( const GenParticlePtr &p, search3.results() ) {
         p->print();
     }
 
+
     evt.print();
+
+    cout << endl << "Dumping all of the event-related information "      << endl
+                 << "(including particles and vertices in list format):" << endl << endl;
     evt.dump();
 
     return 0;

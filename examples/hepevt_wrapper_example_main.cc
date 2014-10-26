@@ -1,25 +1,37 @@
 /**
- *  @brief Basic test of HEPEVT interface
+ *  @file hepevt_wrapper_example_main.cc
+ *  @brief Basic example of HEPEVT interface use
  *
+ *  Fills HEPEVT twice - once using FORTRAN and second time using C++
+ *  Tests that both times printouts from FORTRAN and C++ match
+ *
+ *  Note that HepMC/HEPEVT_Wrapper.h file is a standalone header file
+ *  and can be copied over to user directory. No linking to HepMC library
+ *  is needed to use this wrapper.
  */
 
-/* NOTE: These two define statements can be used to change HEPEVT definition.
-         They must be defined before including HepMC/HEPEVT_Wrapper.h
-         For this test, the same changes must be included in FORTRAN code */
+
+/* These two define statements can be used to change HEPEVT definition.
+   They must be defined before including HepMC/HEPEVT_Wrapper.h
+   For this test, if these values were to be changed, the same changes
+   must be included in FORTRAN code
+
+   NOTE: default is NMXHEP=10000 and double precision */
 
 //#define HEPMC_HEPEVT_NMXHEP 4000
 //#define HEPMC_HEPEVT_PRECISION float
 #include "HepMC/HEPEVT_Wrapper.h"
 
 #include <iostream>
+using HepMC::HEPEVT_Wrapper;
 using std::cout;
 using std::endl;
-using HepMC::HEPEVT_Wrapper;
 
-/* Defined in hepevt_wrapper_test.f */
+// Forward declaration of functions defined in hepevt_wrapper_example_fortran.f
 extern "C" void simple_tau_hepevt_event_();
 extern "C" void phodmp_();
 
+// Add single particle to HEPEVT event
 void add_particle(int id, int status, double px, double py, double pz, double e, double m,
                   int mother1, int mother2, int daughter1, int daughter2) {
     int idx = HEPEVT_Wrapper::number_entries()+1;
@@ -74,22 +86,25 @@ void simple_tau_hepevt_event_cpp() {
 }
 
 int main() {
-    cout << endl << "HEPEVT wrapper test - FORTRAN EVENT" << endl;
-    cout <<         "-----------------------------------" << endl;
+    cout << endl << "HEPEVT wrapper example - FORTRAN EVENT" << endl;
+    cout <<         "--------------------------------------" << endl;
+
     simple_tau_hepevt_event_();
 
     cout << endl << "FORTRAN PRINTOUT" << endl << endl;
     phodmp_();
-    cout << endl << "C++ PRINTOUT" << endl << endl;
+
+    cout << endl << "C++ PRINTOUT"     << endl << endl;
     HEPEVT_Wrapper::print_hepevt();
 
-    cout << endl << "HEPEVT wrapper test - C++ EVENT" << endl;
-    cout <<         "-------------------------------" << endl;
+    cout << endl << "HEPEVT wrapper example - C++ EVENT" << endl;
+    cout <<         "----------------------------------" << endl;
 
     simple_tau_hepevt_event_cpp();
 
     cout << endl << "FORTRAN PRINTOUT" << endl << endl;
     phodmp_();
+
     cout << endl << "C++ PRINTOUT" << endl << endl;
     HEPEVT_Wrapper::print_hepevt();
 }
