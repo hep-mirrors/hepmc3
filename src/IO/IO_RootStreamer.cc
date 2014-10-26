@@ -11,6 +11,7 @@
 #include "HepMC/Setup.h"
 
 #include <vector>
+#include <cstring> // memset
 
 #include <HepMC/foreach.h>
 using std::vector;

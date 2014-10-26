@@ -16,6 +16,7 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include <cstring>
 
 #include <HepMC/foreach.h>
 
