@@ -176,6 +176,18 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
         }
     }
 
+    // Remove vertices with no incoming particles or no outgoing particles
+    for(unsigned int i=0; i<m_vertex_cache.size(); ++i) {
+        if( m_vertex_cache[i]->particles_in().size() == 0 ) {
+            m_vertex_cache[i]->particles_out().clear();
+            m_vertex_cache[i] = NULL;
+        }
+        else if( m_vertex_cache[i]->particles_out().size() == 0 ) {
+            m_vertex_cache[i]->particles_in().clear();
+            m_vertex_cache[i] = NULL;
+        }
+    }
+
     // Reserve memory for the event
     evt.reserve( m_particle_cache.size(), m_vertex_cache.size() );
 

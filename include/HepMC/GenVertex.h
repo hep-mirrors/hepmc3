@@ -59,8 +59,8 @@ public:
     void add_particle_in ( const GenParticlePtr &p ); //!< Add incoming particle
     void add_particle_out( const GenParticlePtr &p ); //!< Add outgoing particle
 
-    const vector<GenParticlePtr>& particles_in()  const { return m_particles_in;  } //!< Get list of incoming particles
-    const vector<GenParticlePtr>& particles_out() const { return m_particles_out; } //!< Get list of outgoing particles
+    vector<GenParticlePtr>& particles_in()  { return m_particles_in;  } //!< Get/set list of incoming particles
+    vector<GenParticlePtr>& particles_out() { return m_particles_out; } //!< Get/set list of outgoing particles
 
     /** @brief Get position
      *
