@@ -83,7 +83,7 @@ private:
      *
      *  Helper routine for writing single particle to file
      */
-    void write_particle(const GenParticlePtr &p, int second_field, bool is_new_version);
+    void write_particle(const GenParticlePtr &p, int second_field);
 
 private:
     /** @brief Parse event

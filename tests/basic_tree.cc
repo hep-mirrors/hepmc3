@@ -107,31 +107,7 @@ int main() {
         p->print();
     }
 
-    std::cout<<std::endl<<"Versioning test:"<<std::endl<<std::endl;
-
-    evt.new_version("2nd version");
-
-    p7->mark_deleted();
-
-    GenParticlePtr old_p9 = evt.particles().back();
-    GenParticlePtr p9     = old_p9->new_version();
-
-    old_p9->production_vertex()->add_particle_out(p9);
-
-    GenParticlePtr p10 = make_shared<HepMC::GenParticle>( FourVector(1,2,3,4), 99, 77 );
-
-    GenVertexPtr vn  = make_shared<HepMC::GenVertex>();
-    vn->add_particle_in(p9);
-    vn->add_particle_out(p10);
-    evt.add_vertex(vn);
-
-    IO_GenEvent file("test.hepmc",std::ios::out);
-    file.set_precision(4);
-    file.write_event(evt);
-
-    std::cout<<std::endl;
-    evt.print_version(1);
-    evt.print_version(2);
+    evt.print();
     evt.dump();
 
     return 0;

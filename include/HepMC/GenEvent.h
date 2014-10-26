@@ -7,7 +7,8 @@
  *  @class HepMC::GenEvent
  *  @brief Stores event-related information
  *
- *  Manages GenParticle and GenVertex objects
+ *  Manages event-related information.
+ *  Contains lists of GenParticle and GenVertex objects
  *
  */
 #include "HepMC/Data/SmartPointer.h"
@@ -33,18 +34,12 @@ public:
     /** @brief Default constructor */
     GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit);
 
-    /** @brief Default destructor */
-    ~GenEvent();
-
 //
 // Functions
 //
 public:
-    /** @brief Print current version of the event */
-    void print( std::ostream& ostr = std::cout ) const { print_version( last_version(),ostr ); }
-
-    /** @brief Print selected version of the event */
-    void print_version( unsigned char version, std::ostream& ostr = std::cout ) const;
+    /** @brief Print event */
+    void print( std::ostream& ostr = std::cout ) const;
 
     /** @brief Dump the whole content of the event memory. Useful for debugging */
     void dump() const;
@@ -66,9 +61,6 @@ public:
      *        will be ignored.
      */
     void add_tree( const vector<GenParticlePtr> &particles );
-
-    /** @brief Create new version */
-    void new_version( std::string name );
 
     /** @brief Reserve memory for particles and vertices
      *
@@ -112,8 +104,6 @@ public:
 
     const GenCrossSection*     cross_section()                          const { return m_cross_section.get(); } //!< Get cross-section information
     void                       set_cross_section(GenCrossSectionPtr cs)       { m_cross_section = cs;         } //!< Set cross-section information
-
-    unsigned char last_version() const { return m_versions.size(); } //!< Get last version number
 //
 // Deprecated functions
 //
@@ -138,7 +128,6 @@ private:
     GenCrossSectionPtr          m_cross_section;   //!< Cross-section information
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
-    std::vector<std::string>    m_versions;        //!< List of versions
 };
 
 } // namespace HepMC

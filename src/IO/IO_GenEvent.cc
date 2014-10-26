@@ -108,12 +108,6 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     int vertices_processed = 0;
     int lowest_vertex_id   = 0;
 
-    m_cursor += sprintf(m_cursor, "T Version 0");
-    flush();
-
-    m_cursor += sprintf(m_cursor, "\n");
-    flush();
-
     // Print particles
     FOREACH( const GenParticlePtr &p, evt.particles() ) {
 
@@ -135,7 +129,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
             lowest_vertex_id = v->id();
         }
 
-        write_particle( p, production_vertex, false );
+        write_particle( p, production_vertex );
     }
 
     // Flush rest of the buffer to file
@@ -195,15 +189,13 @@ void IO_GenEvent::write_vertex(const GenVertexPtr &v) {
     }
 }
 
-void IO_GenEvent::write_particle(const GenParticlePtr &p, int second_field, bool is_new_version) {
+void IO_GenEvent::write_particle(const GenParticlePtr &p, int second_field) {
 
     m_cursor += sprintf(m_cursor,"P %i",p->id());
     flush();
 
-    if ( is_new_version ) m_cursor += sprintf(m_cursor," X%i",second_field);
-    else                  m_cursor += sprintf(m_cursor," %i",second_field);
+    m_cursor += sprintf(m_cursor," %i",   second_field);
     flush();
-
     m_cursor += sprintf(m_cursor," %i",   p->pdg_id() );
     flush();
     m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().px() );
@@ -285,10 +277,6 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
                 break;
             case 'U':
                 is_parsing_successful = parse_units(evt,buf);
-                break;
-            case 'T':
-                DEBUG( 10, "IO_GenEvent: T: skipping version (for now)" )
-                is_parsing_successful = true;
                 break;
             case 'F':
                 is_parsing_successful = parse_pdf_info(evt,buf);

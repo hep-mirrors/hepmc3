@@ -20,9 +20,18 @@
 #include "PythiaValidationTool.h"
 #endif
 
+/* NOTE: we have to copy this code frome HepMC/Version.h
+         as this header is not available when compiling
+         validation program with HepMC2 */
+#if __cplusplus >= 201103L
+    #define FOREACH( iterator, container ) for( iterator: container )
+#else
+    #include <boost/foreach.hpp>
+    #define FOREACH( iterator, container ) BOOST_FOREACH( iterator, container )
+#endif
+
 #include <fstream>
 #include <cstdio>
-#include "HepMC/foreach.h"
 
 ValidationControl::ValidationControl():
 m_events(0),

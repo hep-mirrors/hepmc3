@@ -12,9 +12,7 @@ namespace HepMC {
 
 GenParticle::GenParticle( const FourVector &momentum, int pdg_id, int status ):
 m_event(NULL),
-m_id(0),
-m_version_created(0),
-m_version_deleted(0) {
+m_id(0) {
     m_data.pdg_id            = pdg_id;
     m_data.momentum          = momentum;
     m_data.status            = status;
@@ -26,22 +24,15 @@ m_version_deleted(0) {
 GenParticle::GenParticle( const GenParticleData &data ):
 m_event(NULL),
 m_id(0),
-m_data(data),
-m_version_created(0),
-m_version_deleted(0) {
+m_data(data) {
 }
 
 void GenParticle::print( std::ostream& ostr ) const {
 
     ostr << "GenParticle: ";
     ostr.width(3);
-    ostr << id() << " (versions: ";
-
-    int vd = version_deleted();
-    if(vd) ostr<<(int)version_created()<<"-"<<vd-1;
-    else   ostr<<(int)version_created()<<"-"<<(int)parent_event()->last_version();
-
-    ostr <<") barcode: ";
+    ostr << id();
+    ostr << " barcode: ";
     ostr.width(5);
     ostr << barcode() <<" PDGID: ";
     ostr.width(5);
@@ -73,9 +64,7 @@ void GenParticle::print( std::ostream& ostr ) const {
          << std::endl;
 }
 
-void GenParticle::print_version( unsigned char version, std::ostream& ostr ) const {
-    if( !is_in_version(version) ) return;
-
+void GenParticle::print_event_listing( std::ostream& ostr ) const {
     ostr << " ";
     ostr.width(6);
     ostr << id();
@@ -110,39 +99,6 @@ void GenParticle::print_version( unsigned char version, std::ostream& ostr ) con
     }
 
     ostr << std::endl;
-}
-
-GenParticlePtr GenParticle::new_version() {
-    if( !m_event ) return GenParticlePtr();
-
-    if( m_next_version ) {
-        WARNING( "GenVertex::new_version: newer version of this vertex exists" )
-        return GenParticlePtr();
-    }
-
-    if( version_created() == m_event->last_version() ) {
-        WARNING( "GenVertex::new_version: this vertex already belongs to last version" )
-        return GenParticlePtr();
-    }
-
-    if( version_deleted() != 0 ) {
-        WARNING( "GenParticle::new_version: vertex marked as deleted" )
-        return GenParticlePtr();
-    }
-
-    GenParticlePtr new_p = new GenParticle(data());
-    m_event->add_particle(new_p);
-
-    m_next_version    = new_p;
-    m_version_deleted = m_event->last_version();
-
-    return new_p;
-}
-
-void GenParticle::mark_deleted() {
-    if( !m_event ) return;
-
-    m_version_deleted = m_event->last_version();
 }
 
 double GenParticle::generated_mass() const {

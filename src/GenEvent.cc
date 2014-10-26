@@ -23,25 +23,19 @@ namespace HepMC {
 GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit) {
     set_print_precision(2);
     set_event_number(0);
-    m_versions.push_back("Version 1");
     m_momentum_unit = momentum_unit;
     m_length_unit   = length_unit;
 }
 
-GenEvent::~GenEvent() {
-}
-
-void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const {
-    if( version == 0 || version > last_version() ) {
-      ERROR( "GenEvent::print_version: version no. out of range: " << (int)version )
-      return;
-    }
+void GenEvent::print( std::ostream& ostr ) const {
 
     ostr << "________________________________________________________________________________" << endl;
     ostr << "GenEvent: #" << event_number() << endl;
     ostr << " Momenutm units: " << Units::name(m_momentum_unit)
          << " Position units: " << Units::name(m_length_unit) << endl;
-    ostr << " Version: '" << m_versions[version-1] <<"' (no. "<< (int)version << "/"<< (int)last_version() << ")" << endl;
+    if( m_pdf_info )      m_pdf_info->print(ostr);
+    if( m_cross_section ) m_cross_section->print(ostr);
+    if( m_heavy_ion )     m_heavy_ion->print(ostr);
     ostr << " Entries in this event: " << vertices().size() << " vertices, "
          << particles().size() << " particles." << endl;
 
@@ -61,7 +55,7 @@ void GenEvent::print_version( unsigned char version, std::ostream& ostr ) const 
 
     // Print all vertices
     FOREACH( const GenVertexPtr &v, vertices() ) {
-        v->print_version(version,ostr);
+        v->print_event_listing(ostr);
     }
 
     // Restore the stream state
@@ -76,9 +70,13 @@ void GenEvent::dump() const {
     std::cout<<"-----------------------------"<<std::endl;
     std::cout<<std::endl;
 
+    if( m_pdf_info )      m_pdf_info->print();
+    if( m_cross_section ) m_cross_section->print();
+    if( m_heavy_ion )     m_heavy_ion->print();
+
     std::cout<<"GenParticlePtr ("<<particles().size()<<")"<<std::endl;
 
-    FOREACH( const GenParticlePtr &p, particles() ) 
+    FOREACH( const GenParticlePtr &p, particles() )
     {
         p->print();
     }
@@ -98,8 +96,6 @@ void GenEvent::add_particle( const GenParticlePtr &p ) {
 
     p->m_event = this;
     p->m_id    = particles().size();
-
-    p->m_version_created = last_version();
 }
 
 void GenEvent::add_vertex( const GenVertexPtr &v ) {
@@ -120,8 +116,6 @@ void GenEvent::add_vertex( const GenVertexPtr &v ) {
         if(!p->in_event()) add_particle(p);
         p->set_production_vertex(v->m_this.lock());
     }
-
-    v->m_version_created = last_version();
 }
 
 void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
@@ -190,10 +184,6 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
     )
 }
 
-void GenEvent::new_version( std::string name ) {
-    m_versions.push_back( name );
-}
-
 void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
     m_particles.reserve(particles);
     m_vertices.reserve(vertices);
@@ -227,8 +217,6 @@ void GenEvent::clear() {
 
     m_particles.clear();
     m_vertices.clear();
-    m_versions.clear();
-    m_versions.push_back("Version 1");
 }
 
 //

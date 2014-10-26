@@ -123,6 +123,10 @@ bool IO_HepMC2_adapter::fill_next_event(GenEvent &evt) {
                 DEBUG( 10, "IO_HepMC2_adapter: H: skipping Heavy Ions (for now)" )
                 is_parsing_successful = true;
                 break;
+            case 'N':
+                DEBUG( 10, "IO_HepMC2_adapter: skipping weights (for now)" )
+                is_parsing_successful = true;
+                break;
             default:
                 WARNING( "IO_HepMC2_adapter: skipping unrecognised prefix: " << buf[0] )
                 is_parsing_successful = true;

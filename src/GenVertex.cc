@@ -14,44 +14,50 @@ namespace HepMC {
 
 GenVertex::GenVertex( const FourVector& position ):
 m_event(NULL),
-m_id(0),
-m_version_created(0),
-m_version_deleted(0) {
+m_id(0) {
     m_data.position = position;
 }
 
 GenVertex::GenVertex( const GenVertexData &data):
 m_event(NULL),
 m_id(0),
-m_data(data),
-m_version_created(0),
-m_version_deleted(0) {
+m_data(data) {
 }
 
 void GenVertex::print( std::ostream& ostr ) const {
-    ostr << "GenVertex:  ";
-    ostr << id() << " (versions: ";
-
-    int vd = version_deleted();
-    if(vd) ostr<<(int)version_created()<<"-"<<vd-1;
-    else   ostr<<(int)version_created()<<"-"<<(int)parent_event()->last_version();
-
-    ostr <<") barcode: ";
-    ostr << " in: "  << particles_in().size()
-         << " out: " << particles_out().size();
+    ostr << "GenVertex:  " << id();
+    ostr << " barcode: ";
+    ostr.width(5);
+    ostr << barcode() <<" PDGID: ";
+    ostr.width(3);
+    ostr << " in: "  << particles_in().size();
+    ostr.width(3);
+    ostr << " out: " << particles_out().size();
 
     const FourVector &pos = position();
     if( !pos.is_zero() ) {
+
+        // Find the current stream state
+        std::ios_base::fmtflags orig = ostr.flags();
+        std::streamsize         prec = ostr.precision();
+
+        if(m_event) ostr.precision(m_event->print_precision());
+
+        ostr.setf(std::ios::scientific, std::ios::floatfield);
+        ostr.setf(std::ios_base::showpos);
+
         ostr << " @ " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
+
+        // Restore the stream state
+        ostr.flags(orig);
+        ostr.precision(prec);
     }
     else ostr << " (X,cT): 0";
 
     ostr << std::endl;
 }
 
-void GenVertex::print_version( unsigned char version, std::ostream& ostr ) const {
-    if( !is_in_version(version) ) return;
-
+void GenVertex::print_event_listing(std::ostream& ostr ) const {
     ostr << "Vtx: ";
     ostr.width(6);
     ostr << id() ;
@@ -68,32 +74,26 @@ void GenVertex::print_version( unsigned char version, std::ostream& ostr ) const
 
     // Print out all the incoming particles
     FOREACH( const GenParticlePtr &p, particles_in() ) {
-
-        if( !p->is_in_version(version) ) continue;
-
         if( !printed_header ) {
             ostr << " I: ";
             printed_header = true;
         }
         else ostr << "    ";
 
-        p->print_version(version,ostr);
+        p->print_event_listing(ostr);
     }
 
     printed_header = false;
 
     // Print out all the outgoing particles
     FOREACH( const GenParticlePtr &p, particles_out() ) {
-
-        if( !p->is_in_version(version) ) continue;
-
         if( !printed_header ) {
             ostr << " O: ";
             printed_header = true;
         }
         else ostr << "    ";
 
-        p->print_version(version,ostr);
+        p->print_event_listing(ostr);
     }
 }
 
@@ -125,41 +125,6 @@ void GenVertex::add_particle_out( const GenParticlePtr &p ) {
     p->set_production_vertex( m_this.lock() );
 
     if(m_event) m_event->add_particle(p);
-}
-
-
-GenVertexPtr GenVertex::new_version() {
-    if( !m_event ) return GenVertexPtr();
-
-    if( m_next_version ) {
-        WARNING( "GenVertex::new_version: newer version of this vertex exists" )
-        return GenVertexPtr();
-    }
-
-    if( version_created() == m_event->last_version() ) {
-        WARNING( "GenVertex::new_version: this vertex already belongs to last version" )
-        return GenVertexPtr();
-    }
-
-    if( version_deleted() != 0 ) {
-        WARNING( "GenVertex::new_version: vertex marked as deleted" )
-        return GenVertexPtr();
-    }
-
-    GenVertexPtr new_v = new GenVertex(data());
-    m_event->add_vertex(new_v);
-
-    m_next_version    = new_v;
-    m_version_deleted = m_event->last_version();
-
-    return new_v;
-}
-
-void GenVertex::mark_deleted() {
-    if( !m_event ) return;
-    if( m_version_deleted ) return;
-
-    m_version_deleted = m_event->last_version();
 }
 
 const FourVector& GenVertex::position() const {
