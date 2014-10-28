@@ -90,8 +90,8 @@ public:
     unsigned int particles_count()             const { return m_particles.size();     } //!< Get number of particles
     unsigned int vertices_count()              const { return m_vertices.size();      } //!< Get number of vertices
 
-    vector<GenParticlePtr>& particles()              { return m_particles;            } //!< Get/set list of particles
-    vector<GenVertexPtr>&   vertices()               { return m_vertices;             } //!< Get/set list of vertices
+    const vector<GenParticlePtr>& particles()  const { return m_particles;            } //!< Get/set list of particles
+    const vector<GenVertexPtr>&   vertices()   const { return m_vertices;             } //!< Get/set list of vertices
 
     const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit;        } //!< Get momentum unit
     const Units::LengthUnit&   length_unit()   const { return m_length_unit;          } //!< Get length unit
