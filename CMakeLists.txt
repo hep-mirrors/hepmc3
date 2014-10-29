@@ -93,14 +93,14 @@ install(TARGETS HepMC_static DESTINATION lib)
 install(DIRECTORY include/ DESTINATION include COMPONENT headers)
 
 #---Options
-option(HEPMC_ENABLE_TESTING "Enables building of tests.")
+#option(HEPMC_ENABLE_TESTING "Enables building of tests.")
 option(HEPMC_BUILD_EXAMPLES "Enables building of examples.")
 
 #------------------------------------------------------------------------------
 # Add the examples and tests subdirectories
-if(HEPMC_ENABLE_TESTING)
-  add_subdirectory(tests)
-endif()
+#if(HEPMC_ENABLE_TESTING)
+#  add_subdirectory(tests)
+#endif()
 
 if(HEPMC_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
