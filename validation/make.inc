@@ -1,1 +1,1 @@
-../../make.inc
+../make.inc

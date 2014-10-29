@@ -4,6 +4,7 @@
 #include "HepMC/GenVertex.h"
 
 #include "HepMC/foreach.h"
+using namespace HepMC;
 
 namespace Tauolapp
 {
@@ -202,7 +203,7 @@ void TauolaHepMC3Particle::checkMomentumConservation(){
   if( sum.length() > Tauola::momentum_conservation_threshold ) {
     Log::Warning()<<"Momentum not conserved in the vertex:"<<endl;
     Log::RedirectOutput(Log::Warning(false));
-    m_particle->end_vertex()->print_version(m_particle->parent_event()->last_version(),cout);
+    m_particle->end_vertex()->print(cout);
     Log::RevertOutput();
     return;
   }
