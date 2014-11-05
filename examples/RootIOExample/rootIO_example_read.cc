@@ -7,15 +7,7 @@
 //
 
 #include "HepMC/GenEvent.h"
-#include "HepMC/IO/IO_RootStreamer.h"
-
-#include "TROOT.h"
-#include "TFile.h"
-#include "TSystem.h"
-#include "TKey.h"
-
-#include <iostream>
-#include <sstream>
+#include "IO_RootStreamer.h"
 
 using namespace HepMC;
 using std::cout;
@@ -28,47 +20,25 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    // initialize ROOT
-    TSystem ts;
-    gSystem->Load("librootIO_example_ClassesDict");
+    IO_RootStreamer rootio(argv[1], "READ");
 
-    TFile fo(argv[1]);
-
-    IO_RootStreamer input;
-    GenEventData* eventdata = NULL;
-
-    fo.GetListOfKeys()->Print();
-
-    TIter next(fo.GetListOfKeys());
-    TKey *key;
-
+    GenEvent evt(Units::GEV,Units::MM);
     int events_parsed = 0;
 
-    while ((key=(TKey*)next()))
-    {
-        eventdata = (GenEventData*)key->ReadObj();
+    while (rootio.fill_next_event(evt))
+    {        
+      if( events_parsed == 0 ) {
+	cout << "First event: " << endl;
+	evt.print();
+      }
 
-        if( !eventdata ) break;
-
-        GenEvent evt(Units::GEV,Units::MM);
-
-        input.set_data( *eventdata );
-        input.fill_next_event(evt);
-
-        if( events_parsed == 0 ) {
-            cout << "First event: " << endl;
-            evt.print();
-        }
-
-        delete eventdata;
-
-        ++events_parsed;
-
-        if( events_parsed%1000 == 0 ) {
-            cout << "Event: " << events_parsed << endl;
-        }
+      ++events_parsed;
+      
+      if( events_parsed%1000 == 0 ) {
+	cout << "Event: " << events_parsed << endl;
+      }
     }
-
+    
     cout << "Events parsed: " << events_parsed << endl;
     return 0;
 }

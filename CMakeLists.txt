@@ -92,6 +92,14 @@ install(TARGETS HepMC DESTINATION lib)
 install(TARGETS HepMC_static DESTINATION lib)
 install(DIRECTORY include/ DESTINATION include COMPONENT headers)
 
+#---Optional build of rootIO-------------------------------------------------
+
+find_package(ROOT QUIET)
+
+if(ROOT_FOUND)
+  add_subdirectory(rootIO)
+endif()
+
 #---Options
 #option(HEPMC_ENABLE_TESTING "Enables building of tests.")
 option(HEPMC_BUILD_EXAMPLES "Enables building of examples.")

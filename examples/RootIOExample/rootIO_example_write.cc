@@ -8,11 +8,7 @@
 
 #include "HepMC/GenEvent.h"
 #include "HepMC/IO/IO_GenEvent.h"
-#include "HepMC/IO/IO_RootStreamer.h"
-
-#include "TROOT.h"
-#include "TFile.h"
-#include "TSystem.h"
+#include "IO_RootStreamer.h"
 
 #include <iostream>
 #include <sstream>
@@ -28,16 +24,10 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    // initialize ROOT
-    TSystem ts;
-    gSystem->Load("librootIO_example_ClassesDict");
-
-
-    TFile* fFile = new TFile(argv[2],"RECREATE");
+    IO_RootStreamer rootio(argv[2],"RECREATE");
 
     //
     IO_GenEvent input_file (argv[1],std::ios::in);
-    IO_RootStreamer output;
 
     int events_parsed = 0;
 
@@ -54,22 +44,11 @@ int main(int argc, char **argv) {
             evt.print();
         }
 
-        output.write_event(evt);
+        rootio.write_event(evt);
 
-        std::ostringstream os;
-        os << events_parsed;
-        std::string stevt = "Event_" + os.str();
-        const char* chevt = stevt.c_str();
-
-        cout << "writing " << stevt << endl;
-
-        fFile->WriteObject(&(output.data()), chevt);
-
-        events_parsed++;
     }
 
     input_file.close();
-    fFile->Close();
 
     return 0;
 }

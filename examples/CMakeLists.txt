@@ -15,12 +15,6 @@ else()
   message(STATUS "pythia8_example disabled")
 endif()
 
-find_package(ROOT QUIET)
-
-if(ROOT_USE_FILE)
-  include(${ROOT_USE_FILE})
-endif()
-
 if(ROOT_FOUND)
   add_subdirectory(RootIOExample)
 else()
