@@ -11,16 +11,24 @@
 #include <iostream>
 using namespace HepMC;
 
-int main() {
+int main(int argc, char **argv) {
     Pythia8::Pythia pythia;
     Pythia8ToHepMC3 pythiaToHepMC;
 
-    pythia.readFile("pythia8_ee_to_Z_to_tautau.conf");
+    char* filename = (char*)"pythia8_ee_to_Z_to_tautau.conf";
+    if(argc>1) filename = argv[1];
+
+    pythia.readFile(filename);
     pythia.init();
 
-    IO_GenEvent file("out.hepmc3",ios::out);
+    char* output = (char*)"out.hepmc3"; 
+    if(argc==3) output = argv[2];
 
-    for( int i = 0; i< 10000; ++i ) {
+    IO_GenEvent file(output,ios::out);
+
+    int    nEvent    = pythia.mode("Main:numberOfEvents");
+
+    for( int i = 0; i< nEvent; ++i ) {
         if( !pythia.next() ) continue;
 
         HepMC::GenEvent hepmc( Units::GEV, Units::MM );

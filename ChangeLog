@@ -1,3 +1,11 @@
+2014-11-05  Witold Pokorski
+
+	* redesign of ROOT I/O, moved to a separate library
+
+	* added .exe in examples executables names
+
+	* improvement in Pythia8 example; possibility of setting number of events and passing conf and output file names as arguments
+
 2014-10-22  Tomasz Przedzinski & Witold Pokorski
 
 	* Added ROOT I/O
