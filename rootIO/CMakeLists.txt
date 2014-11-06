@@ -21,7 +21,7 @@ list(APPEND ROOT_FIND_COMPONENTS RIO)
 
 #target_link_libraries(rootIO_ClassesDict HepMC ${ROOT_LIBRARIES})
 
-add_library(rootIO ${PROJECT_SOURCE_DIR}/rootIO/src/IO_RootStreamer.cc rootIO_Classes.cxx)
+add_library(rootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/IO_RootStreamer.cc rootIO_Classes.cxx)
 
 set(libsuffix .so)
 set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES} SUFFIX ${libsuffix})
