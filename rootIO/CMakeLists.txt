@@ -14,19 +14,10 @@ ROOT_GENERATE_DICTIONARY(rootIO_Classes include/rootIO_Classes.hh LINKDEF includ
 
 list(APPEND ROOT_FIND_COMPONENTS RIO)
 
-add_library(rootIO_ClassesDict SHARED rootIO_Classes.cxx ${sources})
-set(libsuffix .so)
-set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES} SUFFIX ${libsuffix})
-set_target_properties(rootIO_ClassesDict PROPERTIES ${ROOT_LIBRARY_PROPERTIES})
-
-target_link_libraries(rootIO_ClassesDict HepMC ${ROOT_LIBRARIES})
-###
-
-add_library(rootIO ${PROJECT_SOURCE_DIR}/rootIO/src/IO_RootStreamer.cc)
+add_library(rootIO ${PROJECT_SOURCE_DIR}/rootIO/src/IO_RootStreamer.cc rootIO_Classes.cxx)
 target_link_libraries(rootIO ${ROOT_LIBRARIES} RIO HepMC)
 set_target_properties(rootIO PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 
 
 # installs 
 install(TARGETS rootIO DESTINATION lib)
-install(TARGETS rootIO_ClassesDict DESTINATION lib)

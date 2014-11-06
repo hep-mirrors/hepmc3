@@ -29,9 +29,6 @@ namespace HepMC {
 
   IO_RootStreamer::IO_RootStreamer(const std::string &filename, const std::string mode) {
 
-    TSystem ts;
-    gSystem->Load("librootIO_ClassesDict");
-
     fFile = new TFile(filename.c_str(), mode.c_str());
     next = new TIter(fFile->GetListOfKeys());
   }
