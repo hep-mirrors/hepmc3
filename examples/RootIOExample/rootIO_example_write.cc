@@ -1,54 +1,58 @@
-//
-//  rootIOexample.cc
-//  HepMC3
-//
-//  Created by Witold Pokorski on 16/10/14.
-//
-//
-
+/**
+ *  @file rootIO_example_write.cc
+ *  @brief Basic example of use of root I/O: writing events to file
+ *
+ *  @author Witold Pokorski
+ *  @date   16/10/14
+ */
 #include "HepMC/GenEvent.h"
 #include "HepMC/IO/IO_GenEvent.h"
 #include "IO_RootStreamer.h"
 
 #include <iostream>
-#include <sstream>
 
 using namespace HepMC;
 using std::cout;
 using std::endl;
 
+/** Main */
 int main(int argc, char **argv) {
 
     if( argc<3 ) {
-        cout << "Usage: " << argv[0] << " <HepMC3_input_file> <output_file>" << endl;
+        cout << "Usage: " << argv[0] << " <input_hepmc3_file> <output_root_file>" << endl;
         exit(-1);
     }
 
-    IO_RootStreamer rootio(argv[2],"RECREATE");
-
-    //
-    IO_GenEvent input_file (argv[1],std::ios::in);
+    IO_GenEvent     text_input (argv[1],std::ios::in);
+    IO_RootStreamer root_output(argv[2],std::ios::out);
 
     int events_parsed = 0;
 
-    while(!input_file.rdstate()) {
+    while( !text_input.rdstate() ) {
 
         GenEvent evt(Units::GEV,Units::MM);
 
-        input_file.fill_next_event(evt);
+        text_input.fill_next_event(evt);
 
-        if(input_file.rdstate()) break;
+        if( text_input.rdstate() ) break;
 
         if( events_parsed == 0 ) {
             cout << "First event: " << endl;
             evt.print();
         }
 
-        rootio.write_event(evt);
+        root_output.write_event(evt);
+        ++events_parsed;
 
+        if( events_parsed%1000 == 0 ) {
+            cout << "Event: " << events_parsed << endl;
+        }
     }
 
-    input_file.close();
+    text_input.close();
+    root_output.close();
+
+    std::cout << "Events parsed and written: " << events_parsed << std::endl;
 
     return 0;
 }

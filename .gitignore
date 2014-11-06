@@ -37,3 +37,12 @@
 *.hepmc
 *.hepmc2
 *.hepmc3
+
+# CMake output files
+cmake_install.cmake
+CMakeFiles
+CMakeFiles.txt
+CMakeCache.txt
+install_manifest.txt
+install_manifest_headers.txt
+outputs

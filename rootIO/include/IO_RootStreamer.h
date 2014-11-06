@@ -7,6 +7,9 @@
  *  @class HepMC::IO_RootStreamer
  *  @brief GenEvent I/O parsing and serialization for root files
  *
+ *  If HepMC was compiled with path to ROOT available, this class can be used
+ *  for root file I/O in the same manner as with HepMC::IO_GenEvent class.
+ *
  *  @ingroup IO
  *
  */
@@ -14,22 +17,25 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/Data/GenEventData.h"
 
+// ROOT header files
 #include "TFile.h"
 #include "TKey.h"
 
+#include <fstream>
 
 namespace HepMC {
-
 
 class IO_RootStreamer : public IO_Base {
 //
 // Constructors
 //
 public:
-    /** Default constructor */
-    IO_RootStreamer();
-    IO_RootStreamer(const std::string &filename, const std::string mode);
+    /** @brief Default constructor
+     *  @warning If file opened in write mode exists, it will be deleted
+     */
+    IO_RootStreamer(const std::string &filename, std::ios::openmode mode);
 
+    /** @brief Default destructor */
     ~IO_RootStreamer();
 
 //
@@ -48,22 +54,18 @@ public:
      */
     bool fill_next_event(GenEvent &evt);
 
-//
-// Accessors
-//
-public:
-    //    GenEventData& data()                             { return m_data; } //!< Get event data
-    //    void          set_data(const GenEventData &data) { m_data = data; } //!< Set event data
+    void close();
 
+    /** @brief Get stream error state flags */
+    std::ios::iostate rdstate();
 //
 // Fields
 //
 private:
-
-    TFile* fFile;
-    TIter* next;
-
-    GenEventData m_data; //!< Event data
+    shared_ptr<TFile>  m_file; //!< File handler
+    shared_ptr<TIter>  m_next; //!< Iterator for event reading
+    std::ios::openmode m_mode; //!< I/O stream mode
+    GenEventData       m_data; //!< Event data
 };
 
 } // namespace HepMC
