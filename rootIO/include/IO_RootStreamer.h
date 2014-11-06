@@ -54,6 +54,7 @@ public:
      */
     bool fill_next_event(GenEvent &evt);
 
+    /** @brief Close file stream */
     void close();
 
     /** @brief Get stream error state flags */
