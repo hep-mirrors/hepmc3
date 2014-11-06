@@ -74,6 +74,8 @@ set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -ffixed-line-l
 
 #### RPATH handling #####
 
+set(CMAKE_MACOSX_RPATH 1)
+
 # use, i.e. don't skip the full RPATH for the build tree
 SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 
