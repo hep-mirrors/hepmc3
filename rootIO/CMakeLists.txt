@@ -33,3 +33,4 @@ set_target_properties(rootIO PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINAR
 
 # installs 
 install(TARGETS rootIO DESTINATION lib)
+install(DIRECTORY include/HepMC DESTINATION include COMPONENT headers)

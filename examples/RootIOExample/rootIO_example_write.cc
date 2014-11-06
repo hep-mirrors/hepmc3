@@ -7,7 +7,7 @@
  */
 #include "HepMC/GenEvent.h"
 #include "HepMC/IO/IO_GenEvent.h"
-#include "IO_RootStreamer.h"
+#include "HepMC/IO/IO_RootStreamer.h"
 
 #include <iostream>
 

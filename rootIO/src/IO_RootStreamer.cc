@@ -3,8 +3,7 @@
  *  @brief Implementation of \b class IO_RootStreamer
  *
  */
-#include "IO_RootStreamer.h"
-
+#include "HepMC/IO/IO_RootStreamer.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
