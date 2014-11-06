@@ -6,7 +6,7 @@
 
     @subsection pre_releases Alpha and beta stage releases
 
-    - <b>6.Nov.2014:</b> <a href="releases/HepMC3-alpha1.tgz">     <b>First alpha release of HepMC3 </b></a>
+    - <b>6.Nov.2014:</b> <a href="releases/hepmc3-alpha1.tgz">     <b>First alpha release of HepMC3 </b></a>
 
     @subsection datafiles Data files for testing purposes
 
@@ -28,6 +28,8 @@
     - <a href="resources/docs">                            <b>Slides from the status update meetings </b></a>
 
     @subsection diagram Class diagram
+
+    @note Some of the classes and less significant relations omitted for clarity
 
     <img src="class_diagram.png">
 
