@@ -2,28 +2,35 @@
 
     @mainpage Main page
 
-    @section links Links to project-related webpages
+    @section releases Releases
+
+    @subsection pre_releases Alpha and beta stage releases
+
+    - <b>6.Nov.2014:</b> <a href="releases/HepMC3-alpha1.tgz">     <b>First alpha release of HepMC3 </b></a>
+
+    @subsection datafiles Data files for testing purposes
+
+    - <a href="resources/datafiles"> <b>Sample test files</b></a>
+      - Note that paths provided in validation config files may need to be changed to use these files
+      - Note also that some of these files are purposely damaged (or cut-off in the middle) to test the I/O module
+
+    @subsection contact Contact information:
+
+    -  <a href="mailto:hepmc-dev@cern.ch"><b>hepmc-dev mailing list</b></a>
+
+    @section documentation Additional documentation
+    - @subpage features
+    - @subpage differences
+
+    @subsection links Links to project-related webpages
     - <a href="https://git.cern.ch/web/hepmc3.git">        <b>HepMC3 Git repository                  </b></a> (requires login)
     - <a href="https://sft.its.cern.ch/jira/browse/HEPMC"> <b>HepMC project JIRA instance            </b></a>
     - <a href="resources/docs">                            <b>Slides from the status update meetings </b></a>
 
-    @section documentation Sections of this documentation
-    - @subpage features
-    - @subpage differences
-
-    @section datafiles Test data files
-
-    - <a href="resources/datafiles"> <b>Sample test files </b></a>
-      - Note that paths provided in validation config files may need to be changed to use these files
-      - Note also that some of these files are purposely damaged (or cut-off in the middle) to test the I/O module
-
-    @section contact Contact information
-    -  <a href="mailto:hepmc-dev@cern.ch"><b>hepmc-dev mailing list</b></a>
-
-    @section diagram Class diagram
+    @subsection diagram Class diagram
 
     <img src="class_diagram.png">
 
     <hr>
-    Last update 15 June 2014
+    Last update 6 November 2014
 */

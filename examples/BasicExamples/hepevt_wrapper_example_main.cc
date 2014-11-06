@@ -27,11 +27,10 @@ using HepMC::HEPEVT_Wrapper;
 using std::cout;
 using std::endl;
 
-// Forward declaration of functions defined in hepevt_wrapper_example_fortran.f
-extern "C" void simple_tau_hepevt_event_();
-extern "C" void phodmp_();
+extern "C" void simple_tau_hepevt_event_(); //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
+extern "C" void phodmp_();                  //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
 
-// Add single particle to HEPEVT event
+/** @brief Add single particle to HEPEVT event */
 void add_particle(int id, int status, double px, double py, double pz, double e, double m,
                   int mother1, int mother2, int daughter1, int daughter2) {
     int idx = HEPEVT_Wrapper::number_entries()+1;
@@ -45,21 +44,24 @@ void add_particle(int id, int status, double px, double py, double pz, double e,
     HEPEVT_Wrapper::set_mass(idx, m);
 }
 
-//
-// In this example we will place the following event into HEPEVT "by hand"
-//
-// 0      Particle Parameters
-// 0 Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M.
-//     1     11      0         3 -    3     0.00    -0.00    45.52    45.52     0.00
-//     2    -11      0         3 -    3    -0.00     0.00   -45.58    45.58     0.00
-//     3     23   1 -    2     4 -    5     0.00     0.00    -0.06    91.11    91.11
-//     4     15      3         6 -    7   -23.19   -26.31   -29.05    45.57     1.78
-//     5    -15      3         8 -    9    23.19    26.31    28.98    45.53     1.78
-//     6     16      4         Stable      -1.26    -1.80    -1.38     2.59     0.01
-//     7   -211      4         Stable     -21.94   -24.51   -27.67    42.98     0.14
-//     8    -16      5         Stable       8.44     8.32     9.62    15.26     0.01
-//     9    211      5         Stable      14.76    17.99    19.36    30.27     0.14
-// 0                       Vector Sum:      0.00     0.00    -0.06    91.11    91.11
+/**
+ * @brief Create simple e+ e- -> Z -> tau+ tau- event
+ *
+ * In this example we will place the following event into HEPEVT "by hand"
+ *
+ * 0      Particle Parameters
+ * 0 Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M.
+ *     1     11      0         3 -    3     0.00    -0.00    45.52    45.52     0.00
+ *     2    -11      0         3 -    3    -0.00     0.00   -45.58    45.58     0.00
+ *     3     23   1 -    2     4 -    5     0.00     0.00    -0.06    91.11    91.11
+ *     4     15      3         6 -    7   -23.19   -26.31   -29.05    45.57     1.78
+ *     5    -15      3         8 -    9    23.19    26.31    28.98    45.53     1.78
+ *     6     16      4         Stable      -1.26    -1.80    -1.38     2.59     0.01
+ *     7   -211      4         Stable     -21.94   -24.51   -27.67    42.98     0.14
+ *     8    -16      5         Stable       8.44     8.32     9.62    15.26     0.01
+ *     9    211      5         Stable      14.76    17.99    19.36    30.27     0.14
+ * 0                       Vector Sum:      0.00     0.00    -0.06    91.11    91.11
+ */
 void simple_tau_hepevt_event_cpp() {
 
     HEPEVT_Wrapper::zero_everything();
@@ -85,6 +87,7 @@ void simple_tau_hepevt_event_cpp() {
                            1.3956753909587860e-01,  5,  0,  0, 0);
 }
 
+/** Main program */
 int main() {
     cout << endl << "HEPEVT wrapper example - FORTRAN EVENT" << endl;
     cout <<         "--------------------------------------" << endl;

@@ -1,4 +1,5 @@
 /**
+ *  @file  pythia8_example.cc
  *  @brief Basic example of use for pythia8 interface
  *
  */
@@ -11,6 +12,7 @@
 #include <iostream>
 using namespace HepMC;
 
+/** Main program */
 int main(int argc, char **argv) {
     Pythia8::Pythia pythia;
     Pythia8ToHepMC3 pythiaToHepMC;

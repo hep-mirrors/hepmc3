@@ -18,6 +18,7 @@ using namespace HepMC;
 using std::cout;
 using std::endl;
 
+/** Main program */
 int main() {
     //
     // In this example we will place the following event into HepMC "by hand"

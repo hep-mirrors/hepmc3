@@ -17,13 +17,13 @@
  *  @todo Do we just make write_event and fill_next_event instead?
  */
 
-// NMXHEP
 #ifndef HEPMC_HEPEVT_NMXHEP
+/** Default number of particles in the HEPEVT structure */
 #define HEPMC_HEPEVT_NMXHEP 10000
 #endif
 
-// momentum precision
 #ifndef HEPMC_HEPEVT_PRECISION
+/** Default precision of the 4-momentum, time-space position and mass */
 #define HEPMC_HEPEVT_PRECISION double
 #endif
 
@@ -36,20 +36,23 @@
       DOUBLE PRECISION PHEP,VHEP
 */
 
-static const int NMXHEP = HEPMC_HEPEVT_NMXHEP;
-typedef HEPMC_HEPEVT_PRECISION momentum_t;
+static const int NMXHEP = HEPMC_HEPEVT_NMXHEP; //!< Number of particles in the HEPEVT structure
+typedef HEPMC_HEPEVT_PRECISION momentum_t;     //!< Precision of the 4-momentum, time-space position and mass
 
+/** @struct HEPEVT
+ *  @brief  C structure representing Fortran common block HEPEVT
+ */
 extern "C" struct HEPEVT
 {
-  int        nevhep;             // event number
-  int        nhep;               // number of entries in the event
-  int        isthep[NMXHEP];     // status code
-  int        idhep [NMXHEP];     // PDG ID
-  int        jmohep[NMXHEP][2];  // pointer to position of 1st and 2nd (or last!) mother
-  int        jdahep[NMXHEP][2];  // pointer to position of 1nd and 2nd (or last!) daughter
-  momentum_t phep  [NMXHEP][5];  // momentum: px, py, pz, e, m
-  momentum_t vhep  [NMXHEP][4];  // time-space position: x, y, z, t
-} hepevt_;
+  int        nevhep;             //!< Event number
+  int        nhep;               //!< Number of entries in the event
+  int        isthep[NMXHEP];     //!< Status code
+  int        idhep [NMXHEP];     //!< PDG ID
+  int        jmohep[NMXHEP][2];  //!< Pointer to position of 1st and 2nd (or last!) mother
+  int        jdahep[NMXHEP][2];  //!< Pointer to position of 1nd and 2nd (or last!) daughter
+  momentum_t phep  [NMXHEP][5];  //!< Momentum: px, py, pz, e, m
+  momentum_t vhep  [NMXHEP][4];  //!< Time-space position: x, y, z, t
+} hepevt_;                       //!< Fortran common block HEPEVT
 
 #include <iostream>
 #include <cstdio>
@@ -79,8 +82,8 @@ public:
 // Accessors
 //
 public:
-    static int    event_number()            { return hepevt_.nevhep;           } //!< Get event number
-    static int    number_entries()          { return hepevt_.nhep;             } //!< Get number of entries
+    static int    event_number()            { return hepevt_.nevhep;             } //!< Get event number
+    static int    number_entries()          { return hepevt_.nhep;               } //!< Get number of entries
     static int    status( int index )       { return hepevt_.isthep[index-1];    } //!< Get status code
     static int    id( int index )           { return hepevt_.idhep[index-1];     } //!< Get PDG particle id
     static int    first_parent( int index ) { return hepevt_.jmohep[index-1][0]; } //!< Get index of 1st mother

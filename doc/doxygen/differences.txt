@@ -8,6 +8,47 @@
     @section technical Technical changes
     ###########################################################################
     ###########################################################################
+    @subsection structure Structure change and header file organization
+    ###########################################################################
+
+    Following changes in header files have been applied:
+    @code{.cpp}
+        HepMC/IO_GenEvent.h  ->  HepMC/IO/IO_GenEvent.h
+        HepMC/HeavyIons.h    ->  HepMC/GenHeavyIons.h   (now a POD struct)
+        HepMC/PdfInfo.h      ->  HepMC/GenPdfInfo.h     (now a POD struct)
+        HepMC/SimpleVector.h ->  HepMC/FourVector.h     (ThreeVector class removed)
+    @endcode
+
+    Following header files are no longer available:
+
+    @code{.cpp}
+        CompareGenEvent.h
+        Flow.h
+        GenRanges.h
+        HepMCDefs.h
+        HerwigWrapper.h
+        IteratorRange.h
+        Polarization.h
+        SearchVector.h
+        StreamHelpers.h
+        StreamInfo.h
+        TempParticleMap.h
+        WeightContainer.h
+
+        enable_if.h
+        is_arithmetic.h
+
+        IO_AsciiParticles.h
+        IO_Exception.h
+        IO_HEPEVT.h
+        IO_HERWIG.h
+
+        PythiaWrapper.h
+        PythiaWrapper6_4.h
+        PythiaWrapper6_4_WIN32.h
+    @endcode
+
+    ###########################################################################
     @subsection memory Memory managed by shared pointers
     ###########################################################################
     Particles and vertices are managed using shared pointers,
@@ -87,23 +128,7 @@
     @subsection deleting Removed function GenEvent::remove_particle()
     ###########################################################################
 
-    Function GenEvent::remove_particle() has been replaced by
-    HepMC3::GenEvent::mark_deleted() with a different role
-    than previous function. Versioning scheme requires that deleting a particle
-    or vertex only tags it as being deleted without actually deleting its data.
-    See \ref versioning for a description on how to use deleted particles or
-    vertices or how to delete them permanently.
-
-    @code{.cpp}
-        GenParticlePtr p = make_shared<GenParticle>();
-
-        event.add_particle(p);
-        event.mark_deleted(p); // marks particle as deleted. Does not remove it from memory
-
-        cout<<p->generated_mass()<<endl; // valid operation - memory is still allocated
-    @endcode
-
-    @note A separate functions will be provided to permanently delete particles or vertices
+    @warning For now, there is no option to delete a particle!
 
     ###########################################################################
     @subsection barcodes Barcodes can no longer be set
@@ -112,16 +137,18 @@
     Barcodes are now solely for backward-compatibility purpose.
     To code information that previously was stored as barcode use
     HepMC3::GenParticle::set_status_subcode()
+
     @note This will be replaced in future with more complex option of defining user code
 
     ###########################################################################
     @subsection units Units are no longer defined at compilation time
     ###########################################################################
 
-    Default units are GEV and CM. To change them use HepMC::GenEvent::set_units
+    Units has to be always provided when creating new event.
+    They can be later changed using HepMC::GenEvent::set_units
 
     @code{.cpp}
-        GenEvent event;
+        GenEvent event(Units::GEV,Units::CM);
 
         GenParticlePtr p = make_shared<GenParticle>();
 
@@ -136,5 +163,5 @@
     @endcode
 
     <hr>
-    Last update 15 June 2014
+    Last update 6 November 2014
 */

@@ -16,6 +16,7 @@ using namespace HepMC;
 using std::cout;
 using std::endl;
 
+/** Main program */
 int main(int argc, char **argv) {
 
     if( argc < 3 ) {

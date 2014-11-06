@@ -4,6 +4,37 @@
     The following is a list of the new features available in HepMC3
 
     ###########################################################################
+    @section cmake Cmake build system
+    ###########################################################################
+
+    HepMC3 is built using CMake and is fully compatible with c++11.
+    Following options are available:
+
+    @code{.cpp}
+        cmake -DHEPMC_ENABLE_CPP11=ON
+              -DHEPMC_BUILD_EXAMPLES=ON
+              -DPYTHIA8_ROOT_DIR=<path_to_pythia8180_or_later>
+              -DROOT_DIR=<path_to_root_bin_dir>
+    @endcode
+
+    @note Path to pythia8 is used for examples only
+
+    @note Path to ROOT is optional. If not provided, CMake will attempt to find
+          default ROOT installation. If no installation is present, ROOT I/O
+          will not be available
+
+    @note If <b>-DHEPMC_ENABLE_CPP11=ON</b> is not used, CMake will attempt to
+          find and use BOOST v1.4 or later
+
+    ###########################################################################
+    @section modules New modules
+    ###########################################################################
+
+    New modules, such as ROOT I/O or search engine, have been added.
+
+    See <b>Modules</b> section for their full list and descriptions.
+
+    ###########################################################################
     @section small Small enchantments
     ###########################################################################
     ###########################################################################
@@ -24,119 +55,51 @@
     will return mass calculated from 4-momentum using HepMC3::FourVector.m()
 
     ###########################################################################
-    @section versioning Versioning
-    ###########################################################################
-    ###########################################################################
-    @subsection versioning_adding Adding version tracking
+    @subsection iterators Iterators
     ###########################################################################
 
-    HepMC3 can record changes made to particles and vertices to keep track
-    of modifications added by different tools.
+    GenEvent and GenVertex containers are now of std::vector type.
+    This greatly simplifies iteration over them
 
     @code{.cpp}
-        event.new_version("Second tool")
+        BOOST_FOREACH( const GenParticlePtr &p, event.particles() ) { {
+            ...
+        }
 
-        GenParticlePtr new_p = old_p->new_version();  // Will create new version of particle
-        old_p->end_vertex()->add_particle_out(new_p); // Particle has to be added to end/production vertex by hand
-
-        event.mark_deleted(old_p);                    // Will mark particle as deleted in new version
-    @endcode
-
-    New version will contain 'new_p' and will not contain particle 'old_p'.
-    Both versions of these particles can be accessed by the user.
-
-    ###########################################################################
-    @subsection versioning_accessing Accessing different versions of the event
-    ###########################################################################
-
-    To print selected version of the event use HepMC3::GenEvent::print_version.
-
-    @code{.cpp}
-        event.print();          // print latest version of the event
-        event.print_version(1); // print original version of the event
-    @endcode
-
-    Use search engine (see \ref search_engine) to access
-    data from different versions.
-
-    ###########################################################################
-    @subsection versioning_flattening Merging selected versions into one (NOT YET IMPLEMENTED!)
-    ###########################################################################
-
-    When some of the information about the versions of the event is no longer
-    needed, it can be removed from the event. This is especially useful when
-    creating a final version of the event before writing to file to save disk
-    space
-
-    @code{.cpp}
-        // Find versions to be merged
-        int v1 = event.find_version("pythia8");
-        int v2 = event.find_version("Tauola++");
-
-
-        // Merge versions
-        event.merge_versions(v1,v2);
-
-        /* Let's say v1 = 3, v2 = 5. Merging these versions will remove
-           informations about version 3 and 4 and make version 5 change its
-           number to 3. Note that this will also change the number
-           of all subsequent versions (version 6 will become 4, etc.) */
-
-        // Flatten the whole event removing all version information
-        event.merge_versions(1,event.last_version());
-    @endcode
-
-    @note Merging versions will permanently delete discarded versions of the
-          particles and vertices which invalidates any references and pointers
-          to these particles.
-
-    @todo This note is actually important as in current scheme, the pointers
-          and references will in most cases remain valid but will point at different
-          particles. How do we deal with that?
-
-    ###########################################################################
-    @subsection versioning_dropping Dropping versions (NOT YET IMPLEMENTED!)
-    ###########################################################################
-
-    Use event.drop_last_version() to undo changes made by the last tool.
-
-    @code{.cpp}
-        // Discard changes made in the last version
-        event.drop_last_version();
-
-        // Discard all modifications made after pythia8 processing
-        int v1 = event.find_version("pythia8);
-
-        // Make sure to check if such version was found!
-        if(v1) {
-            while( event.last_version()>v1 ) event.drop_last_version();
+        BOOST_FOREACH( const GenParticlePtr &p, vertex.particles_in() ) { {
+            ...
         }
     @endcode
 
-    @note As with merging, this will permanently delete discarded versions of the
-          particles and vertices.
-
-    ###########################################################################
-    @subsection versioning_writing Writing single version to file (NOT YET IMPLEMENTED!)
-    ###########################################################################
-
-    By default, IO_GenEvent class writes all available versions of the event.
-    This can be changed to write just one selected version or a range of versions.
+    or (c++11):
 
     @code{.cpp}
+        foreach( const GenParticlePtr &p : event.particles() ) { {
+            ...
+        }
 
-        IO_GenEvent event("output.hepmc",ios::out);
+        foreach( const GenParticlePtr &p : vertex.particles_in() ) { {
+            ...
+        }
+    @endcode
 
-        // Write all versions of the event
-        event.write_event( event );
+    @note one can use macro FOREACH defined in HepMC/foreach.h which uses
+          either BOOST or c++11 depending on the installation options
 
-        // Write only the selected version of the event
-        event.write_event( event, event.last_version() );
+    @code{.cpp}
+        #include "HepMC/foreach.h"
 
-        // Write selected range of versions to the event
-        event.write_event( event, 1, event.last_version() );
+        ...
+
+        FOREACH( const GenParticlePtr &p, event.particles() ) { {
+            ...
+        }
+
+        FOREACH( const GenParticlePtr &p, vertex.particles_in() ) { {
+            ...
+        }
     @endcode
 
     <hr>
-    Last update 15 June 2014
+    Last update 6 November 2014
 */
