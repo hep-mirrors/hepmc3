@@ -1,3 +1,10 @@
+2014-11-07  Witold Pokorski
+
+	* fixes in cmake to export also rootIO library, removed obsolete forcing of .so on Mac
+
+	* changed IO_RootStreamer to inherit from IO_FileBase
+
+
 2014-11-05  Witold Pokorski
 
 	* redesign of ROOT I/O, moved to a separate library

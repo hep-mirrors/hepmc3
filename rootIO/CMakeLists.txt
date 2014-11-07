@@ -23,12 +23,12 @@ list(APPEND ROOT_FIND_COMPONENTS RIO)
 
 add_library(rootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/IO_RootStreamer.cc rootIO_Classes.cxx)
 
-set(libsuffix .so)
-set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES} SUFFIX ${libsuffix})
-set_target_properties(rootIO PROPERTIES ${ROOT_LIBRARY_PROPERTIES})
+#set(libsuffix .so)
+#set(ROOT_LIBRARY_PROPERTIES ${ROOT_LIBRARY_PROPERTIES} SUFFIX ${libsuffix})
+#set_target_properties(rootIO PROPERTIES ${ROOT_LIBRARY_PROPERTIES})
 
 target_link_libraries(rootIO ${ROOT_LIBRARIES} RIO HepMC)
-set_target_properties(rootIO PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
+set_target_properties(rootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 
 
 # installs 

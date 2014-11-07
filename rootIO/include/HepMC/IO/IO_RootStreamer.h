@@ -13,7 +13,7 @@
  *  @ingroup IO
  *
  */
-#include "HepMC/IO/IO_Base.h"
+#include "HepMC/IO/IO_FileBase.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/Data/GenEventData.h"
 
@@ -25,7 +25,7 @@
 
 namespace HepMC {
 
-class IO_RootStreamer : public IO_Base {
+class IO_RootStreamer : public IO_FileBase {
 //
 // Constructors
 //
