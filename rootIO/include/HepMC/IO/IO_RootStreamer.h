@@ -25,7 +25,7 @@
 
 namespace HepMC {
 
-class IO_RootStreamer : public IO_FileBase {
+class IO_RootStreamer : public IO_Base {
 //
 // Constructors
 //

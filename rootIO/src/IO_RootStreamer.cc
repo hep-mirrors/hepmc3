@@ -19,7 +19,6 @@ using std::vector;
 namespace HepMC {
 
 IO_RootStreamer::IO_RootStreamer(const std::string &filename, std::ios::openmode mode):
-IO_FileBase(filename,mode),
 m_mode(mode) {
 
     if ( mode == std::ios::in ) {
