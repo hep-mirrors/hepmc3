@@ -33,4 +33,5 @@ set_target_properties(rootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINAR
 
 # installs 
 install(TARGETS rootIO DESTINATION lib)
+install(DIRECTORY ${PROJECT_BINARY_DIR}/rootIO/ DESTINATION lib FILES_MATCHING PATTERN "*.pcm")
 install(DIRECTORY include/HepMC DESTINATION include COMPONENT headers)

@@ -17,7 +17,7 @@ set(CMAKE_MODULE_PATH
 #----------------------------------------------------------------------------
 #----------------------------------------------------------------------------
 
-option(HEPMC_ENABLE_CPP11 "Enables building with C++11.")
+option(HEPMC_ENABLE_CPP11 "Enables building with C++11." ON)
 
 if(HEPMC_ENABLE_CPP11)
   include(CheckCXXCompilerFlag)
