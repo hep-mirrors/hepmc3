@@ -8,7 +8,7 @@
 
 namespace HepMC {
 
-bool GenPdfInfo::parse_attribute_container(const AttributeContainer &att) {
+bool GenPdfInfo::from_string(const string &att) {
     const char *cursor = att.data();
 
     parton_id[0] = atoi(cursor);
@@ -40,7 +40,7 @@ bool GenPdfInfo::parse_attribute_container(const AttributeContainer &att) {
     return true;
 }
 
-bool GenPdfInfo::fill_attribute_container(AttributeContainer &att) const {
+bool GenPdfInfo::to_string(string &att) const {
     char buf[255];
     char *cursor = buf;
 

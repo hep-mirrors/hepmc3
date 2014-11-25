@@ -37,11 +37,11 @@ public:
 // Functions
 //
 public:
-    /** @brief Implementation of Attribute::parse_attribute_container */
-    bool parse_attribute_container(const AttributeContainer &att);
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att);
 
-    /** @brief Implementation of Attribute::fill_attribute_container */
-    bool fill_attribute_container(AttributeContainer &att) const;
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const;
 
     /** @brief Set all fields */
     void set_cross_section( double xs, double xs_err ) {

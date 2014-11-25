@@ -64,9 +64,9 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
 
     FOREACH( const value_type1& vt1, evt.attributes() ) {
         FOREACH( const value_type2& vt2, vt1.second ) {
-            AttributeContainer ac;
+            string st;
 
-            bool status = vt2.second->fill_attribute_container(ac);
+            bool status = vt2.second->to_string(st);
 
             if( !status ) {
                 WARNING( "IO_GenEvent::write_event: problem serializing attribute: "<<vt1.first )
@@ -74,7 +74,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
             else {
                 m_cursor += sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
                 flush();
-                write_string(ac);
+                write_string(st);
                 m_cursor += sprintf(m_cursor, "\n");
                 flush();
             }
@@ -490,10 +490,8 @@ bool IO_GenEvent::parse_attribute(GenEvent &evt, const char *buf) {
 
     cursor = cursor2+1;
 
-    // rest of the 'buf' is the attribute container written in string format
-    AttributeContainer ac = cursor;
-
-    shared_ptr<UnparsedAttribute> att = make_shared<UnparsedAttribute>(ac);
+    // rest of the 'buf' is the unparsed attribute
+    shared_ptr<StringAttribute> att = make_shared<StringAttribute>( string(cursor) );
 
     evt.add_attribute(string(name),att);
 

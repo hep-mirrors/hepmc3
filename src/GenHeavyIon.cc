@@ -8,7 +8,7 @@
 
 namespace HepMC {
 
-bool GenHeavyIon::parse_attribute_container(const AttributeContainer &att) {
+bool GenHeavyIon::from_string(const string &att) {
     const char *cursor = att.data();
 
     Ncoll_hard = atoi(cursor);
@@ -52,7 +52,7 @@ bool GenHeavyIon::parse_attribute_container(const AttributeContainer &att) {
     return true;
 }
 
-bool GenHeavyIon::fill_attribute_container(AttributeContainer &att) const {
+bool GenHeavyIon::to_string(string &att) const {
     char buf[255];
 
     sprintf(buf,"%i %i %i %i %i %i %i %i %i %.8e %.8e %.8e %.8e",

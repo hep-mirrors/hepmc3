@@ -8,7 +8,7 @@
 
 namespace HepMC {
 
-bool GenCrossSection::parse_attribute_container(const AttributeContainer &att) {
+bool GenCrossSection::from_string(const string &att) {
     const char *cursor = att.data();
 
     cross_section = atof(cursor);
@@ -19,7 +19,7 @@ bool GenCrossSection::parse_attribute_container(const AttributeContainer &att) {
     return true;
 }
 
-bool GenCrossSection::fill_attribute_container(AttributeContainer &att) const {
+bool GenCrossSection::to_string(string &att) const {
     char buf[64];
 
     sprintf(buf,"%.8e %.8e",

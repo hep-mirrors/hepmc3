@@ -197,7 +197,7 @@ shared_ptr<T> GenEvent::attribute(const string &name) {
     if( !i2->second->is_parsed() ) {
 
         shared_ptr<T> att = make_shared<T>();
-        att->parse_attribute_container(i2->second->attribute_container());
+        att->from_string(i2->second->unparsed_string());
         i2->second = att;
 
         return att;

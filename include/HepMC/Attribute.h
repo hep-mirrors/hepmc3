@@ -2,27 +2,19 @@
 #define  HEPMC_ATTRIBUTE_H
 /**
  *  @file Attribute.h
- *  @brief Definition of \b type AttributeContainer and \b class Attribute
+ *  @brief Definition of \b class Attribute and \b class StringAttribute
  *
  *  @class HepMC::Attribute
  *  @brief Base class for all attributes
  *
- *  Defines functions for parsing AttributeContainer
- *  and serializing the class as AttributeContainer
- *  that each attribute must have
+ *  Contains virtual functions to_string and from_string that
+ *  each attribute must implement
  *
  */
 #include <string>
+using std::string;
 
 namespace HepMC {
-
-/** @brief Attribute container used for serialization and parsing
- *
- *  Any other container can be used if needed. Rest of the code should not
- *  be influenced by this as long as AttributeContainer can be casted
- *  to std::string and created from std::string using operator=
- */
-typedef std::string AttributeContainer;
 
 class Attribute {
 //
@@ -36,68 +28,73 @@ public:
     virtual ~Attribute() {}
 
 protected:
-    /** @brief Protected constructor that allows to set AttributeContainer
+    /** @brief Protected constructor that allows to set string
      *
-     *  Used when parsing attributes from file. An UnparsedAttribute class
+     *  Used when parsing attributes from file. An StringAttribute class
      *  object is made, which uses this constructor to signify that
-     *  it just holds AttributeContainer without parsing it.
+     *  it just holds string without parsing it.
      *
      *  @note There should be no need for user class to ever use this constructor
      */
-    Attribute(const AttributeContainer &ac):m_is_parsed(false),m_attribute_container(ac) {}
+    Attribute(const string &st):m_is_parsed(false),m_string(st) {}
 
 //
-// Functions
+// Virtual Functions
 //
 public:
-    /** @brief Fill class content from AttributeContainer */
-    virtual bool parse_attribute_container(const AttributeContainer &att) = 0;
+    /** @brief Fill class content from string */
+    virtual bool from_string(const string &att) = 0;
 
-    /** @brief Fill AttributeContainer from class content */
-    virtual bool fill_attribute_container(AttributeContainer &att) const = 0;
+    /** @brief Fill string from class content */
+    virtual bool to_string(string &att) const = 0;
 
+//
+// Accessors
+//
+public:
     /** @brief Check if this attribute is parsed */
     bool is_parsed() { return m_is_parsed; }
 
-    /** @brief Get attribute container */
-    const AttributeContainer& attribute_container() const { return m_attribute_container; }
+    /** @brief Get unparsed string */
+    const string& unparsed_string() const { return m_string; }
 
 //
 // Fields
 //
 private:
-    const bool         m_is_parsed;
-    AttributeContainer m_attribute_container;
+    const bool m_is_parsed;
+    string     m_string;
 };
 
 /**
- *  @class HepMC::UnparsedAttribute
- *  @brief Class used when reading attributes from input file
+ *  @class HepMC::StringAttribute
+ *  @brief Attribute that holds a string
  *
- *  Signifies that this class contains an unparsed AttributeContainer.
- *  Used when reading attributes from input file without the knowledge
- *  of what class it represents.
+ *  Default attribute constructed when reading input files.
+ *  It can be then parsed by other attributes or left as a string.
  *
  */
-class UnparsedAttribute : public Attribute {
+class StringAttribute : public Attribute {
 public:
-    /** @brief Default constructor */
-    UnparsedAttribute(const AttributeContainer &ac):Attribute(ac) {}
-
-    /** @brief Implementation of Attribute::parse_attribute_container
+    /** @brief String-based constructor
      *
-     *  No parsing can be done thus returning false if a parsing is attempted
+     *  The Attribute constructor used here marks that this is an unparsed
+     *  string that can be (but does not have to be) parsed
+     *
      */
-    bool parse_attribute_container(const AttributeContainer &att) {
-        return false;
+    StringAttribute(const string &st):Attribute(st) {}
+
+    /** @brief Implementation of Attribute::from_string
+     *
+     *  No parsing is needed
+     */
+    bool from_string(const string &att) {
+        return true;
     }
 
-    /** @brief Implementation of Attribute::fill_attribute_container
-     *
-     *  In case of this class, we do not have to fill the container at all;
-     */
-    bool fill_attribute_container(AttributeContainer &att) const {
-        att = attribute_container();
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+        att = unparsed_string();
         return true;
     }
 };
