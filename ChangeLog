@@ -1,3 +1,17 @@
+2014-07-25  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added beam particles
+
+	* Added backward-compatibility iterators
+
+	* Added Attributes mechanism. Currently used only for event and
+	  keys (strings) are stored in GenEvent (which will change)
+
+	* Updated ASCII file I/O to work with Attributes. ROOT I/O will follow
+
+	* Modified GenPdfInfo, GenHeavyIon and GenCrossSection to work as
+	  Attributes
+
 2014-11-25  Andy Buckley  <andy.buckley@cern.ch>
 
 	* Add HEPMC_DEPRECATED macro in Setup.h
