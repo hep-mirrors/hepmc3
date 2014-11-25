@@ -22,7 +22,7 @@ bool GenCrossSection::parse_attribute_container(const AttributeContainer &att) {
 bool GenCrossSection::fill_attribute_container(AttributeContainer &att) const {
     char buf[64];
 
-    sprintf(buf,"%.8e %.8e\n",
+    sprintf(buf,"%.8e %.8e",
             cross_section,
             cross_section_error);
 

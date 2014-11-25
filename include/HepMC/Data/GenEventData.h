@@ -38,10 +38,6 @@ struct GenEventData {
      */
     std::vector<int> links1;
     std::vector<int> links2; ///< Second id of the vertex links
-
-    GenPdfInfo      pdf_info;      ///< PDF information
-    GenHeavyIon     heavy_ion;     ///< Heavy ion additional information
-    GenCrossSection cross_section; ///< Cross Section additional information
 };
 
 } // namespace HepMC

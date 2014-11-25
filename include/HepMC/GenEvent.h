@@ -98,6 +98,8 @@ public:
     const vector<GenParticlePtr>& particles()  const { return m_particles;            } //!< Get/set list of particles
     const vector<GenVertexPtr>&   vertices()   const { return m_vertices;             } //!< Get/set list of vertices
 
+    const map< string, map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; } //!< Get list of attributes
+
     const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit;        } //!< Get momentum unit
     const Units::LengthUnit&   length_unit()   const { return m_length_unit;          } //!< Get length unit
 
@@ -192,7 +194,15 @@ shared_ptr<T> GenEvent::attribute(const string &name) {
     map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(0);
     if( i2 == i1->second.end() ) return shared_ptr<T>();
 
-    return std::dynamic_pointer_cast<T>(i2->second);
+    if( !i2->second->is_parsed() ) {
+
+        shared_ptr<T> att = make_shared<T>();
+        att->parse_attribute_container(i2->second->attribute_container());
+        i2->second = att;
+
+        return att;
+    }
+    else return std::dynamic_pointer_cast<T>(i2->second);
 }
 
 } // namespace HepMC

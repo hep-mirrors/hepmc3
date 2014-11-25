@@ -119,6 +119,13 @@ private:
      */
     bool parse_particle_information(GenEvent &evt, const char *buf);
 
+    /** @brief Parse attribute
+     *
+     *  Helper routine for parsing attribute information
+     *  @param[out] evt Event that will contain parsed particle
+     *  @param[in] buf Line of text that needs to be parsed
+     */
+    bool parse_attribute(GenEvent &evt, const char *buf);
 //
 // Accessors
 //

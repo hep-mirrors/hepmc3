@@ -58,6 +58,29 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     m_cursor += sprintf(m_cursor, "U %s %s\n",Units::name(evt.momentum_unit()).c_str(),Units::name(evt.length_unit()).c_str());
     flush();
 
+    // Write attributes
+    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
+    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
+
+    FOREACH( const value_type1& vt1, evt.attributes() ) {
+        FOREACH( const value_type2& vt2, vt1.second ) {
+            AttributeContainer ac;
+
+            bool status = vt2.second->fill_attribute_container(ac);
+
+            if( !status ) {
+                WARNING( "IO_GenEvent::write_event: problem serializing attribute: "<<vt1.first )
+            }
+            else {
+                m_cursor += sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
+                flush();
+                write_string(ac);
+                m_cursor += sprintf(m_cursor, "\n");
+                flush();
+            }
+        }
+    }
+
     int vertices_processed = 0;
     int lowest_vertex_id   = 0;
 
@@ -230,6 +253,9 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
                 break;
             case 'U':
                 is_parsing_successful = parse_units(evt,buf);
+                break;
+            case 'A':
+                is_parsing_successful = parse_attribute(evt,buf);
                 break;
             default:
                 WARNING( "IO_GenEvent: skipping unrecognised prefix: " << buf[0] )
@@ -443,6 +469,33 @@ bool IO_GenEvent::parse_particle_information(GenEvent &evt, const char *buf) {
     evt.add_particle(data);
 
     DEBUG( 10, "IO_GenEvent: P: "<<data->barcode()<<" ( mother: "<<mother_barcode<<", pdg_id: "<<data->pdg_id()<<")" )
+
+    return true;
+}
+
+bool IO_GenEvent::parse_attribute(GenEvent &evt, const char *buf) {
+    const char     *cursor  = buf;
+    const char     *cursor2 = buf;
+    char            name[64];
+    int             id = 0;
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    id = atoi(cursor);
+
+    if( !(cursor  = strchr(cursor+1,' ')) ) return false;
+    ++cursor;
+
+    if( !(cursor2 = strchr(cursor,' ')) ) return false;
+    sprintf(name,"%.*s", cursor2-cursor, cursor);
+
+    cursor = cursor2+1;
+
+    // rest of the 'buf' is the attribute container written in string format
+    AttributeContainer ac = cursor;
+
+    shared_ptr<UnparsedAttribute> att = make_shared<UnparsedAttribute>(ac);
+
+    evt.add_attribute(string(name),att);
 
     return true;
 }

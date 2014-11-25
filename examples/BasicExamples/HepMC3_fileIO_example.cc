@@ -42,6 +42,31 @@ int main(int argc, char **argv) {
         if(events_parsed==0) {
             cout << " First event: " << endl;
             evt.print();
+            evt.dump();
+
+            cout << " Testing attribute reading for the first event: " << endl;
+
+            shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
+            shared_ptr<GenHeavyIon>     hi = evt.attribute<GenHeavyIon>("GenHeavyIon");
+            shared_ptr<GenPdfInfo>      pi = evt.attribute<GenPdfInfo>("GenPdfInfo");
+
+            if(cs) {
+                cout << " Has GenCrossSection:   ";
+                cs->print();
+            }
+            else cout << " No GenCrossSection " << endl;
+
+            if(pi) {
+                cout << " Has GenPdfInfo:        ";
+                pi->print();
+            }
+            else cout << " No GenPdfInfo " << endl;
+
+            if(hi) {
+                cout << " Has GenHeavyIon:       ";
+                hi->print();
+            }
+            else cout << " No GenHeavyIon " << endl;
         }
 
         ++events_parsed;
