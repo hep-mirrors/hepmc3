@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #include "McTesterValidationTool.h"
 
 void McTesterValidationTool::initialize() {
@@ -18,4 +23,3 @@ int McTesterValidationTool::process(GenEvent &hepmc) {
 void McTesterValidationTool::finalize() {
     MC_Finalize();
 }
-

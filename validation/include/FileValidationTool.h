@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef FILE_VALIDTAION_TOOL_H
 #define FILE_VALIDTAION_TOOL_H
 

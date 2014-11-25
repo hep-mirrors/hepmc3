@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef Pythia8_Pythia8ToHepMC3_H
 #define Pythia8_Pythia8ToHepMC3_H
 

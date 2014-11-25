@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #include <vector>
 #include "Photos/PhotosHepMC3Particle.h"
 #include "Photos/PhotosHepMC3Event.h"

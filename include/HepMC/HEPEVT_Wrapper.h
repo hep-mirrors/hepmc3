@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef HEPMC_HEPEVT_WRAPPER_H
 #define HEPMC_HEPEVT_WRAPPER_H
 /**

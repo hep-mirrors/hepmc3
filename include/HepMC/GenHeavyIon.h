@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef  HEPMC_HEAVYION_H
 #define  HEPMC_HEAVYION_H
 /**

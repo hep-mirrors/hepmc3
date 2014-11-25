@@ -9,7 +9,7 @@ set_target_properties(pythia8_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${
 
 set(bindir "${CMAKE_INSTALL_PREFIX}/bin")
 set(libdir "${CMAKE_INSTALL_PREFIX}/lib:${PYTHIA8_ROOT_DIR}/lib")
-set(pythia8data "${PYTHIA8_ROOT_DIR}/xmldoc")
+set(pythia8data "${PYTHIA8_XMLDOC_DIR}")
 
 configure_file(${CMAKE_SOURCE_DIR}/examples/Pythia8Example/pythia8_example_env.sh.in
 	       ${PROJECT_BINARY_DIR}/outputs/bin/pythia8_example_env.sh

@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file IO_RootStreamer.cc
  *  @brief Implementation of \b class IO_RootStreamer

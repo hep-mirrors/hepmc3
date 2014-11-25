@@ -7,6 +7,8 @@
 #define HEPMC_HEPMC_H
 
 #include "HepMC/Version.h"
+#include "HepMC/HepMCDefs.h"
+
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
