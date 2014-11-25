@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file rootIO_example_read.cc
  *  @brief Basic example of use of root I/O: reading events from file

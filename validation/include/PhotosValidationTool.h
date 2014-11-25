@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef PHOTOS_VALIDATION_TOOL_H
 #define PHOTOS_VALIDATION_TOOL_H
 

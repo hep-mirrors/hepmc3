@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file HepMC2_adapter_example.cc
  *  @brief Example of use of HepMC2 adapter

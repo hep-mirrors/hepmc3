@@ -1,15 +1,18 @@
-/**
- *  @file basic_tree.cc
- *  @brief Basic example of building HepMC3 tree by hand
- *
- *  Based on HepMC2/examples/example_BuildEventFromScratch.cc
- */
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
+/// @brief Basic example of building HepMC3 tree by hand
+///
+///  Based on HepMC2/examples/example_BuildEventFromScratch.cc
+
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/Search/FindParticles.h"
 
-// Useful definition of a FORACH loop that either uses BOOST_FOREACH
+// Useful definition of a FOREACH loop that either uses BOOST_FOREACH
 // or c++11 'foreach' loop depending on the HepMC installation options
 #include "HepMC/foreach.h"
 

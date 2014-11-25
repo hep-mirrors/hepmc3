@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef _TauolaHepMC3Event_h_included_
 #define _TauolaHepMC3Event_h_included_
 
@@ -67,4 +72,3 @@ class TauolaHepMC3Event : public TauolaEvent{
 
 } // namespace Tauolapp
 #endif
-

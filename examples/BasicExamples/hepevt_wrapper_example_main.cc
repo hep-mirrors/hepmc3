@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file hepevt_wrapper_example_main.cc
  *  @brief Basic example of HEPEVT interface use

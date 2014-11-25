@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file HepMC3_fileIO_example.cc
  *  @brief Test of file I/O

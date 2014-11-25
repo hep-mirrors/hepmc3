@@ -1,3 +1,7 @@
+2014-11-25  Andy Buckley  <andy.buckley@cern.ch>
+
+	* Add HEPMC_DEPRECATED macro in Setup.h
+
 2014-11-18  Witold Pokorski
 
 	* fixe in cmake for rootIO library to work with ROOT6

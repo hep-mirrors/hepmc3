@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #include "PythiaValidationTool.h"
 
 PythiaValidationTool::PythiaValidationTool( const string &filename ):m_filename(filename),m_timer("pythia8 conversion time") {

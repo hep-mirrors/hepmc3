@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file IO_HepMC2_adapter.cc
  *  @brief Implementation of \b class IO_HepMC2_adapter

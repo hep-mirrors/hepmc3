@@ -1,8 +1,11 @@
-/**
- *  @file  pythia8_example.cc
- *  @brief Basic example of use for pythia8 interface
- *
- */
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
+//
+/// @brief Basic example of use for pythia8 interface
+
 #include "HepMC/GenEvent.h"
 #include "HepMC/IO/IO_GenEvent.h"
 
@@ -23,7 +26,7 @@ int main(int argc, char **argv) {
     pythia.readFile(filename);
     pythia.init();
 
-    char* output = (char*)"out.hepmc3"; 
+    char* output = (char*)"out.hepmc3";
     if(argc==3) output = argv[2];
 
     IO_GenEvent file(output,ios::out);

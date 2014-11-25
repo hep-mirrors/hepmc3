@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file IO_GenEvent.cc
  *  @brief Implementation of \b class IO_GenEvent
@@ -23,6 +28,7 @@
 using std::vector;
 
 namespace HepMC {
+
 
 IO_GenEvent::IO_GenEvent(const std::string &filename, std::ios::openmode mode):
 IO_FileBase(filename,mode),

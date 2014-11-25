@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file IO_RootStreamer.cc
  *  @brief Implementation of \b class IO_RootStreamer
@@ -101,7 +106,7 @@ void IO_RootStreamer::write_event(const GenEvent &evt) {
     sprintf(buf,"%15i",evt.event_number());
 
     int nbytes = m_file->WriteObject(&m_data, buf);
-    
+
     if( nbytes == 0 ) {
         ERROR( "IO_RootStreamer: error writing event")
         m_file->Close();
