@@ -48,7 +48,7 @@ public:
     void print( std::ostream& ostr = std::cout ) const;
 
     /// @brief Dump the whole content of the event memory. Useful for debugging
-    /// @too Dump to where, in what format? Is this really a core API feature?
+    /// @todo Dump to where, in what format? Is this really a core API feature?
     void dump() const;
 
     /// Get printout precision. Default is 2

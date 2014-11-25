@@ -23,6 +23,8 @@
  *
  *  The units of cross_section and cross_section_error are expected to be pb.
  *
+ *  @ingroup attributes
+ *
  */
 #include <iostream>
 #include "HepMC/Attribute.h"

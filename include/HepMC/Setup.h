@@ -105,8 +105,12 @@ namespace HepMC {
     /// @todo Move to a dedicated header once we have more than one
     //@{
 
+    /// @class Exception
+    /// @brief Standard runtime error
     /// @todo Should it be GenException? It's a HepMC thing, but not really a "gen" thing
     struct Exception : public std::runtime_error {
+
+      /// Runtime error message
       Exception(const std::string& msg) : std::runtime_error(msg) {}
     };
 

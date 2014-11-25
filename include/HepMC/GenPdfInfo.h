@@ -20,6 +20,9 @@
  *  @note The contents of pdf1 and pdf2 are expected to be x*f(x).
  *        The LHAPDF set ids are the entries in the first column of
  *        http:///projects.hepforge.org/lhapdf/PDFsets.index
+ *
+ *  @ingroup attributes
+ *
  */
 #include <iostream>
 #include "HepMC/Attribute.h"
@@ -32,6 +35,7 @@ class GenPdfInfo : public Attribute {
 // Fields
 //
 public:
+    /// @todo We need description for the fields of GenPdfInfo
     int    parton_id[2];
     int    pdf_id[2];
     double scale;

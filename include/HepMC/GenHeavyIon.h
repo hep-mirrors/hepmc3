@@ -14,6 +14,8 @@
  *
  *  This is an example of event attribute used to store Heavy Ion information
  *
+ *  @ingroup attributes
+ *
  */
 #include <iostream>
 #include "HepMC/Attribute.h"
@@ -26,6 +28,7 @@ class GenHeavyIon : public Attribute {
 // Fields
 //
 public:
+    /// @todo We need description for the fields of GenHeavyIon
     int   Ncoll_hard;
     int   Npart_proj;
     int   Npart_targ;

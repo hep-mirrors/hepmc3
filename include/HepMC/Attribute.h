@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef  HEPMC_ATTRIBUTE_H
 #define  HEPMC_ATTRIBUTE_H
 /**
@@ -9,6 +14,8 @@
  *
  *  Contains virtual functions to_string and from_string that
  *  each attribute must implement
+ *
+ *  @ingroup attributes
  *
  */
 #include <string>
@@ -62,8 +69,8 @@ public:
 // Fields
 //
 private:
-    const bool m_is_parsed;
-    string     m_string;
+    const bool m_is_parsed; //!< Is this attribute parsed?
+    string     m_string;    //!< Raw (unparsed) string
 };
 
 /**
@@ -72,6 +79,8 @@ private:
  *
  *  Default attribute constructed when reading input files.
  *  It can be then parsed by other attributes or left as a string.
+ *
+ *  @ingroup attributes
  *
  */
 class StringAttribute : public Attribute {
