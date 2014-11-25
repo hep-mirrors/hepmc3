@@ -29,7 +29,7 @@
 
     Attributes can be attached to GenEvent, GenParticle or GenVertex
     and they can have any format defined by the user
-    (see @ref<user_attributes>). An attribute is accessed through
+    (see @ref writing_attributes). An attribute is accessed through
     a shared pointer and identified by its name.
 
     Example of reading an attribute from the event:
