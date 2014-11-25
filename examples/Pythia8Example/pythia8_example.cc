@@ -1,11 +1,8 @@
-// -*- C++ -*-
-//
-// This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
-//
-//
-/// @brief Basic example of use for pythia8 interface
-
+/**
+ *  @file  pythia8_example.cc
+ *  @brief Basic example of use for pythia8 interface
+ *
+ */
 #include "HepMC/GenEvent.h"
 #include "HepMC/IO/IO_GenEvent.h"
 
@@ -17,19 +14,18 @@ using namespace HepMC;
 
 /** Main program */
 int main(int argc, char **argv) {
+    if (argc < 3) {
+        cout << "Usage: " << argv[0] 
+	     << " <pythia_config_file> <output_hepmc3_file>" << endl;
+        exit(-1);
+    }
+
     Pythia8::Pythia pythia;
     Pythia8ToHepMC3 pythiaToHepMC;
-
-    char* filename = (char*)"pythia8_ee_to_Z_to_tautau.conf";
-    if(argc>1) filename = argv[1];
-
-    pythia.readFile(filename);
+    pythia.readFile(argv[1]);
     pythia.init();
 
-    char* output = (char*)"out.hepmc3";
-    if(argc==3) output = argv[2];
-
-    IO_GenEvent file(output,ios::out);
+    IO_GenEvent file(argv[2],ios::out);
 
     int    nEvent    = pythia.mode("Main:numberOfEvents");
 
@@ -49,5 +45,5 @@ int main(int argc, char **argv) {
     }
 
     file.close();
-    pythia.statistics();
+    pythia.stat();
 }
