@@ -12,7 +12,7 @@
  *  @class HepMC::Setup
  *  @brief Configuration for HepMC
  *
- *  Contains macro definitions for printing debug output.
+ *  Contains macro definitions for printing debug output, feature deprecation, etc.
  *  Static class - configuration is shared among all HepMC events
  *  and program threads
  *
@@ -21,61 +21,92 @@
 
 namespace HepMC {
 
-class Setup {
-//
-// Constructors
-//
-private:
-    /** @brief Private constructor */
-    Setup() {}
-    /** @brief Private destructor */
-    ~Setup() {}
 
-//
-// Accessors
-//
-public:
-    static bool print_errors()                { return m_is_printing_errors;    } //!< Get error messages printing flag
-    static void set_print_errors(bool flag)   { m_is_printing_errors   = flag;  } //!< Set error messages printing flag
+  class Setup {
 
-    static bool print_warnings()              { return m_is_printing_warnings;  } //!< Get warning messages printing flag
-    static void set_print_warnings(bool flag) { m_is_printing_warnings = flag;  } //!< Get warning messages printing flag
+      /// Private constructor
+      Setup() {}
+      /// Private destructor
+      ~Setup() {}
 
-    static int  debug_level()                 { return m_debug_level;           } //!< Get debug level
-    static void set_debug_level(int level)    { m_debug_level          = level; } //!< Set debug level
 
-//
-// Fields
-//
-public:
-    static const unsigned int DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS; //!< Default maxUlps for AlmostEqual2sComplement function (double precision)
-    static const double       DOUBLE_EPSILON;                      //!< Default threshold for comparing double variables
+  public:
 
-private:
-    static bool m_is_printing_errors;   //!< Flag for printing error messages
-    static bool m_is_printing_warnings; //!< Flag for printing warning messages
-    static int  m_debug_level;          //!< Level of debug messages printed out
-};
+      /// @name Accessors
+      //@{
 
-/** @brief Macro for printing error messages */
-#define ERROR(MESSAGE)       if( Setup::print_errors() )         { std::cerr << "ERROR::"                 << MESSAGE << std::endl; }
+      /// Get error messages printing flag
+      static bool print_errors()                { return m_is_printing_errors;    }
+      /// set error messages printing flag
+      static void set_print_errors(bool flag)   { m_is_printing_errors   = flag;  }
 
-/** @brief Macro for printing warning messages */
-#define WARNING(MESSAGE)     if( Setup::print_warnings() )       { std::cout << "WARNING::"               << MESSAGE << std::endl; }
+      /// Get warning messages printing flag
+      static bool print_warnings()              { return m_is_printing_warnings;  }
+      /// Set warning messages printing flag
+      static void set_print_warnings(bool flag) { m_is_printing_warnings = flag;  }
 
-// Debug messages and code that will not go to the release version
-#ifndef HEPMC_RELEASE_VERSION
+      /// Get debug level
+      static int  debug_level()                 { return m_debug_level;           }
+      /// Set debug level
+      static void set_debug_level(int level)    { m_debug_level          = level; }
+      //@}
 
-/** @brief Macro for printing debug messages with appropriate debug level */
-#define DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
+      /// @name Static constants
+      //@{
+      /// Default maxUlps for AlmostEqual2sComplement function (double precision)
+      static const unsigned int DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS;
 
-/** @brief Macro for storing code useful for debugging */
-#define DEBUG_CODE_BLOCK( x ) x
+      /// Default threshold for comparing double variables
+      static const double DOUBLE_EPSILON;
 
-#else
-#define DEBUG( x,y )
-#define DEBUG_CODE_BLOCK( x )
-#endif
+      //@}
+
+
+  private:
+
+      static bool m_is_printing_errors;   //!< Flag for printing error messages
+      static bool m_is_printing_warnings; //!< Flag for printing warning messages
+      static int  m_debug_level;          //!< Level of debug messages printed out
+  };
+
+
+  /// @name Printing macros
+  //@{
+
+  /** @brief Macro for printing error messages */
+  #define ERROR(MESSAGE)       if( Setup::print_errors() )         { std::cerr << "ERROR::"                 << MESSAGE << std::endl; }
+
+  /** @brief Macro for printing warning messages */
+  #define WARNING(MESSAGE)     if( Setup::print_warnings() )       { std::cout << "WARNING::"               << MESSAGE << std::endl; }
+
+  // Debug messages and code that will not go to the release version
+  #ifndef HEPMC_RELEASE_VERSION
+
+  /** @brief Macro for printing debug messages with appropriate debug level */
+  #define DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
+
+  /** @brief Macro for storing code useful for debugging */
+  #define DEBUG_CODE_BLOCK( x ) x
+
+  #else
+  #define DEBUG( x,y )
+  #define DEBUG_CODE_BLOCK( x )
+  #endif
+
+  //@}
+
+
+  // Deprecation macro
+  #if __GNUC__ && __cplusplus && HEPMC_NO_DEPRECATION_WARNINGS == 0
+  #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+  #if GCC_VERSION >= 40500
+    #define HEPMC_DEPRECATED(x) __attribute__((deprecated(x)))
+  #else
+    #define HEPMC_DEPRECATED(x) __attribute__((deprecated))
+  #endif
+  #else
+    #define HEPMC_DEPRECATED(x)
+  #endif
 
 } // namespace HepMC
 
