@@ -129,10 +129,7 @@ endif()
 option(HEPMC_BUILD_EXAMPLES "Enables building of examples.")
 
 #------------------------------------------------------------------------------
-# Add the examples and tests subdirectories
-#if(HEPMC_ENABLE_TESTING)
-#  add_subdirectory(tests)
-#endif()
+# Add the examples subdirectories
 
 if(HEPMC_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
@@ -142,6 +139,13 @@ endif()
 add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
                                    -DCOMPONENTS="headers"
                                    -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
+
+#------------------------------------------------------------------------------
+# Add the validation subdirectories
+if(HEPMC_ENABLE_VALIDATION)
+  add_subdirectory(validation)
+endif()
+
 
 # Generate config CMake files to be used by other projects
 #
