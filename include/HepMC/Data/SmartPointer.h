@@ -96,10 +96,14 @@ namespace HepMC {
         /// @name Deprecated functions
         //@{
 
+        #ifndef HEPMC_NO_DEPRECATED
+
         /// Cast to raw pointer
         ///@deprecated Should not be used at all
         HEPMC_DEPRECATED("Use smart pointers instead of raw pointers")
         operator T*() const { return m_data.get(); }
+
+        #endif
 
         //@}
 
