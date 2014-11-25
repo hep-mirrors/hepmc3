@@ -38,6 +38,10 @@ void GenEvent::print( std::ostream& ostr ) const {
     if( m_heavy_ion )     m_heavy_ion->print(ostr);
     ostr << " Entries in this event: " << vertices().size() << " vertices, "
          << particles().size() << " particles." << endl;
+    ostr << " Beam particle indexes:";
+    if(m_beam_particle_1) ostr << " " << m_beam_particle_1->id();
+    if(m_beam_particle_2) ostr << " " << m_beam_particle_2->id();
+    ostr << "\n";
 
     // Print a legend to describe the particle info
     ostr << "                                    GenParticle Legend" << endl;

@@ -20,6 +20,8 @@
 #include <iostream>
 #include <vector>
 using std::vector;
+using std::pair;
+using std::make_pair;
 
 namespace HepMC {
 
@@ -104,6 +106,11 @@ public:
 
     const GenCrossSection*     cross_section()                          const { return m_cross_section.get(); } //!< Get cross-section information
     void                       set_cross_section(GenCrossSectionPtr cs)       { m_cross_section = cs;         } //!< Set cross-section information
+
+    bool                                valid_beam_particles()                                                 const { return (bool)m_beam_particle_1 && (bool)m_beam_particle_2; } //!< Test to see if we have two valid beam particles
+    pair<GenParticlePtr,GenParticlePtr> beam_particles()                                                       const { return make_pair(m_beam_particle_1,m_beam_particle_2);     } //!< Get incoming beam particles
+    void                                set_beam_particles(const GenParticlePtr &p1, const GenParticlePtr &p2)       { m_beam_particle_1 = p1;      m_beam_particle_2 = p2;       } //!< Set incoming beam particles
+    void                                set_beam_particles(const pair<GenParticlePtr,GenParticlePtr> &p)             { m_beam_particle_1 = p.first; m_beam_particle_2 = p.second; } //!< Set incoming beam particles
 //
 // Deprecated functionality
 //
@@ -146,6 +153,8 @@ private:
     GenHeavyIonPtr              m_heavy_ion;       //!< Heavy ion generator additional information
     GenPdfInfoPtr               m_pdf_info;        //!< Pdf information
     GenCrossSectionPtr          m_cross_section;   //!< Cross-section information
+    GenParticlePtr              m_beam_particle_1; //!< First beam particle
+    GenParticlePtr              m_beam_particle_2; //!< Second beam particle
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
 };

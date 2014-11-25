@@ -61,6 +61,7 @@ int main() {
     v2->add_particle_in (p2);
     v2->add_particle_out(p4);
     evt.add_vertex(v2);
+    evt.set_beam_particles(p1,p2); // declare that p1 and p2 are beam particles
 
     GenVertexPtr v3 = make_shared<HepMC::GenVertex>();
     v3->add_particle_in(p3);
