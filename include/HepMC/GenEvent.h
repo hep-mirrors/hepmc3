@@ -105,7 +105,7 @@ public:
     const GenCrossSection*     cross_section()                          const { return m_cross_section.get(); } //!< Get cross-section information
     void                       set_cross_section(GenCrossSectionPtr cs)       { m_cross_section = cs;         } //!< Set cross-section information
 //
-// Deprecated functions
+// Deprecated functionality
 //
 public:
     __attribute__((deprecated("Use GenParticlePtr instead of GenParticle*"))) void add_particle( GenParticle *p ); //!< Add particle by raw pointer @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
@@ -114,6 +114,26 @@ public:
     __attribute__((deprecated("Use GenHeavyIonPtr instead of GenHeavyIon*")))         void set_heavy_ion(GenHeavyIon *hi);         //!< Set heavy ion generator additional information by raw pointer @deprecated Use GenEvent::set_heavy_ion( GenHeavyIonPtr hi);         instead
     __attribute__((deprecated("Use GenPdfInfoPtr instead of GenPdfInfo*")))           void set_pdf_info(GenPdfInfo *pi);           //!< Set pdf information by raw pointer                            @deprecated Use GenEvent::set_pdf_info( GenPdfInfoPtr pi);           instead
     __attribute__((deprecated("Use GenCrossSectionPtr instead of GenCrossSection*"))) void set_cross_section(GenCrossSection *cs); //!< Set cross-section information by raw pointer                  @deprecated Use GenEvent::set_cross_section( GenCrossSectionPtr cs); instead
+
+    typedef std::vector<GenParticlePtr>::iterator       particle_iterator;       //!< @deprecated Backward compatibility iterators
+    typedef std::vector<GenParticlePtr>::const_iterator particle_const_iterator; //!< @deprecated Backward compatibility iterators
+
+    typedef std::vector<GenVertexPtr>::iterator         vertex_iterator;         //!< @deprecated Backward compatibility iterators
+    typedef std::vector<GenVertexPtr>::const_iterator   vertex_const_iterator;   //!< @deprecated Backward compatibility iterators
+
+    __attribute__((deprecated("Iterate over std container particles() instead"))) particle_iterator       particles_begin()       { return m_particles.begin(); } //!< @deprecated Backward compatibility iterators
+    __attribute__((deprecated("Iterate over std container particles() instead"))) particle_iterator       particles_end()         { return m_particles.end();   } //!< @deprecated Backward compatibility iterators
+    __attribute__((deprecated("Iterate over std container particles() instead"))) particle_const_iterator particles_begin() const { return m_particles.begin(); } //!< @deprecated Backward compatibility iterators
+    __attribute__((deprecated("Iterate over std container particles() instead"))) particle_const_iterator particles_end()   const { return m_particles.end();   } //!< @deprecated Backward compatibility iterators
+    __attribute__((deprecated("Iterate over std container vertices() instead")))  vertex_iterator         vertices_begin()        { return m_vertices.begin();  } //!< @deprecated Backward compatibility iterators
+    __attribute__((deprecated("Iterate over std container vertices() instead")))  vertex_iterator         vertices_end()          { return m_vertices.end();    } //!< @deprecated Backward compatibility iterators
+    __attribute__((deprecated("Iterate over std container vertices() instead")))  vertex_const_iterator   vertices_begin()  const { return m_vertices.begin();  } //!< @deprecated Backward compatibility iterators
+    __attribute__((deprecated("Iterate over std container vertices() instead")))  vertex_const_iterator   vertices_end()    const { return m_vertices.end();    } //!< @deprecated Backward compatibility iterators
+
+    __attribute__((deprecated("Use particles().size() instead")))  int  particles_size()  const { return m_particles.size();  } //!< @deprecated backward compatibility
+    __attribute__((deprecated("Use particles().empty() instead"))) bool particles_empty() const { return m_particles.empty(); } //!< @deprecated backward compatibility
+    __attribute__((deprecated("Use vertices().size() instead")))   int  vertices_size()   const { return m_vertices.size();   } //!< @deprecated backward compatibility
+    __attribute__((deprecated("Use vertices().empty() instead")))  bool vertices_empty()  const { return m_vertices.empty();  } //!< @deprecated backward compatibility
 
 //
 // Fields
