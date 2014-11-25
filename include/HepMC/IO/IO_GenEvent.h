@@ -103,30 +103,6 @@ private:
      */
     bool parse_units(GenEvent &evt, const char *buf);
 
-    /** @brief Parse struct GenPdfInfo information
-     *
-     *  Helper routine for parsing PDF information
-     *  @param[out] evt Event that will be filled with unit information
-     *  @param[in]  buf Line of text that needs to be parsed
-     */
-    bool parse_pdf_info(GenEvent &evt, const char *buf);
-
-    /** @brief Parse struct GenHeavyIon information
-     *
-     *  Helper routine for parsing heavy ion information
-     *  @param[out] evt Event that will be filled with unit information
-     *  @param[in]  buf Line of text that needs to be parsed
-     */
-    bool parse_heavy_ion(GenEvent &evt, const char *buf);
-
-    /** @brief Parse struct GenCrossSection information
-     *
-     *  Helper routine for parsing cross-section information
-     *  @param[out] evt Event that will be filled with unit information
-     *  @param[in]  buf Line of text that needs to be parsed
-     */
-    bool parse_cross_section(GenEvent &evt, const char *buf);
-
     /** @brief Parse vertex
      *
      *  Helper routine for parsing single event information

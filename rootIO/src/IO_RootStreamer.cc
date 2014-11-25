@@ -87,21 +87,11 @@ void IO_RootStreamer::write_event(const GenEvent &evt) {
         }
     }
 
-    // Copy additional structs
-    if( evt.pdf_info()      ) m_data.pdf_info      = *evt.pdf_info();
-    else                      memset(&m_data.pdf_info,0,sizeof(m_data.pdf_info) );
-
-    if( evt.heavy_ion()     ) m_data.heavy_ion     = *evt.heavy_ion();
-    else                      memset(&m_data.heavy_ion,0,sizeof(m_data.heavy_ion) );
-
-    if( evt.cross_section() ) m_data.cross_section = *evt.cross_section();
-    else                      memset(&m_data.cross_section,0,sizeof(m_data.cross_section) );
-
     char buf[16] = "";
     sprintf(buf,"%15i",evt.event_number());
 
     int nbytes = m_file->WriteObject(&m_data, buf);
-    
+
     if( nbytes == 0 ) {
         ERROR( "IO_RootStreamer: error writing event")
         m_file->Close();
@@ -162,11 +152,6 @@ bool IO_RootStreamer::fill_next_event(GenEvent &evt) {
         if( id1 > 0 ) evt.vertices()[ (-id2)-1 ]->add_particle_in ( evt.particles()[ id1-1 ] );
         else          evt.vertices()[ (-id1)-1 ]->add_particle_out( evt.particles()[ id2-1 ] );
     }
-
-    // Copy additional structs
-    if( m_data.pdf_info.is_valid()      ) evt.set_pdf_info( make_shared<GenPdfInfo>(m_data.pdf_info) );
-    if( m_data.heavy_ion.is_valid()     ) evt.set_heavy_ion( make_shared<GenHeavyIon>(m_data.heavy_ion) );
-    if( m_data.cross_section.is_valid() ) evt.set_cross_section( make_shared<GenCrossSection>(m_data.cross_section) );
 
     return true;
 }

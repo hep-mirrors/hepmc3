@@ -2,12 +2,12 @@
 #define  HEPMC_GENPDFINFO_H
 /**
  *  @file GenPdfInfo.h
- *  @brief Definition of \b struct GenPdfInfo
+ *  @brief Definition of event attribute \b class GenPdfInfo
  *
- *  @struct HepMC::GenPdfInfo
+ *  @class HepMC::GenPdfInfo
  *  @brief Stores additional information about PDFs
  *
- *  Creation and use of this information is optional
+ *  This is an example of event attribute used to store PDF-related information
  *
  *  @note Input parton flavour codes id1 & id2 are expected to obey the
  *        PDG code conventions, especially g = 21.
@@ -17,10 +17,11 @@
  *        http:///projects.hepforge.org/lhapdf/PDFsets.index
  */
 #include <iostream>
+#include "HepMC/Attribute.h"
 
 namespace HepMC {
 
-struct GenPdfInfo {
+class GenPdfInfo : public Attribute {
 
 //
 // Fields
@@ -36,9 +37,16 @@ public:
 // Functions
 //
 public:
+    /** @brief Implementation of Attribute::parse_attribute_container */
+    bool parse_attribute_container(const AttributeContainer &att);
+
+    /** @brief Implementation of Attribute::fill_attribute_container */
+    bool fill_attribute_container(AttributeContainer &att) const;
+
+    /** @brief Set all fields */
     void set( int parton_id1, int parton_id2, double x1, double x2,
               double scale_in, double xf1, double xf2,
-              int pdf_id1 = 0, int pdf_id2 = 0 ); ///< Set all fields
+              int pdf_id1 = 0, int pdf_id2 = 0 );
 
     bool operator==( const GenPdfInfo& ) const; ///< Operator ==
     bool operator!=( const GenPdfInfo& ) const; ///< Operator !=

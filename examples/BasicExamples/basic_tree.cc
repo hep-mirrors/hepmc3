@@ -125,6 +125,49 @@ int main() {
         p->print();
     }
 
+    //
+    // Example of adding event attributes
+    //
+    shared_ptr<GenPdfInfo> pdf_info = make_shared<GenPdfInfo>();
+    evt.add_attribute("GenPdfInfo",pdf_info);
+
+    pdf_info->set(1,2,3.4,5.6,7.8,9.0,1.2,3,4);
+
+    shared_ptr<GenHeavyIon> heavy_ion = make_shared<GenHeavyIon>();
+    evt.add_attribute("GenHeavyIon",heavy_ion);
+
+    heavy_ion->set( 1,2,3,4,5,6,7,8,9,0.1,2.3,4.5,6.7);
+
+    shared_ptr<GenCrossSection> cross_section = make_shared<GenCrossSection>();
+    evt.add_attribute("GenCrossSection",cross_section);
+
+    cross_section->set_cross_section(1.2,3.4);
+
+    //
+    // Example of manipulating the attributes
+    //
+
+    cout << endl << " Manipulating attributes:" << endl;
+
+    // get attribute
+    shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
+
+    // if attribute exists - do something with it
+    if(cs) {
+        cs->set_cross_section(-1.0,0.0);
+        cs->print();
+    }
+    else cout << "Problem accessing attribute!" << endl;
+
+    // remove attribute
+    evt.remove_attribute("GenCrossSection");
+    evt.remove_attribute("GenCrossSection");
+
+    // now this should be null
+    cs = evt.attribute<GenCrossSection>("GenCrossSection");
+
+    if(!cs) cout << "Successfully removed attribute" << endl;
+    else    cout << "Problem removing attribute!" << endl;
 
     evt.print();
 

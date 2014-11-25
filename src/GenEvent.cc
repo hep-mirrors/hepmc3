@@ -33,9 +33,6 @@ void GenEvent::print( std::ostream& ostr ) const {
     ostr << "GenEvent: #" << event_number() << endl;
     ostr << " Momenutm units: " << Units::name(m_momentum_unit)
          << " Position units: " << Units::name(m_length_unit) << endl;
-    if( m_pdf_info )      m_pdf_info->print(ostr);
-    if( m_cross_section ) m_cross_section->print(ostr);
-    if( m_heavy_ion )     m_heavy_ion->print(ostr);
     ostr << " Entries in this event: " << vertices().size() << " vertices, "
          << particles().size() << " particles." << endl;
     ostr << " Beam particle indexes:";
@@ -74,9 +71,16 @@ void GenEvent::dump() const {
     std::cout<<"-----------------------------"<<std::endl;
     std::cout<<std::endl;
 
-    if( m_pdf_info )      m_pdf_info->print();
-    if( m_cross_section ) m_cross_section->print();
-    if( m_heavy_ion )     m_heavy_ion->print();
+    std::cout<<"Attributes:"<<std::endl;
+
+    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
+    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
+
+    FOREACH( const value_type1& vt1, m_attributes ) {
+        FOREACH( const value_type2& vt2, vt1.second ) {
+            std::cout << vt2.first << ": " << vt1.first << std::endl;
+        }
+    }
 
     std::cout<<"GenParticlePtr ("<<particles().size()<<")"<<std::endl;
 
@@ -215,10 +219,7 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
 void GenEvent::clear() {
     m_event_number = 0;
 
-    m_heavy_ion.reset();
-    m_pdf_info.reset();
-    m_cross_section.reset();
-
+    m_attributes.clear();
     m_particles.clear();
     m_vertices.clear();
 }
@@ -235,16 +236,20 @@ void GenEvent::add_vertex( GenVertex *v ) {
     add_vertex( GenVertexPtr(v) );
 }
 
-void GenEvent::set_heavy_ion(GenHeavyIon *hi) {
-     m_heavy_ion.reset(hi);
+void GenEvent::add_attribute(const string &name, const shared_ptr<Attribute> &att) {
+    if(!att) return;
+
+    m_attributes[name][0] = att;
 }
 
-void GenEvent::set_pdf_info(GenPdfInfo *pi) {
-     m_pdf_info.reset(pi);
-}
+void GenEvent::remove_attribute(const string &name) {
+    map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    if( i1 == m_attributes.end() ) return;
 
-void GenEvent::set_cross_section(GenCrossSection *cs) {
-     m_cross_section.reset(cs);
+    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(0);
+    if( i2 == i1->second.end() ) return;
+
+    i1->second.erase(i2);
 }
 
 } // namespace HepMC

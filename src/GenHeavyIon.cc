@@ -1,12 +1,79 @@
 /**
  *  @file GenHeavyIon.cc
- *  @brief Implementation of \b struct GenHeavyIon
+ *  @brief Implementation of \b class GenHeavyIon
  *
  */
 #include "HepMC/GenHeavyIon.h"
 #include <cstring> // memcmp
 
 namespace HepMC {
+
+bool GenHeavyIon::parse_attribute_container(const AttributeContainer &att) {
+    const char *cursor = att.data();
+
+    Ncoll_hard = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    Npart_proj = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    Npart_targ = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    Ncoll = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    spectator_neutrons = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    spectator_protons = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    N_Nwounded_collisions = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    Nwounded_N_collisions = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    Nwounded_Nwounded_collisions = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    impact_parameter = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    event_plane_angle = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    eccentricity = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    sigma_inel_NN = atof(cursor);
+
+    return true;
+}
+
+bool GenHeavyIon::fill_attribute_container(AttributeContainer &att) const {
+    char buf[255];
+
+    sprintf(buf,"%i %i %i %i %i %i %i %i %i %.8e %.8e %.8e %.8e",
+            Ncoll_hard,
+            Npart_proj,
+            Npart_targ,
+            Ncoll,
+            spectator_neutrons,
+            spectator_protons,
+            N_Nwounded_collisions,
+            Nwounded_N_collisions,
+            Nwounded_Nwounded_collisions,
+            impact_parameter,
+            event_plane_angle,
+            eccentricity,
+            sigma_inel_NN);
+
+    att = buf;
+
+    return true;
+}
 
 void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
                     int nnw, int nwn, int nwnw,

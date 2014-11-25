@@ -58,53 +58,6 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     m_cursor += sprintf(m_cursor, "U %s %s\n",Units::name(evt.momentum_unit()).c_str(),Units::name(evt.length_unit()).c_str());
     flush();
 
-    // Write heavy ion information (if present)
-    const GenHeavyIon *hi = evt.heavy_ion();
-    if(hi) {
-        m_cursor += sprintf(m_cursor,"H %i %i %i",hi->Ncoll_hard,hi->Npart_proj,hi->Npart_targ);
-        flush();
-        m_cursor += sprintf(m_cursor," %i %i %i",hi->Ncoll,hi->spectator_neutrons,hi->spectator_protons);
-        flush();
-        m_cursor += sprintf(m_cursor," %i %i %i",hi->N_Nwounded_collisions,hi->Nwounded_N_collisions,hi->Nwounded_Nwounded_collisions);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,hi->impact_parameter);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,hi->event_plane_angle);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,hi->eccentricity);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e\n",m_precision,hi->sigma_inel_NN);
-        flush();
-    }
-
-    // Write pdf information (if present)
-    const GenPdfInfo *pi = evt.pdf_info();
-    if(pi) {
-        m_cursor += sprintf(m_cursor,"F %i %i",pi->parton_id[0],pi->parton_id[1]);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x[0]);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->x[1]);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->scale);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->xf[0]);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pi->xf[1]);
-        flush();
-        m_cursor += sprintf(m_cursor," %i %i\n",pi->pdf_id[0],pi->pdf_id[1]);
-        flush();
-    }
-
-    // Write cross-section information (if present)
-    const GenCrossSection *cs = evt.cross_section();
-    if(cs) {
-        m_cursor += sprintf(m_cursor,"C %.*e",m_precision,cs->cross_section);
-        flush();
-        m_cursor += sprintf(m_cursor," %.*e\n",m_precision,cs->cross_section_error);
-        flush();
-    }
-
     int vertices_processed = 0;
     int lowest_vertex_id   = 0;
 
@@ -278,15 +231,6 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
             case 'U':
                 is_parsing_successful = parse_units(evt,buf);
                 break;
-            case 'F':
-                is_parsing_successful = parse_pdf_info(evt,buf);
-                break;
-            case 'H':
-                is_parsing_successful = parse_heavy_ion(evt,buf);
-                break;
-            case 'C':
-                is_parsing_successful = parse_cross_section(evt,buf);
-                break;
             default:
                 WARNING( "IO_GenEvent: skipping unrecognised prefix: " << buf[0] )
                 is_parsing_successful = true;
@@ -361,105 +305,6 @@ bool IO_GenEvent::parse_units(GenEvent &evt, const char *buf) {
     evt.set_units(momentum_unit,length_unit);
 
     DEBUG( 10, "IO_GenEvent: U: " << Units::name(evt.momentum_unit()) << " " << Units::name(evt.length_unit()) )
-
-    return true;
-}
-
-bool IO_GenEvent::parse_pdf_info(GenEvent &evt, const char *buf) {
-    GenPdfInfoPtr pi = make_shared<GenPdfInfo>();
-    const char *cursor = buf;
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->parton_id[0] = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->parton_id[1] = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->x[0] = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->x[1] = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->scale = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->xf[0] = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->xf[1] = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->pdf_id[0] = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->pdf_id[1] = atoi(cursor);
-
-    evt.set_pdf_info(pi);
-
-    return true;
-}
-
-bool IO_GenEvent::parse_heavy_ion(GenEvent &evt, const char *buf) {
-    GenHeavyIonPtr hi = make_shared<GenHeavyIon>();
-    const char *cursor = buf;
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->Ncoll_hard = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->Npart_proj = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->Npart_targ = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->Ncoll = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->spectator_neutrons = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->spectator_protons = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->N_Nwounded_collisions = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->Nwounded_N_collisions = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->Nwounded_Nwounded_collisions = atoi(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->impact_parameter = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->event_plane_angle = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->eccentricity = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    hi->sigma_inel_NN = atof(cursor);
-
-    evt.set_heavy_ion(hi);
-
-    return true;
-}
-
-bool IO_GenEvent::parse_cross_section(GenEvent &evt, const char *buf) {
-    GenCrossSectionPtr cs = make_shared<GenCrossSection>();
-    const char *cursor = buf;
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    cs->cross_section = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    cs->cross_section_error = atof(cursor);
-
-    evt.set_cross_section(cs);
 
     return true;
 }
