@@ -10,7 +10,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/rootIO/i
 #----------------------------------------------------------------------------
 # Generate dictionaries
 #
-ROOT_GENERATE_DICTIONARY(rootIO_Classes include/rootIO_Classes.hh LINKDEF include/LinkDef.hh)
+ROOT_GENERATE_DICTIONARY(rootIO_Classes rootIO_Classes.hh LINKDEF LinkDef.hh OPTIONS -inlineInputHeader)
 
 list(APPEND ROOT_FIND_COMPONENTS RIO)
 

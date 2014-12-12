@@ -56,55 +56,44 @@ include(CMakeMacroParseArguments)
 find_program(ROOTCINT_EXECUTABLE rootcint PATHS $ENV{ROOT_DIR}/bin)
 
 #----------------------------------------------------------------------------
-# function ROOT_GENERATE_DICTIONARY( dictionary   
-#                                    header1 header2 ... 
-#                                    LINKDEF linkdef1 ... 
+# function ROOT_GENERATE_DICTIONARY( dictionary
+#                                    header1 header2 ...
+#                                    LINKDEF linkdef1 ...
 #                                    OPTIONS opt1...)
 function(ROOT_GENERATE_DICTIONARY dictionary)
   CMAKE_PARSE_ARGUMENTS(ARG "" "" "LINKDEF;OPTIONS" "" ${ARGN})
+  #---Get the list of include directories------------------
+  get_directory_property(incdirs INCLUDE_DIRECTORIES)
+  set(includedirs)
+  foreach( d ${incdirs})
+     set(includedirs ${includedirs} -I${d})
+  endforeach()
   #---Get the list of header files-------------------------
   set(headerfiles)
   foreach(fp ${ARG_UNPARSED_ARGUMENTS})
-    file(GLOB files ${fp})
-    if(files)
+    if(${fp} MATCHES "[*?]") # Is this header a globbing expression?
+      file(GLOB files ${fp})
       foreach(f ${files})
-        if(NOT f MATCHES LinkDef)
+        if(NOT f MATCHES LinkDef) # skip LinkDefs from globbing result
           set(headerfiles ${headerfiles} ${f})
         endif()
       endforeach()
     else()
-      set(headerfiles ${headerfiles} ${fp})
-    endif()
-  endforeach()
-  #---Get the list of include directories------------------
-  # Filter out UNIX system directory to workaround bug in
-  # rootcint (info from Andrea Dotti, and info from post:
-  # http://root.cern.ch/phpBB3/viewtopic.php?f=3&t=15086
-  get_directory_property(incdirs INCLUDE_DIRECTORIES)
-  set(includedirs) 
-  foreach( d ${incdirs})
-    if(NOT ${d} STREQUAL "/usr/include")
-     set(includedirs ${includedirs} -I${d})
+      find_file(headerFile ${fp} PATHS ${incdirs})
+      set(headerfiles ${headerfiles} ${headerFile})
+      unset(headerFile CACHE)
     endif()
   endforeach()
   #---Get LinkDef.h file------------------------------------
   set(linkdefs)
   foreach( f ${ARG_LINKDEF})
-    if( IS_ABSOLUTE ${f})
-      set(linkdefs ${linkdefs} ${f})
-    else() 
-      if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/inc/${f})
-        set(linkdefs ${linkdefs} ${CMAKE_CURRENT_SOURCE_DIR}/inc/${f})
-      else()
-        set(linkdefs ${linkdefs} ${CMAKE_CURRENT_SOURCE_DIR}/${f})
-      endif()
-    endif()
+    find_file(linkFile ${f} PATHS ${incdirs})
+    set(linkdefs ${linkdefs} ${linkFile})
+    unset(linkFile CACHE)
   endforeach()
   #---call rootcint------------------------------------------
   add_custom_command(OUTPUT ${dictionary}.cxx ${dictionary}.h
-                     COMMAND ${ROOTCINT_EXECUTABLE} -cint -f  ${dictionary}.cxx 
-                                          -c ${ARG_OPTIONS} ${includedirs} ${headerfiles} ${linkdefs} 
-                     DEPENDS ${headerfiles} ${linkdefs})
+                     COMMAND ${ROOTCINT_EXECUTABLE} -cint -f  ${dictionary}.cxx
+                                          -c ${ARG_OPTIONS} ${includedirs} ${headerfiles} ${linkdefs}
+                     DEPENDS ${headerfiles} ${linkdefs} VERBATIM)
 endfunction()
-
-  

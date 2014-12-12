@@ -1,3 +1,8 @@
+2014-12-12 Witold Pokorski
+
+	* updating example event file
+	* fixes for ROOT6 dictionary
+
 2014-07-25  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
 
 	* Added beam particles
