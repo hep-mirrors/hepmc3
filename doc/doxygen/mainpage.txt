@@ -8,8 +8,8 @@
 
     @subsection pre_releases Alpha and beta stage releases
 
-    - <b>15.Dec.2014:</b> HepMC3 alpha2 <a href="releases/hepmc3-alpha1.tgz">hepmc3-alpha2.tgz</a>
-    - <b>6.Nov.2014:</b> First alpha release of HepMC3 <a href="releases/hepmc3-alpha1.tgz">hepmc3-alpha1.tgz</a>
+    - <a href="releases/hepmc3-alpha2.tgz">hepmc3-alpha2.tgz</a> HepMC3 alpha2 <b>15.Dec.2014</b> 
+    - <a href="releases/hepmc3-alpha1.tgz">hepmc3-alpha1.tgz</a> First alpha release of HepMC3 <b>6.Nov.2014</b>
 
     @subsection datafiles Data files for testing purposes
 
