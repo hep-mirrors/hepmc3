@@ -1,7 +1,14 @@
+2015-02-15  Andy Buckley  <andy.buckley@cern.ch>
+
+	* Adding new Reader and Writer I/O base classes and first draft ASCII I/o interfaces (to be finished).
+
+	* Adding new GenWeights container (from HepMC2 update, to be cleaned).
+
 2014-12-12 Witold Pokorski
 
-	* updating example event file
-	* fixes for ROOT6 dictionary
+	* Updating example event file
+
+	* Fixes for ROOT6 dictionary
 
 2014-07-25  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
 
@@ -23,7 +30,7 @@
 
 2014-11-25  Witold Pokorski
 
-	* adding first version of CMake for validation
+	* Adding first version of CMake for validation
 
 2014-11-18  Witold Pokorski
 
