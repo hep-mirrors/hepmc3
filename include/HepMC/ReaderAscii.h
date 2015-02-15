@@ -48,33 +48,22 @@ namespace HepMC {
     /// small enough for system to allocate
     void allocate_buffer();
 
-    /// @brief Inline function for writing strings
+    /// @brief Set buffer size (in bytes)
     ///
-    /// Since strings can be long (maybe even longer than buffer) they have to be dealt
-    /// with separately.
-    void write_string( const std::string &str );
+    /// Default is 256kb. Minimum is 256b.
+    /// Size can only be changed before first read/write operation.
+    ///
+    /// @todo Arg should be size_t?
+    void set_buffer_size( unsigned long size) {
+      if (m_buffer) return;
+      if (size < 256) return;
+      m_buffer_size = size;
+    }
 
     /// Inline function flushing buffer to output stream when close to buffer capacity
     void flush();
     /// Inline function forcing flush to the output stream
     void forced_flush();
-
-    //@}
-
-
-    /// @name Write helpers
-    //@{
-
-    /// @brief Write vertex
-    ///
-    /// Helper routine for writing single vertex to file
-    void write_vertex  (const GenVertexPtr &v);
-
-    /// @brief Write particle
-    ///
-    /// Helper routine for writing single particle to file
-    void write_particle(const GenParticlePtr &p, int second_field);
-
 
     //@}
 
@@ -135,31 +124,6 @@ namespace HepMC {
     bool parse_particle_information(GenEvent &evt, const char *buf);
 
     //@}
-
-
-  public:
-
-    /// @brief Set output precision
-    ///
-    /// Available range is [2,24]. Default is 16.
-    ///
-    /// @todo Arg should be size_t?
-    void set_precision( unsigned int prec ) {
-      if (prec < 2 || prec > 24) return;
-      m_precision = prec;
-    }
-
-    /// @brief Set buffer size (in bytes)
-    ///
-    /// Default is 256kb. Minimum is 256b.
-    /// Size can only be changed before first read/write operation.
-    ///
-    /// @todo Arg should be size_t?
-    void set_buffer_size( unsigned long size) {
-      if (m_buffer) return;
-      if (size < 256) return;
-      m_buffer_size = size;
-    }
 
 
   private:
