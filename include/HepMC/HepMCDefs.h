@@ -6,6 +6,12 @@
 #ifndef HEPMC_DEFS_H
 #define HEPMC_DEFS_H
 
+/// @todo This header should have a better "real" name, maybe located together
+/// with things like the version and logging/error handling utilities (or
+/// accessed with them via a convenience HepMC/Setup/Common.h or similar). Emit
+/// a build warning to code which tries to access HepMC/HepMCDefs.h, which is a
+/// terrible name but should be provided for a while for backward compatibility.
+
 
 // Define the version of HepMC.
 #ifndef HEPMC_VERSION

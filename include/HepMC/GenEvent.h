@@ -107,8 +107,10 @@ public:
     void set_event_number(int num) { m_event_number = num; }
 
     /// Get number of particles
+    /// @todo Not particles_size()? size() is the standard name. Or require particles().size() which is as efficient.
     unsigned int particles_count() const { return m_particles.size(); }
     /// Get number of vertices
+    /// @todo Not vertices_size()? size() is the standard name. Or require vertices().size() which is as efficient.
     unsigned int vertices_count() const { return m_vertices.size(); }
 
     /// Get/set list of particles
