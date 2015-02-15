@@ -1,10 +1,33 @@
+2014-12-12 Witold Pokorski
+
+	* updating example event file
+	* fixes for ROOT6 dictionary
+
+2014-07-25  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* Added beam particles
+
+	* Added backward-compatibility iterators
+
+	* Added Attributes mechanism. Currently used only for event and
+	  keys (strings) are stored in GenEvent (which will change)
+
+	* Updated ASCII file I/O to work with Attributes. ROOT I/O will follow
+
+	* Modified GenPdfInfo, GenHeavyIon and GenCrossSection to work as
+	  Attributes
+
 2014-11-25  Andy Buckley  <andy.buckley@cern.ch>
 
 	* Add HEPMC_DEPRECATED macro in Setup.h
 
+2014-11-25  Witold Pokorski
+
+	* adding first version of CMake for validation
+
 2014-11-18  Witold Pokorski
 
-	* fixe in cmake for rootIO library to work with ROOT6
+	* fix in cmake for rootIO library to work with ROOT6
 	* made DHEPMC_ENABLE_CPP11 option ON by default
 
 2014-11-07  Witold Pokorski

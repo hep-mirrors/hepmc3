@@ -18,8 +18,10 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 using std::vector;
 using std::pair;
+using std::map;
 using std::make_pair;
 
 namespace HepMC {
@@ -46,7 +48,7 @@ public:
     void print( std::ostream& ostr = std::cout ) const;
 
     /// @brief Dump the whole content of the event memory. Useful for debugging
-    /// @too Dump to where, in what format? Is this really a core API feature?
+    /// @todo Dump to where, in what format? Is this really a core API feature?
     void dump() const;
 
     /// Get printout precision. Default is 2
@@ -124,19 +126,19 @@ public:
     const Units::LengthUnit& length_unit() const { return m_length_unit; }
 
     /// Get heavy ion generator additional information
-    const GenHeavyIon* heavy_ion() const { return m_heavy_ion.get(); }
+    const GenHeavyIonPtr heavy_ion() const { return attribute<GenHeavyIon>("GenHeavyIon"); }
     /// Set heavy ion generator additional information
-    void set_heavy_ion(GenHeavyIonPtr hi) { m_heavy_ion = hi; }
+    void set_heavy_ion(const GenHeavyIonPtr &hi) { add_attribute("GenHeavyIon",hi); }
 
     /// Get PDF information
-    const GenPdfInfo* pdf_info() const { return m_pdf_info.get(); }
+    const GenPdfInfoPtr pdf_info() const { return attribute<GenPdfInfo>("GenPdfInfo"); }
     /// Set PDF information
-    void set_pdf_info(GenPdfInfoPtr pi) { m_pdf_info = pi; }
+    void set_pdf_info(const GenPdfInfoPtr &pi) { add_attribute("GenPdfInfo",pi); }
 
     /// Get cross-section information
-    const GenCrossSection* cross_section() const { return m_cross_section.get(); }
+    const GenCrossSectionPtr cross_section() const { return attribute<GenCrossSection>("GenCrossSection"); }
     /// Set cross-section information
-    void set_cross_section(GenCrossSectionPtr cs) { m_cross_section = cs; }
+    void set_cross_section(const GenCrossSectionPtr &cs) { add_attribute("GenCrossSection",cs); }
 
     /// Test to see if we have two valid beam particles
     bool valid_beam_particles() const { return (bool)m_beam_particle_1 && (bool)m_beam_particle_2; }
@@ -146,6 +148,23 @@ public:
     void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) { m_beam_particle_1 = p1; m_beam_particle_2 = p2; }
     /// Set incoming beam particles
     void set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) { m_beam_particle_1 = p.first; m_beam_particle_2 = p.second; }
+
+    /** @brief Add event attribute to event
+     *
+     *  This will overwrite existing attribute if an attribute
+     *  with the same name is present
+     */
+    void add_attribute(const string &name, const shared_ptr<Attribute> &att);
+
+    /// Remove attribute
+    void remove_attribute(const string &name);
+
+    /// Get attribute of type T
+    template<class T>
+    shared_ptr<T> attribute(const string &name) const;
+
+    /// Get list of attributes
+    const map< string, map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
 
     //@}
 
@@ -251,17 +270,45 @@ private:
     int                         m_print_precision; //!< Printout precision
     Units::MomentumUnit         m_momentum_unit;   //!< Momentum unit
     Units::LengthUnit           m_length_unit;     //!< Length unit
-    GenHeavyIonPtr              m_heavy_ion;       //!< Heavy ion generator additional information
-    GenPdfInfoPtr               m_pdf_info;        //!< Pdf information
-    GenCrossSectionPtr          m_cross_section;   //!< Cross-section information
     GenParticlePtr              m_beam_particle_1; //!< First beam particle
     GenParticlePtr              m_beam_particle_2; //!< Second beam particle
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
+
+    /** @brief Map of event, particle and vertex attributes
+     *
+     *  Keys are name and id (0 = event, <0 = vertex, >0 = particle)
+     */
+    mutable map< string, map<int, shared_ptr<Attribute> > > m_attributes;
     //@}
 
 };
 
+//
+// Template methods
+//
+
+template<class T>
+shared_ptr<T> GenEvent::attribute(const string &name) const {
+
+    map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    if( i1 == m_attributes.end() ) return shared_ptr<T>();
+
+    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(0);
+    if( i2 == i1->second.end() ) return shared_ptr<T>();
+
+    if( !i2->second->is_parsed() ) {
+
+        shared_ptr<T> att = make_shared<T>();
+        att->from_string(i2->second->unparsed_string());
+
+        // update map with new pointer
+        i2->second = att;
+
+        return att;
+    }
+    else return std::dynamic_pointer_cast<T>(i2->second);
+}
 
 } // namespace HepMC
 

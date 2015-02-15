@@ -4,9 +4,12 @@
 
     @section releases Releases
 
+    Development version (updated daily at 3AM): <a href="releases/hepmc3-dev.tgz">hepmc3-dev.tgz</a>
+
     @subsection pre_releases Alpha and beta stage releases
 
-    - <b>6.Nov.2014:</b> <a href="releases/hepmc3-alpha1.tgz">     <b>First alpha release of HepMC3 </b></a>
+    - <a href="releases/hepmc3-alpha2.tgz">hepmc3-alpha2.tgz</a> HepMC3 alpha2 <b>15.Dec.2014</b> 
+    - <a href="releases/hepmc3-alpha1.tgz">hepmc3-alpha1.tgz</a> First alpha release of HepMC3 <b>6.Nov.2014</b>
 
     @subsection datafiles Data files for testing purposes
 
@@ -34,5 +37,5 @@
     <img src="class_diagram.png">
 
     <hr>
-    Last update 6 November 2014
+    Last update 25 November 2014
 */

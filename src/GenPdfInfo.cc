@@ -5,13 +5,65 @@
 //
 /**
  *  @file GenPdfInfo.cc
- *  @brief Implementation of \b struct GenPdfInfo
+ *  @brief Implementation of \b class GenPdfInfo
  *
  */
 #include "HepMC/GenPdfInfo.h"
 #include <cstring> // memcmp
 
 namespace HepMC {
+
+bool GenPdfInfo::from_string(const string &att) {
+    const char *cursor = att.data();
+
+    parton_id[0] = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    parton_id[1] = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    x[0] = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    x[1] = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    scale = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    xf[0] = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    xf[1] = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pdf_id[0] = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pdf_id[1] = atoi(cursor);
+
+    return true;
+}
+
+bool GenPdfInfo::to_string(string &att) const {
+    char buf[255];
+    char *cursor = buf;
+
+    sprintf(buf,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
+                parton_id[0],
+                parton_id[1],
+                x[0],
+                x[1],
+                scale,
+                xf[0],
+                xf[1],
+                pdf_id[0],
+                pdf_id[1]);
+
+    att = buf;
+
+    return true;
+}
 
 void GenPdfInfo::set( int parton_id1, int parton_id2, double x1, double x2,
                       double scale_in, double xf1, double xf2,

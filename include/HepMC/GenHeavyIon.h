@@ -7,24 +7,28 @@
 #define  HEPMC_HEAVYION_H
 /**
  *  @file GenHeavyIon.h
- *  @brief Definition of \b struct GenHeavyIon
+ *  @brief Definition of attribute \b class GenHeavyIon
  *
- *  @struct HepMC::GenHeavyIon
+ *  @class HepMC::GenHeavyIon
  *  @brief Stores additional information about Heavy Ion generator
  *
- *  Creation and use of this information is optional
+ *  This is an example of event attribute used to store Heavy Ion information
+ *
+ *  @ingroup attributes
  *
  */
 #include <iostream>
+#include "HepMC/Attribute.h"
 
 namespace HepMC {
 
-struct GenHeavyIon {
+class GenHeavyIon : public Attribute {
 
 //
 // Fields
 //
 public:
+    /// @todo We need description for the fields of GenHeavyIon
     int   Ncoll_hard;
     int   Npart_proj;
     int   Npart_targ;
@@ -43,9 +47,16 @@ public:
 // Functions
 //
 public:
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att);
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const;
+
+    /** @brief Set all fields */
     void set( int nh, int np, int nt, int nc, int ns, int nsp,
               int nnw=0, int nwn=0, int nwnw=0,
-              float im=0., float pl=0., float ec=0., float s=0. ); ///< Set all fields
+              float im=0., float pl=0., float ec=0., float s=0. );
 
     bool operator==( const GenHeavyIon& ) const; ///< Operator ==
     bool operator!=( const GenHeavyIon& ) const; ///< Operator !=

@@ -1,8 +1,3 @@
-// -*- C++ -*-
-//
-// This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
-//
 #include "Pythia8/Pythia8ToHepMC3.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenParticle.h"
@@ -50,7 +45,7 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
     for(int i=0;i<pyev.size(); ++i) {
         hepevt_particles.push_back( make_shared<GenParticle>( FourVector( pyev[i].px(), pyev[i].py(),
                                                               pyev[i].pz(), pyev[i].e() ),
-                                                              pyev[i].id(), pyev.statusHepMC(i) )
+                                                              pyev[i].id(), pyev[i].statusHepMC() )
                                   );
 
 /*
@@ -73,7 +68,7 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
 
     for(int i=1;i<pyev.size(); ++i) {
 
-        std::vector<int> mothers = pyev.motherList(i);
+        std::vector<int> mothers = pyev[i].motherList();
 
         if(mothers.size()) {
             GenVertexPtr prod_vtx = hepevt_particles[mothers[0]]->end_vertex();

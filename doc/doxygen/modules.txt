@@ -23,9 +23,94 @@
 
 
 /**
+    @defgroup attributes Attributes
+
+    @section using_attributes Using Attributes
+
+    Attributes can be attached to GenEvent, GenParticle or GenVertex
+    and they can have any format defined by the user
+    (see @ref writing_attributes). An attribute is accessed through
+    a shared pointer and identified by its name.
+
+    Example of reading an attribute from the event:
+
+    @code{.cpp}
+        shared_ptr<GenPdfInfo> pdf_info = event.attribute<GenPdfInfo>("GenPdfInfo");
+
+        if( pdf_info ) pdf_info->print();
+    @endcode
+
+    Example of adding an attribute to the event:
+
+    @code{.cpp}
+        shared_ptr<GenPdfInfo> pdf_info = make_shared<GenPdfInfo>();
+        evt.add_attribute("GenPdfInfo",pdf_info);
+
+        // Setting values can be done before or after adding it to the event
+        pdf_info->set(1,2,3.4,5.6,7.8,9.0,1.2,3,4);
+    @endcode
+
+    Adding and getting attributes of a vertex or particle uses the same
+    principles.
+
+    @note An event (or particle or vertex) can have more than one attribute
+          of the same type distinguished by different names. This might be
+          useful in some applications, however, we strongly encourage
+          to use just one instance named by its class name, as in these
+          examples.
+
+    @section writing_attributes Writing custom attributes
+
+    Any class that derives from HepMC::Attribute class can be used as
+    an attribute that can be attached to the event, vertex or particle.
+
+    User has to provide two abstract methods from HepMC::Attribute used
+    to parse the class content from/to string.
+
+    Example:
+
+    @code{.cpp}
+        #include "HepMC/Attribute.h"
+
+        struct MyAttribute : public HepMC::Attribute {
+
+            double val1; /// First value
+            int    val2; /// Second value
+
+        public:
+            /// Implementation of Attribute::from_string
+            bool from_string(const string &att) {
+                val1 = stof( att );
+                val2 = stol( att.substr( att.find(' ')+1 ) );
+
+                return true;
+            }
+
+            /// Implementation of Attribute::to_string
+            bool to_string(string &att) const {
+                char buf[64];
+
+                sprintf(buf,"%.8e %i",val1,val2);
+
+                att = buf;
+
+                return true;
+            }
+        };
+    @endcode
+
+    For other examples see attributes provided in the HepMC package.
+
+    <hr>
+    Last update 25 November 2014
+*/
+
+
+
+/**
     @defgroup search_engine Search engine
 
-    @section tutorial Using search engine module
+    @section using_search_engine Using search engine module
 
     The aim of the search engine is to provide an unified way to search through
     the event for any type of particles needed for the analysis without any need
