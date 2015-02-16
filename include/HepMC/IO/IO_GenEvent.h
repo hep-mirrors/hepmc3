@@ -21,6 +21,7 @@
 
 #include <string>
 #include <fstream>
+#include <map>
 
 namespace HepMC {
 
@@ -77,6 +78,11 @@ private:
     void flush();        //!< Inline function flushing buffer to output stream when close to buffer capacity
     void forced_flush(); //!< Inline function forcing flush to the output stream
 
+  static std::string escape(const std::string s); //!< Return the given string with all new-lines and backslashes escaped.
+
+  static std::string unescape(const std::string s); //!< Return the given sting unescaping all new-lines and backslashes
+
+
 private:
     /** @brief Write vertex
      *
@@ -131,6 +137,26 @@ private:
      *  @param[in] buf Line of text that needs to be parsed
      */
     bool parse_attribute(GenEvent &evt, const char *buf);
+
+  /** @brief Skip printing of global attributed
+   *
+   * If a global attribute has already been printed out, only its name
+   * is printed. if \a att has not been written out before, it is
+   * stored in a local map and should still be written out. @return
+   * true if \att is global and should not be written out agaoin.
+   */
+  bool skip_global(std::string name, shared_ptr<Attribute> att);
+
+  /**
+   * @brief Return a global attribute that has already been read.
+   *
+   * If a global attribute with the given \a name has already been
+   * read in for a previous GenEvent, its contents should not be read
+   * from the event stream. Instead the previously read attribute is
+   * returned.
+   */
+  shared_ptr<Attribute> get_global(std::string name);
+
 //
 // Accessors
 //
@@ -164,6 +190,10 @@ private:
     char          *m_buffer;      //!< Stream buffer
     char          *m_cursor;      //!< Cursor inside stream buffer
     unsigned long  m_buffer_size; //!< Buffer size
+
+  /** @brief Store attributes global to the run being written/read. */
+  std::map< std::string, shared_ptr<Attribute> > m_global_attributes;
+
 };
 
 } // namespace HepMC

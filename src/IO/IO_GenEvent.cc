@@ -70,6 +70,9 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
 
     FOREACH( const value_type1& vt1, evt.attributes() ) {
         FOREACH( const value_type2& vt2, vt1.second ) {
+
+	    bool skip = skip_global(vt1.first, vt2.second);
+
             string st;
 
             bool status = vt2.second->to_string(st);
@@ -78,9 +81,15 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
                 WARNING( "IO_GenEvent::write_event: problem serializing attribute: "<<vt1.first )
             }
             else {
-                m_cursor += sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
+	        if ( vt2.second->is_global() ) {
+		    m_cursor +=
+		        sprintf(m_cursor, "A G %s ",vt2.first,vt1.first.c_str());
+	        } else {
+                    m_cursor +=
+		        sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
+	        }
                 flush();
-                write_string(st);
+                if ( !skip ) write_string(escape(st));
                 m_cursor += sprintf(m_cursor, "\n");
                 flush();
             }
@@ -116,6 +125,15 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
 
     // Flush rest of the buffer to file
     forced_flush();
+}
+
+bool IO_GenEvent::skip_global(std::string name, shared_ptr<Attribute> att) {
+  if ( !att->is_global() ) return false;
+  std::map< std::string, shared_ptr<Attribute> >::iterator globit=
+    m_global_attributes.find(name);
+  if ( globit != m_global_attributes.end() ) return true;
+  m_global_attributes[name] = att;
+  return false;
 }
 
 void IO_GenEvent::allocate_buffer() {
@@ -484,9 +502,13 @@ bool IO_GenEvent::parse_attribute(GenEvent &evt, const char *buf) {
     const char     *cursor2 = buf;
     char            name[64];
     int             id = 0;
+    bool global = false;
 
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    id = atoi(cursor);
+    if ( *(cursor + 1) == 'G' )
+      global = true;
+    else
+      id = atoi(cursor);
 
     if( !(cursor  = strchr(cursor+1,' ')) ) return false;
     ++cursor;
@@ -496,12 +518,20 @@ bool IO_GenEvent::parse_attribute(GenEvent &evt, const char *buf) {
 
     cursor = cursor2+1;
 
-    // rest of the 'buf' is the unparsed attribute
-    shared_ptr<StringAttribute> att = make_shared<StringAttribute>( string(cursor) );
+    shared_ptr<Attribute> att = get_global(name);
+    // if not global, the rest of the 'buf' is the unparsed attribute
+    if ( !att ) att = make_shared<StringAttribute>( unescape(cursor) );
 
     evt.add_attribute(string(name),att);
 
     return true;
+}
+
+shared_ptr<Attribute> IO_GenEvent::get_global(std::string name) {
+  std::map< std::string, shared_ptr<Attribute> >::iterator globit =
+    m_global_attributes.find(name);
+  if ( globit ==  m_global_attributes.end() ) return shared_ptr<Attribute>();
+  return globit->second;
 }
 
 inline void IO_GenEvent::flush() {
@@ -519,5 +549,36 @@ inline void IO_GenEvent::forced_flush() {
     m_file.write( m_buffer, m_cursor-m_buffer );
     m_cursor = m_buffer;
 }
+
+std::string IO_GenEvent::escape(const std::string s) {
+  std::string ret;
+  ret.reserve(s.length());
+  for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
+    switch ( *it ) {
+    case '\\': ret += "\\\\"; break;
+    case '\n': ret += "\\|"; break;
+    default: ret += *it;
+    }
+  }
+  return ret;
+}
+
+std::string IO_GenEvent::unescape(const std::string s) {
+  std::string ret;
+  ret.reserve(s.length());
+  for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
+    if ( *it == '\\' ) {
+      ++it;
+      if ( *it == '|' )
+	ret += '\n';
+      else
+	ret += *it;
+    } else
+      ret += *it;
+  }
+  return ret;
+}
+
+
 
 } // namespace HepMC

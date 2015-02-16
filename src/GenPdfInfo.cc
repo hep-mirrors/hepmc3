@@ -10,6 +10,8 @@
  */
 #include "HepMC/GenPdfInfo.h"
 #include <cstring> // memcmp
+#include <cstdlib> // atoi
+#include <cstdio> // sprintf
 
 namespace HepMC {
 

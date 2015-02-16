@@ -24,6 +24,12 @@ using std::pair;
 using std::map;
 using std::make_pair;
 
+#if __cplusplus >= 201103L
+using std::dynamic_pointer_cast;
+#else
+using boost::dynamic_pointer_cast;
+#endif
+
 namespace HepMC {
 
 
@@ -161,7 +167,7 @@ public:
 
     /// Get attribute of type T
     template<class T>
-    shared_ptr<T> attribute(const string &name) const;
+    shared_ptr<T> attribute(const string &name, int id = 0) const;
 
     /// Get list of attributes
     const map< string, map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
@@ -289,7 +295,7 @@ private:
 //
 
 template<class T>
-shared_ptr<T> GenEvent::attribute(const string &name) const {
+shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 
     map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
     if( i1 == m_attributes.end() ) return shared_ptr<T>();
@@ -307,7 +313,7 @@ shared_ptr<T> GenEvent::attribute(const string &name) const {
 
         return att;
     }
-    else return std::dynamic_pointer_cast<T>(i2->second);
+    else return dynamic_pointer_cast<T>(i2->second);
 }
 
 } // namespace HepMC
