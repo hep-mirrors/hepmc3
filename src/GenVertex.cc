@@ -12,6 +12,7 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/Setup.h"
+#include "HepMC/Attribute.h"
 
 #include "HepMC/foreach.h"
 
@@ -147,6 +148,16 @@ const FourVector& GenVertex::position() const {
 
 void GenVertex::set_position(const FourVector& new_pos) {
     m_data.position = new_pos;
+}
+
+bool GenVertex::add_attribute(std::string name, shared_ptr<Attribute> att) {
+  if ( !parent_event() ) return false;
+  parent_event()->add_attribute(name, att, id());
+  return true;
+}
+
+void GenVertex::remove_attribute(std::string name) {
+  if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }
 
 } // namespace HepMC

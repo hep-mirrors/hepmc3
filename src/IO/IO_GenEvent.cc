@@ -64,6 +64,11 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     m_cursor += sprintf(m_cursor, "U %s %s\n",Units::name(evt.momentum_unit()).c_str(),Units::name(evt.length_unit()).c_str());
     flush();
 
+    // Write global attributes
+    typedef map< std::string, shared_ptr<Attribute> >::value_type value_typeG;
+    FOREACH( value_typeG vglob, m_global_attributes )
+      m_cursor += sprintf(m_cursor, "A G %s \n",vglob.first.c_str());
+
     // Write attributes
     typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
     typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
@@ -71,7 +76,7 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
     FOREACH( const value_type1& vt1, evt.attributes() ) {
         FOREACH( const value_type2& vt2, vt1.second ) {
 
-	    bool skip = skip_global(vt1.first, vt2.second);
+	    if ( skip_global(vt1.first, vt2.second) ) continue;
 
             string st;
 
@@ -83,13 +88,13 @@ void IO_GenEvent::write_event(const GenEvent &evt) {
             else {
 	        if ( vt2.second->is_global() ) {
 		    m_cursor +=
-		        sprintf(m_cursor, "A G %s ",vt2.first,vt1.first.c_str());
+		        sprintf(m_cursor, "A G %s ",vt1.first.c_str());
 	        } else {
                     m_cursor +=
 		        sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
 	        }
                 flush();
-                if ( !skip ) write_string(escape(st));
+                write_string(escape(st));
                 m_cursor += sprintf(m_cursor, "\n");
                 flush();
             }
@@ -520,9 +525,12 @@ bool IO_GenEvent::parse_attribute(GenEvent &evt, const char *buf) {
 
     shared_ptr<Attribute> att = get_global(name);
     // if not global, the rest of the 'buf' is the unparsed attribute
-    if ( !att ) att = make_shared<StringAttribute>( unescape(cursor) );
+    if ( !att ) {
+      att = make_shared<StringAttribute>( unescape(cursor) );
+      if ( global ) m_global_attributes[name] = att;
+    }
 
-    evt.add_attribute(string(name),att);
+    evt.add_attribute(string(name), att, id);
 
     return true;
 }
@@ -576,6 +584,7 @@ std::string IO_GenEvent::unescape(const std::string s) {
     } else
       ret += *it;
   }
+
   return ret;
 }
 

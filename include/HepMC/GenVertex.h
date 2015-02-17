@@ -27,6 +27,7 @@ namespace HepMC {
 
 
     class GenEvent;
+    class Attribute;
 
 
     /// Stores vertex-related information
@@ -113,6 +114,21 @@ namespace HepMC {
         /// @todo Write proper barcode once we decide how it should look like... or don't provide it at all?
         int barcode() const { return m_id; }
 
+    /** @brief Add event attribute to this vertex
+     *
+     *  This will overwrite existing attribute if an attribute with
+     *  the same name is present. The attribute will be stored in the
+     *  parent_event(). @return false if there is no parent_event();
+     */
+    bool add_attribute(std::string name, shared_ptr<Attribute> att);
+
+    /// Remove attribute
+    void remove_attribute(std::string name);
+
+    /// Get attribute of type T
+    template<class T>
+    shared_ptr<T> attribute(std::string name) const;
+
 
         /// @name Deprecated functionality
         //@{
@@ -197,5 +213,13 @@ namespace HepMC {
 
 
 } // namespace HepMC
+
+#include "HepMC/GenEvent.h"
+
+template<class T>
+HepMC::shared_ptr<T> HepMC::GenVertex::attribute(std::string name) const {
+  return parent_event()?
+    parent_event()->attribute<T>(name, id()): HepMC::shared_ptr<T>();
+}
 
 #endif

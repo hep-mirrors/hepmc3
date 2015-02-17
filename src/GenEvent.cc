@@ -241,17 +241,18 @@ void GenEvent::add_vertex( GenVertex *v ) {
     add_vertex( GenVertexPtr(v) );
 }
 
-void GenEvent::add_attribute(const string &name, const shared_ptr<Attribute> &att) {
+void GenEvent::
+add_attribute(const string &name, const shared_ptr<Attribute> &att, int id) {
     if(!att) return;
 
-    m_attributes[name][0] = att;
+    m_attributes[name][id] = att;
 }
 
-void GenEvent::remove_attribute(const string &name) {
+void GenEvent::remove_attribute(const string &name, int id) {
     map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
     if( i1 == m_attributes.end() ) return;
 
-    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(0);
+    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
     if( i2 == i1->second.end() ) return;
 
     i1->second.erase(i2);

@@ -12,6 +12,7 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/Setup.h"
+#include "HepMC/Attribute.h"
 
 namespace HepMC {
 
@@ -143,6 +144,16 @@ GenVertexPtr GenParticle::production_vertex() const {
 
 GenVertexPtr GenParticle::end_vertex() const {
     return m_end_vertex.lock();
+}
+
+bool GenParticle::add_attribute(std::string name, shared_ptr<Attribute> att) {
+  if ( !parent_event() ) return false;
+  parent_event()->add_attribute(name, att, id());
+  return true;
+}
+
+void GenParticle::remove_attribute(std::string name) {
+  if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }
 
 } // namespace HepMC

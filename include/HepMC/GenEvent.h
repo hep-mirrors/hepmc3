@@ -160,10 +160,11 @@ public:
      *  This will overwrite existing attribute if an attribute
      *  with the same name is present
      */
-    void add_attribute(const string &name, const shared_ptr<Attribute> &att);
+    void add_attribute(const string &name, const shared_ptr<Attribute> &att,
+		     int id = 0);
 
     /// Remove attribute
-    void remove_attribute(const string &name);
+    void remove_attribute(const string &name, int id = 0);
 
     /// Get attribute of type T
     template<class T>
@@ -300,7 +301,7 @@ shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
     map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
     if( i1 == m_attributes.end() ) return shared_ptr<T>();
 
-    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(0);
+    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
     if( i2 == i1->second.end() ) return shared_ptr<T>();
 
     if( !i2->second->is_parsed() ) {
