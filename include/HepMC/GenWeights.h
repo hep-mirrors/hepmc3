@@ -1,16 +1,10 @@
-#ifndef HEPMC_WEIGHT_CONTAINER_H
-#define HEPMC_WEIGHT_CONTAINER_H
-
-//////////////////////////////////////////////////////////////////////////
-// Matt.Dobbs@Cern.CH, November 2000, refer to:
-// M. Dobbs and J.B. Hansen, "The HepMC C++ Monte Carlo Event Record for
-// High Energy Physics", Computer Physics Communications (to be published).
+// -*- C++ -*-
 //
-// Container for the Weights associated with an event or vertex.
+// This file is part of HepMC
+// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
-// This implementation adds a map-like interface in addition to the
-// vector-like interface.
-//////////////////////////////////////////////////////////////////////////
+#ifndef HEPMC_GENWEIGHTS_H
+#define HEPMC_GENWEIGHTS_H
 
 #include <iostream>
 #include <vector>
@@ -19,58 +13,54 @@
 
 namespace HepMC {
 
-  //! Container for the Weights associated with an event or vertex.
 
+  /// Container for the Weights associated with an event or vertex.
   ///
-  /// \class  WeightContainer
   /// This class has both map-like and vector-like functionality.
   /// Named weights are now supported.
-  class WeightContainer {
-
-    friend class GenEvent;
-
+  class GenWeights {
   public:
 
-    /// Default constructor of an empty WeightContainer
-    WeightContainer() {  }
+    /// Default constructor of an empty GenWeights
+    GenWeights() {  }
 
     /// Constructor from an array of weight values
-    WeightContainer(const std::vector<double>& wgts);
+    GenWeights(const std::vector<double>& wgts);
 
     /// Constructor from arrays of names and weight values
-    WeightContainer(const std::vector<std::string>& keys, const std::vector<double>& wgts )
+    GenWeights(const std::vector<std::string>& keys, const std::vector<double>& wgts )
       : m_weights(wgts), m_names(keys)
     {  }
 
     /// Constructor from array of pairs of names and weight values
-    WeightContainer(const std::vector< std::pair<std::string,double> >& keys_wgts ) {
+    GenWeights(const std::vector< std::pair<std::string,double> >& keys_wgts ) {
       for (size_t i = 0; i < keys_wgts.size(); ++i)
         push_back(keys_wgts[i]);
     }
 
     /// Copy constructor
-    WeightContainer(const WeightContainer& other)
+    GenWeights(const GenWeights& other)
       : m_weights(other.m_weights), m_names(other.m_names)
     {  }
 
 
     /// Copy assignment
-    WeightContainer& operator = (const WeightContainer& wc) {
-      WeightContainer tmp(wc);
+    GenWeights& operator = (const GenWeights& wc) {
+      GenWeights tmp(wc);
       swap(tmp);
       return *this;
     }
 
     /// Alternate assignment using a vector of doubles
-    WeightContainer& operator = (const std::vector<double>& in) {
-      WeightContainer tmp(in);
+    GenWeights& operator = (const std::vector<double>& in) {
+      GenWeights tmp(in);
       swap(tmp);
       return *this;
     }
 
     /// Alternate assignment using a vector of pairs
-    WeightContainer& operator = (const std::vector< std::pair<std::string,double> >& in) {
-      WeightContainer tmp(in);
+    GenWeights& operator = (const std::vector< std::pair<std::string,double> >& in) {
+      GenWeights tmp(in);
       swap(tmp);
       return *this;
     }
@@ -132,7 +122,7 @@ namespace HepMC {
 
 
     /// Swap
-    void swap( WeightContainer& other) {
+    void swap( GenWeights& other) {
       m_weights.swap( other.m_weights );
       m_names.swap( other.m_names );
     }
@@ -154,9 +144,9 @@ namespace HepMC {
     const double& operator[]( const std::string& s ) const;
 
     /// Equality
-    bool operator == ( const WeightContainer& other) const;
+    bool operator == ( const GenWeights& other) const;
     /// Inequality
-    bool operator != ( const WeightContainer& other) const { return !(*this == other ); }
+    bool operator != ( const GenWeights& other) const { return !(*this == other ); }
 
     /// Returns the first (nominal) weight
     double& front() { return m_weights.front(); }
@@ -172,10 +162,12 @@ namespace HepMC {
   };
 
 
+  #ifndef HEPMC_NO_DEPRECATED
   /// Alias for backward compatibility
-  typedef WeightContainer GenWeights;
+  typedef GenWeights WeightContainer;
+  #endif
 
 
 } // HepMC
 
-#endif  // HEPMC_WEIGHT_CONTAINER_H
+#endif  // HEPMC_GENWEIGHTS_H
