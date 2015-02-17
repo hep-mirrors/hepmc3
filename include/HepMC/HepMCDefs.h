@@ -15,7 +15,7 @@
 
 // Define the version of HepMC.
 #ifndef HEPMC_VERSION
-#define HEPMC_VERSION "2.07.00.a01"
+#define HEPMC_VERSION "3.00.00b01"
 #endif
 
 
@@ -61,9 +61,14 @@
 #define HEPMC_HAS_ITERATOR_RANGES
 #endif
 
-// The HepMC::WeightContainer class allows named weights
+// The HepMC::GenWeights class allows named weights (version 2)
 #ifndef HEPMC_HAS_NAMED_WEIGHTS
-#define HEPMC_HAS_NAMED_WEIGHTS
+#define HEPMC_HAS_NAMED_WEIGHTS 2
+#endif
+
+// The HepMC::GenVertex class has a status() member
+#ifndef HEPMC_VERTEX_HAS_STATUS
+#define HEPMC_VERTEX_HAS_STATUS
 #endif
 
 // The HeavyIon class is available
