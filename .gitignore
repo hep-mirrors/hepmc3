@@ -50,3 +50,5 @@ outputs
 # root dictionaries
 rootIO/rootIO_Classes.cxx
 rootIO/rootIO_Classes.h
+
+# working directories

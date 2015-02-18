@@ -241,7 +241,7 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
         return false;
     }
 
-    char               buf[512];
+    char               buf[512*512];
     bool               parsed_event_header    = false;
     bool               is_parsing_successful  = true;
     std::pair<int,int> vertices_and_particles(0,0);
@@ -250,7 +250,7 @@ bool IO_GenEvent::fill_next_event(GenEvent &evt) {
     // Parse event, vertex and particle information
     //
     while(!m_file.rdstate()) {
-        m_file.getline(buf,512);
+        m_file.getline(buf,512*512);
 
         if( strlen(buf) == 0 ) continue;
 

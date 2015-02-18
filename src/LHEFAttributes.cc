@@ -33,9 +33,10 @@ bool HEPRUPAttribute::from_string(const string &att) {
 
 bool HEPRUPAttribute::to_string(string &att) const {
   std::ostringstream os;
-  heprup.print(os);
+  if ( heprup.NPRUP ) heprup.print(os);
   for ( int i = 0, N = tags.size(); i < N; ++i )
-    if ( tags[i]->name != "init" ) tags[i]->print(os);
+    if ( heprup.NPRUP == 0 || tags[i]->name != "init" ) tags[i]->print(os);
+  att = os.str();
   return true;
 }
 
@@ -60,6 +61,7 @@ bool HEPEUPAttribute::to_string(string &att) const {
     if ( !hepeup.heprup ||
 	 ( tags[i]->name != "event" && tags[i]->name != "eventgroup" ) )
       tags[i]->print(os);
+  att = os.str();
   return true;
 }
 

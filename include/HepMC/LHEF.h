@@ -1,6 +1,6 @@
 // -*- C++ -*-
-#ifndef THEPEG_LHEF_H
-#define THEPEG_LHEF_H
+#ifndef HEPMC_LHEF_H
+#define HEPMC_LHEF_H
 //
 // This is the declaration of the Les Houches Event File classes,
 // implementing a simple C++ parser/writer for Les Houches Event files.
@@ -304,7 +304,7 @@ struct XMLTag {
     for ( int i = 0, N = tags.size(); i < N; ++i )
       tags[i]->print(os);
 
-    os << "````" << contents << "''''</" << name << ">" << std::endl;
+    os << contents << "</" << name << ">" << std::endl;
   }
 
 };
@@ -313,7 +313,7 @@ struct XMLTag {
  * Helper function to make sure that each line in the string \a s starts with a
  * #-character and that the string ends with a new-line.
  */
-std::string hashline(std::string s) {
+inline std::string hashline(std::string s) {
   std::string ret;
   std::istringstream is(s);
   std::string ss;
@@ -453,12 +453,9 @@ struct TagBase {
   /**
    * Static string token for truth values.
    */
-  static const std::string yes;
+  static std::string yes() { return "yes"; }
 
 };
-
-const std::string TagBase::yes("yes");
-
 
 /**
  * The Generator class contains information about a generator used in a run.
@@ -533,8 +530,8 @@ struct XSecInfo : public TagBase {
   void print(std::ostream & file) const {
     file << "<xsecinfo" << oattr("neve", neve) << oattr("totxsec", totxsec)
 	 << oattr("maxweight", maxweight) << oattr("meanweight", meanweight);
-    if ( negweights ) file << oattr("negweights", yes);
-    if ( varweights ) file << oattr("varweights", yes);
+    if ( negweights ) file << oattr("negweights", yes());
+    if ( varweights ) file << oattr("varweights", yes());
     printattrs(file);
     closetag(file, "xsecinfo");
   }
@@ -922,7 +919,7 @@ struct MergeInfo : public TagBase {
   void print(std::ostream & file) const {
     file << "<mergeinfo" << oattr("iproc", iproc);
     if ( mergingscale > 0.0 ) file << oattr("mergingscale", mergingscale);
-    if ( maxmult ) file << oattr("maxmult", yes);
+    if ( maxmult ) file << oattr("maxmult", yes());
     printattrs(file);
     closetag(file, "mergeinfo");
   }
@@ -1763,27 +1760,27 @@ struct EventGroup: public std::vector<HEPEUP*> {
   /**
    * Initialize default values.
    */
-  EventGroup(): nreal(-1), ncounter(-1) {}
+  inline EventGroup(): nreal(-1), ncounter(-1) {}
 
   /**
    * The copy constructor also copies the included HEPEUP object.
    */
-  EventGroup(const EventGroup &);
+  inline EventGroup(const EventGroup &);
 
   /**
    * The assignment also copies the included HEPEUP object.
    */
-  EventGroup & operator=(const EventGroup &);
+  inline EventGroup & operator=(const EventGroup &);
 
   /**
    * Remove all subevents.
    */
-  void clear();
+  inline void clear();
 
   /**
    * The destructor deletes the included HEPEUP objects.
    */
-  ~EventGroup();
+  inline ~EventGroup();
 
   /**
    * The number of real events in this event group.
@@ -2379,22 +2376,22 @@ public:
 
 // Destructor implemented here.
 
-void EventGroup::clear() {
+inline void EventGroup::clear() {
   while ( size() > 0 ) {
     delete back();
     pop_back();
   }
 }
 
-EventGroup::~EventGroup() {
+inline EventGroup::~EventGroup() {
   clear();
 }
 
-EventGroup::EventGroup(const EventGroup &) {
+inline EventGroup::EventGroup(const EventGroup &) {
   for ( int i = 0, N = size(); i < N; ++i ) at(i) = new HEPEUP(*at(i));
 }
 
-EventGroup & EventGroup::operator=(const EventGroup & x) {
+inline EventGroup & EventGroup::operator=(const EventGroup & x) {
   if ( &x == this ) return *this;
   clear();
   nreal = x.nreal;
@@ -2894,4 +2891,4 @@ workshop at CERN 2006.
  */
 
 
-#endif /* THEPEG_LHEF_H */
+#endif /* HEPMC_LHEF_H */

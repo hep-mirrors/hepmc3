@@ -15,6 +15,7 @@
 
 #include "Attribute.h"
 #include "LHEF.h"
+#include "FourVector.h"
 
 namespace HepMC {
 
@@ -96,6 +97,11 @@ public:
 
   /** @brief Parse the XML-tags. */
   bool parse(LHEF::HEPRUP & hepr);
+
+  FourVector momentum(int i) const {
+    return FourVector(hepeup.PUP[i][0], hepeup.PUP[i][1],
+		      hepeup.PUP[i][2], hepeup.PUP[i][3]);
+  }
 
   /** @brief Clear this object. */
   void clear();
