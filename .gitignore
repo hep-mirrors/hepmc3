@@ -52,3 +52,5 @@ rootIO/rootIO_Classes.cxx
 rootIO/rootIO_Classes.h
 
 # working directories
+.build
+.test
