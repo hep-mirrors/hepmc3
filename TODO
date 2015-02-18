@@ -1,23 +1,53 @@
-3.0.0a1
+3.0.0b2
 =======
+
+* Refactor I/O classes
+  Moving to separate Reader/Writer hierarchy.
+  Should they be GenReader, GenWriter? Probably...
+
+* Replace ERRORs with proper exceptions
 
 * HepMC3 file reader
 
 * Provide an empty libHepMCfio library
 
-* Hide headers only intended for internal use
+* Add GV::status handling to ASCII I/O
+
+* Do not install headers only intended for internal use
+
+* Remove barcode concept from HepMC
+  We can't think of a clean way to replicate v2 usage, and ATLAS sim
+  have agreed that it's ok for a custom "barcode" to be created according
+  to ATLAS needs in analysis ntuples, based on properly structured data
+  members on the v3 API.
 
 * Eliminate static setup class if we can -- what is the need?
   TP: We have some global options that user may want to change.
-      They need to be kept somewhere.
+   They need to be kept somewhere.
+  AB: Which? It doesn't feel like a library that needs global settings! And what
+   if two codes are using HepMC features in the same memory space, but
+   require/want different settings?
 
 * Change namespace, lib name, etc. to HepMC for build system compat
   TP: Do we prepare a script for user that does this or do we change
       them permanently?
+  AB: Permanently. Now done, right?
 
 * See also: http://hepmc.web.cern.ch/hepmc/todo.html
   and:      https://sft.its.cern.ch/jira/browse/HEPMC
 
-NOTE: Do we really need this TODO file if we have JIRA and doxygen?
+TP: Do we really need this TODO file if we have JIRA and doxygen?
       Do we also need ChangeLog, for the same reason? Shouldn't ChangeLog
       document only release-related changes?
+AB: I find the TODO file more convenient for noting quick to-do's: it
+   doesn't require being online, for example, and is bound to the versioning
+   of the code itself. For development, as opposed to maintenance and support,
+   I'd like to keep using it. For contentious things JIRA is better for
+   discussion, of course. Similarly, the ChangeLog is not the same as the git
+   log: it is a summary of the significant & lasting changes that are made during
+   development. It is much easier to review this list of changes between release
+   markers in a text document that comes in the tarball than it is to log into
+   JIRA (assuming it still exists N years in the future) and decode which
+   tickets were opened and closed between release milestones! Based on my
+   experience from Rivet, LHAPDF, YODA, etc. a continuously filled changelog is
+   a very useful thing when making release announcements, too.
