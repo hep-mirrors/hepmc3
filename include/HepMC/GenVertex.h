@@ -79,8 +79,15 @@ namespace HepMC {
         /// @todo Needed? Wouldn't it be good enough to just rely on user testing nullness of parent_event()?
         bool in_event() const { return parent_event() != NULL; }
 
-        /// Get vertex ID
-        int id() const { return m_id;}
+        /// Get the vertex unique identifier
+        ///
+        /// @note This is not the same as id() in HepMC v2, which is now @c status()
+        int id() const { return status(); }
+
+        /// Get vertex status code
+        int status() const { return m_status; }
+        /// Set vertex status code
+        void set_status(int status) { m_status = status; }
 
         /// Get vertex data
         const GenVertexData& data() const { return m_data; }
@@ -100,24 +107,23 @@ namespace HepMC {
         /// Returns the position of this vertex. If a position is not set on _this_ vertex,
         /// the production vertices of ancestors are searched to find the inherited position.
         /// FourVector(0,0,0,0) is returned if no position information is found.
+        ///
+        /// @todo We need a way to check if there is a position on _this_ vertex, without messing up the interface. Is has_position() too intrusive?
         const FourVector& position() const;
-
         /// Set vertex position
         void set_position(const FourVector& new_pos); //!<
-
-        /// @todo We need a way to check if there is a position on _this_ vertex, without messing up the interface. Is has_position() too intrusive?
-
-        /// Get barcode
-        ///
-        /// @note          *  Currently barcode = id
-        /// @todo Write proper barcode once we decide how it should look like... or don't provide it at all?
-        int barcode() const { return m_id; }
 
 
         /// @name Deprecated functionality
         //@{
 
         #ifndef HEPMC_NO_DEPRECATED
+
+        /// Get barcode
+        ///
+        /// @note Currently barcode = id
+        /// @todo Remove barcode concept from HepMC API -- users' derived formats can still use the name as they wish
+        int barcode() const { return m_id; }
 
         /// Add incoming particle by raw pointer
         /// @deprecated Use GenVertex::add_particle_in( const GenParticlePtr &p ) instead
@@ -184,9 +190,10 @@ namespace HepMC {
 
         /// @name Fields
         //@{
-        GenEvent      *m_event; //!< Parent event
-        int            m_id;    //!< Vertex id
-        GenVertexData  m_data;  //!< Vertex data
+        GenEvent      *m_event;  //!< Parent event
+        int            m_id;     //!< Vertex id
+        int            m_status; //!< Vertex id
+        GenVertexData  m_data;   //!< Vertex data
 
         vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
         vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list

@@ -31,12 +31,12 @@ namespace HepMC {
 
 
 IO_GenEvent::IO_GenEvent(const std::string &filename, std::ios::openmode mode):
-IO_FileBase(filename,mode),
-m_precision(16),
-m_buffer(NULL),
-m_cursor(NULL),
-m_buffer_size( 256*1024 ) {
-}
+  IO_FileBase(filename,mode),
+  m_precision(16),
+  m_buffer(NULL),
+  m_cursor(NULL),
+  m_buffer_size( 256*1024 )
+{  }
 
 IO_GenEvent::~IO_GenEvent() {
     forced_flush();
@@ -342,17 +342,24 @@ bool IO_GenEvent::parse_units(GenEvent &evt, const char *buf) {
 }
 
 bool IO_GenEvent::parse_vertex_information(GenEvent &evt, const char *buf) {
-    GenVertexPtr  data = make_shared<GenVertex>();
-    FourVector    position;
-    const char   *cursor          = buf;
-    const char   *cursor2         = NULL;
-    int           barcode         = 0;
-    int           particle_in     = 0;
-    int           highest_barcode = evt.particles_count();
+    GenVertexPtr data = make_shared<GenVertex>();
+    FourVector   position;
+    const char*  cursor          = buf;
+    const char*  cursor2         = NULL;
+    int          barcode         = 0;
+    int          status          = 0;
+    int          particle_in     = 0;
+    int          highest_barcode = evt.particles_count();
 
     // barcode
+    /// @todo Is this ever set on data?
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     barcode = atoi(cursor);
+
+    // status
+    /// @todo This needs to be set on data
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    status = atoi(cursor);
 
     // skip to the list of particles
     if( !(cursor = strchr(cursor+1,'[')) ) return false;
@@ -365,8 +372,7 @@ bool IO_GenEvent::parse_vertex_information(GenEvent &evt, const char *buf) {
         // add incoming particle to the vertex
         if( particle_in > 0 && particle_in <= highest_barcode) {
             data->add_particle_in( evt.particles()[particle_in-1] );
-        }
-        else {
+        } else {
             return false;
         }
 
@@ -405,6 +411,7 @@ bool IO_GenEvent::parse_vertex_information(GenEvent &evt, const char *buf) {
 
     return true;
 }
+
 
 bool IO_GenEvent::parse_particle_information(GenEvent &evt, const char *buf) {
     GenParticlePtr  data = make_shared<GenParticle>();
@@ -492,7 +499,7 @@ bool IO_GenEvent::parse_attribute(GenEvent &evt, const char *buf) {
     ++cursor;
 
     if( !(cursor2 = strchr(cursor,' ')) ) return false;
-    sprintf(name,"%.*s", cursor2-cursor, cursor);
+    sprintf(name,"%.*s", static_cast<int>(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
 
