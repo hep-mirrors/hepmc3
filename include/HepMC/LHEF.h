@@ -300,7 +300,7 @@ struct XMLTag {
       os << "/>" << std::endl;
       return;
     }
-    os << ">" << std::endl;
+    os << ">";
     for ( int i = 0, N = tags.size(); i < N; ++i )
       tags[i]->print(os);
 

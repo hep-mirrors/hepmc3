@@ -161,7 +161,9 @@ public:
      *  with the same name is present
      */
     void add_attribute(const string &name, const shared_ptr<Attribute> &att,
-		     int id = 0);
+		       int id = 0) {
+      if ( att ) m_attributes[name][id] = att;
+    }
 
     /// Remove attribute
     void remove_attribute(const string &name, int id = 0);
