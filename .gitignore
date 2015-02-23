@@ -46,6 +46,7 @@ CMakeCache.txt
 install_manifest.txt
 install_manifest_headers.txt
 outputs
+Makefile
 
 # root dictionaries
 rootIO/rootIO_Classes.cxx
