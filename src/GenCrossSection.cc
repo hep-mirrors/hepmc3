@@ -39,7 +39,7 @@ bool GenCrossSection::to_string(string &att) const {
 }
 
 bool GenCrossSection::operator==( const GenCrossSection& a ) const {
-    return ( memcmp( this, &a, sizeof(struct GenCrossSection) ) == 0 );
+  return ( memcmp( (void*)this, (void*) &a, sizeof(struct GenCrossSection) ) == 0 );
 }
 
 bool GenCrossSection::operator!=( const GenCrossSection& a ) const {

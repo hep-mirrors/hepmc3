@@ -519,7 +519,7 @@ bool IO_GenEvent::parse_attribute(GenEvent &evt, const char *buf) {
     ++cursor;
 
     if( !(cursor2 = strchr(cursor,' ')) ) return false;
-    sprintf(name,"%.*s", cursor2-cursor, cursor);
+    sprintf(name,"%.*s", (int)(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
 
