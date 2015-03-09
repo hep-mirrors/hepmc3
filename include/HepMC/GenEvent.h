@@ -30,6 +30,12 @@ using std::dynamic_pointer_cast;
 using boost::dynamic_pointer_cast;
 #endif
 
+#ifdef HEPMC_ROOTIO
+#include "TBuffer.h"
+#include "TClass.h"
+#endif
+
+
 namespace HepMC {
 
 
@@ -44,8 +50,7 @@ class GenEvent {
 public:
 
     /// Default constructor
-    GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit);
-
+    GenEvent(Units::MomentumUnit momentum_unit = Units::GEV, Units::LengthUnit length_unit = Units::MM);
 
     /// @name Print functions
     //@{
@@ -267,10 +272,21 @@ public:
     bool vertices_empty()  const { return m_vertices.empty();  }
 
     #endif
-
+  
     //@}
 
+  // methods to fill GenEventData and to read it back
 
+  void write_data(GenEventData &data) const;
+  void read_data(const GenEventData &data);
+
+  
+#ifdef HEPMC_ROOTIO
+
+  void Streamer(TBuffer &b);
+
+#endif
+  
 private:
 
     /// @name Fields

@@ -17,6 +17,7 @@ endif()
 
 if(ROOT_FOUND)
   add_subdirectory(RootIOExample)
+  add_subdirectory(RootIOExample2)
 else()
   message(STATUS "Examples: ROOT package not found. ") 
   message(STATUS "rootIO_example disabled")

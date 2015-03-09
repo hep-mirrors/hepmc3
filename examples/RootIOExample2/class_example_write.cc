@@ -12,13 +12,18 @@
  */
 #include "HepMC/GenEvent.h"
 #include "HepMC/IO/IO_GenEvent.h"
-#include "HepMC/IO/IO_Root.h"
+
+#include "TFile.h"
 
 #include <iostream>
+#include <sstream>
 
 using namespace HepMC;
 using std::cout;
 using std::endl;
+
+#include "MyClass.h"
+
 
 /** Main */
 int main(int argc, char **argv) {
@@ -29,7 +34,8 @@ int main(int argc, char **argv) {
     }
 
     IO_GenEvent     text_input (argv[1],std::ios::in);
-    IO_Root root_output(argv[2],std::ios::out);
+
+    TFile* fFile = new TFile(argv[2],"RECREATE");
 
     int events_parsed = 0;
 
@@ -46,7 +52,19 @@ int main(int argc, char **argv) {
             evt.print();
         }
 
-        root_output.write_event(evt);
+	MyClass* myclass = new MyClass();
+
+	myclass->SetEvent(&evt);
+	//
+	std::ostringstream os;
+	os << events_parsed;
+	std::string stevt = "Event_" + os.str();
+	const char* chevt = stevt.c_str();
+           
+	cout << "writing " << stevt << endl;
+	
+	fFile->WriteObject(myclass, chevt);
+	
         ++events_parsed;
 
         if( events_parsed%1000 == 0 ) {
@@ -55,8 +73,7 @@ int main(int argc, char **argv) {
     }
 
     text_input.close();
-    root_output.close();
-
+    fFile->Close();
     std::cout << "Events parsed and written: " << events_parsed << std::endl;
 
     return 0;

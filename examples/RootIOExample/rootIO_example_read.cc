@@ -12,7 +12,7 @@
  */
 #include "HepMC/GenEvent.h"
 #include "HepMC/IO/IO_GenEvent.h"
-#include "HepMC/IO/IO_RootStreamer.h"
+#include "HepMC/IO/IO_Root.h"
 
 #include <iostream>
 
@@ -28,14 +28,14 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    IO_RootStreamer root_input (argv[1],std::ios::in);
+    IO_Root root_input (argv[1],std::ios::in);
     IO_GenEvent     text_output(argv[2],std::ios::out);
 
     int events_parsed = 0;
 
     while( !root_input.rdstate() ) {
 
-        GenEvent evt(Units::GEV,Units::MM);
+        GenEvent evt;
 
         root_input.fill_next_event(evt);
 

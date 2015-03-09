@@ -251,4 +251,92 @@ void GenEvent::remove_attribute(const string &name, int id) {
     i1->second.erase(i2);
 }
 
+  void GenEvent::write_data(GenEventData &data) const 
+  {
+    // Reserve memory for containers
+    data.particles.reserve( this->particles().size() );
+    data.vertices.reserve( this->vertices().size() );
+    data.links1.reserve( this->particles().size()*2 );
+    data.links2.reserve( this->particles().size()*2 );
+
+    // Fill event data
+    data.event_number  = this->event_number();
+    data.momentum_unit = this->momentum_unit();
+    data.length_unit   = this->length_unit();
+
+    // Fill containers
+    FOREACH( const GenParticlePtr &p, this->particles() ) {
+        data.particles.push_back( p->data() );
+    }
+
+    FOREACH( const GenVertexPtr &v, this->vertices() ) {
+        data.vertices.push_back( v->data() );
+        int v_id = v->id();
+
+        FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+            data.links1.push_back( p->id() );
+            data.links2.push_back( v_id    );
+        }
+
+        FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+            data.links1.push_back( v_id    );
+            data.links2.push_back( p->id() );
+        }
+    } 
+  }
+
+  void GenEvent::read_data(const GenEventData &data)
+  {
+    this->set_event_number( data.event_number );
+    this->set_units( data.momentum_unit, data.length_unit );
+
+    // Fill particle information
+    FOREACH( const GenParticleData &pd, data.particles ) {
+      GenParticlePtr p = make_shared<GenParticle>(pd);
+      this->add_particle(p);
+    }
+    
+    // Fill vertex information
+    FOREACH( const GenVertexData &vd, data.vertices ) {
+      GenVertexPtr v = make_shared<GenVertex>(vd);
+        this->add_vertex(v);
+    }
+    
+    // Restore links
+    for( unsigned int i=0; i<data.links1.size(); ++i) {
+      int id1 = data.links1[i];
+      int id2 = data.links2[i];
+      
+      if( id1 > 0 ) this->vertices()[ (-id2)-1 ]->add_particle_in ( this->particles()[ id1-1 ] );
+      else          this->vertices()[ (-id1)-1 ]->add_particle_out( this->particles()[ id2-1 ] );
+    }
+  }
+  
+  
+#ifdef HEPMC_ROOTIO
+
+void GenEvent::Streamer(TBuffer &b){
+
+  if (b.IsReading()){
+    std::cout << "Is Reading" << std::endl;
+
+    GenEventData data;
+
+    b.ReadClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
+
+    read_data(data);
+    
+  } else {
+    std::cout << "Is Writting" << std::endl;
+    // fill the GenEventData structures
+
+    GenEventData data;
+    write_data(data);
+    
+    // write the GenEventData structures
+    b.WriteClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
+  }
+}
+
+#endif
 } // namespace HepMC
