@@ -4,7 +4,9 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #
 
 add_subdirectory(BasicExamples)
+
 add_subdirectory(LHEFExample)
+
 set(PYTHIA8_ROOT_DIR "" CACHE PATH "Location of Pythia8 installation.")
 find_package(Pythia8 QUIET)
 

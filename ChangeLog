@@ -1,3 +1,11 @@
+2015-03-09 Witek Pokorski
+
+	* implemented ROOT I/O custom streamer for GenEvent
+
+2015-02-19 Leif Lonnblad
+
+	* implemented the LHEF attributes classes
+
 2015-02-15  Andy Buckley  <andy.buckley@cern.ch>
 
 	* Adding new Reader and Writer I/O base classes and first draft ASCII I/o interfaces (to be finished).
