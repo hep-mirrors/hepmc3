@@ -5,46 +5,51 @@
 //
 #ifndef HEPMC_WRITERASCII_H
 #define HEPMC_WRITERASCII_H
-
-#include "HepMC/IO/IO_FileBase.h"
+///
+/// @file  WriterAscii.h
+/// @brief Definition of class \b WriterAscii
+///
+/// @class HepMC::WriterAscii
+/// @brief GenEvent I/O serialization for structured text files
+///
+/// @ingroup IO
+///
+#include "HepMC/Writer.h"
 #include "HepMC/GenEvent.h"
 #include <string>
 #include <fstream>
 
 namespace HepMC {
 
-
-
-  /// @brief GenEvent I/O parsing and serialization for structured text files
-  /// @ingroup IO
-  class IO_GenEvent : public IO_FileBase {
-  public:
+class WriterAscii : public Writer {
+public:
 
     /// @brief Constructor
     /// @warning If file already exists, it will be cleared before writing
-    IO_GenEvent(const std::string& filename);
+    WriterAscii(const std::string& filename);
 
     /// @brief Destructor
-    ~IO_GenEvent();
-
+    ~WriterAscii();
 
     /// @brief Write event to file
     ///
     /// @param[in] evt Event to be serialized
     void write_event(const GenEvent& evt);
 
+    /// @brief Return status of the stream
+    ///
+    /// @todo Rename!
+    int rdstate() { return m_file.rdstate(); }
+
     /// @brief Set output precision
     ///
     /// Available range is [2,24]. Default is 16.
-    ///
-    /// @todo Arg should be size_t?
-    void set_precision( unsigned int prec ) {
-      if (prec < 2 || prec > 24) return;
-      m_precision = prec;
+    void set_precision( size_t prec ) {
+        if (prec < 2 || prec > 24) return;
+        m_precision = prec;
     }
 
-
-  private:
+private:
 
     /// @name Buffer management
     //@{
@@ -62,22 +67,23 @@ namespace HepMC {
     ///
     /// Default is 256kb. Minimum is 256b.
     /// Size can only be changed before first read/write operation.
-    ///
-    /// @todo Arg should be size_t?
-    void set_buffer_size( unsigned long size) {
-      if (m_buffer) return;
-      if (size < 256) return;
-      m_buffer_size = size;
+    void set_buffer_size( size_t size ) {
+        if (m_buffer) return;
+        if (size < 256) return;
+        m_buffer_size = size;
     }
 
-    /// @brief Inline function for writing strings
+    /// @brief Escape '\' and '\n' characters in string
+    std::string escape(const std::string s);
+
+    /// @brief Skip global attribute
     ///
-    /// Since strings can be long (maybe even longer than buffer) they have to be dealt
-    /// with separately.
-    void write_string( const std::string &str );
+    /// @todo rewrite global attributes altogether
+    bool skip_global(std::string name, shared_ptr<Attribute> att);
 
     /// Inline function flushing buffer to output stream when close to buffer capacity
     void flush();
+
     /// Inline function forcing flush to the output stream
     void forced_flush();
 
@@ -86,6 +92,12 @@ namespace HepMC {
 
     /// @name Write helpers
     //@{
+
+    /// @brief Inline function for writing strings
+    ///
+    /// Since strings can be long (maybe even longer than buffer) they have to be dealt
+    /// with separately.
+    void write_string( const std::string &str );
 
     /// @brief Write vertex
     ///
@@ -99,15 +111,17 @@ namespace HepMC {
 
     //@}
 
+private:
 
-  private:
-
+    ofstream m_file; //!< Output file
     int m_precision; //!< Output precision
     char* m_buffer;  //!< Stream buffer
     char* m_cursor;  //!< Cursor inside stream buffer
     unsigned long m_buffer_size; //!< Buffer size
 
-  };
+    /** @brief Store attributes global to the run being written/read. */
+    std::map< std::string, shared_ptr<Attribute> > m_global_attributes;
+};
 
 
 } // namespace HepMC

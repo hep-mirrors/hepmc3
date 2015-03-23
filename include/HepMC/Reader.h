@@ -5,16 +5,21 @@
 //
 #ifndef HEPMC_READER_H
 #define HEPMC_READER_H
+///
+/// @file  Reader.h
+/// @brief Definition of interface \b Reader
+///
+/// @class HepMC::Reader
+/// @brief Base class for all I/O readers
+///
+/// @ingroup IO
+///
 
 namespace HepMC {
-
 
   // Forward declaration
   class GenEvent;
 
-
-  /// @brief Base class for all I/O interfaces
-  /// @ingroup IO
   class Reader {
   public:
 

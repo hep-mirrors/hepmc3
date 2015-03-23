@@ -5,68 +5,50 @@
 //
 #ifndef HEPMC_READERASCII_H
 #define HEPMC_READERASCII_H
-
-#include "HepMC/IO/IO_FileBase.h"
+///
+/// @file  ReaderAscii.h
+/// @brief Definition of class \b ReaderAscii
+///
+/// @class HepMC::ReaderAscii
+/// @brief GenEvent I/O parsing for structured text files
+///
+/// @ingroup IO
+///
+#include "HepMC/Reader.h"
 #include "HepMC/GenEvent.h"
 #include <string>
 #include <fstream>
 
 namespace HepMC {
 
-
-
-  /// @brief GenEvent I/O parsing and serialization for structured text files
-  /// @ingroup IO
-  class IO_GenEvent : public IO_FileBase {
-  public:
+class ReaderAscii : public Reader {
+public:
 
     /// @brief Constructor
     /// @warning If file already exists, it will be cleared before writing
-    IO_GenEvent(const std::string& filename);
+    ReaderAscii(const std::string& filename);
 
     /// @brief Destructor
-    ~IO_GenEvent();
-
+    ~ReaderAscii();
 
     /// @brief Load event from file
     ///
     /// @param[out] evt Event to be filled
     bool read_event(GenEvent& evt);
 
-
+    /// @brief Return status of the stream
+    ///
+    /// @todo Rename!
+    int rdstate() { return m_file.rdstate(); }
   private:
 
-    /// @name Buffer management
-    //@{
-
-    /// @brief Attempts to allocate buffer of the chosen size
+    /// @brief Get global attribute
     ///
-    /// This function can be called manually by the user or will be called
-    /// before first read/write operation
-    ///
-    /// @note If buffer size is too large it will be divided by 2 until it is
-    /// small enough for system to allocate
-    void allocate_buffer();
+    /// @todo rewrite global attributes
+    shared_ptr<Attribute> get_global(std::string name);
 
-    /// @brief Set buffer size (in bytes)
-    ///
-    /// Default is 256kb. Minimum is 256b.
-    /// Size can only be changed before first read/write operation.
-    ///
-    /// @todo Arg should be size_t?
-    void set_buffer_size( unsigned long size) {
-      if (m_buffer) return;
-      if (size < 256) return;
-      m_buffer_size = size;
-    }
-
-    /// Inline function flushing buffer to output stream when close to buffer capacity
-    void flush();
-    /// Inline function forcing flush to the output stream
-    void forced_flush();
-
-    //@}
-
+    /// @brief Unsecape '\' and '\n' characters in string
+    std::string unescape(const std::string s);
 
     /// @name Read helpers
     //@{
@@ -123,16 +105,21 @@ namespace HepMC {
     /// @param[in] buf Line of text that needs to be parsed
     bool parse_particle_information(GenEvent &evt, const char *buf);
 
+    /// @brief Parse attribute
+    ///
+    /// Helper routine for parsing single attribute information
+    /// @param[out] evt Event that will contain parsed attribute
+    /// @param[in] buf Line of text that needs to be parsed
+    bool parse_attribute(GenEvent &evt, const char *buf);
     //@}
 
 
   private:
 
-    int m_precision; //!< Output precision
-    char* m_buffer;  //!< Stream buffer
-    char* m_cursor;  //!< Cursor inside stream buffer
-    unsigned long m_buffer_size; //!< Buffer size
+    ifstream m_file; //!< Input file
 
+    /** @brief Store attributes global to the run being written/read. */
+    std::map< std::string, shared_ptr<Attribute> > m_global_attributes;
   };
 
 
