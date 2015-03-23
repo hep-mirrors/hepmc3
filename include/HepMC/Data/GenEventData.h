@@ -43,6 +43,10 @@ struct GenEventData {
      */
     std::vector<int> links1;
     std::vector<int> links2; ///< Second id of the vertex links
+
+    std::vector<int>         attribute_id;     ///< Attribute owner id
+    std::vector<std::string> attribute_name;   ///< Attribute name
+    std::vector<std::string> attribute_string; ///< Attribute serialized as string
 };
 
 } // namespace HepMC

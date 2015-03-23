@@ -251,13 +251,16 @@ void GenEvent::remove_attribute(const string &name, int id) {
     i1->second.erase(i2);
 }
 
-  void GenEvent::write_data(GenEventData &data) const 
-  {
+void GenEvent::write_data(GenEventData &data) const
+{
     // Reserve memory for containers
     data.particles.reserve( this->particles().size() );
     data.vertices.reserve( this->vertices().size() );
     data.links1.reserve( this->particles().size()*2 );
     data.links2.reserve( this->particles().size()*2 );
+    data.attribute_id.reserve( this->attributes().size() );
+    data.attribute_name.reserve( this->attributes().size() );
+    data.attribute_string.reserve( this->attributes().size() );
 
     // Fill event data
     data.event_number  = this->event_number();
@@ -282,11 +285,32 @@ void GenEvent::remove_attribute(const string &name, int id) {
             data.links1.push_back( v_id    );
             data.links2.push_back( p->id() );
         }
-    } 
-  }
+    }
 
-  void GenEvent::read_data(const GenEventData &data)
-  {
+    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
+    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
+
+    FOREACH( const value_type1& vt1, this->attributes() ) {
+        FOREACH( const value_type2& vt2, vt1.second ) {
+
+            string st;
+
+            bool status = vt2.second->to_string(st);
+
+            if( !status ) {
+                WARNING( "GenEvent::write_data: problem serializing attribute: "<<vt1.first )
+            }
+            else {
+                data.attribute_id.push_back(vt2.first);
+                data.attribute_name.push_back(vt1.first);
+                data.attribute_string.push_back(st);
+            }
+        }
+    }
+}
+
+void GenEvent::read_data(const GenEventData &data)
+{
     this->set_event_number( data.event_number );
     this->set_units( data.momentum_unit, data.length_unit );
 
@@ -310,8 +334,14 @@ void GenEvent::remove_attribute(const string &name, int id) {
       if( id1 > 0 ) this->vertices()[ (-id2)-1 ]->add_particle_in ( this->particles()[ id1-1 ] );
       else          this->vertices()[ (-id1)-1 ]->add_particle_out( this->particles()[ id2-1 ] );
     }
-  }
-  
+
+    // Read attributes
+    for( unsigned int i=0; i<data.attribute_id.size(); ++i) {
+        add_attribute( data.attribute_name[i],
+                       make_shared<StringAttribute>(data.attribute_string[i]),
+                       data.attribute_id[i] );
+    }
+}
   
 #ifdef HEPMC_ROOTIO
 
