@@ -6,8 +6,11 @@
 #include "ValidationControl.h"
 
 #include "SimpleEventTool.h"
-#include "RootStreamerTool.h"
 #include "FileValidationTool.h"
+
+#ifdef ROOTCONFIG
+#include "RootTool.h"
+#endif
 
 #ifdef PHOTOSPP
 #include "PhotosValidationTool.h"
@@ -146,7 +149,11 @@ void ValidationControl::read_file(const std::string &filename) {
 #endif
             }
             else if( strncmp(buf,"root_streamer",13)==0 ) {
-                m_toolchain.push_back( new RootStreamerTool() );
+#ifdef ROOTCONFIG
+                m_toolchain.push_back( new RootTool("test.root",ios::out) );
+#else
+                status = UNAVAILABLE_TOOL;
+#endif
             }
             else status = UNRECOGNIZED_TOOL;
         }
