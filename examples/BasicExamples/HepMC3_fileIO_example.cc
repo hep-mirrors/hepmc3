@@ -12,7 +12,8 @@
  *
  */
 #include "HepMC/GenEvent.h"
-#include "HepMC/IO/IO_GenEvent.h"
+#include "HepMC/ReaderAscii.h"
+#include "HepMC/WriterAscii.h"
 
 #include <iostream>
 using namespace HepMC;
@@ -27,8 +28,8 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    IO_GenEvent input_file (argv[1],std::ios::in);
-    IO_GenEvent output_file(argv[2],std::ios::out);
+    ReaderAscii input_file (argv[1]);
+    WriterAscii output_file(argv[2]);
 
     int events_parsed = 0;
 
@@ -36,7 +37,7 @@ int main(int argc, char **argv) {
         GenEvent evt(Units::GEV,Units::MM);
 
         // Read event from input file
-        input_file.fill_next_event(evt);
+        input_file.read_event(evt);
 
         // If reading failed - exit loop
         if( input_file.rdstate() ) break;

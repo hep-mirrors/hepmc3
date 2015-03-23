@@ -11,7 +11,7 @@
  *  @date   16/10/14
  */
 #include "HepMC/GenEvent.h"
-#include "HepMC/IO/IO_GenEvent.h"
+#include "HepMC/WriterAscii.h"
 
 #include "MyClass.h"
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 
 
     TFile fo(argv[1]);
-    IO_GenEvent     text_output(argv[2],std::ios::out);
+    WriterAscii text_output(argv[2]);
     
     MyClass* myevent;
     int events_parsed = 0;

@@ -11,8 +11,8 @@
  *  @date   16/10/14
  */
 #include "HepMC/GenEvent.h"
-#include "HepMC/IO/IO_GenEvent.h"
-#include "HepMC/IO/IO_Root.h"
+#include "HepMC/ReaderAscii.h"
+#include "HepMC/WriterRoot.h"
 
 #include <iostream>
 
@@ -28,8 +28,8 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    IO_GenEvent     text_input (argv[1],std::ios::in);
-    IO_Root root_output(argv[2],std::ios::out);
+    ReaderAscii text_input (argv[1]);
+    WriterRoot  root_output(argv[2]);
 
     int events_parsed = 0;
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 
         GenEvent evt(Units::GEV,Units::MM);
 
-        text_input.fill_next_event(evt);
+        text_input.read_event(evt);
 
         if( text_input.rdstate() ) break;
 

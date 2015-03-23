@@ -34,9 +34,7 @@ m_buffer_size( 256*1024 ) {
 }
 
 WriterAscii::~WriterAscii() {
-    forced_flush();
-    m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << std::endl << std::endl;
-    m_file.close();
+    close();
 
     if( m_buffer ) delete[] m_buffer;
 }
@@ -254,6 +252,14 @@ inline void WriterAscii::write_string( const std::string &str ) {
         forced_flush();
         m_file.write( str.data(), str.length() );
     }
+}
+
+void WriterAscii::close() {
+    if( !m_file.is_open() ) return;
+
+    forced_flush();
+    m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << std::endl << std::endl;
+    m_file.close();
 }
 
 } // namespace HepMC

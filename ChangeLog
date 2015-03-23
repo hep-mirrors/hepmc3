@@ -1,3 +1,13 @@
+2015-03-23  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
+
+	* ReaderAscii and WriterAscii finished. IO_GenEvent is now only
+	  backward-compatibility header file
+
+	* IO_Root divided into WriterRoot and ReaderRoot
+
+	* Other I/O cleanup. include/HepMC/IO and src/IO removed
+	  IO_FileBase and IO_Base removed. Examples updated.
+
 2015-03-09 Witek Pokorski
 
 	* implemented ROOT I/O custom streamer for GenEvent

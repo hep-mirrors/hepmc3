@@ -399,4 +399,10 @@ int HepMC2_adapter::parse_particle_information(const char *buf) {
     return 0;
 }
 
+
+void HepMC2_adapter::close() {
+    if( !m_file.is_open() ) return;
+    m_file.close();
+}
+
 } // namespace HepMC

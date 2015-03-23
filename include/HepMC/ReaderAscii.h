@@ -40,6 +40,10 @@ public:
     ///
     /// @todo Rename!
     int rdstate() { return m_file.rdstate(); }
+
+    /// @brief Close file stream
+    void close();
+
   private:
 
     /// @brief Get global attribute

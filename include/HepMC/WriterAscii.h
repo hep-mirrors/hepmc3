@@ -41,6 +41,9 @@ public:
     /// @todo Rename!
     int rdstate() { return m_file.rdstate(); }
 
+    /// @brief Close file stream
+    void close();
+
     /// @brief Set output precision
     ///
     /// Available range is [2,24]. Default is 16.

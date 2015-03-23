@@ -27,7 +27,7 @@ m_file(filename) {
 }
 
 ReaderAscii::~ReaderAscii() {
-    m_file.close();
+    close();
 }
 
 bool ReaderAscii::read_event(GenEvent &evt) {
@@ -348,6 +348,11 @@ std::string ReaderAscii::unescape(const std::string s) {
     }
 
     return ret;
+}
+
+void ReaderAscii::close() {
+    if( !m_file.is_open() ) return;
+    m_file.close();
 }
 
 } // namespace HepMC

@@ -1,5 +1,6 @@
 #include "HepMC/LHEFAttributes.h"
-#include "HepMC/IO/IO_GenEvent.h"
+#include "HepMC/ReaderAscii.h"
+#include "HepMC/WriterAscii.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
@@ -13,7 +14,7 @@ int main(int argc, char ** argv) {
   // Create Reader and Writer object
   LHEF::Reader reader("LHEF_example.lhe");
 
-  IO_GenEvent output("LHEF_example.hepmc3", std::ios::out);
+  WriterAscii output("LHEF_example.hepmc3");
 
   shared_ptr<HEPRUPAttribute> hepr = make_shared<HEPRUPAttribute>();
 
@@ -60,7 +61,7 @@ int main(int argc, char ** argv) {
 
   output.close();
 
-  IO_GenEvent input("LHEF_example.hepmc3", std::ios::in);
+  ReaderAscii input("LHEF_example.hepmc3");
   LHEF::Writer writer("LHEF_example_out.lhe");
   hepr = shared_ptr<HEPRUPAttribute>();
 
@@ -68,7 +69,7 @@ int main(int argc, char ** argv) {
 
     GenEvent ev(Units::GEV, Units::MM);
 
-    if ( !input.fill_next_event(ev) || ev.event_number() == 0 ) break;
+    if ( !input.read_event(ev) || ev.event_number() == 0 ) break;
 
     if ( !hepr ) {
       hepr = ev.attribute<HEPRUPAttribute>("HEPRUP");
