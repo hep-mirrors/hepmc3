@@ -3,19 +3,19 @@
 // This file is part of HepMC
 // Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_IO_HEPMC2_ADAPTER_H
-#define  HEPMC_IO_HEPMC2_ADAPTER_H
+#ifndef  HEPMC_HEPMC2_ADAPTER_H
+#define  HEPMC_HEPMC2_ADAPTER_H
 /**
- *  @file  IO_HepMC2_adapter.h
- *  @brief Definition of \b class IO_HepMC2_adapter
+ *  @file  HepMC2_adapter.h
+ *  @brief Definition of \b class HepMC2_adapter
  *
- *  @class HepMC::IO_HepMC2_adapter
+ *  @class HepMC::HepMC2_adapter
  *  @brief Parser for HepMC2 I/O files
  *
  *  @ingroup IO
  *
  */
-#include "HepMC/IO/IO_FileBase.h"
+#include "HepMC/Reader.h"
 
 #include "HepMC/Data/SmartPointer.h"
 
@@ -23,37 +23,30 @@
 #include <fstream>
 #include <vector>
 using std::vector;
+using std::ifstream;
 
 namespace HepMC {
 
 class GenEvent;
 
-class IO_HepMC2_adapter : public IO_FileBase {
+class HepMC2_adapter : public Reader {
 //
 // Constructors
 //
 public:
-    /** @brief Default constructor
-     *
-     *  Accepts only ios::in mode
-     */
-    IO_HepMC2_adapter(const std::string& filename, std::ios::openmode mode = std::ios::in);
+    /** @brief Default constructor */
+    HepMC2_adapter(const std::string& filename);
 //
 // Functions
 //
 public:
-    /** @brief Write GenEvent in HepMC2 IO file format
-     *
-     *  @warning Function not implemented. It will be implemented if
-     *           there is demand for it
-     */
-    void write_event(const GenEvent &evt);
+    /** @brief Implementation of Reader::read_event */
+    bool read_event(GenEvent &evt);
 
-    /** @brief Parse HepMC2 event and convert it to GenEvent
-     *
-     *  @param[out] evt Contains parsed event
-     */
-    bool fill_next_event(GenEvent &evt);
+    /// @brief Return status of the stream
+    ///
+    /// @todo Rename!
+    int rdstate() { return m_file.rdstate(); }
 
 private:
     /** @brief Parse event
@@ -90,6 +83,8 @@ private:
 // Fields
 //
 private:
+    ifstream               m_file;                //!< Input file
+
     vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache
     vector<int>            m_vertex_barcodes;     //!< Old vertex barcodes
 
