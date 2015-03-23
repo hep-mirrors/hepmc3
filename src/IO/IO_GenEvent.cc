@@ -526,7 +526,7 @@ bool IO_GenEvent::parse_attribute(GenEvent &evt, const char *buf) {
     shared_ptr<Attribute> att = get_global(name);
     // if not global, the rest of the 'buf' is the unparsed attribute
     if ( !att ) {
-      att = make_shared<StringAttribute>( unescape(cursor) );
+      att = make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
       if ( global ) m_global_attributes[name] = att;
     }
 
