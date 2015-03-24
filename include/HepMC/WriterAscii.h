@@ -116,7 +116,7 @@ private:
 
 private:
 
-    ofstream m_file; //!< Output file
+    std::ofstream m_file; //!< Output file
     int m_precision; //!< Output precision
     char* m_buffer;  //!< Stream buffer
     char* m_cursor;  //!< Cursor inside stream buffer

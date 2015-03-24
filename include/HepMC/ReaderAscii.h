@@ -120,7 +120,7 @@ public:
 
   private:
 
-    ifstream m_file; //!< Input file
+  std::ifstream m_file; //!< Input file
 
     /** @brief Store attributes global to the run being written/read. */
     std::map< std::string, shared_ptr<Attribute> > m_global_attributes;
