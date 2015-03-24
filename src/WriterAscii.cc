@@ -49,7 +49,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     flush();
 
     // Write event info
-    m_cursor += sprintf(m_cursor, "E %i %i %i\n",evt.event_number(),evt.vertices_count(),evt.particles_count());
+    m_cursor += sprintf(m_cursor, "E %i %i %i\n",evt.event_number(),evt.vertices().size(),evt.particles().size());
     flush();
 
     // Write units

@@ -92,8 +92,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     }
 
     // Check if all particles and vertices were parsed
-    if( (int)evt.vertices_count()  != vertices_and_particles.first ||
-        (int)evt.particles_count() != vertices_and_particles.second ) {
+    if( (int)evt.vertices().size()  != vertices_and_particles.first ||
+        (int)evt.particles().size() != vertices_and_particles.second ) {
         ERROR( "ReaderAscii: not all particles or vertices were parsed" )
         is_parsing_successful = false;
     }
@@ -163,7 +163,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     const char   *cursor2         = NULL;
     int           barcode         = 0;
     int           particle_in     = 0;
-    int           highest_barcode = evt.particles_count();
+    int           highest_barcode = evt.particles().size();
 
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
@@ -230,7 +230,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     // verify barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
 
-    if( atoi(cursor) != (int)evt.particles_count() + 1 ) {
+    if( atoi(cursor) != (int)evt.particles().size() + 1 ) {
         ERROR( "ReaderAscii: particle barcode mismatch" )
         return false;
     }
@@ -240,7 +240,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     mother_barcode = atoi(cursor);
 
     // add particle to corresponding vertex
-    if( mother_barcode > 0 && mother_barcode <= (int)evt.particles_count() ) {
+    if( mother_barcode > 0 && mother_barcode <= (int)evt.particles().size() ) {
 
         GenParticlePtr mother = evt.particles()[ mother_barcode-1 ];
         GenVertexPtr   vertex = mother->end_vertex();
@@ -254,7 +254,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
         vertex->add_particle_out(data);
         evt.add_vertex(vertex);
     }
-    else if( mother_barcode < 0 && -mother_barcode <= (int)evt.vertices_count() ) {
+    else if( mother_barcode < 0 && -mother_barcode <= (int)evt.vertices().size() ) {
         evt.vertices()[ (-mother_barcode)-1 ]->add_particle_out(data);
     }
 
