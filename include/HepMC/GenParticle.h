@@ -100,11 +100,6 @@ public:
     template<class T>
     shared_ptr<T> attribute(std::string name) const;
 
-  
-
-protected:
-    void set_production_vertex( const shared_ptr<GenVertex> &v ) { m_production_vertex = v; } //!< Set production vertex
-    void set_end_vertex       ( const shared_ptr<GenVertex> &v ) { m_end_vertex        = v; } //!< Set end vertex
 //
 // Fields
 //

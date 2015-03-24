@@ -61,6 +61,20 @@ public:
     /// @brief Add vertex
     void add_vertex( const GenVertexPtr &v );
 
+    /// @brief Remove particle
+    ///
+    /// This will remove whole sub-tree starting from this particle
+    /// and will remove production vertex of this particle if this vertex
+    /// has no more outgoing particles
+    /// @todo Rejoining vertices. Also: what to do if deleting beam particle?
+    void remove_particle( const GenParticlePtr &v );
+
+    /// @brief Remove vertex
+    ///
+    /// This will remove all sub-trees of all outgoing particles of this vertex
+    /// @todo Optimize. Currently each particle/vertex is erased separately
+    void remove_vertex( const GenVertexPtr &v );
+
     /// @brief Add whole tree in topological order
     ///
     /// This function will find the beam particles (particles

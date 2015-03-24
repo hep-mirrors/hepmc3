@@ -15,6 +15,7 @@
 #include "HepMC/Setup.h"
 
 #include "HepMC/Data/GenEventData.h"
+#include "HepMC/Search/FindParticles.h"
 
 #include <vector>
 #include <deque>
@@ -51,12 +52,74 @@ void GenEvent::add_vertex( const GenVertexPtr &v ) {
     // Add all incoming and outgoing particles and restore their production/end vertices
     FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
         if(!p->in_event()) add_particle(p);
-        p->set_end_vertex(v->m_this.lock());
+        p->m_end_vertex = v->m_this.lock();
     }
 
     FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
         if(!p->in_event()) add_particle(p);
-        p->set_production_vertex(v->m_this.lock());
+        p->m_production_vertex = v->m_this.lock();
+    }
+}
+
+void GenEvent::remove_particle( const GenParticlePtr &p ) {
+    if( !p || p->parent_event() != this ) return;
+
+    DEBUG( 3, "GenEvent::remove_particle - called with particle: "<<p->id() );
+    GenVertexPtr end_vtx = p->end_vertex();
+    if( end_vtx ) {
+        end_vtx->remove_particle_in(p);
+
+        // If that was the only incoming particle, remove vertex from the event
+        if( end_vtx->particles_in().size() == 0 )  remove_vertex(end_vtx);
+    }
+
+    GenVertexPtr prod_vtx = p->production_vertex();
+    if( prod_vtx ) {
+        prod_vtx->remove_particle_out(p);
+
+        // If that was the only outgoing particle, remove vertex from the event
+        if( prod_vtx->particles_out().size() == 0 ) remove_vertex(prod_vtx);
+    }
+
+    DEBUG( 3,"GenEvent::remove_particle - erasing particle: " << p->id() )
+
+    int idx = p->id();
+    vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
+
+    // Reassign id of the particles following this one
+    for(;it != m_particles.end(); ++it) {
+        (*it)->m_id = idx;
+        ++idx;
+    }
+}
+
+void GenEvent::remove_vertex( const GenVertexPtr &v ) {
+    if( !v || v->parent_event() != this ) return;
+
+    DEBUG( 3, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
+    shared_ptr<GenVertex> null_vtx;
+
+    FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
+        p->m_end_vertex.reset();
+    }
+
+    FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
+        p->m_production_vertex.reset();
+
+        // recursive delete rest of the tree
+        remove_particle(p);
+    }
+
+    // Erase this vertex from vertices list
+    DEBUG( 3, "GenEvent::remove_vertex   - erasing vertex: " << v->id() )
+
+    int idx = -v->id();
+    vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
+
+    // Reassign id of the vertices following this one
+    for(;it != m_vertices.end(); ++it) {
+        (*it)->m_id = -idx;
+        ++idx;
     }
 }
 
@@ -248,18 +311,18 @@ void GenEvent::read_data(const GenEventData &data)
       GenParticlePtr p = make_shared<GenParticle>(pd);
       this->add_particle(p);
     }
-    
+
     // Fill vertex information
     FOREACH( const GenVertexData &vd, data.vertices ) {
       GenVertexPtr v = make_shared<GenVertex>(vd);
         this->add_vertex(v);
     }
-    
+
     // Restore links
     for( unsigned int i=0; i<data.links1.size(); ++i) {
       int id1 = data.links1[i];
       int id2 = data.links2[i];
-      
+
       if( id1 > 0 ) this->vertices()[ (-id2)-1 ]->add_particle_in ( this->particles()[ id1-1 ] );
       else          this->vertices()[ (-id1)-1 ]->add_particle_out( this->particles()[ id2-1 ] );
     }
@@ -271,7 +334,7 @@ void GenEvent::read_data(const GenEventData &data)
                        data.attribute_id[i] );
     }
 }
-  
+
 #ifdef HEPMC_ROOTIO
 
 void GenEvent::Streamer(TBuffer &b){
@@ -284,14 +347,14 @@ void GenEvent::Streamer(TBuffer &b){
     b.ReadClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
 
     read_data(data);
-    
+
   } else {
     std::cout << "Is Writting" << std::endl;
     // fill the GenEventData structures
 
     GenEventData data;
     write_data(data);
-    
+
     // write the GenEventData structures
     b.WriteClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
   }

@@ -180,5 +180,11 @@ int main() {
 
     Print::content(evt);
 
+    cout << endl << "Now: removing particle with id 6 and printing again:" << endl << endl;
+    evt.remove_particle(p6);
+
+    Print::listing(evt);
+    Print::content(evt);
+
     return 0;
 }

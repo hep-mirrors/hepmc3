@@ -74,6 +74,10 @@ namespace HepMC {
         void add_particle_in ( const GenParticlePtr& p);
         /// Add outgoing particle
         void add_particle_out( const GenParticlePtr& p);
+        /// Remove incoming particle
+        void remove_particle_in ( const GenParticlePtr& p);
+        /// Remove outgoing particle
+        void remove_particle_out( const GenParticlePtr& p);
 
         /// Get/set list of incoming particles
         const vector<GenParticlePtr>& particles_in()  const { return m_particles_in;  }

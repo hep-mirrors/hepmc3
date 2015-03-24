@@ -13,8 +13,9 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/Setup.h"
 #include "HepMC/Attribute.h"
-
 #include "HepMC/foreach.h"
+
+#include <algorithm> // std::remove
 
 namespace HepMC {
 
@@ -40,7 +41,7 @@ void GenVertex::add_particle_in( const GenParticlePtr &p ) {
 
     m_particles_in.push_back(p);
 
-    p->set_end_vertex( m_this.lock() );
+    p->m_end_vertex = m_this.lock();
 
     if(m_event) m_event->add_particle(p);
 }
@@ -55,9 +56,19 @@ void GenVertex::add_particle_out( const GenParticlePtr &p ) {
 
     m_particles_out.push_back(p);
 
-    p->set_production_vertex( m_this.lock() );
+    p->m_production_vertex = m_this.lock();
 
     if(m_event) m_event->add_particle(p);
+}
+
+void GenVertex::remove_particle_in( const GenParticlePtr& p ) {
+    p->m_end_vertex.reset();
+    m_particles_in.erase( std::remove( std::begin(m_particles_in), std::end(m_particles_in), p), m_particles_in.end());
+}
+
+void GenVertex::remove_particle_out( const GenParticlePtr& p ) {
+    p->m_production_vertex.reset();
+    m_particles_out.erase( std::remove( std::begin(m_particles_out), std::end(m_particles_out), p), m_particles_out.end());
 }
 
 const FourVector& GenVertex::position() const {
