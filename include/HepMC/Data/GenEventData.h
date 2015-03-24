@@ -16,12 +16,10 @@
  *
  */
 #include <vector>
+#include <string>
 #include "HepMC/Data/GenParticleData.h"
 #include "HepMC/Data/GenVertexData.h"
 #include "HepMC/Units.h"
-#include "HepMC/GenPdfInfo.h"
-#include "HepMC/GenHeavyIon.h"
-#include "HepMC/GenCrossSection.h"
 
 namespace HepMC {
 
