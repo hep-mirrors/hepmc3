@@ -104,17 +104,4 @@ bool GenPdfInfo::is_valid() const
     return false;
 }
 
-void GenPdfInfo::print( std::ostream & ostr) const {
-    ostr << " GenPdfInfo: " << parton_id[0]
-         << " " << parton_id[1]
-         << " " << x[0]
-         << " " << x[1]
-         << " " << scale
-         << " " << xf[0]
-         << " " << xf[1]
-         << " " << pdf_id[0]
-         << " " << pdf_id[1]
-         << " " << std::endl;
-}
-
 } // namespace HepMC

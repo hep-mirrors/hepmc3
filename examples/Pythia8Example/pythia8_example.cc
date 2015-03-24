@@ -5,6 +5,7 @@
  */
 #include "HepMC/GenEvent.h"
 #include "HepMC/WriterAscii.h"
+#include "HepMC/Print.h"
 
 #include "Pythia8/Pythia.h"
 #include "Pythia8/Pythia8ToHepMC3.h"
@@ -37,7 +38,7 @@ int main(int argc, char **argv) {
 
         if( i==0 ) {
             std::cout << "First event: " << std::endl;
-            hepmc.print();
+            Print::listing(hepmc);
         }
 
         file.write_event(hepmc);

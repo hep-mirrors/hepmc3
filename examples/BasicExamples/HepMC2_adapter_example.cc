@@ -14,6 +14,7 @@
 
 #include "HepMC/HepMC2_adapter.h"
 #include "HepMC/WriterAscii.h"
+#include "HepMC/Print.h"
 
 #include <iostream>
 #include <cstdlib> // atoi
@@ -51,7 +52,7 @@ int main(int argc, char **argv) {
 
         if(events_parsed==0) {
             cout << " First event: " << endl;
-            evt.print();
+            Print::listing(evt);
         }
 
         ++events_parsed;

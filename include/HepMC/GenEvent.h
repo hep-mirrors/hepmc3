@@ -52,24 +52,6 @@ public:
     /// Default constructor
     GenEvent(Units::MomentumUnit momentum_unit = Units::GEV, Units::LengthUnit length_unit = Units::MM);
 
-    /// @name Print functions
-    //@{
-
-    /// @brief Print event
-    void print( std::ostream& ostr = std::cout ) const;
-
-    /// @brief Dump the whole content of the event memory. Useful for debugging
-    /// @todo Dump to where, in what format? Is this really a core API feature?
-    void dump() const;
-
-    /// Get printout precision. Default is 2
-    int  print_precision() const { return m_print_precision; }
-    /// Set printout precision
-    void set_print_precision(int precision) { m_print_precision = precision; }
-
-    //@}
-
-
     /// @name Content allocation
     //@{
 
@@ -112,19 +94,10 @@ public:
     /// @name Accessors
     //@{
 
-    /// @todo Remove printing from the GenEvent itself -- we should make lightweight external functions for this, to not hard-code formatting
-
     /// Get event number
     int  event_number() const { return m_event_number; }
     /// Set event number
     void set_event_number(int num) { m_event_number = num; }
-
-    /// Get number of particles
-    /// @todo Not particles_size()? size() is the standard name. Or require particles().size() which is as efficient.
-    unsigned int particles_count() const { return m_particles.size(); }
-    /// Get number of vertices
-    /// @todo Not vertices_size()? size() is the standard name. Or require vertices().size() which is as efficient.
-    unsigned int vertices_count() const { return m_vertices.size(); }
 
     /// Get/set list of particles
     const vector<GenParticlePtr>& particles() const { return m_particles; }
@@ -292,7 +265,6 @@ private:
     /// @name Fields
     //@{
     int                         m_event_number;    //!< Event number
-    int                         m_print_precision; //!< Printout precision
     Units::MomentumUnit         m_momentum_unit;   //!< Momentum unit
     Units::LengthUnit           m_length_unit;     //!< Length unit
     GenParticlePtr              m_beam_particle_1; //!< First beam particle

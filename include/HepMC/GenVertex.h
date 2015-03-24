@@ -51,22 +51,6 @@ namespace HepMC {
 
         //@}
 
-
-        /// @name Printing functions
-        //@{
-
-        /// Print information about the vertex
-        void print( std::ostream& ostr = std::cout ) const;
-
-    protected:
-
-        /// Print information about the vertex in event-listing format
-        /// @todo Why here, and why protected?
-        void print_event_listing( std::ostream& ostr = std::cout ) const;
-
-        //@}
-
-
     public:
 
         /// @name Accessors

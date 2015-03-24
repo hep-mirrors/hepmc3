@@ -125,21 +125,4 @@ bool GenHeavyIon::is_valid() const {
     return false;
 }
 
-void GenHeavyIon::print( std::ostream &ostr ) const {
-    ostr << " GenHeavyIon: " << Ncoll_hard
-         << " " << Npart_proj
-         << " " << Npart_targ
-         << " " << Ncoll
-         << " " << spectator_neutrons
-         << " " << spectator_protons
-         << " " << N_Nwounded_collisions
-         << " " << Nwounded_N_collisions
-         << " " << Nwounded_Nwounded_collisions
-         << " " << impact_parameter
-         << " " << event_plane_angle
-         << " " << eccentricity
-         << " " << sigma_inel_NN
-         << std::endl;
-}
-
 } // namespace HepMC

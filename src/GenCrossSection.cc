@@ -52,10 +52,4 @@ bool GenCrossSection::is_valid() const {
     return false;
 }
 
-void GenCrossSection::print( std::ostream & ostr) const {
-    ostr << " GenCrossSection: " << cross_section
-         << " " << cross_section_error
-         << " " << std::endl;
-}
-
 } // namespace HepMC

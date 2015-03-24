@@ -68,8 +68,10 @@ namespace HepMC {
 
 
     /// Print weights
+    /// @todo move to HepMC::Print once weights are actually added to GenEvent
     void print(std::ostream& ostr=std::cout) const;
     /// Write weights in a readable table
+    /// @todo move to HepMC::Print once weights are actually added to GenEvent
     void write(std::ostream& ostr=std::cout) const;
 
 

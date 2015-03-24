@@ -44,15 +44,8 @@ public:
 // Functions
 //
 public:
-    /** @brief Print information about the particle */
-    void print( std::ostream& ostr = std::cout ) const;
-
     /** @brief Check if this particle belongs to an event */
     bool in_event() const { return (bool)(m_event); }
-
-protected:
-    /** @brief Print information about the particle in event-listing format */
-    void print_event_listing( std::ostream& ostr = std::cout ) const;
 
 //
 // Accessors

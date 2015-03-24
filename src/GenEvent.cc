@@ -26,80 +26,9 @@ using std::endl;
 namespace HepMC {
 
 GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit) {
-    set_print_precision(2);
     set_event_number(0);
     m_momentum_unit = momentum_unit;
     m_length_unit   = length_unit;
-}
-
-void GenEvent::print( std::ostream& ostr ) const {
-
-    ostr << "________________________________________________________________________________" << endl;
-    ostr << "GenEvent: #" << event_number() << endl;
-    ostr << " Momenutm units: " << Units::name(m_momentum_unit)
-         << " Position units: " << Units::name(m_length_unit) << endl;
-    ostr << " Entries in this event: " << vertices().size() << " vertices, "
-         << particles().size() << " particles." << endl;
-    ostr << " Beam particle indexes:";
-    if(m_beam_particle_1) ostr << " " << m_beam_particle_1->id();
-    if(m_beam_particle_2) ostr << " " << m_beam_particle_2->id();
-    ostr << "\n";
-
-    // Print a legend to describe the particle info
-    ostr << "                                    GenParticle Legend" << endl;
-    ostr << "     Barcode   PDG ID   "
-         << "( Px,       Py,       Pz,     E )"
-         << "   Stat-Subst  ProdVtx" << endl;
-    ostr << "________________________________________________________________________________" << endl;
-
-    // Find the current stream state
-    std::ios_base::fmtflags orig = ostr.flags();
-    std::streamsize         prec = ostr.precision();
-
-    // Set precision
-    ostr.precision( print_precision() );
-
-    // Print all vertices
-    FOREACH( const GenVertexPtr &v, vertices() ) {
-        v->print_event_listing(ostr);
-    }
-
-    // Restore the stream state
-    ostr.flags(orig);
-    ostr.precision(prec);
-    ostr << "________________________________________________________________________________" << endl;
-}
-
-void GenEvent::dump() const {
-    std::cout<<"-----------------------------"<<std::endl;
-    std::cout<<"--------- EVENT DUMP --------"<<std::endl;
-    std::cout<<"-----------------------------"<<std::endl;
-    std::cout<<std::endl;
-
-    std::cout<<"Attributes:"<<std::endl;
-
-    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
-    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
-
-    FOREACH( const value_type1& vt1, m_attributes ) {
-        FOREACH( const value_type2& vt2, vt1.second ) {
-            std::cout << vt2.first << ": " << vt1.first << std::endl;
-        }
-    }
-
-    std::cout<<"GenParticlePtr ("<<particles().size()<<")"<<std::endl;
-
-    FOREACH( const GenParticlePtr &p, particles() )
-    {
-        p->print();
-    }
-
-    std::cout<<"GenVertexPtr ("<<vertices().size()<<")"<<std::endl;
-    FOREACH( const GenVertexPtr &v, vertices() ) {
-        v->print();
-    }
-
-    std::cout<<"-----------------------------"<<std::endl;
 }
 
 void GenEvent::add_particle( const GenParticlePtr &p ) {
@@ -192,7 +121,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
 
     DEBUG_CODE_BLOCK(
         DEBUG( 6, "GenEvent - particles sorted: "
-                   <<particles_count()<<", max deque size: "
+                   <<this->particles().size()<<", max deque size: "
                    <<max_deque_size<<", iterations: "<<sorting_loop_count )
     )
 }
