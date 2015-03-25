@@ -66,7 +66,7 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
 
     // Print a legend to describe the particle info
     cout << "                                    GenParticle Legend" << endl;
-    cout << "     Barcode   PDG ID   "
+    cout << "         id    PDG ID   "
          << "( Px,       Py,       Pz,     E )"
          << "   Stat-Subst  ProdVtx" << endl;
     cout << "________________________________________________________________________________" << endl;
@@ -172,9 +172,6 @@ void Print::listing( const GenParticlePtr &p ) {
 
 void Print::line(const GenVertexPtr &v) {
     cout << "GenVertex:  " << v->id();
-    cout << " barcode: ";
-    cout.width(5);
-    cout << v->barcode();
     cout.width(3);
     cout << " in: "  << v->particles_in().size();
     cout.width(3);
@@ -193,10 +190,7 @@ void Print::line(const GenParticlePtr &p) {
 
     cout << "GenParticle: ";
     cout.width(3);
-    cout << p->id();
-    cout << " barcode: ";
-    cout.width(5);
-    cout << p->barcode() <<" PDGID: ";
+    cout << p->id() <<" PDGID: ";
     cout.width(5);
     cout << p->pdg_id();
 

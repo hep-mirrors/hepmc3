@@ -78,13 +78,6 @@ public:
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
 
-    /** @brief Get barcode
-     *
-     *  Currently barcode = id
-     *  @todo Write proper barcode once we decide how it should look like
-     */
-    int barcode() const { return m_id; }
-
     /** @brief Add event attribute to this particle
      *
      *  This will overwrite existing attribute if an attribute with

@@ -94,14 +94,6 @@ namespace HepMC {
         /// Set vertex position
         void set_position(const FourVector& new_pos); //!<
 
-        /// @todo We need a way to check if there is a position on _this_ vertex, without messing up the interface. Is has_position() too intrusive?
-
-        /// Get barcode
-        ///
-        /// @note          *  Currently barcode = id
-        /// @todo Write proper barcode once we decide how it should look like... or don't provide it at all?
-        int barcode() const { return m_id; }
-
     /** @brief Add event attribute to this vertex
      *
      *  This will overwrite existing attribute if an attribute with
