@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef  HEPMC_FOURVECTOR_H
 #define  HEPMC_FOURVECTOR_H
@@ -15,8 +15,6 @@
  *  Interpretation of its content depends on accessors used.
  *  Contains few support operations on 4-vectors and floating-point values.
  *  Fully inlined
- *
- *  @todo Change notation to eta,phi,pT. Make proper accessors
  *
  */
 #include "HepMC/Setup.h"
@@ -42,7 +40,7 @@ public:
 
     double m()       const; //!< Calculate mass. Returns -sqrt(-m) if e^2 - P^2 is negative
     double length()  const; //!< Calculate length
-    bool   is_zero() const; //!< Check if the length of this vertex is equivalent to zero
+    bool   is_zero() const; //!< Check if the length of this vertex is zero
 
     bool        operator==(const FourVector& rhs) const;                            //!< Boolean operator ==
     bool        operator!=(const FourVector& rhs) const { return !(*this == rhs); } //!< Boolean operator !=
@@ -56,28 +54,6 @@ public:
     void        operator-=(const FourVector& rhs);       //!< Assignment operator -=
     void        operator*=(const double rhs);            //!< Assignment operator *=
     void        operator/=(const double rhs);            //!< Assignment operator /=
-
-//
-// Functions related to floating-point operations
-//
-public:
-    /** @brief Check if floating-point value is almost equal 0 */
-    static bool AlmostEqualZero(double A);
-
-    /** @brief Compare floating-point numbers
-     *
-     *  Bruce Dawson algorithm for comparing floating-point numbers
-     *  Implementation for 64-bit double precision
-     *  Updated to remove strict-aliasing warnings
-     *
-     *  @see https://randomascii.wordpress.com/category/floating-point/
-     *
-     *  @param A first value
-     *  @param B second value
-     *  @param maxUlps maximum acceptable deviation in number of units in the last place
-     *                 maxUlps > 0 && maxUlps < 4 * 1024 * 1024
-     */
-    static bool AlmostEqual2sComplement(double A, double B, unsigned int maxUlps = Setup::DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS);
 
 //
 // Accessors

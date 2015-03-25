@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file Print.cc
@@ -51,7 +51,7 @@ void Print::content( const GenEvent &event ) {
 
 void Print::listing( const GenEvent &event, unsigned short precision ) {
 
-    cout << "________________________________________________________________________________" << endl;
+    cout << "________________________________________________________________________" << endl;
     cout << "GenEvent: #" << event.event_number() << endl;
     cout << " Momenutm units: " << Units::name(event.momentum_unit())
          << " Position units: " << Units::name(event.length_unit()) << endl;
@@ -66,10 +66,10 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
 
     // Print a legend to describe the particle info
     cout << "                                    GenParticle Legend" << endl;
-    cout << "     Barcode   PDG ID   "
+    cout << "         id    PDG ID   "
          << "( Px,       Py,       Pz,     E )"
-         << "   Stat-Subst  ProdVtx" << endl;
-    cout << "________________________________________________________________________________" << endl;
+         << "   Stat ProdVtx" << endl;
+    cout << "________________________________________________________________________" << endl;
 
     // Find the current stream state
     std::ios_base::fmtflags orig = cout.flags();
@@ -86,7 +86,7 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
     // Restore the stream state
     cout.flags(orig);
     cout.precision(prec);
-    cout << "________________________________________________________________________________" << endl;
+    cout << "________________________________________________________________________" << endl;
 }
 
 void Print::listing( const GenVertexPtr &v ) {
@@ -153,12 +153,6 @@ void Print::listing( const GenParticlePtr &p ) {
     cout.unsetf(std::ios_base::showpos);
     cout.width(3);
     cout << p->status();
-    if( p->status_subcode() ) {
-        cout << "-";
-        cout.width(9);
-        cout << std::left << p->status_subcode() << std::right;
-    }
-    else cout << "          ";
 
     GenVertexPtr prod = p->production_vertex();
     
@@ -172,9 +166,6 @@ void Print::listing( const GenParticlePtr &p ) {
 
 void Print::line(const GenVertexPtr &v) {
     cout << "GenVertex:  " << v->id();
-    cout << " barcode: ";
-    cout.width(5);
-    cout << v->barcode();
     cout.width(3);
     cout << " in: "  << v->particles_in().size();
     cout.width(3);
@@ -193,10 +184,7 @@ void Print::line(const GenParticlePtr &p) {
 
     cout << "GenParticle: ";
     cout.width(3);
-    cout << p->id();
-    cout << " barcode: ";
-    cout.width(5);
-    cout << p->barcode() <<" PDGID: ";
+    cout << p->id() <<" PDGID: ";
     cout.width(5);
     cout << p->pdg_id();
 

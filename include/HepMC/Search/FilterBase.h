@@ -38,7 +38,6 @@ enum FilterParamType {
 /** @brief List of filters with integer parameter */
 enum FilterIntegerParam {
     STATUS,
-    STATUS_SUBCODE,
     PDG_ID,
     ABS_PDG_ID
 };
@@ -65,7 +64,6 @@ enum FilterOperator {
 //
 public:
     static const FilterBase init_status()          { return FilterBase(STATUS);          } //!< init static const STATUS
-    static const FilterBase init_status_subcode()  { return FilterBase(STATUS_SUBCODE);  } //!< init static const STATUS_SUBCODE
     static const FilterBase init_pdg_id()          { return FilterBase(PDG_ID);          } //!< init static const PDG_ID
     static const FilterBase init_abs_pdg_id()      { return FilterBase(ABS_PDG_ID);      } //!< init static const ABS_PDG_ID
 
@@ -113,7 +111,6 @@ protected:
 };
 
 static const FilterBase STATUS          = FilterBase::init_status();           //!< Filter base for filtering GenParticle::status()
-static const FilterBase STATUS_SUBCODE  = FilterBase::init_status_subcode();   //!< Filter base for filtering GenParticle::status_subcode()
 static const FilterBase PDG_ID          = FilterBase::init_pdg_id();           //!< Filter base for filtering GenParticle::pdg_id()
 static const FilterBase ABS_PDG_ID      = FilterBase::init_abs_pdg_id();       //!< Filter base for filtering abs( GenParticle::pdg_id() )
 

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file WriterAscii.cc
@@ -19,6 +19,7 @@
 
 namespace HepMC {
 
+
 WriterAscii::WriterAscii(const std::string &filename):
 m_file(filename),
 m_precision(16),
@@ -34,11 +35,13 @@ m_buffer_size( 256*1024 ) {
     }
 }
 
+
 WriterAscii::~WriterAscii() {
     close();
 
     if( m_buffer ) delete[] m_buffer;
 }
+
 
 void WriterAscii::write_event(const GenEvent &evt) {
     if( !m_file.is_open() ) return;
@@ -50,7 +53,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     flush();
 
     // Write event info
-    m_cursor += sprintf(m_cursor, "E %i %i %i\n",evt.event_number(),evt.vertices().size(),evt.particles().size());
+    m_cursor += sprintf(m_cursor, "E %d %lu %lu\n", evt.event_number(), evt.vertices().size(), evt.particles().size());
     flush();
 
     // Write units
@@ -125,6 +128,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     forced_flush();
 }
 
+
 void WriterAscii::allocate_buffer() {
     if( m_buffer ) return;
     while( !m_buffer && m_buffer_size >= 256 ) {
@@ -143,6 +147,7 @@ void WriterAscii::allocate_buffer() {
     m_cursor = m_buffer;
 }
 
+
 std::string WriterAscii::escape(const std::string s) {
     std::string ret;
     ret.reserve( s.length()*2 );
@@ -156,6 +161,7 @@ std::string WriterAscii::escape(const std::string s) {
     return ret;
 }
 
+
 bool WriterAscii::skip_global(std::string name, shared_ptr<Attribute> att) {
     if ( !att->is_global() ) return false;
     std::map< std::string, shared_ptr<Attribute> >::iterator globit = m_global_attributes.find(name);
@@ -163,6 +169,7 @@ bool WriterAscii::skip_global(std::string name, shared_ptr<Attribute> att) {
     m_global_attributes[name] = att;
     return false;
 }
+
 
 void WriterAscii::write_vertex(const GenVertexPtr &v) {
 
@@ -199,6 +206,7 @@ void WriterAscii::write_vertex(const GenVertexPtr &v) {
     }
 }
 
+
 inline void WriterAscii::flush() {
     // The maximum size of single add to the buffer (other than by
     // using WriterAscii::write) is 32 bytes. This is a safe value as
@@ -210,10 +218,12 @@ inline void WriterAscii::flush() {
     }
 }
 
+
 inline void WriterAscii::forced_flush() {
     m_file.write( m_buffer, m_cursor-m_buffer );
     m_cursor = m_buffer;
 }
+
 
 void WriterAscii::write_particle(const GenParticlePtr &p, int second_field) {
 
@@ -238,6 +248,7 @@ void WriterAscii::write_particle(const GenParticlePtr &p, int second_field) {
     flush();
 }
 
+
 inline void WriterAscii::write_string( const std::string &str ) {
 
     // First let's check if string will fit into the buffer
@@ -255,6 +266,7 @@ inline void WriterAscii::write_string( const std::string &str ) {
     }
 }
 
+
 void WriterAscii::close() {
     if( !m_file.is_open() ) return;
 
@@ -262,5 +274,6 @@ void WriterAscii::close() {
     m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << std::endl << std::endl;
     m_file.close();
 }
+
 
 } // namespace HepMC
