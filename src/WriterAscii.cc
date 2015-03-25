@@ -63,9 +63,9 @@ void WriterAscii::write_event(const GenEvent &evt) {
     flush();
 
     // Write weight values
-    m_cursor += sprintf(m_cursor, "W \n");
+    m_cursor += sprintf(m_cursor, "W ");
     FOREACH (double w, evt.weights().values())
-      m_cursor += sprintf(m_cursor, "%e \n", w);
+      m_cursor += sprintf(m_cursor, "%e ", w);
     m_cursor += sprintf(m_cursor, "\n");
     flush();
 
