@@ -15,6 +15,8 @@
 /// @ingroup IO
 ///
 
+#include "HepMC/GenRunInfo.h"
+
 namespace HepMC {
 
   // Forward declaration
@@ -28,6 +30,23 @@ namespace HepMC {
 
     /// Fill next event from input into @a evt
     virtual bool read_event(GenEvent& evt) = 0;
+
+    /// Get the global GenRunInfo object.
+    shared_ptr<GenRunInfo> run_info() const {
+      return m_run_info;
+    }
+
+  protected:
+
+    /// Set the global GenRunInfo object.
+    void set_run_info(shared_ptr<GenRunInfo> run) {
+      m_run_info = run;
+    }
+
+  private:
+
+    /// The global GenRunInfo object.
+    shared_ptr<GenRunInfo> m_run_info;
 
   };
 

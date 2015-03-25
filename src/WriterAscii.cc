@@ -19,18 +19,20 @@
 
 namespace HepMC {
 
-WriterAscii::WriterAscii(const std::string &filename):
+WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run):
 m_file(filename),
 m_precision(16),
 m_buffer(NULL),
 m_cursor(NULL),
 m_buffer_size( 256*1024 ) {
+    set_run_info(run);
     if( !m_file.is_open() ) {
         ERROR( "WriterAscii: could not open output file: "<<filename )
     }
     else {
         m_file << "HepMC::Version " << HepMC::version() << std::endl;
         m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
+	if ( run_info() ) write_run_info();
     }
 }
 
@@ -49,6 +51,15 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Make sure nothing was left from previous event
     flush();
 
+    if ( !run_info() ) {
+	set_run_info(evt.run_info());
+	write_run_info();
+    } else {
+	if ( evt.run_info() && run_info() != evt.run_info()
+	     && !evt.run_info()->empty() ) 
+	    WARNING( "WriterAscii::write_event: GenEvents contain different GenRunInfo objects - only the first such object will be serialized." )
+    }
+
     // Write event info
     m_cursor += sprintf(m_cursor, "E %i %i %i\n",evt.event_number(),evt.vertices().size(),evt.particles().size());
     flush();
@@ -57,19 +68,12 @@ void WriterAscii::write_event(const GenEvent &evt) {
     m_cursor += sprintf(m_cursor, "U %s %s\n",Units::name(evt.momentum_unit()).c_str(),Units::name(evt.length_unit()).c_str());
     flush();
 
-    // Write global attributes
-    typedef map< std::string, shared_ptr<Attribute> >::value_type value_typeG;
-    FOREACH( value_typeG vglob, m_global_attributes )
-      m_cursor += sprintf(m_cursor, "A G %s \n",vglob.first.c_str());
-
     // Write attributes
     typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
     typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
 
     FOREACH( const value_type1& vt1, evt.attributes() ) {
         FOREACH( const value_type2& vt2, vt1.second ) {
-
-	    if ( skip_global(vt1.first, vt2.second) ) continue;
 
             string st;
 
@@ -79,13 +83,8 @@ void WriterAscii::write_event(const GenEvent &evt) {
                 WARNING( "WriterAscii::write_event: problem serializing attribute: "<<vt1.first )
             }
             else {
-	        if ( vt2.second->is_global() ) {
-		    m_cursor +=
-		        sprintf(m_cursor, "A G %s ",vt1.first.c_str());
-	        } else {
-                    m_cursor +=
-		        sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
-	        }
+		m_cursor +=
+		    sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
                 flush();
                 write_string(escape(st));
                 m_cursor += sprintf(m_cursor, "\n");
@@ -93,10 +92,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
             }
         }
     }
-
+    
     int vertices_processed = 0;
     int lowest_vertex_id   = 0;
-
+    
     // Print particles
     FOREACH( const GenParticlePtr &p, evt.particles() ) {
 
@@ -156,14 +155,6 @@ std::string WriterAscii::escape(const std::string s) {
     return ret;
 }
 
-bool WriterAscii::skip_global(std::string name, shared_ptr<Attribute> att) {
-    if ( !att->is_global() ) return false;
-    std::map< std::string, shared_ptr<Attribute> >::iterator globit = m_global_attributes.find(name);
-    if ( globit != m_global_attributes.end() ) return true;
-    m_global_attributes[name] = att;
-    return false;
-}
-
 void WriterAscii::write_vertex(const GenVertexPtr &v) {
 
     m_cursor += sprintf( m_cursor, "V %i [",v->id() );
@@ -214,6 +205,33 @@ inline void WriterAscii::forced_flush() {
     m_file.write( m_buffer, m_cursor-m_buffer );
     m_cursor = m_buffer;
 }
+
+void WriterAscii::write_run_info() {
+    allocate_buffer();
+
+    if ( !run_info() ) {
+	WARNING("WriterAscii::write_run_info: No run info object." )
+	    return;
+    }
+    typedef map< std::string, shared_ptr<Attribute> >::value_type value_type;
+    FOREACH( value_type att, run_info()->attributes() ) {
+	string st;
+	if ( ! att.second->to_string(st) ) {
+	    WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
+		}
+	else {
+	    m_cursor +=
+		sprintf(m_cursor, "A %s ", att.first.c_str());
+	    flush();
+	    write_string(escape(st));
+	    m_cursor += sprintf(m_cursor, "\n");
+	    flush();
+	}
+    }
+}
+    
+
+    
 
 void WriterAscii::write_particle(const GenParticlePtr &p, int second_field) {
 

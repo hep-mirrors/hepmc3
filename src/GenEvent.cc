@@ -26,12 +26,6 @@ using std::endl;
 
 namespace HepMC {
 
-GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit) {
-    set_event_number(0);
-    m_momentum_unit = momentum_unit;
-    m_length_unit   = length_unit;
-}
-
 void GenEvent::add_particle( const GenParticlePtr &p ) {
     if( p->in_event() ) return;
 

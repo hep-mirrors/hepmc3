@@ -15,6 +15,7 @@
 #include "HepMC/GenHeavyIon.h"
 #include "HepMC/GenPdfInfo.h"
 #include "HepMC/GenCrossSection.h"
+#include "HepMC/GenRunInfo.h"
 
 #include <iostream>
 #include <vector>
@@ -50,8 +51,20 @@ class GenEvent {
 public:
 
     /// @brief Default constructor
-    GenEvent(Units::MomentumUnit momentum_unit = Units::GEV, Units::LengthUnit length_unit = Units::MM);
-
+    GenEvent(Units::MomentumUnit momentum_unit = Units::GEV,
+	     Units::LengthUnit length_unit = Units::MM)
+	: m_event_number(0), m_momentum_unit(momentum_unit),
+	  m_length_unit(length_unit),
+	  m_run_info(make_shared<GenRunInfo>()) {}
+  
+  /// @brief Default constructor
+    GenEvent(shared_ptr<GenRunInfo> run,
+	     Units::MomentumUnit momentum_unit = Units::GEV,
+	     Units::LengthUnit length_unit = Units::MM)
+	: m_event_number(0), m_momentum_unit(momentum_unit),
+	  m_length_unit(length_unit),
+	  m_run_info(run? run: make_shared<GenRunInfo>()) {}
+    
     /// @name Content allocation
     //@{
 
@@ -164,7 +177,8 @@ public:
     shared_ptr<T> attribute(const string &name, int id = 0) const;
 
     /// @brief Get list of attributes
-    const map< string, map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
+    const map< string, map<int, shared_ptr<Attribute> > >&
+    attributes() const { return m_attributes; }
 
     //@}
 
@@ -193,6 +207,16 @@ public:
     /// @deprecated Use GenEvent::set_pdf_info( GenPdfInfoPtr pi) instead
     HEPMC_DEPRECATED("Use GenPdfInfoPtr instead of GenPdfInfo*")
     void set_pdf_info(GenPdfInfo *pi);
+
+    /// @brief Get a pointer to the the GenRunInfo object.
+    shared_ptr<GenRunInfo> run_info() const {
+	return m_run_info;
+    }
+
+    /// @brief Set the GenRunInfo object by smart pointer.
+    void set_run_info(shared_ptr<GenRunInfo> run) {
+	m_run_info = run;
+    }
 
     /// @brief Set cross-section information by raw pointer
     /// @deprecated Use GenEvent::set_cross_section( GenCrossSectionPtr cs) instead
@@ -287,6 +311,7 @@ private:
     GenParticlePtr              m_beam_particle_2; //!< Second beam particle
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
+    shared_ptr<GenRunInfo>          m_run_info;        //!< Run information
 
     /// @brief Map of event, particle and vertex attributes
     ///
@@ -304,7 +329,11 @@ template<class T>
 shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 
     map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
-    if( i1 == m_attributes.end() ) return shared_ptr<T>();
+    if( i1 == m_attributes.end() ) {
+	if ( id == 0 && run_info() )
+	    return run_info()->attribute<T>(name);
+	return shared_ptr<T>();
+    }
 
     map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
     if( i2 == i1->second.end() ) return shared_ptr<T>();
