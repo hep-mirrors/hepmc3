@@ -14,13 +14,15 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/Units.h"
+
 #include "HepMC/foreach.h"
 #include <cstring>
+using namespace std;
 
 namespace HepMC {
 
 
-WriterAscii::WriterAscii(const std::string &filename):
+WriterAscii::WriterAscii(const string &filename):
 m_file(filename),
 m_precision(16),
 m_buffer(NULL),
@@ -30,8 +32,8 @@ m_buffer_size( 256*1024 ) {
         ERROR( "WriterAscii: could not open output file: "<<filename )
     }
     else {
-        m_file << "HepMC::Version " << HepMC::version() << std::endl;
-        m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
+        m_file << "HepMC::Version " << HepMC::version() << endl;
+        m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << endl;
     }
 }
 
@@ -61,7 +63,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     flush();
 
     // Write global attributes
-    typedef map< std::string, shared_ptr<Attribute> >::value_type value_typeG;
+    typedef map< string, shared_ptr<Attribute> >::value_type value_typeG;
     FOREACH( value_typeG vglob, m_global_attributes )
       m_cursor += sprintf(m_cursor, "A G %s \n",vglob.first.c_str());
 
@@ -148,10 +150,10 @@ void WriterAscii::allocate_buffer() {
 }
 
 
-std::string WriterAscii::escape(const std::string s) {
-    std::string ret;
+string WriterAscii::escape(const string s) {
+    string ret;
     ret.reserve( s.length()*2 );
-    for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
+    for ( string::const_iterator it = s.begin(); it != s.end(); ++it ) {
         switch ( *it ) {
             case '\\': ret += "\\\\"; break;
             case '\n': ret += "\\|"; break;
@@ -162,9 +164,9 @@ std::string WriterAscii::escape(const std::string s) {
 }
 
 
-bool WriterAscii::skip_global(std::string name, shared_ptr<Attribute> att) {
+bool WriterAscii::skip_global(string name, shared_ptr<Attribute> att) {
     if ( !att->is_global() ) return false;
-    std::map< std::string, shared_ptr<Attribute> >::iterator globit = m_global_attributes.find(name);
+    map< string, shared_ptr<Attribute> >::iterator globit = m_global_attributes.find(name);
     if ( globit != m_global_attributes.end() ) return true;
     m_global_attributes[name] = att;
     return false;
@@ -249,7 +251,7 @@ void WriterAscii::write_particle(const GenParticlePtr &p, int second_field) {
 }
 
 
-inline void WriterAscii::write_string( const std::string &str ) {
+inline void WriterAscii::write_string( const string &str ) {
 
     // First let's check if string will fit into the buffer
     unsigned long length = m_cursor-m_buffer;
@@ -271,7 +273,7 @@ void WriterAscii::close() {
     if( !m_file.is_open() ) return;
 
     forced_flush();
-    m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << std::endl << std::endl;
+    m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
     m_file.close();
 }
 

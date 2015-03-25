@@ -9,7 +9,6 @@
  *
  */
 #include "HepMC/GenEvent.h"
-
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/Setup.h"
@@ -17,14 +16,14 @@
 #include "HepMC/Data/GenEventData.h"
 #include "HepMC/Search/FindParticles.h"
 
+#include "HepMC/foreach.h"
 #include <vector>
 #include <deque>
 
-#include "HepMC/foreach.h"
-
-using std::endl;
+using namespace std;
 
 namespace HepMC {
+
 
 GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit) {
     set_event_number(0);
@@ -123,9 +122,10 @@ void GenEvent::remove_vertex( const GenVertexPtr &v ) {
     }
 }
 
+
 void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
 
-    std::deque<GenVertexPtr> sorting;
+    deque<GenVertexPtr> sorting;
 
     // Find all starting vertices (end vertex of particles that have no production vertex)
     FOREACH( const GenParticlePtr &p, particles ) {
@@ -189,10 +189,12 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
     )
 }
 
+
 void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
     m_particles.reserve(particles);
     m_vertices.reserve(vertices);
 }
+
 
 void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
     if( new_momentum_unit != m_momentum_unit ) {
@@ -213,6 +215,7 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 }
 
+
 void GenEvent::clear() {
     m_event_number = 0;
 
@@ -229,9 +232,11 @@ void GenEvent::add_particle( GenParticle *p ) {
     add_particle( GenParticlePtr(p) );
 }
 
+
 void GenEvent::add_vertex( GenVertex *v ) {
     add_vertex( GenVertexPtr(v) );
 }
+
 
 void GenEvent::remove_attribute(const string &name, int id) {
     map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
@@ -243,8 +248,8 @@ void GenEvent::remove_attribute(const string &name, int id) {
     i1->second.erase(i2);
 }
 
-void GenEvent::write_data(GenEventData &data) const
-{
+
+void GenEvent::write_data(GenEventData &data) const {
     // Reserve memory for containers
     data.particles.reserve( this->particles().size() );
     data.vertices.reserve( this->vertices().size() );
@@ -340,7 +345,7 @@ void GenEvent::read_data(const GenEventData &data)
 void GenEvent::Streamer(TBuffer &b){
 
   if (b.IsReading()){
-    std::cout << "Is Reading" << std::endl;
+    cout << "Is Reading" << endl;
 
     GenEventData data;
 
@@ -349,7 +354,7 @@ void GenEvent::Streamer(TBuffer &b){
     read_data(data);
 
   } else {
-    std::cout << "Is Writting" << std::endl;
+    cout << "Is Writing" << endl;
     // fill the GenEventData structures
 
     GenEventData data;

@@ -19,22 +19,11 @@
 #include <iostream>
 #include <vector>
 #include <map>
-using std::vector;
-using std::pair;
-using std::map;
-using std::make_pair;
-
-#if __cplusplus >= 201103L
-using std::dynamic_pointer_cast;
-#else
-using boost::dynamic_pointer_cast;
-#endif
 
 #ifdef HEPMC_ROOTIO
 #include "TBuffer.h"
 #include "TClass.h"
 #endif
-
 
 namespace HepMC {
 
@@ -50,7 +39,8 @@ class GenEvent {
 public:
 
     /// @brief Default constructor
-    GenEvent(Units::MomentumUnit momentum_unit = Units::GEV, Units::LengthUnit length_unit = Units::MM);
+    GenEvent(Units::MomentumUnit momentum_unit=Units::GEV, Units::LengthUnit length_unit=Units::MM);
+
 
     /// @name Content allocation
     //@{
@@ -84,7 +74,7 @@ public:
     ///
     /// @note Any particles on this list that do not belong to the tree
     ///       will be ignored.
-    void add_tree( const vector<GenParticlePtr> &particles );
+    void add_tree( const std::vector<GenParticlePtr> &particles );
 
     /// @brief Reserve memory for particles and vertices
     ///
@@ -111,9 +101,9 @@ public:
     void set_event_number(int num) { m_event_number = num; }
 
     /// @brief Get/set list of particles
-    const vector<GenParticlePtr>& particles() const { return m_particles; }
+    const std::vector<GenParticlePtr>& particles() const { return m_particles; }
     /// @brief Get/set list of vertices
-    const vector<GenVertexPtr>& vertices() const { return m_vertices; }
+    const std::vector<GenVertexPtr>& vertices() const { return m_vertices; }
 
     /// @brief Get momentum unit
     const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit; }
@@ -139,13 +129,13 @@ public:
     bool valid_beam_particles() const { return (bool)m_beam_particle_1 && (bool)m_beam_particle_2; }
 
     /// @brief Get incoming beam particles
-    pair<GenParticlePtr,GenParticlePtr> beam_particles() const { return make_pair(m_beam_particle_1,m_beam_particle_2); }
+    std::pair<GenParticlePtr,GenParticlePtr> beam_particles() const { return std::make_pair(m_beam_particle_1,m_beam_particle_2); }
 
     /// @brief Set incoming beam particles
     void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) { m_beam_particle_1 = p1; m_beam_particle_2 = p2; }
 
     /// @brief Set incoming beam particles
-    void set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) { m_beam_particle_1 = p.first; m_beam_particle_2 = p.second; }
+    void set_beam_particles(const std::pair<GenParticlePtr,GenParticlePtr>& p) { m_beam_particle_1 = p.first; m_beam_particle_2 = p.second; }
 
     /// @brief Add event attribute to event
     ///
@@ -164,7 +154,7 @@ public:
     shared_ptr<T> attribute(const string &name, int id = 0) const;
 
     /// @brief Get list of attributes
-    const map< string, map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
+    const std::map< string, std::map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
 
     //@}
 
@@ -261,20 +251,23 @@ public:
 
     //@}
 
-  // methods to fill GenEventData and to read it back
 
-  /// @brief Fill GenEventData object
-  void write_data(GenEventData &data) const;
+    /// @name methods to fill GenEventData and to read it back
+    //@{
 
-  /// @brief Fill GenEvent based on GenEventData
-  void read_data(const GenEventData &data);
+    /// @brief Fill GenEventData object
+    void write_data(GenEventData &data) const;
 
-#ifdef HEPMC_ROOTIO
+    /// @brief Fill GenEvent based on GenEventData
+    void read_data(const GenEventData &data);
 
-  /// @brief Root I/O streamer
-  void Streamer(TBuffer &b);
+    #ifdef HEPMC_ROOTIO
+    /// @brief ROOT I/O streamer
+    void Streamer(TBuffer &b);
+    #endif
 
-#endif
+    //@}
+
 
 private:
 
@@ -291,7 +284,7 @@ private:
     /// @brief Map of event, particle and vertex attributes
     ///
     /// Keys are name and id (0 = event, <0 = vertex, >0 = particle)
-    mutable map< string, map<int, shared_ptr<Attribute> > > m_attributes;
+    mutable std::map< string, std::map<int, shared_ptr<Attribute> > > m_attributes;
     //@}
 
 };
@@ -303,10 +296,10 @@ private:
 template<class T>
 shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 
-    map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
     if( i1 == m_attributes.end() ) return shared_ptr<T>();
 
-    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
+    std::map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
     if( i2 == i1->second.end() ) return shared_ptr<T>();
 
     if( !i2->second->is_parsed() ) {
@@ -319,7 +312,7 @@ shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 
 	    return att;
 	}
-	else 
+	else
 	    return shared_ptr<T>();
     }
     else return dynamic_pointer_cast<T>(i2->second);
