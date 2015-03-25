@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenEvent.h
@@ -12,6 +12,7 @@
 
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Units.h"
+#include "HepMC/GenWeights.h"
 #include "HepMC/GenHeavyIon.h"
 #include "HepMC/GenPdfInfo.h"
 #include "HepMC/GenCrossSection.h"
@@ -19,22 +20,11 @@
 #include <iostream>
 #include <vector>
 #include <map>
-using std::vector;
-using std::pair;
-using std::map;
-using std::make_pair;
-
-#if __cplusplus >= 201103L
-using std::dynamic_pointer_cast;
-#else
-using boost::dynamic_pointer_cast;
-#endif
 
 #ifdef HEPMC_ROOTIO
 #include "TBuffer.h"
 #include "TClass.h"
 #endif
-
 
 namespace HepMC {
 
@@ -50,9 +40,104 @@ class GenEvent {
 public:
 
     /// @brief Default constructor
-    GenEvent(Units::MomentumUnit momentum_unit = Units::GEV, Units::LengthUnit length_unit = Units::MM);
+    GenEvent(Units::MomentumUnit momentum_unit=Units::GEV, Units::LengthUnit length_unit=Units::MM);
 
-    /// @name Content allocation
+
+    /// @name Particle and vertex read access
+    //@{
+
+    /// @brief Get/set list of particles
+    const std::vector<GenParticlePtr>& particles() const { return m_particles; }
+    /// @brief Get/set list of vertices
+    const std::vector<GenVertexPtr>& vertices() const { return m_vertices; }
+
+    //@}
+
+
+    /// @name Auxiliary info and event metadata
+    //@{
+
+    /// @brief Get event number
+    int  event_number() const { return m_event_number; }
+    /// @brief Set event number
+    void set_event_number(int num) { m_event_number = num; }
+
+    /// Get event weights
+    const GenWeights& weights() const {}
+    /// Get canonical event weight (might not exist...)
+    double weight() const { return weights()[0]; }
+
+    /// @brief Get momentum unit
+    const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit; }
+    /// @brief Get length unit
+    const Units::LengthUnit& length_unit() const { return m_length_unit; }
+    /// @brief Change event units
+    /// Converts event from current units to new ones
+    void set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
+
+    /// @brief Get heavy ion generator additional information
+    const GenHeavyIonPtr heavy_ion() const { return attribute<GenHeavyIon>("GenHeavyIon"); }
+    /// @brief Set heavy ion generator additional information
+    void set_heavy_ion(const GenHeavyIonPtr &hi) { add_attribute("GenHeavyIon",hi); }
+
+    /// @brief Get PDF information
+    const GenPdfInfoPtr pdf_info() const { return attribute<GenPdfInfo>("GenPdfInfo"); }
+    /// @brief Set PDF information
+    void set_pdf_info(const GenPdfInfoPtr &pi) { add_attribute("GenPdfInfo",pi); }
+
+    /// @brief Get cross-section information
+    const GenCrossSectionPtr cross_section() const { return attribute<GenCrossSection>("GenCrossSection"); }
+    /// @brief Set cross-section information
+    void set_cross_section(const GenCrossSectionPtr &cs) { add_attribute("GenCrossSection",cs); }
+
+    //@}
+
+
+    /// @name Beam particles
+    //@{
+
+    /// @brief Test to see if we have two valid beam particles
+    bool valid_beam_particles() const { return (bool)m_beam_particle_1 && (bool)m_beam_particle_2; }
+
+    /// @brief Get incoming beam particles
+    std::pair<GenParticlePtr,GenParticlePtr> beam_particles() const { return std::make_pair(m_beam_particle_1,m_beam_particle_2); }
+
+    /// @brief Set incoming beam particles
+    /// @todo Set/require status = 4 at the same time?
+    void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) { m_beam_particle_1 = p1; m_beam_particle_2 = p2; }
+
+    /// @brief Set incoming beam particles
+    /// @todo Set/require status = 4 at the same time?
+    void set_beam_particles(const std::pair<GenParticlePtr,GenParticlePtr>& p) { m_beam_particle_1 = p.first; m_beam_particle_2 = p.second; }
+
+    //@}
+
+
+    /// @name Attributes
+    //@{
+
+    /// @brief Add event attribute to event
+    ///
+    /// This will overwrite existing attribute if an attribute
+    /// with the same name is present
+    void add_attribute(const string &name, const shared_ptr<Attribute> &att, int id = 0) {
+      if ( att ) m_attributes[name][id] = att;
+    }
+
+    /// @brief Remove attribute
+    void remove_attribute(const string &name, int id = 0);
+
+    /// @brief Get attribute of type T
+    template<class T>
+    shared_ptr<T> attribute(const string &name, int id = 0) const;
+
+    /// @brief Get list of attributes
+    const std::map< string, std::map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
+
+    //@}
+
+
+    /// @name Particle and vertex modification
     //@{
 
     /// @brief Add particle
@@ -84,87 +169,15 @@ public:
     ///
     /// @note Any particles on this list that do not belong to the tree
     ///       will be ignored.
-    void add_tree( const vector<GenParticlePtr> &particles );
+    void add_tree( const std::vector<GenParticlePtr> &particles );
 
     /// @brief Reserve memory for particles and vertices
     ///
     /// Helps optimize event creation when size of the event is known beforehand
     void reserve(unsigned int particles, unsigned int vertices = 0);
 
-    /// @brief Change event units
-    ///
-    /// Converts event from current units to new ones
-    void set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
-
     /// @brief Remove contents of this event
     void clear();
-
-    //@}
-
-
-    /// @name Accessors
-    //@{
-
-    /// @brief Get event number
-    int  event_number() const { return m_event_number; }
-    /// @brief Set event number
-    void set_event_number(int num) { m_event_number = num; }
-
-    /// @brief Get/set list of particles
-    const vector<GenParticlePtr>& particles() const { return m_particles; }
-    /// @brief Get/set list of vertices
-    const vector<GenVertexPtr>& vertices() const { return m_vertices; }
-
-    /// @brief Get momentum unit
-    const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit; }
-    /// @brief Get length unit
-    const Units::LengthUnit& length_unit() const { return m_length_unit; }
-
-    /// @brief Get heavy ion generator additional information
-    const GenHeavyIonPtr heavy_ion() const { return attribute<GenHeavyIon>("GenHeavyIon"); }
-    /// @brief Set heavy ion generator additional information
-    void set_heavy_ion(const GenHeavyIonPtr &hi) { add_attribute("GenHeavyIon",hi); }
-
-    /// @brief Get PDF information
-    const GenPdfInfoPtr pdf_info() const { return attribute<GenPdfInfo>("GenPdfInfo"); }
-    /// @brief Set PDF information
-    void set_pdf_info(const GenPdfInfoPtr &pi) { add_attribute("GenPdfInfo",pi); }
-
-    /// @brief Get cross-section information
-    const GenCrossSectionPtr cross_section() const { return attribute<GenCrossSection>("GenCrossSection"); }
-    /// @brief Set cross-section information
-    void set_cross_section(const GenCrossSectionPtr &cs) { add_attribute("GenCrossSection",cs); }
-
-    /// @brief Test to see if we have two valid beam particles
-    bool valid_beam_particles() const { return (bool)m_beam_particle_1 && (bool)m_beam_particle_2; }
-
-    /// @brief Get incoming beam particles
-    pair<GenParticlePtr,GenParticlePtr> beam_particles() const { return make_pair(m_beam_particle_1,m_beam_particle_2); }
-
-    /// @brief Set incoming beam particles
-    void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) { m_beam_particle_1 = p1; m_beam_particle_2 = p2; }
-
-    /// @brief Set incoming beam particles
-    void set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) { m_beam_particle_1 = p.first; m_beam_particle_2 = p.second; }
-
-    /// @brief Add event attribute to event
-    ///
-    /// This will overwrite existing attribute if an attribute
-    /// with the same name is present
-    void add_attribute(const string &name, const shared_ptr<Attribute> &att,
-		       int id = 0) {
-      if ( att ) m_attributes[name][id] = att;
-    }
-
-    /// @brief Remove attribute
-    void remove_attribute(const string &name, int id = 0);
-
-    /// @brief Get attribute of type T
-    template<class T>
-    shared_ptr<T> attribute(const string &name, int id = 0) const;
-
-    /// @brief Get list of attributes
-    const map< string, map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
 
     //@}
 
@@ -261,40 +274,66 @@ public:
 
     //@}
 
-  // methods to fill GenEventData and to read it back
 
-  /// @brief Fill GenEventData object
-  void write_data(GenEventData &data) const;
+    /// @name Methods to fill GenEventData and to read it back
+    //@{
 
-  /// @brief Fill GenEvent based on GenEventData
-  void read_data(const GenEventData &data);
+    /// @brief Fill GenEventData object
+    void write_data(GenEventData &data) const;
 
-#ifdef HEPMC_ROOTIO
+    /// @brief Fill GenEvent based on GenEventData
+    void read_data(const GenEventData &data);
 
-  /// @brief Root I/O streamer
-  void Streamer(TBuffer &b);
+    #ifdef HEPMC_ROOTIO
+    /// @brief ROOT I/O streamer
+    void Streamer(TBuffer &b);
+    #endif
 
-#endif
+    //@}
+
 
 private:
 
     /// @name Fields
     //@{
-    int                         m_event_number;    //!< Event number
-    Units::MomentumUnit         m_momentum_unit;   //!< Momentum unit
-    Units::LengthUnit           m_length_unit;     //!< Length unit
-    GenParticlePtr              m_beam_particle_1; //!< First beam particle
-    GenParticlePtr              m_beam_particle_2; //!< Second beam particle
-    std::vector<GenParticlePtr> m_particles;       //!< List of particles
-    std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
+
+    /// List of particles
+    std::vector<GenParticlePtr> m_particles;
+    /// List of vertices
+    std::vector<GenVertexPtr> m_vertices;
+
+    /// Event number
+    /// @todo Move to attributes?
+    int m_event_number;
+
+    /// Event weights
+    /// @todo Move to attributes?
+    GenWeights m_weights;
+
+    /// Momentum unit
+    /// @todo Move to attributes?
+    Units::MomentumUnit m_momentum_unit;
+    /// Length unit
+    /// @todo Move to attributes?
+    Units::LengthUnit m_length_unit;
+
+    /// First beam particle
+    /// @todo Replace with search for status = 4?
+    GenParticlePtr m_beam_particle_1;
+    /// Second beam particle
+    /// @todo Replace with search for status = 4?
+    GenParticlePtr m_beam_particle_2;
 
     /// @brief Map of event, particle and vertex attributes
     ///
-    /// Keys are name and id (0 = event, <0 = vertex, >0 = particle)
-    mutable map< string, map<int, shared_ptr<Attribute> > > m_attributes;
+    /// Keys are name and ID (0 = event, <0 = vertex, >0 = particle)
+    mutable std::map< string, std::map<int, shared_ptr<Attribute> > > m_attributes;
+
     //@}
 
 };
+
+
 
 //
 // Template methods
@@ -303,27 +342,25 @@ private:
 template<class T>
 shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 
-    map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
-    if( i1 == m_attributes.end() ) return shared_ptr<T>();
+    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    if (i1 == m_attributes.end() ) return shared_ptr<T>();
 
-    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
-    if( i2 == i1->second.end() ) return shared_ptr<T>();
+    std::map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
+    if (i2 == i1->second.end() ) return shared_ptr<T>();
 
-    if( !i2->second->is_parsed() ) {
+    if (!i2->second->is_parsed() ) {
 
-	shared_ptr<T> att = make_shared<T>();
-        if ( att->from_string(i2->second->unparsed_string()) &&
-	     att->init(*this) ) {
-	    // update map with new pointer
-	    i2->second = att;
-
-	    return att;
-	}
-	else 
-	    return shared_ptr<T>();
+    shared_ptr<T> att = make_shared<T>();
+    if ( att->from_string(i2->second->unparsed_string()) && att->init(*this) ) {
+        // update map with new pointer
+        i2->second = att;
+        return att;
+    } else
+        return shared_ptr<T>();
     }
     else return dynamic_pointer_cast<T>(i2->second);
 }
+
 
 } // namespace HepMC
 

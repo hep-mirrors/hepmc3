@@ -12,6 +12,7 @@
  */
 #include "HepMC/GenEvent.h"
 #include "HepMC/WriterAscii.h"
+#include "HepMC/Print.h"
 
 #include "MyClass.h"
 
@@ -53,7 +54,7 @@ int main(int argc, char **argv) {
    
         if( events_parsed == 0 ) {
             cout << "First event: " << endl;
-            myevent->GetEvent()->print();
+	    Print::listing(*(myevent->GetEvent()));
         }
 
         text_output.write_event(*(myevent->GetEvent()));

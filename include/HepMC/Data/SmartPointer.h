@@ -17,6 +17,7 @@ namespace HepMC {
     using std::weak_ptr;
     using std::shared_ptr;
     using std::make_shared;
+    using std::dynamic_pointer_cast;
 }
 
 #else
@@ -28,6 +29,7 @@ namespace HepMC {
     using boost::weak_ptr;
     using boost::shared_ptr;
     using boost::make_shared;
+    using boost::dynamic_pointer_cast;
 }
 
 #endif
