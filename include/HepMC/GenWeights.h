@@ -14,10 +14,9 @@
 namespace HepMC {
 
 
-  /// Container for the Weights associated with an event or vertex.
+  /// Container for the weights associated with an event or vertex.
   ///
   /// This class has both map-like and vector-like functionality.
-  /// Named weights are now supported.
   class GenWeights {
   public:
 
