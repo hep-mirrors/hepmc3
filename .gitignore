@@ -46,7 +46,15 @@ CMakeCache.txt
 install_manifest.txt
 install_manifest_headers.txt
 outputs
+Makefile
 
 # root dictionaries
 rootIO/rootIO_Classes.cxx
 rootIO/rootIO_Classes.h
+
+# working directories
+.build
+.test
+
+# check output files
+examples/LHEFExample/LHEF_example_out.lhe

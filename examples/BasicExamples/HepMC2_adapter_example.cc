@@ -12,8 +12,9 @@
  */
 #include "HepMC/GenEvent.h"
 
-#include "HepMC/IO/IO_HepMC2_adapter.h"
-#include "HepMC/IO/IO_GenEvent.h"
+#include "HepMC/HepMC2_adapter.h"
+#include "HepMC/WriterAscii.h"
+#include "HepMC/Print.h"
 
 #include <iostream>
 #include <cstdlib> // atoi
@@ -30,8 +31,8 @@ int main(int argc, char **argv) {
     }
 
     // Open input and output files
-    IO_HepMC2_adapter adapter(argv[1]);
-    IO_GenEvent       output_file(argv[2],std::ios::out);
+    HepMC2_adapter adapter(argv[1]);
+    WriterAscii    output_file(argv[2]);
     int events_parsed = 0;
     int events_limit  = 0;
 
@@ -41,7 +42,7 @@ int main(int argc, char **argv) {
         GenEvent evt(Units::GEV,Units::MM);
 
         // Read event from input file
-        adapter.fill_next_event(evt);
+        adapter.read_event(evt);
 
         // If reading failed - exit loop
         if( adapter.rdstate() ) break;
@@ -51,7 +52,7 @@ int main(int argc, char **argv) {
 
         if(events_parsed==0) {
             cout << " First event: " << endl;
-            evt.print();
+            Print::listing(evt);
         }
 
         ++events_parsed;

@@ -16,12 +16,10 @@
  *
  */
 #include <vector>
+#include <string>
 #include "HepMC/Data/GenParticleData.h"
 #include "HepMC/Data/GenVertexData.h"
 #include "HepMC/Units.h"
-#include "HepMC/GenPdfInfo.h"
-#include "HepMC/GenHeavyIon.h"
-#include "HepMC/GenCrossSection.h"
 
 namespace HepMC {
 
@@ -43,6 +41,10 @@ struct GenEventData {
      */
     std::vector<int> links1;
     std::vector<int> links2; ///< Second id of the vertex links
+
+    std::vector<int>         attribute_id;     ///< Attribute owner id
+    std::vector<std::string> attribute_name;   ///< Attribute name
+    std::vector<std::string> attribute_string; ///< Attribute serialized as string
 };
 
 } // namespace HepMC

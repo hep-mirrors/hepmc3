@@ -30,7 +30,6 @@ endif
 VALIDATION_SRC= validation.cc \
                 src/ValidationControl.cc \
                 src/SimpleEventTool.cc \
-                src/RootStreamerTool.cc \
                 src/FileValidationTool.cc
 
 # Definitions for compiling interfaces to the tools

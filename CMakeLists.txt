@@ -95,9 +95,17 @@ IF("${isSystemDir}" STREQUAL "-1")
    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 ENDIF("${isSystemDir}" STREQUAL "-1")
 
+#---Optional build of rootIO-------------------------------------------------
+
+find_package(ROOT QUIET)
+if(ROOT_USE_FILE)
+  include(${ROOT_USE_FILE})
+endif()
+
+list(APPEND ROOT_FIND_COMPONENTS RIO)
 
 #--------------------------------------------------------------------------
-include_directories(include)
+include_directories(include ${ROOT_INCLUDE_DIR})
 
 #---Select sources for the various libraries---------------------------------
 file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc)
@@ -108,6 +116,12 @@ file(GLOB hepmc3_sources_Search ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
 
 add_library(HepMC SHARED ${hepmc3_sources} ${hepmc3_sources_IO} ${hepmc3_sources_Search})
 add_library(HepMC_static STATIC ${hepmc3_sources} ${hepmc3_sources_IO} ${hepmc3_sources_Search})
+
+if(ROOT_FOUND)
+  target_link_libraries(HepMC ${ROOT_LIBRARIES} RIO)
+  target_link_libraries(HepMC_static ${ROOT_LIBRARIES} RIO)
+endif()
+  
 set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 
@@ -118,9 +132,8 @@ install(DIRECTORY include/ DESTINATION include COMPONENT headers)
 
 #---Optional build of rootIO-------------------------------------------------
 
-find_package(ROOT QUIET)
-
 if(ROOT_FOUND)
+  add_definitions(-DHEPMC_ROOTIO)
   add_subdirectory(rootIO)
 endif()
 

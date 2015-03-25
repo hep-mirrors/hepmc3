@@ -1,4 +1,18 @@
-INTERFACEDIRECTORY = $(HEPMC3LOCATION)/interfaces/
+INTERFACEDIRECTORY = $(HEPMC3INTERFACES)
+
+#
+# ROOT
+#
+ifneq ($(ROOTCONFIG), )
+  override INCLUDES      += -I$(shell $(ROOTCONFIG) --incdir)
+  override LINKS_HEPMC3  += -lrootIO $(shell $(ROOTCONFIG) --glibs)
+  override DEFS_HEPMC3   += -DROOTCONFIG
+
+  override LINKS_HEPMC2  += $(shell $(ROOTCONFIG) --glibs)
+  override DEFS_HEPMC2   += -DROOTCONFIG_HEPMC2
+
+  override VALIDATION_SRC+= src/RootTool.cc
+endif
 
 #
 # Photos++

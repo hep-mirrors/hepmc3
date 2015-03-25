@@ -15,6 +15,7 @@
 #include "HepMC/Setup.h"
 
 #include "HepMC/Data/GenEventData.h"
+#include "HepMC/Search/FindParticles.h"
 
 #include <vector>
 #include <deque>
@@ -26,80 +27,9 @@ using std::endl;
 namespace HepMC {
 
 GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit) {
-    set_print_precision(2);
     set_event_number(0);
     m_momentum_unit = momentum_unit;
     m_length_unit   = length_unit;
-}
-
-void GenEvent::print( std::ostream& ostr ) const {
-
-    ostr << "________________________________________________________________________________" << endl;
-    ostr << "GenEvent: #" << event_number() << endl;
-    ostr << " Momenutm units: " << Units::name(m_momentum_unit)
-         << " Position units: " << Units::name(m_length_unit) << endl;
-    ostr << " Entries in this event: " << vertices().size() << " vertices, "
-         << particles().size() << " particles." << endl;
-    ostr << " Beam particle indexes:";
-    if(m_beam_particle_1) ostr << " " << m_beam_particle_1->id();
-    if(m_beam_particle_2) ostr << " " << m_beam_particle_2->id();
-    ostr << "\n";
-
-    // Print a legend to describe the particle info
-    ostr << "                                    GenParticle Legend" << endl;
-    ostr << "     Barcode   PDG ID   "
-         << "( Px,       Py,       Pz,     E )"
-         << "   Stat-Subst  ProdVtx" << endl;
-    ostr << "________________________________________________________________________________" << endl;
-
-    // Find the current stream state
-    std::ios_base::fmtflags orig = ostr.flags();
-    std::streamsize         prec = ostr.precision();
-
-    // Set precision
-    ostr.precision( print_precision() );
-
-    // Print all vertices
-    FOREACH( const GenVertexPtr &v, vertices() ) {
-        v->print_event_listing(ostr);
-    }
-
-    // Restore the stream state
-    ostr.flags(orig);
-    ostr.precision(prec);
-    ostr << "________________________________________________________________________________" << endl;
-}
-
-void GenEvent::dump() const {
-    std::cout<<"-----------------------------"<<std::endl;
-    std::cout<<"--------- EVENT DUMP --------"<<std::endl;
-    std::cout<<"-----------------------------"<<std::endl;
-    std::cout<<std::endl;
-
-    std::cout<<"Attributes:"<<std::endl;
-
-    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
-    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
-
-    FOREACH( const value_type1& vt1, m_attributes ) {
-        FOREACH( const value_type2& vt2, vt1.second ) {
-            std::cout << vt2.first << ": " << vt1.first << std::endl;
-        }
-    }
-
-    std::cout<<"GenParticlePtr ("<<particles().size()<<")"<<std::endl;
-
-    FOREACH( const GenParticlePtr &p, particles() )
-    {
-        p->print();
-    }
-
-    std::cout<<"GenVertexPtr ("<<vertices().size()<<")"<<std::endl;
-    FOREACH( const GenVertexPtr &v, vertices() ) {
-        v->print();
-    }
-
-    std::cout<<"-----------------------------"<<std::endl;
 }
 
 void GenEvent::add_particle( const GenParticlePtr &p ) {
@@ -122,12 +52,74 @@ void GenEvent::add_vertex( const GenVertexPtr &v ) {
     // Add all incoming and outgoing particles and restore their production/end vertices
     FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
         if(!p->in_event()) add_particle(p);
-        p->set_end_vertex(v->m_this.lock());
+        p->m_end_vertex = v->m_this.lock();
     }
 
     FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
         if(!p->in_event()) add_particle(p);
-        p->set_production_vertex(v->m_this.lock());
+        p->m_production_vertex = v->m_this.lock();
+    }
+}
+
+void GenEvent::remove_particle( const GenParticlePtr &p ) {
+    if( !p || p->parent_event() != this ) return;
+
+    DEBUG( 3, "GenEvent::remove_particle - called with particle: "<<p->id() );
+    GenVertexPtr end_vtx = p->end_vertex();
+    if( end_vtx ) {
+        end_vtx->remove_particle_in(p);
+
+        // If that was the only incoming particle, remove vertex from the event
+        if( end_vtx->particles_in().size() == 0 )  remove_vertex(end_vtx);
+    }
+
+    GenVertexPtr prod_vtx = p->production_vertex();
+    if( prod_vtx ) {
+        prod_vtx->remove_particle_out(p);
+
+        // If that was the only outgoing particle, remove vertex from the event
+        if( prod_vtx->particles_out().size() == 0 ) remove_vertex(prod_vtx);
+    }
+
+    DEBUG( 3,"GenEvent::remove_particle - erasing particle: " << p->id() )
+
+    int idx = p->id();
+    vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
+
+    // Reassign id of the particles following this one
+    for(;it != m_particles.end(); ++it) {
+        (*it)->m_id = idx;
+        ++idx;
+    }
+}
+
+void GenEvent::remove_vertex( const GenVertexPtr &v ) {
+    if( !v || v->parent_event() != this ) return;
+
+    DEBUG( 3, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
+    shared_ptr<GenVertex> null_vtx;
+
+    FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
+        p->m_end_vertex.reset();
+    }
+
+    FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
+        p->m_production_vertex.reset();
+
+        // recursive delete rest of the tree
+        remove_particle(p);
+    }
+
+    // Erase this vertex from vertices list
+    DEBUG( 3, "GenEvent::remove_vertex   - erasing vertex: " << v->id() )
+
+    int idx = -v->id();
+    vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
+
+    // Reassign id of the vertices following this one
+    for(;it != m_vertices.end(); ++it) {
+        (*it)->m_id = -idx;
+        ++idx;
     }
 }
 
@@ -192,7 +184,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
 
     DEBUG_CODE_BLOCK(
         DEBUG( 6, "GenEvent - particles sorted: "
-                   <<particles_count()<<", max deque size: "
+                   <<this->particles().size()<<", max deque size: "
                    <<max_deque_size<<", iterations: "<<sorting_loop_count )
     )
 }
@@ -241,20 +233,132 @@ void GenEvent::add_vertex( GenVertex *v ) {
     add_vertex( GenVertexPtr(v) );
 }
 
-void GenEvent::add_attribute(const string &name, const shared_ptr<Attribute> &att) {
-    if(!att) return;
-
-    m_attributes[name][0] = att;
-}
-
-void GenEvent::remove_attribute(const string &name) {
+void GenEvent::remove_attribute(const string &name, int id) {
     map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
     if( i1 == m_attributes.end() ) return;
 
-    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(0);
+    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
     if( i2 == i1->second.end() ) return;
 
     i1->second.erase(i2);
 }
 
+void GenEvent::write_data(GenEventData &data) const
+{
+    // Reserve memory for containers
+    data.particles.reserve( this->particles().size() );
+    data.vertices.reserve( this->vertices().size() );
+    data.links1.reserve( this->particles().size()*2 );
+    data.links2.reserve( this->particles().size()*2 );
+    data.attribute_id.reserve( this->attributes().size() );
+    data.attribute_name.reserve( this->attributes().size() );
+    data.attribute_string.reserve( this->attributes().size() );
+
+    // Fill event data
+    data.event_number  = this->event_number();
+    data.momentum_unit = this->momentum_unit();
+    data.length_unit   = this->length_unit();
+
+    // Fill containers
+    FOREACH( const GenParticlePtr &p, this->particles() ) {
+        data.particles.push_back( p->data() );
+    }
+
+    FOREACH( const GenVertexPtr &v, this->vertices() ) {
+        data.vertices.push_back( v->data() );
+        int v_id = v->id();
+
+        FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+            data.links1.push_back( p->id() );
+            data.links2.push_back( v_id    );
+        }
+
+        FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+            data.links1.push_back( v_id    );
+            data.links2.push_back( p->id() );
+        }
+    }
+
+    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
+    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
+
+    FOREACH( const value_type1& vt1, this->attributes() ) {
+        FOREACH( const value_type2& vt2, vt1.second ) {
+
+            string st;
+
+            bool status = vt2.second->to_string(st);
+
+            if( !status ) {
+                WARNING( "GenEvent::write_data: problem serializing attribute: "<<vt1.first )
+            }
+            else {
+                data.attribute_id.push_back(vt2.first);
+                data.attribute_name.push_back(vt1.first);
+                data.attribute_string.push_back(st);
+            }
+        }
+    }
+}
+
+void GenEvent::read_data(const GenEventData &data)
+{
+    this->set_event_number( data.event_number );
+    this->set_units( data.momentum_unit, data.length_unit );
+
+    // Fill particle information
+    FOREACH( const GenParticleData &pd, data.particles ) {
+      GenParticlePtr p = make_shared<GenParticle>(pd);
+      this->add_particle(p);
+    }
+
+    // Fill vertex information
+    FOREACH( const GenVertexData &vd, data.vertices ) {
+      GenVertexPtr v = make_shared<GenVertex>(vd);
+        this->add_vertex(v);
+    }
+
+    // Restore links
+    for( unsigned int i=0; i<data.links1.size(); ++i) {
+      int id1 = data.links1[i];
+      int id2 = data.links2[i];
+
+      if( id1 > 0 ) this->vertices()[ (-id2)-1 ]->add_particle_in ( this->particles()[ id1-1 ] );
+      else          this->vertices()[ (-id1)-1 ]->add_particle_out( this->particles()[ id2-1 ] );
+    }
+
+    // Read attributes
+    for( unsigned int i=0; i<data.attribute_id.size(); ++i) {
+        add_attribute( data.attribute_name[i],
+                       make_shared<StringAttribute>(data.attribute_string[i]),
+                       data.attribute_id[i] );
+    }
+}
+
+#ifdef HEPMC_ROOTIO
+
+void GenEvent::Streamer(TBuffer &b){
+
+  if (b.IsReading()){
+    std::cout << "Is Reading" << std::endl;
+
+    GenEventData data;
+
+    b.ReadClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
+
+    read_data(data);
+
+  } else {
+    std::cout << "Is Writting" << std::endl;
+    // fill the GenEventData structures
+
+    GenEventData data;
+    write_data(data);
+
+    // write the GenEventData structures
+    b.WriteClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
+  }
+}
+
+#endif
 } // namespace HepMC

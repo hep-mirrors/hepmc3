@@ -6,17 +6,14 @@
 #ifndef HEPMC_DEFS_H
 #define HEPMC_DEFS_H
 
+#include "HepMC/Version.h"
+
+
 /// @todo This header should have a better "real" name, maybe located together
 /// with things like the version and logging/error handling utilities (or
 /// accessed with them via a convenience HepMC/Setup/Common.h or similar). Emit
 /// a build warning to code which tries to access HepMC/HepMCDefs.h, which is a
 /// terrible name but should be provided for a while for backward compatibility.
-
-
-// Define the version of HepMC.
-#ifndef HEPMC_VERSION
-#define HEPMC_VERSION "3.00.00b01"
-#endif
 
 
 // The IO_GenEvent class is available
@@ -41,14 +38,14 @@
 #endif
 
 // HepMC uses SimpleVector (FourVector) to store momentum and position
-/// @todo Rename/remove?
+/// @todo Remove, since SimpleVector.h does not exist
 #ifndef HEPMC_HAS_SIMPLE_VECTOR
 #define HEPMC_HAS_SIMPLE_VECTOR
 #endif
 
 // Units are defined in HepMC
 #ifndef HEPMC_HAS_UNITS
-#define HEPMC_HAS_UNITS
+#define HEPMC_HAS_UNITS 2
 #endif
 
 // The GenCrossSection class is available

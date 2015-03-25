@@ -14,7 +14,7 @@ ROOT_GENERATE_DICTIONARY(rootIO_Classes rootIO_Classes.hh LINKDEF LinkDef.hh OPT
 
 list(APPEND ROOT_FIND_COMPONENTS RIO)
 
-add_library(rootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/IO_RootStreamer.cc rootIO_Classes.cxx)
+add_library(rootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRoot.cc rootIO_Classes.cxx)
 
 target_link_libraries(rootIO ${ROOT_LIBRARIES} RIO HepMC)
 set_target_properties(rootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)

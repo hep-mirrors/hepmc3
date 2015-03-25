@@ -5,16 +5,21 @@
 //
 #ifndef HEPMC_WRITER_H
 #define HEPMC_WRITER_H
+///
+/// @file  Writer.h
+/// @brief Definition of interface \b Writer
+///
+/// @class HepMC::Writer
+/// @brief Base class for all I/O writers
+///
+/// @ingroup IO
+///
 
 namespace HepMC {
-
 
   // Forward declaration
   class GenEvent;
 
-
-  /// @brief Base class for all I/O interfaces
-  /// @ingroup IO
   class Writer {
   public:
 

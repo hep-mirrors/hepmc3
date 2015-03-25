@@ -58,7 +58,8 @@ namespace HepMC {
 
 
   double GenWeights::get(size_t n, double def) const {
-    if (n < 0 || n >= size()) return def;
+    // if (n < 0 || n >= size()) return def;
+    if (n >= size()) return def;
     return m_weights[n];
   }
 

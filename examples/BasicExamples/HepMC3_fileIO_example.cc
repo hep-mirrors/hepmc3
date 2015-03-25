@@ -12,7 +12,9 @@
  *
  */
 #include "HepMC/GenEvent.h"
-#include "HepMC/IO/IO_GenEvent.h"
+#include "HepMC/ReaderAscii.h"
+#include "HepMC/WriterAscii.h"
+#include "HepMC/Print.h"
 
 #include <iostream>
 using namespace HepMC;
@@ -27,8 +29,8 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    IO_GenEvent input_file (argv[1],std::ios::in);
-    IO_GenEvent output_file(argv[2],std::ios::out);
+    ReaderAscii input_file (argv[1]);
+    WriterAscii output_file(argv[2]);
 
     int events_parsed = 0;
 
@@ -36,7 +38,7 @@ int main(int argc, char **argv) {
         GenEvent evt(Units::GEV,Units::MM);
 
         // Read event from input file
-        input_file.fill_next_event(evt);
+        input_file.read_event(evt);
 
         // If reading failed - exit loop
         if( input_file.rdstate() ) break;
@@ -46,8 +48,8 @@ int main(int argc, char **argv) {
 
         if(events_parsed==0) {
             cout << " First event: " << endl;
-            evt.print();
-            evt.dump();
+            Print::listing(evt);
+            Print::content(evt);
 
             cout << " Testing attribute reading for the first event: " << endl;
 
@@ -57,19 +59,19 @@ int main(int argc, char **argv) {
 
             if(cs) {
                 cout << " Has GenCrossSection:   ";
-                cs->print();
+                Print::line(cs);
             }
             else cout << " No GenCrossSection " << endl;
 
             if(pi) {
                 cout << " Has GenPdfInfo:        ";
-                pi->print();
+                Print::line(pi);
             }
             else cout << " No GenPdfInfo " << endl;
 
             if(hi) {
                 cout << " Has GenHeavyIon:       ";
-                hi->print();
+                Print::line(hi);
             }
             else cout << " No GenHeavyIon " << endl;
         }

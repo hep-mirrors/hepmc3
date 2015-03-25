@@ -11,6 +11,7 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/Search/FindParticles.h"
+#include "HepMC/Print.h"
 
 // Useful definition of a FOREACH loop that either uses BOOST_FOREACH
 // or c++11 'foreach' loop depending on the HepMC installation options
@@ -97,7 +98,7 @@ int main() {
     FindParticles search(evt, FIND_ALL, STATUS == 1 && STATUS_SUBCODE == 0);
 
     FOREACH( const GenParticlePtr &p, search.results() ) {
-        p->print();
+        Print::line(p);
     }
 
     // 3)
@@ -106,7 +107,7 @@ int main() {
     FindParticles search2(p5, FIND_ALL_ANCESTORS);
 
     FOREACH( const GenParticlePtr &p, search2.results() ) {
-        p->print();
+        Print::line(p);
     }
 
     // 3)
@@ -116,7 +117,7 @@ int main() {
     FindParticles search3(p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX);
 
     FOREACH( const GenParticlePtr &p, search3.results() ) {
-        p->print();
+        Print::line(p);
     }
 
     // 3b)
@@ -125,7 +126,7 @@ int main() {
     search3.narrow_down( PDG_ID >= -6 && PDG_ID <= 6 );
 
     FOREACH( const GenParticlePtr &p, search3.results() ) {
-        p->print();
+        Print::line(p);
     }
 
     //
@@ -158,7 +159,7 @@ int main() {
     // if attribute exists - do something with it
     if(cs) {
         cs->set_cross_section(-1.0,0.0);
-        cs->print();
+        Print::line(cs);
     }
     else cout << "Problem accessing attribute!" << endl;
 
@@ -172,11 +173,18 @@ int main() {
     if(!cs) cout << "Successfully removed attribute" << endl;
     else    cout << "Problem removing attribute!" << endl;
 
-    evt.print();
+    Print::listing(evt);
 
-    cout << endl << "Dumping all of the event-related information "      << endl
-                 << "(including particles and vertices in list format):" << endl << endl;
-    evt.dump();
+    cout << endl << "Printing full content of the GenEvent object " << endl
+                 << "(including particles and vertices in one-line format):" << endl << endl;
+
+    Print::content(evt);
+
+    cout << endl << "Now: removing particle with id 6 and printing again:" << endl << endl;
+    evt.remove_particle(p6);
+
+    Print::listing(evt);
+    Print::content(evt);
 
     return 0;
 }

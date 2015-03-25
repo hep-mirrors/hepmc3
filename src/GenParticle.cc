@@ -12,6 +12,7 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/Setup.h"
+#include "HepMC/Attribute.h"
 
 namespace HepMC {
 
@@ -30,80 +31,6 @@ GenParticle::GenParticle( const GenParticleData &data ):
 m_event(NULL),
 m_id(0),
 m_data(data) {
-}
-
-void GenParticle::print( std::ostream& ostr ) const {
-
-    ostr << "GenParticle: ";
-    ostr.width(3);
-    ostr << id();
-    ostr << " barcode: ";
-    ostr.width(5);
-    ostr << barcode() <<" PDGID: ";
-    ostr.width(5);
-    ostr << m_data.pdg_id;
-
-    // Find the current stream state
-    std::ios_base::fmtflags orig = ostr.flags();
-    std::streamsize         prec = ostr.precision();
-
-    if(m_event) ostr.precision(m_event->print_precision());
-
-    ostr.setf(std::ios::scientific, std::ios::floatfield);
-    ostr.setf(std::ios_base::showpos);
-    ostr << " (P,E)=" << m_data.momentum.px()
-               << "," << m_data.momentum.py()
-               << "," << m_data.momentum.pz()
-               << "," << m_data.momentum.e();
-
-    // Restore the stream state
-    ostr.flags(orig);
-    ostr.precision(prec);
-
-    int prod_vtx_id = (!m_production_vertex.expired()) ? m_production_vertex.lock()->id() : 0;
-    int end_vtx_id  = (!m_end_vertex.expired())        ? m_end_vertex.lock()->id()        : 0;
-
-    ostr << " Stat: " << m_data.status
-         << " PV: " << prod_vtx_id
-         << " EV: " << end_vtx_id
-         << std::endl;
-}
-
-void GenParticle::print_event_listing( std::ostream& ostr ) const {
-    ostr << " ";
-    ostr.width(6);
-    ostr << id();
-    ostr.width(9);
-    ostr << pdg_id() << " ";
-    ostr.width(9);
-    ostr.setf(std::ios::scientific, std::ios::floatfield);
-    ostr.setf(std::ios_base::showpos);
-    ostr << m_data.momentum.px() << ",";
-    ostr.width(9);
-    ostr << m_data.momentum.py() << ",";
-    ostr.width(9);
-    ostr << m_data.momentum.pz() << ",";
-    ostr.width(9);
-    ostr << m_data.momentum.e() << " ";
-    ostr.setf(std::ios::fmtflags(0), std::ios::floatfield);
-    ostr.unsetf(std::ios_base::showpos);
-    ostr.width(3);
-    ostr << m_data.status;
-    if( m_data.status_subcode ) {
-        ostr << "-";
-        ostr.width(9);
-        ostr << std::left << m_data.status_subcode << std::right;
-    }
-    else ostr << "          ";
-
-    int prod_vtx_id = (!m_production_vertex.expired()) ? m_production_vertex.lock()->id() : 0;
-
-    if( prod_vtx_id ) {
-        ostr.width(6);
-        ostr << prod_vtx_id;
-    }
-
-    ostr << std::endl;
 }
 
 double GenParticle::generated_mass() const {
@@ -143,6 +70,16 @@ GenVertexPtr GenParticle::production_vertex() const {
 
 GenVertexPtr GenParticle::end_vertex() const {
     return m_end_vertex.lock();
+}
+
+bool GenParticle::add_attribute(std::string name, shared_ptr<Attribute> att) {
+  if ( !parent_event() ) return false;
+  parent_event()->add_attribute(name, att, id());
+  return true;
+}
+
+void GenParticle::remove_attribute(std::string name) {
+  if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }
 
 } // namespace HepMC

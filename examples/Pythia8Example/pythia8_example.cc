@@ -4,7 +4,8 @@
  *
  */
 #include "HepMC/GenEvent.h"
-#include "HepMC/IO/IO_GenEvent.h"
+#include "HepMC/WriterAscii.h"
+#include "HepMC/Print.h"
 
 #include "Pythia8/Pythia.h"
 #include "Pythia8/Pythia8ToHepMC3.h"
@@ -15,8 +16,7 @@ using namespace HepMC;
 /** Main program */
 int main(int argc, char **argv) {
     if (argc < 3) {
-        cout << "Usage: " << argv[0] 
-	     << " <pythia_config_file> <output_hepmc3_file>" << endl;
+        cout << "Usage: " << argv[0] << " <pythia_config_file> <output_hepmc3_file>" << endl;
         exit(-1);
     }
 
@@ -25,9 +25,9 @@ int main(int argc, char **argv) {
     pythia.readFile(argv[1]);
     pythia.init();
 
-    IO_GenEvent file(argv[2],ios::out);
+    WriterAscii file(argv[2]);
 
-    int    nEvent    = pythia.mode("Main:numberOfEvents");
+    int nEvent = pythia.mode("Main:numberOfEvents");
 
     for( int i = 0; i< nEvent; ++i ) {
         if( !pythia.next() ) continue;
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
 
         if( i==0 ) {
             std::cout << "First event: " << std::endl;
-            hepmc.print();
+            Print::listing(hepmc);
         }
 
         file.write_event(hepmc);

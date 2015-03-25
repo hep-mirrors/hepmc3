@@ -60,8 +60,6 @@ public:
     bool operator==( const GenPdfInfo& ) const; ///< Operator ==
     bool operator!=( const GenPdfInfo& ) const; ///< Operator !=
     bool is_valid()                      const; ///< Verify that the instance contains non-zero information
-
-    void print(std::ostream &ostr = std::cout) const; ///< Print the contents to output stream
 };
 
 } // namespace HepMC

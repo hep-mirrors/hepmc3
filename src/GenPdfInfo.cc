@@ -10,6 +10,8 @@
  */
 #include "HepMC/GenPdfInfo.h"
 #include <cstring> // memcmp
+#include <cstdlib> // atoi
+#include <cstdio> // sprintf
 
 namespace HepMC {
 
@@ -80,7 +82,7 @@ void GenPdfInfo::set( int parton_id1, int parton_id2, double x1, double x2,
 }
 
 bool GenPdfInfo::operator==( const GenPdfInfo& a ) const {
-    return ( memcmp( this, &a, sizeof(struct GenPdfInfo) ) == 0 );
+  return ( memcmp( (void*)this, (void*)&a, sizeof(struct GenPdfInfo) ) == 0 );
 }
 
 bool GenPdfInfo::operator!=( const GenPdfInfo& a ) const {
@@ -100,19 +102,6 @@ bool GenPdfInfo::is_valid() const
     if( pdf_id[1]    != 0 ) return true;
 
     return false;
-}
-
-void GenPdfInfo::print( std::ostream & ostr) const {
-    ostr << " GenPdfInfo: " << parton_id[0]
-         << " " << parton_id[1]
-         << " " << x[0]
-         << " " << x[1]
-         << " " << scale
-         << " " << xf[0]
-         << " " << xf[1]
-         << " " << pdf_id[0]
-         << " " << pdf_id[1]
-         << " " << std::endl;
 }
 
 } // namespace HepMC

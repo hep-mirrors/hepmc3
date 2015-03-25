@@ -3,8 +3,11 @@
 # See README for more details
 #
 
-#HEPMC2LOCATION = ../../HepMC209
-HEPMC3LOCATION = ..
+#HEPMC2LOCATION   = ../../HepMC209
+HEPMC3LOCATION   = ../builds
+HEPMC3INTERFACES = ../interfaces
+
+ROOTCONFIG = root-config
 
 #PHOTOSLOCATION_HEPMC2 = ../../Photospp.3.54-HepMC2/
 #PHOTOSLOCATION_HEPMC3 = ../../Photospp.3.54/

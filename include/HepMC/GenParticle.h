@@ -22,6 +22,7 @@
 namespace HepMC {
 
 class GenEvent;
+class Attribute;
 
 class GenParticle {
 
@@ -43,15 +44,8 @@ public:
 // Functions
 //
 public:
-    /** @brief Print information about the particle */
-    void print( std::ostream& ostr = std::cout ) const;
-
     /** @brief Check if this particle belongs to an event */
     bool in_event() const { return (bool)(m_event); }
-
-protected:
-    /** @brief Print information about the particle in event-listing format */
-    void print_event_listing( std::ostream& ostr = std::cout ) const;
 
 //
 // Accessors
@@ -91,9 +85,21 @@ public:
      */
     int barcode() const { return m_id; }
 
-protected:
-    void set_production_vertex( const shared_ptr<GenVertex> &v ) { m_production_vertex = v; } //!< Set production vertex
-    void set_end_vertex       ( const shared_ptr<GenVertex> &v ) { m_end_vertex        = v; } //!< Set end vertex
+    /** @brief Add event attribute to this particle
+     *
+     *  This will overwrite existing attribute if an attribute with
+     *  the same name is present. The attribute will be stored in the
+     *  parent_event(). @return false if there is no parent_event();
+     */
+    bool add_attribute(std::string name, shared_ptr<Attribute> att);
+
+    /// Remove attribute
+    void remove_attribute(std::string name);
+
+    /// Get attribute of type T
+    template<class T>
+    shared_ptr<T> attribute(std::string name) const;
+
 //
 // Fields
 //
@@ -108,5 +114,13 @@ private:
 };
 
 } // namespace HepMC
+
+#include "HepMC/GenEvent.h"
+
+template<class T>
+HepMC::shared_ptr<T> HepMC::GenParticle::attribute(std::string name) const {
+  return parent_event()?
+    parent_event()->attribute<T>(name, id()): HepMC::shared_ptr<T>();
+}
 
 #endif

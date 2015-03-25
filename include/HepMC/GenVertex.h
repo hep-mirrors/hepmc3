@@ -27,6 +27,7 @@ namespace HepMC {
 
 
     class GenEvent;
+    class Attribute;
 
 
     /// Stores vertex-related information
@@ -49,22 +50,6 @@ namespace HepMC {
         GenVertex( const GenVertexData& data );
 
         //@}
-
-
-        /// @name Printing functions
-        //@{
-
-        /// Print information about the vertex
-        void print( std::ostream& ostr = std::cout ) const;
-
-    protected:
-
-        /// Print information about the vertex in event-listing format
-        /// @todo Why here, and why protected?
-        void print_event_listing( std::ostream& ostr = std::cout ) const;
-
-        //@}
-
 
     public:
 
@@ -96,6 +81,10 @@ namespace HepMC {
         void add_particle_in ( const GenParticlePtr& p);
         /// Add outgoing particle
         void add_particle_out( const GenParticlePtr& p);
+        /// Remove incoming particle
+        void remove_particle_in ( const GenParticlePtr& p);
+        /// Remove outgoing particle
+        void remove_particle_out( const GenParticlePtr& p);
 
         /// Get/set list of incoming particles
         const vector<GenParticlePtr>& particles_in()  const { return m_particles_in;  }
@@ -112,6 +101,23 @@ namespace HepMC {
         const FourVector& position() const;
         /// Set vertex position
         void set_position(const FourVector& new_pos); //!<
+
+        /// @todo We need a way to check if there is a position on _this_ vertex, without messing up the interface. Is has_position() too intrusive?
+
+
+        /// @brief Add event attribute to this vertex
+        ///
+        /// This will overwrite existing attribute if an attribute with
+        /// the same name is present. The attribute will be stored in the
+        /// parent_event(). @return false if there is no parent_event();
+        bool add_attribute(std::string name, shared_ptr<Attribute> att);
+
+        /// Remove attribute
+        void remove_attribute(std::string name);
+
+        /// Get attribute of type T
+        template<class T>
+        shared_ptr<T> attribute(std::string name) const;
 
 
         /// @name Deprecated functionality
@@ -204,5 +210,13 @@ namespace HepMC {
 
 
 } // namespace HepMC
+
+#include "HepMC/GenEvent.h"
+
+template<class T>
+HepMC::shared_ptr<T> HepMC::GenVertex::attribute(std::string name) const {
+  return parent_event()?
+    parent_event()->attribute<T>(name, id()): HepMC::shared_ptr<T>();
+}
 
 #endif

@@ -10,6 +10,8 @@
  */
 #include "HepMC/GenHeavyIon.h"
 #include <cstring> // memcmp
+#include <cstdlib> // atoi
+#include <cstdio> // sprintf
 
 namespace HepMC {
 
@@ -99,7 +101,7 @@ void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
 }
 
 bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
-    return ( memcmp( this, &a, sizeof(struct GenHeavyIon) ) == 0 );
+  return ( memcmp( (void*) this, (void*) &a, sizeof(struct GenHeavyIon) ) == 0 );
 }
 
 bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {
@@ -121,23 +123,6 @@ bool GenHeavyIon::is_valid() const {
     if( eccentricity                 != 0 ) return true;
     if( sigma_inel_NN                != 0 ) return true;
     return false;
-}
-
-void GenHeavyIon::print( std::ostream &ostr ) const {
-    ostr << " GenHeavyIon: " << Ncoll_hard
-         << " " << Npart_proj
-         << " " << Npart_targ
-         << " " << Ncoll
-         << " " << spectator_neutrons
-         << " " << spectator_protons
-         << " " << N_Nwounded_collisions
-         << " " << Nwounded_N_collisions
-         << " " << Nwounded_Nwounded_collisions
-         << " " << impact_parameter
-         << " " << event_plane_angle
-         << " " << eccentricity
-         << " " << sigma_inel_NN
-         << std::endl;
 }
 
 } // namespace HepMC
