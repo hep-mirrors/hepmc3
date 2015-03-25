@@ -62,6 +62,13 @@ void WriterAscii::write_event(const GenEvent &evt) {
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
 
+    // Write weight values
+    m_cursor += sprintf(m_cursor, "W \n");
+    FOREACH (double w, evt.weights().values())
+      m_cursor += sprintf(m_cursor, "%e \n", w);
+    m_cursor += sprintf(m_cursor, "\n");
+    flush();
+
     // Write global attributes
     typedef map< string, shared_ptr<Attribute> >::value_type value_typeG;
     FOREACH ( value_typeG vglob, m_global_attributes )

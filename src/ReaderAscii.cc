@@ -13,23 +13,24 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/Units.h"
-#include <cstring>
 
-using std::vector;
+#include <cstring>
+using namespace std;
 
 namespace HepMC {
 
 
-ReaderAscii::ReaderAscii(const std::string &filename):
-m_file(filename) {
+ReaderAscii::ReaderAscii(const string &filename)
+ : m_file(filename)
+{
     if( !m_file.is_open() ) {
         ERROR( "ReaderAscii: could not open input file: "<<filename )
     }
 }
 
-ReaderAscii::~ReaderAscii() {
-    close();
-}
+
+ReaderAscii::~ReaderAscii() { close(); }
+
 
 bool ReaderAscii::read_event(GenEvent &evt) {
     if ( !m_file.is_open() ) return false;
@@ -37,7 +38,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     char               buf[512*512];
     bool               parsed_event_header    = false;
     bool               is_parsing_successful  = true;
-    std::pair<int,int> vertices_and_particles(0,0);
+    pair<int,int> vertices_and_particles(0,0);
 
     //
     // Parse event, vertex and particle information
@@ -57,12 +58,12 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         }
 
         switch(buf[0]) {
+            /// @todo Should consider exceptions for reporting parsing problems more locally to the source of trouble
             case 'E':
                 vertices_and_particles = parse_event_information(evt,buf);
-                if(vertices_and_particles.second<0) {
+                if (vertices_and_particles.second < 0) {
                     is_parsing_successful = false;
-                }
-                else {
+                } else {
                     is_parsing_successful = true;
                     parsed_event_header   = true;
                 }
@@ -72,6 +73,9 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 break;
             case 'P':
                 is_parsing_successful = parse_particle_information(evt,buf);
+                break;
+            case 'W':
+                is_parsing_successful = parse_weight_values(evt,buf);
                 break;
             case 'U':
                 is_parsing_successful = parse_units(evt,buf);
@@ -102,10 +106,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     // Check if there were errors during parsing
     if( !is_parsing_successful ) {
         ERROR( "ReaderAscii: event parsing failed. Returning empty event" )
-        DEBUG( 1, "Parsing failed at line:" << std::endl << buf )
+        DEBUG( 1, "Parsing failed at line:" << endl << buf )
 
         evt.clear();
-        m_file.clear(std::ios::badbit);
+        m_file.clear(ios::badbit);
 
         return false;
     }
@@ -113,9 +117,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     return true;
 }
 
-std::pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *buf) {
-    static const std::pair<int,int>  err(-1,-1);
-    std::pair<int,int>               ret(-1,-1);
+
+pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *buf) {
+    static const pair<int,int>  err(-1,-1);
+    pair<int,int>               ret(-1,-1);
     const char                      *cursor   = buf;
     int                              event_no = 0;
 
@@ -137,8 +142,24 @@ std::pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const cha
     return ret;
 }
 
+
+bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
+    const char *cursor = buf;
+
+    while (cursor = strchr(cursor+1,' ')) {
+      ++cursor; // step past the space
+      /// @todo Ick, there's no way to detect a parsing-as-float failure?!?
+      const double w = atof(cursor);
+      /// @todo If evt.runinfo().has_attr("WEIGHT_NAMES")... push_back(n,w)
+      evt.weights().push_back(w);
+    }
+
+    return true;
+}
+
+
 bool ReaderAscii::parse_units(GenEvent &evt, const char *buf) {
-    const char *cursor  = buf;
+    const char *cursor = buf;
 
     // momentum
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
@@ -156,6 +177,7 @@ bool ReaderAscii::parse_units(GenEvent &evt, const char *buf) {
 
     return true;
 }
+
 
 bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     GenVertexPtr  data = make_shared<GenVertex>();
@@ -221,6 +243,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
 
     return true;
 }
+
 
 bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     GenParticlePtr  data = make_shared<GenParticle>();
@@ -295,6 +318,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     return true;
 }
 
+
 bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     const char     *cursor  = buf;
     const char     *cursor2 = buf;
@@ -328,16 +352,18 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     return true;
 }
 
-shared_ptr<Attribute> ReaderAscii::get_global(std::string name) {
-    std::map< std::string, shared_ptr<Attribute> >::iterator globit = m_global_attributes.find(name);
+
+shared_ptr<Attribute> ReaderAscii::get_global(string name) {
+    map< string, shared_ptr<Attribute> >::iterator globit = m_global_attributes.find(name);
     if ( globit ==  m_global_attributes.end() ) return shared_ptr<Attribute>();
     return globit->second;
 }
 
-std::string ReaderAscii::unescape(const std::string s) {
-    std::string ret;
+
+string ReaderAscii::unescape(const string s) {
+    string ret;
     ret.reserve(s.length());
-    for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
+    for ( string::const_iterator it = s.begin(); it != s.end(); ++it ) {
         if ( *it == '\\' ) {
             ++it;
             if ( *it == '|' )
@@ -351,9 +377,11 @@ std::string ReaderAscii::unescape(const std::string s) {
     return ret;
 }
 
+
 void ReaderAscii::close() {
     if( !m_file.is_open() ) return;
     m_file.close();
 }
+
 
 } // namespace HepMC
