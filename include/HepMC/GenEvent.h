@@ -97,16 +97,6 @@ public:
 
     //@}
 
-
-    /// @name Beam particles
-    //@{
-
-    /// @todo Set/require status = 4 at the same time?
-    void set_beam_particles(const std::pair<GenParticlePtr,GenParticlePtr>& p) { m_beam_particle_1 = p.first; m_beam_particle_2 = p.second; }
-
-    //@}
-
-
     /// @name Attributes
     //@{
     /// @brief Add event attribute to event
@@ -332,12 +322,8 @@ private:
     /// @todo Move to attributes?
     Units::LengthUnit m_length_unit;
 
-    /// First beam particle
-    /// @todo Replace with search for status = 4?
-    GenParticlePtr m_beam_particle_1;
-    /// Second beam particle
-    /// @todo Replace with search for status = 4?
-    GenParticlePtr m_beam_particle_2;
+    /// Default event position
+    GenVertexPtr m_event_pos;
 
     /// @brief Map of event, particle and vertex attributes
     ///
