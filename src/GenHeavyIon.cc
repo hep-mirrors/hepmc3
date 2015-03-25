@@ -56,13 +56,16 @@ bool GenHeavyIon::from_string(const string &att) {
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     sigma_inel_NN = atof(cursor);
 
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    centrality = atof(cursor);
+
     return true;
 }
 
 bool GenHeavyIon::to_string(string &att) const {
     char buf[255];
 
-    sprintf(buf,"%i %i %i %i %i %i %i %i %i %.8e %.8e %.8e %.8e",
+    sprintf(buf,"%i %i %i %i %i %i %i %i %i %.8e %.8e %.8e %.8e %.8e",
             Ncoll_hard,
             Npart_proj,
             Npart_targ,
@@ -75,7 +78,8 @@ bool GenHeavyIon::to_string(string &att) const {
             impact_parameter,
             event_plane_angle,
             eccentricity,
-            sigma_inel_NN);
+            sigma_inel_NN,
+            centrality);
 
     att = buf;
 
@@ -84,7 +88,7 @@ bool GenHeavyIon::to_string(string &att) const {
 
 void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
                     int nnw, int nwn, int nwnw,
-                    float im, float pl, float ec, float s ) {
+                    float im, float pl, float ec, float s, float cent ) {
     Ncoll_hard                   = nh;
     Npart_proj                   = np;
     Npart_targ                   = nt;
@@ -98,6 +102,7 @@ void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
     event_plane_angle            = pl;
     eccentricity                 = ec;
     sigma_inel_NN                = s;
+    centrality                   = cent;
 }
 
 bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
@@ -122,6 +127,7 @@ bool GenHeavyIon::is_valid() const {
     if( event_plane_angle            != 0 ) return true;
     if( eccentricity                 != 0 ) return true;
     if( sigma_inel_NN                != 0 ) return true;
+    if( centrality                   != 0 ) return true;
     return false;
 }
 
