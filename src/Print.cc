@@ -1,21 +1,23 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file Print.cc
 /// @brief Implementation of static \b class Print
+///
+/// @todo AB: Why a static class rather than some namespaced free functions?
 ///
 #include "HepMC/Print.h"
 #include "HepMC/Attribute.h"
 #include "HepMC/foreach.h"
 
 #include <iostream>
-using std::cout;
-using std::endl;
+using namespace std;
 
 namespace HepMC {
+
 
 void Print::content( const GenEvent &event ) {
     cout<<"--------------------------------"<<endl;
@@ -51,32 +53,30 @@ void Print::content( const GenEvent &event ) {
 
 void Print::listing( const GenEvent &event, unsigned short precision ) {
 
-    cout << "________________________________________________________________________________" << endl;
+    // Find the current stream state
+    ios_base::fmtflags orig = cout.flags();
+    streamsize         prec = cout.precision();
+
+    // Set precision
+    cout.precision( precision );
+
+    cout << "________________________________________________________________________" << endl;
     cout << "GenEvent: #" << event.event_number() << endl;
     cout << " Momenutm units: " << Units::name(event.momentum_unit())
          << " Position units: " << Units::name(event.length_unit()) << endl;
     cout << " Entries in this event: " << event.vertices().size() << " vertices, "
          << event.particles().size() << " particles." << endl;
+    cout << " root vertex: " << event.event_pos()->particles_out().size();
 
-    pair<GenParticlePtr,GenParticlePtr> beam_particles = event.beam_particles();
-    cout << " Beam particle indexes:";
-    if(beam_particles.first) cout << " " << beam_particles.first->id();
-    if(beam_particles.second) cout << " " << beam_particles.second->id();
-    cout << "\n";
+    const FourVector &pos = event.event_pos()->position();
+    cout << ", position offset: " << pos.x() << ", " << pos.y() << ", " << pos.z() << ", " << pos.t() <<endl;
 
     // Print a legend to describe the particle info
     cout << "                                    GenParticle Legend" << endl;
-    cout << "     Barcode   PDG ID   "
+    cout << "         id    PDG ID   "
          << "( Px,       Py,       Pz,     E )"
-         << "   Stat-Subst  ProdVtx" << endl;
-    cout << "________________________________________________________________________________" << endl;
-
-    // Find the current stream state
-    std::ios_base::fmtflags orig = cout.flags();
-    std::streamsize         prec = cout.precision();
-
-    // Set precision
-    cout.precision( precision );
+         << "   Stat ProdVtx" << endl;
+    cout << "________________________________________________________________________" << endl;
 
     // Print all vertices
     FOREACH( const GenVertexPtr &v, event.vertices() ) {
@@ -86,7 +86,7 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
     // Restore the stream state
     cout.flags(orig);
     cout.precision(prec);
-    cout << "________________________________________________________________________________" << endl;
+    cout << "________________________________________________________________________" << endl;
 }
 
 void Print::listing( const GenVertexPtr &v ) {
@@ -136,11 +136,11 @@ void Print::listing( const GenParticlePtr &p ) {
     cout.width(9);
     cout << p->pdg_id() << " ";
     cout.width(9);
-    cout.setf(std::ios::scientific, std::ios::floatfield);
-    cout.setf(std::ios_base::showpos);
-    
+    cout.setf(ios::scientific, ios::floatfield);
+    cout.setf(ios_base::showpos);
+
     const FourVector &momentum = p->momentum();
-    
+
     cout.width(9);
     cout << momentum.px() << ",";
     cout.width(9);
@@ -149,19 +149,13 @@ void Print::listing( const GenParticlePtr &p ) {
     cout << momentum.pz() << ",";
     cout.width(9);
     cout << momentum.e() << " ";
-    cout.setf(std::ios::fmtflags(0), std::ios::floatfield);
-    cout.unsetf(std::ios_base::showpos);
+    cout.setf(ios::fmtflags(0), ios::floatfield);
+    cout.unsetf(ios_base::showpos);
     cout.width(3);
     cout << p->status();
-    if( p->status_subcode() ) {
-        cout << "-";
-        cout.width(9);
-        cout << std::left << p->status_subcode() << std::right;
-    }
-    else cout << "          ";
 
     GenVertexPtr prod = p->production_vertex();
-    
+
     if( prod ) {
         cout.width(6);
         cout << prod->id();
@@ -172,46 +166,39 @@ void Print::listing( const GenParticlePtr &p ) {
 
 void Print::line(const GenVertexPtr &v) {
     cout << "GenVertex:  " << v->id();
-    cout << " barcode: ";
-    cout.width(5);
-    cout << v->barcode();
     cout.width(3);
     cout << " in: "  << v->particles_in().size();
     cout.width(3);
     cout << " out: " << v->particles_out().size();
 
     const FourVector &pos = v->position();
-    if( !pos.is_zero() ) {
-        cout << " @ " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
-    }
-    else cout << " (X,cT): 0";
+    cout << " has_set_position: ";
+    if( v->has_set_position() ) cout << "true";
+    else                        cout << "false";
 
-    cout << endl;
+    cout << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t() << endl;
 }
 
 void Print::line(const GenParticlePtr &p) {
 
     cout << "GenParticle: ";
     cout.width(3);
-    cout << p->id();
-    cout << " barcode: ";
-    cout.width(5);
-    cout << p->barcode() <<" PDGID: ";
+    cout << p->id() <<" PDGID: ";
     cout.width(5);
     cout << p->pdg_id();
 
     // Find the current stream state
-    std::ios_base::fmtflags orig = cout.flags();
+    ios_base::fmtflags orig = cout.flags();
 
-    cout.setf(std::ios::scientific, std::ios::floatfield);
-    cout.setf(std::ios_base::showpos);
-    std::streamsize prec = cout.precision();
+    cout.setf(ios::scientific, ios::floatfield);
+    cout.setf(ios_base::showpos);
+    streamsize prec = cout.precision();
 
     // Set precision
     cout.precision( 2 );
 
     const FourVector &momentum = p->momentum();
-    
+
     cout << " (P,E)=" << momentum.px()
                << "," << momentum.py()
                << "," << momentum.pz()
@@ -219,7 +206,7 @@ void Print::line(const GenParticlePtr &p) {
 
     // Restore the stream state
     cout.flags(orig);
-    cout.precision(prec); 
+    cout.precision(prec);
 
     GenVertexPtr prod = p->production_vertex();
     GenVertexPtr end  = p->end_vertex();

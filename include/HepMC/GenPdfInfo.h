@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef  HEPMC_GENPDFINFO_H
 #define  HEPMC_GENPDFINFO_H
@@ -35,12 +35,11 @@ class GenPdfInfo : public Attribute {
 // Fields
 //
 public:
-    /// @todo We need description for the fields of GenPdfInfo
-    int    parton_id[2];
-    int    pdf_id[2];
-    double scale;
-    double x[2];
-    double xf[2];
+    int    parton_id[2]; ///< Parton PDG ID
+    int    pdf_id[2];    ///< LHAPDF ID code
+    double scale;        ///< Factorisation scale (in GEV)
+    double x[2];         ///< Parton momentum fraction
+    double xf[2];        ///< PDF value
 
 //
 // Functions

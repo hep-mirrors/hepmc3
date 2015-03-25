@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef  HEPMC_FOURVECTOR_H
 #define  HEPMC_FOURVECTOR_H
@@ -15,8 +15,6 @@
  *  Interpretation of its content depends on accessors used.
  *  Contains few support operations on 4-vectors and floating-point values.
  *  Fully inlined
- *
- *  @todo Change notation to eta,phi,pT. Make proper accessors
  *
  */
 #include "HepMC/Setup.h"
@@ -42,7 +40,20 @@ public:
 
     double m()       const; //!< Calculate mass. Returns -sqrt(-m) if e^2 - P^2 is negative
     double length()  const; //!< Calculate length
-    bool   is_zero() const; //!< Check if the length of this vertex is equivalent to zero
+    double p()       const; //!< Magnitude of (x, y, z) vector
+    double pt()      const; //!< Magnitude of (x, y) vector
+    double phi()     const; //!< Calculate azimuthal angle
+    double theta()   const; //!< Calculate polar angle
+    double eta()     const; //!< Calculate pseudo-rapidity
+    double rap()     const; //!< Calculate rapidity
+    double abs_eta() const; //!< Calculate absolute pseudo-rapidity
+    double abs_rap() const; //!< Calculate absolute rapidity
+    double delta_phi  (const FourVector &v) const; //!< Azimuthal angle separation
+    double delta_theta(const FourVector &v) const; //!< Polar angle separation
+    double delta_eta  (const FourVector &v) const; //!< Pseudo-rapidity separation
+    double delta_rap  (const FourVector &v) const; //!< Rapidity separation
+    double delta_r    (const FourVector &v) const; //!< sqrt(dphi^2 + deta^2)
+    bool   is_zero() const; //!< Check if the length of this vertex is zero
 
     bool        operator==(const FourVector& rhs) const;                            //!< Boolean operator ==
     bool        operator!=(const FourVector& rhs) const { return !(*this == rhs); } //!< Boolean operator !=
@@ -56,28 +67,6 @@ public:
     void        operator-=(const FourVector& rhs);       //!< Assignment operator -=
     void        operator*=(const double rhs);            //!< Assignment operator *=
     void        operator/=(const double rhs);            //!< Assignment operator /=
-
-//
-// Functions related to floating-point operations
-//
-public:
-    /** @brief Check if floating-point value is almost equal 0 */
-    static bool AlmostEqualZero(double A);
-
-    /** @brief Compare floating-point numbers
-     *
-     *  Bruce Dawson algorithm for comparing floating-point numbers
-     *  Implementation for 64-bit double precision
-     *  Updated to remove strict-aliasing warnings
-     *
-     *  @see https://randomascii.wordpress.com/category/floating-point/
-     *
-     *  @param A first value
-     *  @param B second value
-     *  @param maxUlps maximum acceptable deviation in number of units in the last place
-     *                 maxUlps > 0 && maxUlps < 4 * 1024 * 1024
-     */
-    static bool AlmostEqual2sComplement(double A, double B, unsigned int maxUlps = Setup::DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS);
 
 //
 // Accessors

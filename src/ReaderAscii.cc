@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file ReaderAscii.cc
@@ -168,13 +168,13 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     FourVector    position;
     const char   *cursor          = buf;
     const char   *cursor2         = NULL;
-    int           barcode         = 0;
+    int           id              = 0;
     int           particle_in     = 0;
-    int           highest_barcode = evt.particles().size();
+    int           highest_id      = evt.particles().size();
 
-    // barcode
+    // id
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    barcode = atoi(cursor);
+    id = atoi(cursor);
 
     // skip to the list of particles
     if( !(cursor = strchr(cursor+1,'[')) ) return false;
@@ -185,7 +185,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
         particle_in = atoi(cursor);
 
         // add incoming particle to the vertex
-        if( particle_in > 0 && particle_in <= highest_barcode) {
+        if( particle_in > 0 && particle_in <= highest_id) {
             data->add_particle_in( evt.particles()[particle_in-1] );
         }
         else {
@@ -221,7 +221,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
 
     }
 
-    DEBUG( 10, "ReaderAscii: V: "<<barcode<<" with "<<data->particles_in().size()<<" particles)" )
+    DEBUG( 10, "ReaderAscii: V: "<<id<<" with "<<data->particles_in().size()<<" particles)" )
 
     evt.add_vertex(data);
 
@@ -232,24 +232,24 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     GenParticlePtr  data = make_shared<GenParticle>();
     FourVector      momentum;
     const char     *cursor  = buf;
-    int             mother_barcode = 0;
+    int             mother_id = 0;
 
-    // verify barcode
+    // verify id
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
 
     if( atoi(cursor) != (int)evt.particles().size() + 1 ) {
-        ERROR( "ReaderAscii: particle barcode mismatch" )
+        ERROR( "ReaderAscii: particle id mismatch" )
         return false;
     }
 
-    // mother barcode
+    // mother id
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    mother_barcode = atoi(cursor);
+    mother_id = atoi(cursor);
 
     // add particle to corresponding vertex
-    if( mother_barcode > 0 && mother_barcode <= (int)evt.particles().size() ) {
+    if( mother_id > 0 && mother_id <= (int)evt.particles().size() ) {
 
-        GenParticlePtr mother = evt.particles()[ mother_barcode-1 ];
+        GenParticlePtr mother = evt.particles()[ mother_id-1 ];
         GenVertexPtr   vertex = mother->end_vertex();
 
         // create new vertex if needed
@@ -261,8 +261,8 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
         vertex->add_particle_out(data);
         evt.add_vertex(vertex);
     }
-    else if( mother_barcode < 0 && -mother_barcode <= (int)evt.vertices().size() ) {
-        evt.vertices()[ (-mother_barcode)-1 ]->add_particle_out(data);
+    else if( mother_id < 0 && -mother_id <= (int)evt.vertices().size() ) {
+        evt.vertices()[ (-mother_id)-1 ]->add_particle_out(data);
     }
 
     // pdg id
@@ -296,7 +296,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 
     evt.add_particle(data);
 
-    DEBUG( 10, "ReaderAscii: P: "<<data->barcode()<<" ( mother: "<<mother_barcode<<", pdg_id: "<<data->pdg_id()<<")" )
+    DEBUG( 10, "ReaderAscii: P: "<<data->id()<<" ( mother: "<<mother_id<<", pdg_id: "<<data->pdg_id()<<")" )
 
     return true;
 }

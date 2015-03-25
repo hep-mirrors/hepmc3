@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC_GENWEIGHTS_H
 #define HEPMC_GENWEIGHTS_H
@@ -14,10 +14,9 @@
 namespace HepMC {
 
 
-  /// Container for the Weights associated with an event or vertex.
+  /// Container for the weights associated with an event or vertex.
   ///
   /// This class has both map-like and vector-like functionality.
-  /// Named weights are now supported.
   class GenWeights {
   public:
 

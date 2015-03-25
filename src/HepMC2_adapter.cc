@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file HepMC2_adapter.cc
@@ -337,9 +337,8 @@ int HepMC2_adapter::parse_particle_information(const char *buf) {
     const char     *cursor  = buf;
     int             end_vtx = 0;
 
-    // barcode
+    // barcode (IGNORED but maybe should be put as an attribute?...)
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    data->set_status_subcode( atoi(cursor) );
 
     // id
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -394,7 +393,7 @@ int HepMC2_adapter::parse_particle_information(const char *buf) {
     m_particle_cache.push_back( data );
     m_end_vertex_barcodes.push_back( end_vtx );
 
-    DEBUG( 10, "HepMC2_adapter: P: "<<m_particle_cache.size()<<" ( old barcode: "<<data->status_subcode()<<", pdg_id: "<<data->pdg_id()<<") end vertex: "<<end_vtx )
+    DEBUG( 10, "HepMC2_adapter: P: "<<m_particle_cache.size()<<" ( pdg_id: "<<data->pdg_id()<<") end vertex: "<<end_vtx )
 
     return 0;
 }

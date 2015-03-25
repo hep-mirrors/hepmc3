@@ -37,10 +37,10 @@ int main(int argc, char ** argv) {
       hepe->tags =  XMLTag::findXMLTags(reader.outsideBlock);
     hepe->hepeup = reader.hepeup;
 
-
     GenEvent ev(runinfo, Units::GEV, Units::MM);
     ev.set_event_number(neve);
     ev.add_attribute("HEPEUP", hepe);
+
 
     GenParticlePtr p1 = make_shared<GenParticle>(hepe->momentum(0),
 						 hepe->hepeup.IDUP[0],

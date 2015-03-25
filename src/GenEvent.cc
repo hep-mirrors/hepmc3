@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenEvent.cc
@@ -9,7 +9,6 @@
  *
  */
 #include "HepMC/GenEvent.h"
-
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/Setup.h"
@@ -17,14 +16,28 @@
 #include "HepMC/Data/GenEventData.h"
 #include "HepMC/Search/FindParticles.h"
 
+#include "HepMC/foreach.h"
 #include <vector>
 #include <deque>
 
-#include "HepMC/foreach.h"
-
-using std::endl;
+using namespace std;
 
 namespace HepMC {
+
+GenEvent::GenEvent(Units::MomentumUnit momentum_unit,
+		   Units::LengthUnit length_unit)
+  : m_event_number(0), m_momentum_unit(momentum_unit),
+    m_length_unit(length_unit),
+    m_event_pos(make_shared<GenVertex>()),
+    m_run_info(make_shared<GenRunInfo>()) {}
+  
+GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
+	 Units::MomentumUnit momentum_unit,
+	 Units::LengthUnit length_unit)
+  : m_event_number(0), m_momentum_unit(momentum_unit),
+    m_length_unit(length_unit),
+    m_event_pos(make_shared<GenVertex>()),
+    m_run_info(run? run: make_shared<GenRunInfo>()) {}
 
 void GenEvent::add_particle( const GenParticlePtr &p ) {
     if( p->in_event() ) return;
@@ -33,6 +46,10 @@ void GenEvent::add_particle( const GenParticlePtr &p ) {
 
     p->m_event = this;
     p->m_id    = particles().size();
+
+    // Particles without production vertex are added to event_pos()
+    if( !p->production_vertex() )
+      m_event_pos->add_particle_out(p);
 }
 
 void GenEvent::add_vertex( const GenVertexPtr &v ) {
@@ -46,7 +63,7 @@ void GenEvent::add_vertex( const GenVertexPtr &v ) {
     // Add all incoming and outgoing particles and restore their production/end vertices
     FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
         if(!p->in_event()) add_particle(p);
-        p->m_end_vertex = v->m_this.lock();
+	p->m_end_vertex = v->m_this.lock();
     }
 
     FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
@@ -117,9 +134,10 @@ void GenEvent::remove_vertex( const GenVertexPtr &v ) {
     }
 }
 
+
 void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
 
-    std::deque<GenVertexPtr> sorting;
+    deque<GenVertexPtr> sorting;
 
     // Find all starting vertices (end vertex of particles that have no production vertex)
     FOREACH( const GenParticlePtr &p, particles ) {
@@ -183,10 +201,12 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
     )
 }
 
+
 void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
     m_particles.reserve(particles);
     m_vertices.reserve(vertices);
 }
+
 
 void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
     if( new_momentum_unit != m_momentum_unit ) {
@@ -207,6 +227,17 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 }
 
+void GenEvent::offset_position( const FourVector &op ) {
+    m_event_pos->set_position( m_event_pos->position() + op );
+
+    // Offset all vertices
+    FOREACH( GenVertexPtr &v, m_vertices ) {
+        if( v->has_set_position() ) {
+            v->set_position( v->position() + op );
+        }
+    }
+}
+
 void GenEvent::clear() {
     m_event_number = 0;
 
@@ -223,9 +254,11 @@ void GenEvent::add_particle( GenParticle *p ) {
     add_particle( GenParticlePtr(p) );
 }
 
+
 void GenEvent::add_vertex( GenVertex *v ) {
     add_vertex( GenVertexPtr(v) );
 }
+
 
 void GenEvent::remove_attribute(const string &name, int id) {
     map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
@@ -237,8 +270,8 @@ void GenEvent::remove_attribute(const string &name, int id) {
     i1->second.erase(i2);
 }
 
-void GenEvent::write_data(GenEventData &data) const
-{
+
+void GenEvent::write_data(GenEventData &data) const {
     // Reserve memory for containers
     data.particles.reserve( this->particles().size() );
     data.vertices.reserve( this->vertices().size() );
@@ -329,12 +362,41 @@ void GenEvent::read_data(const GenEventData &data)
     }
 }
 
+
+#ifndef HEPMC_NO_DEPRECATED
+
+
+bool GenEvent::valid_beam_particles() const {
+    return (m_event_pos->particles_out().size()==2);
+}
+
+pair<GenParticlePtr,GenParticlePtr> GenEvent::beam_particles() const {
+    switch( m_event_pos->particles_out().size() ) {
+        case 0:  return make_pair(GenParticlePtr(),              GenParticlePtr());
+        case 1:  return make_pair(m_event_pos->particles_out()[0],GenParticlePtr());
+        default: return make_pair(m_event_pos->particles_out()[0],m_event_pos->particles_out()[1]);
+    }
+}
+
+void GenEvent::set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) {
+    m_event_pos->add_particle_out(p1);
+    m_event_pos->add_particle_out(p2);
+}
+
+void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) {
+    m_event_pos->add_particle_out(p.first);
+    m_event_pos->add_particle_out(p.second);
+}
+
+#endif
+
+
 #ifdef HEPMC_ROOTIO
 
 void GenEvent::Streamer(TBuffer &b){
 
   if (b.IsReading()){
-    std::cout << "Is Reading" << std::endl;
+    cout << "Is Reading" << endl;
 
     GenEventData data;
 
@@ -343,7 +405,7 @@ void GenEvent::Streamer(TBuffer &b){
     read_data(data);
 
   } else {
-    std::cout << "Is Writting" << std::endl;
+    cout << "Is Writing" << endl;
     // fill the GenEventData structures
 
     GenEventData data;
