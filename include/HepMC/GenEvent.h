@@ -96,6 +96,9 @@ public:
     /// Converts event from current units to new ones
     void set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
 
+    /// @brief Offset position of all vertices in the event
+    void offset_position( const FourVector &op );
+
     /// @brief Remove contents of this event
     void clear();
 
@@ -109,6 +112,12 @@ public:
     int  event_number() const { return m_event_number; }
     /// @brief Set event number
     void set_event_number(int num) { m_event_number = num; }
+
+    /// @brief Get root event vertex
+    ///
+    /// This vertex contains all particles that have no production vertex
+    /// event_pos().position() can be used to obtain event position offset
+    const GenVertexPtr& event_pos() const { return m_event_pos; }
 
     /// @brief Get/set list of particles
     const vector<GenParticlePtr>& particles() const { return m_particles; }
@@ -134,18 +143,6 @@ public:
     const GenCrossSectionPtr cross_section() const { return attribute<GenCrossSection>("GenCrossSection"); }
     /// @brief Set cross-section information
     void set_cross_section(const GenCrossSectionPtr &cs) { add_attribute("GenCrossSection",cs); }
-
-    /// @brief Test to see if we have two valid beam particles
-    bool valid_beam_particles() const { return (bool)m_beam_particle_1 && (bool)m_beam_particle_2; }
-
-    /// @brief Get incoming beam particles
-    pair<GenParticlePtr,GenParticlePtr> beam_particles() const { return make_pair(m_beam_particle_1,m_beam_particle_2); }
-
-    /// @brief Set incoming beam particles
-    void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) { m_beam_particle_1 = p1; m_beam_particle_2 = p2; }
-
-    /// @brief Set incoming beam particles
-    void set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) { m_beam_particle_1 = p.first; m_beam_particle_2 = p.second; }
 
     /// @brief Add event attribute to event
     ///
@@ -257,6 +254,26 @@ public:
     HEPMC_DEPRECATED("Use vertices().empty() instead")
     bool vertices_empty()  const { return m_vertices.empty();  }
 
+    /// @brief Test to see if we have exactly two particles in event_pos() vertex
+    /// @deprecated Backward compatibility
+    HEPMC_DEPRECATED("Use event_pos().particles_out() to access beam particles")
+    bool valid_beam_particles() const;
+
+    /// @brief Get first two particles of the event_pos() vertex
+    /// @deprecated Backward compatibility
+    HEPMC_DEPRECATED("Use event_pos().particles_out() to access beam particles")
+    pair<GenParticlePtr,GenParticlePtr> beam_particles() const;
+
+    /// @brief Set incoming beam particles
+    /// @deprecated Backward compatibility
+    HEPMC_DEPRECATED("instead add particle without production vertex to the event")
+    void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2);
+
+    /// @brief Set incoming beam particles
+    /// @deprecated Backward compatibility
+    HEPMC_DEPRECATED("instead add particle without production vertex to the event")
+    void set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p);
+
     #endif
 
     //@}
@@ -283,8 +300,7 @@ private:
     int                         m_event_number;    //!< Event number
     Units::MomentumUnit         m_momentum_unit;   //!< Momentum unit
     Units::LengthUnit           m_length_unit;     //!< Length unit
-    GenParticlePtr              m_beam_particle_1; //!< First beam particle
-    GenParticlePtr              m_beam_particle_2; //!< Second beam particle
+    GenVertexPtr                m_event_pos;       //!< Default vertex
     std::vector<GenParticlePtr> m_particles;       //!< List of particles
     std::vector<GenVertexPtr>   m_vertices;        //!< List of vertices
 
@@ -319,7 +335,7 @@ shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 
 	    return att;
 	}
-	else 
+	else
 	    return shared_ptr<T>();
     }
     else return dynamic_pointer_cast<T>(i2->second);

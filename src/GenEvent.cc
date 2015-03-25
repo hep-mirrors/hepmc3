@@ -26,10 +26,11 @@ using std::endl;
 
 namespace HepMC {
 
-GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit) {
-    set_event_number(0);
-    m_momentum_unit = momentum_unit;
-    m_length_unit   = length_unit;
+GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit):
+m_event_number(0),
+m_momentum_unit(momentum_unit),
+m_length_unit(length_unit),
+m_event_pos( new GenVertex() ) {
 }
 
 void GenEvent::add_particle( const GenParticlePtr &p ) {
@@ -39,6 +40,9 @@ void GenEvent::add_particle( const GenParticlePtr &p ) {
 
     p->m_event = this;
     p->m_id    = particles().size();
+
+    // Particles without production vertex are added to event_pos()
+    if( !p->production_vertex() ) m_event_pos->add_particle_out(p);
 }
 
 void GenEvent::add_vertex( const GenVertexPtr &v ) {
@@ -213,6 +217,17 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 }
 
+void GenEvent::offset_position( const FourVector &op ) {
+    m_event_pos->set_position( m_event_pos->position() + op );
+
+    // Offset all vertices
+    FOREACH( GenVertexPtr &v, m_vertices ) {
+        if( v->has_set_position() ) {
+            v->set_position( v->position() + op );
+        }
+    }
+}
+
 void GenEvent::clear() {
     m_event_number = 0;
 
@@ -334,6 +349,35 @@ void GenEvent::read_data(const GenEventData &data)
                        data.attribute_id[i] );
     }
 }
+
+
+#ifndef HEPMC_NO_DEPRECATED
+
+
+bool GenEvent::valid_beam_particles() const {
+    return (m_event_pos->particles_out().size()==2);
+}
+
+pair<GenParticlePtr,GenParticlePtr> GenEvent::beam_particles() const {
+    switch( m_event_pos->particles_out().size() ) {
+        case 0:  return make_pair(GenParticlePtr(),              GenParticlePtr());
+        case 1:  return make_pair(m_event_pos->particles_out()[0],GenParticlePtr());
+        default: return make_pair(m_event_pos->particles_out()[0],m_event_pos->particles_out()[1]);
+    }
+}
+
+void GenEvent::set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) {
+    m_event_pos->add_particle_out(p1);
+    m_event_pos->add_particle_out(p2);
+}
+
+void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) {
+    m_event_pos->add_particle_out(p.first);
+    m_event_pos->add_particle_out(p.second);
+}
+
+#endif
+
 
 #ifdef HEPMC_ROOTIO
 

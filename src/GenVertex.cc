@@ -41,6 +41,8 @@ void GenVertex::add_particle_in( const GenParticlePtr &p ) {
 
     m_particles_in.push_back(p);
 
+    if( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
+
     p->m_end_vertex = m_this.lock();
 
     if(m_event) m_event->add_particle(p);
@@ -55,6 +57,8 @@ void GenVertex::add_particle_out( const GenParticlePtr &p ) {
     }
 
     m_particles_out.push_back(p);
+
+    if( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
 
     p->m_production_vertex = m_this.lock();
 
@@ -73,7 +77,7 @@ void GenVertex::remove_particle_out( const GenParticlePtr& p ) {
 
 const FourVector& GenVertex::position() const {
 
-    if( !m_data.position.is_zero() ) return m_data.position;
+    if( has_set_position() ) return m_data.position;
 
     // No position information - search ancestors
     FOREACH( const GenParticlePtr &p, particles_in() ) {

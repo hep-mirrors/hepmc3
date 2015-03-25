@@ -91,6 +91,9 @@ namespace HepMC {
         /// FourVector(0,0,0,0) is returned if no position information is found.
         const FourVector& position() const;
 
+        /// @brief Check if position of this vertex is set
+        bool has_set_position() const { return !(m_data.position.is_zero()); }
+
         /// Set vertex position
         void set_position(const FourVector& new_pos); //!<
 
