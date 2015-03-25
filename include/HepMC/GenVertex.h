@@ -67,7 +67,7 @@ namespace HepMC {
         /// Get the vertex unique identifier
         ///
         /// @note This is not the same as id() in HepMC v2, which is now @c status()
-        int id() const { return status(); }
+        int id() const { return m_id; }
 
         /// Get vertex status code
         int status() const { return m_status; }
