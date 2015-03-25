@@ -12,6 +12,7 @@
  */
 #include "HepMC/GenEvent.h"
 #include "HepMC/ReaderAscii.h"
+#include "HepMC/Print.h"
 
 #include "TFile.h"
 
@@ -49,7 +50,7 @@ int main(int argc, char **argv) {
 
         if( events_parsed == 0 ) {
             cout << "First event: " << endl;
-            evt.print();
+	    Print::listing(evt);
         }
 
 	MyClass* myclass = new MyClass();

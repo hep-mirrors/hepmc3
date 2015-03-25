@@ -1,21 +1,23 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file Print.cc
 /// @brief Implementation of static \b class Print
+///
+/// @todo AB: Why a static class rather than some namespaced free functions?
 ///
 #include "HepMC/Print.h"
 #include "HepMC/Attribute.h"
 #include "HepMC/foreach.h"
 
 #include <iostream>
-using std::cout;
-using std::endl;
+using namespace std;
 
 namespace HepMC {
+
 
 void Print::content( const GenEvent &event ) {
     cout<<"--------------------------------"<<endl;
@@ -52,8 +54,8 @@ void Print::content( const GenEvent &event ) {
 void Print::listing( const GenEvent &event, unsigned short precision ) {
 
     // Find the current stream state
-    std::ios_base::fmtflags orig = cout.flags();
-    std::streamsize         prec = cout.precision();
+    ios_base::fmtflags orig = cout.flags();
+    streamsize         prec = cout.precision();
 
     // Set precision
     cout.precision( precision );
@@ -134,8 +136,8 @@ void Print::listing( const GenParticlePtr &p ) {
     cout.width(9);
     cout << p->pdg_id() << " ";
     cout.width(9);
-    cout.setf(std::ios::scientific, std::ios::floatfield);
-    cout.setf(std::ios_base::showpos);
+    cout.setf(ios::scientific, ios::floatfield);
+    cout.setf(ios_base::showpos);
 
     const FourVector &momentum = p->momentum();
 
@@ -147,8 +149,8 @@ void Print::listing( const GenParticlePtr &p ) {
     cout << momentum.pz() << ",";
     cout.width(9);
     cout << momentum.e() << " ";
-    cout.setf(std::ios::fmtflags(0), std::ios::floatfield);
-    cout.unsetf(std::ios_base::showpos);
+    cout.setf(ios::fmtflags(0), ios::floatfield);
+    cout.unsetf(ios_base::showpos);
     cout.width(3);
     cout << p->status();
 
@@ -186,11 +188,11 @@ void Print::line(const GenParticlePtr &p) {
     cout << p->pdg_id();
 
     // Find the current stream state
-    std::ios_base::fmtflags orig = cout.flags();
+    ios_base::fmtflags orig = cout.flags();
 
-    cout.setf(std::ios::scientific, std::ios::floatfield);
-    cout.setf(std::ios_base::showpos);
-    std::streamsize prec = cout.precision();
+    cout.setf(ios::scientific, ios::floatfield);
+    cout.setf(ios_base::showpos);
+    streamsize prec = cout.precision();
 
     // Set precision
     cout.precision( 2 );

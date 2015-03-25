@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef  HEPMC_FOURVECTOR_H
 #define  HEPMC_FOURVECTOR_H
@@ -40,6 +40,19 @@ public:
 
     double m()       const; //!< Calculate mass. Returns -sqrt(-m) if e^2 - P^2 is negative
     double length()  const; //!< Calculate length
+    double p()       const; //!< Magnitude of (x, y, z) vector
+    double pt()      const; //!< Magnitude of (x, y) vector
+    double phi()     const; //!< Calculate azimuthal angle
+    double theta()   const; //!< Calculate polar angle
+    double eta()     const; //!< Calculate pseudo-rapidity
+    double rap()     const; //!< Calculate rapidity
+    double abs_eta() const; //!< Calculate absolute pseudo-rapidity
+    double abs_rap() const; //!< Calculate absolute rapidity
+    double delta_phi  (const FourVector &v) const; //!< Azimuthal angle separation
+    double delta_theta(const FourVector &v) const; //!< Polar angle separation
+    double delta_eta  (const FourVector &v) const; //!< Pseudo-rapidity separation
+    double delta_rap  (const FourVector &v) const; //!< Rapidity separation
+    double delta_r    (const FourVector &v) const; //!< sqrt(dphi^2 + deta^2)
     bool   is_zero() const; //!< Check if the length of this vertex is zero
 
     bool        operator==(const FourVector& rhs) const;                            //!< Boolean operator ==
