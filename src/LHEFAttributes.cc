@@ -15,12 +15,12 @@ using namespace HepMC;
 using namespace LHEF;
 
 void HEPRUPAttribute::clear() {
-  for ( int i = 0, N = tags.size(); i < N; ++i ) delete tags[i];
-  tags.clear();
-  heprup.clear();
+    for ( int i = 0, N = tags.size(); i < N; ++i ) delete tags[i];
+    tags.clear();
+    heprup.clear();
 }
 
-bool HEPRUPAttribute::from_string(const string &att, const GenEvent &) {
+bool HEPRUPAttribute::from_string(const string &att) {
   bool found = false;
   clear();
   tags = XMLTag::findXMLTags(att);
@@ -47,17 +47,12 @@ void HEPEUPAttribute::clear() {
   hepeup.clear();
 }
 
-bool HEPEUPAttribute::from_string(const string &att, const GenEvent & geneve) {
-  clear();
-  tags = XMLTag::findXMLTags(att);
-  for ( int i = 0, N = tags.size(); i < N; ++i )
-      if ( tags[i]->name == "event" || tags[i]->name == "eventgroup") {
-	  if ( shared_ptr<HEPRUPAttribute> hepr
-	       = geneve.attribute<HEPRUPAttribute>("HEPRUP") ) {
-	      hepeup = HEPEUP(*tags[i], hepr->heprup);
-	      return true;
-	  }
-      }
+bool HEPEUPAttribute::from_string(const string &att) {
+    clear();
+    tags = XMLTag::findXMLTags(att);
+    for ( int i = 0, N = tags.size(); i < N; ++i )
+	if ( tags[i]->name == "event" || tags[i]->name == "eventgroup")
+	    return true;
   return false;
 }
 
@@ -72,14 +67,16 @@ bool HEPEUPAttribute::to_string(string &att) const {
   return true;
 }
 
-bool HEPEUPAttribute::parse(HEPRUP & heprup) {
-  bool found = false;
-  for ( int i = 0, N = tags.size(); i < N; ++i )
-    if ( tags[i]->name == "event" || tags[i]->name == "eventgroup" ) {
-      hepeup = HEPEUP(*tags[i], heprup);
-      found = true;
-    }
-  return true;
+bool HEPEUPAttribute::init(const GenEvent & geneve) {
+    shared_ptr<HEPRUPAttribute> hepr =
+	geneve.attribute<HEPRUPAttribute>("HEPRUP");
+    bool found = false;
+    for ( int i = 0, N = tags.size(); i < N; ++i )
+	if ( tags[i]->name == "event" || tags[i]->name == "eventgroup" ) {
+	    hepeup = HEPEUP(*tags[i], hepr->heprup);
+	    found = true;
+	}
+    return true;
 }
 
 

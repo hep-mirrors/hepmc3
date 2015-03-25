@@ -43,7 +43,7 @@ public:
   //
 public:
   /** @brief Fill class content from string */
-  virtual bool from_string(const string &att, const GenEvent & geneve);
+  virtual bool from_string(const string &att);
   
   /** @brief Fill string from class content */
   virtual bool to_string(string &att) const;
@@ -88,15 +88,15 @@ public:
   //
 public:
   /** @brief Fill class content from string */
-  virtual bool from_string(const string &att, const GenEvent & geneve);
+  virtual bool from_string(const string &att);
   
+  /** @brief Parse the XML-tags. */
+  virtual bool init(const GenEvent & geneve);
+
   /** @brief Fill string from class content */
   virtual bool to_string(string &att) const;
 
 public:
-
-  /** @brief Parse the XML-tags. */
-  bool parse(LHEF::HEPRUP & hepr);
 
   FourVector momentum(int i) const {
     return FourVector(hepeup.PUP[i][0], hepeup.PUP[i][1],

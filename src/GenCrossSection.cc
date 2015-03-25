@@ -15,7 +15,7 @@
 
 namespace HepMC {
 
-bool GenCrossSection::from_string(const string &att, const GenEvent &) {
+bool GenCrossSection::from_string(const string &att) {
     const char *cursor = att.data();
 
     cross_section = atof(cursor);

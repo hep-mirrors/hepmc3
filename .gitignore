@@ -55,3 +55,6 @@ rootIO/rootIO_Classes.h
 # working directories
 .build
 .test
+
+# check output files
+examples/LHEFExample/LHEF_example_out.lhe

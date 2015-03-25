@@ -45,7 +45,7 @@ public:
 //
 public:
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att, const GenEvent & geneve);
+    bool from_string(const string &att);
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(string &att) const;

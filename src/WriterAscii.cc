@@ -15,6 +15,7 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/Units.h"
 #include "HepMC/foreach.h"
+#include <cstring>
 
 namespace HepMC {
 

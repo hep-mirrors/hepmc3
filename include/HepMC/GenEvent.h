@@ -311,13 +311,16 @@ shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 
     if( !i2->second->is_parsed() ) {
 
-        shared_ptr<T> att = make_shared<T>();
-        att->from_string(i2->second->unparsed_string(), *this);
+	shared_ptr<T> att = make_shared<T>();
+        if ( att->from_string(i2->second->unparsed_string()) &&
+	     att->init(*this) ) {
+	    // update map with new pointer
+	    i2->second = att;
 
-        // update map with new pointer
-        i2->second = att;
-
-        return att;
+	    return att;
+	}
+	else 
+	    return shared_ptr<T>();
     }
     else return dynamic_pointer_cast<T>(i2->second);
 }

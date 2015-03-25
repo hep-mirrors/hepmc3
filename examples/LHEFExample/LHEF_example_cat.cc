@@ -81,8 +81,7 @@ int main(int argc, char ** argv) {
     }
 
     shared_ptr<HEPEUPAttribute> hepe = ev.attribute<HEPEUPAttribute>("HEPEUP");
-    if ( hepr ) hepe->parse(hepr->heprup);
-      for ( int i = 0, N = hepe->tags.size(); i < N; ++i )
+    for ( int i = 0, N = hepe->tags.size(); i < N; ++i )
 	if ( hepe->tags[i]->name != "event" &&
 	     hepe->tags[i]->name != "eventgroup" )
 	  hepe->tags[i]->print(writer.eventComments());

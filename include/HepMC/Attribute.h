@@ -52,11 +52,13 @@ protected:
 //
 public:
     /** @brief Fill class content from string.
-     *
-     * \a generve is a referenceto where the GenEvent object where the
-     * attribute is stored.
      */
-    virtual bool from_string(const string & att, const GenEvent & geneve) = 0;
+    virtual bool from_string(const string & att) = 0;
+
+    /** @brief Optionally initialize the attribute after from_string
+     *
+     */
+    virtual bool init(const GenEvent & geneve) {}
 
     /** @brief Fill string from class content */
     virtual bool to_string(string &att) const = 0;
@@ -112,7 +114,7 @@ public:
      *
      *  No parsing is needed
      */
-    bool from_string(const string &att, const GenEvent & geneve) {
+    bool from_string(const string &att) {
         return true;
     }
 

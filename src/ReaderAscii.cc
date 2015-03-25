@@ -13,6 +13,7 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/Units.h"
+#include <cstring>
 
 using std::vector;
 
