@@ -59,35 +59,34 @@ void WriterAscii::write_event(const GenEvent &evt) {
     flush();
 
     // Write units
-    m_cursor += sprintf(m_cursor, "U %s %s\n",Units::name(evt.momentum_unit()).c_str(),Units::name(evt.length_unit()).c_str());
+    m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
 
     // Write global attributes
     typedef map< string, shared_ptr<Attribute> >::value_type value_typeG;
-    FOREACH( value_typeG vglob, m_global_attributes )
-      m_cursor += sprintf(m_cursor, "A G %s \n",vglob.first.c_str());
+    FOREACH ( value_typeG vglob, m_global_attributes )
+      m_cursor += sprintf(m_cursor, "A G %s \n", vglob.first.c_str());
 
     // Write attributes
     typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
     typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
-
     FOREACH ( const value_type1& vt1, evt.attributes() ) {
         FOREACH ( const value_type2& vt2, vt1.second ) {
 
             if ( skip_global(vt1.first, vt2.second) ) continue;
 
             string st;
-            /// @todo This would be nicer as a return value of string & throw exception if there's a conversion problem
+            /// @todo This would be nicer as a return value of string & throw exception if there's a conversion problem...
             bool status = vt2.second->to_string(st);
 
             if ( !status ) {
                 /// @todo Surely failing to write out attrs is worth more than a warning?
-                WARNING( "WriterAscii::write_event: problem serializing attribute: "<<vt1.first )
+                WARNING( "WriterAscii::write_event: problem serializing attribute: " << vt1.first )
             } else {
                 if ( vt2.second->is_global() ) {
-                    m_cursor += sprintf(m_cursor, "A G %s ",vt1.first.c_str());
+                    m_cursor += sprintf(m_cursor, "A G %s ", vt1.first.c_str());
                 } else {
-                    m_cursor += sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
+                    m_cursor += sprintf(m_cursor, "A %i %s ", vt2.first, vt1.first.c_str());
                 }
                 flush();
                 write_string(escape(st));
@@ -135,7 +134,7 @@ void WriterAscii::allocate_buffer() {
         m_buffer = new char[ m_buffer_size ]();
         if (!m_buffer) {
             m_buffer_size /= 2;
-            WARNING( "WriterAscii::allocate_buffer: buffer size too large. Dividing by 2. New size: "<<m_buffer_size )
+            WARNING( "WriterAscii::allocate_buffer: buffer size too large. Dividing by 2. New size: " << m_buffer_size )
         }
     }
 
