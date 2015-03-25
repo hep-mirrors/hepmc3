@@ -23,17 +23,17 @@ inline double FourVector::length() const {
 }
 
 inline bool FourVector::is_zero() const {
-    return AlmostEqualZero(v1) &&
-           AlmostEqualZero(v2) &&
-           AlmostEqualZero(v3) &&
-           AlmostEqualZero(v4);
+    return (v1 == 0.0) &&
+           (v2 == 0.0) &&
+           (v3 == 0.0) &&
+           (v4 == 0.0);
 }
 
 inline bool FourVector::operator==(const FourVector& rhs) const {
-    return AlmostEqual2sComplement(v1,rhs.v1) &&
-           AlmostEqual2sComplement(v2,rhs.v2) &&
-           AlmostEqual2sComplement(v3,rhs.v3) &&
-           AlmostEqual2sComplement(v4,rhs.v4);
+    return (v1 == rhs.v1) &&
+           (v2 == rhs.v2) &&
+           (v3 == rhs.v3) &&
+           (v4 == rhs.v4);
 }
 
 inline FourVector FourVector::operator+(const FourVector& rhs) const {
@@ -92,13 +92,23 @@ inline void FourVector::operator/=(const double rhs) {
     v4 /= rhs;
 }
 
-inline bool FourVector::AlmostEqualZero(double A) {
-    return fabs(A) < Setup::DOUBLE_EPSILON;
-}
-
+/*
+/// @brief Compare floating-point numbers
+///
+/// Bruce Dawson algorithm for comparing floating-point numbers
+/// Implementation for 64-bit double precision
+/// Updated to remove strict-aliasing warnings
+///
+/// @see https://randomascii.wordpress.com/category/floating-point/
+///
+/// @param A first value
+/// @param B second value
+/// @param maxUlps maximum acceptable deviation in number of units in the last place
+///                maxUlps > 0 && maxUlps < 4 * 1024 * 1024
+///
 inline bool FourVector::AlmostEqual2sComplement(double A, double B, unsigned int maxUlps) {
 
-    // @todo Currently only works on 64-bit machine 
+    // @todo Currently only works on 64-bit machine
   //    BOOST_STATIC_ASSERT( sizeof(double)==8 && sizeof(long long)==8 );
     static const long long MASK = 0x8000000000000000;
 
@@ -124,5 +134,6 @@ inline bool FourVector::AlmostEqual2sComplement(double A, double B, unsigned int
 
     return false;
 }
+*/
 
 } // namespace HepMC
