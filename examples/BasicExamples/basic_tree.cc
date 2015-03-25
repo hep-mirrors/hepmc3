@@ -95,7 +95,7 @@ int main() {
     // 1)
     cout << endl << "Find all stable particles: " << endl;
 
-    FindParticles search(evt, FIND_ALL, STATUS == 1 && STATUS_SUBCODE == 0);
+    FindParticles search(evt, FIND_ALL, STATUS == 1);
 
     FOREACH( const GenParticlePtr &p, search.results() ) {
         Print::line(p);

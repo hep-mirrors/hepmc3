@@ -24,7 +24,6 @@ namespace HepMC {
 struct GenParticleData {
     int        pdg_id;            ///< PDG ID
     int        status;            ///< Status
-    int        status_subcode;    ///< Status subcode
     bool       is_mass_set;       ///< Check if generated mass is set
     double     mass;              ///< Generated mass (if set)
     FourVector momentum;          ///< Momentum

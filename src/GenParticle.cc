@@ -22,7 +22,6 @@ m_id(0) {
     m_data.pdg_id            = pdg_id;
     m_data.momentum          = momentum;
     m_data.status            = status;
-    m_data.status_subcode    = 0;
     m_data.is_mass_set       = false;
     m_data.mass              = 0.0;
 }
@@ -44,10 +43,6 @@ void GenParticle::set_pdg_id(int pdg_id) {
 
 void GenParticle::set_status(int status) {
     m_data.status = status;
-}
-
-void GenParticle::set_status_subcode(int subcode) {
-    m_data.status_subcode = subcode;
 }
 
 void GenParticle::set_momentum(const FourVector& momentum) {

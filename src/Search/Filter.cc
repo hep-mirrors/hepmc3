@@ -35,7 +35,6 @@ bool Filter::passed_int_filter(const GenParticlePtr &p ) const {
 
     switch(m_int) {
         case STATUS:          value = p->status();          break;
-        case STATUS_SUBCODE:  value = p->status_subcode();  break;
         case PDG_ID:          value = p->pdg_id();          break;
         case ABS_PDG_ID:      value = abs( p->pdg_id() );   break;
         default:
