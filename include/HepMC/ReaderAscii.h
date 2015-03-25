@@ -38,7 +38,7 @@ public:
 
     /// @brief Return status of the stream
     ///
-    /// @todo Rename!
+    /// @todo Remove!
     int rdstate() { return m_file.rdstate(); }
 
     /// @brief Close file stream
@@ -64,6 +64,14 @@ public:
     /// @param[in]  buf Line of text that needs to be parsed
     /// @return vertices count and particles count for verification
     std::pair<int,int> parse_event_information(GenEvent &evt, const char *buf);
+
+    /// @brief Parse weight value lines
+    ///
+    /// Helper routine for parsing weight value information
+    /// @param[out] evt Event whose GenWeights will be filled with weight values
+    /// @param[in]  buf Line of text that needs to be parsed
+    ///
+    bool parse_weight_values(GenEvent &evt, const char *buf);
 
     /// @brief Parse units
     ///

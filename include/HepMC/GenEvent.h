@@ -72,7 +72,9 @@ public:
     void set_event_number(int num) { m_event_number = num; }
 
     /// Get event weights
-    const GenWeights& weights() const {}
+    const GenWeights& weights() const { return m_weights; }
+    /// Get event weights (non-const)
+    GenWeights& weights() { return m_weights; }
     /// Get canonical event weight (might not exist...)
     double weight() const { return weights()[0]; }
     const GenVertexPtr& event_pos() const { return m_event_pos; }
