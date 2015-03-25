@@ -99,6 +99,9 @@ namespace HepMC {
         ///
         /// @todo We need a way to check if there is a position on _this_ vertex, without messing up the interface. Is has_position() too intrusive?
         const FourVector& position() const;
+        /// @brief Check if position of this vertex is set
+        bool has_set_position() const { return !(m_data.position.is_zero()); }
+
         /// Set vertex position
         void set_position(const FourVector& new_pos); //!<
 

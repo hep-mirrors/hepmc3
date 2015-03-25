@@ -53,18 +53,23 @@ void Print::content( const GenEvent &event ) {
 
 void Print::listing( const GenEvent &event, unsigned short precision ) {
 
+    // Find the current stream state
+    ios_base::fmtflags orig = cout.flags();
+    streamsize         prec = cout.precision();
+
+    // Set precision
+    cout.precision( precision );
+
     cout << "________________________________________________________________________" << endl;
     cout << "GenEvent: #" << event.event_number() << endl;
     cout << " Momenutm units: " << Units::name(event.momentum_unit())
          << " Position units: " << Units::name(event.length_unit()) << endl;
     cout << " Entries in this event: " << event.vertices().size() << " vertices, "
          << event.particles().size() << " particles." << endl;
+    cout << " root vertex: " << event.event_pos()->particles_out().size();
 
-    pair<GenParticlePtr,GenParticlePtr> beam_particles = event.beam_particles();
-    cout << " Beam particle indexes:";
-    if(beam_particles.first) cout << " " << beam_particles.first->id();
-    if(beam_particles.second) cout << " " << beam_particles.second->id();
-    cout << "\n";
+    const FourVector &pos = event.event_pos()->position();
+    cout << ", position offset: " << pos.x() << ", " << pos.y() << ", " << pos.z() << ", " << pos.t() <<endl;
 
     // Print a legend to describe the particle info
     cout << "                                    GenParticle Legend" << endl;
@@ -72,13 +77,6 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
          << "( Px,       Py,       Pz,     E )"
          << "   Stat ProdVtx" << endl;
     cout << "________________________________________________________________________" << endl;
-
-    // Find the current stream state
-    ios_base::fmtflags orig = cout.flags();
-    streamsize         prec = cout.precision();
-
-    // Set precision
-    cout.precision( precision );
 
     // Print all vertices
     FOREACH( const GenVertexPtr &v, event.vertices() ) {
@@ -174,12 +172,11 @@ void Print::line(const GenVertexPtr &v) {
     cout << " out: " << v->particles_out().size();
 
     const FourVector &pos = v->position();
-    if( !pos.is_zero() ) {
-        cout << " @ " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
-    }
-    else cout << " (X,cT): 0";
+    cout << " has_set_position: ";
+    if( v->has_set_position() ) cout << "true";
+    else                        cout << "false";
 
-    cout << endl;
+    cout << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t() << endl;
 }
 
 void Print::line(const GenParticlePtr &p) {

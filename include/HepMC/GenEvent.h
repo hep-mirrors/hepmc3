@@ -50,6 +50,9 @@ public:
     const std::vector<GenParticlePtr>& particles() const { return m_particles; }
     /// @brief Get/set list of vertices
     const std::vector<GenVertexPtr>& vertices() const { return m_vertices; }
+    /// @brief Offset position of all vertices in the event
+    void offset_position( const FourVector &op );
+
 
     //@}
 
@@ -68,6 +71,8 @@ public:
     GenWeights& weights() { return m_weights; }
     /// Get canonical event weight (might not exist...)
     double weight() const { return weights()[0]; }
+    const GenVertexPtr& event_pos() const { return m_event_pos; }
+
 
     /// @brief Get momentum unit
     const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit; }
@@ -98,17 +103,6 @@ public:
     /// @name Beam particles
     //@{
 
-    /// @brief Test to see if we have two valid beam particles
-    bool valid_beam_particles() const { return (bool)m_beam_particle_1 && (bool)m_beam_particle_2; }
-
-    /// @brief Get incoming beam particles
-    std::pair<GenParticlePtr,GenParticlePtr> beam_particles() const { return std::make_pair(m_beam_particle_1,m_beam_particle_2); }
-
-    /// @brief Set incoming beam particles
-    /// @todo Set/require status = 4 at the same time?
-    void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) { m_beam_particle_1 = p1; m_beam_particle_2 = p2; }
-
-    /// @brief Set incoming beam particles
     /// @todo Set/require status = 4 at the same time?
     void set_beam_particles(const std::pair<GenParticlePtr,GenParticlePtr>& p) { m_beam_particle_1 = p.first; m_beam_particle_2 = p.second; }
 
@@ -117,7 +111,6 @@ public:
 
     /// @name Attributes
     //@{
-
     /// @brief Add event attribute to event
     ///
     /// This will overwrite existing attribute if an attribute
@@ -271,6 +264,28 @@ public:
     /// @deprecated Backward compatibility
     HEPMC_DEPRECATED("Use vertices().empty() instead")
     bool vertices_empty()  const { return m_vertices.empty();  }
+
+    /// @brief Test to see if we have exactly two particles in event_pos() vertex
+    /// @deprecated Backward compatibility
+    HEPMC_DEPRECATED("Use event_pos().particles_out() to access beam particles")
+    bool valid_beam_particles() const;
+
+    /// @brief Get first two particles of the event_pos() vertex
+    /// @deprecated Backward compatibility
+    HEPMC_DEPRECATED("Use event_pos().particles_out() to access beam particles")
+    std::pair<GenParticlePtr,GenParticlePtr> beam_particles() const;
+
+    /// @brief Set incoming beam particles
+    /// @deprecated Backward compatibility
+    /// @todo Set/require status = 4 at the same time?
+    HEPMC_DEPRECATED("instead add particle without production vertex to the event")
+    void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2);
+
+    /// @brief Set incoming beam particles
+    /// @deprecated Backward compatibility
+    /// @todo Set/require status = 4 at the same time?
+    HEPMC_DEPRECATED("instead add particle without production vertex to the event")
+    void set_beam_particles(const std::pair<GenParticlePtr,GenParticlePtr>& p);
 
     #endif
 
