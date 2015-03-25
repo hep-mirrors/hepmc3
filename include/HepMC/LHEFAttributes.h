@@ -43,7 +43,7 @@ public:
   //
 public:
   /** @brief Fill class content from string */
-  virtual bool from_string(const string &att);
+  virtual bool from_string(const string &att, const GenEvent & geneve);
   
   /** @brief Fill string from class content */
   virtual bool to_string(string &att) const;
@@ -88,7 +88,7 @@ public:
   //
 public:
   /** @brief Fill class content from string */
-  virtual bool from_string(const string &att);
+  virtual bool from_string(const string &att, const GenEvent & geneve);
   
   /** @brief Fill string from class content */
   virtual bool to_string(string &att) const;

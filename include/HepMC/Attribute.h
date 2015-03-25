@@ -23,6 +23,8 @@ using std::string;
 
 namespace HepMC {
 
+class GenEvent;
+
 class Attribute {
 //
 // Constructors
@@ -49,8 +51,12 @@ protected:
 // Virtual Functions
 //
 public:
-    /** @brief Fill class content from string */
-    virtual bool from_string(const string &att) = 0;
+    /** @brief Fill class content from string.
+     *
+     * \a generve is a referenceto where the GenEvent object where the
+     * attribute is stored.
+     */
+    virtual bool from_string(const string & att, const GenEvent & geneve) = 0;
 
     /** @brief Fill string from class content */
     virtual bool to_string(string &att) const = 0;
@@ -106,7 +112,7 @@ public:
      *
      *  No parsing is needed
      */
-    bool from_string(const string &att) {
+    bool from_string(const string &att, const GenEvent & geneve) {
         return true;
     }
 

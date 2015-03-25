@@ -15,7 +15,7 @@
 
 namespace HepMC {
 
-bool GenPdfInfo::from_string(const string &att) {
+bool GenPdfInfo::from_string(const string &att, const GenEvent &) {
     const char *cursor = att.data();
 
     parton_id[0] = atoi(cursor);

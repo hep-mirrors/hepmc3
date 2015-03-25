@@ -9,6 +9,7 @@
  */
 
 #include "HepMC/LHEFAttributes.h"
+#include "HepMC/GenEvent.h"
 
 using namespace HepMC;
 using namespace LHEF;
@@ -19,7 +20,7 @@ void HEPRUPAttribute::clear() {
   heprup.clear();
 }
 
-bool HEPRUPAttribute::from_string(const string &att) {
+bool HEPRUPAttribute::from_string(const string &att, const GenEvent &) {
   bool found = false;
   clear();
   tags = XMLTag::findXMLTags(att);
@@ -46,11 +47,17 @@ void HEPEUPAttribute::clear() {
   hepeup.clear();
 }
 
-bool HEPEUPAttribute::from_string(const string &att) {
+bool HEPEUPAttribute::from_string(const string &att, const GenEvent & geneve) {
   clear();
   tags = XMLTag::findXMLTags(att);
   for ( int i = 0, N = tags.size(); i < N; ++i )
-    if ( tags[i]->name == "event" || tags[i]->name == "eventgroup") return true;
+      if ( tags[i]->name == "event" || tags[i]->name == "eventgroup") {
+	  if ( shared_ptr<HEPRUPAttribute> hepr
+	       = geneve.attribute<HEPRUPAttribute>("HEPRUP") ) {
+	      hepeup = HEPEUP(*tags[i], hepr->heprup);
+	      return true;
+	  }
+      }
   return false;
 }
 

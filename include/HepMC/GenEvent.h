@@ -312,7 +312,7 @@ shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
     if( !i2->second->is_parsed() ) {
 
         shared_ptr<T> att = make_shared<T>();
-        att->from_string(i2->second->unparsed_string());
+        att->from_string(i2->second->unparsed_string(), *this);
 
         // update map with new pointer
         i2->second = att;

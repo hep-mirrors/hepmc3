@@ -15,7 +15,7 @@
 
 namespace HepMC {
 
-bool GenHeavyIon::from_string(const string &att) {
+bool GenHeavyIon::from_string(const string &att, const GenEvent &) {
     const char *cursor = att.data();
 
     Ncoll_hard = atoi(cursor);
