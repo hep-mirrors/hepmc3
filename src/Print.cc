@@ -51,7 +51,7 @@ void Print::content( const GenEvent &event ) {
 
 void Print::listing( const GenEvent &event, unsigned short precision ) {
 
-    cout << "________________________________________________________________________________" << endl;
+    cout << "________________________________________________________________________" << endl;
     cout << "GenEvent: #" << event.event_number() << endl;
     cout << " Momenutm units: " << Units::name(event.momentum_unit())
          << " Position units: " << Units::name(event.length_unit()) << endl;
@@ -68,8 +68,8 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
     cout << "                                    GenParticle Legend" << endl;
     cout << "         id    PDG ID   "
          << "( Px,       Py,       Pz,     E )"
-         << "   Stat-Subst  ProdVtx" << endl;
-    cout << "________________________________________________________________________________" << endl;
+         << "   Stat ProdVtx" << endl;
+    cout << "________________________________________________________________________" << endl;
 
     // Find the current stream state
     std::ios_base::fmtflags orig = cout.flags();
@@ -86,7 +86,7 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
     // Restore the stream state
     cout.flags(orig);
     cout.precision(prec);
-    cout << "________________________________________________________________________________" << endl;
+    cout << "________________________________________________________________________" << endl;
 }
 
 void Print::listing( const GenVertexPtr &v ) {
@@ -153,12 +153,6 @@ void Print::listing( const GenParticlePtr &p ) {
     cout.unsetf(std::ios_base::showpos);
     cout.width(3);
     cout << p->status();
-    if( p->status_subcode() ) {
-        cout << "-";
-        cout.width(9);
-        cout << std::left << p->status_subcode() << std::right;
-    }
-    else cout << "          ";
 
     GenVertexPtr prod = p->production_vertex();
     

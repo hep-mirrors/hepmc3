@@ -57,7 +57,6 @@ public:
 
     int   pdg_id()                const { return m_data.pdg_id;         } //!< Get PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
-    int   status_subcode()        const { return m_data.status_subcode; } //!< Get status subcode
     const FourVector& momentum()  const { return m_data.momentum;       } //!< Get momentum
     bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
 
@@ -73,7 +72,6 @@ public:
 
     void set_pdg_id(int pdg_id);                   //!< Set PDG ID
     void set_status(int status);                   //!< Set status code
-    void set_status_subcode(int subcode);          //!< Set status subcode
     void set_momentum(const FourVector& momentum); //!< Set momentum
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
