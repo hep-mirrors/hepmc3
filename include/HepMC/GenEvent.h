@@ -69,33 +69,6 @@ public:
     //@}
 
 
-public:
-
-    // /// @brief Get/set list of particles (const view)
-    // const std::vector<GenParticlePtr>& particles() {
-    //   return reinterpret_cast< const std::vector<const GenParticlePtr>& >(m_particles);
-    // }
-    // /// @brief Get/set list of vertices (const view)
-    // const std::vector<GenParticlePtr>& particles() const {
-    //   return reinterpret_cast< const std::vector<const GenParticlePtr>& >(m_particles);
-    // }
-
-    // const std::vector< SmartPointer<const GenParticle> >& particles() const {
-    //   return reinterpret_cast< const std::vector< SmartPointer<const GenParticle> >& >(m_particles);
-    // }
-    //   std::vector<ConstGenParticlePtr> rtn; rtn.reserve(m_particles.size());
-    //   FOREACH (GenParticlePtr p, m_particles)
-    //     rtn.push_back( const_pointer_cast<const GenParticle>(p) );
-    //   return rtn;
-    // }
-    // /// @brief Get/set list of vertices (const view)
-    // const std::vector< SmartPointer<const GenVertex> >& vertices() const {
-    //   return reinterpret_cast< const std::vector< SmartPointer<const GenVertex> >& >(m_vertices);
-    // }
-
-    //@}
-
-
     /// @name Event weights
     //@{
 
