@@ -13,11 +13,10 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/Setup.h"
 #include "HepMC/Attribute.h"
-#include "HepMC/foreach.h"
-
 #include <algorithm> // std::remove
 
 namespace HepMC {
+
 
 GenVertex::GenVertex( const FourVector& position ):
 m_event(NULL),

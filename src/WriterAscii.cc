@@ -15,15 +15,14 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/Units.h"
 
-#include "HepMC/foreach.h"
 #include <cstring>
 using namespace std;
 
 namespace HepMC {
 
-WriterAscii::WriterAscii(const std::string &filename,
-			 shared_ptr<GenRunInfo> run):
-    m_file(filename),
+
+WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run)
+  : m_file(filename),
     m_precision(16),
     m_buffer(NULL),
     m_cursor(NULL),

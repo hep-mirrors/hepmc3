@@ -15,9 +15,7 @@
 #include "HepMC/Data/GenEventData.h"
 #include "HepMC/Search/FindParticles.h"
 
-#include "HepMC/foreach.h"
 #include <deque>
-
 using namespace std;
 
 namespace HepMC {

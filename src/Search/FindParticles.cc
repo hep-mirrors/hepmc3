@@ -15,11 +15,9 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
-#include "HepMC/Setup.h"
-
-#include <HepMC/foreach.h>
 
 namespace HepMC {
+
 
 FindParticles::FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list) {
 

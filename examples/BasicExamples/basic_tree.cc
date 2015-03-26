@@ -13,14 +13,9 @@
 #include "HepMC/Search/FindParticles.h"
 #include "HepMC/Print.h"
 
-// Useful definition of a FOREACH loop that either uses BOOST_FOREACH
-// or c++11 'foreach' loop depending on the HepMC installation options
-#include "HepMC/foreach.h"
-
-#include <iostream>
 using namespace HepMC;
-using std::cout;
-using std::endl;
+using namespace std;
+
 
 /** Main program */
 int main() {

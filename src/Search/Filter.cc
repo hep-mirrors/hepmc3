@@ -13,11 +13,9 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
-#include "HepMC/Setup.h"
-
-#include "HepMC/foreach.h"
 
 namespace HepMC {
+
 
 bool Filter::passed_filter(const GenParticlePtr &p) const {
 

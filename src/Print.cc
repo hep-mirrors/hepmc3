@@ -11,9 +11,7 @@
 ///
 #include "HepMC/Print.h"
 #include "HepMC/Attribute.h"
-#include "HepMC/foreach.h"
 
-#include <iostream>
 using namespace std;
 
 namespace HepMC {

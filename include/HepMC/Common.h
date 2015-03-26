@@ -5,6 +5,8 @@
 #ifndef HEPMC_COMMON_H
 #define HEPMC_COMMON_H
 
+/// @todo Rename to e.g. HepMC/Build/Utils.h?
+
 #include <vector>
 #include <map>
 #include <string>
@@ -15,6 +17,15 @@
 /// Neater/extensible C++11 availability test
 #if __cplusplus >= 201103L
 #define HEPMC_HAS_CXX11
+#endif
+
+
+/// Define a FOREACH directive
+#ifdef  HEPMC_HAS_CXX11
+#define FOREACH( iterator, container ) for ( iterator: container )
+#else
+#include <boost/foreach.hpp>
+#define FOREACH( iterator, container ) BOOST_FOREACH( iterator, container )
 #endif
 
 
