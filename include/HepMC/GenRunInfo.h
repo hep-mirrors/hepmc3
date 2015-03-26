@@ -10,19 +10,10 @@
 #ifndef  HEPMC_GENRUNINFO_H
 #define  HEPMC_GENRUNINFO_H
 
+#include "HepMC/Common.h"
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Units.h"
 #include "HepMC/Attribute.h"
-
-#include <map>
-using std::map;
-using std::make_pair;
-
-#if __cplusplus >= 201103L
-using std::dynamic_pointer_cast;
-#else
-using boost::dynamic_pointer_cast;
-#endif
 
 namespace HepMC {
 
@@ -41,7 +32,7 @@ public:
 
     /// @brief Returns true if this is a plain default-constructed object.
     bool empty() const {
-	return m_attributes.empty();
+      return m_attributes.empty();
     }
 
     /// @brief add an attribute
@@ -54,7 +45,7 @@ public:
 
     /// @brief Remove attribute
     void remove_attribute(const string &name) {
-	m_attributes.erase(name);
+      m_attributes.erase(name);
     }
 
     /// @brief Get attribute of type T
@@ -62,9 +53,10 @@ public:
     shared_ptr<T> attribute(const string &name) const;
 
     /// @brief Get list of attributes
-    const map< string, shared_ptr<Attribute> > & attributes() const {
-	return m_attributes;
+    const std::map< std::string, shared_ptr<Attribute> > & attributes() const {
+      return m_attributes;
     }
+
 
 private:
 
@@ -72,10 +64,11 @@ private:
     //@{
 
     /// @brief Map of attributes
-    mutable map< string, shared_ptr<Attribute> > m_attributes;
+    mutable std::map< std::string, shared_ptr<Attribute> > m_attributes;
     //@}
 
 };
+
 
 //
 // Template methods
@@ -84,8 +77,8 @@ private:
 template<class T>
 shared_ptr<T> GenRunInfo::attribute(const string &name) const {
 
-    map< string, shared_ptr<Attribute> >::iterator i =
-	m_attributes.find(name);
+    std::map< std::string, shared_ptr<Attribute> >::iterator i =
+      m_attributes.find(name);
     if( i == m_attributes.end() ) return shared_ptr<T>();
 
     if( !i->second->is_parsed() ) {
@@ -98,11 +91,12 @@ shared_ptr<T> GenRunInfo::attribute(const string &name) const {
 
 	    return att;
 	}
-	else 
+	else
 	    return shared_ptr<T>();
     }
     else return dynamic_pointer_cast<T>(i->second);
 }
+
 
 } // namespace HepMC
 
