@@ -18,7 +18,6 @@
 namespace HepMC {
 
 
-
 /// @brief Stores run-related information
 ///
 /// Manages run-related information.
@@ -30,10 +29,29 @@ public:
     /// @brief Default constructor
     GenRunInfo() {}
 
-    /// @brief Returns true if this is a plain default-constructed object.
-    bool empty() const {
-      return m_attributes.empty();
+    /// @brief Check if a weight name is present.
+    bool has_weight(string name) const {
+  	return m_weight_indices.find(name) !=  m_weight_indices.end();
     }
+
+    /// @brief Return the index corresponding to a weight name.
+    /// @return -1 if name was not found
+    int weight_index(string name) const {
+	std::map<std::string, int>::const_iterator it =
+	    m_weight_indices.find(name);
+	return it == m_weight_indices.end()? -1: it->second;
+    }
+
+    /// @brief Get the vector of weight names.
+    const std::vector<std::string> & weight_names() const {
+	return m_weight_names;
+    }
+
+    /// @brief Set the names of the weights in this run.
+    ///
+    /// For consistency, the length of the vector should be the same as
+    /// the number of weights in the events in the run.
+    void set_weight_names(const std::vector<std::string> & names);
 
     /// @brief add an attribute
     /// This will overwrite existing attribute if an attribute
@@ -62,6 +80,12 @@ private:
 
     /// @name Fields
     //@{
+
+    /// @brief A map of weight names mapping to indices.
+    std::map<std::string, int> m_weight_indices;
+
+    /// @brief A vector of weight names.
+    std::vector<std::string> m_weight_names;
 
     /// @brief Map of attributes
     mutable std::map< std::string, shared_ptr<Attribute> > m_attributes;

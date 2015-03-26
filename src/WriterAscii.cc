@@ -60,9 +60,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
 	set_run_info(evt.run_info());
 	write_run_info();
     } else {
-	if ( evt.run_info() && run_info() != evt.run_info()
-	     && !evt.run_info()->empty() ) 
-	    WARNING( "WriterAscii::write_event: GenEvents contain different GenRunInfo objects - only the first such object will be serialized." )
+	if ( evt.run_info() && run_info() != evt.run_info() )
+	    WARNING( "WriterAscii::write_event: GenEvents contain "
+		     "different GenRunInfo objects from - only the "
+		     "first such object will be serialized." )
     }
 
     // Write event info
@@ -76,7 +77,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Write weight values if present
     if ( evt.weights().size() ) {
       m_cursor += sprintf(m_cursor, "W ");
-      FOREACH (double w, evt.weights().values())
+      FOREACH (double w, evt.weights())
 	m_cursor += sprintf(m_cursor, "%e ", w);
       m_cursor += sprintf(m_cursor, "\n");
       flush();
@@ -105,10 +106,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
             }
         }
     }
-    
+
     int vertices_processed = 0;
     int lowest_vertex_id   = 0;
-    
+
     // Print particles
     FOREACH ( const GenParticlePtr &p, evt.particles() ) {
 
@@ -227,10 +228,9 @@ void WriterAscii::write_run_info() {
 
     allocate_buffer();
 
-    if ( !run_info() ) {
-	WARNING("WriterAscii::write_run_info: No run info object." )
-	    return;
-    }
+    // If no run info object set, create a dummy one.
+    if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
+
     typedef map< std::string, shared_ptr<Attribute> >::value_type value_type;
     FOREACH( value_type att, run_info()->attributes() ) {
 	string st;
@@ -247,7 +247,7 @@ void WriterAscii::write_run_info() {
 	}
     }
 }
-    
+
 void WriterAscii::write_particle(const GenParticlePtr &p, int second_field) {
 
     m_cursor += sprintf(m_cursor,"P %i",p->id());
