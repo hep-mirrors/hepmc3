@@ -16,6 +16,7 @@
 ///
 #include "HepMC/Writer.h"
 #include "HepMC/GenEvent.h"
+#include "HepMC/GenRunInfo.h"
 #include <string>
 #include <fstream>
 
@@ -26,7 +27,8 @@ public:
 
     /// @brief Constructor
     /// @warning If file already exists, it will be cleared before writing
-    WriterAscii(const std::string& filename);
+    WriterAscii(const std::string& filename,
+		shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
     /// @brief Destructor
     ~WriterAscii();
@@ -35,6 +37,9 @@ public:
     ///
     /// @param[in] evt Event to be serialized
     void write_event(const GenEvent& evt);
+
+    /// @brief Write the GenRunInfo object to file.
+    void write_run_info();
 
     /// @brief Return status of the stream
     ///
@@ -79,11 +84,6 @@ private:
     /// @brief Escape '\' and '\n' characters in string
     std::string escape(const std::string s);
 
-    /// @brief Skip global attribute
-    ///
-    /// @todo rewrite global attributes altogether
-    bool skip_global(std::string name, shared_ptr<Attribute> att);
-
     /// Inline function flushing buffer to output stream when close to buffer capacity
     void flush();
 
@@ -122,8 +122,6 @@ private:
     char* m_cursor;  //!< Cursor inside stream buffer
     unsigned long m_buffer_size; //!< Buffer size
 
-    /** @brief Store attributes global to the run being written/read. */
-    std::map< std::string, shared_ptr<Attribute> > m_global_attributes;
 };
 
 

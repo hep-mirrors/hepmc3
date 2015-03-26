@@ -21,20 +21,21 @@ using namespace std;
 
 namespace HepMC {
 
-
-WriterAscii::WriterAscii(const string &filename)
-  : m_file(filename),
+WriterAscii::WriterAscii(const std::string &filename,
+			 shared_ptr<GenRunInfo> run):
+    m_file(filename),
     m_precision(16),
     m_buffer(NULL),
     m_cursor(NULL),
-    m_buffer_size( 256*1024 )
-{
-    if ( !m_file.is_open() ) {
-        ERROR( "WriterAscii: could not open output file: " << filename )
-    }
+    m_buffer_size( 256*1024 ) {
+    set_run_info(run);
+    if( !m_file.is_open() ) {
+        ERROR( "WriterAscii: could not open output file: "<<filename )
+	    }
     else {
-        m_file << "HepMC::Version " << HepMC::version() << endl;
-        m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << endl;
+        m_file << "HepMC::Version " << HepMC::version() << std::endl;
+        m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
+	if ( run_info() ) write_run_info();
     }
 }
 
@@ -46,6 +47,7 @@ WriterAscii::~WriterAscii() {
 
 
 void WriterAscii::write_event(const GenEvent &evt) {
+
     if ( !m_file.is_open() ) return;
 
     allocate_buffer();
@@ -53,6 +55,15 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
     // Make sure nothing was left from previous event
     flush();
+
+    if ( !run_info() ) {
+	set_run_info(evt.run_info());
+	write_run_info();
+    } else {
+	if ( evt.run_info() && run_info() != evt.run_info()
+	     && !evt.run_info()->empty() ) 
+	    WARNING( "WriterAscii::write_event: GenEvents contain different GenRunInfo objects - only the first such object will be serialized." )
+    }
 
     // Write event info
     m_cursor += sprintf(m_cursor, "E %d %lu %lu\n", evt.event_number(), evt.vertices().size(), evt.particles().size());
@@ -62,17 +73,14 @@ void WriterAscii::write_event(const GenEvent &evt) {
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
 
-    // Write weight values
-    m_cursor += sprintf(m_cursor, "W ");
-    FOREACH (double w, evt.weights().values())
-      m_cursor += sprintf(m_cursor, "%e ", w);
-    m_cursor += sprintf(m_cursor, "\n");
-    flush();
-
-    // Write global attributes
-    typedef map< string, shared_ptr<Attribute> >::value_type value_typeG;
-    FOREACH ( value_typeG vglob, m_global_attributes )
-      m_cursor += sprintf(m_cursor, "A G %s \n", vglob.first.c_str());
+    // Write weight values if present
+    if ( evt.weights().size() ) {
+      m_cursor += sprintf(m_cursor, "W ");
+      FOREACH (double w, evt.weights().values())
+	m_cursor += sprintf(m_cursor, "%e ", w);
+      m_cursor += sprintf(m_cursor, "\n");
+      flush();
+    }
 
     // Write attributes
     typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
@@ -80,21 +88,16 @@ void WriterAscii::write_event(const GenEvent &evt) {
     FOREACH ( const value_type1& vt1, evt.attributes() ) {
         FOREACH ( const value_type2& vt2, vt1.second ) {
 
-            if ( skip_global(vt1.first, vt2.second) ) continue;
-
             string st;
             /// @todo This would be nicer as a return value of string & throw exception if there's a conversion problem...
             bool status = vt2.second->to_string(st);
 
-            if ( !status ) {
-                /// @todo Surely failing to write out attrs is worth more than a warning?
-                WARNING( "WriterAscii::write_event: problem serializing attribute: " << vt1.first )
-            } else {
-                if ( vt2.second->is_global() ) {
-                    m_cursor += sprintf(m_cursor, "A G %s ", vt1.first.c_str());
-                } else {
-                    m_cursor += sprintf(m_cursor, "A %i %s ", vt2.first, vt1.first.c_str());
-                }
+            if( !status ) {
+                WARNING( "WriterAscii::write_event: problem serializing attribute: "<<vt1.first )
+            }
+            else {
+		m_cursor +=
+		    sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
                 flush();
                 write_string(escape(st));
                 m_cursor += sprintf(m_cursor, "\n");
@@ -102,10 +105,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
             }
         }
     }
-
+    
     int vertices_processed = 0;
     int lowest_vertex_id   = 0;
-
+    
     // Print particles
     FOREACH ( const GenParticlePtr &p, evt.particles() ) {
 
@@ -167,16 +170,6 @@ string WriterAscii::escape(const string s) {
     return ret;
 }
 
-
-bool WriterAscii::skip_global(string name, shared_ptr<Attribute> att) {
-    if ( !att->is_global() ) return false;
-    map< string, shared_ptr<Attribute> >::iterator globit = m_global_attributes.find(name);
-    if ( globit != m_global_attributes.end() ) return true;
-    m_global_attributes[name] = att;
-    return false;
-}
-
-
 void WriterAscii::write_vertex(const GenVertexPtr &v) {
 
     m_cursor += sprintf( m_cursor, "V %i [",v->id() );
@@ -230,7 +223,31 @@ inline void WriterAscii::forced_flush() {
     m_cursor = m_buffer;
 }
 
+void WriterAscii::write_run_info() {
 
+    allocate_buffer();
+
+    if ( !run_info() ) {
+	WARNING("WriterAscii::write_run_info: No run info object." )
+	    return;
+    }
+    typedef map< std::string, shared_ptr<Attribute> >::value_type value_type;
+    FOREACH( value_type att, run_info()->attributes() ) {
+	string st;
+	if ( ! att.second->to_string(st) ) {
+	    WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
+		}
+	else {
+	    m_cursor +=
+		sprintf(m_cursor, "A %s ", att.first.c_str());
+	    flush();
+	    write_string(escape(st));
+	    m_cursor += sprintf(m_cursor, "\n");
+	    flush();
+	}
+    }
+}
+    
 void WriterAscii::write_particle(const GenParticlePtr &p, int second_field) {
 
     m_cursor += sprintf(m_cursor,"P %i",p->id());

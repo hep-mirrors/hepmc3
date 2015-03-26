@@ -23,7 +23,11 @@ using std::string;
 
 namespace HepMC {
 
+/** @brief Forward declaration of GenEvent. */
 class GenEvent;
+
+/** @brief Forward declaration of GenRunInfo. */
+class GenRunInfo;
 
 class Attribute {
 //
@@ -57,20 +61,24 @@ public:
 
     /** @brief Optionally initialize the attribute after from_string
      *
+     * Is passed a reference to the GenEvent object to which the
+     * Attribute belongs.
      */
-    virtual bool init(const GenEvent & geneve) {}
+    virtual bool init(const GenEvent & geneve) {
+	return true;
+    }
+
+    /** @brief Optionally initialize the attribute after from_string
+     *
+     * Is passed a reference to the GenRunInfo object to which the
+     * Attribute belongs.
+     */
+    virtual bool init(const GenRunInfo & genrun) {
+	return true;
+    }
 
     /** @brief Fill string from class content */
     virtual bool to_string(string &att) const = 0;
-
-    /** @brief Indicate if attribute is global to a run.
-     *
-     * @return true if this attribute is global to the run. Note that
-     * a global attribute is not supposed to change during a run. Only
-     * the first attribute with a given name will be written out to a
-     * file. When reading in a file a global attribute with a given
-     * name will be added to all GenEvents as an event attribute. */
-    virtual bool is_global() const { return false; }
 
 //
 // Accessors

@@ -26,6 +26,7 @@ ReaderAscii::ReaderAscii(const string &filename)
     if( !m_file.is_open() ) {
         ERROR( "ReaderAscii: could not open input file: "<<filename )
     }
+    set_run_info(make_shared<GenRunInfo>());
 }
 
 
@@ -81,7 +82,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 is_parsing_successful = parse_units(evt,buf);
                 break;
             case 'A':
-                is_parsing_successful = parse_attribute(evt,buf);
+		if ( parsed_event_header )
+		    is_parsing_successful = parse_attribute(evt,buf);
+		else
+		    is_parsing_successful = parse_run_attribute(buf);
                 break;
             default:
                 WARNING( "ReaderAscii: skipping unrecognised prefix: " << buf[0] )
@@ -113,6 +117,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         return false;
     }
+
+    evt.set_run_info(run_info());
 
     return true;
 }
@@ -324,13 +330,9 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     const char     *cursor2 = buf;
     char            name[64];
     int             id = 0;
-    bool global = false;
 
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    if ( *(cursor + 1) == 'G' )
-      global = true;
-    else
-      id = atoi(cursor);
+    id = atoi(cursor);
 
     if( !(cursor  = strchr(cursor+1,' ')) ) return false;
     ++cursor;
@@ -340,23 +342,34 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
 
     cursor = cursor2+1;
 
-    shared_ptr<Attribute> att = get_global(name);
-    // if not global, the rest of the 'buf' is the unparsed attribute
-    if ( !att ) {
-      att = make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
-      if ( global ) m_global_attributes[name] = att;
-    }
+    shared_ptr<Attribute> att =
+	make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
 
     evt.add_attribute(string(name), att, id);
 
     return true;
 }
 
+bool ReaderAscii::parse_run_attribute(const char *buf) {
+    const char     *cursor  = buf;
+    const char     *cursor2 = buf;
+    char            name[64];
 
-shared_ptr<Attribute> ReaderAscii::get_global(string name) {
-    map< string, shared_ptr<Attribute> >::iterator globit = m_global_attributes.find(name);
-    if ( globit ==  m_global_attributes.end() ) return shared_ptr<Attribute>();
-    return globit->second;
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    ++cursor;
+
+    if( !(cursor2 = strchr(cursor,' ')) ) return false;
+    sprintf(name,"%.*s", (int)(cursor2-cursor), cursor);
+
+    cursor = cursor2+1;
+
+     shared_ptr<StringAttribute> att =
+	 make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
+
+    run_info()->add_attribute(string(name), att);
+
+    return true;
+
 }
 
 

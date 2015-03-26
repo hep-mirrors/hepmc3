@@ -4,7 +4,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/examples
 #----------------------------------------------------------------------------
 # Generate dictionaries
 #
-ROOT_GENERATE_DICTIONARY(myclass_Classes myclass_Classes.h LINKDEF LinkDef.h OPTIONS -inlineInputHeader)
+ROOT_GENERATE_DICTIONARY(myclass_Classes myclass_Classes.h LINKDEF LinkDef.h OPTIONS -inlineInputHeader -DHEPMC_ROOTIO)
 
 
 add_executable(class_example_read.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/class_example_read.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)

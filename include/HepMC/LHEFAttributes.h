@@ -13,7 +13,7 @@
  *
  */
 
-#include "Attribute.h"
+#include "HepMC/Attribute.h"
 #include "LHEF.h"
 #include "FourVector.h"
 
@@ -47,9 +47,6 @@ public:
   
   /** @brief Fill string from class content */
   virtual bool to_string(string &att) const;
-
-  /** @brief this attribute is global. */
-  virtual bool is_global() const { return true; }
 
 public:
 
@@ -92,6 +89,11 @@ public:
   
   /** @brief Parse the XML-tags. */
   virtual bool init(const GenEvent & geneve);
+
+  /** @brief Dummy function. */
+  virtual bool init(const GenRunInfo & runinfo) {
+    return true;
+  }
 
   /** @brief Fill string from class content */
   virtual bool to_string(string &att) const;

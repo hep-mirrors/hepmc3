@@ -10,6 +10,10 @@
 #ifndef HEPMC_GENEVENT_H
 #define HEPMC_GENEVENT_H
 
+#include "HepMC/Units.h"
+
+#if !defined(__CINT__)
+
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Common.h"
 #include "HepMC/Units.h"
@@ -17,6 +21,9 @@
 #include "HepMC/GenHeavyIon.h"
 #include "HepMC/GenPdfInfo.h"
 #include "HepMC/GenCrossSection.h"
+#include "HepMC/GenRunInfo.h"
+
+#endif // __CINT__
 
 // #include <iostream>
 
@@ -36,12 +43,20 @@ struct GenEventData;
 /// Manages event-related information.
 /// Contains lists of GenParticle and GenVertex objects
 class GenEvent {
+
 public:
 
     /// @brief Default constructor
-    GenEvent(Units::MomentumUnit momentum_unit=Units::GEV, Units::LengthUnit length_unit=Units::MM);
+    GenEvent(Units::MomentumUnit momentum_unit = Units::GEV,
+	     Units::LengthUnit length_unit = Units::MM);
 
-
+#if !defined(__CINT__)
+  
+  /// @brief Default constructor
+    GenEvent(shared_ptr<GenRunInfo> run,
+	     Units::MomentumUnit momentum_unit = Units::GEV,
+	     Units::LengthUnit length_unit = Units::MM);
+    
     /// @name Particle and vertex read access
     //@{
 
@@ -165,7 +180,6 @@ public:
 
     //@}
 
-
     /// @name Deprecated functionality
     //@{
 
@@ -190,6 +204,16 @@ public:
     /// @deprecated Use GenEvent::set_pdf_info( GenPdfInfoPtr pi) instead
     HEPMC_DEPRECATED("Use GenPdfInfoPtr instead of GenPdfInfo*")
     void set_pdf_info(GenPdfInfo *pi);
+
+    /// @brief Get a pointer to the the GenRunInfo object.
+    shared_ptr<GenRunInfo> run_info() const {
+	return m_run_info;
+    }
+
+    /// @brief Set the GenRunInfo object by smart pointer.
+    void set_run_info(shared_ptr<GenRunInfo> run) {
+	m_run_info = run;
+    }
 
     /// @brief Set cross-section information by raw pointer
     /// @deprecated Use GenEvent::set_cross_section( GenCrossSectionPtr cs) instead
@@ -280,6 +304,7 @@ public:
 
     //@}
 
+#endif // __CINT__
 
     /// @name Methods to fill GenEventData and to read it back
     //@{
@@ -290,18 +315,19 @@ public:
     /// @brief Fill GenEvent based on GenEventData
     void read_data(const GenEventData &data);
 
-    #ifdef HEPMC_ROOTIO
+#ifdef HEPMC_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
-    #endif
-
     //@}
+#endif
 
 
 private:
 
     /// @name Fields
     //@{
+
+#if !defined(__CINT__)
 
     /// List of particles
     std::vector<GenParticlePtr> m_particles;
@@ -326,15 +352,21 @@ private:
     /// Default event position
     GenVertexPtr m_event_pos;
 
+    /// Global run information.
+    shared_ptr<GenRunInfo> m_run_info;
+
     /// @brief Map of event, particle and vertex attributes
     ///
     /// Keys are name and ID (0 = event, <0 = vertex, >0 = particle)
     mutable std::map< string, std::map<int, shared_ptr<Attribute> > > m_attributes;
 
+#endif // __CINT__
+  
     //@}
 
 };
 
+#if !defined(__CINT__)
 
 
 //
@@ -344,8 +376,12 @@ private:
 template<class T>
 shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 
-    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
-    if (i1 == m_attributes.end() ) return shared_ptr<T>();
+    map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    if( i1 == m_attributes.end() ) {
+	if ( id == 0 && run_info() )
+	    return run_info()->attribute<T>(name);
+	return shared_ptr<T>();
+    }
 
     std::map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
     if (i2 == i1->second.end() ) return shared_ptr<T>();
@@ -363,7 +399,8 @@ shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
     else return dynamic_pointer_cast<T>(i2->second);
 }
 
-
+#endif // __CINT__
+  
 } // namespace HepMC
 
 #endif

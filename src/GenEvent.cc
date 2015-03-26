@@ -24,13 +24,20 @@ using namespace std;
 
 namespace HepMC {
 
-
-GenEvent::GenEvent(Units::MomentumUnit momentum_unit, Units::LengthUnit length_unit):
-m_event_number(0),
-m_momentum_unit(momentum_unit),
-m_length_unit(length_unit),
-m_event_pos( new GenVertex() ) {
-}
+GenEvent::GenEvent(Units::MomentumUnit momentum_unit,
+		   Units::LengthUnit length_unit)
+  : m_event_number(0), m_momentum_unit(momentum_unit),
+    m_length_unit(length_unit),
+    m_event_pos(make_shared<GenVertex>()),
+    m_run_info(make_shared<GenRunInfo>()) {}
+  
+GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
+	 Units::MomentumUnit momentum_unit,
+	 Units::LengthUnit length_unit)
+  : m_event_number(0), m_momentum_unit(momentum_unit),
+    m_length_unit(length_unit),
+    m_event_pos(make_shared<GenVertex>()),
+    m_run_info(run? run: make_shared<GenRunInfo>()) {}
 
 void GenEvent::add_particle( const GenParticlePtr &p ) {
     if( p->in_event() ) return;
@@ -41,7 +48,8 @@ void GenEvent::add_particle( const GenParticlePtr &p ) {
     p->m_id    = particles().size();
 
     // Particles without production vertex are added to event_pos()
-    if( !p->production_vertex() ) m_event_pos->add_particle_out(p);
+    if( !p->production_vertex() )
+      m_event_pos->add_particle_out(p);
 }
 
 void GenEvent::add_vertex( const GenVertexPtr &v ) {
@@ -55,7 +63,7 @@ void GenEvent::add_vertex( const GenVertexPtr &v ) {
     // Add all incoming and outgoing particles and restore their production/end vertices
     FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
         if(!p->in_event()) add_particle(p);
-        p->m_end_vertex = v->m_this.lock();
+	p->m_end_vertex = v->m_this.lock();
     }
 
     FOREACH( const GenParticlePtr &p, v->m_particles_out ) {

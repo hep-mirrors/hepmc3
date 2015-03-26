@@ -97,7 +97,12 @@ ENDIF("${isSystemDir}" STREQUAL "-1")
 
 #---Optional build of rootIO-------------------------------------------------
 
-find_package(ROOT QUIET)
+option(HEPMC_ENABLE_ROOTIO "Enables building with ROOT O/I." ON)
+
+if(HEPMC_ENABLE_ROOTIO)
+  find_package(ROOT QUIET)
+endif()
+
 if(ROOT_USE_FILE)
   include(${ROOT_USE_FILE})
 endif()

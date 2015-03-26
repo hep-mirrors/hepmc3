@@ -14,13 +14,17 @@ int main(int argc, char ** argv) {
   // Create Reader and Writer object
   LHEF::Reader reader("LHEF_example.lhe");
 
-  WriterAscii output("LHEF_example.hepmc3");
-
   shared_ptr<HEPRUPAttribute> hepr = make_shared<HEPRUPAttribute>();
 
   hepr->heprup = reader.heprup;
 
   hepr->tags = XMLTag::findXMLTags(reader.headerBlock + reader.initComments);
+
+  shared_ptr<GenRunInfo> runinfo = make_shared<GenRunInfo>();
+
+  runinfo->add_attribute("HEPRUP", hepr);
+
+  WriterAscii output("LHEF_example.hepmc3", runinfo);
 
   int neve = 0;
 
@@ -33,10 +37,10 @@ int main(int argc, char ** argv) {
       hepe->tags =  XMLTag::findXMLTags(reader.outsideBlock);
     hepe->hepeup = reader.hepeup;
 
-    GenEvent ev(Units::GEV, Units::MM);
+    GenEvent ev(runinfo, Units::GEV, Units::MM);
     ev.set_event_number(neve);
-    ev.add_attribute("HEPRUP", hepr);
     ev.add_attribute("HEPEUP", hepe);
+
 
     GenParticlePtr p1 = make_shared<GenParticle>(hepe->momentum(0),
 						 hepe->hepeup.IDUP[0],
