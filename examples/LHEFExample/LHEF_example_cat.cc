@@ -65,6 +65,11 @@ int main(int argc, char ** argv) {
 						  hepe->hepeup.ISTUP[i]));
     ev.add_vertex(vx);
 
+    std::vector<double> wts;
+    for ( int i = 0, N = hepe->hepeup.weights.size(); i < N; ++i )
+      wts.push_back(hepe->hepeup.weights[i].first);
+    ev.weights() = wts;
+
     output.write_event(ev);
 
   }
@@ -80,6 +85,8 @@ int main(int argc, char ** argv) {
     GenEvent ev(Units::GEV, Units::MM);
 
     if ( !input.read_event(ev) || ev.event_number() == 0 ) break;
+
+    if ( input.run_info()->weight_names() != weightnames ) return 2;
 
     if ( !hepr ) {
       hepr = ev.attribute<HEPRUPAttribute>("HEPRUP");
