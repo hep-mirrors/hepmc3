@@ -13,16 +13,13 @@
 #include "HepMC/Units.h"
 
 #if !defined(__CINT__)
-
 #include "HepMC/Data/SmartPointer.h"
-#include "HepMC/Common.h"
-#include "HepMC/Units.h"
+#include "HepMC/Errors.h"
 #include "HepMC/GenWeights.h"
 #include "HepMC/GenHeavyIon.h"
 #include "HepMC/GenPdfInfo.h"
 #include "HepMC/GenCrossSection.h"
 #include "HepMC/GenRunInfo.h"
-
 #endif // __CINT__
 
 #ifdef HEPMC_ROOTIO
@@ -63,8 +60,27 @@ public:
     const std::vector<GenParticlePtr>& particles() const { return m_particles; }
     /// @brief Get/set list of vertices
     const std::vector<GenVertexPtr>& vertices() const { return m_vertices; }
-    /// @brief Offset position of all vertices in the event
-    void offset_position( const FourVector &op );
+
+    //@}
+
+
+    /// @name Event weights
+    //@{
+
+    /// Get event weight values as a vector
+    const std::vector<double>& weights() const { return m_weights; }
+    /// Get event weights as a vector (non-const)
+    std::vector<double>& weights() { return m_weights; }
+    /// Get event weight accessed by index (or the canonical/first one if there is no argument)
+    /// @note It's the user's responsibility to ensure that the given index exists!
+    double weight(size_t index=0) const { return weights().at(index); }
+    /// Get event weight accessed by weight name
+    /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
+    /// @note It's the user's responsibility to ensure that the given name exists!
+    // double weight(const std::string& name) const {
+    //   if (!run_info()) throw Exception("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
+    //   return weight(run_info().weight_index(name));
+    // }
 
     //@}
 
@@ -72,19 +88,19 @@ public:
     /// @name Auxiliary info and event metadata
     //@{
 
+    /// @brief Get a pointer to the the GenRunInfo object.
+    shared_ptr<GenRunInfo> run_info() const {
+	  return m_run_info;
+    }
+    /// @brief Set the GenRunInfo object by smart pointer.
+    void set_run_info(shared_ptr<GenRunInfo> run) {
+      m_run_info = run;
+    }
+
     /// @brief Get event number
     int  event_number() const { return m_event_number; }
     /// @brief Set event number
     void set_event_number(int num) { m_event_number = num; }
-
-    /// Get event weights
-    const GenWeights& weights() const { return m_weights; }
-    /// Get event weights (non-const)
-    GenWeights& weights() { return m_weights; }
-    /// Get canonical event weight (might not exist...)
-    double weight() const { return weights()[0]; }
-    const GenVertexPtr& event_pos() const { return m_event_pos; }
-
 
     /// @brief Get momentum unit
     const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit; }
@@ -111,7 +127,22 @@ public:
 
     //@}
 
-    /// @name Attributes
+
+    /// @name Event position
+    //@{
+
+    /// Vertex representing the overall event position
+    /// @todo This is returning a vertex rather than a 4-vector. Rename to root_vertex() (and provide event_pos() = root_vertex().position())?
+    const GenVertexPtr& event_pos() const { return m_event_pos; }
+
+    /// @brief Shift position of all vertices in the event by delta @a op
+    /// @todo Clarify if this is a delta or setting a new absolute pos (with the delta computed internally). Use explicit shift_event_to / shift_event_by names?
+    void shift_position( const FourVector &op );
+
+    //@}
+
+
+    /// @name Additional attributes
     //@{
     /// @brief Add event attribute to event
     ///
@@ -202,16 +233,6 @@ public:
     /// @deprecated Use GenEvent::set_pdf_info( GenPdfInfoPtr pi) instead
     HEPMC_DEPRECATED("Use GenPdfInfoPtr instead of GenPdfInfo*")
     void set_pdf_info(GenPdfInfo *pi);
-
-    /// @brief Get a pointer to the the GenRunInfo object.
-    shared_ptr<GenRunInfo> run_info() const {
-	  return m_run_info;
-    }
-
-    /// @brief Set the GenRunInfo object by smart pointer.
-    void set_run_info(shared_ptr<GenRunInfo> run) {
-      m_run_info = run;
-    }
 
     /// @brief Set cross-section information by raw pointer
     /// @deprecated Use GenEvent::set_cross_section( GenCrossSectionPtr cs) instead
@@ -326,7 +347,7 @@ private:
     /// @name Fields
     //@{
 
-#if !defined(__CINT__)
+    #if !defined(__CINT__)
 
     /// List of particles
     std::vector<GenParticlePtr> m_particles;
@@ -338,17 +359,15 @@ private:
     int m_event_number;
 
     /// Event weights
-    /// @todo Move to attributes?
-    GenWeights m_weights;
+    std::vector<double> m_weights;
 
     /// Momentum unit
-    /// @todo Move to attributes?
     Units::MomentumUnit m_momentum_unit;
     /// Length unit
-    /// @todo Move to attributes?
     Units::LengthUnit m_length_unit;
 
     /// Default event position
+    /// @todo Isn't this the same as the root vertex? (Which we can get otherwise?) Rename or remove?
     GenVertexPtr m_event_pos;
 
     /// Global run information.
@@ -359,23 +378,24 @@ private:
     /// Keys are name and ID (0 = event, <0 = vertex, >0 = particle)
     mutable std::map< string, std::map<int, shared_ptr<Attribute> > > m_attributes;
 
-#endif // __CINT__
+    #endif // __CINT__
 
     //@}
 
 };
 
-#if !defined(__CINT__)
 
+
+#if !defined(__CINT__)
 
 //
 // Template methods
 //
 
 template<class T>
-shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
+shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
 
-    map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
     if( i1 == m_attributes.end() ) {
 	if ( id == 0 && run_info() )
 	    return run_info()->attribute<T>(name);
@@ -399,6 +419,7 @@ shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 }
 
 #endif // __CINT__
+
 
 } // namespace HepMC
 

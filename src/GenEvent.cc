@@ -30,7 +30,7 @@ GenEvent::GenEvent(Units::MomentumUnit momentum_unit,
     m_length_unit(length_unit),
     m_event_pos(make_shared<GenVertex>()),
     m_run_info(make_shared<GenRunInfo>()) {}
-  
+
 GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
 	 Units::MomentumUnit momentum_unit,
 	 Units::LengthUnit length_unit)
@@ -227,16 +227,17 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 }
 
-void GenEvent::offset_position( const FourVector &op ) {
+
+void GenEvent::shift_position( const FourVector &op ) {
     m_event_pos->set_position( m_event_pos->position() + op );
 
     // Offset all vertices
-    FOREACH( GenVertexPtr &v, m_vertices ) {
-        if( v->has_set_position() ) {
+    FOREACH ( GenVertexPtr &v, m_vertices ) {
+        if ( v->has_set_position() )
             v->set_position( v->position() + op );
-        }
     }
 }
+
 
 void GenEvent::clear() {
     m_event_number = 0;
