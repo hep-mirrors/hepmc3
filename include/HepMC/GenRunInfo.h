@@ -26,8 +26,33 @@ class GenRunInfo {
 
 public:
 
+    /// @brief Interrnal struct for keeping track of tools.
+    struct ToolInfo {
+
+	/// @brief The name of the tool.
+	string name;
+
+	/// @brief The version of the tool.
+	string version;
+
+	/// @brief Other information about how the tool was used in
+	/// the run.
+	string description;
+    };
+
+public:
+
     /// @brief Default constructor
     GenRunInfo() {}
+
+    /// @brief The vector of tools used to produce this run.
+    const std::vector<ToolInfo> & tools() const {
+	return m_tools;
+    }
+    /// @brief The vector of tools used to produce this run.
+    std::vector<ToolInfo> & tools() {
+	return m_tools;
+    }
 
     /// @brief Check if a weight name is present.
     bool has_weight(string name) const {
@@ -81,6 +106,9 @@ private:
 
     /// @name Fields
     //@{
+
+    /// @brief The vector of tools used to produce this run.
+    std::vector<ToolInfo> m_tools;
 
     /// @brief A map of weight names mapping to indices.
     std::map<std::string, int> m_weight_indices;

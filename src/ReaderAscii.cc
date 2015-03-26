@@ -85,6 +85,9 @@ bool ReaderAscii::read_event(GenEvent &evt) {
             case 'U':
                 is_parsing_successful = parse_units(evt,buf);
                 break;
+            case 'T':
+                is_parsing_successful = parse_tool(buf);
+                break;
             case 'A':
 		if ( parsed_event_header )
 		    is_parsing_successful = parse_attribute(evt,buf);
@@ -393,6 +396,25 @@ bool ReaderAscii::parse_weight_names(const char *buf) {
 
     run_info()->set_weight_names(names);
 
+    return true;
+
+}
+
+bool ReaderAscii::parse_tool(const char *buf) {
+    const char     *cursor  = buf;
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    ++cursor;
+    string line = unescape(cursor);
+    GenRunInfo::ToolInfo tool;
+    string::size_type pos = line.find("\n");
+    tool.name = line.substr(0, pos);
+    line = line.substr(pos + 1);
+    pos = line.find("\n");
+    tool.version = line.substr(0, pos);
+    tool.description = line.substr(pos + 1);
+    run_info()->tools().push_back(tool);
+ 
     return true;
 
 }
