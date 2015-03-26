@@ -152,7 +152,7 @@ pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *bu
 bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
     const char *cursor = buf;
 
-    while (cursor = strchr(cursor+1,' ')) {
+    while ((cursor = strchr(cursor+1,' '))) {
       ++cursor; // step past the space
       /// @todo Ick, there's no way to detect a parsing-as-float failure?!?
       const double w = atof(cursor);
