@@ -60,9 +60,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
 	set_run_info(evt.run_info());
 	write_run_info();
     } else {
-	if ( evt.run_info() && run_info() != evt.run_info()
-	     && !evt.run_info()->empty() ) 
-	    WARNING( "WriterAscii::write_event: GenEvents contain different GenRunInfo objects - only the first such object will be serialized." )
+	if ( evt.run_info() && run_info() != evt.run_info() ) 
+	    WARNING( "WriterAscii::write_event: GenEvents contain "
+		     "different GenRunInfo objects from - only the "
+		     "first such object will be serialized." )
     }
 
     // Write event info
