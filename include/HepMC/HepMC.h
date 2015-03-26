@@ -13,4 +13,6 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 
+#include "HepMC/Print.h"
+
 #endif
