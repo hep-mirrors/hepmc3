@@ -1491,6 +1491,20 @@ public:
 
 public:
 
+  /**
+   * Return the name of the weight with given index suitable to ne
+   * used for HepMC3 output.
+   */
+  string weightNameHepMC(int i) const {
+    string name;
+    if ( i < 0 || i >= weightinfo.size() ) return name;
+    if ( weightinfo[i].inGroup >= 0 )
+      name = weightgroup[weightinfo[i].inGroup].type + "/"
+	+  weightgroup[weightinfo[i].inGroup].combine + "/";
+    name += weightinfo[i].name;
+    return name;
+  }
+
 
   /**
    * Print out the corresponding XML tag to a stream.

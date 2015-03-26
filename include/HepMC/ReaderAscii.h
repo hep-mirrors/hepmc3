@@ -127,9 +127,15 @@ public:
     /// @brief Parse run-level attribute
     ///
     /// Helper routine for parsing single attribute information
-    /// @param[out] evt Event that will contain parsed attribute
     /// @param[in] buf Line of text that needs to be parsed
     bool parse_run_attribute(const char *buf);
+
+    /// @brief Parse run-level weight names
+    ///
+    /// Helper routine for parsing a line with information about
+    /// weight names.
+    /// @param[in] buf Line of text that needs to be parsed
+    bool parse_weight_names(const char *buf);
     //@}
 
 

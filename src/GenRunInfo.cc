@@ -23,6 +23,7 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
 	    std::ostringstream oss;
 	    oss << i;
 	    name = oss.str();
+	    m_weight_names[i] = name;
 	}
 	if ( has_weight(name) )
 	    throw std::logic_error("GenRunInfo::set_weight_names: "

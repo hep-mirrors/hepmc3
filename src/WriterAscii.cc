@@ -231,6 +231,18 @@ void WriterAscii::write_run_info() {
     // If no run info object set, create a dummy one.
     if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
 
+    vector<string> names = run_info()->weight_names();
+
+    if ( !names.empty() ) {
+      string out = names[0];
+      for ( int i = 1, N = names.size(); i < N; ++i )
+	out += "\n" + names[i];
+      m_cursor += sprintf(m_cursor, "W ");
+      flush();
+      write_string(escape(out));
+      m_cursor += sprintf(m_cursor, "\n");
+    }
+
     typedef map< std::string, shared_ptr<Attribute> >::value_type value_type;
     FOREACH( value_type att, run_info()->attributes() ) {
 	string st;
