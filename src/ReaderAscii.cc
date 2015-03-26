@@ -154,15 +154,17 @@ pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *bu
 
 
 bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
-    const char *cursor = buf;
 
-    while ((cursor = strchr(cursor+1,' '))) {
-      ++cursor; // step past the space
-      /// @todo Ick, there's no way to detect a parsing-as-float failure?!?
-      const double w = atof(cursor);
-      /// @todo If evt.runinfo().has_attr("WEIGHT_NAMES")... push_back(n,w)
-      evt.weights().push_back(w);
-    }
+    std::istringstream iss(buf + 1);
+    vector<double> wts;
+    double w;
+    while ( iss >> w ) wts.push_back(w);
+    if ( run_info() && run_info()->weight_names().size()
+	 && run_info()->weight_names().size() == wts.size() )
+	throw std::logic_error("ReaderAscii::parse_weight_values: "
+			       "The number of weights does not match "
+			       "the weight names in the GenRunInfo object");
+    evt.weights() = wts;
 
     return true;
 }
