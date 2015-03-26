@@ -8,9 +8,9 @@
 #ifndef  HEPMC_DATA_SMARTPOINTER_H
 #define  HEPMC_DATA_SMARTPOINTER_H
 
-#include "HepMC/Setup.h"
+#include "HepMC/Common.h"
 
-#if __cplusplus >= 201103L
+#ifdef HEPMC_HAS_CXX11
 
 #include <memory>
 namespace HepMC {

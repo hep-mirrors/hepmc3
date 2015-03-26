@@ -12,10 +12,7 @@
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Data/GenVertexData.h"
 #include "HepMC/FourVector.h"
-
-#include <iostream>
-#include <vector>
-using std::vector;
+#include "HepMC/Errors.h"
 
 namespace HepMC {
 
@@ -87,9 +84,9 @@ namespace HepMC {
         void remove_particle_out( const GenParticlePtr& p);
 
         /// Get/set list of incoming particles
-        const vector<GenParticlePtr>& particles_in()  const { return m_particles_in;  }
+        const std::vector<GenParticlePtr>& particles_in()  const { return m_particles_in;  }
         /// Get/set list of outgoing particles
-        const vector<GenParticlePtr>& particles_out() const { return m_particles_out; } //!< Get/set list of outgoing particles
+        const std::vector<GenParticlePtr>& particles_out() const { return m_particles_out; } //!< Get/set list of outgoing particles
 
         /// @brief Get vertex position
         ///
@@ -179,7 +176,7 @@ namespace HepMC {
         HEPMC_DEPRECATED() particle_iterator particles_end(IteratorRange range) {
             if (range == parents) return m_particles_in.end();
             if (range == children) return m_particles_out.end();
-            throw Exception("GenVertex::particles_begin: Only 'parents' and 'children' ranges allowed.");
+            throw Exception("GenVertex::particles_end: Only 'parents' and 'children' ranges allowed.");
         }
 
         /// @deprecated Backward compatibility
@@ -204,9 +201,9 @@ namespace HepMC {
         int            m_status; //!< Vertex id
         GenVertexData  m_data;   //!< Vertex data
 
-        vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
-        vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
-        weak_ptr<GenVertex>     m_this;          //!< Pointer to shared pointer managing this vertex
+        std::vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
+        std::vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
+        weak_ptr<GenVertex> m_this;          //!< Pointer to shared pointer managing this vertex
         //@}
 
     };

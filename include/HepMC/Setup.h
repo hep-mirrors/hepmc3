@@ -9,8 +9,7 @@
 #ifndef HEPMC_SETUP_H
 #define HEPMC_SETUP_H
 
-#include <iostream>
-#include <stdexcept>
+// #include <iostream>
 
 namespace HepMC {
 
@@ -71,65 +70,6 @@ namespace HepMC {
         static bool m_is_printing_warnings; //!< Flag for printing warning messages
         static int  m_debug_level;          //!< Level of debug messages printed out
     };
-
-
-
-
-    /// @name Printing macros
-    //@{
-
-    /** @brief Macro for printing error messages */
-    #define ERROR(MESSAGE)       if( Setup::print_errors() )         { std::cerr << "ERROR::"                 << MESSAGE << std::endl; }
-
-    /** @brief Macro for printing warning messages */
-    #define WARNING(MESSAGE)     if( Setup::print_warnings() )       { std::cout << "WARNING::"               << MESSAGE << std::endl; }
-
-    // Debug messages and code that will not go to the release version
-    #ifndef HEPMC_RELEASE_VERSION
-
-    /** @brief Macro for printing debug messages with appropriate debug level */
-    #define DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
-
-    /** @brief Macro for storing code useful for debugging */
-    #define DEBUG_CODE_BLOCK( x ) x
-
-    #else
-    #define DEBUG( x,y )
-    #define DEBUG_CODE_BLOCK( x )
-    #endif
-
-    //@}
-
-
-    /// @name Exceptions
-    /// @todo Move to a dedicated header once we have more than one
-    //@{
-
-    /// @class Exception
-    /// @brief Standard runtime error
-    /// @todo Should it be GenException? It's a HepMC thing, but not really a "gen" thing
-    struct Exception : public std::runtime_error {
-
-      /// Runtime error message
-      Exception(const std::string& msg) : std::runtime_error(msg) {}
-    };
-
-    //@}
-
-
-    /// Deprecation macro
-    #ifndef HEPMC_DEPRECATED
-    #if __GNUC__ && __cplusplus && HEPMC_NO_DEPRECATION_WARNINGS == 0
-    #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-    #if GCC_VERSION >= 40500
-      #define HEPMC_DEPRECATED(x) __attribute__((deprecated(x)))
-    #else
-      #define HEPMC_DEPRECATED(x) __attribute__((deprecated))
-    #endif
-    #else
-      #define HEPMC_DEPRECATED(x)
-    #endif
-    #endif
 
 
 } // namespace HepMC

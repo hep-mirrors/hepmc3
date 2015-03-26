@@ -7,19 +7,18 @@
 /// @file GenEvent.h
 /// @brief Definition of \b class GenEvent
 ///
-#ifndef  HEPMC_GENEVENT_H
-#define  HEPMC_GENEVENT_H
+#ifndef HEPMC_GENEVENT_H
+#define HEPMC_GENEVENT_H
 
 #include "HepMC/Data/SmartPointer.h"
+#include "HepMC/Common.h"
 #include "HepMC/Units.h"
 #include "HepMC/GenWeights.h"
 #include "HepMC/GenHeavyIon.h"
 #include "HepMC/GenPdfInfo.h"
 #include "HepMC/GenCrossSection.h"
 
-#include <iostream>
-#include <vector>
-#include <map>
+// #include <iostream>
 
 #ifdef HEPMC_ROOTIO
 #include "TBuffer.h"

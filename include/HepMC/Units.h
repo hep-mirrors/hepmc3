@@ -15,12 +15,12 @@
  *  Manages units used by HepMC::GenEvent
  *
  */
-#include <iostream>
-#include <string>
+
+#include "HepMC/Errors.h"
 #include "HepMC/FourVector.h"
-using std::string;
 
 namespace HepMC {
+
 
 class Units {
 public:
@@ -32,7 +32,7 @@ public:
 
 public:
     /** @brief Get momentum unit based on its name*/
-    static MomentumUnit momentum_unit( string name ) {
+  static MomentumUnit momentum_unit( const std::string& name ) {
         if( name.compare(0,3,"GEV") == 0 ) return GEV;
         if( name.compare(0,3,"MEV") == 0 ) return MEV;
 
@@ -42,7 +42,7 @@ public:
     }
 
     /** @brief Get length unit based on its name*/
-    static LengthUnit length_unit( string name ) {
+    static LengthUnit length_unit( const std::string& name ) {
         if( name.compare(0,2,"CM") == 0 ) return CM;
         if( name.compare(0,2,"MM") == 0 ) return MM;
 
@@ -52,7 +52,7 @@ public:
     }
 
     /** @brief Get name of momentum unit */
-    static string name( MomentumUnit u ) {
+    static std::string name( MomentumUnit u ) {
         switch(u) {
             case MEV: return "MEV";
             case GEV: return "GEV";
@@ -62,7 +62,7 @@ public:
     }
 
     /** @brief Get name of length unit */
-    static string name( LengthUnit u ) {
+    static std::string name( LengthUnit u ) {
         switch(u) {
             case MM: return "MM";
             case CM: return "CM";
