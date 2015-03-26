@@ -28,8 +28,7 @@ GenEvent::GenEvent(Units::MomentumUnit momentum_unit,
 		   Units::LengthUnit length_unit)
   : m_event_number(0), m_momentum_unit(momentum_unit),
     m_length_unit(length_unit),
-    m_event_pos(make_shared<GenVertex>()),
-    m_run_info(make_shared<GenRunInfo>()) {}
+    m_event_pos(make_shared<GenVertex>()) {}
   
 GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
 	 Units::MomentumUnit momentum_unit,
@@ -37,7 +36,7 @@ GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
   : m_event_number(0), m_momentum_unit(momentum_unit),
     m_length_unit(length_unit),
     m_event_pos(make_shared<GenVertex>()),
-    m_run_info(run? run: make_shared<GenRunInfo>()) {}
+    m_run_info(run) {}
 
 void GenEvent::add_particle( const GenParticlePtr &p ) {
     if( p->in_event() ) return;
