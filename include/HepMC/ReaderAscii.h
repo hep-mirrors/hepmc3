@@ -124,18 +124,25 @@ public:
     /// @param[in] buf Line of text that needs to be parsed
     bool parse_attribute(GenEvent &evt, const char *buf);
 
-    /// @brief Parse run-level attribute
+    /// @brief Parse run-level attribute.
     ///
     /// Helper routine for parsing single attribute information
     /// @param[in] buf Line of text that needs to be parsed
     bool parse_run_attribute(const char *buf);
 
-    /// @brief Parse run-level weight names
+    /// @brief Parse run-level weight names.
     ///
     /// Helper routine for parsing a line with information about
     /// weight names.
     /// @param[in] buf Line of text that needs to be parsed
     bool parse_weight_names(const char *buf);
+
+    /// @brief Parse run-level tool information.
+    ///
+    /// Helper routine for parsing a line with information about
+    /// tools being used.
+    /// @param[in] buf Line of text that needs to be parsed
+    bool parse_tool(const char *buf);
     //@}
 
 

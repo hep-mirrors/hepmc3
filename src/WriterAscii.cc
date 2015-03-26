@@ -242,6 +242,14 @@ void WriterAscii::write_run_info() {
       m_cursor += sprintf(m_cursor, "\n");
     }
 
+    for ( int i = 0, N = run_info()->tools().size(); i < N; ++i  ) {
+      string out = "T " + run_info()->tools()[i].name + "\n"
+	+ run_info()->tools()[i].version + "\n"
+	+ run_info()->tools()[i].description;
+      write_string(escape(out));
+      m_cursor += sprintf(m_cursor, "\n");
+    }
+
     typedef map< std::string, shared_ptr<Attribute> >::value_type value_type;
     FOREACH( value_type att, run_info()->attributes() ) {
 	string st;

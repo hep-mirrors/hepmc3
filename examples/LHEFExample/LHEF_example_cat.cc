@@ -29,6 +29,13 @@ int main(int argc, char ** argv) {
     weightnames.push_back(hepr->heprup.weightNameHepMC(i));
   runinfo->set_weight_names(weightnames);
 
+  for ( int i = 0, N = hepr->heprup.generators.size(); i < N; ++i ) {
+    GenRunInfo::ToolInfo tool;
+    tool.name =  hepr->heprup.generators[i].name;
+    tool.version =  hepr->heprup.generators[i].version;
+    tool.description =  hepr->heprup.generators[i].contents;
+    runinfo->tools().push_back(tool);
+  }
 
   WriterAscii output("LHEF_example.hepmc3", runinfo);
 
