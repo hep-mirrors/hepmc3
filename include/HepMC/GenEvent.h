@@ -25,8 +25,6 @@
 
 #endif // __CINT__
 
-// #include <iostream>
-
 #ifdef HEPMC_ROOTIO
 #include "TBuffer.h"
 #include "TClass.h"
@@ -46,17 +44,18 @@ class GenEvent {
 
 public:
 
-    /// @brief Default constructor
+    /// @brief Event constructor without a run
     GenEvent(Units::MomentumUnit momentum_unit = Units::GEV,
-	     Units::LengthUnit length_unit = Units::MM);
+             Units::LengthUnit length_unit = Units::MM);
 
-#if !defined(__CINT__)
-  
-  /// @brief Default constructor
+    #if !defined(__CINT__)
+
+    /// @brief Constructor with associated run
     GenEvent(shared_ptr<GenRunInfo> run,
-	     Units::MomentumUnit momentum_unit = Units::GEV,
-	     Units::LengthUnit length_unit = Units::MM);
-    
+             Units::MomentumUnit momentum_unit = Units::GEV,
+             Units::LengthUnit length_unit = Units::MM);
+
+
     /// @name Particle and vertex read access
     //@{
 
@@ -66,7 +65,6 @@ public:
     const std::vector<GenVertexPtr>& vertices() const { return m_vertices; }
     /// @brief Offset position of all vertices in the event
     void offset_position( const FourVector &op );
-
 
     //@}
 
@@ -207,12 +205,12 @@ public:
 
     /// @brief Get a pointer to the the GenRunInfo object.
     shared_ptr<GenRunInfo> run_info() const {
-	return m_run_info;
+	  return m_run_info;
     }
 
     /// @brief Set the GenRunInfo object by smart pointer.
     void set_run_info(shared_ptr<GenRunInfo> run) {
-	m_run_info = run;
+      m_run_info = run;
     }
 
     /// @brief Set cross-section information by raw pointer
@@ -304,7 +302,8 @@ public:
 
     //@}
 
-#endif // __CINT__
+    #endif // __CINT__
+
 
     /// @name Methods to fill GenEventData and to read it back
     //@{
@@ -315,11 +314,11 @@ public:
     /// @brief Fill GenEvent based on GenEventData
     void read_data(const GenEventData &data);
 
-#ifdef HEPMC_ROOTIO
+    #ifdef HEPMC_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
     //@}
-#endif
+    #endif
 
 
 private:
@@ -361,7 +360,7 @@ private:
     mutable std::map< string, std::map<int, shared_ptr<Attribute> > > m_attributes;
 
 #endif // __CINT__
-  
+
     //@}
 
 };
@@ -400,7 +399,7 @@ shared_ptr<T> GenEvent::attribute(const string &name, int id) const {
 }
 
 #endif // __CINT__
-  
+
 } // namespace HepMC
 
 #endif
