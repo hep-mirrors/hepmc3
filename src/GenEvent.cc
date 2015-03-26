@@ -402,7 +402,6 @@ void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) 
 void GenEvent::Streamer(TBuffer &b){
 
   if (b.IsReading()){
-    cout << "Is Reading" << endl;
 
     GenEventData data;
 
@@ -411,13 +410,11 @@ void GenEvent::Streamer(TBuffer &b){
     read_data(data);
 
   } else {
-    cout << "Is Writing" << endl;
-    // fill the GenEventData structures
 
+    // fill the GenEventData structures
     GenEventData data;
     write_data(data);
 
-    // write the GenEventData structures
     b.WriteClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
   }
 }
