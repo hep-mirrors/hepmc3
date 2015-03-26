@@ -36,6 +36,7 @@ public:
 
     /// @brief Return the index corresponding to a weight name.
     /// @return -1 if name was not found
+    /// @todo Throw exception instead? Or return ssize_t for better signed/unsigned safety?
     int weight_index(string name) const {
 	std::map<std::string, int>::const_iterator it =
 	    m_weight_indices.find(name);
