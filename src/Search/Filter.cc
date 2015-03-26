@@ -63,8 +63,8 @@ bool Filter::passed_bool_filter(const GenParticlePtr &p ) const {
     DEBUG( 10, "Filter: checking id="<<p->id()<<" param="<<m_bool<<" value="<<m_bool_value<<" (bool)" )
 
     switch( m_bool ) {
-        case HAS_END_VERTEX:           result = p->end_vertex();        break;
-        case HAS_PRODUCTION_VERTEX:    result = p->production_vertex(); break;
+        case HAS_END_VERTEX:           result = (bool) p->end_vertex();        break;
+        case HAS_PRODUCTION_VERTEX:    result = (bool) p->production_vertex(); break;
         case HAS_SAME_PDG_ID_DAUGHTER:
             buf = p->end_vertex();
             if( !buf ) {

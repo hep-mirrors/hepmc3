@@ -84,18 +84,32 @@ namespace HepMC {
         /// @name Accessors
         //@{
 
+        /// Assignment
         SmartPointer& operator=(const SmartPointer &rhs) { m_data = rhs.m_data; return *this; } //!< Assignment operator
 
+        /// Equality test
         bool operator==(const SmartPointer &rhs)  const { return  m_data == rhs.m_data; } //!< == operator
+        /// Inequality test
         bool operator!=(const SmartPointer &rhs)  const { return  m_data != rhs.m_data; } //!< != operator
 
-        const shared_ptr<T> operator->()                { return  m_data; } //!< Shared pointer access operator
-        T&                   operator*()                { return *m_data; } //!< Dereference operator
+        /// Non-const access to the contained shared_ptr, with non-const contained type
+        const shared_ptr<T> operator->() { return  m_data; }
+        /// Non-const dereferencing to a reference of the contained type
+        T& operator*() { return *m_data; }
 
-        const shared_ptr<const T> operator->()    const { return  const_pointer_cast<const T>(m_data); } //!< Const shared pointer access operator
-        const T&             operator*()          const { return *m_data; } //!< Const dereference operator
+        /// Const access to the contained shared_ptr, with const contained type
+        /// @note Hurrah for trickery!
+        const shared_ptr<const T> operator->() const { return  const_pointer_cast<const T>(m_data); } //!< Const shared pointer access operator
+        /// Const dereferencing to a const reference of the contained type
+        const T& operator*() const { return *m_data; } //!< Const dereference operator
 
-        operator bool() const { return (bool) m_data; } //!< Bool cast operator
+        /// Bool cast operator
+        /// @note This should ideally use the 'safe bool idiom' in C++98 -- in C++11 an implicit explicit
+        ///       cast / contextual conversion with the new 'explicit' keyword will be used for safety
+        #ifdef HEPMC_HAS_CXX11
+        explicit
+        #endif
+        operator bool() const { return (bool) m_data; }
 
         //@}
 
