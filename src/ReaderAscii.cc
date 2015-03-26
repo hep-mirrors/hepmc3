@@ -15,6 +15,7 @@
 #include "HepMC/Units.h"
 
 #include <cstring>
+#include <sstream>
 using namespace std;
 
 namespace HepMC {
@@ -76,7 +77,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 is_parsing_successful = parse_particle_information(evt,buf);
                 break;
             case 'W':
-                is_parsing_successful = parse_weight_values(evt,buf);
+		if ( parsed_event_header )
+		  is_parsing_successful = parse_weight_values(evt,buf);
+		else
+		  is_parsing_successful = parse_weight_names(buf);
                 break;
             case 'U':
                 is_parsing_successful = parse_units(evt,buf);
@@ -367,6 +371,24 @@ bool ReaderAscii::parse_run_attribute(const char *buf) {
 	 make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
 
     run_info()->add_attribute(string(name), att);
+
+    return true;
+
+}
+
+
+bool ReaderAscii::parse_weight_names(const char *buf) {
+    const char     *cursor  = buf;
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    ++cursor;
+
+    istringstream iss(unescape(cursor));
+    vector<string> names;
+    string name;
+    while ( iss >> name ) names.push_back(name);
+
+    run_info()->set_weight_names(names);
 
     return true;
 

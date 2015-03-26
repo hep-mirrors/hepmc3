@@ -24,6 +24,12 @@ int main(int argc, char ** argv) {
 
   runinfo->add_attribute("HEPRUP", hepr);
 
+  std::vector<std::string> weightnames;
+  for ( int i = 0, N = hepr->heprup.weightinfo.size(); i < N; ++i )
+    weightnames.push_back(hepr->heprup.weightNameHepMC(i));
+  runinfo->set_weight_names(weightnames);
+
+
   WriterAscii output("LHEF_example.hepmc3", runinfo);
 
   int neve = 0;
