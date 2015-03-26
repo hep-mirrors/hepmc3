@@ -1,5 +1,7 @@
 2015-03-26  Andy Buckley  <andy.buckley@cern.ch>
 
+	* Overhaul of FourVector class and removal of FourVector.icc
+
 	* Differentiate between SmartPointer const and non-const
 	dereferencing and arrow operators, to pass on the constness
 	semantics to the contained type. This blocks accidents like

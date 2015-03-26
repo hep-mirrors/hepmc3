@@ -45,7 +45,9 @@
 
 
 namespace HepMC {
+
   // ...
+
 } // namespace HepMC
 
 #endif

@@ -8,118 +8,296 @@
 /**
  *  @file FourVector.h
  *  @brief Definition of \b class FourVector
- *
- *  @class HepMC::FourVector
- *  @brief Generic 4-vector
- *
- *  Interpretation of its content depends on accessors used.
- *  Contains few support operations on 4-vectors and floating-point values.
- *  Fully inlined
- *
  */
-#include "HepMC/Setup.h"
+#include "HepMC/Common.h"
+#include <cmath>
 
 namespace HepMC {
 
+
+  /// Handy number squaring function
+  template <typename NUM>
+  inline NUM sqr(NUM x) { return x*x; }
+
+
+/**
+ *  @brief Generic 4-vector
+ *
+ *  Interpretation of its content depends on accessors used: it's much simpler to do this
+ *  than to distinguish between space and momentum vectors via the type system (especially
+ *  given the need for backward compatibility with HepMC2). Be sensible and don't call
+ *  energy functions on spatial vectors! To avoid duplication, most definitions are only
+ *  implemented on the spatial function names, with the energy-momentum functions as aliases.
+ *
+ *  This is @a not intended to be a fully featured 4-vector, but does contain the majority
+ *  of common non-boosting functionality, as well as a few support operations on
+ *  4-vectors.
+ *
+ *  The implementations in this class are fully inlined.
+ */
 class FourVector {
-//
-// Constructors
-//
 public:
+
     /** @brief Default constructor */
-    FourVector()                                      :v1(0.0), v2(0.0), v3(0.0), v4(0.0)  {}
+    FourVector()
+      : m_v1(0.0),   m_v2(0.0), m_v3(0.0),    m_v4(0.0)  {}
     /** @brief Sets all FourVector fields */
-    FourVector(double x, double y, double z, double e):v1(x),   v2(y),   v3(z),   v4(e)    {}
+    FourVector(double x, double y, double z, double e)
+      : m_v1(x),     m_v2(y),   m_v3(z),      m_v4(e)    {}
     /** @brief Copy constructor */
-    FourVector(const FourVector & v)                  :v1(v.v1),v2(v.v2),v3(v.v3),v4(v.v4) {}
+    FourVector(const FourVector & v)
+      : m_v1(v.m_v1), m_v2(v.m_v2), m_v3(v.m_v3), m_v4(v.m_v4) {}
 
-//
-// Functions
-//
-public:
 
-    double m()       const; //!< Calculate mass. Returns -sqrt(-m) if e^2 - P^2 is negative
-    double length()  const; //!< Calculate length
-    double p()       const; //!< Magnitude of (x, y, z) vector
-    double pt()      const; //!< Magnitude of (x, y) vector
-    double phi()     const; //!< Calculate azimuthal angle
-    double theta()   const; //!< Calculate polar angle
-    double eta()     const; //!< Calculate pseudo-rapidity
-    double rap()     const; //!< Calculate rapidity
-    double abs_eta() const; //!< Calculate absolute pseudo-rapidity
-    double abs_rap() const; //!< Calculate absolute rapidity
-    double delta_phi  (const FourVector &v) const; //!< Azimuthal angle separation
-    double delta_theta(const FourVector &v) const; //!< Polar angle separation
-    double delta_eta  (const FourVector &v) const; //!< Pseudo-rapidity separation
-    double delta_rap  (const FourVector &v) const; //!< Rapidity separation
-    double delta_r    (const FourVector &v) const; //!< sqrt(dphi^2 + deta^2)
-    bool   is_zero() const; //!< Check if the length of this vertex is zero
+    /// @name Component accessors
+    //@{
 
-    bool        operator==(const FourVector& rhs) const;                            //!< Boolean operator ==
-    bool        operator!=(const FourVector& rhs) const { return !(*this == rhs); } //!< Boolean operator !=
-
-    FourVector  operator+ (const FourVector& rhs) const; //!< Arithmetic operator +
-    FourVector  operator- (const FourVector& rhs) const; //!< Arithmetic operator -
-    FourVector  operator* (const double rhs)      const; //!< Arithmetic operator *
-    FourVector  operator/ (const double rhs)      const; //!< Arithmetic operator /
-
-    void        operator+=(const FourVector& rhs);       //!< Assignment operator +=
-    void        operator-=(const FourVector& rhs);       //!< Assignment operator -=
-    void        operator*=(const double rhs);            //!< Assignment operator *=
-    void        operator/=(const double rhs);            //!< Assignment operator /=
-
-//
-// Accessors
-//
-public:
-    // As 4-momentum
-    double px()       const { return v1; } //!< Get px
-    void   setPx(double px) { v1 = px;   } //!< Set px
-
-    double py()       const { return v2; } //!< Get py
-    void   setPy(double py) { v2 = py;   } //!< Set py
-
-    double pz()       const { return v3; } //!< Get pz
-    void   setPz(double pz) { v3 = pz;   } //!< Set pz
-
-    double e()        const { return v4; } //!< Get energy
-    void   setE (double e ) { v4 = e;    } //!< Set energy
-
-    // As time-space
-    double x()        const { return v1; } //!< Get x coordinate
-    void   setX(double x)   { v1 = x;    } //!< Set x coordinate
-
-    double y()        const { return v2; } //!< Get y coordinate
-    void   setY(double y)   { v2 = y;    } //!< Set y coordinate
-
-    double z()        const { return v3; } //!< Get z coordinate
-    void   setZ(double z)   { v3 = z;    } //!< Set z coordinate
-
-    double t()        const { return v4; } //!< Get time
-    void   setT(double t)   { v4 = t;    } //!< Set time
-
-    /** @brief Set all FourVector fields */
+    /** @brief Set all FourVector fields, in order x,y,z,t */
     void set(double x1, double x2, double x3, double x4) {
-        v1 = x1;
-        v2 = x2;
-        v3 = x3;
-        v4 = x4;
+        m_v1 = x1;
+        m_v2 = x2;
+        m_v3 = x3;
+        m_v4 = x4;
     }
 
-//
-// Fields
-//
-public:
-    static const FourVector& ZERO_VECTOR(); //!< FourVector(0,0,0,0)
+
+    /// x-component of position/displacement
+    double x()        const { return m_v1; }
+    /// Set x-component of position/displacement
+    void   setX(double x)   { m_v1 = x;    }
+
+    /// y-component of position/displacement
+    double y()        const { return m_v2; }
+    /// Set y-component of position/displacement
+    void   setY(double y)   { m_v2 = y;    }
+
+    /// z-component of position/displacement
+    double z()        const { return m_v3; }
+    /// Set z-component of position/displacement
+    void   setZ(double z)   { m_v3 = z;    }
+
+    /// Time component of position/displacement
+    double t()        const { return m_v4; }
+    /// Set time component of position/displacement
+    void   setT(double t)   { m_v4 = t;    }
+
+
+    /// x-component of momentum
+    double px()       const { return x(); }
+    /// Set x-component of momentum
+    void   setPx(double px) { setX(px);   }
+
+    /// y-component of momentum
+    double py()       const { return y(); }
+    /// Set y-component of momentum
+    void   setPy(double py) { setY(py);   }
+
+    /// z-component of momentum
+    double pz()       const { return z(); }
+    /// Set z-component of momentum
+    void   setPz(double pz) { setZ(pz);   }
+
+    /// Energy component of momentum
+    double e()        const { return t(); }
+    /// Set energy component of momentum
+    void   setE (double e ) { setT(e);    }
+
+    //@}
+
+
+    /// @name Computed properties
+    //@{
+
+    /// Squared magnitude of (x, y, z) 3-vector
+    double length2()  const { return sqr(x()) + sqr(y()) + sqr(z()); }
+    /// Magnitude of spatial (x, y, z) 3-vector
+    double length()  const { return sqrt(length2()); }
+    /// Squared magnitude of (x, y) vector
+    double perp2()      const { return sqr(x()) + sqr(y()); }
+    /// Magnitude of (x, y) vector
+    double perp()      const { return sqrt(perp2()); }
+    /// Spacetime invariant interval s^2 = t^2 - x^2 - y^2 - z^2
+    double interval() const { return sqr(t()) - length2(); }
+
+    /// Squared magnitude of p3 = (px, py, pz) vector
+    double p3mod2()       const { return length2(); }
+    /// Magnitude of p3 = (px, py, pz) vector
+    double p3mod()       const { return length(); }
+    /// Squared transverse momentum px^2 + py^2
+    double pt2()      const { return perp2(); }
+    /// Transverse momentum
+    double pt()      const { return perp(); }
+    /// Squared invariant mass m^2 = E^2 - px^2 - py^2 - pz^2
+    double m2()       const { return interval(); }
+    /// Invariant mass. Returns -sqrt(-m) if e^2 - P^2 is negative
+    double m() const { return (m2() > 0.0) ? sqrt(m2()) : -sqrt(-m2()); }
+
+    /// Azimuthal angle
+    double phi()     const { return atan2( y(), x() ); }
+    /// Polar angle w.r.t. z direction
+    double theta()   const {  return atan2( perp(), z() ); }
+    /// Pseudorapidity
+    /// @todo Improve numerical stability
+    double eta()     const  { return 0.5*log( (p3mod() + pz()) / (p3mod() - pz()) ); }
+    /// Rapidity
+    /// @todo Improve numerical stability
+    double rap()     const {   return 0.5*log( (e() + pz()) / (e() - pz()) ); }
+    /// Absolute pseudorapidity
+    double abs_eta() const { return std::abs( eta() ); }
+    /// Absolute rapidity
+    double abs_rap() const { return std::abs( rap() ); }
+
+    //@}
+
+
+    /// @name Comparisons to another FourVector
+    //@{
+
+    /// Check if the length of this vertex is zero
+    bool is_zero() const { return x() == 0 && y() == 0 && z() == 0 && t() == 0; }
+
+    /// Signed azimuthal angle separation in [-pi, pi]
+    double delta_phi(const FourVector &v) const {
+      double dphi = phi() - v.phi();
+      if (dphi != dphi) return dphi;
+      while (dphi >=  M_PI) dphi -= 2.*M_PI;
+      while (dphi <  -M_PI) dphi += 2.*M_PI;
+      return dphi;
+    }
+
+    /// Pseudorapidity separation
+    double delta_eta(const FourVector &v) const { return eta() - v.eta(); }
+
+    /// Rapidity separation
+    double delta_rap(const FourVector &v) const { return rap() - v.rap(); }
+
+    /// R_eta^2-distance separation dR^2 = dphi^2 + deta^2
+    double delta_r2_eta(const FourVector &v) const {
+      return sqr(delta_phi(v)) + sqr(delta_eta(v));
+    }
+
+    /// R_eta-distance separation dR = sqrt(dphi^2 + deta^2)
+    double delta_r_eta(const FourVector &v) const {
+      return sqrt( delta_r2_eta(v) );
+    }
+
+    /// R_rap^2-distance separation dR^2 = dphi^2 + drap^2
+    double delta_r2_rap(const FourVector &v) const {
+      return sqr(delta_phi(v)) + sqr(delta_rap(v));
+    }
+
+    /// R-rap-distance separation dR = sqrt(dphi^2 + drap^2)
+    double delta_r_rap(const FourVector &v) const {
+      return sqrt( delta_r2_rap(v) );
+    }
+
+    //@}
+
+
+    /// @name Operators
+    //@{
+
+    /// Equality
+    bool operator==(const FourVector& rhs) const {
+      return x() == rhs.x() && y() == rhs.y() && z() == rhs.z() && t() == rhs.t();
+    }
+    /// Inequality
+    bool operator!=(const FourVector& rhs) const { return !(*this == rhs); }
+
+    /// Arithmetic operator +
+    FourVector  operator+ (const FourVector& rhs) const {
+      return FourVector( x() + rhs.x(), y() + rhs.y(), z() + rhs.z(), t() + rhs.t() );
+    }
+    /// Arithmetic operator -
+    FourVector  operator- (const FourVector& rhs) const {
+      return FourVector( x() - rhs.x(), y() - rhs.y(), z() - rhs.z(), t() - rhs.t() );
+    }
+    /// Arithmetic operator * by scalar
+    FourVector  operator* (const double rhs) const {
+      return FourVector( x()*rhs, y()*rhs, z()*rhs, t()*rhs );
+    }
+    /// Arithmetic operator / by scalar
+    FourVector  operator/ (const double rhs) const {
+      return FourVector( x()/rhs, y()/rhs, z()/rhs, t()/rhs );
+    }
+
+    /// Arithmetic operator +=
+    void operator += (const FourVector& rhs) {
+      setX(x() + rhs.x());
+      setY(y() + rhs.y());
+      setZ(z() + rhs.z());
+      setT(t() + rhs.t());
+    }
+    /// Arithmetic operator -=
+    void operator -= (const FourVector& rhs) {
+      setX(x() - rhs.x());
+      setY(y() - rhs.y());
+      setZ(z() - rhs.z());
+      setT(t() - rhs.t());
+    }
+    /// Arithmetic operator *= by scalar
+    void operator *= (const double rhs) {
+      setX(x()*rhs);
+      setY(y()*rhs);
+      setZ(z()*rhs);
+      setT(t()*rhs);
+    }
+    /// Arithmetic operator /= by scalar
+      void operator /= (const double rhs) {
+      setX(x()/rhs);
+      setY(y()/rhs);
+      setZ(z()/rhs);
+      setT(t()/rhs);
+    }
+
+    //@}
+
+
+    /// Static null FourVector = (0,0,0,0)
+    static const FourVector& ZERO_VECTOR() {
+      static const FourVector v;
+      return v;
+    }
+
+
 private:
-    double v1; ///< px or x. Interpretation depends on accessors used
-    double v2; ///< py or y. Interpretation depends on accessors used
-    double v3; ///< pz or z. Interpretation depends on accessors used
-    double v4; ///< e  or t. Interpretation depends on accessors used
+
+    double m_v1; ///< px or x. Interpretation depends on accessors used
+    double m_v2; ///< py or y. Interpretation depends on accessors used
+    double m_v3; ///< pz or z. Interpretation depends on accessors used
+    double m_v4; ///< e  or t. Interpretation depends on accessors used
+
 };
+
+
+/// @name Unbound vector comparison functions
+//@{
+
+/// Signed azimuthal angle separation in [-pi, pi] between vecs @c a and @c b
+inline double delta_phi(const FourVector &a, const FourVector &b) { return b.delta_phi(a); }
+
+/// Pseudorapidity separation between vecs @c a and @c b
+inline double delta_eta(const FourVector &a, const FourVector &b) { return b.delta_eta(a); }
+
+/// Rapidity separation between vecs @c a and @c b
+inline double delta_rap(const FourVector &a, const FourVector &b) { return b.delta_rap(a); }
+
+/// R_eta^2-distance separation dR^2 = dphi^2 + deta^2 between vecs @c a and @c b
+inline double delta_r2_eta(const FourVector &a, const FourVector &b) { return b.delta_r2_eta(a); }
+
+/// R_eta-distance separation dR = sqrt(dphi^2 + deta^2) between vecs @c a and @c b
+inline double delta_r_eta(const FourVector &a, const FourVector &b) { return b.delta_r_eta(a); }
+
+/// R_rap^2-distance separation dR^2 = dphi^2 + drap^2 between vecs @c a and @c b
+inline double delta_r2_rap(const FourVector &a, const FourVector &b) { return b.delta_r2_rap(a); }
+
+/// R_rap-distance separation dR = sqrt(dphi^2 + drap^2) between vecs @c a and @c b
+inline double delta_r_rap(const FourVector &a, const FourVector &b) { return b.delta_r_rap(a); }
+
+//@}
+
 
 } // namespace HepMC
 
-#include "HepMC/FourVector.icc"
 
 #endif

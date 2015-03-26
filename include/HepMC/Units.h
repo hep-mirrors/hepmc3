@@ -17,6 +17,7 @@
  */
 
 #include "HepMC/Errors.h"
+#include "HepMC/Setup.h"
 #include "HepMC/FourVector.h"
 
 namespace HepMC {
