@@ -228,10 +228,9 @@ void WriterAscii::write_run_info() {
 
     allocate_buffer();
 
-    if ( !run_info() ) {
-	WARNING("WriterAscii::write_run_info: No run info object." )
-	    return;
-    }
+    // If no run info object set, create a dummy one.
+    if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
+
     typedef map< std::string, shared_ptr<Attribute> >::value_type value_type;
     FOREACH( value_type att, run_info()->attributes() ) {
 	string st;
