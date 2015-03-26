@@ -174,7 +174,7 @@ int main() {
 
     cout << endl << "Offsetting event position by 5,5,5,5" << endl;
 
-    evt.shift_position( FourVector(5,5,5,5) );
+    evt.shift_position_by( FourVector(5,5,5,5) );
 
     Print::listing(evt);
 

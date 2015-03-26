@@ -15,7 +15,6 @@
 #if !defined(__CINT__)
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Errors.h"
-#include "HepMC/GenWeights.h"
 #include "HepMC/GenHeavyIon.h"
 #include "HepMC/GenPdfInfo.h"
 #include "HepMC/GenCrossSection.h"
@@ -132,12 +131,16 @@ public:
     //@{
 
     /// Vertex representing the overall event position
-    /// @todo This is returning a vertex rather than a 4-vector. Rename to root_vertex() (and provide event_pos() = root_vertex().position())?
-    const GenVertexPtr& event_pos() const { return m_event_pos; }
+    const FourVector& event_pos() const;
 
-    /// @brief Shift position of all vertices in the event by delta @a op
-    /// @todo Clarify if this is a delta or setting a new absolute pos (with the delta computed internally). Use explicit shift_event_to / shift_event_by names?
-    void shift_position( const FourVector &op );
+    /// @brief Shift position of all vertices in the event by @a delta
+    void shift_position_by( const FourVector & delta );
+
+    /// @brief Shift position of all vertices in the event to @a op
+    void shift_position_to( const FourVector & newpos ) {
+      const FourVector delta = newpos - event_pos();
+      shift_position_by(delta);
+    }
 
     //@}
 
@@ -239,15 +242,20 @@ public:
     HEPMC_DEPRECATED("Use GenCrossSectionPtr instead of GenCrossSection*")
     void set_cross_section(GenCrossSection *cs);
 
-    /// @deprecated Backward compatibility iterators
-    typedef std::vector<GenParticlePtr>::iterator       particle_iterator;
-    /// @deprecated Backward compatibility iterators
-    typedef std::vector<GenParticlePtr>::const_iterator particle_const_iterator;
+    /// @deprecated Backward compatibility typedefs
+    typedef std::vector<double>  GenWeights;
+    /// @deprecated Backward compatibility typedefs
+    typedef std::vector<double>  WeightContainer;
 
     /// @deprecated Backward compatibility iterators
-    typedef std::vector<GenVertexPtr>::iterator         vertex_iterator;
+    typedef std::vector<GenParticlePtr>::iterator  particle_iterator;
     /// @deprecated Backward compatibility iterators
-    typedef std::vector<GenVertexPtr>::const_iterator   vertex_const_iterator;
+    typedef std::vector<GenParticlePtr>::const_iterator  particle_const_iterator;
+
+    /// @deprecated Backward compatibility iterators
+    typedef std::vector<GenVertexPtr>::iterator vertex_iterator;
+    /// @deprecated Backward compatibility iterators
+    typedef std::vector<GenVertexPtr>::const_iterator  vertex_const_iterator;
 
     /// @deprecated Backward compatibility iterators
     HEPMC_DEPRECATED("Iterate over std container particles() instead")
@@ -366,9 +374,8 @@ private:
     /// Length unit
     Units::LengthUnit m_length_unit;
 
-    /// Default event position
-    /// @todo Isn't this the same as the root vertex? (Which we can get otherwise?) Rename or remove?
-    GenVertexPtr m_event_pos;
+    /// The root vertex is stored outside the normal vertices list to block user access to it
+    GenVertexPtr m_rootvertex;
 
     /// Global run information.
     shared_ptr<GenRunInfo> m_run_info;

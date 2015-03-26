@@ -62,19 +62,19 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
 
     cout << "________________________________________________________________________" << endl;
     cout << "GenEvent: #" << event.event_number() << endl;
-    cout << " Momenutm units: " << Units::name(event.momentum_unit())
+    cout << " Momentum units: " << Units::name(event.momentum_unit())
          << " Position units: " << Units::name(event.length_unit()) << endl;
     cout << " Entries in this event: " << event.vertices().size() << " vertices, "
          << event.particles().size() << " particles." << endl;
-    cout << " root vertex: " << event.event_pos()->particles_out().size();
+    // cout << " root vertex: " << event.event_pos()->particles_out().size();
 
-    const FourVector &pos = event.event_pos()->position();
-    cout << ", position offset: " << pos.x() << ", " << pos.y() << ", " << pos.z() << ", " << pos.t() <<endl;
+    const FourVector &pos = event.event_pos();
+    cout << ", position offset: " << pos.x() << ", " << pos.y() << ", " << pos.z() << ", " << pos.t() << endl;
 
     // Print a legend to describe the particle info
     cout << "                                    GenParticle Legend" << endl;
-    cout << "         id    PDG ID   "
-         << "( Px,       Py,       Pz,     E )"
+    cout << "         ID    PDG ID   "
+         << "( px,       py,       pz,     E )"
          << "   Stat ProdVtx" << endl;
     cout << "________________________________________________________________________" << endl;
 
@@ -154,7 +154,7 @@ void Print::listing( const GenParticlePtr &p ) {
     cout.width(3);
     cout << p->status();
 
-    GenVertexPtr prod = p->production_vertex();
+    const GenVertexPtr prod = p->production_vertex();
 
     if( prod ) {
         cout.width(6);

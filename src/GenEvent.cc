@@ -11,31 +11,31 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
-#include "HepMC/Setup.h"
 
 #include "HepMC/Data/GenEventData.h"
 #include "HepMC/Search/FindParticles.h"
 
 #include "HepMC/foreach.h"
-#include <vector>
 #include <deque>
 
 using namespace std;
 
 namespace HepMC {
 
+
 GenEvent::GenEvent(Units::MomentumUnit momentum_unit,
 		   Units::LengthUnit length_unit)
   : m_event_number(0), m_momentum_unit(momentum_unit),
     m_length_unit(length_unit),
-    m_event_pos(make_shared<GenVertex>()) {}
+    m_rootvertex(make_shared<GenVertex>()) {}
+
 
 GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
 	 Units::MomentumUnit momentum_unit,
 	 Units::LengthUnit length_unit)
   : m_event_number(0), m_momentum_unit(momentum_unit),
     m_length_unit(length_unit),
-    m_event_pos(make_shared<GenVertex>()),
+    m_rootvertex(make_shared<GenVertex>()),
     m_run_info(run) {}
 
 void GenEvent::add_particle( const GenParticlePtr &p ) {
@@ -46,9 +46,9 @@ void GenEvent::add_particle( const GenParticlePtr &p ) {
     p->m_event = this;
     p->m_id    = particles().size();
 
-    // Particles without production vertex are added to event_pos()
+    // Particles without production vertex are added to the root vertex
     if( !p->production_vertex() )
-      m_event_pos->add_particle_out(p);
+      m_rootvertex->add_particle_out(p);
 }
 
 void GenEvent::add_vertex( const GenVertexPtr &v ) {
@@ -227,24 +227,29 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
 }
 
 
-void GenEvent::shift_position( const FourVector &op ) {
-    m_event_pos->set_position( m_event_pos->position() + op );
+const FourVector& GenEvent::event_pos() const {
+  return m_rootvertex->position();
+}
+
+
+void GenEvent::shift_position_by( const FourVector & delta ) {
+    m_rootvertex->set_position( event_pos() + delta );
 
     // Offset all vertices
     FOREACH ( GenVertexPtr &v, m_vertices ) {
         if ( v->has_set_position() )
-            v->set_position( v->position() + op );
+            v->set_position( v->position() + delta );
     }
 }
 
 
 void GenEvent::clear() {
     m_event_number = 0;
-
     m_attributes.clear();
     m_particles.clear();
     m_vertices.clear();
 }
+
 
 //
 // Deprecated functions
@@ -328,8 +333,8 @@ void GenEvent::write_data(GenEventData &data) const {
     }
 }
 
-void GenEvent::read_data(const GenEventData &data)
-{
+
+void GenEvent::read_data(const GenEventData &data) {
     this->set_event_number( data.event_number );
     this->set_units( data.momentum_unit, data.length_unit );
 
@@ -365,27 +370,30 @@ void GenEvent::read_data(const GenEventData &data)
 
 #ifndef HEPMC_NO_DEPRECATED
 
-
 bool GenEvent::valid_beam_particles() const {
-    return (m_event_pos->particles_out().size()==2);
+    /// @todo Change this definition to require status = 4... and in principle there don't have to be two of them
+    return (m_rootvertex->particles_out().size()==2);
 }
 
 pair<GenParticlePtr,GenParticlePtr> GenEvent::beam_particles() const {
-    switch( m_event_pos->particles_out().size() ) {
+    /// @todo Change this definition to require status = 4... and in principle there don't have to be two of them
+    switch( m_rootvertex->particles_out().size() ) {
         case 0:  return make_pair(GenParticlePtr(),              GenParticlePtr());
-        case 1:  return make_pair(m_event_pos->particles_out()[0],GenParticlePtr());
-        default: return make_pair(m_event_pos->particles_out()[0],m_event_pos->particles_out()[1]);
+        case 1:  return make_pair(m_rootvertex->particles_out()[0], GenParticlePtr());
+        default: return make_pair(m_rootvertex->particles_out()[0], m_rootvertex->particles_out()[1]);
     }
 }
 
 void GenEvent::set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) {
-    m_event_pos->add_particle_out(p1);
-    m_event_pos->add_particle_out(p2);
+    /// @todo Require/set status = 4
+    m_rootvertex->add_particle_out(p1);
+    m_rootvertex->add_particle_out(p2);
 }
 
 void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) {
-    m_event_pos->add_particle_out(p.first);
-    m_event_pos->add_particle_out(p.second);
+    /// @todo Require/set status = 4
+    m_rootvertex->add_particle_out(p.first);
+    m_rootvertex->add_particle_out(p.second);
 }
 
 #endif
@@ -417,4 +425,6 @@ void GenEvent::Streamer(TBuffer &b){
 }
 
 #endif
+
+
 } // namespace HepMC
