@@ -267,7 +267,8 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
 
     if( atoi(cursor) != (int)evt.particles().size() + 1 ) {
-        ERROR( "ReaderAscii: particle id mismatch" )
+        /// @todo Should be an exception
+        ERROR( "ReaderAscii: particle ID mismatch" )
         return false;
     }
 

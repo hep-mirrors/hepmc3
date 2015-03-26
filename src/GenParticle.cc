@@ -59,11 +59,19 @@ void GenParticle::unset_generated_mass() {
     m_data.is_mass_set = false;
 }
 
-GenVertexPtr GenParticle::production_vertex() const {
+GenVertexPtr GenParticle::production_vertex() {
     return m_production_vertex.lock();
 }
 
-GenVertexPtr GenParticle::end_vertex() const {
+const GenVertexPtr GenParticle::production_vertex() const {
+    return m_production_vertex.lock();
+}
+
+GenVertexPtr GenParticle::end_vertex() {
+    return m_end_vertex.lock();
+}
+
+const GenVertexPtr GenParticle::end_vertex() const {
     return m_end_vertex.lock();
 }
 

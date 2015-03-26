@@ -36,7 +36,9 @@ GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
     m_rootvertex(make_shared<GenVertex>()),
     m_run_info(run) {}
 
-void GenEvent::add_particle( const GenParticlePtr &p ) {
+
+// void GenEvent::add_particle( const GenParticlePtr &p ) {
+void GenEvent::add_particle( GenParticlePtr p ) {
     if( p->in_event() ) return;
 
     m_particles.push_back(p);
@@ -49,7 +51,9 @@ void GenEvent::add_particle( const GenParticlePtr &p ) {
       m_rootvertex->add_particle_out(p);
 }
 
-void GenEvent::add_vertex( const GenVertexPtr &v ) {
+
+// void GenEvent::add_vertex( const GenVertexPtr &v ) {
+void GenEvent::add_vertex( GenVertexPtr v ) {
     if( v->in_event() ) return;
 
     m_vertices.push_back(v);
@@ -58,18 +62,19 @@ void GenEvent::add_vertex( const GenVertexPtr &v ) {
     v->m_id    = -(int)vertices().size();
 
     // Add all incoming and outgoing particles and restore their production/end vertices
-    FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
+    FOREACH( GenParticlePtr &p, v->m_particles_in ) {
         if(!p->in_event()) add_particle(p);
-	p->m_end_vertex = v->m_this.lock();
+        p->m_end_vertex = v->m_this.lock();
     }
 
-    FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
+    FOREACH( GenParticlePtr &p, v->m_particles_out ) {
         if(!p->in_event()) add_particle(p);
         p->m_production_vertex = v->m_this.lock();
     }
 }
 
-void GenEvent::remove_particle( const GenParticlePtr &p ) {
+
+void GenEvent::remove_particle( GenParticlePtr p ) {
     if( !p || p->parent_event() != this ) return;
 
     DEBUG( 3, "GenEvent::remove_particle - called with particle: "<<p->id() );
@@ -101,17 +106,17 @@ void GenEvent::remove_particle( const GenParticlePtr &p ) {
     }
 }
 
-void GenEvent::remove_vertex( const GenVertexPtr &v ) {
+void GenEvent::remove_vertex( GenVertexPtr v ) {
     if( !v || v->parent_event() != this ) return;
 
     DEBUG( 3, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
     shared_ptr<GenVertex> null_vtx;
 
-    FOREACH( const GenParticlePtr &p, v->m_particles_in ) {
+    FOREACH( GenParticlePtr &p, v->m_particles_in ) {
         p->m_end_vertex.reset();
     }
 
-    FOREACH( const GenParticlePtr &p, v->m_particles_out ) {
+    FOREACH( GenParticlePtr &p, v->m_particles_out ) {
         p->m_production_vertex.reset();
 
         // recursive delete rest of the tree
@@ -274,7 +279,7 @@ void GenEvent::remove_attribute(const string &name, int id) {
 }
 
 
-void GenEvent::write_data(GenEventData &data) const {
+void GenEvent::write_data(GenEventData& data) const {
     // Reserve memory for containers
     data.particles.reserve( this->particles().size() );
     data.vertices.reserve( this->vertices().size() );
@@ -353,8 +358,8 @@ void GenEvent::read_data(const GenEventData &data) {
       int id1 = data.links1[i];
       int id2 = data.links2[i];
 
-      if( id1 > 0 ) this->vertices()[ (-id2)-1 ]->add_particle_in ( this->particles()[ id1-1 ] );
-      else          this->vertices()[ (-id1)-1 ]->add_particle_out( this->particles()[ id2-1 ] );
+      if( id1 > 0 ) m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] );
+      else          m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );
     }
 
     // Read attributes

@@ -1,5 +1,15 @@
 2015-03-26  Andy Buckley  <andy.buckley@cern.ch>
 
+	* Differentiate between SmartPointer const and non-const
+	dereferencing and arrow operators, to pass on the constness
+	semantics to the contained type. This blocks accidents like
+	calling non-const modifying functions on a const GenVertexPtr or
+	const GenParticlePtr, which is not protected against by
+	e.g. shared_ptr<GenParticle>. Plus adding an operator for bool
+	comparisons to SmartPointer and (many) updates through the main
+	object classes to respect the newly invigorated constness
+	rules. Good!
+
 	* Changing GenEvent::event_pos() to return a FourVector ref rather
 	than the root vertex itself, and changing
 	GenEvent::offset_event(v) to two explicitly named

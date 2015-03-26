@@ -18,6 +18,7 @@ namespace HepMC {
     using std::shared_ptr;
     using std::make_shared;
     using std::dynamic_pointer_cast;
+    using std::const_pointer_cast;
 }
 
 #else
@@ -30,6 +31,7 @@ namespace HepMC {
     using boost::shared_ptr;
     using boost::make_shared;
     using boost::dynamic_pointer_cast;
+    using boost::const_pointer_cast;
 }
 
 #endif
@@ -87,10 +89,13 @@ namespace HepMC {
         bool operator==(const SmartPointer &rhs)  const { return  m_data == rhs.m_data; } //!< == operator
         bool operator!=(const SmartPointer &rhs)  const { return  m_data != rhs.m_data; } //!< != operator
 
-        const shared_ptr<T>& operator->()         const { return  m_data; } //!< Shared pointer access operator
-        T&                   operator*()          const { return *m_data; } //!< Dereference operator
+        const shared_ptr<T> operator->()                { return  m_data; } //!< Shared pointer access operator
+        T&                   operator*()                { return *m_data; } //!< Dereference operator
 
-        operator bool() const { return (bool)m_data; } //!< Bool cast operator
+        const shared_ptr<const T> operator->()    const { return  const_pointer_cast<const T>(m_data); } //!< Const shared pointer access operator
+        const T&             operator*()          const { return *m_data; } //!< Const dereference operator
+
+        operator bool() const { return (bool) m_data; } //!< Bool cast operator
 
         //@}
 
@@ -101,9 +106,12 @@ namespace HepMC {
         #ifndef HEPMC_NO_DEPRECATED
 
         /// Cast to raw pointer
-        ///@deprecated Should not be used at all
+        /// @deprecated Should not be used at all
         HEPMC_DEPRECATED("Use smart pointers instead of raw pointers")
-        operator T*() const { return m_data.get(); }
+        operator T*() { return m_data.get(); }
+
+        /// Cast to bool
+        operator bool() { return (bool) m_data.get(); }
 
         #endif
 
@@ -121,10 +129,13 @@ namespace HepMC {
     };
 
 
-    /// @name Pointers to HepMC classes
+    /// @name Typedefs for smart pointers to HepMC classes
     //@{
-    typedef SmartPointer<class GenVertex>   GenVertexPtr;   //!< Smart pointer to GenVertex
     typedef SmartPointer<class GenParticle> GenParticlePtr; //!< Smart pointer to GenParticle
+    typedef SmartPointer<class GenVertex>   GenVertexPtr;   //!< Smart pointer to GenVertex
+
+    typedef SmartPointer<const class GenParticle> ConstGenParticlePtr; //!< Const smart pointer to GenParticle
+    typedef SmartPointer<const class GenVertex>   ConstGenVertexPtr;   //!< Const smart pointer to GenVertex
 
     typedef shared_ptr<struct GenPdfInfo>      GenPdfInfoPtr;      //!< Shared pointer to GenPdfInfo
     typedef shared_ptr<struct GenHeavyIon>     GenHeavyIonPtr;     //!< Shared pointer to GenHeavyIon

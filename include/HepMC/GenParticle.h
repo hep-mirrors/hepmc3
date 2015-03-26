@@ -67,8 +67,11 @@ public:
      */
     double generated_mass() const;
 
-    GenVertexPtr production_vertex() const;        //!< Get production vertex
-    GenVertexPtr end_vertex() const;               //!< Get end vertex
+    const GenVertexPtr production_vertex() const;        //!< Get production vertex
+    const GenVertexPtr end_vertex() const;               //!< Get end vertex
+
+    GenVertexPtr production_vertex();        //!< Get production vertex
+    GenVertexPtr end_vertex();               //!< Get end vertex
 
     void set_pdg_id(int pdg_id);                   //!< Set PDG ID
     void set_status(int status);                   //!< Set status code

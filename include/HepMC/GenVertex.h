@@ -75,13 +75,13 @@ namespace HepMC {
         const GenVertexData& data() const { return m_data; }
 
         /// Add incoming particle
-        void add_particle_in ( const GenParticlePtr& p);
+        void add_particle_in ( GenParticlePtr p);
         /// Add outgoing particle
-        void add_particle_out( const GenParticlePtr& p);
+        void add_particle_out( GenParticlePtr p);
         /// Remove incoming particle
-        void remove_particle_in ( const GenParticlePtr& p);
+        void remove_particle_in ( GenParticlePtr p);
         /// Remove outgoing particle
-        void remove_particle_out( const GenParticlePtr& p);
+        void remove_particle_out( GenParticlePtr p);
 
         /// Get/set list of incoming particles
         const std::vector<GenParticlePtr>& particles_in()  const { return m_particles_in;  }
@@ -128,18 +128,17 @@ namespace HepMC {
         /// Get barcode
         ///
         /// @note Currently barcode = id
-        /// @todo Remove barcode concept from HepMC API -- users' derived formats can still use the name as they wish
-        int barcode() const { return m_id; }
+        // int barcode() const { return m_id; }
 
         /// Add incoming particle by raw pointer
         /// @deprecated Use GenVertex::add_particle_in( const GenParticlePtr &p ) instead
         HEPMC_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
-        void add_particle_in ( GenParticle *p ) { add_particle_in (GenParticlePtr(p)); }
+        void add_particle_in ( GenParticle *p ) { add_particle_in( GenParticlePtr(p) ); }
 
         /// Add outgoing particle by raw pointer
         /// @deprecated Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead
         HEPMC_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
-        void add_particle_out( GenParticle *p ) { add_particle_out(GenParticlePtr(p)); }
+        void add_particle_out( GenParticle *p ) { add_particle_out( GenParticlePtr(p) ); }
 
         /// Define iterator by typedef
         typedef std::vector<GenParticlePtr>::const_iterator particles_in_const_iterator;

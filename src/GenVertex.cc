@@ -30,7 +30,8 @@ m_id(0),
 m_data(data) {
 }
 
-void GenVertex::add_particle_in( const GenParticlePtr &p ) {
+
+void GenVertex::add_particle_in( GenParticlePtr p ) {
     if(!p) return;
 
     // Avoid duplicates
@@ -47,7 +48,8 @@ void GenVertex::add_particle_in( const GenParticlePtr &p ) {
     if(m_event) m_event->add_particle(p);
 }
 
-void GenVertex::add_particle_out( const GenParticlePtr &p ) {
+
+void GenVertex::add_particle_out( GenParticlePtr p ) {
     if(!p) return;
 
     // Avoid duplicates
@@ -64,15 +66,18 @@ void GenVertex::add_particle_out( const GenParticlePtr &p ) {
     if(m_event) m_event->add_particle(p);
 }
 
-void GenVertex::remove_particle_in( const GenParticlePtr& p ) {
+
+void GenVertex::remove_particle_in( GenParticlePtr p ) {
     p->m_end_vertex.reset();
     m_particles_in.erase( std::remove( std::begin(m_particles_in), std::end(m_particles_in), p), m_particles_in.end());
 }
 
-void GenVertex::remove_particle_out( const GenParticlePtr& p ) {
+
+void GenVertex::remove_particle_out( GenParticlePtr p ) {
     p->m_production_vertex.reset();
     m_particles_out.erase( std::remove( std::begin(m_particles_out), std::end(m_particles_out), p), m_particles_out.end());
 }
+
 
 const FourVector& GenVertex::position() const {
 

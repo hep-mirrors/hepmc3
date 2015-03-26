@@ -52,13 +52,46 @@ public:
              Units::LengthUnit length_unit = Units::MM);
 
 
-    /// @name Particle and vertex read access
+    /// @name Particle and vertex access
     //@{
 
-    /// @brief Get/set list of particles
+    /// @brief Get list of particles (const)
     const std::vector<GenParticlePtr>& particles() const { return m_particles; }
-    /// @brief Get/set list of vertices
+    /// @brief Get list of vertices (const)
     const std::vector<GenVertexPtr>& vertices() const { return m_vertices; }
+
+
+    /// @brief Get/set list of particles (non-const)
+    std::vector<GenParticlePtr>& particles() { return m_particles; }
+    /// @brief Get/set list of vertices (non-const)
+    std::vector<GenVertexPtr>& vertices() { return m_vertices; }
+
+    //@}
+
+
+public:
+
+    // /// @brief Get/set list of particles (const view)
+    // const std::vector<GenParticlePtr>& particles() {
+    //   return reinterpret_cast< const std::vector<const GenParticlePtr>& >(m_particles);
+    // }
+    // /// @brief Get/set list of vertices (const view)
+    // const std::vector<GenParticlePtr>& particles() const {
+    //   return reinterpret_cast< const std::vector<const GenParticlePtr>& >(m_particles);
+    // }
+
+    // const std::vector< SmartPointer<const GenParticle> >& particles() const {
+    //   return reinterpret_cast< const std::vector< SmartPointer<const GenParticle> >& >(m_particles);
+    // }
+    //   std::vector<ConstGenParticlePtr> rtn; rtn.reserve(m_particles.size());
+    //   FOREACH (GenParticlePtr p, m_particles)
+    //     rtn.push_back( const_pointer_cast<const GenParticle>(p) );
+    //   return rtn;
+    // }
+    // /// @brief Get/set list of vertices (const view)
+    // const std::vector< SmartPointer<const GenVertex> >& vertices() const {
+    //   return reinterpret_cast< const std::vector< SmartPointer<const GenVertex> >& >(m_vertices);
+    // }
 
     //@}
 
@@ -172,10 +205,10 @@ public:
     //@{
 
     /// @brief Add particle
-    void add_particle( const GenParticlePtr &p );
+    void add_particle( GenParticlePtr p );
 
     /// @brief Add vertex
-    void add_vertex( const GenVertexPtr &v );
+    void add_vertex( GenVertexPtr v );
 
     /// @brief Remove particle
     ///
@@ -183,13 +216,13 @@ public:
     /// and will remove production vertex of this particle if this vertex
     /// has no more outgoing particles
     /// @todo Rejoining vertices. Also: what to do if deleting beam particle?
-    void remove_particle( const GenParticlePtr &v );
+    void remove_particle( GenParticlePtr v );
 
     /// @brief Remove vertex
     ///
     /// This will remove all sub-trees of all outgoing particles of this vertex
     /// @todo Optimize. Currently each particle/vertex is erased separately
-    void remove_vertex( const GenVertexPtr &v );
+    void remove_vertex( GenVertexPtr v );
 
     /// @brief Add whole tree in topological order
     ///
