@@ -46,9 +46,12 @@ namespace HepMC {
     /// @brief Standard runtime error
     /// @todo Should it be GenException? It's a HepMC thing, but not really a "gen" thing
     struct Exception : public std::runtime_error {
-
-      /// Runtime error message
       Exception(const std::string& msg) : std::runtime_error(msg) {}
+    };
+
+    /// @brief Exception related to weight lookups, setting, and index consistency
+    struct WeightError : public Exception {
+      WeightError(const std::string& msg) : Exception(msg) {}
     };
 
     //@}

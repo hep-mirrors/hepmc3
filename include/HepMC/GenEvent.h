@@ -78,7 +78,7 @@ public:
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
     double weight(const std::string& name) const {
-      if (!run_info()) throw Exception("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
+      if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
       return weight(run_info()->weight_index(name));
     }
 
