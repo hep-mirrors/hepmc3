@@ -20,7 +20,7 @@ public:
 
 public:
     const std::string name() {
-        if(m_file_in) return "ROOT WRTITER input file";
+        if(m_file_in) return "ROOT READER input file";
         else          return "ROOT WRTITER output file";
     }
 

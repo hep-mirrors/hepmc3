@@ -14,7 +14,7 @@ RootTool::RootTool(const std::string &filename, std::ios::openmode mode):m_file_
     if(mode == std::ios::in) {
         m_file_in = new ReaderRoot(m_filename);
 
-        m_timer = Timer("ROOT WRITER event parsing time");
+        m_timer = Timer("ROOT READER event parsing time");
     }
     else {
         m_file_out = new WriterRoot(m_filename);
