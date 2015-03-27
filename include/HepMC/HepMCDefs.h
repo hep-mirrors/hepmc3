@@ -8,54 +8,38 @@
 
 #include "HepMC/Version.h"
 
-
 /// @todo This header should have a better "real" name, maybe located together
 /// with things like the version and logging/error handling utilities (or
-/// accessed with them via a convenience HepMC/Setup/Common.h or similar). Emit
-/// a build warning to code which tries to access HepMC/HepMCDefs.h, which is a
-/// terrible name but should be provided for a while for backward compatibility.
+/// accessed with them via a convenience HepMC/Setup/Common.h or similar).
+///
+/// @todo Emit a build warning to code which tries to access HepMC/HepMCDefs.h,
+/// which is a terrible name but should be provided for a while for backward
+/// compatibility.
 
 
-// The IO_GenEvent class is available
-#ifndef HEPMC_HAS_IO_GENEVENT
-#define HEPMC_HAS_IO_GENEVENT
+// The Reader/Writer class separation is available
+#ifndef HEPMC_HAS_SPLIT_IO
+#define HEPMC_HAS_SPLIT_IO 1
 #endif
 
-// The IO_Ascii class is NOT available
-/// @todo Reinstate
-#ifndef HEPMC_IO_ASCII_REMOVED
-#define HEPMC_IO_ASCII_REMOVED
-#endif
-
-// The ParticleData class is NOT available
-#ifndef HEPMC_PARTICLE_DATA_REMOVED
-#define HEPMC_PARTICLE_DATA_REMOVED
-#endif
-
-// The PdfInfo class is available
-#ifndef HEPMC_HAS_PDF_INFO
-#define HEPMC_HAS_PDF_INFO
-#endif
-
-// HepMC uses SimpleVector (FourVector) to store momentum and position
-/// @todo Remove, since SimpleVector.h does not exist
-#ifndef HEPMC_HAS_SIMPLE_VECTOR
-#define HEPMC_HAS_SIMPLE_VECTOR
-#endif
-
-// Units are defined in HepMC
+// Units are defined in HepMC -- version 2 of the units system is simpler
 #ifndef HEPMC_HAS_UNITS
 #define HEPMC_HAS_UNITS 2
 #endif
 
-// The GenCrossSection class is available
-#ifndef HEPMC_HAS_CROSS_SECTION
-#define HEPMC_HAS_CROSS_SECTION
+// The GenPdfInfo class is available
+#ifndef HEPMC_HAS_PDF_INFO
+#define HEPMC_HAS_PDF_INFO 2
 #endif
 
-// The iterator range classes are available
-#ifndef HEPMC_HAS_ITERATOR_RANGES
-#define HEPMC_HAS_ITERATOR_RANGES
+// The GenCrossSection class is available
+#ifndef HEPMC_HAS_CROSS_SECTION
+#define HEPMC_HAS_CROSS_SECTION 2
+#endif
+
+// The GenHeavyIon class is available
+#ifndef HEPMC_HAS_HEAVY_ION
+#define HEPMC_HAS_HEAVY_ION 2
 #endif
 
 // The HepMC::GenWeights class allows named weights (version 2)
@@ -68,14 +52,33 @@
 #define HEPMC_VERTEX_HAS_STATUS
 #endif
 
-// The HeavyIon class is available
-#ifndef HEPMC_HAS_HEAVY_ION
-#define HEPMC_HAS_HEAVY_ION
-#endif
-
 // The HepMC::HeavyIon class contains centrality
 #ifndef HEPMC_HEAVY_ION_HAS_CENTRALITY
 #define HEPMC_HEAVY_ION_HAS_CENTRALITY
 #endif
+
+// Particles and vertices iterators have appropriate constness in method declarations and return types
+#ifndef HEPMC_HAS_CONSISTENT_CONST
+#define HEPMC_HAS_CONSISTENT_CONST 2
+#endif
+
+// Particles and vertices can be retrieved as vectors of pointers as well as the verbose iterators
+#ifndef HEPMC_HAS_SIMPLE_RANGES
+#define HEPMC_HAS_SIMPLE_RANGES 1
+#endif
+
+
+/// DEPRECATED STUFF:
+
+// The IO_GenEvent class is available (for now)
+#ifndef HEPMC_HAS_IO_GENEVENT
+#define HEPMC_HAS_IO_GENEVENT 1
+#endif
+
+// The iterator range classes are available
+#ifndef HEPMC_HAS_ITERATOR_RANGES
+#define HEPMC_HAS_ITERATOR_RANGES 1
+#endif
+
 
 #endif

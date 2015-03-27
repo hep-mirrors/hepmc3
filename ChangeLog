@@ -1,5 +1,7 @@
 2015-03-27  Andy Buckley  <andy.buckley@cern.ch>
 
+	* Adding, removing, and tweaking feature detection macros.
+
 	* Adding backward compatibility typedefs to CrossSection,
 	HeavyIon, PdfInfo (i.e. without the Gen prefixes)
 
