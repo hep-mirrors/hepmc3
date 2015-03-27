@@ -37,21 +37,21 @@ int main(int argc, char **argv) {
 
     TFile fo(argv[1]);
     WriterAscii text_output(argv[2]);
-    
+
     MyClass* myevent;
     int events_parsed = 0;
-  
+
     fo.GetListOfKeys()->Print();
-    
+
     TIter next(fo.GetListOfKeys());
     TKey *key;
-   
+
     while ((key=(TKey*)next()))
       {
 	fo.GetObject(key->GetName(), myevent);
-	
+
 	cout << "Event: " << key->GetName() << endl;
-   
+
         if( events_parsed == 0 ) {
             cout << "First event: " << endl;
 	    Print::listing(*(myevent->GetEvent()));
@@ -63,6 +63,9 @@ int main(int argc, char **argv) {
         if( events_parsed%1000 == 0 ) {
             cout << "Event: " << events_parsed << endl;
         }
+
+        delete myevent->GetEvent();
+        delete myevent;
     }
 
     text_output.close();

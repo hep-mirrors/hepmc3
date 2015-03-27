@@ -53,7 +53,7 @@ int FileValidationTool::process(GenEvent &hepmc) {
         )
         HEPMC3CODE(
             m_file_out->write_event( hepmc);
-            if( m_file_in->failed() ) return -1;
+            if( m_file_out->failed() ) return -1;
         )
     }
 

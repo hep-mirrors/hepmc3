@@ -41,6 +41,7 @@ bool ReaderRoot::read_event(GenEvent& evt) {
 
     evt.read_data(*data);
 
+    delete data;
     return true;
 }
 

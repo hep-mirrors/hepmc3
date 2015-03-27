@@ -46,6 +46,7 @@ int RootTool2::process(GenEvent &hepmc) {
         m_class->GetEvent()->write_data(data);
         hepmc.read_data(data);
 
+        delete m_class->GetEvent();
         delete m_class;
         m_class = NULL;
 
