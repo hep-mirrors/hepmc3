@@ -31,12 +31,14 @@
 
 namespace HepMC {
 
+
 class GenCrossSection : public Attribute {
 
 //
 // Fields
 //
 public:
+
     double cross_section;       ///< Generated cross-section
     double cross_section_error; ///< Generated cross-section error
 
@@ -60,6 +62,7 @@ public:
     bool operator!=( const GenCrossSection& ) const; ///< Operator !=
     bool is_valid()                           const; ///< Verify that the instance contains non-zero information
 };
+
 
 } // namespace HepMC
 

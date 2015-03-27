@@ -22,6 +22,7 @@
 
 namespace HepMC {
 
+
 class GenHeavyIon : public Attribute {
 
 //
@@ -62,6 +63,12 @@ public:
     bool operator!=( const GenHeavyIon& ) const; ///< Operator !=
     bool is_valid()                       const; ///< Verify that the instance contains non-zero information
 };
+
+
+#ifndef HEPMC_NO_DEPRECATED
+typedef GenHeavyIon HeavyIon;
+#endif
+
 
 } // namespace HepMC
 
