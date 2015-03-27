@@ -32,7 +32,8 @@ protected:
 /** @brief List of filter parameter types */
 enum FilterParamType {
     INTEGER_PARAM,
-    BOOL_PARAM
+    BOOL_PARAM,
+    ATTRIBUTE_PARAM
 };
 
 /** @brief List of filters with integer parameter */
@@ -42,11 +43,17 @@ enum FilterIntegerParam {
     ABS_PDG_ID
 };
 
-/** @brief List of filters boolean parameter */
+/** @brief List of filters with boolean parameter */
 enum FilterBoolParam {
     HAS_END_VERTEX,
     HAS_PRODUCTION_VERTEX,
     HAS_SAME_PDG_ID_DAUGHTER
+};
+
+/** @brief List of filters with attribute parameter */
+enum FilterAttributeParam {
+    ATTRIBUTE_EXISTS,
+    ATTRIBUTE_IS_EQUAL
 };
 
 /** @brief List of operators on filter values */
@@ -87,6 +94,13 @@ protected:
      *  Used by static const initializers to define filters.
      */
     FilterBase(FilterBoolParam p):m_value_type(BOOL_PARAM),m_bool(p) {}
+
+    /** @brief Attribute-type internal constructor
+     *
+     *  Used by attribute initializers to define filters.
+     */
+    FilterBase(FilterAttributeParam p):m_value_type(ATTRIBUTE_PARAM),m_attribute(p) {}
+
 //
 // Functions
 //
@@ -102,11 +116,12 @@ public:
 // Fields
 //
 protected:
-    FilterParamType                m_value_type;       //!< Parameter type
+    FilterParamType m_value_type; //!< Parameter type
 
     union {
-        FilterIntegerParam  m_int;  //!< Integer value (if integer parameter type)
-        FilterBoolParam     m_bool; //!< Boolean value (if boolean parameter type)
+        FilterAttributeParam m_attribute; //!< Attribute value (if attribute parameter type)
+        FilterIntegerParam   m_int;       //!< Integer   value (if integer   parameter type)
+        FilterBoolParam      m_bool;      //!< Boolean   value (if boolean   parameter type)
     };
 };
 

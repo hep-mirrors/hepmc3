@@ -21,6 +21,8 @@
 
 namespace HepMC {
 
+using namespace std;
+
 class GenEvent;
 class Attribute;
 
@@ -85,14 +87,17 @@ public:
      *  the same name is present. The attribute will be stored in the
      *  parent_event(). @return false if there is no parent_event();
      */
-    bool add_attribute(std::string name, shared_ptr<Attribute> att);
+    bool add_attribute(string name, shared_ptr<Attribute> att);
 
-    /// Remove attribute
-    void remove_attribute(std::string name);
+    /// @brief Remove attribute
+    void remove_attribute(string name);
 
-    /// Get attribute of type T
+    /// @brief Get attribute of type T
     template<class T>
-    shared_ptr<T> attribute(std::string name) const;
+    shared_ptr<T> attribute(string name) const;
+
+    /// @brief Get attribute of any type as string
+    string attribute_as_string(string name) const;
 
 //
 // Fields
@@ -112,7 +117,7 @@ private:
 #include "HepMC/GenEvent.h"
 
 template<class T>
-HepMC::shared_ptr<T> HepMC::GenParticle::attribute(std::string name) const {
+HepMC::shared_ptr<T> HepMC::GenParticle::attribute(string name) const {
   return parent_event()?
     parent_event()->attribute<T>(name, id()): HepMC::shared_ptr<T>();
 }

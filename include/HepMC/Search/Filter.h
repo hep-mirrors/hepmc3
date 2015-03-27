@@ -21,8 +21,12 @@
  */
 #include "HepMC/Search/FilterBase.h"
 #include "HepMC/Data/SmartPointer.h"
+#include "HepMC/Attribute.h"
+#include <string>
 
 namespace HepMC {
+
+using std::string;
 
 class GenEvent;
 
@@ -39,14 +43,20 @@ protected:
      *  Invoked when an operator == != < > <= or >= with integer value
      *  is used on a filter.
      */
-    Filter(FilterIntegerParam p, FilterOperator o, int value):FilterBase(p),m_operator(o),m_int_value(value) {}
+    Filter(FilterIntegerParam p, FilterOperator o, int value):FilterBase(p),m_operator(o),m_int_value(value),m_bool_value(true) {}
 
     /** @brief Internal constructor for boolean-type filters
      *
      *  Used to initialize global static const filters and to create
      *  new filters using operator '!'
      */
-    Filter(FilterBoolParam p, bool value = true):FilterBase(p),m_operator(EQUAL),m_bool_value(value) {}
+    Filter(FilterBoolParam p, bool value = true):FilterBase(p),m_operator(EQUAL),m_int_value(0),m_bool_value(value) {}
+
+    /** @brief Internal constructor for attribute-type filters
+     *
+     *  Used when class ATTRIBUTE is called to provide attribute name
+     */
+    Filter(FilterAttributeParam p, const string name):FilterBase(p),m_operator(EQUAL),m_int_value(0),m_bool_value(true),m_attribute_name(name) {}
 
 //
 // Functions
@@ -65,16 +75,17 @@ private:
     /** @brief Filter::passed_filter helper for pointer-type filters */
     bool passed_bool_filter(const GenParticlePtr &p) const;
 
+    /** @brief Filter::passed_filter helper for attribute-type filters */
+    bool passed_attribute_filter(const GenParticlePtr &p) const;
 //
 // Fields
 //
-private:
-    FilterOperator   m_operator;                //!< Operator used by filter
-
-    union {
-        int  m_int_value;               //!< Integer value used as a filter parameter (if integer-type filter)
-        bool m_bool_value;              //!< Boolean value used as a filter parameter (if boolean-type filter)
-    };
+protected:
+    FilterOperator m_operator;       //!< Operator used by filter
+    int            m_int_value;      //!< Filter parameter for integer-type filter
+    bool           m_bool_value;     //!< Filter parameter for boolean-type filter
+    string         m_attribute_name; //!< Filter parameter for attribute-type filters
+    string         m_attribute_str;  //!< Filter parameter for attribute-type filters
 };
 
 static const Filter HAS_END_VERTEX           = FilterBase::init_has_end_vertex();           //!< Filter for checking if HepMC::GenParticle::end_vertex()        != NULL

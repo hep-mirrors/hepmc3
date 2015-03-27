@@ -16,6 +16,7 @@
 
 namespace HepMC {
 
+using namespace std;
 
     /** @brief Type of iteration. Ssed by backward-compatibility interface */
     #ifndef HEPMC_NO_DEPRECATED
@@ -84,9 +85,9 @@ namespace HepMC {
         void remove_particle_out( GenParticlePtr p);
 
         /// Get/set list of incoming particles
-        const std::vector<GenParticlePtr>& particles_in()  const { return m_particles_in;  }
+        const vector<GenParticlePtr>& particles_in()  const { return m_particles_in;  }
         /// Get/set list of outgoing particles
-        const std::vector<GenParticlePtr>& particles_out() const { return m_particles_out; } //!< Get/set list of outgoing particles
+        const vector<GenParticlePtr>& particles_out() const { return m_particles_out; } //!< Get/set list of outgoing particles
 
         /// @brief Get vertex position
         ///
@@ -110,15 +111,17 @@ namespace HepMC {
         /// This will overwrite existing attribute if an attribute with
         /// the same name is present. The attribute will be stored in the
         /// parent_event(). @return false if there is no parent_event();
-        bool add_attribute(std::string name, shared_ptr<Attribute> att);
+        bool add_attribute(string name, shared_ptr<Attribute> att);
 
-        /// Remove attribute
-        void remove_attribute(std::string name);
+        /// @brief Remove attribute
+        void remove_attribute(string name);
 
-        /// Get attribute of type T
+        /// @brief Get attribute of type T
         template<class T>
-        shared_ptr<T> attribute(std::string name) const;
+        shared_ptr<T> attribute(string name) const;
 
+        /// @brief Get attribute of any type as string
+        string attribute_as_string(string name) const;
 
         /// @name Deprecated functionality
         //@{
@@ -141,11 +144,11 @@ namespace HepMC {
         void add_particle_out( GenParticle *p ) { add_particle_out( GenParticlePtr(p) ); }
 
         /// Define iterator by typedef
-        typedef std::vector<GenParticlePtr>::const_iterator particles_in_const_iterator;
+        typedef vector<GenParticlePtr>::const_iterator particles_in_const_iterator;
         /// Define iterator by typedef
-        typedef std::vector<GenParticlePtr>::const_iterator particles_out_const_iterator;
+        typedef vector<GenParticlePtr>::const_iterator particles_out_const_iterator;
         /// Define iterator by typedef
-        typedef std::vector<GenParticlePtr>::iterator       particle_iterator;
+        typedef vector<GenParticlePtr>::iterator       particle_iterator;
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
@@ -200,8 +203,8 @@ namespace HepMC {
         int            m_status; //!< Vertex id
         GenVertexData  m_data;   //!< Vertex data
 
-        std::vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
-        std::vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
+        vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
+        vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
         weak_ptr<GenVertex> m_this;          //!< Pointer to shared pointer managing this vertex
         //@}
 
@@ -213,7 +216,7 @@ namespace HepMC {
 #include "HepMC/GenEvent.h"
 
 template<class T>
-HepMC::shared_ptr<T> HepMC::GenVertex::attribute(std::string name) const {
+HepMC::shared_ptr<T> HepMC::GenVertex::attribute(string name) const {
   return parent_event()?
     parent_event()->attribute<T>(name, id()): HepMC::shared_ptr<T>();
 }

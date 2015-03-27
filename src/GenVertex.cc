@@ -106,4 +106,8 @@ void GenVertex::remove_attribute(std::string name) {
   if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }
 
+string GenVertex::attribute_as_string(string name) const {
+    return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
+}
+
 } // namespace HepMC

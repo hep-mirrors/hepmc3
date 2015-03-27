@@ -401,6 +401,26 @@ void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) 
 
 #endif
 
+string GenEvent::attribute_as_string(const string &name, int id) const {
+
+    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    if( i1 == m_attributes.end() ) {
+        if ( id == 0 && run_info() ) {
+            return run_info()->attribute_as_string(name);
+        }
+        return string();
+    }
+
+    std::map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
+    if (i2 == i1->second.end() ) return string();
+
+    if( !i2->second ) return string();
+
+    string ret;
+    i2->second->to_string(ret);
+
+    return ret;
+}
 
 #ifdef HEPMC_ROOTIO
 

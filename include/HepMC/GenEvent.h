@@ -168,6 +168,9 @@ public:
     template<class T>
     shared_ptr<T> attribute(const string &name, int id = 0) const;
 
+    /// @brief Get attribute of any type as string
+    string attribute_as_string(const string &name, int id = 0) const;
+
     /// @brief Get list of attributes
     const std::map< string, std::map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
 
@@ -410,9 +413,10 @@ shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
 
     std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
     if( i1 == m_attributes.end() ) {
-	if ( id == 0 && run_info() )
-	    return run_info()->attribute<T>(name);
-	return shared_ptr<T>();
+        if ( id == 0 && run_info() ) {
+            return run_info()->attribute<T>(name);
+        }
+        return shared_ptr<T>();
     }
 
     std::map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
@@ -420,13 +424,14 @@ shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
 
     if (!i2->second->is_parsed() ) {
 
-    shared_ptr<T> att = make_shared<T>();
-    if ( att->from_string(i2->second->unparsed_string()) && att->init(*this) ) {
-        // update map with new pointer
-        i2->second = att;
-        return att;
-    } else
-        return shared_ptr<T>();
+        shared_ptr<T> att = make_shared<T>();
+        if ( att->from_string(i2->second->unparsed_string()) && att->init(*this) ) {
+            // update map with new pointer
+            i2->second = att;
+            return att;
+        } else {
+            return shared_ptr<T>();
+        }
     }
     else return dynamic_pointer_cast<T>(i2->second);
 }

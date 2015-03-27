@@ -33,5 +33,17 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
     }
 }
 
+string GenRunInfo::attribute_as_string(const string &name) const {
+
+    std::map< std::string, shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
+    if( i == m_attributes.end() ) return string();
+
+    if( !i->second ) return string();
+
+    string ret;
+    i->second->to_string(ret);
+
+    return ret;
+}
 
 } // namespace HepMC

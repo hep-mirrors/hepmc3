@@ -47,17 +47,17 @@ int main() {
 
     //                                                               px      py        pz       e     pdgid status
     GenParticlePtr p1 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr p2 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr p3 = make_shared<HepMC::GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
+    GenParticlePtr p3 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
+    GenParticlePtr p2 = make_shared<HepMC::GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
     GenParticlePtr p4 = make_shared<HepMC::GenParticle>( FourVector(-3.047,-19.0,    -54.629,  57.920),  -2,  3 );
 
     GenVertexPtr v1 = make_shared<HepMC::GenVertex>();
     v1->add_particle_in (p1);
-    v1->add_particle_out(p3);
+    v1->add_particle_out(p2);
     evt.add_vertex(v1);
 
     GenVertexPtr v2 = make_shared<HepMC::GenVertex>();
-    v2->add_particle_in (p2);
+    v2->add_particle_in (p3);
     v2->add_particle_out(p4);
     evt.add_vertex(v2);
 
@@ -95,7 +95,7 @@ int main() {
         Print::line(p);
     }
 
-    // 3)
+    // 2)
     cout << endl << "Find all ancestors of particle with id " << p5->id() << ": " << endl;
 
     FindParticles search2(p5, FIND_ALL_ANCESTORS);
@@ -166,6 +166,50 @@ int main() {
 
     if(!cs) cout << "Successfully removed attribute" << endl;
     else    cout << "Problem removing attribute!" << endl;
+
+    //
+    // Example of adding particle attributes and finding particles with attributes
+    //
+
+    shared_ptr<Attribute> tool1           = make_shared<IntAttribute>(1);
+    shared_ptr<Attribute> tool999         = make_shared<IntAttribute>(999);
+    shared_ptr<Attribute> test_attribute  = make_shared<StringAttribute>("test attribute");
+    shared_ptr<Attribute> test_attribute2 = make_shared<StringAttribute>("test attribute2");
+
+    p2->add_attribute( "tool" ,  tool1           );
+    p2->add_attribute( "other" , test_attribute  );
+
+    p4->add_attribute( "tool" ,  tool1           );
+
+    p6->add_attribute( "tool" ,  tool999         );
+    p6->add_attribute( "other" , test_attribute2 );
+
+    cout << endl << "Find all particles with attribute 'tool' "<< endl;
+    cout << "(should return particles 2,4,6):" << endl;
+
+    FindParticles search_attributes(evt, FIND_ALL, ATTRIBUTE("tool") );
+
+    FOREACH( const GenParticlePtr &p, search_attributes.results() ) {
+        Print::line(p);
+    }
+
+    cout << endl << "Find all particles with attribute 'tool' equal 1 "<< endl;
+    cout << "(should return particles 2,4):" << endl;
+
+    FindParticles search_attributes2(evt, FIND_ALL, ATTRIBUTE("tool") == tool1 );
+
+    FOREACH( const GenParticlePtr &p, search_attributes2.results() ) {
+        Print::line(p);
+    }
+
+    cout << endl << "Find all particles with a string attribute 'other' equal 'test attribute' "<< endl;
+    cout << "(should return particle 2):" << endl;
+
+    FindParticles search_attributes3(evt, FIND_ALL, ATTRIBUTE("other") == "test attribute" );
+
+    FOREACH( const GenParticlePtr &p, search_attributes3.results() ) {
+        Print::line(p);
+    }
 
     cout << endl << "Offsetting event position by 5,5,5,5" << endl;
 

@@ -96,6 +96,9 @@ public:
     template<class T>
     shared_ptr<T> attribute(const string &name) const;
 
+    /// @brief Get attribute of any type as string
+    string attribute_as_string(const string &name) const;
+
     /// @brief Get list of attributes
     const std::map< std::string, shared_ptr<Attribute> > & attributes() const {
       return m_attributes;

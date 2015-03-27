@@ -18,6 +18,7 @@
  *
  */
 #include "HepMC/Search/Filter.h"
+#include "HepMC/Search/FilterAttribute.h"
 
 #include <vector>
 using std::vector;

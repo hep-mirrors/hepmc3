@@ -7,13 +7,14 @@
 #define  HEPMC_ATTRIBUTE_H
 /**
  *  @file Attribute.h
- *  @brief Definition of \b class Attribute and \b class StringAttribute
+ *  @brief Definition of \b class Attribute, \b class IntAttribute and \b class StringAttribute
  *
  *  @class HepMC::Attribute
  *  @brief Base class for all attributes
  *
  *  Contains virtual functions to_string and from_string that
- *  each attribute must implement
+ *  each attribute must implement, as well as init function that
+ *  attributes should overload to initialize parsed attribute
  *
  *  @ingroup attributes
  *
@@ -90,12 +91,59 @@ public:
     /** @brief Get unparsed string */
     const string& unparsed_string() const { return m_string; }
 
+protected:
+    /** @brief Set is_parsed flag */
+    void set_is_parsed(bool flag) { m_is_parsed = flag; }
+
+    /** @brief Set unparsed string */
+    void set_unparsed_string(const string &st) { m_string = st; }
+
 //
 // Fields
 //
 private:
-    const bool m_is_parsed; //!< Is this attribute parsed?
-    string     m_string;    //!< Raw (unparsed) string
+    bool   m_is_parsed; //!< Is this attribute parsed?
+    string m_string;    //!< Raw (unparsed) string
+};
+
+/**
+ *  @class HepMC::IntAttribute
+ *  @brief Attribute that holds an Integer
+ *
+ *  @ingroup attributes
+ */
+class IntAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    IntAttribute():Attribute(),m_val(0) {}
+
+    /** @brief Constructor initializing attribute value */
+    IntAttribute(int val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+#if __cplusplus >= 201103L
+        m_val = std::stoi(att);
+#else
+        m_val = atoi( att.c_str() );
+#endif
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+#if __cplusplus >= 201103L
+        att = std::to_string(m_val);
+#else
+        char buf[24];
+        sprintf(buf,"%23i",m_val);
+        att = buf;
+#endif
+        return true;
+    }
+private:
+    int m_val;
 };
 
 /**
@@ -110,6 +158,10 @@ private:
  */
 class StringAttribute : public Attribute {
 public:
+
+    /** @brief Default constructor - empty string */
+    StringAttribute():Attribute() {}
+
     /** @brief String-based constructor
      *
      *  The Attribute constructor used here marks that this is an unparsed
@@ -118,11 +170,9 @@ public:
      */
     StringAttribute(const string &st):Attribute(st) {}
 
-    /** @brief Implementation of Attribute::from_string
-     *
-     *  No parsing is needed
-     */
+    /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) {
+        set_unparsed_string(att);
         return true;
     }
 

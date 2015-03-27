@@ -19,12 +19,13 @@ namespace HepMC {
 
 bool Filter::passed_filter(const GenParticlePtr &p) const {
 
-        if( m_value_type == INTEGER_PARAM ) return passed_int_filter (p);
-        if( m_value_type == BOOL_PARAM    ) return passed_bool_filter(p);
-
-        // This should never happen
-        ERROR( "Unsupported value type ("<<m_value_type<<")" )
-        return false;
+    switch( m_value_type) {
+        case INTEGER_PARAM:   return passed_int_filter (p);
+        case BOOL_PARAM:      return passed_bool_filter(p);
+        case ATTRIBUTE_PARAM: return passed_attribute_filter(p);
+    }
+    
+    return false;
 }
 
 bool Filter::passed_int_filter(const GenParticlePtr &p ) const {
@@ -91,6 +92,24 @@ bool Filter::passed_bool_filter(const GenParticlePtr &p ) const {
     if( m_bool_value == false ) result = !result;
 
     return result;
+}
+
+bool Filter::passed_attribute_filter(const GenParticlePtr &p ) const {
+
+    bool ret = false;
+
+    string attribute = p->attribute_as_string(m_attribute_name);
+
+    DEBUG( 10, "Filter: checking id="<<p->id()<<" m_attribute="<<m_attribute<<" m_bool_val="<<m_bool_value<<" att name='"<<m_attribute_name<<"' att str='"<<m_attribute_str<<"' compare to='"<<attribute<<"'"  )
+
+    switch( m_attribute ) {
+        case ATTRIBUTE_EXISTS:   ret = (attribute.length() > 0);                  break;
+        case ATTRIBUTE_IS_EQUAL: ret = (m_attribute_str.compare(attribute) == 0); break;
+    }
+
+    if( !m_bool_value ) ret = !ret;
+
+    return ret;
 }
 
 } // namespace HepMC
