@@ -3,13 +3,13 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_HEPMC2_ADAPTER_H
-#define  HEPMC_HEPMC2_ADAPTER_H
+#ifndef  HEPMC_READER_ASCII_HEPMC2_H
+#define  HEPMC_READER_ASCII_HEPMC2_H
 /**
- *  @file  HepMC2_adapter.h
- *  @brief Definition of \b class HepMC2_adapter
+ *  @file  ReaderAsciiHepMC2.h
+ *  @brief Definition of \b class ReaderAsciiHepMC2
  *
- *  @class HepMC::HepMC2_adapter
+ *  @class HepMC::ReaderAsciiHepMC2
  *  @brief Parser for HepMC2 I/O files
  *
  *  @ingroup IO
@@ -29,13 +29,13 @@ namespace HepMC {
 
 class GenEvent;
 
-class HepMC2_adapter : public Reader {
+class ReaderAsciiHepMC2 : public Reader {
 //
 // Constructors
 //
 public:
     /** @brief Default constructor */
-    HepMC2_adapter(const std::string& filename);
+    ReaderAsciiHepMC2(const std::string& filename);
 //
 // Functions
 //

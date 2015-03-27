@@ -12,7 +12,7 @@
  */
 #include "HepMC/GenEvent.h"
 
-#include "HepMC/HepMC2_adapter.h"
+#include "HepMC/ReaderAsciiHepMC2.h"
 #include "HepMC/WriterAscii.h"
 #include "HepMC/Print.h"
 
@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
     }
 
     // Open input and output files
-    HepMC2_adapter adapter(argv[1]);
+    ReaderAsciiHepMC2 adapter(argv[1]);
     WriterAscii    output_file(argv[2]);
     int events_parsed = 0;
     int events_limit  = 0;

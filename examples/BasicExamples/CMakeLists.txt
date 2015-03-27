@@ -22,11 +22,11 @@ else()
  message(STATUS "No Fortran compiler - dissabling HepEvt example.")
 endif()
 
-add_executable(HepMC2_adapter_example.exe ${PROJECT_SOURCE_DIR}/examples/BasicExamples/HepMC2_adapter_example.cc)
-target_link_libraries(HepMC2_adapter_example.exe HepMC_static)
-set_target_properties(HepMC2_adapter_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+add_executable(HepMC2_reader_example.exe ${PROJECT_SOURCE_DIR}/examples/BasicExamples/HepMC2_reader_example.cc)
+target_link_libraries(HepMC2_reader_example.exe HepMC_static)
+set_target_properties(HepMC2_reader_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
-install(TARGETS HepMC2_adapter_example.exe DESTINATION bin)
+install(TARGETS HepMC2_reader_example.exe DESTINATION bin)
 
 add_executable(HepMC3_fileIO_example.exe ${PROJECT_SOURCE_DIR}/examples/BasicExamples/HepMC3_fileIO_example.cc)
 target_link_libraries(HepMC3_fileIO_example.exe HepMC_static)
