@@ -49,7 +49,6 @@ bool GenPdfInfo::from_string(const string &att) {
 
 bool GenPdfInfo::to_string(string &att) const {
     char buf[255];
-    char *cursor = buf;
 
     sprintf(buf,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
                 parton_id[0],

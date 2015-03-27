@@ -1497,7 +1497,7 @@ public:
    */
   string weightNameHepMC(int i) const {
     string name;
-    if ( i < 0 || i >= weightinfo.size() ) return name;
+    if ( i < 0 || i >= (int)weightinfo.size() ) return name;
     if ( weightinfo[i].inGroup >= 0 )
       name = weightgroup[weightinfo[i].inGroup].type + "/"
 	+  weightgroup[weightinfo[i].inGroup].combine + "/";

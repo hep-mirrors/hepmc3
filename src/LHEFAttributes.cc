@@ -29,7 +29,7 @@ bool HEPRUPAttribute::from_string(const string &att) {
       heprup = HEPRUP(*tags[i], 3);
       found = true;
     }
-  return true;
+  return found;
 }
 
 bool HEPRUPAttribute::to_string(string &att) const {
@@ -76,7 +76,7 @@ bool HEPEUPAttribute::init(const GenEvent & geneve) {
 	    hepeup = HEPEUP(*tags[i], hepr->heprup);
 	    found = true;
 	}
-    return true;
+    return found;
 }
 
 
