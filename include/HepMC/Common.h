@@ -24,8 +24,10 @@
 #ifdef  HEPMC_HAS_CXX11
 #define FOREACH( iterator, container ) for ( iterator: container )
 #else
+#if !defined(__CINT__)
 #include <boost/foreach.hpp>
 #define FOREACH( iterator, container ) BOOST_FOREACH( iterator, container )
+#endif
 #endif
 
 
