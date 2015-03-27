@@ -3,7 +3,7 @@ include make.inc
 .DEFAULT_GOAL=all
 
 INTERFACES    =
-INCLUDES      = -Iinclude
+INCLUDES      = -I. -Iinclude
 RPATHS_HEPMC3 =
 LINKS_HEPMC3  =
 DEFS_HEPMC3   =
@@ -67,8 +67,15 @@ validation.exe: $(VALIDATION_SRC:.cc=.o)
 %.o: %.cxx
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(INCLUDES) $(INCLUDES_HEPMC3)
 
+src/RootTool2_classes.cc:
+	rootcint -cint -f $@ -c -inlineInputHeader -DHEPMC_ROOTIO $(INCLUDES_HEPMC3) -Iinclude RootTool2_includes.h LinkDef.h
+
 clean:
 	rm -f src/*.o *.o src/*.o_hepmc2 *.o_hepmc2 *.exe
+	rm -f src/RootTool2_classes.cc
 
 Clean: clean
-	rm -f $(INTERFACEDIRECTORY)*/src/*.o  $(INTERFACEDIRECTORY)*/lib/*.so
+	rm -f $(INTERFACEDIRECTORY)/mc-tester/src/*.o  $(INTERFACEDIRECTORY)/mc-tester/lib/*.so
+	rm -f $(INTERFACEDIRECTORY)/Photospp/src/*.o   $(INTERFACEDIRECTORY)/Photospp/lib/*.so
+	rm -f $(INTERFACEDIRECTORY)/pythia8/src/*.o    $(INTERFACEDIRECTORY)/pythia8/lib/*.so
+	rm -f $(INTERFACEDIRECTORY)/Tauolapp/src/*.o   $(INTERFACEDIRECTORY)/Tauolapp/lib/*.so

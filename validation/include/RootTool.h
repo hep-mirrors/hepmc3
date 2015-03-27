@@ -9,7 +9,8 @@
 #ifdef HEPMC2
 #include "HepMC/GenEvent.h"
 #else
-#include "HepMC/IO/IO_Root.h"
+#include "HepMC/ReaderRoot.h"
+#include "HepMC/WriterRoot.h"
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"
@@ -36,9 +37,11 @@ public:
     int  process(GenEvent &hepmc);
     void finalize();
 
+    bool rdstate();
+
 private:
-    HEPMC3CODE( IO_Root *m_file_in;  )
-    HEPMC3CODE( IO_Root *m_file_out; )
+    HEPMC3CODE( ReaderRoot *m_file_in;  )
+    HEPMC3CODE( WriterRoot *m_file_out; )
     std::string  m_filename;
     Timer        m_timer;
 };

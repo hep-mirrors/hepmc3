@@ -6,12 +6,12 @@ INTERFACEDIRECTORY = $(HEPMC3INTERFACES)
 ifneq ($(ROOTCONFIG), )
   override INCLUDES      += -I$(shell $(ROOTCONFIG) --incdir)
   override LINKS_HEPMC3  += -lrootIO $(shell $(ROOTCONFIG) --glibs)
-  override DEFS_HEPMC3   += -DROOTCONFIG
+  override DEFS_HEPMC3   += -DHEPMC_ROOTIO -DROOTCONFIG
 
   override LINKS_HEPMC2  += $(shell $(ROOTCONFIG) --glibs)
   override DEFS_HEPMC2   += -DROOTCONFIG_HEPMC2
 
-  override VALIDATION_SRC+= src/RootTool.cc
+  override VALIDATION_SRC+= src/RootTool.cc src/RootTool2.cc src/RootTool2_classes.cc
 endif
 
 #

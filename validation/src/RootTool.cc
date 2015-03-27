@@ -10,12 +10,12 @@ RootTool::RootTool(const std::string &filename, std::ios::openmode mode):m_file_
     m_filename = filename;
 
     if(mode == std::ios::in) {
-        HEPMC3CODE( m_file_in = new IO_Root(m_filename, mode); )
+        HEPMC3CODE( m_file_in = new ReaderRoot(m_filename); )
 
         m_timer = Timer("ROOT event parsing time");
     }
     else {
-        m_file_out = new IO_Root(m_filename, mode);
+        m_file_out = new WriterRoot(m_filename);
     }
 }
 
@@ -28,7 +28,7 @@ void RootTool::initialize() {}
 
 int RootTool::process(GenEvent &hepmc) {
     if(m_file_in) {
-        HEPMC3CODE( m_file_in->fill_next_event( hepmc); )
+        HEPMC3CODE( m_file_in->read_event( hepmc); )
         if( m_file_in->rdstate() ) return -1;
     }
     else if(m_file_out) {
@@ -44,4 +44,12 @@ void RootTool::finalize() {
         if(m_file_in)  m_file_in->close();
         if(m_file_out) m_file_out->close();
     )
+}
+
+bool RootTool::rdstate() {
+    HEPMC3CODE(
+        if(m_file_in)  return m_file_in->rdstate();
+        if(m_file_out) return m_file_out->rdstate();
+    )
+    return true;
 }

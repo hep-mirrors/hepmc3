@@ -10,6 +10,7 @@
 #include "HepMC/GenEvent.h"
 #else
 #include "HepMC/GenEvent.h"
+#include "HepMC/Print.h"
 #include "HepMC/Search/FindParticles.h"
 #endif // ifdef HEPMC2
 

@@ -9,8 +9,8 @@
 #ifdef HEPMC2
 #include "HepMC/IO_GenEvent.h"
 #else
-#include "HepMC/IO/IO_GenEvent.h"
-#include "HepMC/IO/IO_HepMC2_adapter.h"
+#include "HepMC/WriterAscii.h"
+#include "HepMC/ReaderAsciiHepMC2.h"
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"
@@ -40,10 +40,15 @@ public:
     bool rdstate();
 
 private:
-    HEPMC2CODE( IO_GenEvent       *m_file_in; )
-    HEPMC3CODE( IO_HepMC2_adapter *m_file_in; )
+    HEPMC2CODE(
+        IO_GenEvent *m_file_in;
+        IO_GenEvent *m_file_out;
+    )
+    HEPMC3CODE(
+        ReaderAsciiHepMC2 *m_file_in;
+        WriterAscii       *m_file_out;
+    )
 
-    IO_GenEvent *m_file_out;
     std::string  m_filename;
     Timer        m_timer;
 };

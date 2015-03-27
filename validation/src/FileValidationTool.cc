@@ -10,16 +10,20 @@ FileValidationTool::FileValidationTool(const std::string &filename, std::ios::op
     m_filename = filename;
 
     if(mode == std::ios::in) {
-        HEPMC2CODE( m_file_in = new IO_GenEvent(m_filename, mode);       )
-        HEPMC3CODE( m_file_in = new IO_HepMC2_adapter(m_filename, mode); )
+        HEPMC2CODE( m_file_in = new IO_GenEvent(m_filename, mode); )
+        HEPMC3CODE( m_file_in = new ReaderAsciiHepMC2(m_filename); )
 
         m_timer = Timer("HepMC event parsing time");
     }
     else {
-        HEPMC2CODE( m_filename += "2"; )
-        HEPMC3CODE( m_filename += "3"; )
-
-        m_file_out = new IO_GenEvent(m_filename, mode);
+        HEPMC2CODE(
+            m_filename += "2";
+            m_file_out = new IO_GenEvent(m_filename, mode);
+        )
+        HEPMC3CODE(
+            m_filename += "3";
+            m_file_out = new WriterAscii(m_filename);
+        )
     }
 }
 
@@ -33,7 +37,7 @@ void FileValidationTool::initialize() {}
 int FileValidationTool::process(GenEvent &hepmc) {
     if(m_file_in) {
         HEPMC2CODE( m_file_in->fill_next_event(&hepmc); )
-        HEPMC3CODE( m_file_in->fill_next_event( hepmc); )
+        HEPMC3CODE( m_file_in->read_event     ( hepmc); )
         if( m_file_in->rdstate() ) return -1;
     }
     else if(m_file_out) {

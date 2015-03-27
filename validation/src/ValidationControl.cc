@@ -10,6 +10,7 @@
 
 #ifdef ROOTCONFIG
 #include "RootTool.h"
+#include "RootTool2.h"
 #endif
 
 #ifdef PHOTOSPP
@@ -28,6 +29,7 @@
 #include "PythiaValidationTool.h"
 #endif
 
+#ifdef HEPMC2
 /* NOTE: we have to copy this code frome HepMC/Version.h
          as this header is not available when compiling
          validation program with HepMC2 */
@@ -37,6 +39,7 @@
     #include <boost/foreach.hpp>
     #define FOREACH( iterator, container ) BOOST_FOREACH( iterator, container )
 #endif
+#endif // HEPMC2
 
 #include <fstream>
 #include <cstdio>
@@ -115,6 +118,26 @@ void ValidationControl::read_file(const std::string &filename) {
                     status = UNAVAILABLE_TOOL;
 #endif
                 }
+                else if( strncmp(buf,"root_writer",11)==0) {
+#ifdef ROOTCONFIG
+                    in >> buf;
+                    RootTool * tool = new RootTool(buf,ios::in);
+                    if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                    else input = tool;
+#else
+                    status = UNAVAILABLE_TOOL;
+#endif
+                }
+                else if( strncmp(buf,"root_streamer",13)==0) {
+#ifdef ROOTCONFIG
+                    in >> buf;
+                    RootTool2 * tool = new RootTool2(buf,ios::in);
+                    if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                    else input = tool;
+#else
+                    status = UNAVAILABLE_TOOL;
+#endif
+                }
                 else status = UNRECOGNIZED_INPUT;
 
                 if(!status) {
@@ -148,22 +171,39 @@ void ValidationControl::read_file(const std::string &filename) {
                 status = UNAVAILABLE_TOOL;
 #endif
             }
-            else if( strncmp(buf,"root_streamer",13)==0 ) {
-#ifdef ROOTCONFIG
-                m_toolchain.push_back( new RootTool("test.root",ios::out) );
-#else
-                status = UNAVAILABLE_TOOL;
-#endif
-            }
             else status = UNRECOGNIZED_TOOL;
         }
         // Parse output file
         else if( strncmp(buf,"OUTPUT",6)==0 ) {
             in >> buf;
 
-            FileValidationTool *tool = new FileValidationTool( buf, std::ios::out );
-            if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
-            else m_toolchain.push_back(tool);
+            if( strncmp(buf,"ascii",5)==0) {
+                in >> buf;
+                FileValidationTool *tool = new FileValidationTool( buf, std::ios::out );
+                if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                else m_toolchain.push_back(tool);
+            }
+            else if( strncmp(buf,"root_writer",11)==0) {
+                in >> buf;
+#ifdef ROOTCONFIG
+                RootTool *tool = new RootTool( buf, std::ios::out );
+                if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                else m_toolchain.push_back(tool);
+#else
+                status = UNAVAILABLE_TOOL
+#endif
+            }
+            else if( strncmp(buf,"root_streamer",13)==0) {
+                in >> buf;
+#ifdef ROOTCONFIG
+                RootTool2 *tool = new RootTool2( buf, std::ios::out );
+                if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                else m_toolchain.push_back(tool);
+#else
+                status = UNAVAILABLE_TOOL
+#endif
+            }
+            else status = UNRECOGNIZED_TOOL;
         }
         // Parse option
         else if( strncmp(buf,"SET",3)==0 ) {
@@ -286,8 +326,8 @@ void ValidationControl::process(GenEvent &hepmc) {
             printf("   Print event: %s\n",tool->name().c_str());
             printf("--------------------------------------------------------------\n");
 
-            HEPMC3CODE( hepmc.set_print_precision(8); )
-            hepmc.print();
+            HEPMC2CODE( hepmc.print();           )
+            HEPMC3CODE( Print::listing(hepmc,8); )
         }
 
         if(tool->tool_modifies_event() && m_momentum_check_events ) {
