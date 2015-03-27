@@ -52,7 +52,7 @@ endif()
 
 #---Compilation and Link options---------------------------------------------
 
-if(${CMAKE_BUILD_TYPE})
+if(CMAKE_BUILD_TYPE)
   message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 else()
   set(CMAKE_BUILD_TYPE "Release")
@@ -64,7 +64,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Darwin)
 endif()
 
 set(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS} -fPIC")
-set(CMAKE_CXX_FLAGS_DEBUG          "-g3")
+set(CMAKE_CXX_FLAGS_DEBUG          "-g3 -Wall")
 set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
