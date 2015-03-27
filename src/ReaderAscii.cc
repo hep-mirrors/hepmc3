@@ -329,7 +329,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 
     evt.add_particle(data);
 
-    DEBUG( 10, "ReaderAscii: P: "<<data->id()<<" ( mother: "<<mother_id<<", pdg_id: "<<data->pdg_id()<<")" )
+    DEBUG( 10, "ReaderAscii: P: "<<data->id()<<" ( mother: "<<mother_id<<", pid: "<<data->pid()<<")" )
 
     return true;
 }

@@ -126,8 +126,8 @@ protected:
 };
 
 static const FilterBase STATUS          = FilterBase::init_status();           //!< Filter base for filtering GenParticle::status()
-static const FilterBase PDG_ID          = FilterBase::init_pdg_id();           //!< Filter base for filtering GenParticle::pdg_id()
-static const FilterBase ABS_PDG_ID      = FilterBase::init_abs_pdg_id();       //!< Filter base for filtering abs( GenParticle::pdg_id() )
+static const FilterBase PDG_ID          = FilterBase::init_pdg_id();           //!< Filter base for filtering GenParticle::pid()
+static const FilterBase ABS_PDG_ID      = FilterBase::init_abs_pdg_id();       //!< Filter base for filtering abs( GenParticle::pid() )
 
 } // namespace HepMC
 

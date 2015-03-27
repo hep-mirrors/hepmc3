@@ -132,7 +132,7 @@ void Print::listing( const GenParticlePtr &p ) {
     cout.width(6);
     cout << p->id();
     cout.width(9);
-    cout << p->pdg_id() << " ";
+    cout << p->pid() << " ";
     cout.width(9);
     cout.setf(ios::scientific, ios::floatfield);
     cout.setf(ios_base::showpos);
@@ -183,7 +183,7 @@ void Print::line(const GenParticlePtr &p) {
     cout.width(3);
     cout << p->id() <<" PDGID: ";
     cout.width(5);
-    cout << p->pdg_id();
+    cout << p->pid();
 
     // Find the current stream state
     ios_base::fmtflags orig = cout.flags();

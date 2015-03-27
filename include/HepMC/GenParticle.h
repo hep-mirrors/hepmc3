@@ -37,7 +37,7 @@ friend class SmartPointer<GenParticle>;
 //
 public:
     /** @brief Default constructor */
-    GenParticle( const FourVector &momentum = FourVector::ZERO_VECTOR(), int pdg_id = 0, int status = 0 );
+    GenParticle( const FourVector &momentum = FourVector::ZERO_VECTOR(), int pid = 0, int status = 0 );
 
     /** @brief Constructor based on particle data */
     GenParticle( const GenParticleData &data );
@@ -57,7 +57,7 @@ public:
     int                    id()           const { return m_id;    } //!< Get particle id
     const GenParticleData& data()         const { return m_data;  } //!< Get particle data
 
-    int   pdg_id()                const { return m_data.pdg_id;         } //!< Get PDG ID
+    int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
     const FourVector& momentum()  const { return m_data.momentum;       } //!< Get momentum
     bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
@@ -75,7 +75,7 @@ public:
     GenVertexPtr production_vertex();        //!< Get production vertex
     GenVertexPtr end_vertex();               //!< Get end vertex
 
-    void set_pdg_id(int pdg_id);                   //!< Set PDG ID
+    void set_pid(int pid);                         //!< Set PDG ID
     void set_status(int status);                   //!< Set status code
     void set_momentum(const FourVector& momentum); //!< Set momentum
     void set_generated_mass(double m);             //!< Set generated mass
@@ -99,6 +99,24 @@ public:
     /// @brief Get attribute of any type as string
     string attribute_as_string(string name) const;
 
+    /// @name Deprecated functionality
+    //@{
+
+    #ifndef HEPMC_NO_DEPRECATED
+
+    /// @brief Get PDG ID
+    /// @deprecated Use pid() instead
+    HEPMC_DEPRECATED("Use pid() instead")
+    int pdg_id() const { return m_data.pid; }
+
+    /// @brief Set PDG ID
+    /// @deprecated Use set_pid() instead
+    HEPMC_DEPRECATED("Use set_pid() instead")
+    void set_pdg_id(int pid) { set_pid(pid); }
+
+    #endif
+
+    //@}
 //
 // Fields
 //

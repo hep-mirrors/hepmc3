@@ -16,10 +16,10 @@
 
 namespace HepMC {
 
-GenParticle::GenParticle( const FourVector &momentum, int pdg_id, int status ):
+GenParticle::GenParticle( const FourVector &momentum, int pid, int status ):
 m_event(NULL),
 m_id(0) {
-    m_data.pdg_id            = pdg_id;
+    m_data.pid               = pid;
     m_data.momentum          = momentum;
     m_data.status            = status;
     m_data.is_mass_set       = false;
@@ -37,8 +37,8 @@ double GenParticle::generated_mass() const {
     else                   return m_data.momentum.m();
 }
 
-void GenParticle::set_pdg_id(int pdg_id) {
-    m_data.pdg_id = pdg_id;
+void GenParticle::set_pid(int pid) {
+    m_data.pid = pid;
 }
 
 void GenParticle::set_status(int status) {

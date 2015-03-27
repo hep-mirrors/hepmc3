@@ -22,7 +22,7 @@ namespace HepMC {
 // NOTE: Keep in mind the data alignment
 //       Currently it's 8b alignment = 56b total
 struct GenParticleData {
-    int        pdg_id;            ///< PDG ID
+    int        pid;               ///< PDG ID
     int        status;            ///< Status
     bool       is_mass_set;       ///< Check if generated mass is set
     double     mass;              ///< Generated mass (if set)

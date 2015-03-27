@@ -393,7 +393,7 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     m_particle_cache.push_back( data );
     m_end_vertex_barcodes.push_back( end_vtx );
 
-    DEBUG( 10, "ReaderAsciiHepMC2: P: "<<m_particle_cache.size()<<" ( pdg_id: "<<data->pdg_id()<<") end vertex: "<<end_vtx )
+    DEBUG( 10, "ReaderAsciiHepMC2: P: "<<m_particle_cache.size()<<" ( pid: "<<data->pid()<<") end vertex: "<<end_vtx )
 
     return 0;
 }

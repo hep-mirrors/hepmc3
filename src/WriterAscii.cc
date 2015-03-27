@@ -274,7 +274,7 @@ void WriterAscii::write_particle(const GenParticlePtr &p, int second_field) {
 
     m_cursor += sprintf(m_cursor," %i",   second_field);
     flush();
-    m_cursor += sprintf(m_cursor," %i",   p->pdg_id() );
+    m_cursor += sprintf(m_cursor," %i",   p->pid() );
     flush();
     m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().px() );
     flush();

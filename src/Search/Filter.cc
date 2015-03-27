@@ -33,9 +33,9 @@ bool Filter::passed_int_filter(const GenParticlePtr &p ) const {
     int value = 0;
 
     switch(m_int) {
-        case STATUS:          value = p->status();          break;
-        case PDG_ID:          value = p->pdg_id();          break;
-        case ABS_PDG_ID:      value = abs( p->pdg_id() );   break;
+        case STATUS:          value = p->status();       break;
+        case PDG_ID:          value = p->pid();          break;
+        case ABS_PDG_ID:      value = abs( p->pid() );   break;
         default:
             // This should never happen
             ERROR( "Unsupported filter ("<<m_int<<")" )
@@ -80,7 +80,7 @@ bool Filter::passed_bool_filter(const GenParticlePtr &p ) const {
 
             FOREACH( const GenParticlePtr &p_out, buf->particles_out() ) {
 
-                if( p_out->pdg_id() == p->pdg_id() ) {
+                if( p_out->pid() == p->pid() ) {
                     result = true;
                     break;
                 }
