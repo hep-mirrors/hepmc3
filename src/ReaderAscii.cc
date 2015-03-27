@@ -45,7 +45,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     //
     // Parse event, vertex and particle information
     //
-    while(!m_file.rdstate()) {
+    while(!failed()) {
         m_file.getline(buf,512*512);
 
         if( strlen(buf) == 0 ) continue;

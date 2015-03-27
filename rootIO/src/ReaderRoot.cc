@@ -48,10 +48,10 @@ void ReaderRoot::close() {
     m_file.Close();
 }
 
-int ReaderRoot::rdstate() {
-    if ( !m_file.IsOpen() ) return 1;
+bool ReaderRoot::failed() {
+    if ( !m_file.IsOpen() ) return true;
 
-    return 0;
+    return false;
 }
 
 } // namespace HepMC

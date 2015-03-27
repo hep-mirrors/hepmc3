@@ -38,14 +38,14 @@ int main(int argc, char **argv) {
 
     if( argc >= 4 ) events_limit = atoi(argv[3]);
 
-    while( !adapter.rdstate() ) {
+    while( !adapter.failed() ) {
         GenEvent evt(Units::GEV,Units::MM);
 
         // Read event from input file
         adapter.read_event(evt);
 
         // If reading failed - exit loop
-        if( adapter.rdstate() ) break;
+        if( adapter.failed() ) break;
 
         // Save event to output file
         output_file.write_event(evt);

@@ -34,13 +34,13 @@ int main(int argc, char **argv) {
 
     int events_parsed = 0;
 
-    while( !text_input.rdstate() ) {
+    while( !text_input.failed() ) {
 
         GenEvent evt(Units::GEV,Units::MM);
 
         text_input.read_event(evt);
 
-        if( text_input.rdstate() ) break;
+        if( text_input.failed() ) break;
 
         if( events_parsed == 0 ) {
             cout << "First event: " << endl;
