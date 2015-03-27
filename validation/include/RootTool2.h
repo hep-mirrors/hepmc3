@@ -43,7 +43,7 @@ public:
     int  process(GenEvent &hepmc);
     void finalize();
 
-    bool rdstate();
+    bool failed();
 
 private:
     HEPMC3CODE( RootTool2_serialized_class *m_class; )

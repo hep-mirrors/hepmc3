@@ -48,7 +48,7 @@ int RootTool2::process(GenEvent &hepmc) {
             delete m_class;
             m_class = NULL;
         )
-        if( rdstate() ) return -1;
+        if( failed() ) return -1;
     }
     else {
         HEPMC3CODE(
@@ -63,7 +63,7 @@ int RootTool2::process(GenEvent &hepmc) {
 
             delete m_class;
         )
-        if( rdstate() ) return -1;
+        if( failed() ) return -1;
     }
 
     return 0;
@@ -75,7 +75,7 @@ void RootTool2::finalize() {
     )
 }
 
-bool RootTool2::rdstate() {
+bool RootTool2::failed() {
     HEPMC3CODE(
         if(m_file) return !(m_file->IsOpen());
     )

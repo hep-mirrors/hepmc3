@@ -95,7 +95,7 @@ double const HepMC3Particle::GetM(){
 }
 
 int const HepMC3Particle::GetPDGId(){
-  return part->pdg_id();
+  return part->pid();
 }
 
 int const HepMC3Particle::GetStatus(){
@@ -187,7 +187,7 @@ void HepMC3Particle::SetM( double m ){
 }
 
 void HepMC3Particle::SetPDGId ( int pdg ){
-  part->set_pdg_id( pdg );
+  part->set_pid( pdg );
 }
 
 void HepMC3Particle::SetStatus( int st){
@@ -244,7 +244,7 @@ HEPParticleList* HepMC3Particle::GetMotherList(HEPParticleList *list)
 
    //iterate over daughters
    for(unsigned int i=0; i<prod->particles_in().size(); ++i) {
-       list->push_back(event->GetParticleWithId((prod->particles_in()[i])->barcode()));
+       list->push_back(event->GetParticleWithId((prod->particles_in()[i])->id()));
    }
 
    return list;

@@ -127,11 +127,11 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
 
         // Also check for free partons (= gluons and quarks; not diquarks?).
         if ( doHadr && m_free_parton_warnings ) {
-            if ( hepevt_particles[i]->pdg_id() == 21 && !hepevt_particles[i]->end_vertex() ) {
+            if ( hepevt_particles[i]->pid() == 21 && !hepevt_particles[i]->end_vertex() ) {
                 std::cerr << "gluon without end vertex " << i << std::endl;
                 if ( m_crash_on_problem ) exit(1);
             }
-            if ( abs(hepevt_particles[i]->pdg_id()) <= 6 && !hepevt_particles[i]->end_vertex() ) {
+            if ( abs(hepevt_particles[i]->pid()) <= 6 && !hepevt_particles[i]->end_vertex() ) {
                 std::cerr << "quark without end vertex " << i << std::endl;
                 if ( m_crash_on_problem ) exit(1);
             }

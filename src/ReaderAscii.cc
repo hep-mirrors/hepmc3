@@ -300,7 +300,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 
     // pdg id
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    data->set_pdg_id( atoi(cursor) );
+    data->set_pid( atoi(cursor) );
 
     // px
     if( !(cursor = strchr(cursor+1,' ')) ) return false;

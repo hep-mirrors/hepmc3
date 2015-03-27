@@ -8,7 +8,8 @@
 #include "Photos/PhotosHepMC3Event.h"
 #include "Photos/Log.h"
 
-#include "HepMC/foreach.h"
+#include "HepMC/Common.h"
+#include "HepMC/Print.h"
 
 using namespace std;
 
@@ -43,7 +44,7 @@ HepMC::GenEvent * PhotosHepMC3Event::getEvent()
 void PhotosHepMC3Event::print()
 {
         if(!m_event) return;
-        m_event->print();
+        HepMC::Print::listing(*m_event);
 }
 
 vector<PhotosParticle*> PhotosHepMC3Event::getParticleList()

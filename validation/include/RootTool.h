@@ -37,7 +37,7 @@ public:
     int  process(GenEvent &hepmc);
     void finalize();
 
-    bool rdstate();
+    bool failed();
 
 private:
     HEPMC3CODE( ReaderRoot *m_file_in;  )

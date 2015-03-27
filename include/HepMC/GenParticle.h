@@ -69,6 +69,7 @@ public:
      */
     double generated_mass() const;
 
+    /// @todo Should these accessors have also non-const version?
     const GenVertexPtr production_vertex() const;        //!< Get production vertex
     const GenVertexPtr end_vertex() const;               //!< Get end vertex
 

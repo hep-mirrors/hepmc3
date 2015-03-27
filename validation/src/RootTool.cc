@@ -29,11 +29,11 @@ void RootTool::initialize() {}
 int RootTool::process(GenEvent &hepmc) {
     if(m_file_in) {
         HEPMC3CODE( m_file_in->read_event( hepmc); )
-        if( m_file_in->rdstate() ) return -1;
+        if( m_file_in->failed() ) return -1;
     }
     else if(m_file_out) {
         HEPMC3CODE( m_file_out->write_event( hepmc); )
-        if( m_file_out->rdstate() ) return -1;
+        if( m_file_out->failed() ) return -1;
     }
 
     return 0;
@@ -46,10 +46,10 @@ void RootTool::finalize() {
     )
 }
 
-bool RootTool::rdstate() {
+bool RootTool::failed() {
     HEPMC3CODE(
-        if(m_file_in)  return m_file_in->rdstate();
-        if(m_file_out) return m_file_out->rdstate();
+        if(m_file_in)  return m_file_in->failed();
+        if(m_file_out) return m_file_out->failed();
     )
     return true;
 }

@@ -46,7 +46,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     //
     // Parse event, vertex and particle information
     //
-    while(!m_file.rdstate()) {
+    while(!failed()) {
         m_file.getline(buf,512);
 
         if( strlen(buf) == 0 ) continue;
@@ -342,7 +342,7 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
 
     // id
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    data->set_pdg_id( atoi(cursor) );
+    data->set_pid( atoi(cursor) );
 
     // px
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;

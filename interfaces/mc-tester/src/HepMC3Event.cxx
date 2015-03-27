@@ -78,7 +78,7 @@ HEPParticleList* HepMC3Event::FindParticle(int pdg, HEPParticleList *list)
         //Check for daughters that are the same particle type
         //If found, remove from list.
         for(unsigned int i=0; i<end->particles_out().size(); ++i) {
-          if(end->particles_out()[i]->pdg_id() == pdg)
+          if(end->particles_out()[i]->pid() == pdg)
             list->remove(p);
         }
       }
