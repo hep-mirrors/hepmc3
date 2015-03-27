@@ -14,13 +14,13 @@ ROOT_GENERATE_DICTIONARY(rootIO_Classes rootIO_Classes.hh LINKDEF LinkDef.hh OPT
 
 list(APPEND ROOT_FIND_COMPONENTS RIO)
 
-add_library(rootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRoot.cc rootIO_Classes.cxx)
+add_library(HepMCrootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRoot.cc rootIO_Classes.cxx)
 
-target_link_libraries(rootIO ${ROOT_LIBRARIES} RIO HepMC)
-set_target_properties(rootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
+target_link_libraries(HepMCrootIO ${ROOT_LIBRARIES} RIO HepMC)
+set_target_properties(HepMCrootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 
 
 # installs 
-install(TARGETS rootIO DESTINATION lib)
+install(TARGETS HepMCrootIO DESTINATION lib)
 install(DIRECTORY ${PROJECT_BINARY_DIR}/rootIO/ DESTINATION lib FILES_MATCHING PATTERN "*.pcm")
 install(DIRECTORY include/HepMC DESTINATION include COMPONENT headers)

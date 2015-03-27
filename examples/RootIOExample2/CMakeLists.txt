@@ -8,11 +8,11 @@ ROOT_GENERATE_DICTIONARY(myclass_Classes myclass_Classes.h LINKDEF LinkDef.h OPT
 
 
 add_executable(class_example_read.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/class_example_read.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)
-target_link_libraries(class_example_read.exe ${ROOT_LIBRARIES} RIO HepMC rootIO)
+target_link_libraries(class_example_read.exe ${ROOT_LIBRARIES} RIO HepMC HepMCrootIO)
 set_target_properties(class_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 add_executable(class_example_write.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/class_example_write.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)
-target_link_libraries(class_example_write.exe ${ROOT_LIBRARIES} RIO HepMC rootIO)
+target_link_libraries(class_example_write.exe ${ROOT_LIBRARIES} RIO HepMC HepMCrootIO)
 set_target_properties(class_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 # create environment scripts
