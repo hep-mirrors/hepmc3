@@ -19,7 +19,9 @@
  *  @ingroup attributes
  *
  */
+#include <cstdio> // sprintf
 #include <string>
+#include "HepMC/Common.h"
 using std::string;
 
 namespace HepMC {
@@ -123,7 +125,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) {
-#if __cplusplus >= 201103L
+#ifdef HEPMC_HAS_CXX11
         m_val = std::stoi(att);
 #else
         m_val = atoi( att.c_str() );
@@ -133,7 +135,7 @@ public:
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(string &att) const {
-#if __cplusplus >= 201103L
+#ifdef HEPMC_HAS_CXX11
         att = std::to_string(m_val);
 #else
         char buf[24];

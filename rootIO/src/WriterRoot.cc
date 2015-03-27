@@ -14,7 +14,8 @@
 namespace HepMC {
 
 WriterRoot::WriterRoot(const std::string &filename):
-m_file(filename.c_str(),"RECREATE") {
+m_file(filename.c_str(),"RECREATE"),
+m_events_count(0) {
 
     if ( !m_file.IsOpen() ) {
         ERROR( "WriterRoot: problem opening file: " << filename )
@@ -29,7 +30,7 @@ void WriterRoot::write_event(const GenEvent &evt) {
     evt.write_data(data);
 
     char buf[16] = "";
-    sprintf(buf,"%15i",evt.event_number());
+    sprintf(buf,"%15i",++m_events_count);
 
     int nbytes = m_file.WriteObject(&data, buf);
 
