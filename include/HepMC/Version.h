@@ -12,13 +12,14 @@
 /// @todo Insert value from build system
 #define HEPMC_VERSION "3.0.0"
 
-/// HepMC version as an int (MICRO + 1000*MINOR + 1000000*MAJOR)
-// Use like "#if defined HEPMC_VERSION_CODE && LHAPDF_VERSION_CODE < 3001042" for < 3.1.42
+/// @brief HepMC version as an integer, HepMC X.Y.Z = 1000000*X + 1000*Y + Z
+///
+/// Use like "#if HEPMC_VERSION_CODE < 3001004" for < 3.01.04
 /// @todo Insert value from build system
 #define HEPMC_VERSION_CODE 3000000
 
 
-/// @todo Add feature detection macros (clearly version-related, and why proliferate headers?)
+/// @todo Add feature detection macros? (clearly version-related)
 
 
 namespace HepMC {
@@ -31,4 +32,5 @@ namespace HepMC {
 
 
 }
+
 #endif

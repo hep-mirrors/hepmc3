@@ -61,6 +61,12 @@ public:
     bool is_valid()                      const; ///< Verify that the instance contains non-zero information
 };
 
+
+#ifndef HEPMC_NO_DEPRECATED
+typedef GenPdfInfo PdfInfo;
+#endif
+
+
 } // namespace HepMC
 
 #endif
