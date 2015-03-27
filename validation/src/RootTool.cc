@@ -5,14 +5,16 @@
 //
 #include "RootTool.h"
 
-RootTool::RootTool(const std::string &filename, std::ios::openmode mode):m_file_in(NULL),m_file_out(NULL),m_timer("ROOT event writing time") {
+#ifndef HEPMC2
+
+RootTool::RootTool(const std::string &filename, std::ios::openmode mode):m_file_in(NULL),m_file_out(NULL),m_timer("ROOT WRITER event writing time") {
 
     m_filename = filename;
 
     if(mode == std::ios::in) {
-        HEPMC3CODE( m_file_in = new ReaderRoot(m_filename); )
+        m_file_in = new ReaderRoot(m_filename);
 
-        m_timer = Timer("ROOT event parsing time");
+        m_timer = Timer("ROOT WRITER event parsing time");
     }
     else {
         m_file_out = new WriterRoot(m_filename);
@@ -28,11 +30,11 @@ void RootTool::initialize() {}
 
 int RootTool::process(GenEvent &hepmc) {
     if(m_file_in) {
-        HEPMC3CODE( m_file_in->read_event( hepmc); )
+        m_file_in->read_event(hepmc);
         if( m_file_in->failed() ) return -1;
     }
     else if(m_file_out) {
-        HEPMC3CODE( m_file_out->write_event( hepmc); )
+        m_file_out->write_event(hepmc);
         if( m_file_out->failed() ) return -1;
     }
 
@@ -40,16 +42,15 @@ int RootTool::process(GenEvent &hepmc) {
 }
 
 void RootTool::finalize() {
-    HEPMC3CODE(
-        if(m_file_in)  m_file_in->close();
-        if(m_file_out) m_file_out->close();
-    )
+    if(m_file_in)  m_file_in->close();
+    if(m_file_out) m_file_out->close();
 }
 
 bool RootTool::failed() {
-    HEPMC3CODE(
-        if(m_file_in)  return m_file_in->failed();
-        if(m_file_out) return m_file_out->failed();
-    )
+    if(m_file_in)  return m_file_in->failed();
+    if(m_file_out) return m_file_out->failed();
+
     return true;
 }
+
+#endif // ifndef HEPMC2

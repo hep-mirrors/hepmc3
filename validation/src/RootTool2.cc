@@ -5,6 +5,8 @@
 //
 #include "RootTool2.h"
 
+#ifndef HEPMC2
+
 RootTool2::RootTool2(const std::string &filename, std::ios::openmode mode):m_file(NULL),m_timer("ROOT STREAMER event writing time") {
 
     m_filename = filename;
@@ -31,38 +33,36 @@ void RootTool2::initialize() {}
 
 int RootTool2::process(GenEvent &hepmc) {
     if( m_mode == std::ios::in ) {
-        HEPMC3CODE(
-            m_key = (TKey*)(*m_next)();
-            if( !m_key ) return -1;
+        m_key = (TKey*)(*m_next)();
+        if( !m_key ) return -1;
 
-            TString classname = "RootTool2_serialized_class";
+        TString classname = "RootTool2_serialized_class";
 
-            m_file->GetObject(m_key->GetName(), m_class);
-            if(!m_class) return -1;
-            if(!m_class->GetEvent()) return -1;
+        m_file->GetObject(m_key->GetName(), m_class);
+        if(!m_class) return -1;
+        if(!m_class->GetEvent()) return -1;
 
-            GenEventData data;
-            m_class->GetEvent()->write_data(data);
-            hepmc.read_data(data);
+        GenEventData data;
+        m_class->GetEvent()->write_data(data);
+        hepmc.read_data(data);
 
-            delete m_class;
-            m_class = NULL;
-        )
+        delete m_class;
+        m_class = NULL;
+
         if( failed() ) return -1;
     }
     else {
-        HEPMC3CODE(
-            m_class = new RootTool2_serialized_class();
+        m_class = new RootTool2_serialized_class();
 
-            m_class->SetEvent(&hepmc);
+        m_class->SetEvent(&hepmc);
 
-            TString name = "Event_";
-            name += (++m_counter);
+        TString name = "Event_";
+        name += (++m_counter);
 
-            m_file->WriteObject(m_class, name.Data());
+        m_file->WriteObject(m_class, name.Data());
 
-            delete m_class;
-        )
+        delete m_class;
+
         if( failed() ) return -1;
     }
 
@@ -70,14 +70,13 @@ int RootTool2::process(GenEvent &hepmc) {
 }
 
 void RootTool2::finalize() {
-    HEPMC3CODE(
-        if(m_file) m_file->Close();
-    )
+    if(m_file) m_file->Close();
 }
 
 bool RootTool2::failed() {
-    HEPMC3CODE(
-        if(m_file) return !(m_file->IsOpen());
-    )
+    if(m_file) return !(m_file->IsOpen());
+
     return true;
 }
+
+#endif // ifndef HEPMC2
