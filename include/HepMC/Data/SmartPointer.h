@@ -151,9 +151,9 @@ namespace HepMC {
     typedef SmartPointer<const class GenParticle> ConstGenParticlePtr; //!< Const smart pointer to GenParticle
     typedef SmartPointer<const class GenVertex>   ConstGenVertexPtr;   //!< Const smart pointer to GenVertex
 
-    typedef shared_ptr<struct GenPdfInfo>      GenPdfInfoPtr;      //!< Shared pointer to GenPdfInfo
-    typedef shared_ptr<struct GenHeavyIon>     GenHeavyIonPtr;     //!< Shared pointer to GenHeavyIon
-    typedef shared_ptr<struct GenCrossSection> GenCrossSectionPtr; //!< Shared pointer to GenCrossSection
+    typedef shared_ptr<class GenPdfInfo>      GenPdfInfoPtr;      //!< Shared pointer to GenPdfInfo
+    typedef shared_ptr<class GenHeavyIon>     GenHeavyIonPtr;     //!< Shared pointer to GenHeavyIon
+    typedef shared_ptr<class GenCrossSection> GenCrossSectionPtr; //!< Shared pointer to GenCrossSection
     //@}
 
 
