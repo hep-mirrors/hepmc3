@@ -8,6 +8,23 @@
 #include "SimpleEventTool.h"
 #include "FileValidationTool.h"
 
+
+#ifdef HEPMC2
+/* NOTE: we have to copy this code frome HepMC/Version.h
+         as this header is not available when compiling
+         validation program with HepMC2 */
+#if __cplusplus >= 201103L
+    #define FOREACH( iterator, container ) for( iterator: container )
+#else
+    #include <boost/foreach.hpp>
+    #define FOREACH( iterator, container ) BOOST_FOREACH( iterator, container )
+#endif
+
+// root not supported for HepMC2
+#undef ROOTCONFIG
+
+#endif // HEPMC2
+
 #ifdef ROOTCONFIG
 #include "RootTool.h"
 #include "RootTool2.h"
@@ -28,18 +45,6 @@
 #ifdef PYTHIA8
 #include "PythiaValidationTool.h"
 #endif
-
-#ifdef HEPMC2
-/* NOTE: we have to copy this code frome HepMC/Version.h
-         as this header is not available when compiling
-         validation program with HepMC2 */
-#if __cplusplus >= 201103L
-    #define FOREACH( iterator, container ) for( iterator: container )
-#else
-    #include <boost/foreach.hpp>
-    #define FOREACH( iterator, container ) BOOST_FOREACH( iterator, container )
-#endif
-#endif // HEPMC2
 
 #include <fstream>
 #include <cstdio>
@@ -107,7 +112,7 @@ void ValidationControl::read_file(const std::string &filename) {
                     in >> buf;
 
                     FileValidationTool *tool = new FileValidationTool( buf, std::ios::in );
-                    if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                    if( tool->failed() ) status = CANNOT_OPEN_FILE;
                     else input = tool;
                 }
                 else if( strncmp(buf,"pythia8",7)==0) {
@@ -118,11 +123,11 @@ void ValidationControl::read_file(const std::string &filename) {
                     status = UNAVAILABLE_TOOL;
 #endif
                 }
-                else if( strncmp(buf,"root_writer",11)==0) {
+                else if( strncmp(buf,"root_reader",11)==0) {
 #ifdef ROOTCONFIG
                     in >> buf;
                     RootTool * tool = new RootTool(buf,ios::in);
-                    if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                    if( tool->failed() ) status = CANNOT_OPEN_FILE;
                     else input = tool;
 #else
                     status = UNAVAILABLE_TOOL;
@@ -132,7 +137,7 @@ void ValidationControl::read_file(const std::string &filename) {
 #ifdef ROOTCONFIG
                     in >> buf;
                     RootTool2 * tool = new RootTool2(buf,ios::in);
-                    if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                    if( tool->failed() ) status = CANNOT_OPEN_FILE;
                     else input = tool;
 #else
                     status = UNAVAILABLE_TOOL;
@@ -180,27 +185,27 @@ void ValidationControl::read_file(const std::string &filename) {
             if( strncmp(buf,"ascii",5)==0) {
                 in >> buf;
                 FileValidationTool *tool = new FileValidationTool( buf, std::ios::out );
-                if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                if( tool->failed() ) status = CANNOT_OPEN_FILE;
                 else m_toolchain.push_back(tool);
             }
             else if( strncmp(buf,"root_writer",11)==0) {
                 in >> buf;
 #ifdef ROOTCONFIG
                 RootTool *tool = new RootTool( buf, std::ios::out );
-                if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                if( tool->failed() ) status = CANNOT_OPEN_FILE;
                 else m_toolchain.push_back(tool);
 #else
-                status = UNAVAILABLE_TOOL
+                status = UNAVAILABLE_TOOL;
 #endif
             }
             else if( strncmp(buf,"root_streamer",13)==0) {
                 in >> buf;
 #ifdef ROOTCONFIG
                 RootTool2 *tool = new RootTool2( buf, std::ios::out );
-                if( tool->rdstate() ) status = CANNOT_OPEN_FILE;
+                if( tool->failed() ) status = CANNOT_OPEN_FILE;
                 else m_toolchain.push_back(tool);
 #else
-                status = UNAVAILABLE_TOOL
+                status = UNAVAILABLE_TOOL;
 #endif
             }
             else status = UNRECOGNIZED_TOOL;

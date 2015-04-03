@@ -58,8 +58,8 @@ public:
 
     /// @brief Wrapper for Writer/Reader rdstate()
     int rdstate() const {
-        if( m_writer ) return m_writer->rdstate();
-        if( m_reader ) return m_reader->rdstate();
+        if( m_writer ) return m_writer->failed();
+        if( m_reader ) return m_reader->failed();
 
         return 1;
     }

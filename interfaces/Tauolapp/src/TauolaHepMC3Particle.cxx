@@ -2,8 +2,8 @@
 #include "Tauola/Log.h"
 
 #include "HepMC/GenVertex.h"
-
-#include "HepMC/foreach.h"
+#include "HepMC/Common.h"
+#include "HepMC/Print.h"
 using namespace HepMC;
 
 namespace Tauolapp
@@ -39,7 +39,7 @@ TauolaHepMC3Particle::~TauolaHepMC3Particle(){
 // NOTE: Not executed by release examples
 TauolaHepMC3Particle::TauolaHepMC3Particle(int pdg_id, int status, double mass){
   m_particle = make_shared<HepMC::GenParticle>();
-  m_particle->set_pdg_id(pdg_id);
+  m_particle->set_pid(pdg_id);
   m_particle->set_status(status);
   m_particle->set_generated_mass(mass);
 }
@@ -203,7 +203,7 @@ void TauolaHepMC3Particle::checkMomentumConservation(){
   if( sum.length() > Tauola::momentum_conservation_threshold ) {
     Log::Warning()<<"Momentum not conserved in the vertex:"<<endl;
     Log::RedirectOutput(Log::Warning(false));
-    m_particle->end_vertex()->print(cout);
+    HepMC::Print::line(m_particle->end_vertex());
     Log::RevertOutput();
     return;
   }
@@ -213,7 +213,7 @@ void TauolaHepMC3Particle::checkMomentumConservation(){
 
 // NOTE: Not executed by release examples
 void TauolaHepMC3Particle::setPdgID(int pdg_id){
-  m_particle->set_pdg_id(pdg_id);
+  m_particle->set_pid(pdg_id);
 }
 
 void TauolaHepMC3Particle::setMass(double mass){
@@ -226,7 +226,7 @@ void TauolaHepMC3Particle::setStatus(int status){
 }
 
 int TauolaHepMC3Particle::getPdgID(){
-  return m_particle->pdg_id();
+  return m_particle->pid();
 }
 
 int TauolaHepMC3Particle::getStatus(){
@@ -234,7 +234,7 @@ int TauolaHepMC3Particle::getStatus(){
 }
 
 int TauolaHepMC3Particle::getBarcode(){
-  return m_particle->barcode();
+  return m_particle->pid();
 }
 
 // Set (X,T) Position of tau decay trees
@@ -272,7 +272,8 @@ void TauolaHepMC3Particle::recursiveSetPosition(HepMC::GenParticlePtr p, HepMC::
     if( !pp->end_vertex() ) continue;
 
     // Set position
-    pp->end_vertex()->set_position(pos);
+    /// @bug Position cannot be set (for now)
+    //pp->end_vertex()->set_position(pos);
     recursiveSetPosition(pp,pos);
   }
 }
@@ -282,7 +283,7 @@ TauolaHepMC3Particle * TauolaHepMC3Particle::createNewParticle(
                         double px, double py, double pz, double e){
 
   TauolaHepMC3Particle * new_particle = new TauolaHepMC3Particle();
-  new_particle->getHepMC3()->set_pdg_id(pdg_id);
+  new_particle->getHepMC3()->set_pid(pdg_id);
   new_particle->getHepMC3()->set_status(status);
   new_particle->getHepMC3()->set_generated_mass(mass);
 
@@ -295,7 +296,7 @@ TauolaHepMC3Particle * TauolaHepMC3Particle::createNewParticle(
 }
 
 void TauolaHepMC3Particle::print(){
-  m_particle->print();
+  HepMC::Print::line(m_particle);
 }
 
 

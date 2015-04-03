@@ -45,7 +45,7 @@ std::vector<TauolaParticle*> TauolaHepMC3Event::findParticles(int pdg_id){
 
     //loop over all particle in the event looking for taus (or other)
     for( unsigned int i=0; i<m_event->particles().size(); ++i) {
-      if(abs((m_event->particles()[i])->pdg_id())==pdg_id)
+      if(abs((m_event->particles()[i])->pid())==pdg_id)
         m_tau_list.push_back(new TauolaHepMC3Particle(m_event->particles()[i]));
     }
   }

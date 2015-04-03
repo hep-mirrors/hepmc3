@@ -45,7 +45,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     //
     // Parse event, vertex and particle information
     //
-    while(!m_file.rdstate()) {
+    while(!failed()) {
         m_file.getline(buf,512*512);
 
         if( strlen(buf) == 0 ) continue;
@@ -300,7 +300,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 
     // pdg id
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    data->set_pdg_id( atoi(cursor) );
+    data->set_pid( atoi(cursor) );
 
     // px
     if( !(cursor = strchr(cursor+1,' ')) ) return false;

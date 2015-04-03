@@ -34,14 +34,14 @@ int main(int argc, char **argv) {
 
     int events_parsed = 0;
 
-    while(!input_file.rdstate()) {
+    while(!input_file.failed()) {
         GenEvent evt(Units::GEV,Units::MM);
 
         // Read event from input file
         input_file.read_event(evt);
 
         // If reading failed - exit loop
-        if( input_file.rdstate() ) break;
+        if( input_file.failed() ) break;
 
         // Save event to output file
         output_file.write_event(evt);

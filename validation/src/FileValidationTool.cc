@@ -36,14 +36,25 @@ void FileValidationTool::initialize() {}
 
 int FileValidationTool::process(GenEvent &hepmc) {
     if(m_file_in) {
-        HEPMC2CODE( m_file_in->fill_next_event(&hepmc); )
-        HEPMC3CODE( m_file_in->read_event     ( hepmc); )
-        if( m_file_in->rdstate() ) return -1;
+        HEPMC2CODE(
+            m_file_in->fill_next_event(&hepmc);
+            if( m_file_in->rdstate() ) return -1;
+        )
+        HEPMC3CODE(
+            m_file_in->read_event(hepmc);
+            if( m_file_in->failed() ) return -1;
+        )
+        
     }
     else if(m_file_out) {
-        HEPMC2CODE( m_file_out->write_event(&hepmc); )
-        HEPMC3CODE( m_file_out->write_event( hepmc); )
-        if( m_file_out->rdstate() ) return -1;
+        HEPMC2CODE(
+            m_file_out->write_event(&hepmc);
+            if( m_file_out->rdstate() ) return -1;
+        )
+        HEPMC3CODE(
+            m_file_out->write_event( hepmc);
+            if( m_file_out->failed() ) return -1;
+        )
     }
 
     return 0;
@@ -56,9 +67,14 @@ void FileValidationTool::finalize() {
     )
 }
 
-bool FileValidationTool::rdstate() {
-    if(m_file_in)  return m_file_in->rdstate();
-    if(m_file_out) return m_file_out->rdstate();
-
+bool FileValidationTool::failed() {
+    HEPMC2CODE(
+        if(m_file_in)  return m_file_in->rdstate();
+        if(m_file_out) return m_file_out->rdstate();
+    )
+    HEPMC3CODE(
+        if(m_file_in)  return m_file_in->failed();
+        if(m_file_out) return m_file_out->failed();
+    )
     return true;
 }

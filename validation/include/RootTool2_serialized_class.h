@@ -15,6 +15,5 @@ public:
     }
 
 private:
-    int someint;
     HepMC::GenEvent* event;
 };

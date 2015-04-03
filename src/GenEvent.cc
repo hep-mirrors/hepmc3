@@ -344,13 +344,21 @@ void GenEvent::read_data(const GenEventData &data) {
     // Fill particle information
     FOREACH( const GenParticleData &pd, data.particles ) {
       GenParticlePtr p = make_shared<GenParticle>(pd);
-      this->add_particle(p);
+        
+        m_particles.push_back(p);
+        
+        p->m_event = this;
+        p->m_id    = particles().size();
     }
 
     // Fill vertex information
     FOREACH( const GenVertexData &vd, data.vertices ) {
       GenVertexPtr v = make_shared<GenVertex>(vd);
-        this->add_vertex(v);
+
+        m_vertices.push_back(v);
+        
+        v->m_event = this;
+        v->m_id    = -(int)vertices().size();
     }
 
     // Restore links

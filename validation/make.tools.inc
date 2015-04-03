@@ -5,13 +5,13 @@ INTERFACEDIRECTORY = $(HEPMC3INTERFACES)
 #
 ifneq ($(ROOTCONFIG), )
   override INCLUDES      += -I$(shell $(ROOTCONFIG) --incdir)
-  override LINKS_HEPMC3  += -lrootIO $(shell $(ROOTCONFIG) --glibs)
+  override LINKS_HEPMC3  += -lHepMCrootIO $(shell $(ROOTCONFIG) --glibs)
   override DEFS_HEPMC3   += -DHEPMC_ROOTIO -DROOTCONFIG
 
   override LINKS_HEPMC2  += $(shell $(ROOTCONFIG) --glibs)
   override DEFS_HEPMC2   += -DROOTCONFIG_HEPMC2
 
-  override VALIDATION_SRC+= src/RootTool.cc src/RootTool2.cc src/RootTool2_classes.cc
+  override VALIDATION_SRC+= src/RootTool.cc src/RootTool2.cc
 endif
 
 #
@@ -25,13 +25,13 @@ ifneq ($(PHOTOSLOCATION_HEPMC3), )
                             -I$(PHOTOSINTERFACE)/include
   override RPATHS_HEPMC3 += -Wl,-rpath,$(PHOTOSLOCATION_HEPMC3)/lib \
                             -Wl,-rpath,$(PHOTOSINTERFACE)/lib
-  override LINKS_HEPMC3  += -L$(PHOTOSLOCATION_HEPMC3)/lib -lPhotosCxxInterface -lPhotosFortran \
+  override LINKS_HEPMC3  += -L$(PHOTOSLOCATION_HEPMC3)/lib -lPhotospp \
                             -L$(PHOTOSINTERFACE)/lib -lPhotosHepMC3Interface
   override DEFS_HEPMC3   += -DPHOTOSPP
   override VALIDATION_SRC+= src/PhotosValidationTool.cc
 ifneq ($(PHOTOSLOCATION_HEPMC2), )
   override RPATHS_HEPMC2 += -Wl,-rpath,$(PHOTOSLOCATION_HEPMC2)/lib
-  override LINKS_HEPMC2  += -L$(PHOTOSLOCATION_HEPMC2)/lib -lPhotosCxxInterface -lPhotosFortran
+  override LINKS_HEPMC2  += -L$(PHOTOSLOCATION_HEPMC2)/lib -lPhotospp -lPhotosppHepMC
   override DEFS_HEPMC2   += -DPHOTOSPP_HEPMC2
 endif
 endif
@@ -79,13 +79,13 @@ ifneq ($(PYTHIA8LOCATION_HEPMC3), )
                             -I$(PYTHIA8INTERFACE)/include
   override RPATHS_HEPMC3 += -Wl,-rpath,$(PYTHIA8LOCATION_HEPMC3)/lib \
                             -Wl,-rpath,$(PYTHIA8INTERFACE)/lib
-  override LINKS_HEPMC3  += -L$(PYTHIA8LOCATION_HEPMC3)/lib -lpythia8 -llhapdfdummy \
+  override LINKS_HEPMC3  += -L$(PYTHIA8LOCATION_HEPMC3)/lib/archive -lpythia8 -llhapdfdummy \
                             -L$(PYTHIA8INTERFACE)/lib -lpythia8tohepmc3
   override DEFS_HEPMC3   += -DPYTHIA8
   override VALIDATION_SRC+= src/PythiaValidationTool.cc
 ifneq ($(PYTHIA8LOCATION_HEPMC2), )
   override RPATHS_HEPMC2 += -Wl,-rpath,$(PYTHIA8LOCATION_HEPMC2)/lib
-  override LINKS_HEPMC2  += -L$(PYTHIA8LOCATION_HEPMC2)/lib -lpythia8 -llhapdfdummy \
+  override LINKS_HEPMC2  += -L$(PYTHIA8LOCATION_HEPMC2)/lib/archive -lpythia8 -llhapdfdummy \
                             -L$(PYTHIA8INTERFACE)/lib -lpythia8tohepmc
   override DEFS_HEPMC2   += -DPYTHIA8_HEPMC2
 endif

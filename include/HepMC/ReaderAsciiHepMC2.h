@@ -44,9 +44,7 @@ public:
     bool read_event(GenEvent &evt);
 
     /// @brief Return status of the stream
-    ///
-    /// @todo Rename!
-    int rdstate() { return m_file.rdstate(); }
+    bool failed() { return (bool)m_file.rdstate(); }
 
     /// @brief Close file stream
     void close();

@@ -6,14 +6,10 @@
 #ifndef ROOT_TOOL2_H
 #define ROOT_TOOL2_H
 
-#ifdef HEPMC2
-#include "HepMC/GenEvent.h"
-#else
+#ifndef HEPMC2
 #include "HepMC/GenEvent.h"
 #include "HepMC/Data/GenEventData.h"
 #include "RootTool2_serialized_class.h"
-#endif // ifdef HEPMC2
-
 #include "ValidationTool.h"
 #include "Timer.h"
 
@@ -30,23 +26,26 @@ public:
 
 public:
     const std::string name() {
-        if( m_mode == std::ios::in) return "ROOT STREAMER input file";
-        else                        return "ROOT STREAMER output file";
+        if(m_mode == std::ios::in) return "ROOT STREAMER input file";
+        else                       return "ROOT STREAMER output file";
     }
 
     const std::string long_name() { return name() + ": " + m_filename; }
 
-    bool   tool_modifies_event() { return (m_mode == std::ios::in) ? true : false; }
-    Timer* timer()               { return &m_timer; }
+    bool tool_modifies_event() {
+        return (m_mode == std::ios::in) ? true : false;
+    }
+
+    Timer* timer() { return &m_timer; }
 
     void initialize();
     int  process(GenEvent &hepmc);
     void finalize();
 
-    bool rdstate();
+    bool failed();
 
 private:
-    HEPMC3CODE( RootTool2_serialized_class *m_class; )
+    RootTool2_serialized_class *m_class;
     TFile             *m_file;
     TIter             *m_next;
     TKey              *m_key;
@@ -56,4 +55,5 @@ private:
     Timer              m_timer;
 };
 
+#endif // ifndef HEPMC2
 #endif

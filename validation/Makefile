@@ -58,7 +58,7 @@ validation_HEPMC2.exe: $(VALIDATION_SRC:.cc=.o_hepmc2)
 	$(CXX) $(CXXFLAGS) -c $< -o $@ $(DEFS_HEPMC3) $(DEFS_HEPMC2) $(INCLUDES) $(INCLUDES_HEPMC2)
 
 # Definitions for HepMC files
-validation.exe: $(VALIDATION_SRC:.cc=.o)
+validation.exe: $(VALIDATION_SRC:.cc=.o) src/RootTool2_classes.o
 	$(LD) $(LDFLAGS) $^ -o $@ $(LINKS_HEPMC3) $(RPATHS_HEPMC3)
 
 %.o: %.cc

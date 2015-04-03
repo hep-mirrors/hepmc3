@@ -49,11 +49,8 @@ public:
     /** @brief Close file stream */
     void close();
 
-    /** @brief Get stream error state
-     *
-     *  @todo Rename!
-     */
-    int rdstate();
+    /** @brief Get stream error state */
+    bool failed();
 //
 // Fields
 //

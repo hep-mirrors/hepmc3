@@ -6,11 +6,12 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
+#include "HepMC/Common.h"
+#include "HepMC/Print.h"
 #include "Photos/PhotosHepMC3Particle.h"
 #include "Photos/Log.h"
 #include "Photos/Photos.h"
 
-#include "HepMC/foreach.h"
 using namespace HepMC;
 
 namespace Photospp
@@ -22,7 +23,7 @@ PhotosHepMC3Particle::PhotosHepMC3Particle(){
 
 PhotosHepMC3Particle::PhotosHepMC3Particle(int pdg_id, int status, double mass){
   m_particle = make_shared<HepMC::GenParticle>();
-  m_particle->set_pdg_id(pdg_id);
+  m_particle->set_pid(pdg_id);
   m_particle->set_status(status);
   m_particle->set_generated_mass(mass);
 }
@@ -241,7 +242,7 @@ bool PhotosHepMC3Particle::checkMomentumConservation(){
   if( sum.length() > Photos::momentum_conservation_threshold ) {
     Log::Warning()<<"Momentum not conserved in the vertex:"<<endl;
     Log::RedirectOutput(Log::Warning(false));
-    m_particle->end_vertex()->print(cout);
+    HepMC::Print::line(m_particle->end_vertex());
     Log::RevertOutput();
     return false;
   }
@@ -250,7 +251,7 @@ bool PhotosHepMC3Particle::checkMomentumConservation(){
 }
 
 void PhotosHepMC3Particle::setPdgID(int pdg_id){
-  m_particle->set_pdg_id(pdg_id);
+  m_particle->set_pid(pdg_id);
 }
 
 void PhotosHepMC3Particle::setMass(double mass){
@@ -262,7 +263,7 @@ void PhotosHepMC3Particle::setStatus(int status){
 }
 
 int PhotosHepMC3Particle::getPdgID(){
-  return m_particle->pdg_id();
+  return m_particle->pid();
 }
 
 int PhotosHepMC3Particle::getStatus(){
@@ -270,7 +271,7 @@ int PhotosHepMC3Particle::getStatus(){
 }
 
 int PhotosHepMC3Particle::getBarcode(){
-  return m_particle->barcode();
+  return m_particle->id();
 }
 
 
@@ -279,7 +280,7 @@ PhotosHepMC3Particle * PhotosHepMC3Particle::createNewParticle(
                         double px, double py, double pz, double e){
 
   PhotosHepMC3Particle * new_particle = new PhotosHepMC3Particle();
-  new_particle->getHepMC3()->set_pdg_id(pdg_id);
+  new_particle->getHepMC3()->set_pid(pdg_id);
   new_particle->getHepMC3()->set_status(status);
   new_particle->getHepMC3()->set_generated_mass(mass);
 
@@ -334,7 +335,7 @@ void PhotosHepMC3Particle::createSelfDecayVertex(PhotosParticle *out)
 }
 
 void PhotosHepMC3Particle::print(){
-  m_particle->print();
+  HepMC::Print::line(m_particle);
 }
 
 
