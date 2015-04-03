@@ -86,6 +86,14 @@ public:
       if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
       return weight(run_info()->weight_index(name));
     }
+    /// Get event weight names, if there are some
+    /// @note Requires there to be an attached GenRunInfo with registered weight names, otherwise will throw an exception
+    const std::vector<std::string>& weight_names(const std::string& name) const {
+      if (!run_info()) throw WeightError("GenEvent::weight_names(): access to event weight names requires the event to have a GenRunInfo");
+      const std::vector<std::string>& weightnames = run_info()->weight_names();
+      if (weightnames.empty()) throw WeightError("GenEvent::weight_names(): no event weight names are registered for this run");
+      return weightnames;
+    }
 
     //@}
 
@@ -437,6 +445,17 @@ shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
 }
 
 #endif // __CINT__
+
+
+#ifndef HEPMC_NO_DEPRECATED
+
+/// Deprecated backward compatibility typedef
+///
+/// There is no distinct weight container type in HepMC3 -- the information
+/// comes from several sources spread between GenEvent and GenRunInfo.
+typedef std::vector<double> WeightContainer;
+
+#endif
 
 
 } // namespace HepMC
