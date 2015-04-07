@@ -4,6 +4,11 @@
 
 2015-03-27  Andy Buckley  <andy.buckley@cern.ch>
 
+	* Reduce/add HepMCDefs.h and SimpleVector.h to stubs for backward
+	compatibility, which include the modern equivalent headers and
+	produce preprocessor warnings. These should be conditionally
+	installed only when building in compatibility mode.
+
 	* Adding, removing, and tweaking feature detection macros.
 
 	* Adding backward compatibility typedefs to CrossSection,
