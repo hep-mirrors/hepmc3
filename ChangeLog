@@ -1,3 +1,7 @@
+2015-04-03 Witek Pokorski
+	* optimisations in read_data method
+
+
 2015-03-27  Andy Buckley  <andy.buckley@cern.ch>
 
 	* Adding, removing, and tweaking feature detection macros.
