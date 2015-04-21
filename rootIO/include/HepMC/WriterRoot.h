@@ -18,6 +18,7 @@
  *  @ingroup IO
  *
  */
+#include "HepMC/Writer.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/Data/GenEventData.h"
 
@@ -26,7 +27,7 @@
 
 namespace HepMC {
 
-class WriterRoot {
+  class WriterRoot : public Writer {
 //
 // Constructors
 //

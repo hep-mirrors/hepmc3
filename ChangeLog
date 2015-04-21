@@ -1,3 +1,6 @@
+2015-04-21 Witek Pokorski
+	* ROOT reader and writer inherit now from Reader and Writer base classes
+
 2015-04-03 Witek Pokorski
 	* optimisations in read_data method
 

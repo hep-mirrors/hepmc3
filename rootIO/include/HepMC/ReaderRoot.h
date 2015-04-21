@@ -18,6 +18,7 @@
  *  @ingroup IO
  *
  */
+#include "HepMC/Reader.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/Data/GenEventData.h"
 
@@ -27,7 +28,7 @@
 
 namespace HepMC {
 
-class ReaderRoot {
+  class ReaderRoot : public Reader {
 //
 // Constructors
 //
