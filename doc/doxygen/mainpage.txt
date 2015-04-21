@@ -8,7 +8,9 @@
 
     @subsection pre_releases Alpha and beta stage releases
 
-    - <a href="releases/hepmc3-alpha2.tgz">hepmc3-alpha2.tgz</a> HepMC3 alpha2 <b>15.Dec.2014</b> 
+    - <a href="releases/hepmc3-alpha4.tgz">hepmc3-alpha4.tgz</a> HepMC3 alpha4 <b> 7.Apr.2015</b>
+    - <a href="releases/hepmc3-alpha3.tgz">hepmc3-alpha3.tgz</a> HepMC3 alpha3 <b>10.Mar.2015</b>
+    - <a href="releases/hepmc3-alpha2.tgz">hepmc3-alpha2.tgz</a> HepMC3 alpha2 <b>15.Dec.2014</b>
     - <a href="releases/hepmc3-alpha1.tgz">hepmc3-alpha1.tgz</a> First alpha release of HepMC3 <b>6.Nov.2014</b>
 
     @subsection datafiles Data files for testing purposes
@@ -26,6 +28,7 @@
     - @subpage differences
 
     @subsection links Links to project-related webpages
+    - <a href="http://git.cern.ch/pubweb/hepmc3.git">      <b>HepMC3 Git public access repository    </b></a>
     - <a href="https://git.cern.ch/web/hepmc3.git">        <b>HepMC3 Git repository                  </b></a> (requires login)
     - <a href="https://sft.its.cern.ch/jira/browse/HEPMC"> <b>HepMC project JIRA instance            </b></a>
     - <a href="resources/docs">                            <b>Slides from the status update meetings </b></a>
@@ -37,5 +40,5 @@
     <img src="class_diagram.png">
 
     <hr>
-    Last update 25 November 2014
+    Last update 15 April 2015
 */
