@@ -8,6 +8,7 @@
 
     @subsection pre_releases Alpha and beta stage releases
 
+    - <a href="releases/hepmc3-alpha5.tgz">hepmc3-alpha5.tgz</a> HepMC3 alpha5 <b> 29.Apr.2015</b>
     - <a href="releases/hepmc3-alpha4.tgz">hepmc3-alpha4.tgz</a> HepMC3 alpha4 <b> 7.Apr.2015</b>
     - <a href="releases/hepmc3-alpha3.tgz">hepmc3-alpha3.tgz</a> HepMC3 alpha3 <b>10.Mar.2015</b>
     - <a href="releases/hepmc3-alpha2.tgz">hepmc3-alpha2.tgz</a> HepMC3 alpha2 <b>15.Dec.2014</b>
