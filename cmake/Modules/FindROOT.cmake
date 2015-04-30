@@ -9,9 +9,18 @@
 find_program(ROOT_CONFIG_EXECUTABLE root-config
   PATHS ${ROOT_DIR}/bin $ENV{ROOT_DIR}/bin)
 
+message(STATUS "XXX Found ROOT ${ROOT_VERSION} in ${ROOT_DIR}")
+
+message("$ENV{ROOT_DIR} ${ROOT_CONFIG_EXECUTABLE}")
+
+
 if(NOT ROOT_CONFIG_EXECUTABLE)
+      message(STATUS "NO Found ROOT ${ROOT_VERSION} in ${ROOT_DIR}")
+
   set(ROOT_FOUND FALSE)
-else()    
+else()
+      message(STATUS "YES Found ROOT ${ROOT_VERSION} in ${ROOT_DIR}")
+
   set(ROOT_FOUND TRUE)
 
   execute_process(
@@ -54,6 +63,7 @@ endif()
 
 include(CMakeMacroParseArguments)
 find_program(ROOTCINT_EXECUTABLE rootcint PATHS $ENV{ROOT_DIR}/bin)
+message(${ROOTCINT_EXECUTABLE})
 
 #----------------------------------------------------------------------------
 # function ROOT_GENERATE_DICTIONARY( dictionary
@@ -92,7 +102,7 @@ function(ROOT_GENERATE_DICTIONARY dictionary)
     unset(linkFile CACHE)
   endforeach()
   #---call rootcint------------------------------------------
-  add_custom_command(OUTPUT ${dictionary}.cxx ${dictionary}.h
+  add_custom_command(OUTPUT ${dictionary}.cxx
                      COMMAND ${ROOTCINT_EXECUTABLE} -cint -f  ${dictionary}.cxx
                                           -c ${ARG_OPTIONS} ${includedirs} ${headerfiles} ${linkdefs}
                      DEPENDS ${headerfiles} ${linkdefs} VERBATIM)
