@@ -1,7 +1,14 @@
+2015-05-08  Andy Buckley  <andy.buckley@cern.ch>
+
+	* Make sure that all macros in Config.h have a numerical value
+	(thanks to Marek Schoenherr for the heads-up).
+
 2015-04-21 Witek Pokorski
+
 	* ROOT reader and writer inherit now from Reader and Writer base classes
 
 2015-04-03 Witek Pokorski
+
 	* optimisations in read_data method
 
 

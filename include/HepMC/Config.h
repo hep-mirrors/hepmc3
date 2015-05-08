@@ -39,12 +39,12 @@
 
 // The HepMC::GenVertex class has a status() member
 #ifndef HEPMC_VERTEX_HAS_STATUS
-#define HEPMC_VERTEX_HAS_STATUS
+#define HEPMC_VERTEX_HAS_STATUS 1
 #endif
 
 // The HepMC::HeavyIon class contains centrality
 #ifndef HEPMC_HEAVY_ION_HAS_CENTRALITY
-#define HEPMC_HEAVY_ION_HAS_CENTRALITY
+#define HEPMC_HEAVY_ION_HAS_CENTRALITY 1
 #endif
 
 // Particles and vertices iterators have appropriate constness in method declarations and return types
