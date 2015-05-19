@@ -113,14 +113,16 @@ list(APPEND ROOT_FIND_COMPONENTS RIO)
 include_directories(include ${ROOT_INCLUDE_DIR})
 
 #---Select sources for the various libraries---------------------------------
-file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB hepmc3_sources_IO ${PROJECT_SOURCE_DIR}/src/IO/*.cc)
-file(GLOB hepmc3_sources_Search ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
+file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/IO/*.cc ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
 
 #---Add libraries------------------------------------------------------------
 
-add_library(HepMC SHARED ${hepmc3_sources} ${hepmc3_sources_IO} ${hepmc3_sources_Search})
-add_library(HepMC_static STATIC ${hepmc3_sources} ${hepmc3_sources_IO} ${hepmc3_sources_Search})
+add_library(objlib OBJECT ${hepmc3_sources})
+# shared libraries need PIC
+set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
+
+add_library(HepMC SHARED $<TARGET_OBJECTS:objlib>)
+add_library(HepMC_static STATIC $<TARGET_OBJECTS:objlib>)
 
 if(ROOT_FOUND)
   target_link_libraries(HepMC ${ROOT_LIBRARIES} RIO)
