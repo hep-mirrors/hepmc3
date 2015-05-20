@@ -8,7 +8,7 @@
 
 
 find_program(ROOT_CONFIG_EXECUTABLE root-config
-  HINTS ${ROOT_DIR}/bin $ENV{ROOT_DIR}/bin )
+  HINTS $ENV{ROOTSYS}/bin ${ROOT_DIR}/bin )
 
 if(NOT ROOT_CONFIG_EXECUTABLE)
       message(STATUS "No ROOT root-config Found")
@@ -42,7 +42,7 @@ else()
     OUTPUT_VARIABLE ROOT_PYTHONVER
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-  set(ROOT_LIBRARY_DIR ${ROOT_DIR}/lib)
+#  set(ROOT_LIBRARY_DIR ${ROOT_DIR}/lib)
 
   # Make variables changeble to the advanced user
   mark_as_advanced(ROOT_CONFIG_EXECUTABLE)
@@ -54,7 +54,7 @@ endif()
 
 
 include(CMakeMacroParseArguments)
-find_program(ROOTCINT_EXECUTABLE rootcint HINTS ${ROOT_DIR}/bin $ENV{ROOT_DIR}/bin )
+find_program(ROOTCINT_EXECUTABLE rootcint HINTS $ENV{ROOTSYS}/bin ${ROOT_DIR}/bin)
 
 if(ROOTCINT_EXECUTABLE)
   message(STATUS "ROOT rootcint found: ${ROOTCINT_EXECUTABLE}")
