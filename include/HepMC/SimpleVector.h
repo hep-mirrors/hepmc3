@@ -7,6 +7,7 @@
 #define HEPMC_SIMPLEVECTOR_H
 
 #include "HepMC/FourVector.h"
+#include "HepMC/GenVertex.h"
 #warning "HepMC/SimpleVector.h is deprecated: please #include HepMC/FourVector.h instead (or not at all)"
 
 #endif
