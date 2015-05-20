@@ -6,22 +6,16 @@
 # ROOT_LIBRARIES      Most common libraries
 # ROOT_LIBRARY_DIR    PATH to the library directory 
 
+
 find_program(ROOT_CONFIG_EXECUTABLE root-config
-  PATHS ${ROOT_DIR}/bin $ENV{ROOT_DIR}/bin)
-
-message(STATUS "XXX Found ROOT ${ROOT_VERSION} in ${ROOT_DIR}")
-
-message("$ENV{ROOT_DIR} ${ROOT_CONFIG_EXECUTABLE}")
-
+  HINTS ${ROOT_DIR}/bin $ENV{ROOT_DIR}/bin )
 
 if(NOT ROOT_CONFIG_EXECUTABLE)
-      message(STATUS "NO Found ROOT ${ROOT_VERSION} in ${ROOT_DIR}")
-
-  set(ROOT_FOUND FALSE)
+      message(STATUS "No ROOT root-config Found")
+      set(ROOT_FOUND FALSE)
 else()
-      message(STATUS "YES Found ROOT ${ROOT_VERSION} in ${ROOT_DIR}")
-
-  set(ROOT_FOUND TRUE)
+      message(STATUS "ROOT root-config found: ${ROOT_CONFIG_EXECUTABLE}")
+      set(ROOT_FOUND TRUE)
 
   execute_process(
     COMMAND ${ROOT_CONFIG_EXECUTABLE} --prefix 
@@ -48,22 +42,27 @@ else()
     OUTPUT_VARIABLE ROOT_PYTHONVER
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-  #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lThread -lMinuit -lHtml -lVMC -lEG -lGeom -lTreePlayer -lXMLIO -lProof)
-  #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lProofPlayer -lMLP -lSpectrum -lEve -lRGL -lGed -lXMLParser -lPhysics)
   set(ROOT_LIBRARY_DIR ${ROOT_DIR}/lib)
 
   # Make variables changeble to the advanced user
   mark_as_advanced(ROOT_CONFIG_EXECUTABLE)
 
   if(NOT ROOT_FIND_QUIETLY)
-    message(STATUS "Found ROOT ${ROOT_VERSION} in ${ROOT_DIR}")
+    message(STATUS "Found ROOT ${ROOT_VERSION}")
   endif()
 endif()
 
 
 include(CMakeMacroParseArguments)
-find_program(ROOTCINT_EXECUTABLE rootcint PATHS $ENV{ROOT_DIR}/bin)
-message(${ROOTCINT_EXECUTABLE})
+find_program(ROOTCINT_EXECUTABLE rootcint HINTS ${ROOT_DIR}/bin $ENV{ROOT_DIR}/bin )
+
+if(ROOTCINT_EXECUTABLE)
+  message(STATUS "ROOT rootcint found: ${ROOTCINT_EXECUTABLE}")
+else()
+  message(STATUS "No ROOT rootcint Found")
+endif()
+
+message(STATUS "ROOT version -- ${ROOT_VERSION}")
 
 #----------------------------------------------------------------------------
 # function ROOT_GENERATE_DICTIONARY( dictionary
