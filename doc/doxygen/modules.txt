@@ -136,6 +136,22 @@
         HAS_PRODUCTION_VERTEX,     HAS_END_VERTEX,     !HAS_END_VERTEX     ...
     @endcode
 
+    They can also be used to find particles selected attribute:
+
+    @code{.cpp}
+        FindParticles search( event, FIND_ALL, ATTRIBUTE("for_deletion") )
+    @endcode
+
+    or with concrete value of an attribute:
+
+    @code{.cpp}
+        shared_ptr<Attribute> our_value  = make_shared<IntAttribute>(1);
+        FindParticles search ( event, FIND_ALL, ATTRIBUTE("some_variable") == our_value )
+        
+        shared_ptr<Attribute> our_string = make_shared<StringAttribute>("test string");
+        FindParticles search2( event, FIND_ALL, ATTRIBUTE("some_other_attribute") == our_string )
+    @endcode
+
     Filters are additive:
 
     @code{.cpp}
@@ -187,5 +203,5 @@
     @endcode
 
     <hr>
-    Last update 15 June 2014
+    Last update 24 May 2015
 */

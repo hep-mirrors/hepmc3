@@ -4,7 +4,7 @@
 // Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
 /**
- *  @file hepevt_wrapper_example_main.cc
+ *  @example hepevt_wrapper_example_main.cc
  *  @brief Basic example of HEPEVT interface use
  *
  *  Fills HEPEVT twice - once using FORTRAN and second time using C++

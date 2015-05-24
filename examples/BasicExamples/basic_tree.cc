@@ -3,6 +3,7 @@
 // This file is part of HepMC
 // Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
+/// @example basic_tree.cc
 /// @brief Basic example of building HepMC3 tree by hand
 ///
 ///  Based on HepMC2/examples/example_BuildEventFromScratch.cc

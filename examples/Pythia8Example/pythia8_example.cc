@@ -1,5 +1,5 @@
 /**
- *  @file  pythia8_example.cc
+ *  @example pythia8_example.cc
  *  @brief Basic example of use for pythia8 interface
  *
  */

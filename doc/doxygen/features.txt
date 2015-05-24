@@ -23,16 +23,32 @@
           default ROOT installation. If no installation is present, ROOT I/O
           will not be available
 
-    @note If <b>-DHEPMC_ENABLE_CPP11=ON</b> is not used, CMake will attempt to
-          find and use BOOST v1.4 or later
+    @note cmake is set to detect c++11 support by default. If c++11 is not
+          supported CMake will attempt to find and use BOOST v1.4 or later
 
     ###########################################################################
     @section modules New modules
     ###########################################################################
 
-    New modules, such as ROOT I/O or search engine, have been added.
+    See <a href="modules.html">modules</a> section for descriptions of new
+    modules, such as ROOT I/O, Search Engine and Attributes.
 
-    See <b>Modules</b> section for their full list and descriptions.
+    ###########################################################################
+    @section gen_run GenRunInfo class
+    ###########################################################################
+
+    A new class has been provided to store run-level informations, such as
+    weight names, names and description of tools used to generate the event,
+    global attributes such as LHE run information or any other run information
+    provided by user. See HepMC::GenRunInfo class description for details.
+
+    @note This class can be serialized and parsed using ASCII I/O or ROOT I/O.
+
+    ###########################################################################
+    @section interfaces LHEF interface and new header-only HEPEVT wrapper
+    ###########################################################################
+
+    See <a href="examples.html">examples</a> section for examples of their use.
 
     ###########################################################################
     @section small Small enchantments
@@ -101,5 +117,5 @@
     @endcode
 
     <hr>
-    Last update 6 November 2014
+    Last update 24 May 2015
 */

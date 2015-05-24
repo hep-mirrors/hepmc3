@@ -4,7 +4,7 @@
 // Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
 /**
- *  @file HepMC2_reader_example.cc
+ *  @example HepMC2_reader_example.cc
  *  @brief Example of use of HepMC2 adapter
  *
  *  Converts selected HepMC2 file to HepMC3 file

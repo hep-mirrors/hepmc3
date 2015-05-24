@@ -1,3 +1,7 @@
+/**
+ *  @example LHEF_example_cat.cc
+ *  @brief Basic example of use of LHEF for reading and writing LHE files
+ */
 #include "HepMC/LHEFAttributes.h"
 #include "HepMC/ReaderAscii.h"
 #include "HepMC/WriterAscii.h"

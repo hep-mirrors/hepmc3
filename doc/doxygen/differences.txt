@@ -13,7 +13,7 @@
 
     Following changes in header files have been applied:
     @code{.cpp}
-        HepMC/IO_GenEvent.h  ->  HepMC/IO/IO_GenEvent.h
+        HepMC/IO_GenEvent.h is now deprecated but can be used
         HepMC/HeavyIons.h    ->  HepMC/GenHeavyIons.h   (now a POD struct)
         HepMC/PdfInfo.h      ->  HepMC/GenPdfInfo.h     (now a POD struct)
         HepMC/SimpleVector.h ->  HepMC/FourVector.h     (ThreeVector class removed)
@@ -52,7 +52,7 @@
     @subsection memory Memory managed by shared pointers
     ###########################################################################
     Particles and vertices are managed using shared pointers,
-    so they cannot be created through the call to 'new'.
+    so they should not be created through the call to 'new'.
 
     @code{.cpp}
         GenEvent event;
@@ -83,7 +83,7 @@
     ###########################################################################
 
     Particles and vertices in HepMC3 are stored in topological order. This means
-    that when creating vertices, incoming particles must have barcode lower than
+    that when creating vertices, incoming particles must have id lower than
     any of the outgoing particles.
 
     This forces the tree structure to be constructed top-to-bottom
@@ -122,30 +122,39 @@
     @endcode
 
     ###########################################################################
-    @section interface Changes to user interface
+    @section functionality Changes to user interface and to HepMC functionality
     ###########################################################################
     ###########################################################################
-    @subsection deleting Removed function GenEvent::remove_particle()
+    @subsection deleting Deleting particles and vertices
     ###########################################################################
 
-    @warning For now, there is no option to delete a particle!
+    Deleting a particle using GenEvent::remove_particle() will also remove
+    its end_vertex if this is the only particle that is on this vertex
+    particles_in() list.
+
+    Deleting a vertex will delete all of its outgoing
+    particles. (and subsequently, all of their decays).
 
     ###########################################################################
     @subsection barcodes Barcodes can no longer be set
     ###########################################################################
 
-    Barcodes are now solely for backward-compatibility purpose.
-    To code information that previously was stored as barcode use
-    HepMC3::GenParticle::set_status_subcode()
-
-    @note This will be replaced in future with more complex option of defining user code
+    Barcodes are no longer available. Use attributes to provide additional
+    information that was previously encoded using barcodes
+    (see module @ref attributes).
+    
+    The unique identifier of particles and vertices is now called id() to
+    separate its role from barcodes. Id is set automatically and cannot
+    be changed. Id is not permanently attached to particle/vertex. When
+    a particle or vertex is removed from the event, id's of other particles
+    or vertices may change.
 
     ###########################################################################
     @subsection units Units are no longer defined at compilation time
     ###########################################################################
 
-    Units has to be always provided when creating new event.
-    They can be later changed using HepMC::GenEvent::set_units
+    The default units are set to GEV and MM. They can be provided as
+    constructor parameters or changed later using HepMC::GenEvent::set_units
 
     @code{.cpp}
         GenEvent event(Units::GEV,Units::CM);
@@ -162,6 +171,14 @@
         event.print(); // event printed in MEV/MM
     @endcode
 
+    ###########################################################################
+    @subsection deprecated_code Deprecated code
+    ###########################################################################
+
+    A lot of HepMC2 functions has been declared obsolete and are marked as
+    deprecated. Warnings displayed at compilation time hint to what functions
+    or classes should be used instead.
+    
     <hr>
-    Last update 6 November 2014
+    Last update 24 May 2015
 */
