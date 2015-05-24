@@ -89,6 +89,8 @@ const FourVector& GenVertex::position() const {
         if(v) return v->position();
     }
 
+    if( parent_event() ) return parent_event()->event_pos();
+
     return FourVector::ZERO_VECTOR();
 }
 

@@ -68,7 +68,7 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
     cout << " Momentum units: " << Units::name(event.momentum_unit())
          << " Position units: " << Units::name(event.length_unit()) << endl;
     cout << " Entries in this event: " << event.vertices().size() << " vertices, "
-         << event.particles().size() << " particles,"
+         << event.particles().size() << " particles, "
          << event.weights().size()   << " weights." << endl;
 
     const FourVector &pos = event.event_pos();
