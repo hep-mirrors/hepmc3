@@ -172,7 +172,7 @@ string WriterAscii::escape(const string s) {
 
 void WriterAscii::write_vertex(const GenVertexPtr &v) {
 
-    m_cursor += sprintf( m_cursor, "V %i [",v->id() );
+    m_cursor += sprintf( m_cursor, "V %i %i [",v->id(),v->status() );
     flush();
 
     bool printed_first = false;

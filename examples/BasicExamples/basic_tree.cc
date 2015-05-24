@@ -56,6 +56,9 @@ int main() {
     v1->add_particle_out(p2);
     evt.add_vertex(v1);
 
+    // Set vertex status if needed
+    v1->set_status(4);
+
     GenVertexPtr v2 = make_shared<HepMC::GenVertex>();
     v2->add_particle_in (p3);
     v2->add_particle_out(p4);

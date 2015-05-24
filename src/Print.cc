@@ -90,7 +90,9 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
 void Print::listing( const GenVertexPtr &v ) {
     cout << "Vtx: ";
     cout.width(6);
-    cout << v->id() ;
+    cout << v->id() << " stat: ";
+    cout.width(3);
+    cout << v->status();
 
     const FourVector &pos = v->position();
     if( !pos.is_zero() ) {
@@ -163,8 +165,9 @@ void Print::listing( const GenParticlePtr &p ) {
 }
 
 void Print::line(const GenVertexPtr &v) {
-    cout << "GenVertex:  " << v->id();
+    cout << "GenVertex:  " << v->id() << " stat: ";
     cout.width(3);
+    cout << v->status();
     cout << " in: "  << v->particles_in().size();
     cout.width(3);
     cout << " out: " << v->particles_out().size();

@@ -207,6 +207,10 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     id = atoi(cursor);
 
+    // status
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    data->set_status( atoi(cursor) );
+
     // skip to the list of particles
     if( !(cursor = strchr(cursor+1,'[')) ) return false;
 
@@ -414,7 +418,7 @@ bool ReaderAscii::parse_tool(const char *buf) {
     tool.version = line.substr(0, pos);
     tool.description = line.substr(pos + 1);
     run_info()->tools().push_back(tool);
- 
+
     return true;
 
 }

@@ -68,9 +68,9 @@ using namespace std;
         int id() const { return m_id; }
 
         /// Get vertex status code
-        int status() const { return m_status; }
+        int status() const { return m_data.status; }
         /// Set vertex status code
-        void set_status(int status) { m_status = status; }
+        void set_status(int status) { m_data.status = status; }
 
         /// Get vertex data
         const GenVertexData& data() const { return m_data; }
@@ -200,7 +200,6 @@ using namespace std;
         //@{
         GenEvent      *m_event;  //!< Parent event
         int            m_id;     //!< Vertex id
-        int            m_status; //!< Vertex id
         GenVertexData  m_data;   //!< Vertex data
 
         vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
