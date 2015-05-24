@@ -89,7 +89,7 @@ int main() {
     // 1)
     cout << endl << "Find all stable particles: " << endl;
 
-    FindParticles search(evt, FIND_ALL, STATUS == 1);
+    FindParticles search(evt, FIND_ALL, IS_STABLE);
 
     FOREACH( const GenParticlePtr &p, search.results() ) {
         Print::line(p);
@@ -106,7 +106,7 @@ int main() {
 
     // 3)
     cout << endl << "Find stable descendants of particle with id " << p4->id() << ": " << endl;
-    cout<<"(we check both for status == 1 and no end vertex just to be safe)" << endl;
+    cout<<"We check both for STATUS == 1 (equivalent of IS_STABLE) and no end vertex, just to be safe" << endl;
 
     FindParticles search3(p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX);
 

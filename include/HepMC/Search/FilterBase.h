@@ -47,7 +47,9 @@ enum FilterIntegerParam {
 enum FilterBoolParam {
     HAS_END_VERTEX,
     HAS_PRODUCTION_VERTEX,
-    HAS_SAME_PDG_ID_DAUGHTER
+    HAS_SAME_PDG_ID_DAUGHTER,
+    IS_STABLE,
+    IS_BEAM
 };
 
 /** @brief List of filters with attribute parameter */
@@ -77,6 +79,8 @@ public:
     static const Filter     init_has_end_vertex();           //!< init static const HAS_END_VERTEX
     static const Filter     init_has_production_vertex();    //!< init static const HAS_PRODUCTION_VERTEX
     static const Filter     init_has_same_pdg_id_daughter(); //!< init static const HAS_SAME_PDG_ID_DAUGHTER
+    static const Filter     init_is_stable();                //!< init static const IS_STABLE
+    static const Filter     init_is_beam();                  //!< init static const IS_BEAM
 
 //
 // Constructors

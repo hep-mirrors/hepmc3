@@ -24,7 +24,7 @@ bool Filter::passed_filter(const GenParticlePtr &p) const {
         case BOOL_PARAM:      return passed_bool_filter(p);
         case ATTRIBUTE_PARAM: return passed_attribute_filter(p);
     }
-    
+
     return false;
 }
 
@@ -87,6 +87,8 @@ bool Filter::passed_bool_filter(const GenParticlePtr &p ) const {
             }
 
             break;
+        case IS_STABLE: result = (bool) (p->status() == 1); break;
+        case IS_BEAM:   result = (bool) (p->status() == 4); break;
     };
 
     if( m_bool_value == false ) result = !result;

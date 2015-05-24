@@ -91,6 +91,8 @@ protected:
 static const Filter HAS_END_VERTEX           = FilterBase::init_has_end_vertex();           //!< Filter for checking if HepMC::GenParticle::end_vertex()        != NULL
 static const Filter HAS_PRODUCTION_VERTEX    = FilterBase::init_has_production_vertex();    //!< Filter for checking if HepMC::GenParticle::production_vertex() != NULL
 static const Filter HAS_SAME_PDG_ID_DAUGHTER = FilterBase::init_has_same_pdg_id_daughter(); //!< Filter for checking if end vertex has particle with same pdg_id
+static const Filter IS_STABLE                = FilterBase::init_is_stable();                //!< Filter for checking if particle is stable
+static const Filter IS_BEAM                  = FilterBase::init_is_beam();                  //!< Filter for checking if particle is a beam particle
 
 } // namespace HepMC
 

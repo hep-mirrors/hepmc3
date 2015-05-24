@@ -25,5 +25,7 @@ Filter FilterBase::operator<=(int value) const { return Filter(m_int,LESS_OR_EQU
 const Filter FilterBase::init_has_end_vertex()           { return Filter(HAS_END_VERTEX);           }
 const Filter FilterBase::init_has_production_vertex()    { return Filter(HAS_PRODUCTION_VERTEX);    }
 const Filter FilterBase::init_has_same_pdg_id_daughter() { return Filter(HAS_SAME_PDG_ID_DAUGHTER); }
+const Filter FilterBase::init_is_stable()                { return Filter(IS_STABLE);                }
+const Filter FilterBase::init_is_beam()                  { return Filter(IS_BEAM);                  }
 
 } // namespace HepMC
