@@ -65,8 +65,8 @@ public:
     }
 
 private:
-    WriterAscii *m_writer; //< Instance of WriterAscii
-    ReaderAscii *m_reader; //< Instance of ReaderAscii
+    WriterAscii *m_writer; ///< Instance of WriterAscii
+    ReaderAscii *m_reader; ///< Instance of ReaderAscii
 };
 
 } // namespace HepMC

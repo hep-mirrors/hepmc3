@@ -1,17 +1,21 @@
 #include "HepMC/GenEvent.h"
 
-class MyClass
-{
+/** @class MyClass
+ *  @brief Sample class for root I/O test
+ */
+class MyClass {
+public:
 
- public:
+    /// @brief Default constructor
+    MyClass();
 
-  MyClass();
-  void SetEvent(HepMC::GenEvent*);
-  HepMC::GenEvent* GetEvent();
+    /// @brief Set HepMC event
+    void SetEvent(HepMC::GenEvent*);
 
-  
- private:
-  int someint;
-  HepMC::GenEvent* event;
-  
+    /// @brief Get HepMC event
+    HepMC::GenEvent* GetEvent();
+
+private:
+    int someint;            ///< Test int
+    HepMC::GenEvent* event; ///< Test event
 };

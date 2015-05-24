@@ -145,7 +145,7 @@ public:
         return true;
     }
 private:
-    int m_val;
+    int m_val; ///< Attribute value
 };
 
 /**

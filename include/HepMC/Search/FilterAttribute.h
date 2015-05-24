@@ -7,9 +7,9 @@
 #define  HEPMC_SEARCH_FILTEATTRIBUTE_H
 ///
 /// @file FilterAttribute.h
-/// @brief Definition of \b class FilterAttribute
+/// @brief Definition of \b class ATTRIBUTE
 ///
-/// @class HepMC::FilterAttribute
+/// @class HepMC::ATTRIBUTE
 /// @brief Filter for the attributes
 ///
 /// Used to construct filters that can check if an attribute exists

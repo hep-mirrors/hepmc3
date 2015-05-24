@@ -63,7 +63,7 @@ public:
 
 
 #ifndef HEPMC_NO_DEPRECATED
-typedef GenPdfInfo PdfInfo;
+typedef GenPdfInfo PdfInfo; ///< Backward compatibility typedef
 #endif
 
 

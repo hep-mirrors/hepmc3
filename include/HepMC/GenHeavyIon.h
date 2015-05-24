@@ -66,7 +66,7 @@ public:
 
 
 #ifndef HEPMC_NO_DEPRECATED
-typedef GenHeavyIon HeavyIon;
+typedef GenHeavyIon HeavyIon; ///< Backward compatibility typedef
 #endif
 
 

@@ -62,7 +62,7 @@ public:
 };
 
 /**
- *  @class HepMC::HEPRUPAttribute
+ *  @class HepMC::HEPEUPAttribute
  *  @brief Class for storing data for LHEF run information
  */
 class HEPEUPAttribute: public Attribute {
@@ -100,6 +100,7 @@ public:
 
 public:
 
+  /** @brief Get momentum */
   FourVector momentum(int i) const {
     return FourVector(hepeup.PUP[i][0], hepeup.PUP[i][1],
 		      hepeup.PUP[i][2], hepeup.PUP[i][3]);

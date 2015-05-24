@@ -135,6 +135,7 @@ private:
 
 #include "HepMC/GenEvent.h"
 
+/// @brief Get attribute of type T
 template<class T>
 HepMC::shared_ptr<T> HepMC::GenParticle::attribute(string name) const {
   return parent_event()?
