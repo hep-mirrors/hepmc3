@@ -66,8 +66,21 @@ void WriterAscii::write_event(const GenEvent &evt) {
     }
 
     // Write event info
-    m_cursor += sprintf(m_cursor, "E %d %lu %lu\n", evt.event_number(), evt.vertices().size(), evt.particles().size());
+    m_cursor += sprintf(m_cursor, "E %d %lu %lu", evt.event_number(), evt.vertices().size(), evt.particles().size());
     flush();
+
+    // Write event position if not zero
+    const FourVector &pos = evt.event_pos();
+    if ( !pos.is_zero() ) {
+        m_cursor += sprintf(m_cursor," @ %.*e",m_precision,pos.x());
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",  m_precision,pos.y());
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e",  m_precision,pos.z());
+        flush();
+        m_cursor += sprintf(m_cursor," %.*e\n",m_precision,pos.t());
+        flush();
+    }
 
     // Write units
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());

@@ -248,6 +248,8 @@ void GenEvent::shift_position_by( const FourVector & delta ) {
 
 void GenEvent::clear() {
     m_event_number = 0;
+    m_rootvertex = make_shared<GenVertex>();
+    m_weights.clear();
     m_attributes.clear();
     m_particles.clear();
     m_vertices.clear();
@@ -293,8 +295,11 @@ void GenEvent::write_data(GenEventData& data) const {
     data.event_number  = this->event_number();
     data.momentum_unit = this->momentum_unit();
     data.length_unit   = this->length_unit();
+    data.event_pos     = this->event_pos();
 
     // Fill containers
+    data.weights = this->weights();
+
     FOREACH( const GenParticlePtr &p, this->particles() ) {
         data.particles.push_back( p->data() );
     }
@@ -338,8 +343,13 @@ void GenEvent::write_data(GenEventData& data) const {
 
 
 void GenEvent::read_data(const GenEventData &data) {
+    this->clear();
     this->set_event_number( data.event_number );
     this->set_units( data.momentum_unit, data.length_unit );
+    this->shift_position_to( data.event_pos );
+
+    // Fill weights
+    this->weights() = data.weights;
 
     // Fill particle information
     FOREACH( const GenParticleData &pd, data.particles ) {

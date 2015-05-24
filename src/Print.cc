@@ -23,7 +23,12 @@ void Print::content( const GenEvent &event ) {
     cout<<"--------------------------------"<<endl;
     cout<<endl;
 
-    cout<<"Attributes:"<<endl;
+    cout<<"Weights (" << event.weights().size() <<"): "<<endl;
+    FOREACH( const double w, event.weights() ) {
+        cout << w << endl;
+    }
+
+    cout<<"Attributes (" << event.attributes().size() << "):"<<endl;
 
     typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
     typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
@@ -63,11 +68,11 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
     cout << " Momentum units: " << Units::name(event.momentum_unit())
          << " Position units: " << Units::name(event.length_unit()) << endl;
     cout << " Entries in this event: " << event.vertices().size() << " vertices, "
-         << event.particles().size() << " particles." << endl;
-    // cout << " root vertex: " << event.event_pos()->particles_out().size();
+         << event.particles().size() << " particles,"
+         << event.weights().size()   << " weights." << endl;
 
     const FourVector &pos = event.event_pos();
-    cout << ", position offset: " << pos.x() << ", " << pos.y() << ", " << pos.z() << ", " << pos.t() << endl;
+    cout << " Position offset: " << pos.x() << ", " << pos.y() << ", " << pos.z() << ", " << pos.t() << endl;
 
     // Print a legend to describe the particle info
     cout << "                                    GenParticle Legend" << endl;

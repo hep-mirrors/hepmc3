@@ -30,6 +30,9 @@ struct GenEventData {
 
     std::vector<GenParticleData> particles; ///< Particles
     std::vector<GenVertexData>   vertices;  ///< Vertices
+    std::vector<double>          weights;   ///< Weights
+
+    FourVector event_pos;                   ///< Event position
 
     /** @brief First id of the vertex links
      *

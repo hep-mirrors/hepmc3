@@ -77,10 +77,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 is_parsing_successful = parse_particle_information(evt,buf);
                 break;
             case 'W':
-		if ( parsed_event_header )
-		  is_parsing_successful = parse_weight_values(evt,buf);
-		else
-		  is_parsing_successful = parse_weight_names(buf);
+                if ( parsed_event_header )
+                  is_parsing_successful = parse_weight_values(evt,buf);
+                else
+                  is_parsing_successful = parse_weight_names(buf);
                 break;
             case 'U':
                 is_parsing_successful = parse_units(evt,buf);
@@ -89,10 +89,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 is_parsing_successful = parse_tool(buf);
                 break;
             case 'A':
-		if ( parsed_event_header )
-		    is_parsing_successful = parse_attribute(evt,buf);
-		else
-		    is_parsing_successful = parse_run_attribute(buf);
+                if ( parsed_event_header )
+                    is_parsing_successful = parse_attribute(evt,buf);
+                else
+                    is_parsing_successful = parse_run_attribute(buf);
                 break;
             default:
                 WARNING( "ReaderAscii: skipping unrecognised prefix: " << buf[0] )
@@ -134,8 +134,9 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *buf) {
     static const pair<int,int>  err(-1,-1);
     pair<int,int>               ret(-1,-1);
-    const char                      *cursor   = buf;
-    int                              event_no = 0;
+    const char                 *cursor   = buf;
+    int                         event_no = 0;
+    FourVector                  position;
 
     // event number
     if( !(cursor = strchr(cursor+1,' ')) ) return err;
@@ -150,6 +151,27 @@ pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *bu
     if( !(cursor = strchr(cursor+1,' ')) ) return err;
     ret.second = atoi(cursor);
 
+    // check if there is position information
+    if( (cursor = strchr(cursor+1,'@')) ) {
+
+        // x
+        if( !(cursor = strchr(cursor+1,' ')) ) return err;
+        position.setX(atof(cursor));
+
+        // y
+        if( !(cursor = strchr(cursor+1,' ')) ) return err;
+        position.setY(atof(cursor));
+
+        // z
+        if( !(cursor = strchr(cursor+1,' ')) ) return err;
+        position.setZ(atof(cursor));
+
+        // t
+        if( !(cursor = strchr(cursor+1,' ')) ) return err;
+        position.setT(atof(cursor));
+        evt.shift_position_to( position );
+    }
+    
     DEBUG( 10, "ReaderAscii: E: "<<event_no<<" ("<<ret.first<<"V, "<<ret.second<<"P)" )
 
     return ret;
@@ -163,10 +185,10 @@ bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
     double w;
     while ( iss >> w ) wts.push_back(w);
     if ( run_info() && run_info()->weight_names().size()
-	 && run_info()->weight_names().size() == wts.size() )
-	throw std::logic_error("ReaderAscii::parse_weight_values: "
-			       "The number of weights does not match "
-			       "the weight names in the GenRunInfo object");
+     && run_info()->weight_names().size() == wts.size() )
+    throw std::logic_error("ReaderAscii::parse_weight_values: "
+                           "The number of weights does not match "
+                           "the weight names in the GenRunInfo object");
     evt.weights() = wts;
 
     return true;
@@ -357,7 +379,7 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     cursor = cursor2+1;
 
     shared_ptr<Attribute> att =
-	make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
+    make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
 
     evt.add_attribute(string(name), att, id);
 
@@ -378,7 +400,7 @@ bool ReaderAscii::parse_run_attribute(const char *buf) {
     cursor = cursor2+1;
 
      shared_ptr<StringAttribute> att =
-	 make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
+     make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
 
     run_info()->add_attribute(string(name), att);
 
