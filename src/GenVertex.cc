@@ -21,6 +21,7 @@ namespace HepMC {
 GenVertex::GenVertex( const FourVector& position ):
 m_event(NULL),
 m_id(0) {
+    m_data.status   = 0;
     m_data.position = position;
 }
 
