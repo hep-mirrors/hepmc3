@@ -135,8 +135,8 @@ void WriterAscii::write_event(const GenEvent &evt) {
         if (v) {
 
             // Check if we need this vertex at all
-            if ( v->particles_in().size() > 1 || !v->data().position.is_zero() ) production_vertex = v->id();
-            else if ( v->particles_in().size() == 1 )                            production_vertex = v->particles_in()[0]->id();
+            if ( v->particles_in().size() > 1 || !v->data().is_zero() ) production_vertex = v->id();
+            else if ( v->particles_in().size() == 1 )                   production_vertex = v->particles_in()[0]->id();
 
             if (production_vertex < lowest_vertex_id) {
                 write_vertex(v);

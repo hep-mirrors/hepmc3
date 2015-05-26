@@ -37,10 +37,14 @@ ReaderAscii::~ReaderAscii() { close(); }
 bool ReaderAscii::read_event(GenEvent &evt) {
     if ( !m_file.is_open() ) return false;
 
+    char               peek;
     char               buf[512*512];
     bool               parsed_event_header    = false;
     bool               is_parsing_successful  = true;
     pair<int,int> vertices_and_particles(0,0);
+
+    evt.clear();
+    evt.set_run_info(run_info());
 
     //
     // Parse event, vertex and particle information
@@ -103,8 +107,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         if( !is_parsing_successful ) break;
 
         // Check for next event
-        buf[0] = m_file.peek();
-        if( parsed_event_header && buf[0]=='E' ) break;
+        peek = m_file.peek();
+        if( parsed_event_header && peek=='E' ) break;
     }
 
     // Check if all particles and vertices were parsed
@@ -124,8 +128,6 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         return false;
     }
-
-    evt.set_run_info(run_info());
 
     return true;
 }

@@ -25,6 +25,7 @@ m_file(filename) {
     if( !m_file.is_open() ) {
         ERROR( "ReaderAsciiHepMC2: could not open input file: "<<filename )
     }
+    set_run_info(make_shared<GenRunInfo>());
 }
 
 bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
@@ -36,6 +37,9 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     unsigned int  current_vertex_particles_count = 0;
     unsigned int  current_vertex_particles_parsed= 0;
 
+    evt.clear();
+    evt.set_run_info(run_info());
+    
     // Empty cache
     m_vertex_cache.clear();
     m_vertex_barcodes.clear();
@@ -247,7 +251,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         random_states[i] = atoi(cursor);
     }
 
-    // SKIPPED: weights
+    // weights
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     weights_size = atoi(cursor);
     weights.resize(weights_size);
@@ -257,6 +261,8 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         weights[i] = atof(cursor);
     }
 
+    evt.weights() = weights;
+    
     DEBUG( 10, "ReaderAsciiHepMC2: E: "<<event_no<<" ("<<vertices_count<<"V, "<<weights_size<<"W, "<<random_states_size<<"RS)" )
 
     return vertices_count;
