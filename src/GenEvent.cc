@@ -231,7 +231,7 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
 
 
 const FourVector& GenEvent::event_pos() const {
-  return m_rootvertex->position();
+  return m_rootvertex->data().position;
 }
 
 

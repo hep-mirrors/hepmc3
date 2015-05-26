@@ -78,9 +78,12 @@ void WriterAscii::write_event(const GenEvent &evt) {
         flush();
         m_cursor += sprintf(m_cursor," %.*e",  m_precision,pos.z());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e\n",m_precision,pos.t());
+        m_cursor += sprintf(m_cursor," %.*e",  m_precision,pos.t());
         flush();
     }
+
+    m_cursor += sprintf(m_cursor,"\n");
+    flush();
 
     // Write units
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
