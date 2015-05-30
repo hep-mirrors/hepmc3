@@ -113,4 +113,10 @@ string GenVertex::attribute_as_string(string name) const {
     return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
 }
 
+vector<string> GenVertex::attribute_names() const {
+  if ( parent_event() ) return parent_event()->attribute_names(id());
+
+  return vector<string>();
+}
+
 } // namespace HepMC

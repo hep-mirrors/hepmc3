@@ -28,7 +28,7 @@ void Print::content( const GenEvent &event ) {
         cout << w << endl;
     }
 
-    cout<<"Attributes (" << event.attributes().size() << "):"<<endl;
+    cout<<"Attributes:"<<endl;
 
     typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
     typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;

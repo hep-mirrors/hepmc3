@@ -16,6 +16,7 @@
 #include "HepMC/Search/FindParticles.h"
 
 #include <deque>
+#include <algorithm> // sort
 using namespace std;
 
 namespace HepMC {
@@ -77,7 +78,7 @@ void GenEvent::add_vertex( GenVertexPtr v ) {
 void GenEvent::remove_particle( GenParticlePtr p ) {
     if( !p || p->parent_event() != this ) return;
 
-    DEBUG( 3, "GenEvent::remove_particle - called with particle: "<<p->id() );
+    DEBUG( 30, "GenEvent::remove_particle - called with particle: "<<p->id() );
     GenVertexPtr end_vtx = p->end_vertex();
     if( end_vtx ) {
         end_vtx->remove_particle_in(p);
@@ -94,22 +95,67 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
         if( prod_vtx->particles_out().size() == 0 ) remove_vertex(prod_vtx);
     }
 
-    DEBUG( 3,"GenEvent::remove_particle - erasing particle: " << p->id() )
+    DEBUG( 30, "GenEvent::remove_particle - erasing particle: " << p->id() )
 
     int idx = p->id();
     vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
 
-    // Reassign id of the particles following this one
+    // Remove attributes of this particle
+    vector<string> attributes = p->attribute_names();
+    FOREACH( string s, attributes) {
+        p->remove_attribute(s);
+    }
+
+    //
+    // Reassign id of attributes with id above this one
+    //
+    vector<att_val_t> changed_attributes;
+
+    FOREACH( att_key_t& vt1, m_attributes ) {
+        changed_attributes.clear();
+
+        FOREACH( const att_val_t& vt2, vt1.second ) {
+            if( vt2.first > p->id() ) {
+                changed_attributes.push_back(vt2);
+            }
+        }
+
+        FOREACH( att_val_t val, changed_attributes ) {
+            vt1.second.erase(val.first);
+            vt1.second[val.first-1] = val.second;
+        }
+    }
+
+    // Reassign id of particles with id above this one
     for(;it != m_particles.end(); ++it) {
-        (*it)->m_id = idx;
-        ++idx;
+        --((*it)->m_id);
+    }
+
+    // Finally - set parent event and id of this particle to 0
+    p->m_event = NULL;
+    p->m_id    = 0;
+}
+
+void GenEvent::remove_particles( vector<GenParticlePtr> v ) {
+    /// @todo Currently the only optimization is sort by id in ascending order.
+    ///       Needs better optimization!
+    struct sort_by_id_asc {
+        inline bool operator()(const GenParticlePtr& p1, const GenParticlePtr& p2) {
+            return (p1->id() > p2->id());
+        }
+    };
+
+    sort( v.begin(), v.end(), sort_by_id_asc() );
+
+    FOREACH( GenParticlePtr &p, v ) {
+        remove_particle(p);
     }
 }
 
 void GenEvent::remove_vertex( GenVertexPtr v ) {
     if( !v || v->parent_event() != this ) return;
 
-    DEBUG( 3, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
+    DEBUG( 30, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
     shared_ptr<GenVertex> null_vtx;
 
     FOREACH( GenParticlePtr &p, v->m_particles_in ) {
@@ -124,16 +170,45 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     }
 
     // Erase this vertex from vertices list
-    DEBUG( 3, "GenEvent::remove_vertex   - erasing vertex: " << v->id() )
+    DEBUG( 30, "GenEvent::remove_vertex   - erasing vertex: " << v->id() )
 
     int idx = -v->id();
     vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
 
-    // Reassign id of the vertices following this one
-    for(;it != m_vertices.end(); ++it) {
-        (*it)->m_id = -idx;
-        ++idx;
+    // Remove attributes of this vertex
+    vector<string> attributes = v->attribute_names();
+    FOREACH( string s, attributes) {
+        v->remove_attribute(s);
     }
+
+    //
+    // Reassign id of attributes with id below this one
+    //
+    vector<att_val_t> changed_attributes;
+
+    FOREACH( att_key_t& vt1, m_attributes ) {
+        changed_attributes.clear();
+
+        FOREACH( const att_val_t& vt2, vt1.second ) {
+            if( vt2.first < v->id() ) {
+                changed_attributes.push_back(vt2);
+            }
+        }
+
+        FOREACH( att_val_t val, changed_attributes ) {
+            vt1.second.erase(val.first);
+            vt1.second[val.first+1] = val.second;
+        }
+    }
+
+    // Reassign id of particles with id above this one
+    for(;it != m_vertices.end(); ++it) {
+        ++((*it)->m_id);
+    }
+
+    // Finally - set parent event and id of this vertex to 0
+    v->m_event = NULL;
+    v->m_id    = 0;
 }
 
 
@@ -231,9 +306,12 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
 
 
 const FourVector& GenEvent::event_pos() const {
-  return m_rootvertex->data().position;
+    return m_rootvertex->data().position;
 }
 
+const vector<GenParticlePtr>& GenEvent::beams() const {
+    return m_rootvertex->particles_out();
+}
 
 void GenEvent::shift_position_by( const FourVector & delta ) {
     m_rootvertex->set_position( event_pos() + delta );
@@ -280,6 +358,17 @@ void GenEvent::remove_attribute(const string &name, int id) {
     i1->second.erase(i2);
 }
 
+vector<string> GenEvent::attribute_names(int id) const {
+    vector<string> results;
+
+    FOREACH( const att_key_t& vt1, this->attributes() ) {
+        FOREACH( const att_val_t& vt2, vt1.second ) {
+            if( vt2.first == id ) results.push_back( vt1.first );
+        }
+    }
+
+    return results;
+}
 
 void GenEvent::write_data(GenEventData& data) const {
     // Reserve memory for containers
@@ -319,11 +408,8 @@ void GenEvent::write_data(GenEventData& data) const {
         }
     }
 
-    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
-    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
-
-    FOREACH( const value_type1& vt1, this->attributes() ) {
-        FOREACH( const value_type2& vt2, vt1.second ) {
+    FOREACH( const att_key_t& vt1, this->attributes() ) {
+        FOREACH( const att_val_t& vt2, vt1.second ) {
 
             string st;
 

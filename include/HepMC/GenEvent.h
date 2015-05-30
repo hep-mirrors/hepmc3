@@ -147,6 +147,9 @@ public:
     /// Vertex representing the overall event position
     const FourVector& event_pos() const;
 
+    /// @brief Vector of beam particles
+    const std::vector<GenParticlePtr>& beams() const;
+
     /// @brief Shift position of all vertices in the event by @a delta
     void shift_position_by( const FourVector & delta );
 
@@ -179,6 +182,9 @@ public:
     /// @brief Get attribute of any type as string
     string attribute_as_string(const string &name, int id = 0) const;
 
+    /// @brief Get list of attribute names
+    std::vector<string> attribute_names(int id = 0) const;
+
     /// @brief Get list of attributes
     const std::map< string, std::map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
 
@@ -194,15 +200,21 @@ public:
     /// @brief Add vertex
     void add_vertex( GenVertexPtr v );
 
-    /// @brief Remove particle
+    /// @brief Remove particle from the event
     ///
-    /// This will remove whole sub-tree starting from this particle
-    /// and will remove production vertex of this particle if this vertex
+    /// This function  will remove whole sub-tree starting from this particle
+    /// if it is the only incoming particle of this vertex.
+    /// It will also production vertex of this particle if this vertex
     /// has no more outgoing particles
-    /// @todo Rejoining vertices. Also: what to do if deleting beam particle?
     void remove_particle( GenParticlePtr v );
 
-    /// @brief Remove vertex
+    /// @brief Remove a set of particles
+    ///
+    /// This function follows rules of GenEvent::remove_particle to remove
+    /// a list of particles from the event.
+    void remove_particles( std::vector<GenParticlePtr> v );
+
+    /// @brief Remove vertex from the event
     ///
     /// This will remove all sub-trees of all outgoing particles of this vertex
     /// @todo Optimize. Currently each particle/vertex is erased separately
@@ -324,12 +336,12 @@ public:
 
     /// @brief Test to see if we have exactly two particles in event_pos() vertex
     /// @deprecated Backward compatibility
-    HEPMC_DEPRECATED("Use event_pos().particles_out() to access beam particles")
+    HEPMC_DEPRECATED("Use beams() to access beam particles")
     bool valid_beam_particles() const;
 
     /// @brief Get first two particles of the event_pos() vertex
     /// @deprecated Backward compatibility
-    HEPMC_DEPRECATED("Use event_pos().particles_out() to access beam particles")
+    HEPMC_DEPRECATED("Use beams() to access beam particles")
     std::pair<GenParticlePtr,GenParticlePtr> beam_particles() const;
 
     /// @brief Set incoming beam particles
@@ -366,7 +378,6 @@ public:
     //@}
     #endif
 
-
 private:
 
     /// @name Fields
@@ -402,6 +413,11 @@ private:
     /// Keys are name and ID (0 = event, <0 = vertex, >0 = particle)
     mutable std::map< string, std::map<int, shared_ptr<Attribute> > > m_attributes;
 
+    /// @brief Attribute map key type
+    typedef std::map< string, std::map<int, shared_ptr<Attribute> > >::value_type att_key_t;
+
+    /// @brief Attribute map value type
+    typedef std::map<int, shared_ptr<Attribute> >::value_type att_val_t;
     #endif // __CINT__
 
     //@}

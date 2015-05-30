@@ -25,9 +25,9 @@ int main() {
     //
     //     name status pdg_id  parent Px       Py    Pz       Energy      Mass
     //  1  !p+!    3   2212    0,0    0.000    0.000 7000.000 7000.000    0.938
-    //  2  !p+!    3   2212    0,0    0.000    0.000-7000.000 7000.000    0.938
+    //  3  !p+!    3   2212    0,0    0.000    0.000-7000.000 7000.000    0.938
     //=========================================================================
-    //  3  !d!     3      1    1,1    0.750   -1.569   32.191   32.238    0.000
+    //  2  !d!     3      1    1,1    0.750   -1.569   32.191   32.238    0.000
     //  4  !u~!    3     -2    2,2   -3.047  -19.000  -54.629   57.920    0.000
     //  5  !W-!    3    -24    1,2    1.517   -20.68  -20.605   85.925   80.799
     //  6  !gamma! 1     22    1,2   -3.813    0.113   -1.833    4.233    0.000
@@ -48,8 +48,8 @@ int main() {
 
     //                                                               px      py        pz       e     pdgid status
     GenParticlePtr p1 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr p3 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
     GenParticlePtr p2 = make_shared<HepMC::GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
+    GenParticlePtr p3 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
     GenParticlePtr p4 = make_shared<HepMC::GenParticle>( FourVector(-3.047,-19.0,    -54.629,  57.920),  -2,  3 );
 
     GenVertexPtr v1 = make_shared<HepMC::GenVertex>();
@@ -66,7 +66,7 @@ int main() {
     evt.add_vertex(v2);
 
     GenVertexPtr v3 = make_shared<HepMC::GenVertex>();
-    v3->add_particle_in(p3);
+    v3->add_particle_in(p2);
     v3->add_particle_in(p4);
     evt.add_vertex(v3);
 
@@ -163,7 +163,7 @@ int main() {
 
     // remove attribute
     evt.remove_attribute("GenCrossSection");
-    evt.remove_attribute("GenCrossSection");
+    evt.remove_attribute("GenCrossSection"); // This call will do nothing
 
     // now this should be null
     cs = evt.attribute<GenCrossSection>("GenCrossSection");
@@ -172,7 +172,7 @@ int main() {
     else    cout << "Problem removing attribute!" << endl;
 
     //
-    // Example of adding particle attributes and finding particles with attributes
+    // Example of adding attributes and finding particles with attributes
     //
 
     shared_ptr<Attribute> tool1           = make_shared<IntAttribute>(1);
@@ -187,6 +187,9 @@ int main() {
 
     p6->add_attribute( "tool" ,  tool999         );
     p6->add_attribute( "other" , test_attribute2 );
+
+    v3->add_attribute( "vtx_att" , test_attribute );
+    v4->add_attribute( "vtx_att" , test_attribute2 );
 
     cout << endl << "Find all particles with attribute 'tool' "<< endl;
     cout << "(should return particles 2,4,6):" << endl;
@@ -232,5 +235,10 @@ int main() {
     Print::listing(evt);
     Print::content(evt);
 
+    cout << endl << "Now: removing beam particles, leaving an empty event" << endl << endl;
+    evt.remove_particles( evt.beams() );
+
+    Print::listing(evt);
+    Print::content(evt);
     return 0;
 }

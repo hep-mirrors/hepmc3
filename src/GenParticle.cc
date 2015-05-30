@@ -81,6 +81,12 @@ bool GenParticle::add_attribute(std::string name, shared_ptr<Attribute> att) {
   return true;
 }
 
+vector<string> GenParticle::attribute_names() const {
+  if ( parent_event() ) return parent_event()->attribute_names(id());
+
+  return vector<string>();
+}
+
 void GenParticle::remove_attribute(std::string name) {
   if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }

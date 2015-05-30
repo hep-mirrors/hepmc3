@@ -113,6 +113,9 @@ using namespace std;
         /// parent_event(). @return false if there is no parent_event();
         bool add_attribute(string name, shared_ptr<Attribute> att);
 
+        /// @brief Get list of names of attributes assigned to this particle
+        vector<string> attribute_names() const;
+
         /// @brief Remove attribute
         void remove_attribute(string name);
 
