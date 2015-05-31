@@ -86,6 +86,23 @@ private:
      *  @param[in] buf Line of text that needs to be parsed
      */
     bool parse_weight_names(const char *buf);
+
+    /** @brief Parse heavy ion information
+     *
+     *  Helper routine for parsing heavy ion information
+     *  @param[out] evt Event that will be filled with new data
+     *  @param[in]  buf Line of text that needs to be parsed
+     */
+    bool parse_heavy_ion(GenEvent &evt, const char *buf);
+
+    /** @brief Parse pdf information
+     *
+     *  Helper routine for parsing pdf information
+     *  @param[out] evt Event that will be filled with new data
+     *  @param[in]  buf Line of text that needs to be parsed
+     */
+    bool parse_pdf_info(GenEvent &evt, const char *buf);
+
 //
 // Fields
 //

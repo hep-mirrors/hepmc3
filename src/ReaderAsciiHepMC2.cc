@@ -13,6 +13,8 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
+#include "HepMC/GenHeavyIon.h"
+#include "HepMC/GenPdfInfo.h"
 #include "HepMC/Setup.h"
 
 #include <cstring>
@@ -120,12 +122,10 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
                 is_parsing_successful = parse_units(evt,buf);
                 break;
             case 'F':
-                DEBUG( 10, "ReaderAsciiHepMC2: F: skipping PdfInfo" )
-                is_parsing_successful = true;
+                is_parsing_successful = parse_pdf_info(evt,buf);
                 break;
             case 'H':
-                DEBUG( 10, "ReaderAsciiHepMC2: H: skipping Heavy Ions (for now)" )
-                is_parsing_successful = true;
+                is_parsing_successful = parse_heavy_ion(evt,buf);
                 break;
             case 'N':
                 is_parsing_successful = parse_weight_names(buf);
@@ -411,7 +411,7 @@ bool ReaderAsciiHepMC2::parse_weight_names(const char *buf) {
 
     // Ignore weight names if no GenRunInfo object
     if( !run_info() ) return true;
-    
+
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     w_count = atoi(cursor);
 
@@ -423,16 +423,103 @@ bool ReaderAsciiHepMC2::parse_weight_names(const char *buf) {
         // Find pair of '"' characters
         if( !(cursor  = strchr(cursor+1,'"')) ) return false;
         if( !(cursor2 = strchr(cursor+1,'"')) ) return false;
-        
+
         // Strip cursor of leading '"' character
         ++cursor;
-        
+
         w_names[i].assign(cursor, cursor2-cursor);
-        
+
         cursor = cursor2;
     }
 
     run_info()->set_weight_names(w_names);
+
+    return true;
+}
+
+bool ReaderAsciiHepMC2::parse_heavy_ion(GenEvent &evt, const char *buf) {
+    shared_ptr<GenHeavyIon>  hi     = make_shared<GenHeavyIon>();
+    const char              *cursor = buf;
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Ncoll_hard = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Npart_proj = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Npart_targ = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Ncoll = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->spectator_neutrons = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->spectator_protons = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->N_Nwounded_collisions = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Nwounded_N_collisions = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->Nwounded_Nwounded_collisions = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->impact_parameter = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->event_plane_angle = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->eccentricity = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    hi->sigma_inel_NN = atof(cursor);
+
+    // Not in HepMC2:
+    hi->centrality = 0.0;
+
+    evt.add_attribute("GenHeavyIon",hi);
+
+    return true;
+}
+
+bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
+    shared_ptr<GenPdfInfo>  pi     = make_shared<GenPdfInfo>();
+    const char             *cursor = buf;
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pi->parton_id[0] = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pi->parton_id[1] = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pi->x[0] = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pi->x[1] = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pi->scale = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pi->xf[0] = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pi->xf[1] = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pi->pdf_id[0] = atoi(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    pi->pdf_id[1] = atoi(cursor);
+
+    evt.add_attribute("GenPdfInfo",pi);
 
     return true;
 }
