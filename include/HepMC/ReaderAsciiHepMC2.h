@@ -80,6 +80,12 @@ private:
      */
     int parse_particle_information(const char *buf);
 
+    /** @brief Parse weight names
+     *
+     *  Helper routine for parsing weight names
+     *  @param[in] buf Line of text that needs to be parsed
+     */
+    bool parse_weight_names(const char *buf);
 //
 // Fields
 //

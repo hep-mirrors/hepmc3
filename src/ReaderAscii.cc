@@ -187,7 +187,7 @@ bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
     double w;
     while ( iss >> w ) wts.push_back(w);
     if ( run_info() && run_info()->weight_names().size()
-     && run_info()->weight_names().size() == wts.size() )
+     && run_info()->weight_names().size() != wts.size() )
     throw std::logic_error("ReaderAscii::parse_weight_values: "
                            "The number of weights does not match "
                            "the weight names in the GenRunInfo object");

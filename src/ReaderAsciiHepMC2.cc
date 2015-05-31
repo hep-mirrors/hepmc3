@@ -39,7 +39,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
     evt.clear();
     evt.set_run_info(run_info());
-    
+
     // Empty cache
     m_vertex_cache.clear();
     m_vertex_barcodes.clear();
@@ -128,8 +128,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
                 is_parsing_successful = true;
                 break;
             case 'N':
-                DEBUG( 10, "ReaderAsciiHepMC2: skipping weights (for now)" )
-                is_parsing_successful = true;
+                is_parsing_successful = parse_weight_names(buf);
                 break;
             default:
                 WARNING( "ReaderAsciiHepMC2: skipping unrecognised prefix: " << buf[0] )
@@ -262,7 +261,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     }
 
     evt.weights() = weights;
-    
+
     DEBUG( 10, "ReaderAsciiHepMC2: E: "<<event_no<<" ("<<vertices_count<<"V, "<<weights_size<<"W, "<<random_states_size<<"RS)" )
 
     return vertices_count;
@@ -343,7 +342,7 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     const char     *cursor  = buf;
     int             end_vtx = 0;
 
-    // barcode (IGNORED but maybe should be put as an attribute?...)
+    /// @todo barcode ignored but maybe should be put as an attribute?...
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
 
     // id
@@ -404,6 +403,39 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     return 0;
 }
 
+bool ReaderAsciiHepMC2::parse_weight_names(const char *buf) {
+    const char     *cursor  = buf;
+    const char     *cursor2 = buf;
+    int             w_count = 0;
+    vector<string>  w_names;
+
+    // Ignore weight names if no GenRunInfo object
+    if( !run_info() ) return true;
+    
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    w_count = atoi(cursor);
+
+    if( w_count <= 0 ) return false;
+
+    w_names.resize(w_count);
+
+    for( int i=0; i < w_count; ++i ) {
+        // Find pair of '"' characters
+        if( !(cursor  = strchr(cursor+1,'"')) ) return false;
+        if( !(cursor2 = strchr(cursor+1,'"')) ) return false;
+        
+        // Strip cursor of leading '"' character
+        ++cursor;
+        
+        w_names[i].assign(cursor, cursor2-cursor);
+        
+        cursor = cursor2;
+    }
+
+    run_info()->set_weight_names(w_names);
+
+    return true;
+}
 
 void ReaderAsciiHepMC2::close() {
     if( !m_file.is_open() ) return;
