@@ -10,13 +10,22 @@
 #ifndef  HEPMC_GENRUNINFO_H
 #define  HEPMC_GENRUNINFO_H
 
+#if !defined(__CINT__)
 #include "HepMC/Common.h"
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Units.h"
 #include "HepMC/Attribute.h"
+#endif // __CINT__
+
+#ifdef HEPMC_ROOTIO
+#include "TBuffer.h"
+#include "TClass.h"
+#endif
 
 namespace HepMC {
 
+
+struct GenRunInfoData;
 
 /// @brief Stores run-related information
 ///
@@ -44,6 +53,8 @@ public:
 
     /// @brief Default constructor
     GenRunInfo() {}
+
+    #if !defined(__CINT__)
 
     /// @brief The vector of tools used to produce this run.
     const std::vector<ToolInfo> & tools() const {
@@ -103,11 +114,29 @@ public:
       return m_attributes;
     }
 
+    #endif // __CINT__
+
+    /// @name Methods to fill GenRunInfoData and to read it back
+    //@{
+
+    /// @brief Fill GenRunInfoData object
+    void write_data(GenRunInfoData &data) const;
+
+    /// @brief Fill GenRunInfo based on GenRunInfoData
+    void read_data(const GenRunInfoData &data);
+
+    #ifdef HEPMC_ROOTIO
+    /// @brief ROOT I/O streamer
+    void Streamer(TBuffer &b);
+    //@}
+    #endif
 
 private:
 
     /// @name Fields
     //@{
+
+    #if !defined(__CINT__)
 
     /// @brief The vector of tools used to produce this run.
     std::vector<ToolInfo> m_tools;
@@ -122,8 +151,10 @@ private:
     mutable std::map< std::string, shared_ptr<Attribute> > m_attributes;
     //@}
 
+    #endif // __CINT__
 };
 
+#if !defined(__CINT__)
 
 //
 // Template methods
@@ -152,6 +183,7 @@ shared_ptr<T> GenRunInfo::attribute(const string &name) const {
     else return dynamic_pointer_cast<T>(i->second);
 }
 
+#endif // __CINT__
 
 } // namespace HepMC
 

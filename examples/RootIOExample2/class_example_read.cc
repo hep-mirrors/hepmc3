@@ -11,10 +11,12 @@
  *  @date   16/10/14
  */
 #include "HepMC/GenEvent.h"
+#include "HepMC/GenRunInfo.h"
 #include "HepMC/WriterAscii.h"
 #include "HepMC/Print.h"
 
 #include "MyClass.h"
+#include "MyRunClass.h"
 
 #include "TFile.h"
 #include "TSystem.h"
@@ -41,20 +43,37 @@ int main(int argc, char **argv) {
     MyClass* myevent;
     int events_parsed = 0;
 
+    // Get GenRunInfo, if available
+    MyRunClass *my_run = (MyRunClass*)fo.Get("MyRunClass");
+    shared_ptr<GenRunInfo> run_info;
+
+    if( my_run ) run_info.reset(my_run->GetRunInfo());
+
+
     fo.GetListOfKeys()->Print();
 
     TIter next(fo.GetListOfKeys());
     TKey *key;
 
     while ((key=(TKey*)next()))
-      {
-	fo.GetObject(key->GetName(), myevent);
+    {
+        const char *cl = key->GetClassName();
 
-	cout << "Event: " << key->GetName() << endl;
+        if( strncmp(cl,"MyClass",7) != 0 ) continue;
+
+        fo.GetObject(key->GetName(), myevent);
+
+        cout << "Event: " << key->GetName() << endl;
 
         if( events_parsed == 0 ) {
             cout << "First event: " << endl;
 	    Print::listing(*(myevent->GetEvent()));
+        }
+
+        if( run_info ) {
+            cout << "Setting run info" << endl;
+            myevent->GetEvent()->set_run_info(run_info);
+            run_info.reset();
         }
 
         text_output.write_event(*(myevent->GetEvent()));

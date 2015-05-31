@@ -11,6 +11,7 @@
  *  @date   16/10/14
  */
 #include "HepMC/GenEvent.h"
+#include "HepMC/GenRunInfo.h"
 #include "HepMC/ReaderAscii.h"
 #include "HepMC/Print.h"
 
@@ -24,7 +25,7 @@ using std::cout;
 using std::endl;
 
 #include "MyClass.h"
-
+#include "MyRunClass.h"
 
 /** Main */
 int main(int argc, char **argv) {
@@ -40,6 +41,8 @@ int main(int argc, char **argv) {
 
     int events_parsed = 0;
 
+    bool is_gen_run_info_written = false;
+
     while( !text_input.failed() ) {
 
         GenEvent evt(Units::GEV,Units::MM);
@@ -50,22 +53,36 @@ int main(int argc, char **argv) {
 
         if( events_parsed == 0 ) {
             cout << "First event: " << endl;
-	    Print::listing(evt);
+            Print::listing(evt);
         }
 
-	MyClass* myclass = new MyClass();
+        if(!is_gen_run_info_written) {
+            if(evt.run_info()) {
+                GenRunInfo run_info(*evt.run_info());
 
-	myclass->SetEvent(&evt);
-	//
-	std::ostringstream os;
-	os << events_parsed;
-	std::string stevt = "Event_" + os.str();
-	const char* chevt = stevt.c_str();
-           
-	cout << "writing " << stevt << endl;
-	
-	fFile->WriteObject(myclass, chevt);
-	
+                MyRunClass *my_run = new MyRunClass();
+
+                my_run->SetRunInfo(&run_info);
+
+                fFile->WriteObject(my_run,"MyRunClass");
+
+                is_gen_run_info_written = true;
+            }
+        }
+
+        MyClass* myclass = new MyClass();
+
+        myclass->SetEvent(&evt);
+        //
+        std::ostringstream os;
+        os << events_parsed;
+        std::string stevt = "Event_" + os.str();
+        const char* chevt = stevt.c_str();
+
+        cout << "writing " << stevt << endl;
+
+        fFile->WriteObject(myclass, chevt);
+
         ++events_parsed;
 
         if( events_parsed%1000 == 0 ) {

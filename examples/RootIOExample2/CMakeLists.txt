@@ -7,11 +7,11 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/examples
 ROOT_GENERATE_DICTIONARY(myclass_Classes myclass_Classes.h LINKDEF LinkDef.h OPTIONS -inlineInputHeader -DHEPMC_ROOTIO)
 
 
-add_executable(class_example_read.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/class_example_read.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)
+add_executable(class_example_read.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/class_example_read.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyRunClass.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)
 target_link_libraries(class_example_read.exe ${ROOT_LIBRARIES} RIO HepMC HepMCrootIO)
 set_target_properties(class_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
-add_executable(class_example_write.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/class_example_write.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)
+add_executable(class_example_write.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/class_example_write.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyRunClass.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)
 target_link_libraries(class_example_write.exe ${ROOT_LIBRARIES} RIO HepMC HepMCrootIO)
 set_target_properties(class_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 

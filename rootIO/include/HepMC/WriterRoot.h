@@ -21,6 +21,7 @@
 #include "HepMC/Writer.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/Data/GenEventData.h"
+#include "HepMC/Data/GenRunInfoData.h"
 
 // ROOT header files
 #include "TFile.h"
@@ -35,7 +36,8 @@ public:
     /** @brief Default constructor
      *  @warning If file exists, it will be overwritten
      */
-    WriterRoot(const std::string &filename);
+    WriterRoot(const std::string& filename,
+               shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
 //
 // Functions
@@ -47,6 +49,9 @@ public:
      *  @param[in] evt Event to be serialized
      */
     void write_event(const GenEvent &evt);
+
+    /** @brief Write the GenRunInfo object to file. */
+    void write_run_info();
 
     /** @brief Close file stream */
     void close();

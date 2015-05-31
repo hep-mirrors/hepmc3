@@ -21,6 +21,7 @@
 #include "HepMC/Reader.h"
 #include "HepMC/GenEvent.h"
 #include "HepMC/Data/GenEventData.h"
+#include "HepMC/Data/GenRunInfoData.h"
 
 // ROOT header files
 #include "TFile.h"

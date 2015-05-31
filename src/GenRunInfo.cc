@@ -9,6 +9,7 @@
  *
  */
 #include "HepMC/GenRunInfo.h"
+#include "HepMC/Data/GenRunInfoData.h"
 #include <sstream>
 
 namespace HepMC {
@@ -45,5 +46,77 @@ string GenRunInfo::attribute_as_string(const string &name) const {
 
     return ret;
 }
+
+void GenRunInfo::write_data(GenRunInfoData& data) const {
+
+    // Weight names
+    data.weight_names = this->weight_names();
+
+    // Attributes
+    typedef std::map<std::string, shared_ptr<Attribute> >::value_type att_val_t;
+
+    FOREACH( const att_val_t& vt, this->attributes() ) {
+        std::string att;
+        vt.second->to_string(att);
+
+        data.attribute_name.  push_back(vt.first);
+        data.attribute_string.push_back(att);
+    }
+
+    // Tools
+    FOREACH( const struct ToolInfo &tool, this->tools() ) {
+        data.tool_name.       push_back(tool.name);
+        data.tool_version.    push_back(tool.version);
+        data.tool_description.push_back(tool.description);
+    }
+}
+
+void GenRunInfo::read_data(const GenRunInfoData& data) {
+
+    //this->clear();
+
+    // Weight names
+    set_weight_names(data.weight_names);
+
+    // Attributes
+    for(unsigned int i=0; i<data.attribute_name.size(); ++i) {
+        add_attribute( data.attribute_name[i],
+                       make_shared<StringAttribute>(data.attribute_string[i]) );
+    }
+
+    // Tools
+    for(unsigned int i=0; i<data.tool_name.size(); ++i) {
+        ToolInfo ti;
+        ti.name        = data.tool_name[i];
+        ti.version     = data.tool_version[i];
+        ti.description = data.tool_description[i];
+
+        this->tools().push_back(ti);
+    }
+}
+
+#ifdef HEPMC_ROOTIO
+
+void GenRunInfo::Streamer(TBuffer &b){
+
+  if (b.IsReading()){
+
+    GenRunInfoData data;
+
+    b.ReadClassBuffer(TClass::GetClass("HepMC::GenRunInfoData"), &data);
+
+    read_data(data);
+
+  } else {
+
+    // fill the GenRunInfo structures
+    GenRunInfoData data;
+    write_data(data);
+
+    b.WriteClassBuffer(TClass::GetClass("HepMC::GenRunInfoData"), &data);
+  }
+}
+
+#endif
 
 } // namespace HepMC
