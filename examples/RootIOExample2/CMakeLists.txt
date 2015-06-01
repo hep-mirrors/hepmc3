@@ -14,6 +14,7 @@ set_target_properties(class_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY
 add_executable(class_example_write.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/class_example_write.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyRunClass.cc ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)
 target_link_libraries(class_example_write.exe ${ROOT_LIBRARIES} RIO HepMC HepMCrootIO)
 set_target_properties(class_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+add_dependencies(class_example_write.exe class_example_read.exe)
 
 # create environment scripts
 
