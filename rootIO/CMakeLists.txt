@@ -1,22 +1,16 @@
 #--------
 #-root IO
 
-if(ROOT_USE_FILE)
-  include(${ROOT_USE_FILE})
-endif()
-
-include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/rootIO/include ${ROOT_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}  ${ROOT_INCLUDE_DIRS})
 
 #----------------------------------------------------------------------------
 # Generate dictionaries
 #
-ROOT_GENERATE_DICTIONARY(rootIO_Classes rootIO_Classes.hh LINKDEF LinkDef.hh OPTIONS -inlineInputHeader)
-
-list(APPEND ROOT_FIND_COMPONENTS RIO)
+ROOT_GENERATE_DICTIONARY(rootIO_Classes include/rootIO_Classes.hh LINKDEF include/LinkDef.hh OPTIONS -inlineInputHeader)
 
 add_library(HepMCrootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRoot.cc rootIO_Classes.cxx)
 
-target_link_libraries(HepMCrootIO ${ROOT_LIBRARIES} RIO HepMC)
+target_link_libraries(HepMCrootIO ${ROOT_LIBRARIES} HepMC)
 set_target_properties(HepMCrootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 
 

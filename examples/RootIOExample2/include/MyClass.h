@@ -1,3 +1,6 @@
+#ifndef MYCLASS_H
+#define MYCLASS_H
+
 #include "HepMC/GenEvent.h"
 
 /** @class MyClass
@@ -19,3 +22,5 @@ private:
     int someint;            ///< Test int
     HepMC::GenEvent* event; ///< Test event
 };
+
+#endif

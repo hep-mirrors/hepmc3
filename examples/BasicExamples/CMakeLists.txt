@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #---Add executables------------------------------------------------------------
 
 add_executable(basic_tree.exe ${PROJECT_SOURCE_DIR}/examples/BasicExamples/basic_tree.cc)
-target_link_libraries(basic_tree.exe HepMC)
+target_link_libraries(basic_tree.exe HepMC ${ROOT_LIBRARIES})
 set_target_properties(basic_tree.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 install(TARGETS basic_tree.exe DESTINATION bin)
@@ -23,13 +23,13 @@ else()
 endif()
 
 add_executable(HepMC2_reader_example.exe ${PROJECT_SOURCE_DIR}/examples/BasicExamples/HepMC2_reader_example.cc)
-target_link_libraries(HepMC2_reader_example.exe HepMC_static)
+target_link_libraries(HepMC2_reader_example.exe HepMC_static ${ROOT_LIBRARIES})
 set_target_properties(HepMC2_reader_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 install(TARGETS HepMC2_reader_example.exe DESTINATION bin)
 
 add_executable(HepMC3_fileIO_example.exe ${PROJECT_SOURCE_DIR}/examples/BasicExamples/HepMC3_fileIO_example.cc)
-target_link_libraries(HepMC3_fileIO_example.exe HepMC_static)
+target_link_libraries(HepMC3_fileIO_example.exe HepMC_static ${ROOT_LIBRARIES})
 set_target_properties(HepMC3_fileIO_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 install(TARGETS HepMC3_fileIO_example.exe DESTINATION bin)

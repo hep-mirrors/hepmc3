@@ -1,10 +1,44 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
-#
 #----------------------------------------------------------------------------
 project(HepMC3)
-#----------------------------------------------------------------------------
+#---Enable FORTRAN (unfortunatelly is not not possible in all cases)-------------------------------
+if(NOT CMAKE_GENERATOR STREQUAL Xcode)
+  enable_language(Fortran OPTIONAL)
+endif()
 
-#----------------------------------------------------------------------------
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+#---Setting HepMC Build type-----------------------------------------------
+if(CMAKE_BUILD_TYPE)
+  message(STATUS "HepMC3 Build type: ${CMAKE_BUILD_TYPE}")
+else(CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release")
+  message(STATUS "HepMC3 Build type not specified, use: ${CMAKE_BUILD_TYPE}")
+endif(CMAKE_BUILD_TYPE)
+
+string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+
+#-------------Options-------------------------------------------------------
+
+option(HEPMC_ENABLE_CPP11 "Enables building with C++11." ON)
+option(HEPMC_ENABLE_ROOTIO "Enables building with ROOT O/I." ON)
+option(HEPMC_BUILD_EXAMPLES "Enables building of examples." OFF)
+
+message(STATUS "HepMC: HEPMC_ENABLE_CPP11      ${HEPMC_ENABLE_CPP11}")
+message(STATUS "HepMC: HEPMC_ENABLE_ROOTIO     ${HEPMC_ENABLE_ROOTIO}") 
+message(STATUS "HepMC: HEPMC_BUILD_EXAMPLES    ${HEPMC_BUILD_EXAMPLES}") 
+
+
+if(HEPMC_ENABLE_ROOTIO)
+  if( EXISTS "$ENV{ROOTSYS}" )
+    message(STATUS "HepMC: ROOTSYS provided $ENV{ROOTSYS}")
+  elseif(ROOT_DIR)
+    message(STATUS "HepMC: ROOT_DIR provided ${ROOT_DIR}")
+  else() 
+    message(FATAL_ERROR "HepMC error: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
+  endif()
+endif()
+
 # - Prepend our own CMake Modules to the search path
 # This allows us to customize, add, and factor out functionality
 # NB: if our custom modules include others that we don't supply, those in the
@@ -14,50 +48,7 @@ set(CMAKE_MODULE_PATH
     ${PROJECT_SOURCE_DIR}/cmake/Modules
     ${CMAKE_MODULE_PATH})
 
-#----------------------------------------------------------------------------
-#----------------------------------------------------------------------------
-
-option(HEPMC_ENABLE_CPP11 "Enables building with C++11." ON)
-
-if(HEPMC_ENABLE_CPP11)
-  include(CheckCXXCompilerFlag)
-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-  if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-  elseif(COMPILER_SUPPORTS_CXX0X)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-  else()
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. We need to use BOOST.")
-    
-    find_package(Boost 1.40 REQUIRED)
-    message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
-    include_directories(${Boost_INCLUDE_DIRS})
-
-  endif()
-else()
-  #--- buiding without C++11
-  #
-  #---Find Boost---------------------------------------------------------------
-  find_package(Boost 1.40 REQUIRED)
-  message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
-  include_directories(${Boost_INCLUDE_DIRS})
-endif()
-
-#---Enable FORTRAN (unfortunatelly is not not possible in all cases)-------------------------------
-if(NOT CMAKE_GENERATOR STREQUAL Xcode)
-enable_language(Fortran OPTIONAL)
-endif()
-
-
 #---Compilation and Link options---------------------------------------------
-
-if(CMAKE_BUILD_TYPE)
-  message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
-else()
-  set(CMAKE_BUILD_TYPE "Release")
-  message(STATUS "Build type not specified, use: ${CMAKE_BUILD_TYPE}")
-endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES Darwin)
   set(CMAKE_SHARED_LIBRARY_CREATE_Fortran_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_Fortran_FLAGS} -flat_namespace -single_module -undefined dynamic_lookup")
@@ -71,6 +62,33 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
 
 # fortran flags needed for some tests and examples
 set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -ffixed-line-length-132")
+
+#----------------------------------------------------------------------------
+
+if(HEPMC_ENABLE_CPP11)
+  include(CheckCXXCompilerFlag)
+  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+  if(COMPILER_SUPPORTS_CXX11)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  elseif(COMPILER_SUPPORTS_CXX0X)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+  else()
+    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. We need to use BOOST.")
+    find_package(Boost 1.40 REQUIRED)
+    message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
+    include_directories(${Boost_INCLUDE_DIRS})
+  endif()
+else()
+  #--- buiding without C++11 and with Boost
+  find_package(Boost 1.40 REQUIRED)
+  message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
+  include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
+
+message(STATUS "HepMC: Fortran FLAGS ${CMAKE_Fortran_FLAGS}")
+message(STATUS "HepMC: CXX FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
 
 #### RPATH handling #####
 
@@ -95,40 +113,52 @@ IF("${isSystemDir}" STREQUAL "-1")
    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 ENDIF("${isSystemDir}" STREQUAL "-1")
 
+
 #---Optional build of rootIO-------------------------------------------------
 
-option(HEPMC_ENABLE_ROOTIO "Enables building with ROOT O/I." ON)
-
 if(HEPMC_ENABLE_ROOTIO)
-  find_package(ROOT QUIET)
+  set (ROOT_FIND_COMPONENTS RIO Core)
+  # usage of ROOTConfig.cmake is disabled for the moment.
+  find_file(ROOT_CONFIG 1ROOTConfig.cmake HINTS $ENV{ROOTSYS} ${ROOT_DIR} NO_DEFAULT_PATH PATH_SUFFIXES cmake)
+  if (ROOT_CONFIG)
+     message(STATUS "ROOTConfig.cmake found and will be used: ${ROOT_CONFIG}")
+     include(${ROOT_CONFIG})
+     message(STATUS "ROOT use file: ${ROOT_USE_FILE}")
+     include(${ROOT_USE_FILE})
+     if(ROOT_LIBRARIES AND ROOT_INCLUDE_DIRS)
+       set(ROOT_FOUND TRUE)
+     endif()
+  else()
+     message(STATUS "ROOTConfig.cmake not found, trying to use FindROOT.cmake...")
+     find_package(ROOT QUIET REQUIRED COMPONENTS Core RIO)
+  endif()
+
+  message(STATUS "ROOT includes: ${ROOT_INCLUDE_DIRS}")
+  message(STATUS "ROOT libraries: ${ROOT_LIBRARIES}")
+  message(STATUS "ROOT_FOUND: ${ROOT_FOUND}")
+
+  if(ROOT_FOUND)
+    include_directories(${ROOT_INCLUDE_DIRS})
+    add_definitions(-DHEPMC_ROOTIO)
+  else()
+    message(FATAL_ERROR "HepMC3 error: ROOT needed for ROOTIO but not found")
+  endif()
 endif()
 
-if(ROOT_USE_FILE)
-  include(${ROOT_USE_FILE})
-endif()
-
-list(APPEND ROOT_FIND_COMPONENTS RIO)
-
-#--------------------------------------------------------------------------
-include_directories(include ${ROOT_INCLUDE_DIR})
 
 #---Select sources for the various libraries---------------------------------
-file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/IO/*.cc ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
-
-#---Add libraries------------------------------------------------------------
+file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
 
 add_library(objlib OBJECT ${hepmc3_sources})
+include_directories(include)
 # shared libraries need PIC
 set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 add_library(HepMC SHARED $<TARGET_OBJECTS:objlib>)
 add_library(HepMC_static STATIC $<TARGET_OBJECTS:objlib>)
+target_link_libraries(HepMC_static ${ROOT_LIBRARIES} )
+target_link_libraries(HepMC ${ROOT_LIBRARIES} )
 
-if(ROOT_FOUND)
-  target_link_libraries(HepMC ${ROOT_LIBRARIES} RIO)
-  target_link_libraries(HepMC_static ${ROOT_LIBRARIES} RIO)
-endif()
-  
 set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 
@@ -137,18 +167,10 @@ install(TARGETS HepMC DESTINATION lib)
 install(TARGETS HepMC_static DESTINATION lib)
 install(DIRECTORY include/ DESTINATION include COMPONENT headers)
 
-#---Optional build of rootIO-------------------------------------------------
 
 if(ROOT_FOUND)
-  add_definitions(-DHEPMC_ROOTIO)
-  add_subdirectory(rootIO)
+   add_subdirectory(rootIO)
 endif()
-
-#---Options
-#option(HEPMC_ENABLE_TESTING "Enables building of tests.")
-option(HEPMC_BUILD_EXAMPLES "Enables building of examples.")
-
-#------------------------------------------------------------------------------
 # Add the examples subdirectories
 
 if(HEPMC_BUILD_EXAMPLES)

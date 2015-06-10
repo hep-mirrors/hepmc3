@@ -1,3 +1,6 @@
+#ifndef MYRUNCLASS_H
+#define MYRUNCLASS_H
+
 #include "HepMC/GenRunInfo.h"
 
 /** @class MyRunClass
@@ -19,3 +22,5 @@ private:
     int someint;            ///< Test int
     HepMC::GenRunInfo* run; ///< Test run info
 };
+
+#endif
