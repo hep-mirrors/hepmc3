@@ -41,7 +41,7 @@ ${CMAKE_SOURCE_DIR}/examples/RootIOExample2/class_example_env.sh.in
 
 # installs 
 install(TARGETS class_example_write.exe class_example_read.exe DESTINATION bin)
-install(DIRECTORY ${PROJECT_BINARY_DIR}/examples/RootIOExample2/ DESTINATION lib FILES_MATCHING PATTERN "*.pcm" PATTERN "CMakeFiles" EXCLUDE )
+install(DIRECTORY ${PROJECT_BINARY_DIR}/examples/RootIOExample2/ DESTINATION bin FILES_MATCHING PATTERN "*.pcm" PATTERN "CMakeFiles" EXCLUDE )
 install(FILES example.hepmc3 DESTINATION bin)
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin/ DESTINATION bin
         FILES_MATCHING PATTERN "*.sh")
