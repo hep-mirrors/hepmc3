@@ -35,7 +35,9 @@ if(HEPMC_ENABLE_ROOTIO)
   elseif(ROOT_DIR)
     message(STATUS "HepMC: ROOT_DIR provided ${ROOT_DIR}")
   else() 
-    message(FATAL_ERROR "HepMC error: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
+    message(STATUS "HepMC warning: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
+    message(STATUS "HepMC warning: Skipping HepMC ROOT IO libraries")
+    set(HEPMC_ENABLE_ROOTIO OFF)
   endif()
 endif()
 
@@ -141,7 +143,9 @@ if(HEPMC_ENABLE_ROOTIO)
     include_directories(${ROOT_INCLUDE_DIRS})
     add_definitions(-DHEPMC_ROOTIO)
   else()
-    message(FATAL_ERROR "HepMC3 error: ROOT needed for ROOTIO but not found")
+    message(STATUS "HepMC warning: ROOT needed for ROOTIO but not found")
+    message(STATUS "HepMC warning: Skipping HepMC ROOT IO libraries")
+    set(HEPMC_ENABLE_ROOTIO OFF)
   endif()
 endif()
 
@@ -151,7 +155,7 @@ file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/sr
 
 add_library(objlib OBJECT ${hepmc3_sources})
 include_directories(include)
-# shared libraries need PIC
+# shared libraries need PIC:
 set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 add_library(HepMC SHARED $<TARGET_OBJECTS:objlib>)

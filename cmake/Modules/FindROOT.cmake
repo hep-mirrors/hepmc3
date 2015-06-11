@@ -12,7 +12,11 @@
 #  dependencies in ROOT_GENERATE_DICTIONARY
 
 find_program(ROOT_CONFIG_EXECUTABLE root-config
-  HINTS $ENV{ROOTSYS}/bin)
+  HINTS $ENV{ROOTSYS}/bin ${ROOT_DIR}/bin NO_DEFAULT_PATH)
+
+message(STATUS "ROOT_CONFIG_EXECUTABLE ${ROOT_CONFIG_EXECUTABLE}")
+
+if(ROOT_CONFIG_EXECUTABLE)
 
 execute_process(
     COMMAND ${ROOT_CONFIG_EXECUTABLE} --prefix
@@ -68,9 +72,20 @@ find_package_handle_standard_args(ROOT DEFAULT_MSG ROOT_CONFIG_EXECUTABLE
 mark_as_advanced(ROOT_CONFIG_EXECUTABLE)
 
 include(CMakeParseArguments)
-find_program(ROOTCINT_EXECUTABLE rootcint HINTS $ENV{ROOTSYS}/bin)
-find_program(GENREFLEX_EXECUTABLE genreflex HINTS $ENV{ROOTSYS}/bin)
+find_program(ROOTCINT_EXECUTABLE rootcint HINTS ${ROOTSYS}/bin $ENV{ROOTSYS}/bin NO_DEFAULT_PATH)
+find_program(GENREFLEX_EXECUTABLE genreflex HINTS ${ROOTSYS}/bin $ENV{ROOTSYS}/bin NO_DEFAULT_PATH)
 find_package(GCCXML)
+
+message(STATUS "ROOTCINT_EXECUTABLE ${ROOTCINT_EXECUTABLE}")
+message(STATUS "GENREFLEX_EXECUTABLE ${GENREFLEX_EXECUTABLE}")
+
+else()
+
+        message(STATUS "root-config NOT found.")
+        set(ROOT_FOUND False)
+        mark_as_advanced(ROOT_FOUND)
+
+endif()
 
 #----------------------------------------------------------------------------
 # function ROOT_GENERATE_DICTIONARY( dictionary
