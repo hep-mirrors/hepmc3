@@ -178,7 +178,8 @@ using namespace std;
         }
 
         /// @deprecated Backward compatibility iterators
-        HEPMC_DEPRECATED() particle_iterator particles_end(IteratorRange range) {
+        HEPMC_DEPRECATED("Use particles_in/out() functions instead")
+        particle_iterator particles_end(IteratorRange range) {
             if (range == parents) return m_particles_in.end();
             if (range == children) return m_particles_out.end();
             throw Exception("GenVertex::particles_end: Only 'parents' and 'children' ranges allowed.");
