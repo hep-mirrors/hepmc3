@@ -63,7 +63,12 @@ set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
 
 # fortran flags needed for some tests and examples
-set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -ffixed-line-length-132")
+
+if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
+   set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -ffixed-line-length-132")
+elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
+   set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -extend-source 132")	
+endif()
 
 #----------------------------------------------------------------------------
 
