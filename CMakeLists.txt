@@ -6,6 +6,7 @@ if(NOT CMAKE_GENERATOR STREQUAL Xcode)
   enable_language(Fortran OPTIONAL)
 endif()
 
+
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 #---Setting HepMC Build type-----------------------------------------------
@@ -64,10 +65,14 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
 
 # fortran flags needed for some tests and examples
 
+# FFLAGS depend on the compiler
+get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
 if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
    set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -ffixed-line-length-132")
+   message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
 elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
    set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -extend-source 132")	
+   message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
 endif()
 
 #----------------------------------------------------------------------------
