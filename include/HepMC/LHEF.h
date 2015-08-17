@@ -2401,8 +2401,9 @@ inline EventGroup::~EventGroup() {
   clear();
 }
 
-inline EventGroup::EventGroup(const EventGroup &) {
-  for ( int i = 0, N = size(); i < N; ++i ) at(i) = new HEPEUP(*at(i));
+inline EventGroup::EventGroup(const EventGroup & eg)
+  : std::vector<HEPEUP*>(eg.size()) {
+  for ( int i = 0, N = eg.size(); i < N; ++i ) at(i) = new HEPEUP(*eg.at(i));
 }
 
 inline EventGroup & EventGroup::operator=(const EventGroup & x) {
