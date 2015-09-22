@@ -1,0 +1,3 @@
+#include "HepMC/GenEvent.h"
+#include "HepMC/GenRunInfo.h"
+#include "MyClass.h"
