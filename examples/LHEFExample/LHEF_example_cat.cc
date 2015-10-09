@@ -29,6 +29,7 @@ int main(int argc, char ** argv) {
   runinfo->add_attribute("HEPRUP", hepr);
 
   std::vector<std::string> weightnames;
+  weightnames.push_back("0"); // The first weight is always the default weight with name "0".
   for ( int i = 0, N = hepr->heprup.weightinfo.size(); i < N; ++i )
     weightnames.push_back(hepr->heprup.weightNameHepMC(i));
   runinfo->set_weight_names(weightnames);
