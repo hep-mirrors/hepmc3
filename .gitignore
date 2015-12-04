@@ -60,5 +60,4 @@ test
 
 # check output files
 examples/LHEFExample/LHEF_example_out.lhe
-LLCheck.sh
 examples/xmldoc

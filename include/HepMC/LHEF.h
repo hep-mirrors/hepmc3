@@ -502,14 +502,14 @@ struct XSecInfo : public TagBase {
   /**
    * Intitialize default values.
    */
-  XSecInfo(): neve(-1), maxweight(1.0), meanweight(1.0), negweights(false), 
-	      varweights(false) {}
+  XSecInfo(): neve(-1), totxsec(0.0), maxweight(1.0), meanweight(1.0),
+	      negweights(false), varweights(false) {}
 
   /**
    * Create from XML tag
    */
   XSecInfo(const XMLTag & tag)
-    : TagBase(tag.attr, tag.contents), neve(-1),
+    : TagBase(tag.attr, tag.contents), neve(-1), totxsec(0.0),
       maxweight(1.0), meanweight(1.0), negweights(false), varweights(false) {
     if ( !getattr("neve", neve) ) 
       throw std::runtime_error("Found xsecinfo tag without neve attribute "
@@ -2401,8 +2401,9 @@ inline EventGroup::~EventGroup() {
   clear();
 }
 
-inline EventGroup::EventGroup(const EventGroup &) {
-  for ( int i = 0, N = size(); i < N; ++i ) at(i) = new HEPEUP(*at(i));
+inline EventGroup::EventGroup(const EventGroup & eg)
+  : std::vector<HEPEUP*>(eg.size()) {
+  for ( int i = 0, N = eg.size(); i < N; ++i ) at(i) = new HEPEUP(*eg.at(i));
 }
 
 inline EventGroup & EventGroup::operator=(const EventGroup & x) {
