@@ -30,6 +30,8 @@ namespace HepMC {
 
     /// Fill next event from input into @a evt
     virtual bool read_event(GenEvent& evt) = 0;
+    virtual bool failed()=0;
+    virtual void close()=0;
 
     /// Get the global GenRunInfo object.
     shared_ptr<GenRunInfo> run_info() const {

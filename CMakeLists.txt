@@ -129,9 +129,9 @@ ENDIF("${isSystemDir}" STREQUAL "-1")
 #---Optional build of rootIO-------------------------------------------------
 
 if(HEPMC_ENABLE_ROOTIO)
-  set (ROOT_FIND_COMPONENTS RIO Core)
+  set (ROOT_FIND_COMPONENTS RIO Core Tree)
   # usage of ROOTConfig.cmake is disabled for the moment.
-  find_file(ROOT_CONFIG 1ROOTConfig.cmake HINTS $ENV{ROOTSYS} ${ROOT_DIR} NO_DEFAULT_PATH PATH_SUFFIXES cmake)
+  find_file(ROOT_CONFIG ROOTConfig.cmake HINTS $ENV{ROOTSYS} ${ROOT_DIR} NO_DEFAULT_PATH PATH_SUFFIXES cmake)
   if (ROOT_CONFIG)
      message(STATUS "ROOTConfig.cmake found and will be used: ${ROOT_CONFIG}")
      include(${ROOT_CONFIG})
@@ -142,7 +142,7 @@ if(HEPMC_ENABLE_ROOTIO)
      endif()
   else()
      message(STATUS "ROOTConfig.cmake not found, trying to use FindROOT.cmake...")
-     find_package(ROOT QUIET REQUIRED COMPONENTS Core RIO)
+     find_package(ROOT QUIET REQUIRED COMPONENTS Core RIO Tree)
   endif()
 
   message(STATUS "ROOT includes: ${ROOT_INCLUDE_DIRS}")
