@@ -100,10 +100,10 @@ public:
     static double pz( int index )           { return hepevt_.phep[index-1][2];   } //!< Get Z momentum
     static double e( int index )            { return hepevt_.phep[index-1][3];   } //!< Get Energy
     static double m( int index )            { return hepevt_.phep[index-1][4];   } //!< Get generated mass
-    static double x( int index )            { return hepevt_.phep[index-1][0];   } //!< Get X Production vertex
-    static double y( int index )            { return hepevt_.phep[index-1][1];   } //!< Get Y Production vertex
-    static double z( int index )            { return hepevt_.phep[index-1][2];   } //!< Get Z Production vertex
-    static double t( int index )            { return hepevt_.phep[index-1][3];   } //!< Get production time
+    static double x( int index )            { return hepevt_.vhep[index-1][0];   } //!< Get X Production vertex
+    static double y( int index )            { return hepevt_.vhep[index-1][1];   } //!< Get Y Production vertex
+    static double z( int index )            { return hepevt_.vhep[index-1][2];   } //!< Get Z Production vertex
+    static double t( int index )            { return hepevt_.vhep[index-1][3];   } //!< Get production time
     static int    number_parents( int index );                                   //!< Get number of parents
     static int    number_children( int index );                                  //!< Get number of children
 
