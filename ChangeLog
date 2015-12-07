@@ -1,3 +1,7 @@
+2015-12-07 Witek Pokorski
+
+	* adding tree-based version of ROOT reader/writer
+
 2015-05-24  Tomasz Przedzinski  <tomasz.przedzinski@cern.ch>
 
 	* Few missing I/O features added
