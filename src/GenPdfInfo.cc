@@ -81,7 +81,7 @@ void GenPdfInfo::set( int parton_id1, int parton_id2, double x1, double x2,
 }
 
 bool GenPdfInfo::operator==( const GenPdfInfo& a ) const {
-  return ( memcmp( (void*)this, (void*)&a, sizeof(struct GenPdfInfo) ) == 0 );
+  return ( memcmp( (void*)this, (void*)&a, sizeof(class GenPdfInfo) ) == 0 );
 }
 
 bool GenPdfInfo::operator!=( const GenPdfInfo& a ) const {

@@ -106,7 +106,7 @@ void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
 }
 
 bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
-  return ( memcmp( (void*) this, (void*) &a, sizeof(struct GenHeavyIon) ) == 0 );
+  return ( memcmp( (void*) this, (void*) &a, sizeof(class GenHeavyIon) ) == 0 );
 }
 
 bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {

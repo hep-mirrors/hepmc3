@@ -91,7 +91,7 @@ public:
   virtual bool init(const GenEvent & geneve);
 
   /** @brief Dummy function. */
-  virtual bool init(const GenRunInfo & runinfo) {
+  virtual bool init(const GenRunInfo & /*runinfo*/) {
     return true;
   }
 

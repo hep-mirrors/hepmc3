@@ -67,7 +67,7 @@ public:
      * Is passed a reference to the GenEvent object to which the
      * Attribute belongs.
      */
-    virtual bool init(const GenEvent & geneve) {
+  virtual bool init(const GenEvent & /*geneve*/) {
 	return true;
     }
 
@@ -76,7 +76,7 @@ public:
      * Is passed a reference to the GenRunInfo object to which the
      * Attribute belongs.
      */
-    virtual bool init(const GenRunInfo & genrun) {
+  virtual bool init(const GenRunInfo & /*genrun*/) {
 	return true;
     }
 

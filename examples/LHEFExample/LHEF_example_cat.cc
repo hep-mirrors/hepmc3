@@ -13,7 +13,7 @@
 using namespace HepMC;
 using namespace LHEF;
 
-int main(int argc, char ** argv) {
+int main(int /*argc*/, char ** /*argv*/) {
 
   // Create Reader and Writer object
   LHEF::Reader reader("LHEF_example.lhe");

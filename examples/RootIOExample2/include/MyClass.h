@@ -18,6 +18,13 @@ public:
     /// @brief Get HepMC event
     HepMC::GenEvent* GetEvent();
 
+    /// @brief Set someint
+    void SetInt(int);
+
+    /// @brief Get someint
+    int GetInt();
+
+
 private:
     int someint;            ///< Test int
     HepMC::GenEvent* event; ///< Test event
