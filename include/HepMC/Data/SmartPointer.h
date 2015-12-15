@@ -91,6 +91,8 @@ namespace HepMC {
         bool operator==(const SmartPointer &rhs)  const { return  m_data == rhs.m_data; } //!< == operator
         /// Inequality test
         bool operator!=(const SmartPointer &rhs)  const { return  m_data != rhs.m_data; } //!< != operator
+        ///
+        bool operator<(const SmartPointer &rhs)  const { return  m_data < rhs.m_data; } //!< < operator
 
         /// Non-const access to the contained shared_ptr, with non-const contained type
         const shared_ptr<T> operator->() { return  m_data; }
