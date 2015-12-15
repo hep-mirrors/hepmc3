@@ -87,6 +87,7 @@ public:
 // Accessors
 //
 public:
+    static const int max_number_entries()   { return int(NMXHEP);                } //!< Block size 
     static int    event_number()            { return hepevt_.nevhep;             } //!< Get event number
     static int    number_entries()          { return hepevt_.nhep;               } //!< Get number of entries
     static int    status( int index )       { return hepevt_.isthep[index-1];    } //!< Get status code
@@ -203,6 +204,13 @@ inline void HEPEVT_Wrapper::set_position( int index, double x, double y, double 
     hepevt_.vhep[index-1][2] = z;
     hepevt_.vhep[index-1][3] = t;
 }
+
+
+
+
+
+
+
 
 } // namespace HepMC
 
