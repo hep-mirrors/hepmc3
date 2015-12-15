@@ -34,6 +34,19 @@ bool ReaderRootTree::init()
             ERROR( "ReaderRootTree: problem opening file: " << m_file.GetName() )
             return false;
         }
+    shared_ptr<GenRunInfo> ri = make_shared<GenRunInfo>();
+
+    GenRunInfoData *run = (GenRunInfoData*)m_file.Get("GenRunInfoData");
+    
+    if(run) {
+        ri->read_data(*run);
+        delete run;
+    }
+
+    set_run_info(ri);        
+        
+        
+        
     m_tree=(TTree*)m_file.Get(m_tree_name.c_str());
     if (!m_tree)
         {

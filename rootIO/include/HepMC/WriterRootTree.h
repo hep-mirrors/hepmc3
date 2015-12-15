@@ -20,9 +20,8 @@
  */
 #include "HepMC/Writer.h"
 #include "HepMC/GenEvent.h"
-//#include "HepMC/GenEventData.h"
 #include "HepMC/Data/GenEventData.h"
-
+#include "HepMC/Data/GenRunInfoData.h"
 
 
 // ROOT header files
@@ -40,9 +39,11 @@ public:
     /** @brief Default constructor
      *  @warning If file exists, it will be overwritten
      */
-    WriterRootTree(const std::string &filename);
+    WriterRootTree(const std::string &filename,
+               shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
     /** @brief Constructor with tree name*/
-    WriterRootTree(const std::string &filename,const std::string &treename,const std::string &branchname);
+    WriterRootTree(const std::string &filename,const std::string &treename,const std::string &branchname,
+               shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 //
 // Functions
 //
@@ -54,6 +55,9 @@ public:
      */
     void write_event(const GenEvent &evt);
 
+    /** @brief Write the GenRunInfo object to file. */
+    void write_run_info();
+
     /** @brief Close file stream */
     void close();
 
@@ -62,7 +66,7 @@ public:
 
 private:
     /** @brief init routine */
-    bool init();
+    bool init(shared_ptr<GenRunInfo> run);
 //
 // Fields
 //
