@@ -15,17 +15,20 @@ find_path(PYTHIA8_INCLUDE_DIR Pythia.h Pythia8/Pythia.h
   HINTS $ENV{PYTHIA8_ROOT_DIR}/include ${PYTHIA8_ROOT_DIR}/include)
 
 find_path(PYTHIA8_XMLDOC_DIR Version.xml
-  HINTS $ENV{PYTHIA8_ROOT_DIR}/xmldoc ${PYTHIA8_ROOT_DIR}/xmldoc $ENV{PYTHIA8_ROOT_DIR}/share/Pythia8/xmldoc ${PYTHIA8_ROOT_DIR}/share/Pythia8/xmldoc)
+  HINTS $ENV{PYTHIA8_ROOT_DIR}/xmldoc ${PYTHIA8_ROOT_DIR}/xmldoc $ENV{PYTHIA8_ROOT_DIR}/share/Pythia8/xmldoc ${PYTHIA8_ROOT_DIR}/share/Pythia8/xmldoc
+  $ENV{PYTHIA8_ROOT_DIR}/share/pythia8-data/xmldoc ${PYTHIA8_ROOT_DIR}/share/pythia8-data/xmldoc)
 
 if(PYTHIA8_INCLUDE_DIR)
   file(READ ${PYTHIA8_XMLDOC_DIR}/Version.xml versionstr)
   string(REGEX REPLACE ".*Pythia:versionNumber.*default.*[0-9][.]([0-9]+).*" "\\1" PYTHIA8_VERSION "${versionstr}")
 
   find_library(PYTHIA8_LIBRARY NAMES pythia8 Pythia8
-    HINTS $ENV{PYTHIA8_ROOT_DIR}/lib ${PYTHIA8_ROOT_DIR}/lib)
+    HINTS $ENV{PYTHIA8_ROOT_DIR}/lib ${PYTHIA8_ROOT_DIR}/lib
+          $ENV{PYTHIA8_ROOT_DIR}/lib64 ${PYTHIA8_ROOT_DIR}/lib64)
 
   find_library(PYTHIA8_lhapdfdummy_LIBRARY NAMES lhapdfdummy
-    HINTS $ENV{PYTHIA8_ROOT_DIR}/lib ${PYTHIA8_ROOT_DIR}/lib)
+    HINTS $ENV{PYTHIA8_ROOT_DIR}/lib ${PYTHIA8_ROOT_DIR}/lib
+          $ENV{PYTHIA8_ROOT_DIR}/lib64 ${PYTHIA8_ROOT_DIR}/lib64)
 
   set(PYTHIA8_INCLUDE_DIRS ${PYTHIA8_INCLUDE_DIR} ${PYTHIA8_INCLUDE_DIR}/Pythia8 )
   set(PYTHIA8_LIBRARIES ${PYTHIA8_LIBRARY})

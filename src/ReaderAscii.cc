@@ -112,12 +112,15 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     }
 
     // Check if all particles and vertices were parsed
-    if( (int)evt.vertices().size()  != vertices_and_particles.first ||
-        (int)evt.particles().size() != vertices_and_particles.second ) {
-        ERROR( "ReaderAscii: not all particles or vertices were parsed" )
+    if ((int)evt.particles().size() != vertices_and_particles.second ) {
+        ERROR( "ReaderAscii: too few or too many particles were parsed" )
         is_parsing_successful = false;
     }
 
+    if ((int)evt.vertices().size()  != vertices_and_particles.first) {
+       ERROR( "ReaderAscii: too few or too many vertices were parsed" )
+        is_parsing_successful =  false;
+    }
     // Check if there were errors during parsing
     if( !is_parsing_successful ) {
         ERROR( "ReaderAscii: event parsing failed. Returning empty event" )
