@@ -34,6 +34,7 @@ using std::endl;
 
 extern "C" void simple_tau_hepevt_event_(); //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
 extern "C" void phodmp_();                  //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
+extern "C" struct HEPEVT hepevt_;                   //!< Forward declaration of fortran block pointer
 
 /** @brief Add single particle to HEPEVT event */
 void add_particle(int id, int status, double px, double py, double pz, double e, double m,
@@ -96,6 +97,8 @@ void simple_tau_hepevt_event_cpp() {
 int main() {
     cout << endl << "HEPEVT wrapper example - FORTRAN EVENT" << endl;
     cout <<         "--------------------------------------" << endl;
+
+    HEPEVT_Wrapper::set_hepevt_address((char*)(&hepevt_));
 
     simple_tau_hepevt_event_();
 
