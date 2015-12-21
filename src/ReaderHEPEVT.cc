@@ -46,7 +46,7 @@ bool ReaderHEPEVT::read_hepevt_event_header()
                     else eventline=false;
                     if (attr=='E')
                         {
-                            eventline=(st_e>>m_i>>m_p);
+                            eventline=static_cast<bool>(st_e>>m_i>>m_p);
                         }
                 }
         }

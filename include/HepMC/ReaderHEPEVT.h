@@ -17,7 +17,6 @@
 #include "HepMC/GenRunInfo.h"
 #include "HepMC/Data/GenEventData.h"
 
-#include "HepMC/IO_HEPEVT.h"
 
 namespace HepMC
 {

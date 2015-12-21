@@ -16,7 +16,6 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/Data/GenEventData.h"
 
-#include "HepMC/IO_HEPEVT.h"
 #include <fstream>
 namespace HepMC
 {
