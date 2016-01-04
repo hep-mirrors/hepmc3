@@ -53,7 +53,7 @@ struct pair_GenVertexPtr_int_greater
         for (std::vector<GenParticlePtr>::const_iterator pp=rx.first->particles_in().begin(); pp!=rx.first->particles_in().end(); pp++ ) rx_id_in.push_back((*pp)->pid());
         std::sort(lx_id_in.begin(),lx_id_in.end());
         std::sort(rx_id_in.begin(),rx_id_in.end());
-        for (int i=0; i<lx_id_in.size(); i++) if (lx_id_in[i]!=rx_id_in[i]) return  (lx_id_in[i]<rx_id_in[i]);
+        for (uint i=0; i<lx_id_in.size(); i++) if (lx_id_in[i]!=rx_id_in[i]) return  (lx_id_in[i]<rx_id_in[i]);
 
         std::vector<int> lx_id_out;
         std::vector<int> rx_id_out;
@@ -61,7 +61,7 @@ struct pair_GenVertexPtr_int_greater
         for (std::vector<GenParticlePtr>::const_iterator pp=rx.first->particles_in().begin(); pp!=rx.first->particles_in().end(); pp++ ) rx_id_out.push_back((*pp)->pid());
         std::sort(lx_id_out.begin(),lx_id_out.end());
         std::sort(rx_id_out.begin(),rx_id_out.end());
-        for (int i=0; i<lx_id_out.size(); i++) if (lx_id_out[i]!=rx_id_out[i]) return  (lx_id_out[i]<rx_id_out[i]);
+        for (uint i=0; i<lx_id_out.size(); i++) if (lx_id_out[i]!=rx_id_out[i]) return  (lx_id_out[i]<rx_id_out[i]);
 
         std::vector<double> lx_mom_in;
         std::vector<double> rx_mom_in;
@@ -69,7 +69,7 @@ struct pair_GenVertexPtr_int_greater
         for (std::vector<GenParticlePtr>::const_iterator pp=rx.first->particles_in().begin(); pp!=rx.first->particles_in().end(); pp++ ) rx_mom_in.push_back((*pp)->momentum().e());
         std::sort(lx_mom_in.begin(),lx_mom_in.end());
         std::sort(rx_mom_in.begin(),rx_mom_in.end());
-        for (int i=0; i<lx_mom_in.size(); i++) if (lx_mom_in[i]!=rx_mom_in[i]) return  (lx_mom_in[i]<rx_mom_in[i]);
+        for (uint i=0; i<lx_mom_in.size(); i++) if (lx_mom_in[i]!=rx_mom_in[i]) return  (lx_mom_in[i]<rx_mom_in[i]);
 
         std::vector<double> lx_mom_out;
         std::vector<double> rx_mom_out;
@@ -77,7 +77,7 @@ struct pair_GenVertexPtr_int_greater
         for (std::vector<GenParticlePtr>::const_iterator pp=rx.first->particles_in().begin(); pp!=rx.first->particles_in().end(); pp++ ) rx_mom_out.push_back((*pp)->momentum().e());
         std::sort(lx_mom_out.begin(),lx_mom_out.end());
         std::sort(rx_mom_out.begin(),rx_mom_out.end());
-        for (int i=0; i<lx_mom_out.size(); i++) if (lx_mom_out[i]!=rx_mom_out[i]) return  (lx_mom_out[i]<rx_mom_out[i]);
+        for (uint i=0; i<lx_mom_out.size(); i++) if (lx_mom_out[i]!=rx_mom_out[i]) return  (lx_mom_out[i]<rx_mom_out[i]);
 /* The code above is usefull mainly for debug*/
         
         return (lx.first<lx.first); /*This  is random. This should never happen*/
