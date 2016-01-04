@@ -22,6 +22,6 @@ ${CMAKE_SOURCE_DIR}/examples/RootIOExample3/rootIOTree_example_env.sh.in
 
 # installs 
 install(TARGETS rootIOTree_example_write.exe rootIOTree_example_read.exe DESTINATION bin)
-install(FILES example.hepmc3 DESTINATION bin)
+#install(FILES example.hepmc3 DESTINATION bin)
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin/ DESTINATION bin
         FILES_MATCHING PATTERN "*.sh")
