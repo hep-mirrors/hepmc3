@@ -22,7 +22,17 @@ namespace HepMC {
 }
 
 #else
-
+/* Here we have only some features of C++ 2011. The rest will be taken from boost*/
+#ifdef	HEPMC_HAS_CXX0X_GCC_ONLY
+#include <memory>
+namespace HepMC {
+    using std::weak_ptr;
+    using std::shared_ptr;
+    using std::make_shared;
+    using std::dynamic_pointer_cast;
+    using std::const_pointer_cast;
+}
+#else
 #include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
@@ -33,7 +43,7 @@ namespace HepMC {
     using boost::dynamic_pointer_cast;
     using boost::const_pointer_cast;
 }
-
+#endif
 #endif
 
 

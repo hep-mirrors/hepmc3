@@ -109,12 +109,13 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     //
     // Reassign id of attributes with id above this one
     //
-    vector<att_val_t> changed_attributes;
+#ifndef HEPMC_HAS_CXX0X_GCC_ONLY
+       vector<att_val_t> changed_attributes;
 
     FOREACH( att_key_t& vt1, m_attributes ) {
         changed_attributes.clear();
 
-        FOREACH( const att_val_t& vt2, vt1.second ) {
+      FOREACH( const att_val_t& vt2, vt1.second ) {
             if( vt2.first > p->id() ) {
                 changed_attributes.push_back(vt2);
             }
@@ -125,7 +126,24 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
             vt1.second[val.first-1] = val.second;
         }
     }
+#else
+       vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
 
+    FOREACH( att_key_t& vt1, m_attributes ) {
+        changed_attributes.clear();
+
+        for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin();vt2!=vt1.second.end();vt2++){
+            if( (*vt2).first > p->id() ) {
+                   changed_attributes.push_back(*vt2);
+            }
+        }
+
+        FOREACH( att_val_t val, changed_attributes ) {
+            vt1.second.erase(val.first);
+            vt1.second[val.first-1] = val.second;
+        }
+    }
+#endif
     // Reassign id of particles with id above this one
     for(;it != m_particles.end(); ++it) {
         --((*it)->m_id);
@@ -136,14 +154,15 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     p->m_id    = 0;
 }
 
-void GenEvent::remove_particles( vector<GenParticlePtr> v ) {
-    /// @todo Currently the only optimization is sort by id in ascending order.
-    ///       Needs better optimization!
     struct sort_by_id_asc {
         inline bool operator()(const GenParticlePtr& p1, const GenParticlePtr& p2) {
             return (p1->id() > p2->id());
         }
     };
+
+void GenEvent::remove_particles( vector<GenParticlePtr> v ) {
+    /// @todo Currently the only optimization is sort by id in ascending order.
+    ///       Needs better optimization!
 
     sort( v.begin(), v.end(), sort_by_id_asc() );
 
@@ -184,6 +203,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     //
     // Reassign id of attributes with id below this one
     //
+#ifndef HEPMC_HAS_CXX0X_GCC_ONLY
     vector<att_val_t> changed_attributes;
 
     FOREACH( att_key_t& vt1, m_attributes ) {
@@ -210,7 +230,34 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     v->m_event = NULL;
     v->m_id    = 0;
 }
+#else
+    vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
 
+    FOREACH( att_key_t& vt1, m_attributes ) {
+        changed_attributes.clear();
+
+        for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin();vt2!=vt1.second.end();vt2++){			
+            if( (*vt2).first < v->id() ) {
+                  changed_attributes.push_back(*vt2);
+            }
+        }
+
+        FOREACH( att_val_t val, changed_attributes ) {
+            vt1.second.erase(val.first);
+            vt1.second[val.first+1] = val.second;
+        }
+    }
+
+    // Reassign id of particles with id above this one
+    for(;it != m_vertices.end(); ++it) {
+        ++((*it)->m_id);
+    }
+
+    // Finally - set parent event and id of this vertex to 0
+    v->m_event = NULL;
+    v->m_id    = 0;
+}
+#endif
 
 void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
 

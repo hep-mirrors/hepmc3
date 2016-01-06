@@ -18,6 +18,9 @@
 #if __cplusplus >= 201103L
 #define HEPMC_HAS_CXX11
 #endif
+#if __GNUC__ && __cplusplus && __GXX_EXPERIMENTAL_CXX0X__
+#define HEPMC_HAS_CXX0X_GCC_ONLY
+#endif
 
 
 /// Define a FOREACH directive

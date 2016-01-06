@@ -108,7 +108,7 @@ public:
 //
 public:
     static void set_hepevt_address(char *c) { hepevtptr=(struct HEPEVT*)c;          } //!< Set Fortran block address
-    static int max_number_entries()   { return NMXHEP;                              } //!< Block size
+    static int    max_number_entries()      { return NMXHEP;                              } //!< Block size
     static int    event_number()            { return hepevtptr->nevhep;             } //!< Get event number
     static int    number_entries()          { return hepevtptr->nhep;               } //!< Get number of entries
     static int    status( int index )       { return hepevtptr->isthep[index-1];    } //!< Get status code
