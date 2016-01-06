@@ -130,6 +130,9 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             case 'N':
                 is_parsing_successful = parse_weight_names(buf);
                 break;
+            case 'C':
+                is_parsing_successful = parse_xs_info(evt,buf);
+                break;            
             default:
                 WARNING( "ReaderAsciiHepMC2: skipping unrecognised prefix: " << buf[0] )
                 is_parsing_successful = true;
@@ -401,6 +404,22 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     DEBUG( 10, "ReaderAsciiHepMC2: P: "<<m_particle_cache.size()<<" ( pid: "<<data->pid()<<") end vertex: "<<end_vtx )
 
     return 0;
+}
+
+bool ReaderAsciiHepMC2::parse_xs_info(GenEvent &evt, const char *buf) {
+    const char *cursor  = buf;
+    shared_ptr<GenCrossSection>  xs     = make_shared<GenCrossSection>();
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    double xs_val  = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    double xs_err = atof(cursor);
+
+    xs->set_cross_section( xs_val , xs_err);
+    evt.add_attribute("GenCrossSection",xs);
+   
+    return true;
 }
 
 bool ReaderAsciiHepMC2::parse_weight_names(const char *buf) {
