@@ -170,7 +170,7 @@ inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr
 }
 
 
-inline bool HEPEVT_Wrapper::check_hepevt_consistency( std::ostream& ostr )
+inline bool HEPEVT_Wrapper::check_hepevt_consistency( std::ostream& /*ostr*/ )
 {
     //!< @todo HEPEVT_Wrapper::check_hepevt_consistency unimplemented!
     printf("HEPEVT_Wrapper::check_hepevt_consistency unimplemented!\n");
