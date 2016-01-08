@@ -3,11 +3,11 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/examples
 
 add_executable(rootIO_example_read.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample/rootIO_example_read.cc)
 target_link_libraries(rootIO_example_read.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
-set_target_properties(rootIO_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(rootIO_example_read.exe PROPERTIES LINK_FLAGS "-Wl,--as-needed" RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 add_executable(rootIO_example_write.exe ${PROJECT_SOURCE_DIR}/examples/RootIOExample/rootIO_example_write.cc)
 target_link_libraries(rootIO_example_write.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
-set_target_properties(rootIO_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(rootIO_example_write.exe PROPERTIES LINK_FLAGS "-Wl,--as-needed" RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 # create environment scripts
 

@@ -3,7 +3,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/examples
 
 add_executable(LHEF_example_cat.exe ${PROJECT_SOURCE_DIR}/examples/LHEFExample/LHEF_example_cat.cc)
 target_link_libraries(LHEF_example_cat.exe HepMC ${ROOT_LIBRARIES})
-set_target_properties(LHEF_example_cat.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(LHEF_example_cat.exe PROPERTIES LINK_FLAGS "-Wl,--as-needed" RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 # create environment scripts
 

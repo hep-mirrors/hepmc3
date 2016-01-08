@@ -3,7 +3,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/interfac
                     ${PYTHIA8_INCLUDE_DIR})
 add_executable(pythia8_example.exe ${PROJECT_SOURCE_DIR}/examples/Pythia8Example/pythia8_example.cc ${PROJECT_SOURCE_DIR}/interfaces/pythia8/src/Pythia8ToHepMC3.cc)
 target_link_libraries(pythia8_example.exe ${PYTHIA8_LIBRARIES} HepMC)
-set_target_properties(pythia8_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(pythia8_example.exe PROPERTIES LINK_FLAGS "-Wl,--as-needed" RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 # create environment scripts
 

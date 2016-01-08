@@ -129,7 +129,7 @@ ENDIF("${isSystemDir}" STREQUAL "-1")
 #---Optional build of rootIO-------------------------------------------------
 
 if(HEPMC_ENABLE_ROOTIO)
-  set (ROOT_FIND_COMPONENTS Core Cint RIO Tree)
+  set (ROOT_FIND_COMPONENTS Core RIO Tree)
   # usage of ROOTConfig.cmake is disabled for the moment.
   find_file(ROOT_CONFIG ROOTConfig.cmake HINTS $ENV{ROOTSYS} ${ROOT_DIR} NO_DEFAULT_PATH PATH_SUFFIXES cmake)
   if (ROOT_CONFIG)
@@ -173,8 +173,10 @@ add_library(HepMC_static STATIC $<TARGET_OBJECTS:objlib>)
 target_link_libraries(HepMC_static ${ROOT_LIBRARIES} )
 target_link_libraries(HepMC ${ROOT_LIBRARIES} )
 
-set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
-set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
+#SET_TARGET_PROPERTIES(... PROPERTIES LINK_FLAGS "$ENV{MYLDFLAGS}")
+
+set_target_properties(HepMC PROPERTIES LINK_FLAGS "-Wl,--as-needed" LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
+set_target_properties(HepMC_static PROPERTIES LINK_FLAGS "-Wl,--as-needed" OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 
 #---Install build products---------------------------------------------------
 install(TARGETS HepMC DESTINATION lib)

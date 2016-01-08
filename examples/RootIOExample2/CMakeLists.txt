@@ -17,7 +17,7 @@ add_executable(class_example_read.exe
         ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyRunClass.cc
         ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)
 target_link_libraries(class_example_read.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
-set_target_properties(class_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(class_example_read.exe PROPERTIES LINK_FLAGS "-Wl,--as-needed" RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 add_dependencies( class_example_read.exe dictionary )
 
 add_executable(class_example_write.exe
@@ -25,7 +25,7 @@ add_executable(class_example_write.exe
         ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyRunClass.cc
         ${PROJECT_SOURCE_DIR}/examples/RootIOExample2/src/MyClass.cc myclass_Classes.cxx)
 target_link_libraries(class_example_write.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
-set_target_properties(class_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(class_example_write.exe PROPERTIES LINK_FLAGS "-Wl,--as-needed" RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 add_dependencies( class_example_write.exe dictionary )
 
 # create environment scripts
