@@ -21,11 +21,9 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 #-------------Options-------------------------------------------------------
 
-option(HEPMC_ENABLE_CPP11 "Enables building with C++11." ON)
 option(HEPMC_ENABLE_ROOTIO "Enables building with ROOT O/I." ON)
 option(HEPMC_BUILD_EXAMPLES "Enables building of examples." OFF)
 
-message(STATUS "HepMC: HEPMC_ENABLE_CPP11      ${HEPMC_ENABLE_CPP11}")
 message(STATUS "HepMC: HEPMC_ENABLE_ROOTIO     ${HEPMC_ENABLE_ROOTIO}") 
 message(STATUS "HepMC: HEPMC_BUILD_EXAMPLES    ${HEPMC_BUILD_EXAMPLES}") 
 
@@ -77,27 +75,17 @@ endif()
 
 #----------------------------------------------------------------------------
 
-if(HEPMC_ENABLE_CPP11)
-  include(CheckCXXCompilerFlag)
-  CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-  CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-  if(COMPILER_SUPPORTS_CXX11)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-  elseif(COMPILER_SUPPORTS_CXX0X)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-  else()
-    message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. We need to use BOOST.")
-    find_package(Boost 1.40 REQUIRED)
-    message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
-    include_directories(${Boost_INCLUDE_DIRS})
-  endif()
-else()
-  #--- buiding without C++11 and with Boost
-  find_package(Boost 1.40 REQUIRED)
-  message(STATUS "Boost includes: ${Boost_INCLUDE_DIRS}")
-  include_directories(${Boost_INCLUDE_DIRS})
-endif()
 
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if(COMPILER_SUPPORTS_CXX11)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif(COMPILER_SUPPORTS_CXX0X)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.")
+endif()
 
 message(STATUS "HepMC: Fortran FLAGS ${CMAKE_Fortran_FLAGS}")
 message(STATUS "HepMC: CXX FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )

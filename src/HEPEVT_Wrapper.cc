@@ -139,7 +139,7 @@ bool HEPEVT_Wrapper::HEPEVT_to_GenEvent( GenEvent* evt )
     for ( int i = 1; i <= HEPEVT_Wrapper::number_entries(); i++ ) vertex_index[i]->remove_particle_out(particles_index[i]);
 
     /*Fill container with vertices with unique sets of incoming particles. Merge the outcoming particle sets.*/
-    std::map<GenVertexPtr,std::pair<std::set<int>,std::set<int> >> final_vertices_map;
+    std::map<GenVertexPtr,std::pair<std::set<int>,std::set<int> > > final_vertices_map;
     for (std::map<GenVertexPtr,std::pair<std::set<int>,std::set<int> > >::iterator vs= hepevt_vertices.begin(); vs!= hepevt_vertices.end(); vs++)
         {
             if ((final_vertices_map.size()==0)||(vs->second.first.size()==0&&vs->second.second.size()!=0)) { final_vertices_map.insert(*vs);  continue; } /*Always insert particles out of nowhere*/
