@@ -16,7 +16,7 @@ add_executable(class_example_read.exe
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyRunClass.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyClass.cc myclass_Classes.cxx)
 target_link_libraries(class_example_read.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
-set_target_properties(class_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(class_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 add_dependencies( class_example_read.exe dictionary )
 
 add_executable(class_example_write.exe
@@ -24,23 +24,23 @@ add_executable(class_example_write.exe
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyRunClass.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyClass.cc myclass_Classes.cxx)
 target_link_libraries(class_example_write.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
-set_target_properties(class_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(class_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 add_dependencies( class_example_write.exe dictionary )
 
 # create environment scripts
 
-set(bindir "${CMAKE_INSTALL_PREFIX}/bin")
-set(libdir "${CMAKE_INSTALL_PREFIX}/lib:${ROOT_LIBRARY_DIR}")
+set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}:${ROOT_LIBRARY_DIR}")
  
 configure_file(
 ${CMAKE_SOURCE_DIR}/examples/RootIOExample2/class_example_env.sh.in
-	    ${PROJECT_BINARY_DIR}/outputs/bin/class_example_env.sh
+	    ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/class_example_env.sh
      	     @ONLY
       	     )
 
 # installs 
-install(TARGETS class_example_write.exe class_example_read.exe DESTINATION bin)
-install(DIRECTORY ${PROJECT_BINARY_DIR}/examples/RootIOExample2/ DESTINATION bin FILES_MATCHING PATTERN "*.pcm" PATTERN "CMakeFiles" EXCLUDE )
-install(FILES example.hepmc3 DESTINATION bin)
-install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin/ DESTINATION bin
+install(TARGETS class_example_write.exe class_example_read.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(DIRECTORY ${PROJECT_BINARY_DIR}/examples/RootIOExample2/ DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "CMakeFiles" EXCLUDE )
+install(FILES example.hepmc3 DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*.sh")

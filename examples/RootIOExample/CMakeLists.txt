@@ -3,25 +3,25 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} ${
 
 add_executable(rootIO_example_read.exe ${CMAKE_CURRENT_SOURCE_DIR}/rootIO_example_read.cc)
 target_link_libraries(rootIO_example_read.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
-set_target_properties(rootIO_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(rootIO_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 
 add_executable(rootIO_example_write.exe ${CMAKE_CURRENT_SOURCE_DIR}/rootIO_example_write.cc)
 target_link_libraries(rootIO_example_write.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
-set_target_properties(rootIO_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(rootIO_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 
 # create environment scripts
 
-set(bindir "${CMAKE_INSTALL_PREFIX}/bin")
-set(libdir "${CMAKE_INSTALL_PREFIX}/lib:${ROOT_LIBRARY_DIR}")
+set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}:${ROOT_LIBRARY_DIR}")
  
 configure_file(
 ${CMAKE_SOURCE_DIR}/examples/RootIOExample/rootIO_example_env.sh.in
-	    ${PROJECT_BINARY_DIR}/outputs/bin/rootIO_example_env.sh
+	    ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/rootIO_example_env.sh
      	     @ONLY
       	     )
 
 # installs 
-install(TARGETS rootIO_example_write.exe rootIO_example_read.exe DESTINATION bin)
-install(FILES example.hepmc3 DESTINATION bin)
-install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin/ DESTINATION bin
+install(TARGETS rootIO_example_write.exe rootIO_example_read.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES example.hepmc3 DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*.sh")

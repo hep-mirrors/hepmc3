@@ -35,8 +35,7 @@ if(HEPMC_ENABLE_ROOTIO)
     message(STATUS "HepMC: ROOT_DIR provided ${ROOT_DIR}")
   else() 
     message(STATUS "HepMC warning: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
-    message(STATUS "HepMC warning: Skipping HepMC ROOT IO libraries")
-    set(HEPMC_ENABLE_ROOTIO OFF)
+    message(STATUS "HepMC warning: Build will use ROOTConfig.cmake or FindROOT.cmake")
   endif()
 endif()
 
@@ -102,6 +101,9 @@ endif()
 message(STATUS "HepMC: Fortran FLAGS ${CMAKE_Fortran_FLAGS}")
 message(STATUS "HepMC: CXX FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
 
+
+#This module respects HFS, e.g. defines lib or lib64 when it is needed. 
+include("GNUInstallDirs")
 #### RPATH handling #####
 
 set(CMAKE_MACOSX_RPATH 1)
@@ -113,16 +115,16 @@ SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # (but later on when installing)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
 
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # the RPATH to be used when installing, but only if it's not a system directory
-LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
 IF("${isSystemDir}" STREQUAL "-1")
-   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 ENDIF("${isSystemDir}" STREQUAL "-1")
 
 
@@ -175,13 +177,15 @@ target_link_libraries(HepMC ${ROOT_LIBRARIES} )
 
 #SET_TARGET_PROPERTIES(... PROPERTIES LINK_FLAGS "$ENV{MYLDFLAGS}")
 
-set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
-set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
+
+
+set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 
 #---Install build products---------------------------------------------------
-install(TARGETS HepMC DESTINATION lib)
-install(TARGETS HepMC_static DESTINATION lib)
-install(DIRECTORY include/ DESTINATION include COMPONENT headers)
+install(TARGETS HepMC DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+install(TARGETS HepMC_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
 
 
 if(ROOT_FOUND)
@@ -211,12 +215,50 @@ endif()
 include(CMakePackageConfigHelpers)
 
 set(INCLUDE_INSTALL_DIR include )
-set(LIB_INSTALL_DIR lib)
-set(CONFIG_INSTALL_DIR cmake )
+set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
+set(CONFIG_INSTALL_DIR share/HepMC/cmake )
 
-configure_package_config_file(cmake/Templates/HepMCConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/outputs/cmake/HepMCConfig.cmake
+configure_package_config_file(cmake/Templates/HepMCConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC/cmake/HepMCConfig.cmake
                                  INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
                                  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/cmake/HepMCConfig.cmake 
-           DESTINATION ${CONFIG_INSTALL_DIR} )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC/cmake/HepMCConfig.cmake 
+           DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
+
+
+#General CPACK settings
+INCLUDE(InstallRequiredSystemLibraries)
+set(CPACK_PACKAGE_NAME "hepmc")
+set(CPACK_PACKAGE_VENDOR "HepMC 3 Developers")
+#Should the version be defined above?
+set(CPACK_PACKAGE_VERSION 3)
+set(CPACK_PACKAGE_VERSION_MAJOR 3)
+set(CPACK_PACKAGE_VERSION_MINOR 0)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(CPACK_PACKAGE_RELEASE 0)
+set(CPACK_PACKAGE_FILE_NAME "hepmc")
+
+set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
+SET(CPACK_INSTALL_PREFIX "/usr")
+
+SET(CPACK_BINARY_RPM "ON")
+#RPM-specific settings
+set(CPACK_RPM_COMPONENT_INSTALL ON)
+set(CPACK_RPM_PACKAGE_LICENSE "GPL")
+set(CPACK_RPM_PACKAGE_GROUP "General")
+set(CPACK_RPM_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${CPACK_PACKAGE_RELEASE}")
+#Everything that goes before  HepMC , i.e. top level directories,should be excluded
+#This feature is working fine only in the recent CPackRPM module -- see cmake/modules directory.
+set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${CPACK_PACKAGING_INSTALL_PREFIX} ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} )
+
+SET(CPACK_BINARY_DEB "ON")
+#DEB-specific settings
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "HepMC 3 Developers")
+
+if(ROOT_FOUND)
+set(CPACK_COMPONENTS_ALL   devel libs rootIO-devel rootIO-libs)
+set(CPACK_RPM_rooIO-libs_PACKAGE_REQUIRES "root")
+else()
+set(CPACK_COMPONENTS_ALL   devel libs)
+endif()
+INCLUDE(CPack)
