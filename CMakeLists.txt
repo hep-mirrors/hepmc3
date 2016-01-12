@@ -199,7 +199,7 @@ if(HEPMC_BUILD_EXAMPLES)
 endif()
 
 add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
-                                   -DCOMPONENTS="headers"
+                                   -DCOMPONENTS="devel"
                                    -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
 
 #------------------------------------------------------------------------------
