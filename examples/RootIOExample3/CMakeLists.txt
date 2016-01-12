@@ -3,11 +3,11 @@ include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}  $
 
 add_executable(rootIOTree_example_read.exe ${CMAKE_CURRENT_SOURCE_DIR}/rootIOTree_example_read.cc)
 target_link_libraries(rootIOTree_example_read.exe ${ROOT_LIBRARIES}  HepMC HepMCrootIO )
-set_target_properties(rootIOTree_example_read.exe PROPERTIES LINK_FLAGS "-Wl,--as-needed" RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(rootIOTree_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 add_executable(rootIOTree_example_write.exe ${CMAKE_CURRENT_SOURCE_DIR}/rootIOTree_example_write.cc)
 target_link_libraries(rootIOTree_example_write.exe ${ROOT_LIBRARIES}  HepMC HepMCrootIO )
-set_target_properties(rootIOTree_example_write.exe PROPERTIES LINK_FLAGS "-Wl,--as-needed" RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
+set_target_properties(rootIOTree_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 # create environment scripts
 

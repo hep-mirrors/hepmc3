@@ -73,6 +73,18 @@ elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
    message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
 endif()
 
+# setting linker flags
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") 
+  SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-dead_strip_dylibs")
+  SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,-dead_strip_dylibs") 
+  SET(STATIC_LIBRARY_FLAGS "-Wl,-dead_strip_dylibs")
+ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+  SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed")
+  SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--as-needed")
+  SET(STATIC_LIBRARY_FLAGS "-Wl,--as-needed")	
+ENDIF()
+
 #----------------------------------------------------------------------------
 
 
@@ -163,8 +175,8 @@ target_link_libraries(HepMC ${ROOT_LIBRARIES} )
 
 #SET_TARGET_PROPERTIES(... PROPERTIES LINK_FLAGS "$ENV{MYLDFLAGS}")
 
-set_target_properties(HepMC PROPERTIES LINK_FLAGS "-Wl,--as-needed" LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
-set_target_properties(HepMC_static PROPERTIES LINK_FLAGS "-Wl,--as-needed" OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
+set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
+set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/lib)
 
 #---Install build products---------------------------------------------------
 install(TARGETS HepMC DESTINATION lib)
