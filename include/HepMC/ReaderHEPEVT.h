@@ -37,13 +37,13 @@ public:
     /** @brief Find and read event header line  from file
     *
     */
-    bool read_hepevt_event_header();
+    virtual bool read_hepevt_event_header();
     /** @brief read particle from file
     *
     * @param[in] i Particle id
     * @param[in] iflong Event style
     */
-    bool read_hepevt_particle(int i, bool iflong=true);
+    virtual bool read_hepevt_particle(int i, bool iflong=true);
 
 
     /** @brief Read event from file

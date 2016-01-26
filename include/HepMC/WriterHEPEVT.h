@@ -41,11 +41,11 @@ public:
      *  @param[in] iflong Format of record
      */
 
-    void write_hepevt_particle( int index, bool iflong=true );
+    virtual void write_hepevt_particle( int index, bool iflong=true );
     /** @brief Write event header to file
      *
      */
-    void write_hepevt_event_header();
+    virtual void write_hepevt_event_header();
 
     /** @brief Write event to file
      *
@@ -59,10 +59,11 @@ public:
     /** @brief Get stream error state flag */
     bool failed();
 
+public:
+    FILE* m_file;         //!< File to write. Need to be public to be accessible by children.
 
 private:
     char* hepevtbuffer;   //!< Pointer to HEPEVT Fortran common block/C struct
-    FILE* m_file;         //!< File to write
     int   m_events_count; //!< Events count. Needed to generate unique object name
 };
 
