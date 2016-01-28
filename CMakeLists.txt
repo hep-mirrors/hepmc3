@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #----------------------------------------------------------------------------
-project(HepMC3)
+project(HepMC)
+set(PROJECT_VERSION 3)
 #---Enable FORTRAN (unfortunatelly is not not possible in all cases)-------------------------------
 if(NOT CMAKE_GENERATOR STREQUAL Xcode)
   enable_language(Fortran OPTIONAL)
@@ -154,6 +155,7 @@ if(HEPMC_ENABLE_ROOTIO)
   if(ROOT_FOUND)
     include_directories(${ROOT_INCLUDE_DIRS})
     add_definitions(-DHEPMC_ROOTIO)
+    set(HEPMC_ROOTIO_LIBRARY "-lHepMCrootIO" )
   else()
     message(STATUS "HepMC warning: ROOT needed for ROOTIO but not found")
     message(STATUS "HepMC warning: Skipping HepMC ROOT IO libraries")
@@ -175,6 +177,8 @@ add_library(HepMC_static STATIC $<TARGET_OBJECTS:objlib>)
 target_link_libraries(HepMC_static ${ROOT_LIBRARIES} )
 target_link_libraries(HepMC ${ROOT_LIBRARIES} )
 
+configure_file(HepMC-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config )
+
 #SET_TARGET_PROPERTIES(... PROPERTIES LINK_FLAGS "$ENV{MYLDFLAGS}")
 
 
@@ -187,6 +191,7 @@ install(TARGETS HepMC DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 install(TARGETS HepMC_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
 
+install(FILES  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config  DESTINATION  ${CMAKE_INSTALL_BINDIR} COMPONENT libs)
 
 if(ROOT_FOUND)
    add_subdirectory(rootIO)
