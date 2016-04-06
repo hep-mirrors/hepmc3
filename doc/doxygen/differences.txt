@@ -259,6 +259,13 @@
         // Replace with:
         TODO
     @endcode
+
+    @code{.cpp}
+        // HepMC2 code:
+        HepMC::GenParticle::set_flow(int code_index, int code = 0)	
+        // Replace with:
+        TODO
+    @endcode
  
     <hr>
     Last update 24 May 2015
