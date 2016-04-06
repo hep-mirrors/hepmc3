@@ -251,6 +251,14 @@
         // Replace with:
         TODO
     @endcode
+
+    @code{.cpp}
+        // HepMC2 code:
+        HepMC::GenVertex * vertex;
+        vertex->check_momentum_conservation();
+        // Replace with:
+        TODO
+    @endcode
  
     <hr>
     Last update 24 May 2015
