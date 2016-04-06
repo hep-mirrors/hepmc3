@@ -183,7 +183,7 @@
 
     @code{.cpp}
         // search.results() returns const vector<GenParticlePtr>
-        BOOST_FOREACH( GenParticle *p, search.results() ) {
+        FOREACH( GenParticle *p, search.results() ) {
         p->print();
     @endcode
 
@@ -203,5 +203,5 @@
     @endcode
 
     <hr>
-    Last update 24 May 2015
+    Last update 6 Apr 2016
 */
