@@ -178,7 +178,80 @@
     A lot of HepMC2 functions has been declared obsolete and are marked as
     deprecated. Warnings displayed at compilation time hint to what functions
     or classes should be used instead.
+   
     
+    @code{.cpp}
+        HepMC::FourVector position(pos[1],pos[2],pos[3],pos[0]);
+        
+        // HepMC2 code:
+        vertex = new HepMC::GenVertex(position, id);
+        
+        // Replace with:
+        HepMC::GenVertexPtr vertex = HepMC::make_shared<HepMC::GenVertex>(position);
+        vertex->set_id(1);
+    @endcode
+    
+    @code{.cpp}
+        // HepMC2 code:
+        std::vector<HepMC::GenParticle*> beamparticles
+        // ...
+        event.set_beam_particles(beamparticles[0],beamparticles[1]);
+    
+        // Replace with:
+        std::vector<HepMC::GenParticlePtr> beamparticles;
+        // ...
+        event.add_particle(beamparticles[0]);
+        event.add_particle(beamparticles[1]);
+    @endcode
+
+    @code{.cpp}
+        // HepMC2 code:
+        HepMC::GenVertex * vertex;
+        vertex->set_id(1);
+        vertex->id();
+    
+        // Replace with:
+        HepMC::GenVertexPtr vertex = HepMC::make_shared<HepMC::GenVertex>();
+        vertex->set_status(1);
+        vertex->status();
+    @endcode
+    
+    @code{.cpp}
+        // HepMC2 code:
+        HepMC::GenVertex * vertex;
+        for (HepMC::GenVertex::particles_out_const_iterator pout
+               =v->particles_out_const_begin();
+             pout!=(*vit)->particles_out_const_end(); ++pout) { }
+
+        // Replace with (similarly for particles_in):
+        HepMC::GenVertexPtr vertex = HepMC::make_shared<HepMC::GenVertex>();
+        for (HepMC::GenParticlePtr pout : vertex->particles_out() ) { }
+    @endcode
+
+    @code{.cpp}
+        // HepMC2 code:
+        vertex->weights().push_back(1.);
+        // Replace with:
+        TODO
+    @endcode
+    
+    @code{.cpp}
+        GenEvent evt(Units::GEV,Units::MM);
+        // HepMC2 code:
+        evt.set_alphaQCD(m_alphas);
+        evt.set_alphaQED(m_alpha);
+        // Replace with:
+        TODO
+    @endcode
+
+    @code{.cpp}
+        // HepMC2 code:
+        HepMC::GenVertex * vertex;
+        vertex->weights().push_back(1.);
+        // Replace with:
+        TODO
+    @endcode
+ 
     <hr>
     Last update 24 May 2015
 */
