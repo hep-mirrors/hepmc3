@@ -21,6 +21,9 @@
  */
 #include <cstdio> // sprintf
 #include <string>
+#include <limits>
+#include <sstream>
+#include <iomanip>
 #include "HepMC/Common.h"
 using std::string;
 
@@ -110,7 +113,7 @@ private:
 
 /**
  *  @class HepMC::IntAttribute
- *  @brief Attribute that holds an Integer
+ *  @brief Attribute that holds an Integer implemented as an int
  *
  *  @ingroup attributes
  */
@@ -144,8 +147,170 @@ public:
 #endif
         return true;
     }
+
+    /** @brief get the value associated to this Attribute. */
+    int value() const {
+	return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(int i) {
+	m_val = i;
+    }
+
 private:
     int m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC::IntAttribute
+ *  @brief Attribute that holds an Integer implemented as an int
+ *
+ *  @ingroup attributes
+ */
+class LongAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    LongAttribute(): Attribute(), m_val(0) {}
+
+    /** @brief Constructor initializing attribute value */
+    LongAttribute(long val): Attribute(), m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+#ifdef HEPMC_HAS_CXX11
+        m_val = std::stoi(att);
+#else
+        m_val = atoi( att.c_str() );
+#endif
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+#ifdef HEPMC_HAS_CXX11
+        att = std::to_string(m_val);
+#else
+        char buf[24];
+        sprintf(buf,"%23li",m_val);
+        att = buf;
+#endif
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    long value() const {
+	return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(long l) {
+	m_val = l;
+    }
+
+private:
+
+    long m_val; ///< Attribute value
+
+};
+
+/**
+ *  @class HepMC::DoubleAttribute
+ *  @brief Attribute that holds a real number as a double.
+ *
+ *  @ingroup attributes
+ */
+class DoubleAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    DoubleAttribute(): Attribute(), m_val(0.0) {}
+
+    /** @brief Constructor initializing attribute value */
+    DoubleAttribute(double val): Attribute(), m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+#ifdef HEPMC_HAS_CXX11
+        m_val = std::stod(att);
+#else
+        m_val = atof( att.c_str() );
+#endif
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+      std::ostringstream oss;
+      oss << std::setprecision(std::numeric_limits<double>::digits10)
+	  << m_val;
+      att = oss.str();
+      return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    double value() const {
+	return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(double d) {
+	m_val = d;
+    }
+
+private:
+
+    double m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC::FloatAttribute
+ *  @brief Attribute that holds a real number as a float.
+ *
+ *  @ingroup attributes
+ */
+class FloatAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    FloatAttribute(): Attribute(), m_val(0.0) {}
+
+    /** @brief Constructor initializing attribute value */
+    FloatAttribute(float val): Attribute(), m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+#ifdef HEPMC_HAS_CXX11
+        m_val = std::stof(att);
+#else
+        m_val = float(atof( att.c_str() ));
+#endif
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+      std::ostringstream oss;
+      oss << std::setprecision(std::numeric_limits<float>::digits10)
+	  << m_val;
+      att = oss.str();
+      return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    float value() const {
+	return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(float f) {
+	m_val = f;
+    }
+
+private:
+
+    float m_val; ///< Attribute value
 };
 
 /**
@@ -183,6 +348,17 @@ public:
         att = unparsed_string();
         return true;
     }
+
+    /** @brief get the value associated to this Attribute. */
+    string value() const {
+	return unparsed_string();
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(string s) {
+	set_unparsed_string(s);
+    }
+
 };
 
 } // namespace HepMC

@@ -27,6 +27,8 @@ int main(int /*argc*/, char ** /*argv*/) {
   shared_ptr<GenRunInfo> runinfo = make_shared<GenRunInfo>();
 
   runinfo->add_attribute("HEPRUP", hepr);
+  runinfo->add_attribute("NPRUP",
+			 make_shared<FloatAttribute>(hepr->heprup.NPRUP));
 
   std::vector<std::string> weightnames;
   weightnames.push_back("0"); // The first weight is always the default weight with name "0".
@@ -58,7 +60,14 @@ int main(int /*argc*/, char ** /*argv*/) {
     GenEvent ev(runinfo, Units::GEV, Units::MM);
     ev.set_event_number(neve);
     ev.add_attribute("HEPEUP", hepe);
-
+    ev.add_attribute("AlphaQCD",
+		     make_shared<DoubleAttribute>(hepe->hepeup.AQCDUP));
+    ev.add_attribute("AlphaEM",
+		     make_shared<DoubleAttribute>(hepe->hepeup.AQEDUP)); 
+    ev.add_attribute("NUP",
+		     make_shared<IntAttribute>(hepe->hepeup.NUP)); 
+    ev.add_attribute("IDPRUP",
+		     make_shared<LongAttribute>(hepe->hepeup.IDPRUP)); 
 
     GenParticlePtr p1 = make_shared<GenParticle>(hepe->momentum(0),
 						 hepe->hepeup.IDUP[0],
@@ -106,6 +115,8 @@ int main(int /*argc*/, char ** /*argv*/) {
 	if ( hepr->tags[i]->name != "init" )
 	  hepr->tags[i]->print(writer.headerBlock());
       writer.heprup = hepr->heprup;
+      writer.heprup.NPRUP =
+	int(input.run_info()->attribute<FloatAttribute>("NPRUP")->value());
       writer.init();
     }
 
@@ -115,6 +126,14 @@ int main(int /*argc*/, char ** /*argv*/) {
 	     hepe->tags[i]->name != "eventgroup" )
 	  hepe->tags[i]->print(writer.eventComments());
       writer.hepeup = hepe->hepeup;
+      writer.hepeup.AQCDUP =
+       	ev.attribute<DoubleAttribute>("AlphaQCD")->value();
+      writer.hepeup.AQEDUP =
+       	ev.attribute<DoubleAttribute>("AlphaEM")->value();
+      writer.hepeup.NUP =
+       	ev.attribute<IntAttribute>("NUP")->value();
+      writer.hepeup.IDPRUP =
+       	ev.attribute<LongAttribute>("IDPRUP")->value();
       writer.hepeup.heprup =  &writer.heprup;
       writer.writeEvent();
 

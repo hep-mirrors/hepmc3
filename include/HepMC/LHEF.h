@@ -1111,7 +1111,10 @@ struct Weight : public TagBase {
     if ( sudakov != 0.0 ) file << oattr("sudakov", sudakov);
     file << ">";
     for ( int j = 0, M = weights.size(); j < M; ++j ) file << " " << weights[j];
-    file << "</weight>" << std::endl;
+    if ( iswgt )
+      file << "</wgt>" << std::endl;
+    else
+      file << "</weight>" << std::endl;
   }
 
   /**
@@ -1367,7 +1370,8 @@ public:
    * Default constructor.
    */
   HEPRUP()
-    : IDWTUP(0), NPRUP(0), version(3) {}
+    : IDWTUP(0), NPRUP(0), version(3),
+      dprec(std::numeric_limits<double>::digits10) {}
 
   /**
    * Assignment operator.
@@ -1403,7 +1407,8 @@ public:
    * Construct from a given init tag.
    */
   HEPRUP(const XMLTag & tag, int versin)
-    : TagBase(tag.attr, tag.contents), version(versin) {
+    : TagBase(tag.attr, tag.contents), version(versin),
+      dprec(std::numeric_limits<double>::digits10) {
 
     std::vector<XMLTag*> tags = tag.tags;
  
@@ -1512,6 +1517,7 @@ public:
   void print(std::ostream & file) const {
 
     using std::setw;
+    file << std::setprecision(dprec);
 
     file << "<init>\n"
 	 << " " << setw(8) << IDBMUP.first
@@ -1757,6 +1763,11 @@ public:
    * The main version of the information stored.
    */
   int version;
+
+  /**
+   * The precision used for outputing real numbers.
+   */
+  int dprec;
 
 };
 
@@ -2017,6 +2028,8 @@ public:
    * Print out the event (group) as an XML tag.
    */
   void print(std::ostream & file) const {
+
+    file << std::setprecision(heprup->dprec);
 
     using std::setw;
 
@@ -2768,7 +2781,7 @@ public:
       file << "<LesHouchesEvents version=\"1.0\">\n";
 
 
-    file << std::setprecision(8);
+    file << std::setprecision(10);
 
     using std::setw;
 

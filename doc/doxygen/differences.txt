@@ -241,7 +241,10 @@
         evt.set_alphaQCD(m_alphas);
         evt.set_alphaQED(m_alpha);
         // Replace with:
-        TODO
+	evt.add_attribute("AlphaQCD",
+		           make_shared<DoubleAttribute>(m_alphas));
+	evt.add_attribute("AlphaEM",
+		           make_shared<DoubleAttribute>(m_alpha));
     @endcode
 
     @code{.cpp}
