@@ -65,12 +65,14 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
 
 # FFLAGS depend on the compiler
 get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
+if (CMAKE_Fortran_FLAGS)
+elseif()
 if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
    set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -ffixed-line-length-132")
-   message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
 elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
    set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -extend-source 132")	
-   message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
+endif()
+message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
 endif()
 
 # setting linker flags
