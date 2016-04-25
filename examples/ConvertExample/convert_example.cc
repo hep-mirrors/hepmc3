@@ -1,4 +1,6 @@
 // -*- C++ -*-
+#define HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
+#define HEPMCCONVERT_EXTENSION_HEPEVTZEUS
 #include "HepMC/GenEvent.h"
 #include "HepMC/Reader.h"
 #include "HepMC/Writer.h"
@@ -21,7 +23,7 @@
 
 #ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
 #ifndef HEPMC_ROOTIO
-#warning "HEPMCCONVERT_EXTENSION_ROOTTREEOPAL requires  compilation with of HepMC with ROOT, i.e. HEPMC_ROOTIO. Will be disabld."
+#warning "HEPMCCONVERT_EXTENSION_ROOTTREEOPAL requires  compilation with of HepMC with ROOT, i.e. HEPMC_ROOTIO.This extension will be disabled."
 #undef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
 #else
 #include "WriterRootTreeOPAL.h"
