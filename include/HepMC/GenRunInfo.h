@@ -18,8 +18,7 @@
 #endif // __CINT__
 
 #ifdef HEPMC_ROOTIO
-#include "TBuffer.h"
-#include "TClass.h"
+class TBuffer;
 #endif
 
 namespace HepMC {

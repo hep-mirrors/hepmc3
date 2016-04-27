@@ -573,29 +573,4 @@ string GenEvent::attribute_as_string(const string &name, int id) const {
     return ret;
 }
 
-#ifdef HEPMC_ROOTIO
-
-void GenEvent::Streamer(TBuffer &b){
-
-  if (b.IsReading()){
-
-    GenEventData data;
-
-    b.ReadClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
-
-    read_data(data);
-
-  } else {
-
-    // fill the GenEventData structures
-    GenEventData data;
-    write_data(data);
-
-    b.WriteClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
-  }
-}
-
-#endif
-
-
 } // namespace HepMC

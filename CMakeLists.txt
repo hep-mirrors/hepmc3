@@ -176,13 +176,10 @@ set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 add_library(HepMC SHARED $<TARGET_OBJECTS:objlib>)
 add_library(HepMC_static STATIC $<TARGET_OBJECTS:objlib>)
-target_link_libraries(HepMC_static ${ROOT_LIBRARIES} )
-target_link_libraries(HepMC ${ROOT_LIBRARIES} )
 
 configure_file(HepMC-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config )
 
 #SET_TARGET_PROPERTIES(... PROPERTIES LINK_FLAGS "$ENV{MYLDFLAGS}")
-
 
 
 set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
