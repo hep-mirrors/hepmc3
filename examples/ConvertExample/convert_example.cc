@@ -90,7 +90,7 @@ int main(int argc, char** argv)
             printf("\
      Usage: %s  <mode> <input_file.input_extension>    <output_file.output_extension>  [optional list of options]\n\
      Supported modes are: hepmc2_root hepmc3_root etc.\n\
-     List of options should be given as option1=value1:option2=value2:option3=value3 ...\n",argv[0],argv[0]);
+     List of options should be given as option1=value1:option2=value2:option3=value3 ...\n",argv[0]);
             exit(1);
         }
 
@@ -156,7 +156,6 @@ int main(int argc, char** argv)
     std::pair<std::string,std::string> convert_formats;
     std::string mode(argv[1]);
     unsigned int i,j=0;
-    int k;
     for (i=0; i<mode.size(); i++)
         if (mode[i]!='_')
             {
@@ -176,7 +175,9 @@ int main(int argc, char** argv)
     )
         { printf("The conversion mode=%s is not suitable for extensions of %s %s files\n",argv[1],argv[2],argv[3]); exit(1);}
 
+#ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
     int Run=0;
+#endif
     /*So far this is size 1, but it is better to keep as an option for an extension*/
     for (i=0; i<convert_list.size(); i++)
         {

@@ -22,18 +22,18 @@ using namespace std;
 namespace HepMC {
 
 
-GenEvent::GenEvent(Units::MomentumUnit momentum_unit,
-		   Units::LengthUnit length_unit)
-  : m_event_number(0), m_momentum_unit(momentum_unit),
-    m_length_unit(length_unit),
+GenEvent::GenEvent(Units::MomentumUnit mu,
+		   Units::LengthUnit lu)
+  : m_event_number(0), m_momentum_unit(mu),
+    m_length_unit(lu),
     m_rootvertex(make_shared<GenVertex>()) {}
 
 
 GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
-	 Units::MomentumUnit momentum_unit,
-	 Units::LengthUnit length_unit)
-  : m_event_number(0), m_momentum_unit(momentum_unit),
-    m_length_unit(length_unit),
+	 Units::MomentumUnit mu,
+	 Units::LengthUnit lu)
+  : m_event_number(0), m_momentum_unit(mu),
+    m_length_unit(lu),
     m_rootvertex(make_shared<GenVertex>()),
     m_run_info(run) {}
 
@@ -101,8 +101,8 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
 
     // Remove attributes of this particle
-    vector<string> attributes = p->attribute_names();
-    FOREACH( string s, attributes) {
+    vector<string> atts = p->attribute_names();
+    FOREACH( string s, atts) {
         p->remove_attribute(s);
     }
 
@@ -195,8 +195,8 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
 
     // Remove attributes of this vertex
-    vector<string> attributes = v->attribute_names();
-    FOREACH( string s, attributes) {
+    vector<string> atts = v->attribute_names();
+    FOREACH( string s, atts) {
         v->remove_attribute(s);
     }
 
@@ -259,12 +259,12 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
 }
 #endif
 
-void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
+void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
 
     deque<GenVertexPtr> sorting;
 
     // Find all starting vertices (end vertex of particles that have no production vertex)
-    FOREACH( const GenParticlePtr &p, particles ) {
+    FOREACH( const GenParticlePtr &p, parts ) {
         const GenVertexPtr &v = p->production_vertex();
         if( !v || v->particles_in().size()==0 ) {
             const GenVertexPtr &v2 = p->end_vertex();
@@ -326,9 +326,9 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &particles ) {
 }
 
 
-void GenEvent::reserve(unsigned int particles, unsigned int vertices) {
-    m_particles.reserve(particles);
-    m_vertices.reserve(vertices);
+void GenEvent::reserve(unsigned int parts, unsigned int verts) {
+    m_particles.reserve(parts);
+    m_vertices.reserve(verts);
 }
 
 

@@ -1406,11 +1406,11 @@ public:
   /**
    * Construct from a given init tag.
    */
-  HEPRUP(const XMLTag & tag, int versin)
-    : TagBase(tag.attr, tag.contents), version(versin),
+  HEPRUP(const XMLTag & tagin, int versin)
+    : TagBase(tagin.attr, tagin.contents), version(versin),
       dprec(std::numeric_limits<double>::digits10) {
 
-    std::vector<XMLTag*> tags = tag.tags;
+    std::vector<XMLTag*> tags = tagin.tags;
  
     // The first (anonymous) tag should just be the init block.
     std::istringstream iss(tags[0]->contents);
@@ -1464,8 +1464,8 @@ public:
 	  if ( ctag.name == "ptype" ) {
 	    std::string tname = ctag.attr["name"];
 	    long id;
-	    std::istringstream iss(ctag.contents);
-	    while ( iss >> id ) ptypes[tname].insert(id);
+	    std::istringstream isss(ctag.contents);
+	    while ( isss >> id ) ptypes[tname].insert(id);
 	  }
 	  else if ( ctag.name == "cut" )
 	    cuts.push_back(Cut(ctag, ptypes));
@@ -1907,16 +1907,16 @@ public:
   /**
    * Constructor from an event or eventgroup tag.
    */
-  HEPEUP(const XMLTag & tag, HEPRUP & heprupin)
-    : TagBase(tag.attr), NUP(0), IDPRUP(0), XWGTUP(0.0), XPDWUP(0.0, 0.0),
+  HEPEUP(const XMLTag & tagin, HEPRUP & heprupin)
+    : TagBase(tagin.attr), NUP(0), IDPRUP(0), XWGTUP(0.0), XPDWUP(0.0, 0.0),
       SCALUP(0.0), AQEDUP(0.0), AQCDUP(0.0), heprup(&heprupin),
-      currentWeight(0), isGroup(tag.name == "eventgroup") {
+      currentWeight(0), isGroup(tagin.name == "eventgroup") {
 
     if ( heprup->NPRUP < 0 )
       throw std::runtime_error("Tried to read events but no processes defined "
 			       "in init block of Les Houches file.");
 
-    std::vector<XMLTag*> tags = tag.tags;
+    std::vector<XMLTag*> tags = tagin.tags;
 
     if ( isGroup ) {
       getattr("nreal", subevents.nreal);
@@ -1969,14 +1969,14 @@ public:
 	weights.resize(heprup->nWeights(),
 		       std::make_pair(XWGTUP, (WeightInfo*)(0)));
 	weights.front().first = XWGTUP;
-	for ( int i = 1, N = weights.size(); i < N; ++i ) 
-	  weights[i].second =  &heprup->weightinfo[i - 1];
+	for ( int ii = 1, NN = weights.size(); ii < NN; ++ii ) 
+	  weights[ii].second =  &heprup->weightinfo[ii - 1];
 	double w = 0.0;
-	int i = 0;
-	std::istringstream iss(tag.contents);
-	while ( iss >> w )
-	  if ( ++i < int(weights.size()) )
-	    weights[i].first = w;
+	int iii = 0;
+	std::istringstream isss(tag.contents);
+	while ( isss >> w )
+	  if ( ++iii < int(weights.size()) )
+	    weights[iii].first = w;
 	  else
 	    weights.push_back(std::make_pair(w, (WeightInfo*)(0)));
       }
@@ -2145,8 +2145,8 @@ public:
   double totalWeight(int i = 0) const {
     if ( subevents.empty() ) return weight(i);
     double w = 0.0;
-    for ( int i = 0, N = subevents.size(); i < N; ++i )
-      w += subevents[i]->weight(i);
+    for ( int ii = 0, N = subevents.size(); ii < N; ++ii )
+      w += subevents[ii]->weight(i);
     return w;
   }
 
@@ -2244,9 +2244,9 @@ public:
     if ( i == 0 ) {
       reset();
       weights = subevents[0]->weights;
-      for ( int i = 1, N = subevents.size(); i < N; ++i )
+      for ( int ii = 1, N = subevents.size(); ii < N; ++ii )
 	for ( int j = 0, M = weights.size(); j < M; ++j )
-	  weights[j].first += subevents[i]->weights[j].first;
+	  weights[j].first += subevents[ii]->weights[j].first;
       currentWeight = 0;
     } else {
       setEvent(*subevents[i - 1]);
@@ -2785,14 +2785,14 @@ public:
 
     using std::setw;
 
-    std::string headerBlock = headerStream.str();
-    if ( headerBlock.length() ) {
-      if ( headerBlock.find("<header>") == std::string::npos )
+    std::string headBlock = headerStream.str();
+    if ( headBlock.length() ) {
+      if ( headBlock.find("<header>") == std::string::npos )
 	file << "<header>\n";
-      if ( headerBlock[headerBlock.length() - 1] != '\n' )
-	headerBlock += '\n';
-      file << headerBlock;
-      if ( headerBlock.find("</header>") == std::string::npos )
+      if ( headBlock[headBlock.length() - 1] != '\n' )
+	headBlock += '\n';
+      file << headBlock;
+      if ( headBlock.find("</header>") == std::string::npos )
 	file << "</header>\n";
     }
 
