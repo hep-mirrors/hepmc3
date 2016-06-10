@@ -7,7 +7,7 @@ void WriterHEPEVTZEUS::write_hepevt_event_header()
 {
     fprintf(m_file," E % 12i% 12i% 12i\n",HEPEVT_Wrapper::event_number(),0,HEPEVT_Wrapper::number_entries());
 }
-void WriterHEPEVTZEUS::write_hepevt_particle( int index, bool iflong )
+  void WriterHEPEVTZEUS::write_hepevt_particle( int index, bool /*iflong*/ )
 {
     fprintf(m_file,"% 12i% 8i",HEPEVT_Wrapper::status(index), HEPEVT_Wrapper::id(index));
     fprintf(m_file,"% 8i% 8i",HEPEVT_Wrapper::first_parent(index),HEPEVT_Wrapper::last_parent(index));
