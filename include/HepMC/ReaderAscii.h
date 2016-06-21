@@ -18,6 +18,7 @@
 #include "HepMC/GenEvent.h"
 #include <string>
 #include <fstream>
+#include <istream>
 
 namespace HepMC {
 
@@ -28,6 +29,9 @@ public:
     /// @warning If file already exists, it will be cleared before writing
     ReaderAscii(const std::string& filename);
 
+    /// The ctor to read from stdin
+    ReaderAscii(std::istream &);
+
     /// @brief Destructor
     ~ReaderAscii();
 
@@ -37,7 +41,7 @@ public:
     bool read_event(GenEvent& evt);
 
     /// @brief Return status of the stream
-    bool failed() { return (bool)m_file.rdstate(); }
+    bool failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
 
     /// @brief Close file stream
     void close();
@@ -147,6 +151,11 @@ public:
   private:
 
   std::ifstream m_file; //!< Input file
+
+  std::istream* m_stream; // For ctor when reading from stdin
+  bool m_isstream; // Maybe not most elegant solution ---
+                   // toggles usage of m_file or m_stream
+
 
     /** @brief Store attributes global to the run being written/read. */
     std::map< std::string, shared_ptr<Attribute> > m_global_attributes;

@@ -1,16 +1,20 @@
-2016-01-18 Andrii Verbytskyiv
-      
-    *Builds of Debian packages
+2016-04-27 Witek Pokorski
+
+	* moving GenEvent and GenRunInfo root streamers to a separate file
+
+2016-01-18 Andrii Verbytskyi
+
+	*Builds of Debian packages
 
 2016-01-12 Andrii Verbytskyi
-   
-    *Update of cmake files to allow proper  RedHatx86_64 directory structure, 
-    *Add section to build rpms and debs with cpack
-    *ROOT IO is enabled if ROOTConfig.cmake or FindROOT.cmake set ROOT_FOUND
+
+	*Update of cmake files to allow proper  RedHatx86_64 directory structure
+	*Add section to build rpms and debs with cpack
+	*ROOT IO is enabled if ROOTConfig.cmake or FindROOT.cmake set ROOT_FOUND
 
 2016-01-06 Andrii Verbytskyi
-    
-    * Compilation with gcc 4.4
+
+	* Compilation with gcc 4.4
 
 2016-01-06 Dmitri Konstantinov
 

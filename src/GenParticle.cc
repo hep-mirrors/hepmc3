@@ -16,20 +16,20 @@
 
 namespace HepMC {
 
-GenParticle::GenParticle( const FourVector &momentum, int pid, int status ):
+GenParticle::GenParticle( const FourVector &mom, int pidin, int stat):
 m_event(NULL),
 m_id(0) {
-    m_data.pid               = pid;
-    m_data.momentum          = momentum;
-    m_data.status            = status;
+    m_data.pid               = pidin;
+    m_data.momentum          = mom;
+    m_data.status            = stat;
     m_data.is_mass_set       = false;
     m_data.mass              = 0.0;
 }
 
-GenParticle::GenParticle( const GenParticleData &data ):
+GenParticle::GenParticle( const GenParticleData &dat ):
 m_event(NULL),
 m_id(0),
-m_data(data) {
+m_data(dat) {
 }
 
 double GenParticle::generated_mass() const {
@@ -37,16 +37,16 @@ double GenParticle::generated_mass() const {
     else                   return m_data.momentum.m();
 }
 
-void GenParticle::set_pid(int pid) {
-    m_data.pid = pid;
+void GenParticle::set_pid(int pidin) {
+    m_data.pid = pidin;
 }
 
-void GenParticle::set_status(int status) {
-    m_data.status = status;
+void GenParticle::set_status(int stat) {
+    m_data.status = stat;
 }
 
-void GenParticle::set_momentum(const FourVector& momentum) {
-    m_data.momentum = momentum;
+void GenParticle::set_momentum(const FourVector& mom) {
+    m_data.momentum = mom;
 }
 
 void GenParticle::set_generated_mass(double m) {

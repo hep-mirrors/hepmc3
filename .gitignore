@@ -1,63 +1,67 @@
+
+
+
+
+
+
+
+
+
+
+
 # Backup Files
-*~
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
+# CMake output files
 # Compiled Dynamic libraries
-*.so
-*.so.*
-*.dylib
-*.dll
-
+# Compiled Object files
 # Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
 # Executables
-*.exe
-*.out
-*.app
-
-# Other temp files
-*.o_hepmc2
-*.log
-*.out
-*.err
-
-# ROOT output files
-*.root
-
 # HepMC output files
+# Other temp files
+# ROOT output files
+# check output files
+# root dictionaries
+# working directories
+*.a
+*.app
+*.dll
+*.dylib
+*.err
+*.exe
 *.hepmc
 *.hepmc2
 *.hepmc3
-
-# CMake output files
-cmake_install.cmake
+*.la
+*.lai
+*.lib
+*.lo
+*.log
+*.o
+*.o_hepmc2
+*.obj
+*.out
+*.out
+*.root
+*.slo
+*.so
+*.so.*
+*~
+.build
+.test
+/.inst
+/CPackConfig.cmake
+/CPackSourceConfig.cmake
+/install_manifest_devel.txt
+CMakeCache.txt
 CMakeFiles
 CMakeFiles.txt
-CMakeCache.txt
+Makefile
+build
+cmake_install.cmake
+examples/LHEFExample/LHEF_example_out.lhe
+examples/xmldoc
 install_manifest.txt
 install_manifest_headers.txt
 outputs
-Makefile
-
-# root dictionaries
 rootIO/rootIO_Classes.cxx
 rootIO/rootIO_Classes.h
-
-# working directories
-.build
-.test
-build
 test
-
-# check output files
-examples/LHEFExample/LHEF_example_out.lhe
-examples/xmldoc

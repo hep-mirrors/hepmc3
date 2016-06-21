@@ -23,9 +23,10 @@ if test $# -eq 0 || test -n "$tmp"; then
     echo
     echo "  --cflags|--cppflags : returns a '-I' string for insertion into CPPFLAGS or CXXFLAGS"
     echo "  --ldflags|libs      : returns a '-L/-l' string for insertion into LIBS or LIBADD"
+    echo "  --static            : returns a string for insertion into LIBS or LIBADD"
     echo "  --rootIO            : returns a '-L/-l' string for insertion into LIBS or LIBADD with rootIO support"
     echo
-    echo "  --version     : returns the ${PROJECT_NAME} release version number"
+    echo "  --version           : returns the ${PROJECT_NAME} release version number"
     exit 0
 fi
 
@@ -46,8 +47,11 @@ test -n "$tmp" && OUT="$OUT -I$prefix/${CMAKE_INSTALL_INCLUDEDIR}"
 tmp=$( echo "$*" | egrep -- '--\<ldflags|libs\>')
 test -n "$tmp" && OUT="$OUT -L$prefix/${CMAKE_INSTALL_LIBDIR} -lHepMC"
 
+tmp=$( echo "$*" | egrep -- '--\<static\>')
+test -n "$tmp" && OUT="$OUT $prefix/${CMAKE_INSTALL_LIBDIR}/libHepMC.a -lHepMC"
+
 tmp=$( echo "$*" | egrep -- '--\<rootIO\>')
-test -n "$tmp" && OUT="$OUT -L$prefix/${CMAKE_INSTALL_LIBDIR} -lHepMC  ${HEPMC_ROOTIO_LIBRARY}"
+test -n "$tmp" && OUT="$OUT -L$prefix/${CMAKE_INSTALL_LIBDIR}  ${HEPMC_ROOTIO_LIBRARY}"
 
 tmp=$( echo "$*" | egrep -- '--\<version\>')
 test -n "$tmp" && echo ${PROJECT_VERSION}&& exit 0

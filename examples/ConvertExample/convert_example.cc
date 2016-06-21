@@ -1,4 +1,6 @@
 // -*- C++ -*-
+#define HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
+#define HEPMCCONVERT_EXTENSION_HEPEVTZEUS
 #include "HepMC/GenEvent.h"
 #include "HepMC/Reader.h"
 #include "HepMC/Writer.h"
@@ -7,19 +9,30 @@
 #include "HepMC/WriterAscii.h"
 #include "HepMC/Print.h"
 #include "HepMC/GenEvent.h"
+#include "HepMC/WriterHEPEVT.h"
+#include "HepMC/ReaderHEPEVT.h"
+
+#ifdef HEPMC_ROOTIO
 #include "HepMC/ReaderRoot.h"
 #include "HepMC/WriterRoot.h"
 #include "HepMC/ReaderRootTree.h"
 #include "HepMC/WriterRootTree.h"
-#include "HepMC/WriterHEPEVT.h"
-#include "HepMC/ReaderHEPEVT.h"
+#endif
 
 /* Extension example*/
-#define  HEPMCCONVERT_EXTENSION
-#ifdef HEPMCCONVERT_EXTENSION
+
+#ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
+#ifndef HEPMC_ROOTIO
+#warning "HEPMCCONVERT_EXTENSION_ROOTTREEOPAL requires  compilation with of HepMC with ROOT, i.e. HEPMC_ROOTIO.This extension will be disabled."
+#undef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
+#else
 #include "WriterRootTreeOPAL.h"
+#endif
+#endif
+#ifdef HEPMCCONVERT_EXTENSION_HEPEVTZEUS  
 #include "WriterHEPEVTZEUS.h"
 #endif
+
 
 #include <iostream>
 #include <vector>
@@ -29,10 +42,15 @@
 using namespace HepMC;
 using std::cout;
 using std::endl;
-enum formats {hepmc2, hepmc3, root,treeroot,hpe
+enum formats {hepmc2, hepmc3, hpe
+#ifdef HEPMC_ROOTIO
+              ,root,treeroot
+#endif
               /* Extension example*/
-#ifdef HEPMCCONVERT_EXTENSION
+#ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
               ,treerootopal
+#endif
+#ifdef HEPMCCONVERT_EXTENSION_HEPEVTZEUS              
               ,hpezeus
 #endif
              };
@@ -72,7 +90,7 @@ int main(int argc, char** argv)
             printf("\
      Usage: %s  <mode> <input_file.input_extension>    <output_file.output_extension>  [optional list of options]\n\
      Supported modes are: hepmc2_root hepmc3_root etc.\n\
-     List of options should be given as option1=value1:option2=value2:option3=value3 ...\n",argv[0],argv[0]);
+     List of options should be given as option1=value1:option2=value2:option3=value3 ...\n",argv[0]);
             exit(1);
         }
 
@@ -103,24 +121,32 @@ int main(int argc, char** argv)
     std::map<std::string,formats> format_map;
     format_map.insert(std::pair<std::string,formats> ( "hepmc2", hepmc2 ));
     format_map.insert(std::pair<std::string,formats> ( "hepmc3", hepmc3 ));
+    format_map.insert(std::pair<std::string,formats> ( "hpe", hpe  ));
+#ifdef HEPMC_ROOTIO
     format_map.insert(std::pair<std::string,formats> ( "root", root ));
     format_map.insert(std::pair<std::string,formats> ( "treeroot", treeroot ));
-    format_map.insert(std::pair<std::string,formats> ( "hpe", hpe  ));
+#endif
     /* Extension example*/
-#ifdef HEPMCCONVERT_EXTENSION
+#ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
     format_map.insert(std::pair<std::string,formats> ( "treerootopal", treerootopal ));
+#endif
+#ifdef HEPMCCONVERT_EXTENSION_HEPEVTZEUS
     format_map.insert(std::pair<std::string,formats> ( "hpezeus", hpezeus ));
 #endif
 
     std::map<std::string,std::string> extention_map;
     extention_map.insert(std::pair<std::string,std::string> ( "hepmc2","hepmc2" ));
     extention_map.insert(std::pair<std::string,std::string> ( "hepmc3", "hepmc3" ));
+    extention_map.insert(std::pair<std::string,std::string> ( "hpe", "hpe" ));
+#ifdef HEPMC_ROOTIO
     extention_map.insert(std::pair<std::string,std::string> ( "root", "root" ));
     extention_map.insert(std::pair<std::string,std::string> ( "treeroot", "root" ));
-    extention_map.insert(std::pair<std::string,std::string> ( "hpe", "hpe" ));
+#endif
     /* Extension example*/
-#ifdef HEPMCCONVERT_EXTENSION
+#ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
     extention_map.insert(std::pair<std::string,std::string> ( "treerootopal", "root" ));
+#endif
+#ifdef HEPMCCONVERT_EXTENSION_HEPEVTZEUS
     extention_map.insert(std::pair<std::string,std::string> ( "hpezeus", "zeusmc" ));
 #endif
 
@@ -130,7 +156,6 @@ int main(int argc, char** argv)
     std::pair<std::string,std::string> convert_formats;
     std::string mode(argv[1]);
     unsigned int i,j=0;
-    int k;
     for (i=0; i<mode.size(); i++)
         if (mode[i]!='_')
             {
@@ -150,7 +175,9 @@ int main(int argc, char** argv)
     )
         { printf("The conversion mode=%s is not suitable for extensions of %s %s files\n",argv[1],argv[2],argv[3]); exit(1);}
 
+#ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
     int Run=0;
+#endif
     /*So far this is size 1, but it is better to keep as an option for an extension*/
     for (i=0; i<convert_list.size(); i++)
         {
@@ -173,15 +200,17 @@ int main(int argc, char** argv)
                 case hepmc3:
                     input_file=new ReaderAscii(convert_list[i].first);
                     break;
+                case hpe:
+                    input_file=new ReaderHEPEVT(convert_list[i].first);
+                    break;
+#ifdef HEPMC_ROOTIO
                 case treeroot:
                     input_file=new ReaderRootTree(convert_list[i].first);
                     break;
                 case root:
                     input_file=new ReaderRoot(convert_list[i].first);
                     break;
-                case hpe:
-                    input_file=new ReaderHEPEVT(convert_list[i].first);
-                    break;
+#endif
                 default:
                     printf("Input format %s is unknown.\n",convert_formats.first.c_str());
                     exit(2);
@@ -191,20 +220,25 @@ int main(int argc, char** argv)
             switch (format_map.at(convert_formats.second))
                 {
                 case hepmc2:
-                    printf("WARNING: hepmc3 format will be used instead of hepmc3.\n");
+                    printf("WARNING: hepmc3 format will be used instead of hepmc2.\n");
                     output_file=new WriterAscii(convert_list[i].second.c_str());
                     break;
                 case hepmc3:
                     output_file=new WriterAscii(convert_list[i].second.c_str());
                     break;
+                case hpe:
+                    output_file=new WriterHEPEVT(convert_list[i].second);
+                    break;
+#ifdef HEPMC_ROOTIO
                 case root:
                     output_file=new WriterRoot(convert_list[i].second);
                     break;
                 case treeroot:
                     output_file=new WriterRootTree(convert_list[i].second);
                     break;
+#endif                    
                     /* Extension example*/
-#ifdef HEPMCCONVERT_EXTENSION
+#ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
                 case treerootopal:
                     output_file=new WriterRootTreeOPAL(convert_list[i].second);
                     ((WriterRootTreeOPAL*)(output_file))->init_branches();
@@ -212,13 +246,12 @@ int main(int argc, char** argv)
                     if (options.find("Run")!=options.end()) Run=options.at("Run").fint;
                     ((WriterRootTreeOPAL*)(output_file))->set_run_number(Run);
                     break;
+#endif
+#ifdef HEPMCCONVERT_EXTENSION_HEPEVTZEUS
                 case hpezeus:
                     output_file=new WriterHEPEVTZEUS(convert_list[i].second);
                     break;
 #endif
-                case hpe:
-                    output_file=new WriterHEPEVT(convert_list[i].second);
-                    break;
                 default:
                     printf("Output format %s is unknown.\n",convert_formats.second.c_str());
                     exit(2);

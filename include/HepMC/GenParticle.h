@@ -124,7 +124,7 @@ public:
     /// @brief Set PDG ID
     /// @deprecated Use set_pid() instead
     HEPMC_DEPRECATED("Use set_pid() instead")
-    void set_pdg_id(int pid) { set_pid(pid); }
+    void set_pdg_id(int pidin) { set_pid(pidin); }
 
     #endif
 

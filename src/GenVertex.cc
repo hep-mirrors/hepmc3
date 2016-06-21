@@ -18,17 +18,17 @@
 namespace HepMC {
 
 
-GenVertex::GenVertex( const FourVector& position ):
+GenVertex::GenVertex( const FourVector& pos):
 m_event(NULL),
 m_id(0) {
     m_data.status   = 0;
-    m_data.position = position;
+    m_data.position = pos;
 }
 
-GenVertex::GenVertex( const GenVertexData &data):
+GenVertex::GenVertex( const GenVertexData &dat):
 m_event(NULL),
 m_id(0),
-m_data(data) {
+m_data(dat) {
 }
 
 

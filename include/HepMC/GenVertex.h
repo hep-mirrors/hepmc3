@@ -70,7 +70,7 @@ using namespace std;
         /// Get vertex status code
         int status() const { return m_data.status; }
         /// Set vertex status code
-        void set_status(int status) { m_data.status = status; }
+        void set_status(int stat) { m_data.status = stat; }
 
         /// Get vertex data
         const GenVertexData& data() const { return m_data; }

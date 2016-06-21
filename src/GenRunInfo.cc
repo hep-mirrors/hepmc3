@@ -93,30 +93,5 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
 
         this->tools().push_back(ti);
     }
-}
-
-#ifdef HEPMC_ROOTIO
-
-void GenRunInfo::Streamer(TBuffer &b){
-
-  if (b.IsReading()){
-
-    GenRunInfoData data;
-
-    b.ReadClassBuffer(TClass::GetClass("HepMC::GenRunInfoData"), &data);
-
-    read_data(data);
-
-  } else {
-
-    // fill the GenRunInfo structures
-    GenRunInfoData data;
-    write_data(data);
-
-    b.WriteClassBuffer(TClass::GetClass("HepMC::GenRunInfoData"), &data);
-  }
-}
-
-#endif
-
+}  
 } // namespace HepMC

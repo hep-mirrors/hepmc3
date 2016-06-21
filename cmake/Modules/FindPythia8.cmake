@@ -10,7 +10,7 @@
 #  PYTHIA8_hepmcinterface_LIBRARY
 #  PYTHIA8_lhapdfdummy_LIBRARY
 #  PYTHIA8_LIBRARIES (not cached) : includes 3 libraries above; not to be used if lhapdf is used
-set(TEST_PYTHIA8_ROOT_DIR  ""${PYTHIA8_ROOT_DIR})
+set(TEST_PYTHIA8_ROOT_DIR  "" ${PYTHIA8_ROOT_DIR})
 IF(TEST_PYTHIA8_ROOT_DIR STREQUAL "")
 IF(DEFINED ENV{PYTHIA8_ROOT_DIR})
 set(PYTHIA8_ROOT_DIR  $ENV{PYTHIA8_ROOT_DIR})

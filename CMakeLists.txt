@@ -65,12 +65,15 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
 
 # FFLAGS depend on the compiler
 get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
+if ("${CMAKE_Fortran_FLAGS}" STREQUAL "" )
 if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
    set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -ffixed-line-length-132")
-   message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
 elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
    set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -extend-source 132")	
-   message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
+endif()
+message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
+elseif()
+
 endif()
 
 # setting linker flags
@@ -174,13 +177,10 @@ set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 add_library(HepMC SHARED $<TARGET_OBJECTS:objlib>)
 add_library(HepMC_static STATIC $<TARGET_OBJECTS:objlib>)
-target_link_libraries(HepMC_static ${ROOT_LIBRARIES} )
-target_link_libraries(HepMC ${ROOT_LIBRARIES} )
 
 configure_file(HepMC-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config )
 
 #SET_TARGET_PROPERTIES(... PROPERTIES LINK_FLAGS "$ENV{MYLDFLAGS}")
-
 
 
 set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
@@ -294,10 +294,10 @@ set(CPACK_RPM_rootIO-libs_PACKAGE_SUMMARY  "HepMC libraries with ROOT I/O suppor
 set(CPACK_RPM_rootIO-devel_PACKAGE_SUMMARY "Headers for HepMC libraries with ROOT I/O support")
 set(CPACK_RPM_rootIO-libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
 set(CPACK_RPM_rootIO-devel_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_rootIO-libs_PACKAGE_REQUIRES   "root,${CPACK_RPM_PACKAGE_NAME}-libs")
-set(CPACK_RPM_rootIO-devel_PACKAGE_REQUIRES   "${CPACK_RPM_PACKAGE_NAME}-devel,${CPACK_RPM_PACKAGE_NAME}-rootIO-libs")
-SET(CPACK_DEBIAN_rootIO-libs_PACKAGE_DEPENDS "libroot,${CPACK_DEBIAN_PACKAGE_NAME}-libs")
-SET(CPACK_DEBIAN_rootIO-devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-devel,${CPACK_DEBIAN_PACKAGE_NAME}-rootIO-libs")
+set(CPACK_RPM_rootIO-libs_PACKAGE_REQUIRES   "root, ${CPACK_RPM_PACKAGE_NAME}-libs")
+set(CPACK_RPM_rootIO-devel_PACKAGE_REQUIRES   "${CPACK_RPM_PACKAGE_NAME}-devel, ${CPACK_RPM_PACKAGE_NAME}-rootIO-libs")
+SET(CPACK_DEBIAN_rootIO-libs_PACKAGE_DEPENDS "libroot, ${CPACK_DEBIAN_PACKAGE_NAME}-libs")
+SET(CPACK_DEBIAN_rootIO-devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-devel, ${CPACK_DEBIAN_PACKAGE_NAME}-rootIO-libs")
 else()
 set(CPACK_COMPONENTS_ALL   devel libs)
 endif()

@@ -42,8 +42,8 @@ public:
     FourVector()
       : m_v1(0.0),   m_v2(0.0), m_v3(0.0),    m_v4(0.0)  {}
     /** @brief Sets all FourVector fields */
-    FourVector(double x, double y, double z, double e)
-      : m_v1(x),     m_v2(y),   m_v3(z),      m_v4(e)    {}
+    FourVector(double xx, double yy, double zz, double ee)
+      : m_v1(xx),     m_v2(yy),   m_v3(zz),      m_v4(ee)    {}
     /** @brief Copy constructor */
     FourVector(const FourVector & v)
       : m_v1(v.m_v1), m_v2(v.m_v2), m_v3(v.m_v3), m_v4(v.m_v4) {}
@@ -64,43 +64,43 @@ public:
     /// x-component of position/displacement
     double x()        const { return m_v1; }
     /// Set x-component of position/displacement
-    void   setX(double x)   { m_v1 = x;    }
+    void   setX(double xx)   { m_v1 = xx;    }
 
     /// y-component of position/displacement
     double y()        const { return m_v2; }
     /// Set y-component of position/displacement
-    void   setY(double y)   { m_v2 = y;    }
+    void   setY(double yy)   { m_v2 = yy;    }
 
     /// z-component of position/displacement
     double z()        const { return m_v3; }
     /// Set z-component of position/displacement
-    void   setZ(double z)   { m_v3 = z;    }
+    void   setZ(double zz)   { m_v3 = zz;    }
 
     /// Time component of position/displacement
     double t()        const { return m_v4; }
     /// Set time component of position/displacement
-    void   setT(double t)   { m_v4 = t;    }
+    void   setT(double tt)   { m_v4 = tt;    }
 
 
     /// x-component of momentum
     double px()       const { return x(); }
     /// Set x-component of momentum
-    void   setPx(double px) { setX(px);   }
+    void   setPx(double pxx) { setX(pxx);   }
 
     /// y-component of momentum
     double py()       const { return y(); }
     /// Set y-component of momentum
-    void   setPy(double py) { setY(py);   }
+    void   setPy(double pyy) { setY(pyy);   }
 
     /// z-component of momentum
     double pz()       const { return z(); }
     /// Set z-component of momentum
-    void   setPz(double pz) { setZ(pz);   }
+    void   setPz(double pzz) { setZ(pzz);   }
 
     /// Energy component of momentum
     double e()        const { return t(); }
     /// Set energy component of momentum
-    void   setE (double e ) { setT(e);    }
+    void   setE (double ee ) { setT(ee);    }
 
     //@}
 

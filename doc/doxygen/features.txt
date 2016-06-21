@@ -24,7 +24,7 @@
           will not be available
 
     @note cmake is set to detect c++11 support by default. If c++11 is not
-          supported CMake will attempt to find and use BOOST v1.4 or later
+          supported CMake will attempt to use c++0x.
 
     ###########################################################################
     @section modules New modules
@@ -77,17 +77,7 @@
     GenEvent and GenVertex containers are now of std::vector type.
     This greatly simplifies iteration over them
 
-    @code{.cpp}
-        BOOST_FOREACH( const GenParticlePtr &p, event.particles() ) { {
-            ...
-        }
-
-        BOOST_FOREACH( const GenParticlePtr &p, vertex.particles_in() ) { {
-            ...
-        }
-    @endcode
-
-    or (c++11):
+    e.g. (c++11):
 
     @code{.cpp}
         foreach( const GenParticlePtr &p : event.particles() ) { {
@@ -99,11 +89,11 @@
         }
     @endcode
 
-    @note one can use macro FOREACH defined in HepMC/foreach.h which uses
-          either BOOST or c++11 depending on the installation options
+    @note one can use macro FOREACH defined in HepMC/Common.h which uses
+          c++11 or tries to mimic it depending on the installation options
 
     @code{.cpp}
-        #include "HepMC/foreach.h"
+        #include "HepMC/Common.h"
 
         ...
 
@@ -117,5 +107,5 @@
     @endcode
 
     <hr>
-    Last update 24 May 2015
+    Last update 6 Apr 2016
 */

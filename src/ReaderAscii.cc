@@ -20,9 +20,8 @@ using namespace std;
 
 namespace HepMC {
 
-
 ReaderAscii::ReaderAscii(const string &filename)
- : m_file(filename)
+ : m_file(filename), m_stream(0), m_isstream(false)
 {
     if( !m_file.is_open() ) {
         ERROR( "ReaderAscii: could not open input file: "<<filename )
@@ -30,12 +29,23 @@ ReaderAscii::ReaderAscii(const string &filename)
     set_run_info(make_shared<GenRunInfo>());
 }
 
+// Ctor for reading from stdin
+ReaderAscii::ReaderAscii(std::istream & stream)
+ : m_stream(&stream), m_isstream(true)
+{
+    if( !m_stream ) {
+        ERROR( "ReaderAscii: could not open input stream " )
+    }
+    set_run_info(make_shared<GenRunInfo>());
+}
 
-ReaderAscii::~ReaderAscii() { close(); }
+
+
+ReaderAscii::~ReaderAscii() { if (!m_isstream) close(); }
 
 
 bool ReaderAscii::read_event(GenEvent &evt) {
-    if ( !m_file.is_open() ) return false;
+    if ( !m_file.is_open() &! m_isstream ) return false;
 
     char               peek;
     char               buf[512*512];
@@ -50,7 +60,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     // Parse event, vertex and particle information
     //
     while(!failed()) {
-        m_file.getline(buf,512*512);
+
+        m_isstream ? m_stream->getline(buf,512*512) : m_file.getline(buf,512*512);
 
         if( strlen(buf) == 0 ) continue;
 
@@ -107,9 +118,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         if( !is_parsing_successful ) break;
 
         // Check for next event
-        peek = m_file.peek();
+        m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
         if( parsed_event_header && peek=='E' ) break;
     }
+
 
     // Check if all particles and vertices were parsed
     if ((int)evt.particles().size() != vertices_and_particles.second ) {
@@ -127,7 +139,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         DEBUG( 1, "Parsing failed at line:" << endl << buf )
 
         evt.clear();
-        m_file.clear(ios::badbit);
+        m_isstream ? m_stream->clear(ios::badbit) : m_file.clear(ios::badbit);
 
         return false;
     }
@@ -470,7 +482,7 @@ string ReaderAscii::unescape(const string s) {
 
 
 void ReaderAscii::close() {
-    if( !m_file.is_open() ) return;
+    if( !m_file.is_open()) return;
     m_file.close();
 }
 
