@@ -75,6 +75,14 @@ const GenVertexPtr GenParticle::end_vertex() const {
     return m_end_vertex.lock();
 }
 
+vector<GenParticlePtr> GenParticle::parents() {
+    return production_vertex() ? production_vertex()->particles_in() : vector<GenParticlePtr>();
+}
+
+vector<GenParticlePtr> GenParticle::children() {
+    return end_vertex() ? end_vertex()->particles_out() : vector<GenParticlePtr>();
+}
+
 bool GenParticle::add_attribute(std::string name, shared_ptr<Attribute> att) {
   if ( !parent_event() ) return false;
   parent_event()->add_attribute(name, att, id());

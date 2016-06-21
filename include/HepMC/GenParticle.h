@@ -76,6 +76,14 @@ public:
     GenVertexPtr production_vertex();        //!< Get production vertex
     GenVertexPtr end_vertex();               //!< Get end vertex
 
+    /// @brief Convenience access to immediate incoming particles via production vertex
+    /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
+    vector<GenParticlePtr> parents();
+
+    /// @brief Convenience access to immediate outcoming particles via end vertex
+    /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
+    vector<GenParticlePtr> children();
+
     void set_pid(int pid);                         //!< Set PDG ID
     void set_status(int status);                   //!< Set status code
     void set_momentum(const FourVector& momentum); //!< Set momentum
