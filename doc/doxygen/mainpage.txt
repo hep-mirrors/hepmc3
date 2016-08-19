@@ -7,7 +7,7 @@
 
     @section releases Status of releases
     The current development effort is concentrated on the HepMC3 series. Users are encouraged to integrate that version in their applications and to provide any feedback they may have.
-    The HepMC2 series development has been essentially stopped and in particular HepMC2.06.x (with the latest being 2.06.08) versions are frozen. Some of the new features HepMC3 series are also now available in HepMC2.07.x versions, but this should be regarded (for those who need it) as an intermediate step before migrating to HepMC3.
+    The HepMC2 series development has been essentially stopped and in particular HepMC2.06.x (with the latest being 2.06.08) versions are frozen. Some of the new features of HepMC3 series are now also available in HepMC2.07.x versions, but this should be regarded (for those who need it) as an intermediate step before migrating to HepMC3.
     Finally, HepMC1 series is by now fully deprecated.
 
     @section tarfiles Available tarfiles
@@ -49,7 +49,7 @@
     - <a href="https://sft.its.cern.ch/jira/browse/HEPMC"> <b>HepMC project JIRA instance            </b></a>
     - <a href="resources/docs">                            <b>Slides from the status update meetings </b></a>
 
-    @subsection diagram Class diagram
+    @subsection diagram HepMC3 class diagram
 
     @note Some of the classes and less significant relations omitted for clarity
 
