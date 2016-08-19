@@ -3,7 +3,7 @@
     @mainpage Main page
 
     @section introduction Introduction
-    The HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo Generators. The original code was written by M. Dobbs and J.B. Hansen (Comput. Phys. Commun. 134 (2001) 41). Since the first implementation, the package has undergone several modifications and in particular, the latest HepMC3 series is a completely new re-write using currently available C++11 techniques.
+    The HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation. The original code was written by M. Dobbs and J.B. Hansen (Comput. Phys. Commun. 134 (2001) 41). Since the first implementation, the package has undergone several modifications and in particular, the latest HepMC 3 series is a completely new re-write using currently available C++11 techniques.
 
     @section releases Status of releases
     The current development effort is concentrated on the HepMC 3 series. Users are encouraged to integrate that version in their applications and to provide any feedback they may have.
@@ -14,7 +14,7 @@
 
     Development version (updated daily at 3AM): <a href="releases/hepmc3-dev.tgz">hepmc3-dev.tgz</a>
 
-    @subsection pre_releases Alpha and beta stage releases
+    @subsection hepmc3_releases HepMC 3 releases
 
     - <a href="releases/hepmc3-beta2.0.tgz">hepmc3-beta2.0.tgz</a> HepMC3 beta2.0 <b> 25.Apr.2016</b>
     - <a href="releases/hepmc3-beta1.0.tgz">hepmc3-beta1.0.tgz</a> HepMC3 beta1.0 <b> 13.Jan.2016</b>
@@ -23,6 +23,11 @@
     - <a href="releases/hepmc3-alpha3.tgz">hepmc3-alpha3.tgz</a> HepMC3 alpha3 <b>10.Mar.2015</b>
     - <a href="releases/hepmc3-alpha2.tgz">hepmc3-alpha2.tgz</a> HepMC3 alpha2 <b>15.Dec.2014</b>
     - <a href="releases/hepmc3-alpha1.tgz">hepmc3-alpha1.tgz</a> First alpha release of HepMC3 <b>6.Nov.2014</b>
+
+    @subsection hepmc2_releases HepMC 2 releases
+    - <a href="releases/hepmc2.07-beta00.tgz">hepmc2.07-beta00.tgz</a> HepMC 2.07.beta00 <b> 19.August.2016</b>
+    - <a href="releases/hepmc2.06.09.tgz">hepmc2.06.09.tar</a> HepMC 2.06.09 <b> 05.June.2012</b>
+
 
     @subsection datafiles Data files for testing purposes
 
