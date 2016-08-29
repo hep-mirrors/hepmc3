@@ -45,7 +45,7 @@
 
     @subsection links Links to project-related webpages
     - <a href="https://gitlab.cern.ch/hepmc/HepMC3.git">   <b>HepMC3 GitLab repository               </b></a>
-    - <a href="https://gitlab.cern.ch/hepmc/HepMC.gitt">   <b>HepMC2 GitLab repository               </b></a>
+    - <a href="https://gitlab.cern.ch/hepmc/HepMC.git">   <b>HepMC2 GitLab repository               </b></a>
     - <a href="https://sft.its.cern.ch/jira/browse/HEPMC"> <b>HepMC project JIRA instance            </b></a>
     - <a href="resources/docs">                            <b>Slides from the status update meetings </b></a>
 
