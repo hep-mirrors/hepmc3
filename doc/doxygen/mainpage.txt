@@ -42,7 +42,7 @@
     @section documentation Additional documentation
     - @subpage features
     - @subpage differences
-    - HepMC2.06 <a href="releases/HepMC2_user_manual.pdf">user manual</a> and <a href="releases/HepMC2_reference_manual.pdf">reference manual</a> (old document NOT covering HepMC3)
+    - HepMC2.06 <a href="releases/HepMC2_user_manual.pdf">user manual</a> and <a href="releases/HepMC2_reference_manual.pdf">reference manual</a> (old documents NOT covering HepMC3)
 
     @subsection links Links to project-related webpages
     - <a href="https://gitlab.cern.ch/hepmc/HepMC3.git">   <b>HepMC3 GitLab repository               </b></a>
