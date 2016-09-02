@@ -1,6 +1,24 @@
+2016-07-05 Dmitri Konstantinov
+
+	* making installation of interfaces optional
+
+2016-06-30 Witek Pokorski
+
+	* changing ROOTIO_LIB define to HEPMC_ROOTIO_LIB
+
+2016-06-10 Witek Pokorski
+
+	* removing warnings, adding README, updating documentation
+
+2016-04-29 Andrii Verbyskyi
+
+	* fixing Fortran flags
+
 2016-04-27 Witek Pokorski
 
 	* moving GenEvent and GenRunInfo root streamers to a separate file
+
+  --------------------------  HepMC3-beta2.0  --------------------------
 
 2016-01-18 Andrii Verbytskyi
 
