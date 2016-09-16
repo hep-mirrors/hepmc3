@@ -194,7 +194,7 @@ struct XMLTag {
       pos_t begin = str.find("<", curr);
 
       // Check for comments
-      if ( str.find("<!--", curr) == begin ) {
+      if ( begin != end && str.find("<!--", curr) == begin ) {
 	pos_t endcom = str.find("-->", begin);
 	tags.push_back(new XMLTag());
 	if ( endcom == end ) {
