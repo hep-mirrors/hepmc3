@@ -41,6 +41,8 @@ public:
 
     double cross_section;       ///< Generated cross-section
     double cross_section_error; ///< Generated cross-section error
+    long accepted_events;       ///< The number of events generated so far.
+    long attempted_events;      ///< The number of events attempted so far.
 
 //
 // Functions
@@ -53,9 +55,11 @@ public:
     bool to_string(string &att) const;
 
     /** @brief Set all fields */
-    void set_cross_section( double xs, double xs_err ) {
+  void set_cross_section( double xs, double xs_err, long n_acc = -1, long n_att = -1) {
         cross_section       = xs;
         cross_section_error = xs_err;
+	accepted_events     = n_acc;
+	attempted_events    = n_att;
     }
 
     bool operator==( const GenCrossSection& ) const; ///< Operator ==
