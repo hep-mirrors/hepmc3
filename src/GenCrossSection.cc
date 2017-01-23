@@ -23,15 +23,23 @@ bool GenCrossSection::from_string(const string &att) {
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     cross_section_error = atof(cursor);
 
+    if( !(cursor = strchr(cursor+1,' ')) ) accepted_events = -1;
+    else accepted_events = atof(cursor);
+
+    if( !(cursor = strchr(cursor+1,' ')) ) attempted_events = -1;
+    else attempted_events = atof(cursor);
+
     return true;
 }
 
 bool GenCrossSection::to_string(string &att) const {
-    char buf[64];
+    char buf[128];
 
-    sprintf(buf,"%.8e %.8e",
+    sprintf(buf,"%.8e %.8e %l %l",
             cross_section,
-            cross_section_error);
+            cross_section_error,
+	    accepted_events,
+	    attempted_events);
 
     att = buf;
 
