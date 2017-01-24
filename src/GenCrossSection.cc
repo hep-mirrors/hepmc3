@@ -35,7 +35,7 @@ bool GenCrossSection::from_string(const string &att) {
 bool GenCrossSection::to_string(string &att) const {
     char buf[128];
 
-    sprintf(buf,"%.8e %.8e %l %l",
+    sprintf(buf,"%.8e %.8e %li %li",
             cross_section,
             cross_section_error,
 	    accepted_events,
