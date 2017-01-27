@@ -12,16 +12,18 @@
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Data/GenVertexData.h"
 #include "HepMC/FourVector.h"
+#include "HepMC/Common.h"
 #include "HepMC/Errors.h"
 
 namespace HepMC {
 
-using namespace std;
 
-    /** @brief Type of iteration. Ssed by backward-compatibility interface */
-    #ifndef HEPMC_NO_DEPRECATED
-    enum IteratorRange { parents, children, family, ancestors, descendants, relatives };
-    #endif
+    using namespace std;
+
+    // /** @brief Type of iteration. Used by backward-compatibility interface */
+    // #ifndef HEPMC_NO_DEPRECATED
+    // enum IteratorRange { parents, children, family, ancestors, descendants, relatives };
+    // #endif
 
 
     class GenEvent;

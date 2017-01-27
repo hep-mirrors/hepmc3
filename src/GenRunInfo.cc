@@ -64,7 +64,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     }
 
     // Tools
-    FOREACH( const struct ToolInfo &tool, this->tools() ) {
+    FOREACH( const ToolInfo &tool, this->tools() ) {
         data.tool_name.       push_back(tool.name);
         data.tool_version.    push_back(tool.version);
         data.tool_description.push_back(tool.description);
@@ -93,5 +93,5 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
 
         this->tools().push_back(ti);
     }
-}  
+}
 } // namespace HepMC

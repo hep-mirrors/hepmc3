@@ -18,39 +18,37 @@
 #include "HepMC/Search/FilterList.h"
 #include "HepMC/Data/SmartPointer.h"
 
-#include <vector>
-using std::vector;
-
 namespace HepMC {
+
 
 class GenEvent;
 
+
 /** @brief List of methods of searching through all particles in the event */
-enum FilterEvent {
+enum FilterType {
     FIND_ALL,
     FIND_FIRST,
     FIND_LAST
 };
+/// Compatibility name
+using FilterEvent = FilterType;
 
-/** @brief List of methods of searching starting from particle pointer */
-enum FilterParticle {
-    FIND_ALL_ANCESTORS,
-    FIND_ALL_DESCENDANTS,
-    FIND_MOTHERS,
-    FIND_DAUGHTERS,
-    FIND_PRODUCTION_SIBLINGS
-};
 
 class FindParticles {
 //
 // Constructors
 //
 public:
+
     /** @brief GenEvent-based constructor */
     FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list = FilterList() );
 
     /** @brief GenParticle-based constructor */
-    FindParticles(const GenParticlePtr &p, FilterParticle filter_type, FilterList filter_list = FilterList() );
+    FindParticles(const GenParticlePtr &p, Relationship filter_type, FilterList filter_list = FilterList() );
+
+    /** @brief GenVertex-based constructor */
+    FindParticles(const GenVertexPtr &v, Relationship filter_type, FilterList filter_list = FilterList() );
+
 
     /** @brief Narrow down the results applying additional filters */
     void narrow_down( FilterList filter_list );
@@ -85,6 +83,28 @@ private:
     vector<GenParticlePtr> m_results;          //!< List of results
     vector<GenVertexPtr>   m_checked_vertices; //!< List of already checked vertices
 };
+
+
+  /// @name Finding via unbound functions (returns by copy)
+  //@{
+
+  /** @brief Find from GenEvent */
+  inline vector<GenParticlePtr> findParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list = FilterList() ) {
+    return FindParticles(evt, filter_type, filter_list).results();
+  }
+
+  /** @brief Find from GenParticle */
+  inline vector<GenParticlePtr> findParticles(const GenParticlePtr &p, Relationship filter_type, FilterList filter_list = FilterList() ) {
+    return FindParticles(p, filter_type, filter_list).results();
+  }
+
+  /** @brief Find from GenVertex */
+  inline vector<GenParticlePtr> findParticles(const GenVertexPtr &v, Relationship filter_type, FilterList filter_list = FilterList() ) {
+    return FindParticles(v, filter_type, filter_list).results();
+  }
+
+  //@}
+
 
 } // namespace HepMC
 

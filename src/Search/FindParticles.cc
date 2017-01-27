@@ -33,6 +33,7 @@ FindParticles::FindParticles(const GenEvent &evt, FilterEvent filter_type, Filte
     }
 }
 
+
 FindParticles::FindParticles(const GenParticlePtr &p, FilterParticle filter_type, FilterList filter_list) {
 
     switch(filter_type) {
@@ -78,6 +79,37 @@ FindParticles::FindParticles(const GenParticlePtr &p, FilterParticle filter_type
             break;
     };
 }
+
+
+FindParticles::FindParticles(const GenVertexPtr &v, FilterParticle filter_type, FilterList filter_list) {
+
+    switch(filter_type) {
+        case FIND_ALL_ANCESTORS:
+            recursive_check_ancestors( v, filter_list );
+            break;
+        case FIND_ALL_DESCENDANTS:
+            recursive_check_descendants( v, filter_list );
+            break;
+        case FIND_MOTHERS:
+            FOREACH( const GenParticlePtr &p_in, v->particles_in() ) {
+                if ( passed_all_filters(p_in,filter_list) ) {
+                    m_results.push_back( p_in );
+                }
+            }
+            break;
+        case FIND_DAUGHTERS:
+            FOREACH( const GenParticlePtr &p_out, v->particles_out() ) {
+                if ( passed_all_filters(p_out,filter_list) ) {
+                    m_results.push_back( p_out );
+                }
+            }
+            break;
+        case FIND_PRODUCTION_SIBLINGS:
+        default:
+            throw Exception("Invalid filter type provided for FindParticles(GenVertexPtr)");
+    };
+}
+
 
 void FindParticles::narrow_down( FilterList filter_list ) {
 

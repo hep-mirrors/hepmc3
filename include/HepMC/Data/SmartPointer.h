@@ -74,14 +74,14 @@ namespace HepMC {
         //@{
 
         /// Assignment
-        SmartPointer& operator=(const SmartPointer &rhs) { m_data = rhs.m_data; return *this; } //!< Assignment operator
+        SmartPointer& operator=(const SmartPointer &rhs) { m_data = rhs.m_data; return *this; }
 
         /// Equality test
-        bool operator==(const SmartPointer &rhs)  const { return  m_data == rhs.m_data; } //!< == operator
+        bool operator==(const SmartPointer &rhs)  const { return  m_data == rhs.m_data; }
         /// Inequality test
-        bool operator!=(const SmartPointer &rhs)  const { return  m_data != rhs.m_data; } //!< != operator
-        ///
-        bool operator<(const SmartPointer &rhs)  const { return  m_data < rhs.m_data; } //!< < operator
+        bool operator!=(const SmartPointer &rhs)  const { return  m_data != rhs.m_data; }
+        /// Less-than comparison
+        bool operator<(const SmartPointer &rhs)  const { return  m_data < rhs.m_data; }
 
         /// Non-const access to the contained shared_ptr, with non-const contained type
         const shared_ptr<T> operator->() { return  m_data; }
@@ -90,9 +90,9 @@ namespace HepMC {
 
         /// Const access to the contained shared_ptr, with const contained type
         /// @note Hurrah for trickery!
-        const shared_ptr<const T> operator->() const { return  const_pointer_cast<const T>(m_data); } //!< Const shared pointer access operator
+        const shared_ptr<const T> operator->() const { return const_pointer_cast<const T>(m_data); }
         /// Const dereferencing to a const reference of the contained type
-        const T& operator*() const { return *m_data; } //!< Const dereference operator
+        const T& operator*() const { return *m_data; }
 
         /// Bool cast operator
         /// @note This should ideally use the 'safe bool idiom' in C++98 -- in C++11 an implicit explicit

@@ -16,6 +16,7 @@
 
 namespace HepMC {
 
+
 GenParticle::GenParticle( const FourVector &mom, int pidin, int stat):
 m_event(NULL),
 m_id(0) {

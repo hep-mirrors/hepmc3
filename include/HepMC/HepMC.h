@@ -8,11 +8,13 @@
 
 #include "HepMC/Version.h"
 #include "HepMC/Config.h"
+#include "HepMC/Common.h"
 
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 
 #include "HepMC/Print.h"
+#include "HepMC/Search/FindParticles.h"
 
 #endif

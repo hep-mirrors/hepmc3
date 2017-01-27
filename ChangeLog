@@ -1,3 +1,11 @@
+2017-01-27  Andy Buckley  <andy.buckley@cern.ch>
+
+	* Add unbound accessor functions in FindParticles.
+
+	* Add unisex 'children' and 'parents' accessors in FindParticles.
+
+	* Make FindParticles available from HepMC.h convenience header.
+
 2016-07-05 Dmitri Konstantinov
 
 	* making installation of interfaces optional

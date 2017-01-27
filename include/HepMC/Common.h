@@ -5,13 +5,34 @@
 #ifndef HEPMC_COMMON_H
 #define HEPMC_COMMON_H
 
-/// @todo Rename to e.g. HepMC/Build/Utils.h?
-
 #include <vector>
 #include <map>
 #include <string>
 #include <stdexcept>
 #include <iostream>
+
+
+namespace HepMC {
+
+    /** @brief List of methods of searching starting from a particle or vertex
+        @todo Add 'family'='parents'+'children' and 'relatives'='ancestors'+'descendants'(+'siblings')?
+    */
+    enum Relationship {
+      ANCESTORS = 0, FIND_ANCESTORS = 0, FIND_ALL_ANCESTORS = 0, ancestors = 0,
+      DESCENDANTS = 1, FIND_DESCENDANTS = 1, FIND_ALL_DESCENDANTS = 1, descendants = 1,
+      PARENTS = 2, FIND_PARENTS = 2, FIND_MOTHERS = 2, parents = 2,
+      CHILDREN = 3, FIND_CHILDREN = 3, FIND_DAUGHTERS = 3, children = 3,
+      PRODUCTION_SIBLINGS = 4, FIND_PRODUCTION_SIBLINGS = 4
+    };
+
+    /// Compatibility name
+    using FilterParticle = Relationship;
+    #ifndef HEPMC_NO_DEPRECATED
+    /// Compatibility name
+    using IteratorRange = Relationship;
+    #endif
+
+}
 
 
 /// Neater/extensible C++11 availability test
@@ -28,10 +49,10 @@
 #define FOREACH( iterator, container ) for ( iterator: container )
 #else
 #if !defined(__CINT__)
-/* This code was adapted from 
+/* This code was adapted from
  * https://github.com/assimp/assimp/blob/master/code/BoostWorkaround/boost/foreach.hpp
  * to rid of boost dependency.
- */ 
+ */
 ///////////////////////////////////////////////////////////////////////////////
 // A stripped down version of FOREACH for
 // illustration purposes. NOT FOR GENERAL USE.
@@ -137,11 +158,5 @@ typename T::reference deref(auto_any_base const& cur, T&)
 #endif
 #endif
 
-
-namespace HepMC {
-
-  // ...
-
-} // namespace HepMC
 
 #endif

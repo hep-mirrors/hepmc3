@@ -16,8 +16,7 @@
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Data/GenParticleData.h"
 #include "HepMC/FourVector.h"
-#include <iostream>
-#include <vector>
+#include "HepMC/Common.h"
 
 namespace HepMC {
 
@@ -118,12 +117,12 @@ public:
 
     /// @brief Get PDG ID
     /// @deprecated Use pid() instead
-    HEPMC_DEPRECATED("Use pid() instead")
+    // HEPMC_DEPRECATED("Use pid() instead")
     int pdg_id() const { return m_data.pid; }
 
     /// @brief Set PDG ID
     /// @deprecated Use set_pid() instead
-    HEPMC_DEPRECATED("Use set_pid() instead")
+    // HEPMC_DEPRECATED("Use set_pid() instead")
     void set_pdg_id(int pidin) { set_pid(pidin); }
 
     #endif
