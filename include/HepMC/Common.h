@@ -19,6 +19,11 @@ namespace HepMC {
     using namespace std;
 
 
+    /// Handy number squaring function
+    template <typename NUM>
+    inline NUM sqr(NUM x) { return x*x; }
+
+
     /** @brief List of methods of searching starting from a particle or vertex
         @todo Add 'family'='parents'+'children' and 'relatives'='ancestors'+'descendants'(+'siblings')?
     */

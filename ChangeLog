@@ -1,5 +1,7 @@
 2017-01-30  Andy Buckley  <andy.buckley@cern.ch>
 
+	* Add ancestors() and descendants() methods to GenParticle, and make parents() and children() accessors const.
+
 	* Add stream constructors to IO_GenEvent wrapper, and an ostream implementation to WriterAscii.
 
 2017-01-27  Andy Buckley  <andy.buckley@cern.ch>

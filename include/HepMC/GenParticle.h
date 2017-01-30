@@ -20,10 +20,12 @@
 
 namespace HepMC {
 
+
 using namespace std;
 
 class GenEvent;
 class Attribute;
+
 
 class GenParticle {
 
@@ -68,7 +70,6 @@ public:
      */
     double generated_mass() const;
 
-    /// @todo Should these accessors have also non-const version?
     const GenVertexPtr production_vertex() const;        //!< Get production vertex
     const GenVertexPtr end_vertex() const;               //!< Get end vertex
 
@@ -77,11 +78,17 @@ public:
 
     /// @brief Convenience access to immediate incoming particles via production vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> parents();
+    vector<GenParticlePtr> parents() const;
 
-    /// @brief Convenience access to immediate outcoming particles via end vertex
+    /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> children();
+    vector<GenParticlePtr> children() const;
+
+    /// @brief Convenience access to all incoming particles via production vertex
+    vector<GenParticlePtr> ancestors() const;
+
+    /// @brief Convenience access to all outgoing particles via end vertex
+    vector<GenParticlePtr> descendants() const;
 
     void set_pid(int pid);                         //!< Set PDG ID
     void set_status(int status);                   //!< Set status code
