@@ -41,6 +41,12 @@ struct GenEventData {
      *
      *  If this id is negative - it's the id of a vertex which
      *  outgoing particle id is written in GenEventData::links2
+     *
+     *  The links1[i] points to links2[i].
+     *  In case links1[i] is particle, links2[i] is end vertex.
+     *  In case links2[i] is vertex, links2[i] is outgoing particle.
+     *  An example of usage is given in documentation.
+     *
      */
     std::vector<int> links1;
     std::vector<int> links2; ///< Second id of the vertex links
