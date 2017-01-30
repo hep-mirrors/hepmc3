@@ -1,3 +1,7 @@
+2017-01-30  Andy Buckley  <andy.buckley@cern.ch>
+
+	* Add stream constructors to IO_GenEvent wrapper, and an ostream implementation to WriterAscii.
+
 2017-01-27  Andy Buckley  <andy.buckley@cern.ch>
 
 	* Add unbound accessor functions in FindParticles.

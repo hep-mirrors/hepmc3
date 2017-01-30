@@ -14,28 +14,48 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/Units.h"
-
 #include <cstring>
-using namespace std;
 
 namespace HepMC {
 
 
 WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run)
   : m_file(filename),
+    m_stream(&m_file),
     m_precision(16),
     m_buffer(NULL),
     m_cursor(NULL),
-    m_buffer_size( 256*1024 ) {
+    m_buffer_size( 256*1024 )
+{
     set_run_info(run);
-    if( !m_file.is_open() ) {
+    if ( !m_file.is_open() ) {
         ERROR( "WriterAscii: could not open output file: "<<filename )
-	    }
-    else {
+    } else {
         m_file << "HepMC::Version " << HepMC::version() << std::endl;
         m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
-	if ( run_info() ) write_run_info();
+	    if ( run_info() ) write_run_info();
     }
+}
+
+
+WriterAscii::WriterAscii(std::ostream &stream, shared_ptr<GenRunInfo> run)
+  : m_file(),
+    m_stream(&stream),
+    m_precision(16),
+    m_buffer(NULL),
+    m_cursor(NULL),
+    m_buffer_size( 256*1024 )
+{
+    set_run_info(run);
+    // if ( !m_file.is_open() ) {
+    //     ERROR( "WriterAscii: could not open output file: "<<filename )
+	// } else {
+        // m_file << "HepMC::Version " << HepMC::version() << std::endl;
+        // m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
+    (*m_stream) << "HepMC::Version " << HepMC::version() << std::endl;
+    (*m_stream) << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
+	if ( run_info() ) write_run_info();
+    // }
 }
 
 
@@ -47,7 +67,7 @@ WriterAscii::~WriterAscii() {
 
 void WriterAscii::write_event(const GenEvent &evt) {
 
-    if ( !m_file.is_open() ) return;
+    // if ( !m_file.is_open() ) return;
 
     allocate_buffer();
     if ( !m_buffer ) return;
@@ -93,7 +113,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     if ( evt.weights().size() ) {
       m_cursor += sprintf(m_cursor, "W");
       FOREACH (double w, evt.weights())
-	m_cursor += sprintf(m_cursor, " %e", w);
+        m_cursor += sprintf(m_cursor, " %e", w);
       m_cursor += sprintf(m_cursor, "\n");
       flush();
     }
@@ -112,8 +132,8 @@ void WriterAscii::write_event(const GenEvent &evt) {
                 WARNING( "WriterAscii::write_event: problem serializing attribute: "<<vt1.first )
             }
             else {
-		m_cursor +=
-		    sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
+                m_cursor +=
+                  sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
                 flush();
                 write_string(escape(st));
                 m_cursor += sprintf(m_cursor, "\n");
@@ -226,18 +246,21 @@ inline void WriterAscii::flush() {
     // The maximum size of single add to the buffer (other than by
     // using WriterAscii::write) is 32 bytes. This is a safe value as
     // we will not allow precision larger than 24 anyway
-    unsigned long length = m_cursor-m_buffer;
+    unsigned long length = m_cursor - m_buffer;
     if ( m_buffer_size - length < 32 ) {
-        m_file.write( m_buffer, length );
+        // m_file.write( m_buffer, length );
+        m_stream->write( m_buffer, length );
         m_cursor = m_buffer;
     }
 }
 
 
 inline void WriterAscii::forced_flush() {
-    m_file.write( m_buffer, m_cursor-m_buffer );
+    // m_file.write( m_buffer, m_cursor-m_buffer );
+    m_stream->write( m_buffer, m_cursor - m_buffer );
     m_cursor = m_buffer;
 }
+
 
 void WriterAscii::write_run_info() {
 
@@ -320,17 +343,23 @@ inline void WriterAscii::write_string( const string &str ) {
     // If not, flush the buffer and write the string directly
     else {
         forced_flush();
-        m_file.write( str.data(), str.length() );
+        // m_file.write( str.data(), str.length() );
+        m_stream->write( str.data(), str.length() );
     }
 }
 
 
 void WriterAscii::close() {
-    if ( !m_file.is_open() ) return;
+  std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
+  // if ( !m_file.is_open() ) return;
+  if (ofs && !ofs->is_open()) return;
 
-    forced_flush();
-    m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
-    m_file.close();
+  forced_flush();
+  // m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
+  (*m_stream) << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
+
+  // m_file.close();
+  if (ofs) ofs->close();
 }
 
 

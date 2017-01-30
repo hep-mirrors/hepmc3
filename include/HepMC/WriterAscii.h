@@ -30,6 +30,10 @@ public:
     WriterAscii(const std::string& filename,
 		shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
+    /// @brief Constructor from ostream
+    WriterAscii(std::ostream& stream,
+		shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+
     /// @brief Destructor
     ~WriterAscii();
 
@@ -115,6 +119,7 @@ private:
 private:
 
     std::ofstream m_file; //!< Output file
+    std::ostream* m_stream; //!< Output stream
     int m_precision; //!< Output precision
     char* m_buffer;  //!< Stream buffer
     char* m_cursor;  //!< Cursor inside stream buffer

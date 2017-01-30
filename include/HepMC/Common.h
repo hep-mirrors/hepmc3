@@ -10,9 +10,14 @@
 #include <string>
 #include <stdexcept>
 #include <iostream>
-
+#include <memory>
 
 namespace HepMC {
+
+
+    // Use unqualified namespace std within the HepMC namespace
+    using namespace std;
+
 
     /** @brief List of methods of searching starting from a particle or vertex
         @todo Add 'family'='parents'+'children' and 'relatives'='ancestors'+'descendants'(+'siblings')?
