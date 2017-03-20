@@ -14,7 +14,7 @@
 
     Development version (updated daily at 3AM): <a href="releases/hepmc3-dev.tgz">hepmc3-dev.tgz</a>
 
-    @subsection hepmc3_releases HepMC3 releases
+    @subsection hepmc3_releases HepMC3 releases (<a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>)
     
       - <a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>
     
