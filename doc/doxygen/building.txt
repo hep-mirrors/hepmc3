@@ -9,9 +9,9 @@
     Following options are available:
 
     @code{.cpp}
-        cmake -DHEPMC_ENABLE_CPP11=ON
-              -DHEPMC_BUILD_EXAMPLES=ON
-              -DPYTHIA8_ROOT_DIR=<path_to_pythia8180_or_later>
+        cmake -DCMAKE_INSTALL_PREFIX=<installation path> \
+              -DHEPMC_BUILD_EXAMPLES=ON|OFF \
+              -DPYTHIA8_ROOT_DIR=<path_to_pythia8180_or_later> \
               -DROOT_DIR=<path_to_root_bin_dir>
     @endcode
 
