@@ -61,5 +61,5 @@
     <img src="class_diagram.png">
 
     <hr>
-    Last update 29 August 2016
+    Last update 20 March 2017
 */
