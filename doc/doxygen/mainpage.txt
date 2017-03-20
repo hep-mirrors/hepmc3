@@ -16,7 +16,8 @@
 
     @subsection hepmc3_releases HepMC3 releases
     
-    - <a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>
+      - <a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>
+    
       - <a href="releases/hepmc3.0.0.tgz">hepmc3.0.0.tgz</a> HepMC3.0.0 <b> 20.Mar.2017</b>
       - <a href="releases/hepmc3-beta2.0.tgz">hepmc3-beta2.0.tgz</a> HepMC3 beta2.0 <b> 25.Apr.2016</b>
       - <a href="releases/hepmc3-beta1.0.tgz">hepmc3-beta1.0.tgz</a> HepMC3 beta1.0 <b> 13.Jan.2016</b>
@@ -46,7 +47,7 @@
     - <a href="https://gitlab.cern.ch/hepmc/HepMC3">   <b>HepMC3 GitLab repository               </b></a>
     - <a href="https://gitlab.cern.ch/hepmc/HepMC">   <b>HepMC2 GitLab repository               </b></a>
     - <a href="https://sft.its.cern.ch/jira/browse/HEPMC"> <b>HepMC project JIRA instance            </b></a>
-    - <a href="resources/docs">                            <b>Slides from the status update meetings </b></a>
+    - <a href="resources/docs">                            <b>Slides from developers meetings </b></a>
 
     @subsection diagram HepMC3 class diagram
 
