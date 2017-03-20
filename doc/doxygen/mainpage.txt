@@ -14,9 +14,8 @@
 
     Development version (updated daily at 3AM): <a href="releases/hepmc3-dev.tgz">hepmc3-dev.tgz</a>
 
-    @subsection hepmc3_releases HepMC3 releases (<a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>)
-    
-      - <a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>
+    @subsection hepmc3_releases HepMC3 releases
+    <a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>
     
       - <a href="releases/hepmc3.0.0.tgz">hepmc3.0.0.tgz</a> HepMC3.0.0 <b> 20.Mar.2017</b>
       - <a href="releases/hepmc3-beta2.0.tgz">hepmc3-beta2.0.tgz</a> HepMC3 beta2.0 <b> 25.Apr.2016</b>
@@ -28,8 +27,8 @@
       - <a href="releases/hepmc3-alpha1.tgz">hepmc3-alpha1.tgz</a> First alpha release of HepMC3 <b>6.Nov.2014</b>
 
     @subsection hepmc2_releases HepMC2 releases
+    <a href="https://gitlab.cern.ch/hepmc/HepMC/blob/master/ChangeLog">ChangeLog</a>
     
-    - <a href="https://gitlab.cern.ch/hepmc/HepMC/blob/master/ChangeLog">ChangeLog</a>
       - <a href="releases/hepmc2.07-beta00.tgz">hepmc2.07-beta00.tgz</a> HepMC2.07.beta00 <b> 19.August.2016</b>
       - <a href="releases/hepmc2.06.09.tgz">hepmc2.06.09.tgz</a> HepMC2.06.09 <b> 05.June.2012</b>
 
