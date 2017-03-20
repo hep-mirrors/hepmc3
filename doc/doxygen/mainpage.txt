@@ -37,6 +37,7 @@
     -  <a href="mailto:hepmc-dev@cern.ch"><b>hepmc-dev@NOSPAM.cern.ch mailing list</b></a>
 
     @section documentation Documentation
+    - @subpage building
     - @subpage features
     - @subpage differences
     - HepMC2.06 <a href="releases/HepMC2_user_manual.pdf">user manual</a> and <a href="releases/HepMC2_reference_manual.pdf">reference manual</a> (old documents NOT covering HepMC3)
