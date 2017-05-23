@@ -9,6 +9,7 @@
 #ifndef HEPMC_GENVERTEX_H
 #define HEPMC_GENVERTEX_H
 
+#include "HepMC/GenParticle.h"
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Data/GenVertexData.h"
 #include "HepMC/FourVector.h"
