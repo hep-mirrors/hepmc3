@@ -30,19 +30,39 @@ class GenHeavyIon : public Attribute {
 //
 public:
     int    Ncoll_hard;                   ///< Number of hard collisions
+  /* We should define the meaning of "hard" */
     int    Npart_proj;                   ///< Number of participating nucleons in the projectile
+  /* Does "participating" mean (non-) diffractively wounded? */
     int    Npart_targ;                   ///< Number of participating nucleons in the target
     int    Ncoll;                        ///< Number of collisions
+  /* I assume this is not "hard" (whatever that means) but what is it exactly? */
     int    spectator_neutrons;           ///< Number of spectator neutrons
+  /* Completely non-interacting? Why is it not seaparatly for target and projectile? */
     int    spectator_protons;            ///< Number of spectator protons
     int    N_Nwounded_collisions;        ///< @todo Describe!
     int    Nwounded_N_collisions;        ///< @todo Describe!
     int    Nwounded_Nwounded_collisions; ///< @todo Describe!
+  /* Yes, please describe! */
     double impact_parameter;             ///< Impact parameter
+  /* In the standard units of HepMC (CM/MM)? */
     double event_plane_angle;            ///< Event plane angle
+  /* I asume this is the angle of the impact parameter vector + pi/2. */
     double eccentricity;                 ///< Eccentricity
+  /* I'm sure there is a standard definition of this. */
     double sigma_inel_NN;                ///< Assumed nucleon-nucleon cross-section
+  /* I assume this is the total - elastic cross section. Or is it the
+   * non-diffractive cross section. I assume that this would be the
+   * same for all events in a run. */
     double centrality;                   ///< Centrality
+  /* I assume this is a number between 0 and 1, where 0 is the
+   * maximally central. Or is in percent? */
+
+  /* For all these, there should be a default value (set in the
+   * constructor) indicating that the corresponding information was
+   * not given. I guess -1 would do for all of them. Currently the
+   * is_valid() function requres that all fields should be non-zero,
+   * but I guess that not all generators are able to supply all the
+   * information.*/
 
 //
 // Functions
