@@ -1220,18 +1220,47 @@ struct Scales : public TagBase {
   /**
    * Empty constructor.
    */
-  Scales(double defscale = -1.0)
-  : muf(defscale), mur(defscale), mups(defscale), SCALUP(defscale) {}
+  Scales(double defscale = -1.0, int npart = 0)
+    : muf(defscale), mur(defscale), mups(defscale),
+      muisr(defscale), mufsr(defscale), mumpi(defscale), mures(defscale),
+      SCALUP(defscale) {
+    if ( npart > 0 ) pscales = std::vector<double>(npart, defscale);
+  }
 
   /**
    * Construct from an XML-tag
    */
-  Scales(const XMLTag & tag, double defscale = -1.0)
+  Scales(const XMLTag & tag, double defscale = -1.0, int npart = 0)
     : TagBase(tag.attr, tag.contents),
-      muf(defscale), mur(defscale), mups(defscale), SCALUP(defscale) {
+      muf(defscale), mur(defscale), mups(defscale),
+      muisr(defscale), mufsr(defscale), mumpi(defscale), mures(defscale),
+      SCALUP(defscale) {
     getattr("muf", muf);
     getattr("mur", mur);
     getattr("mups", mups);
+    muisr = mufsr = mumpi = mures = mups;
+    getattr("muisr", muisr);
+    getattr("mufsr", mufsr);
+    getattr("mumpi", mumpi);
+    getattr("mures", mures);
+    if ( npart > 0 ) pscales = std::vector<double>(npart, mups);
+    for ( int i = 0; i < npart; ++i ) {
+      std::ostringstream pttag;
+      pttag << "pt_start_" << i + 1;
+      getattr(pttag.str(), pscales[i]);
+    }
+    
+  }
+
+  /**
+   * Check if this object contains useful information besides SCALUP.
+   */
+  bool hasInfo() const {
+    if ( muf != SCALUP || mur != SCALUP || mups != SCALUP || muisr != SCALUP
+         || mufsr != SCALUP || mumpi != SCALUP || mures != SCALUP )
+      return true;
+    for ( int i = 0, N = pscales.size(); i < N; ++i )
+      if ( pscales[i] != SCALUP ) return true;
   }
 
   /**
@@ -1243,6 +1272,16 @@ struct Scales : public TagBase {
     if ( muf != SCALUP ) file << oattr("muf", muf);
     if ( mur != SCALUP ) file << oattr("mur", mur);
     if ( mups != SCALUP ) file << oattr("mups", mups);
+    if ( muisr != mups ) file << oattr("muisr", muisr);
+    if ( mufsr != mups ) file << oattr("mufsr", mufsr);
+    if ( mumpi != mups ) file << oattr("mumpi", mumpi);
+    if ( mures != mups ) file << oattr("mures", mures);
+    for ( int i = 0, N = pscales.size(); i < N; ++i ) {
+      if ( pscales[i] == mups ) continue;
+      std::ostringstream pttag;
+      pttag << "pt_start_" << i + 1;
+      file << oattr(pttag.str(), pscales[i]);
+    }      
     printattrs(file);
     closetag(file, "scales");
   }
@@ -1263,6 +1302,36 @@ struct Scales : public TagBase {
    */
   double mups;
 
+  /**
+   * The starting scale for the initial state parton shower as
+   * suggested by the matrix element generator.
+   */
+  double muisr;
+
+  /**
+   * The starting scale for the final state parton shower as
+   * suggested by the matrix element generator.
+   */
+  double mufsr;
+
+  /**
+   * The starting scale for the multi-parton interactions as suggested
+   * by the matrix element generator.
+   */
+  double mumpi;
+
+  /**
+   * The starting scale for the parton shower in a resonance decay as
+   * suggested by the matrix element generator.
+   */
+  double mures;
+
+  /**
+   * The starting (production) scale of individueal particles in
+   * HEPEUP.
+   */
+  std::vector<double> pscales;
+  
   /**
    * The default scale in this event.
    */
@@ -1950,7 +2019,7 @@ public:
     std::string ss;
     while ( getline(iss, ss) ) junk += ss + '\n';
     
-    scales = Scales(SCALUP);
+    scales = Scales(SCALUP, NUP);
     pdfinfo = PDFInfo(SCALUP);
     namedweights.clear();
     weights.clear();
@@ -2000,7 +2069,7 @@ public:
 	pdfinfo = PDFInfo(tag, SCALUP);
       }
       else if ( tag.name == "scales" ) {
-	scales = Scales(tag, SCALUP);
+	scales = Scales(tag, SCALUP, NUP);
       }
 
     }
