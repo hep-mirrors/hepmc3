@@ -370,7 +370,7 @@ Just some random garbage...
    <wgt id="1008"> 0.42208E+02 </wgt>
    <wgt id="1009"> 0.56435E+02 </wgt>
   </rwgt>
-  <scales pt_1="90.1" pt_2="90.2" pt_4="90.3" pt_5="90.4"> random stuff </scales>
+  <scales pt_start_1="90.1" pt_start_2="90.2" pt_start_4="90.3" pt_start_5="90.4"> random stuff </scales>
   </event>
   <event>
   6     66 0.50109093E+02 0.88344569E+02 0.75563862E-02 0.12114027E+00
@@ -395,7 +395,7 @@ Just some random garbage...
    <wgt id="1008"> 0.43255E+02 </wgt>
    <wgt id="1009"> 0.55234E+02 </wgt>
   </rwgt>
-  <scales pt_1="0.1" pt_2="0.2" pt_5="0.3" pt_6="0.4"> random stuff </scales>
+  <scales pt_start_1="0.1" pt_start_2="0.2" pt_start_5="0.3" pt_start_6="0.4"> random stuff </scales>
   </event>
   <event>
   5     66 0.50109093E+02 0.34743976E+02 0.75563862E-02 0.12114027E+00

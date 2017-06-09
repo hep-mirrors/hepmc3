@@ -1261,13 +1261,14 @@ struct Scales : public TagBase {
       return true;
     for ( int i = 0, N = pscales.size(); i < N; ++i )
       if ( pscales[i] != SCALUP ) return true;
+    return false;
   }
 
   /**
    * Print out the corresponding XML-tag.
    */
   void print(std::ostream & file) const {
-    if ( muf == SCALUP && mur == SCALUP && mups == SCALUP ) return;
+    if ( !hasInfo() ) return;
     file << "<scales";
     if ( muf != SCALUP ) file << oattr("muf", muf);
     if ( mur != SCALUP ) file << oattr("mur", mur);
