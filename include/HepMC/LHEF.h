@@ -2072,40 +2072,38 @@ public:
 	   << " " << setw(1) << VTIMUP[i]
 	   << " " << setw(1) << SPINUP[i] << std::endl;
 
-      if ( weights.size() > 0 ) {
-	file << "<weights>";
-	for ( int i = 1, N = weights.size(); i < N; ++i )
-	  file << " " << weights[i].first;
-	file << "</weights>\n";
+    if ( weights.size() > 0 ) {
+      file << "<weights>";
+      for ( int i = 1, N = weights.size(); i < N; ++i )
+        file << " " << weights[i].first;
+      file << "</weights>\n";
+    }
+
+    bool iswgt = false;
+    for ( int i = 0, N = namedweights.size(); i < N; ++i ) {
+      if ( namedweights[i].iswgt ) {
+        if ( !iswgt ) file << "<rwgt>\n";
+        iswgt = true;
+      } else {
+        if ( iswgt ) file << "</rwgt>\n";
+        iswgt = false;
       }
+      for ( int j = 0, M = namedweights[i].indices.size(); j < M; ++j )
+        namedweights[i].weights[j] = weight(namedweights[i].indices[j]);
+      namedweights[i].print(file);
+    }
+    if ( iswgt ) file << "</rwgt>\n";
+    
+    if ( !clustering.empty() ) {
+      file << "<clustering>" << std::endl;
+      for ( int i = 0, N = clustering.size(); i < N; ++i )
+        clustering[i].print(file);
+      file << "</clustering>" << std::endl;	
+    }
 
-      bool iswgt = false;
-      for ( int i = 0, N = namedweights.size(); i < N; ++i ) {
-	if ( namedweights[i].iswgt ) {
-	  if ( !iswgt ) file << "<rwgt>\n";
-	  iswgt = true;
-	} else {
-	  if ( iswgt ) file << "</rwgt>\n";
-	  iswgt = false;
-	}
-	for ( int j = 0, M = namedweights[i].indices.size(); j < M; ++j )
-	  namedweights[i].weights[j] = weight(namedweights[i].indices[j]);
-	namedweights[i].print(file);
-      }
-      if ( iswgt ) file << "</rwgt>\n";
-
-      if ( !clustering.empty() ) {
-	file << "<clustering>" << std::endl;
-	for ( int i = 0, N = clustering.size(); i < N; ++i )
-	  clustering[i].print(file);
-	file << "</clustering>" << std::endl;	
-      }
-
-      pdfinfo.print(file);
-      scales.print(file);
-
-      //    }
-
+    pdfinfo.print(file);
+    scales.print(file);
+    
     file << hashline(junk) << "</event>\n";
 
   }

@@ -35,6 +35,9 @@ class GenEvent;
 /** @brief Forward declaration of GenRunInfo. */
 class GenRunInfo;
 
+/** @brief Forward declaration of GenParticle. */
+class GenParticle;
+
 class Attribute {
 //
 // Constructors
@@ -57,6 +60,9 @@ protected:
      */
     Attribute(const string &st):m_is_parsed(false),m_string(st) {}
 
+    /** @brief GenEvent is a friend */
+    friend class GenEvent;
+    
 //
 // Virtual Functions
 //
@@ -65,13 +71,10 @@ public:
      */
     virtual bool from_string(const string & att) = 0;
 
-    /** @brief Optionally initialize the attribute after from_string
-     *
-     * Is passed a reference to the GenEvent object to which the
-     * Attribute belongs.
+    /** @brief Optionally initialize the attribute after from_string.
      */
-  virtual bool init(const GenEvent & /*geneve*/) {
-	return true;
+    virtual bool init() {
+        return true;
     }
 
     /** @brief Optionally initialize the attribute after from_string
@@ -79,7 +82,7 @@ public:
      * Is passed a reference to the GenRunInfo object to which the
      * Attribute belongs.
      */
-  virtual bool init(const GenRunInfo & /*genrun*/) {
+    virtual bool init(const GenRunInfo & ) {
 	return true;
     }
 
@@ -96,6 +99,16 @@ public:
     /** @brief Get unparsed string */
     const string& unparsed_string() const { return m_string; }
 
+    /** return the GenEvent to which this Attribute belongs, if at all. */
+    const GenEvent * event() const {
+        return m_event;
+    }
+
+    /** return the GenParticle to which this Attribute belongs, if at all. */
+    const GenParticle * particle() const {
+        return m_particle;
+    }
+
 protected:
     /** @brief Set is_parsed flag */
     void set_is_parsed(bool flag) { m_is_parsed = flag; }
@@ -107,8 +120,11 @@ protected:
 // Fields
 //
 private:
-    bool   m_is_parsed; //!< Is this attribute parsed?
-    string m_string;    //!< Raw (unparsed) string
+    bool   m_is_parsed;             //!< Is this attribute parsed?
+    string m_string;                //!< Raw (unparsed) string
+    const GenEvent * m_event;       //!< Possibility to be aware of the
+                                    //!  controlling GenEvent object.
+    const GenParticle * m_particle; //!< Particle to which assigned.
 };
 
 /**
@@ -163,7 +179,7 @@ private:
 };
 
 /**
- *  @class HepMC::IntAttribute
+ *  @class HepMC::LongAttribute
  *  @brief Attribute that holds an Integer implemented as an int
  *
  *  @ingroup attributes

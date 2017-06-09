@@ -174,7 +174,12 @@ public:
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const string &name, const shared_ptr<Attribute> &att, int id = 0) {
-      if ( att ) m_attributes[name][id] = att;
+      if ( att ) {
+        m_attributes[name][id] = att;
+        att->m_event = this;
+        if ( id > 0 && id <= int(particles().size()) )
+          att->m_particle = particles()[id - 1];
+      }
     }
 
     /// @brief Remove attribute
@@ -454,7 +459,11 @@ shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
     if (!i2->second->is_parsed() ) {
 
         shared_ptr<T> att = make_shared<T>();
-        if ( att->from_string(i2->second->unparsed_string()) && att->init(*this) ) {
+        att->m_event = this;
+        if ( id > 0 && id < int(particles().size()) )
+          att->m_particle = &(*particles()[id - 1]);
+        if ( att->from_string(i2->second->unparsed_string()) &&
+             att->init() ) {
             // update map with new pointer
             i2->second = att;
             return att;
