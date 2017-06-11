@@ -448,7 +448,7 @@ struct TagBase {
   /**
    * The contents of this tag.
    */
-  std::string contents;
+  mutable std::string contents;
 
   /**
    * Static string token for truth values.
@@ -502,18 +502,20 @@ struct XSecInfo : public TagBase {
   /**
    * Intitialize default values.
    */
-  XSecInfo(): neve(-1), totxsec(0.0), maxweight(1.0), meanweight(1.0),
-	      negweights(false), varweights(false) {}
+  XSecInfo(): neve(-1), ntries(-1), totxsec(0.0), maxweight(1.0),
+              meanweight(1.0), negweights(false), varweights(false) {}
 
   /**
    * Create from XML tag
    */
   XSecInfo(const XMLTag & tag)
-    : TagBase(tag.attr, tag.contents), neve(-1), totxsec(0.0),
+    : TagBase(tag.attr, tag.contents), neve(-1), ntries(-1), totxsec(0.0),
       maxweight(1.0), meanweight(1.0), negweights(false), varweights(false) {
     if ( !getattr("neve", neve) ) 
       throw std::runtime_error("Found xsecinfo tag without neve attribute "
 			       "in Les Houches Event File.");
+    ntries = neve;
+    getattr("ntries", ntries);
     if ( !getattr("totxsec", totxsec) ) 
       throw std::runtime_error("Found xsecinfo tag without totxsec "
 			       "attribute in Les Houches Event File.");
@@ -528,8 +530,12 @@ struct XSecInfo : public TagBase {
    * Print out an XML tag.
    */
   void print(std::ostream & file) const {
-    file << "<xsecinfo" << oattr("neve", neve) << oattr("totxsec", totxsec)
-	 << oattr("maxweight", maxweight) << oattr("meanweight", meanweight);
+    file << "<xsecinfo" << oattr("neve", neve)
+         << oattr("totxsec", totxsec);
+    if ( maxweight != 1.0 ) 
+      file << oattr("maxweight", maxweight)
+           << oattr("meanweight", meanweight);
+    if ( ntries > neve ) file << oattr("ntries", ntries);
     if ( negweights ) file << oattr("negweights", yes());
     if ( varweights ) file << oattr("varweights", yes());
     printattrs(file);
@@ -540,6 +546,11 @@ struct XSecInfo : public TagBase {
    * The number of events.
    */
   long neve;
+
+  /**
+   * The number of attempte that was needed to produce the neve events.
+   */
+  long ntries;
 
   /**
    * The total cross section in pb.
@@ -1213,6 +1224,106 @@ struct Clus : public TagBase {
 };
 
 /**
+ * Store special scales from within a <scales> tag.
+ */
+
+struct Scale : public TagBase {
+
+  /**
+   * Empty constructor
+   */
+  Scale(string st = "veto", int emtr = 0, double sc = 0.0)
+    : stype(st), emitter(emtr), recoiler(emtr), scale(sc) {}
+
+  /**
+   * Construct from an XML-tag.
+   */
+  Scale(const XMLTag & tag)
+    : TagBase(tag.attr, tag.contents),stype("veto"), emitter(0), recoiler(0) {
+    if ( !getattr("stype", stype) )
+      throw std::runtime_error("Found scale tag without stype attribute "
+			       "in Les Houches Event File.");
+    std::string pattr;
+    if ( getattr("p", pattr) ) {
+      std::istringstream pis(pattr);
+      if ( !(pis >> emitter) ) emitter = 0;
+      recoiler = emitter;
+      if ( !(pis >> recoiler) ) recoiler = emitter;
+    }
+
+    std::string eattr;
+    if ( getattr("etype", eattr) ) {
+      if ( eattr == "QCD" ) eattr = "-5 -4  -3 -2 -1 1 2 3 4 5 21";
+      if ( eattr == "EW" ) eattr = "-13 -12 -11 11 12 13 22 23 24";
+      std::istringstream eis(eattr);
+      int pdg = 0;
+      while ( eis >> pdg ) emitted.insert(pdg);
+    }
+    std::istringstream cis(tag.contents);
+    cis >> scale;
+    
+  }
+
+  /**
+   * Print out an XML tag.
+   */
+  void print(std::ostream & file) const {
+    file << "<scale" << oattr("stype", stype);
+    std::ostringstream ps;
+    if ( emitter > 0 ) ps << emitter;
+    if ( recoiler != emitter ) ps << " " << recoiler;
+    if ( ps.str().length() > 0 ) file << oattr("p", ps.str());
+    if ( emitted.size() > 0 ) {
+      std::set<int>::iterator it = emitted.begin();
+      std::ostringstream eos;
+      eos << *it;
+      while ( ++it != emitted.end() ) eos << " " << *it;
+      if ( eos.str() == "-5 -4  -3 -2 -1 1 2 3 4 5 21" )
+        file << oattr("etype", string("QCD"));
+      else if ( eos.str() == "-13 -12 -11 11 12 13 22 23 24" )
+        file << oattr("etype", string("EW"));
+      else
+        file << oattr("etype", eos.str());
+    }
+    std::ostringstream os;
+    os << scale;
+    contents = os.str();
+    closetag(file, "scale");
+  }
+
+  /**
+   * The type of scale this represents. Predefined values are "veto"
+   * and "start".
+   */
+  std::string stype;
+
+  /**
+   * The emitter this scale applies to. This is the index of a
+   * particle in HEPEUP (starting at 1). Zero corresponds to any
+   * particle in HEPEUP.
+   */
+  int emitter;
+
+  /** 
+   * If different from emitter, the recoiling particle in the
+   * emission. This is the index of a particle in HEPEUP (starting at
+   * 1). Zero corresponds to any particle in HEPEUP.
+   */
+  int recoiler;
+
+  /**
+   * The set of emitted particles (PDG id) this applies to.
+   */
+  std::set<int> emitted;
+
+  /**
+   * The actual scale given.
+   */
+  double scale;
+  
+};
+
+/**
  * Collect different scales relevant for an event.
  */
 struct Scales : public TagBase {
@@ -1221,10 +1332,7 @@ struct Scales : public TagBase {
    * Empty constructor.
    */
   Scales(double defscale = -1.0, int npart = 0)
-    : muf(defscale), mur(defscale), mups(defscale),
-      muisr(defscale), mufsr(defscale), mumpi(defscale), mures(defscale),
-      SCALUP(defscale) {
-    if ( npart > 0 ) pscales = std::vector<double>(npart, defscale);
+    : muf(defscale), mur(defscale), mups(defscale), SCALUP(defscale) {
   }
 
   /**
@@ -1233,21 +1341,19 @@ struct Scales : public TagBase {
   Scales(const XMLTag & tag, double defscale = -1.0, int npart = 0)
     : TagBase(tag.attr, tag.contents),
       muf(defscale), mur(defscale), mups(defscale),
-      muisr(defscale), mufsr(defscale), mumpi(defscale), mures(defscale),
       SCALUP(defscale) {
     getattr("muf", muf);
     getattr("mur", mur);
     getattr("mups", mups);
-    muisr = mufsr = mumpi = mures = mups;
-    getattr("muisr", muisr);
-    getattr("mufsr", mufsr);
-    getattr("mumpi", mumpi);
-    getattr("mures", mures);
-    if ( npart > 0 ) pscales = std::vector<double>(npart, mups);
+    for ( int i = 0, N = tag.tags.size(); i < N; ++i )
+      if ( tag.tags[i]->name == "scale" )
+        scales.push_back(Scale(*tag.tags[i]));
     for ( int i = 0; i < npart; ++i ) {
       std::ostringstream pttag;
       pttag << "pt_start_" << i + 1;
-      getattr(pttag.str(), pscales[i]);
+      double sc = 0.0;
+      if ( getattr(pttag.str(), sc) )
+        scales.push_back(Scale("start", i + 1, sc));
     }
     
   }
@@ -1256,12 +1362,8 @@ struct Scales : public TagBase {
    * Check if this object contains useful information besides SCALUP.
    */
   bool hasInfo() const {
-    if ( muf != SCALUP || mur != SCALUP || mups != SCALUP || muisr != SCALUP
-         || mufsr != SCALUP || mumpi != SCALUP || mures != SCALUP )
-      return true;
-    for ( int i = 0, N = pscales.size(); i < N; ++i )
-      if ( pscales[i] != SCALUP ) return true;
-    return false;
+    return  muf != SCALUP || mur != SCALUP || mups != SCALUP ||
+      !scales.empty();
   }
 
   /**
@@ -1273,18 +1375,47 @@ struct Scales : public TagBase {
     if ( muf != SCALUP ) file << oattr("muf", muf);
     if ( mur != SCALUP ) file << oattr("mur", mur);
     if ( mups != SCALUP ) file << oattr("mups", mups);
-    if ( muisr != mups ) file << oattr("muisr", muisr);
-    if ( mufsr != mups ) file << oattr("mufsr", mufsr);
-    if ( mumpi != mups ) file << oattr("mumpi", mumpi);
-    if ( mures != mups ) file << oattr("mures", mures);
-    for ( int i = 0, N = pscales.size(); i < N; ++i ) {
-      if ( pscales[i] == mups ) continue;
-      std::ostringstream pttag;
-      pttag << "pt_start_" << i + 1;
-      file << oattr(pttag.str(), pscales[i]);
-    }      
     printattrs(file);
+
+    if ( !scales.empty() ) {
+      std::ostringstream os;
+      for ( int i = 0, N = scales.size(); i < N; ++i )
+        scales[i].print(os);
+      contents = os.str();
+    }
     closetag(file, "scales");
+  }
+
+  /**
+   * Return the scale of type st for a given emission of particle type
+   * pdgem from the emitter with number emr and a recoiler rec. (Note
+   * that the indices for emr and rec starts at 1 and 0 is interpreted
+   * as any particle.) First it will check for Scale object with an
+   * exact match. If not found, it will search for an exact match for
+   * the emitter and recoiler with an undefined emitted particle. If
+   * not found, it will look for a match for only emitter and emitted,
+   * of if not found, a match for only the emitter. Finally a general
+   * Scale object will be used, or if nothing matches, the mups will
+   * be returned.
+   */
+  double getScale(std::string st, int pdgem, int emr, int rec) const {
+    for ( int i = 0, N = scales.size(); i < N; ++i ) {
+      if ( scales[i].emitter == emr &&
+           scales[i].recoiler == rec &&
+           st == scales[i].stype ) {
+        if ( scales[i].emitted.find(pdgem) != scales[i].emitted.end() )
+          return scales[i].scale;
+      }
+    }
+    for ( int i = 0, N = scales.size(); i < N; ++i ) {
+      if ( scales[i].emitter == emr &&
+           scales[i].recoiler == rec &&
+           st == scales[i].stype && scales[i].emitted.empty() )
+        return scales[i].scale;
+    }
+    if ( emr != rec ) return getScale(st, pdgem, emr, emr);
+    if ( emr == rec ) return getScale(st, pdgem, 0, 0);
+    return mups;
   }
 
   /**
@@ -1304,40 +1435,15 @@ struct Scales : public TagBase {
   double mups;
 
   /**
-   * The starting scale for the initial state parton shower as
-   * suggested by the matrix element generator.
-   */
-  double muisr;
-
-  /**
-   * The starting scale for the final state parton shower as
-   * suggested by the matrix element generator.
-   */
-  double mufsr;
-
-  /**
-   * The starting scale for the multi-parton interactions as suggested
-   * by the matrix element generator.
-   */
-  double mumpi;
-
-  /**
-   * The starting scale for the parton shower in a resonance decay as
-   * suggested by the matrix element generator.
-   */
-  double mures;
-
-  /**
-   * The starting (production) scale of individueal particles in
-   * HEPEUP.
-   */
-  std::vector<double> pscales;
-  
-  /**
    * The default scale in this event.
    */
   double SCALUP;
 
+  /**
+   * The list of special scales.
+   */
+  std::vector<Scale> scales;
+  
 };
 
 /**
@@ -1910,7 +2016,7 @@ public:
   HEPEUP()
     : NUP(0), IDPRUP(0), XWGTUP(0.0), XPDWUP(0.0, 0.0),
       SCALUP(0.0), AQEDUP(0.0), AQCDUP(0.0), heprup(0), currentWeight(0),
-      isGroup(false) {}
+      ntries(1), isGroup(false) {}
 
   /**
    * Copy constructor
@@ -1940,6 +2046,7 @@ public:
     VTIMUP = x.VTIMUP;
     SPINUP = x.SPINUP;
     heprup = x.heprup;
+    xsecinfo = x.xsecinfo;
     namedweights = x.namedweights;
     weights = x.weights;
     pdfinfo = x.pdfinfo;
@@ -1949,6 +2056,7 @@ public:
     scales = x.scales;
     junk = x.junk;
     currentWeight = x.currentWeight;
+    ntries = x.ntries;
     return *this;
   }
 
@@ -1980,7 +2088,7 @@ public:
   HEPEUP(const XMLTag & tagin, HEPRUP & heprupin)
     : TagBase(tagin.attr), NUP(0), IDPRUP(0), XWGTUP(0.0), XPDWUP(0.0, 0.0),
       SCALUP(0.0), AQEDUP(0.0), AQCDUP(0.0), heprup(&heprupin),
-      currentWeight(0), isGroup(tagin.name == "eventgroup") {
+      currentWeight(0), ntries(1), isGroup(tagin.name == "eventgroup") {
 
     if ( heprup->NPRUP < 0 )
       throw std::runtime_error("Tried to read events but no processes defined "
@@ -1995,7 +2103,8 @@ public:
 	if ( tags[i]->name == "event" )
 	  subevents.push_back(new HEPEUP(*tags[i], heprupin));
       return;
-    }
+    } else
+      getattr("ntries", ntries);
       
 
 
@@ -2035,6 +2144,10 @@ public:
 
       if ( tag.name.empty() ) junk += tag.contents;
 
+      if ( tag.name == "xsecinfo" ) {
+	xsecinfo = XSecInfo(tag);
+        heprup->xsecinfo = xsecinfo;
+      }
       if ( tag.name == "weights" ) {
 	weights.resize(heprup->nWeights(),
 		       std::make_pair(XWGTUP, (WeightInfo*)(0)));
@@ -2118,6 +2231,7 @@ public:
     }
 
     file << "<event";
+    if ( ntries > 1 ) file << oattr("ntries", ntries);
     printattrs(file);
     file << ">\n";
     file << " " << setw(4) << NUP
@@ -2142,6 +2256,8 @@ public:
 	   << " " << setw(1) << VTIMUP[i]
 	   << " " << setw(1) << SPINUP[i] << std::endl;
 
+    if ( xsecinfo.neve > 0 ) xsecinfo.print(file);
+    
     if ( weights.size() > 0 ) {
       file << "<weights>";
       for ( int i = 1, N = weights.size(); i < N; ++i )
@@ -2449,6 +2565,17 @@ public:
    * Contents of the scales tag
    */
   Scales scales;
+
+  /**
+   * Contents of the xsecinfo tag.
+   */
+  XSecInfo xsecinfo;
+
+  /**
+   * The number of attempts the ME generator did before accepting this
+   * event.
+   */
+  int ntries;
 
   /**
    * Is this an event or an event group?

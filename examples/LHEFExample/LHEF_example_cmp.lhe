@@ -1186,6 +1186,7 @@ average = event_norm ! Normalize events to sum or average to the X sect.
 <generator name="SomeGen1" version="1.2.3"> some additional comments </generator>
 <generator name="SomeGen2" version="a.x.3"> some other comments </generator>
 <generator name="SomeGen3" version="+.#.@"> more comments </generator>
+<xsecinfo neve="59" totxsec="50.109093"/>
 <weightinfo name="test" muf="2"/>
 <initrwgt>
 <weightgroup type="scale_variation" combine="envelope">
@@ -1247,7 +1248,13 @@ average = event_norm ! Normalize events to sum or average to the X sect.
 <wgt id="1008"> 42.208</wgt>
 <wgt id="1009"> 56.435</wgt>
 </rwgt>
-<scales pt_start_1="90.1" pt_start_2="90.2" pt_start_4="90.3" pt_start_5="90.4"> random stuff </scales>
+<scales>
+<scale stype="start" p="1">90.1</scale>
+<scale stype="start" p="2">90.2</scale>
+<scale stype="start" p="4">90.3</scale>
+<scale stype="start" p="5">90.4</scale>
+
+</scales>
 #aMCatNLO 1  6  5  0  0 0.00000000E+00 0.00000000E+00 9  0  0 0.99999998E+00 0.84231243E+00 0.11262380E+01 0.00000000E+00 0.00000000E+00
 #aMCatNLO 1  6  2  0  0 0.00000000E+00 0.00000000E+00 9  0  0 0.10000000E+01 0.91292678E+00 0.10493312E+01 0.00000000E+00 0.00000000E+00
 #aMCatNLO 1  6  2  0  0 0.00000000E+00 0.00000000E+00 9  0  0 0.10000000E+01 0.91292678E+00 0.10493312E+01 0.00000000E+00 0.00000000E+00
@@ -1273,13 +1280,19 @@ average = event_norm ! Normalize events to sum or average to the X sect.
 <wgt id="1008"> 43.255</wgt>
 <wgt id="1009"> 55.234</wgt>
 </rwgt>
-<scales pt_start_1="0.1" pt_start_2="0.2" pt_start_5="0.3" pt_start_6="0.4"> random stuff </scales>
+<scales>
+<scale stype="start" p="1">0.1</scale>
+<scale stype="start" p="2">0.2</scale>
+<scale stype="start" p="5">0.3</scale>
+<scale stype="start" p="6">0.4</scale>
+
+</scales>
 #aMCatNLO 1  6  2  0  0 0.00000000E+00 0.00000000E+00 9  0  0 0.10000000E+01 0.86321681E+00 0.11022720E+01 0.00000000E+00 0.00000000E+00
 #aMCatNLO 1  6  2  0  0 0.00000000E+00 0.00000000E+00 9  0  0 0.10000000E+01 0.91292678E+00 0.10493312E+01 0.00000000E+00 0.00000000E+00
 #aMCatNLO 1  6  2  0  0 0.00000000E+00 0.00000000E+00 9  0  0 0.10000000E+01 0.91292678E+00 0.10493312E+01 0.00000000E+00 0.00000000E+00
 #aMCatNLO 1  6  2  0  0 0.00000000E+00 0.00000000E+00 9  0  0 0.10000000E+01 0.91292678E+00 0.10493312E+01 0.00000000E+00 0.00000000E+00
 </event>
-<event>
+<event ntries="2">
     5     66      50.109093      34.743976   0.0075563862     0.12114027
         2 -1    0    0  502    0              0              0      185.67734      185.67764           0.33 0 0
         5 -1    0    0  501    0              0              0     -92.971073        93.0949            4.8 0 0
@@ -2481,6 +2494,7 @@ average = event_norm ! Normalize events to sum or average to the X sect.
        24  1    1    2    0    0     -15.557538      23.372455      58.191134       103.1424         80.398 0 0
         5  1    1    2  502    0      18.223675     -31.671148      148.78543      153.28179            4.8 0 0
        -2  1    1    2    0  501     -2.6661367       8.298693      172.49323      172.71364           0.33 0 0
+<xsecinfo neve="59" totxsec="50.109093" ntries="60"/>
 <weights> 50.109093 50.109 42.77 55.733 50.109 42.77 55.733 50.109 42.77 55.733</weights>
 <rwgt>
 <wgt id="1001"> 50.109</wgt>
