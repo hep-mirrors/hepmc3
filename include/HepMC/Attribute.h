@@ -25,6 +25,7 @@
 #include <sstream>
 #include <iomanip>
 #include "HepMC/Common.h"
+#include "HepMC/Data/SmartPointer.h"
 using std::string;
 
 namespace HepMC {
@@ -36,7 +37,7 @@ class GenEvent;
 class GenRunInfo;
 
 /** @brief Forward declaration of GenParticle. */
-class GenParticle;
+// class GenParticle;
 
 class Attribute {
 //
@@ -105,7 +106,7 @@ public:
     }
 
     /** return the GenParticle to which this Attribute belongs, if at all. */
-    const GenParticle * particle() const {
+    GenParticlePtr particle() const {
         return m_particle;
     }
 
@@ -124,7 +125,7 @@ private:
     string m_string;                //!< Raw (unparsed) string
     const GenEvent * m_event;       //!< Possibility to be aware of the
                                     //!  controlling GenEvent object.
-    const GenParticle * m_particle; //!< Particle to which assigned.
+    GenParticlePtr m_particle; //!< Particle to which assigned.
 };
 
 /**
