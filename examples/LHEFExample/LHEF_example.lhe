@@ -397,10 +397,10 @@ Just some random garbage...
    <wgt id="1009"> 0.55234E+02 </wgt>
   </rwgt>
   <scales>
-  <scale stype="start" p="1">0.1</scale>
-  <scale stype="start" p="2">0.2</scale>
-  <scale stype="start" p="5">0.3</scale>
-  <scale stype="start" p="6">0.4</scale>
+  <scale stype="start" pos="1">0.1</scale>
+  <scale stype="start" pos="2">0.2</scale>
+  <scale stype="start" pos="5 1 2">0.3</scale>
+  <scale stype="start" pos="6 1 2">0.4</scale>
   </scales>
   </event>
   <event ntries="2">

@@ -502,15 +502,16 @@ struct XSecInfo : public TagBase {
   /**
    * Intitialize default values.
    */
-  XSecInfo(): neve(-1), ntries(-1), totxsec(0.0), maxweight(1.0),
+  XSecInfo(): neve(-1), ntries(-1), totxsec(0.0), xsecerr(0.0), maxweight(1.0),
               meanweight(1.0), negweights(false), varweights(false) {}
 
   /**
    * Create from XML tag
    */
   XSecInfo(const XMLTag & tag)
-    : TagBase(tag.attr, tag.contents), neve(-1), ntries(-1), totxsec(0.0),
-      maxweight(1.0), meanweight(1.0), negweights(false), varweights(false) {
+    : TagBase(tag.attr, tag.contents), neve(-1), ntries(-1),
+      totxsec(0.0), xsecerr(0.0), maxweight(1.0), meanweight(1.0),
+      negweights(false), varweights(false) {
     if ( !getattr("neve", neve) ) 
       throw std::runtime_error("Found xsecinfo tag without neve attribute "
 			       "in Les Houches Event File.");
@@ -519,6 +520,8 @@ struct XSecInfo : public TagBase {
     if ( !getattr("totxsec", totxsec) ) 
       throw std::runtime_error("Found xsecinfo tag without totxsec "
 			       "attribute in Les Houches Event File.");
+    getattr("xsecerr", xsecerr);
+    getattr("weightname", weightname);
     getattr("maxweight", maxweight);
     getattr("meanweight", meanweight);
     getattr("negweights", negweights);
@@ -536,6 +539,8 @@ struct XSecInfo : public TagBase {
       file << oattr("maxweight", maxweight)
            << oattr("meanweight", meanweight);
     if ( ntries > neve ) file << oattr("ntries", ntries);
+    if ( xsecerr > 0.0 ) file << oattr("xsecerr", xsecerr);
+    if ( !weightname.empty() ) file << oattr("weightname", weightname);
     if ( negweights ) file << oattr("negweights", yes());
     if ( varweights ) file << oattr("varweights", yes());
     printattrs(file);
@@ -558,6 +563,11 @@ struct XSecInfo : public TagBase {
   double totxsec;
 
   /**
+   * The estimated statistical error on totxsec.
+   */
+  double xsecerr;
+
+  /**
    * The maximum weight.
    */
   double maxweight;
@@ -577,6 +587,10 @@ struct XSecInfo : public TagBase {
    */
   bool varweights;
 
+  /**
+   * The named weight to which this object belongs.
+   */
+  std::string weightname;
 
 };
 
@@ -1233,24 +1247,26 @@ struct Scale : public TagBase {
    * Empty constructor
    */
   Scale(string st = "veto", int emtr = 0, double sc = 0.0)
-    : stype(st), emitter(emtr), recoiler(emtr), scale(sc) {}
+    : stype(st), emitter(emtr), scale(sc) {}
 
   /**
    * Construct from an XML-tag.
    */
   Scale(const XMLTag & tag)
-    : TagBase(tag.attr, tag.contents),stype("veto"), emitter(0), recoiler(0) {
+    : TagBase(tag.attr, tag.contents),stype("veto"), emitter(0) {
     if ( !getattr("stype", stype) )
       throw std::runtime_error("Found scale tag without stype attribute "
 			       "in Les Houches Event File.");
     std::string pattr;
-    if ( getattr("p", pattr) ) {
+    if ( getattr("pos", pattr) ) {
       std::istringstream pis(pattr);
       if ( !(pis >> emitter) ) emitter = 0;
-      recoiler = emitter;
-      if ( !(pis >> recoiler) ) recoiler = emitter;
+      else {
+        int rec = 0;
+        while ( pis >> rec ) recoilers.insert(rec);
+      }
     }
-
+    
     std::string eattr;
     if ( getattr("etype", eattr) ) {
       if ( eattr == "QCD" ) eattr = "-5 -4  -3 -2 -1 1 2 3 4 5 21";
@@ -1269,10 +1285,14 @@ struct Scale : public TagBase {
    */
   void print(std::ostream & file) const {
     file << "<scale" << oattr("stype", stype);
-    std::ostringstream ps;
-    if ( emitter > 0 ) ps << emitter;
-    if ( recoiler != emitter ) ps << " " << recoiler;
-    if ( ps.str().length() > 0 ) file << oattr("p", ps.str());
+    if ( emitter > 0 ) {
+      std::ostringstream pos;
+      pos << emitter;
+      for ( std::set<int>::iterator it = recoilers.begin();
+            it != recoilers.end(); ++it )
+        pos << " " << *it;
+      file << oattr("pos", pos.str());
+    }
     if ( emitted.size() > 0 ) {
       std::set<int>::iterator it = emitted.begin();
       std::ostringstream eos;
@@ -1305,11 +1325,9 @@ struct Scale : public TagBase {
   int emitter;
 
   /** 
-   * If different from emitter, the recoiling particle in the
-   * emission. This is the index of a particle in HEPEUP (starting at
-   * 1). Zero corresponds to any particle in HEPEUP.
+   * The set of recoilers for which this scale applies.
    */
-  int recoiler;
+  std::set<int> recoilers;
 
   /**
    * The set of emitted particles (PDG id) this applies to.
@@ -1400,17 +1418,17 @@ struct Scales : public TagBase {
    */
   double getScale(std::string st, int pdgem, int emr, int rec) const {
     for ( int i = 0, N = scales.size(); i < N; ++i ) {
-      if ( scales[i].emitter == emr &&
-           scales[i].recoiler == rec &&
-           st == scales[i].stype ) {
-        if ( scales[i].emitted.find(pdgem) != scales[i].emitted.end() )
-          return scales[i].scale;
-      }
+      if ( scales[i].emitter == emr && st == scales[i].stype &&
+           ( emr == rec ||
+             scales[i].recoilers.find(rec) != scales[i].recoilers.end() ) &&
+           scales[i].emitted.find(pdgem) != scales[i].emitted.end()  )
+        return scales[i].scale;
     }
     for ( int i = 0, N = scales.size(); i < N; ++i ) {
-      if ( scales[i].emitter == emr &&
-           scales[i].recoiler == rec &&
-           st == scales[i].stype && scales[i].emitted.empty() )
+      if ( scales[i].emitter == emr && st == scales[i].stype &&
+           ( emr == rec ||
+             scales[i].recoilers.find(rec) != scales[i].recoilers.end() ) &&
+           scales[i].emitted.empty() )
         return scales[i].scale;
     }
     if ( emr != rec ) return getScale(st, pdgem, emr, emr);
