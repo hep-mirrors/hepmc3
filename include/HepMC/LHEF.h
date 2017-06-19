@@ -595,6 +595,60 @@ struct XSecInfo : public TagBase {
 };
 
 /**
+ * Convenient Alias.
+ */
+typedef std::map<std::string,XSecInfo> XSecInfos;
+
+struct EventFile : public TagBase {
+
+  /**
+   * Intitialize default values.
+   */
+  EventFile(): filename(""), neve(-1), ntries(-1) {}
+
+  /**
+   * Create from XML tag
+   */
+  EventFile(const XMLTag & tag)
+    : TagBase(tag.attr, tag.contents), filename(""), neve(-1), ntries(-1) {
+    if ( !getattr("name", filename) ) 
+      throw std::runtime_error("Found eventfile tag without name attribute "
+			       "in Les Houches Event File.");
+    getattr("neve", neve);
+    ntries = neve;
+    getattr("ntries", ntries);
+  }
+
+  /**
+   * Print out an XML tag.
+   */
+  void print(std::ostream & file) const {
+    if ( filename.empty() ) return;
+    file << "  <eventfile" << oattr("name", filename);
+    if ( neve > 0 ) file << oattr("neve", neve);
+    if ( ntries > neve ) file << oattr("ntries", ntries);
+    printattrs(file);
+    closetag(file, "eventfile");
+  }
+
+  /**
+   * The name of the file.
+   */
+  std::string filename;
+  
+  /**
+   * The number of events.
+   */
+  long neve;
+
+  /**
+   * The number of attempte that was needed to produce the neve events.
+   */
+  long ntries;
+
+};
+
+/**
  * The Cut class represents a cut used by the Matrix Element generator.
  */
 struct Cut : public TagBase {
@@ -1583,7 +1637,8 @@ public:
     XERRUP = x.XERRUP;
     XMAXUP = x.XMAXUP;
     LPRUP = x.LPRUP;
-    xsecinfo = x.xsecinfo;
+    xsecinfos = x.xsecinfos;
+    eventfiles = x.eventfiles;
     cuts = x.cuts;
     ptypes = x.ptypes;
     procinfo = x.procinfo;
@@ -1645,8 +1700,16 @@ public:
 	weightgroup.push_back(WeightGroup(tag, weightgroup.size(),
 					  weightinfo));
       }
+      if ( tag.name == "eventfiles" ) {
+	for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
+	  XMLTag & eftag = *tag.tags[j];
+          if ( eftag.name == "eventfile" )
+            eventfiles.push_back(EventFile(eftag));
+        }
+      }
       if ( tag.name == "xsecinfo" ) {
-	xsecinfo = XSecInfo(tag);
+	XSecInfo xsecinfo = XSecInfo(tag);
+        xsecinfos[xsecinfo.weightname] = xsecinfo;
       }
       if ( tag.name == "generator" ) {
 	generators.push_back(Generator(tag));
@@ -1734,7 +1797,16 @@ public:
     for ( int i = 0, N = generators.size(); i < N; ++i )
       generators[i].print(file);
 
-    if ( xsecinfo.neve > 0 ) xsecinfo.print(file);
+    if ( !eventfiles.empty() ) {
+      file << "<eventfiles>\n";
+      for ( int i = 0, N = eventfiles.size(); i < N; ++i )
+        eventfiles[i].print(file);
+      file << "</eventfiles>\n";
+    }
+    if ( !xsecinfos.empty() > 0 )
+      for ( XSecInfos::const_iterator it = xsecinfos.begin();
+            it != xsecinfos.end(); ++it )
+        if ( it->second.neve > 0 ) it->second.print(file);
 
     if ( cuts.size() > 0 ) {
       file << "<cutsinfo>" << std::endl;
@@ -1841,9 +1913,32 @@ public:
    * @return the number of weights (including the nominial one).
    */
   int nWeights() const {
-    return weightmap.size() + 1;
+    return weightmap.size() + 1;    
   }
 
+  /**
+   * @return the XSecInfo object corresponding to the named weight \a
+   * weithname. If no such object exists, it will be created.
+   */
+  XSecInfo & getXSecInfo(std::string weightname = "") {
+    XSecInfo & xi = xsecinfos[weightname];
+    xi.weightname = weightname;
+    return xi;
+  }
+
+  /**
+   * @return the XSecInfo object corresponding to the named weight \a
+   * weithname. If no such object exists, an empty XSecInfo will be
+   * returned..
+   */
+  const XSecInfo & getXSecInfo(std::string weightname = "") const {
+    static XSecInfo noinfo;
+    XSecInfos::const_iterator it = xsecinfos.find(weightname);
+    if ( it != xsecinfos.end() ) return it->second;
+    else return noinfo;
+  }
+    
+  
 public:
 
   /**
@@ -1903,9 +1998,15 @@ public:
   std::vector<int> LPRUP;
 
   /**
-   * Contents of the xsecinfo tag
+   * Contents of the xsecinfo tags.
    */
-  XSecInfo xsecinfo;
+  XSecInfos xsecinfos;
+
+  /**
+   * A vector of EventFiles where the events are stored separate fron
+   * the init block.
+   */
+  std::vector<EventFile> eventfiles;
 
   /**
    * Contents of the cuts tag.
@@ -2064,7 +2165,6 @@ public:
     VTIMUP = x.VTIMUP;
     SPINUP = x.SPINUP;
     heprup = x.heprup;
-    xsecinfo = x.xsecinfo;
     namedweights = x.namedweights;
     weights = x.weights;
     pdfinfo = x.pdfinfo;
@@ -2162,10 +2262,6 @@ public:
 
       if ( tag.name.empty() ) junk += tag.contents;
 
-      if ( tag.name == "xsecinfo" ) {
-	xsecinfo = XSecInfo(tag);
-        heprup->xsecinfo = xsecinfo;
-      }
       if ( tag.name == "weights" ) {
 	weights.resize(heprup->nWeights(),
 		       std::make_pair(XWGTUP, (WeightInfo*)(0)));
@@ -2274,8 +2370,6 @@ public:
 	   << " " << setw(1) << VTIMUP[i]
 	   << " " << setw(1) << SPINUP[i] << std::endl;
 
-    if ( xsecinfo.neve > 0 ) xsecinfo.print(file);
-    
     if ( weights.size() > 0 ) {
       file << "<weights>";
       for ( int i = 1, N = weights.size(); i < N; ++i )
@@ -2585,11 +2679,6 @@ public:
   Scales scales;
 
   /**
-   * Contents of the xsecinfo tag.
-   */
-  XSecInfo xsecinfo;
-
-  /**
    * The number of attempts the ME generator did before accepting this
    * event.
    */
@@ -2781,7 +2870,7 @@ public:
     if ( heprup.NPRUP < 0 ) return false;
 
     std::string eventLines;
-    int inEvent = 0;;
+    int inEvent = 0;
 
     // Keep reading lines until we hit the end of an event or event group.
     while ( getline() ) {
