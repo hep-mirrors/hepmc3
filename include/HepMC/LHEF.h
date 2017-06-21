@@ -2762,7 +2762,8 @@ public:
    * @param is the stream to read from.
    */
   Reader(std::istream & is)
-    : file(is) {
+    : file(&is), currevent(-1),
+      curreventfile(-1), currfileevent(-1), dirpath("") {
     init();
   }
 
@@ -2777,7 +2778,11 @@ public:
    * @param filename the name of the file to read from.
    */
   Reader(std::string filename)
-    : intstream(filename.c_str()), file(intstream) {
+    : intstream(filename.c_str()), file(&intstream), currevent(-1),
+      curreventfile(-1), currfileevent(-1), dirpath("") {
+
+    size_t slash = filename.find_last_of('/');
+    if ( slash != std::string::npos ) dirpath = filename.substr(0, slash + 1);
     init();
   }
 
@@ -2788,6 +2793,9 @@ private:
    * blocks.
    */
   void init() {
+
+    // initialize reading from multi-file runs.
+    initfile = file;
 
     bool readingHeader = false;
     bool readingInit = false;
@@ -2852,6 +2860,8 @@ private:
 	break;
       }
     XMLTag::deleteAll(tags);
+
+    if ( !heprup.eventfiles.empty() ) openeventfile(0);
  
   }
 
@@ -2860,7 +2870,7 @@ public:
   /**
    * Read an event from the file and store it in the hepeup
    * object. Optional comment lines are stored i the eventComments
-   * member variable.
+   * member variable. 
    * @return true if the read sas successful.
    */
   bool readEvent() {
@@ -2891,8 +2901,13 @@ public:
 	outsideBlock += currentLine + "\n";
       }
     }
-    if ( inEvent == 1 && !currentFind("</event>") ) return false;
-    if ( inEvent == 2 && !currentFind("</eventgroup>") ) return false;
+    if ( ( inEvent == 1 && !currentFind("</event>") ) ||
+         ( inEvent == 2 && !currentFind("</eventgroup>") ) ) {
+      if ( heprup.eventfiles.empty() ||
+           ++curreventfile >= int(heprup.eventfiles.size()) ) return false;
+      openeventfile(curreventfile);
+      return readEvent();
+    }
 
     std::vector<XMLTag*> tags = XMLTag::findXMLTags(eventLines);
 
@@ -2900,13 +2915,39 @@ public:
       if ( tags[i]->name == "event" || tags[i]->name == "eventgroup" ) {
 	hepeup = HEPEUP(*tags[i], heprup);
 	XMLTag::deleteAll(tags);
+        ++currevent;
+        if ( curreventfile >= 0 ) ++currfileevent;
 	return true;
       }
     }
 
+    if ( !heprup.eventfiles.empty() &&
+         ++curreventfile < int(heprup.eventfiles.size()) ) {
+      openeventfile(curreventfile);
+      return readEvent();
+    }
+ 
     XMLTag::deleteAll(tags);
     return false;
 
+  }
+
+  /**
+   * Open the efentfile with index ifile. If another eventfile is
+   * being read, its remaining contents is discarded. This is a noop
+   * if current read session is not a multi-file run.
+   */
+  void openeventfile(int ifile) {
+    std::cerr << "opening file " << ifile << std::endl;
+    efile.close();
+    string fname = heprup.eventfiles[ifile].filename;
+    if ( fname[0] != '/' ) fname = dirpath + fname;
+    efile.open(fname.c_str());
+    if ( !efile ) throw std::runtime_error("Could not open event file " +
+                                           fname);
+    file = &efile;
+    curreventfile = ifile;
+    currfileevent = 0;
   }
 
 protected:
@@ -2915,7 +2956,7 @@ protected:
    * Used internally to read a single line from the stream.
    */
   bool getline() {
-    return ( (bool)std::getline(file, currentLine) );
+    return ( (bool)std::getline(*file, currentLine) );
   }
 
   /**
@@ -2934,10 +2975,21 @@ protected:
   std::ifstream intstream;
 
   /**
-   * The stream we are reading from. This may be a reference to an
-   * external stream or the internal intstream.
+   * The stream we are reading from. This may be a pointer to an
+   * external stream or the internal intstream, or a separate event
+   * file from a multi-file run
    */
-  std::istream & file;
+  std::istream * file;
+
+  /**
+   * The original stream from where we read the init block.
+   */
+  std::istream * initfile;
+  
+  /**
+   * A separate stream for reading multi-file runs.
+   */
+  std::ifstream efile;
 
   /**
    * The last line read in from the stream in getline().
@@ -2982,6 +3034,27 @@ public:
    */
   std::string eventComments;
 
+  /**
+   * The number of the current event (starting from 1).
+   */
+  int currevent;
+
+  /**
+   * The current event file being read from (-1 means there are no
+   * separate event files).
+   */
+  int curreventfile;
+
+  /**
+   * The number of the current event in the current event file.
+   */
+  int currfileevent;
+
+  /**
+   * The directory from where we are reading files.
+   */
+  std::string dirpath;
+  
 private:
 
   /**
@@ -3031,20 +3104,32 @@ public:
    * @param os the stream where the event file is written.
    */
   Writer(std::ostream & os)
-    : file(os) {  }
+    : file(&os), initfile(&os), dirpath("") {  }
 
   /**
    * Create a Writer object giving a filename to write to.
    * @param filename the name of the event file to be written.
    */
   Writer(std::string filename)
-    : intstream(filename.c_str()), file(intstream) {}
+    : intstream(filename.c_str()), file(&intstream), initfile(&intstream),
+      dirpath("") {
+    size_t slash = filename.find_last_of('/');
+    if ( slash != std::string::npos ) dirpath = filename.substr(0, slash + 1);
+  }
 
   /**
    * The destructor writes out the final XML end-tag.
    */
   ~Writer() {
-    file << "</LesHouchesEvents>" << std::endl;
+    file = initfile;
+    if ( !heprup.eventfiles.empty() ) {
+      if ( curreventfile >= 0 &&
+           curreventfile < int(heprup.eventfiles.size()) &&
+           heprup.eventfiles[curreventfile].neve < 0 )
+        heprup.eventfiles[curreventfile].neve = currfileevent;
+      writeinit();
+    }
+    *file << "</LesHouchesEvents>" << std::endl;
   }
 
   /**
@@ -3069,36 +3154,74 @@ public:
   }
 
   /**
+   * Initialize the writer.
+   */
+  void init() {
+    if ( heprup.eventfiles.empty() ) writeinit();
+    lastevent = 0;
+    curreventfile = currfileevent = -1;
+    if ( !heprup.eventfiles.empty() ) openeventfile(0);
+  }
+
+  /**
+   * Open a new event file, possibly closing a previous opened one.
+   */
+  bool openeventfile(int ifile) {
+    if ( heprup.eventfiles.empty() ) return false;
+    if ( ifile < 0 || ifile >= int(heprup.eventfiles.size()) ) return false;
+    if ( curreventfile >= 0 ) {
+      EventFile & ef = heprup.eventfiles[curreventfile];
+      if ( ef.neve > 0 && ef.neve != currfileevent )
+        std::cerr << "LHEF::Writer number of events in event file "
+                  << ef.filename << " does not match the given number."
+                  << std::endl;
+      ef.neve = currfileevent;
+    }
+    efile.close();
+    string fname = heprup.eventfiles[ifile].filename;
+    if ( fname[0] != '/' ) fname = dirpath + fname;
+    efile.open(fname.c_str());
+    if ( !efile ) throw std::runtime_error("Could not open event file " +
+                                           fname);
+    std::cerr << "Opened event file " << fname << std::endl;
+    file = &efile;
+    curreventfile = ifile;
+    currfileevent = 0;
+    return true;
+  }
+    
+
+  /**
    * Write out an optional header block followed by the standard init
    * block information together with any comment lines.
    */
-  void init() {
+  void writeinit() {
 
     // Write out the standard XML tag for the event file.
     if ( heprup.version == 3 )
-      file << "<LesHouchesEvents version=\"3.0\">\n";
+      *file << "<LesHouchesEvents version=\"3.0\">\n";
     else if ( heprup.version == 2 )
-      file << "<LesHouchesEvents version=\"2.0\">\n";
+      *file << "<LesHouchesEvents version=\"2.0\">\n";
     else
-      file << "<LesHouchesEvents version=\"1.0\">\n";
+      *file << "<LesHouchesEvents version=\"1.0\">\n";
 
 
-    file << std::setprecision(10);
+    *file << std::setprecision(10);
 
     using std::setw;
 
     std::string headBlock = headerStream.str();
     if ( headBlock.length() ) {
       if ( headBlock.find("<header>") == std::string::npos )
-	file << "<header>\n";
+	*file << "<header>\n";
       if ( headBlock[headBlock.length() - 1] != '\n' )
 	headBlock += '\n';
-      file << headBlock;
+      *file << headBlock;
       if ( headBlock.find("</header>") == std::string::npos )
-	file << "</header>\n";
+	*file << "</header>\n";
     }
 
-    heprup.print(file);
+    heprup.print(*file);
 
   }
 
@@ -3106,7 +3229,17 @@ public:
    * Write the current HEPEUP object to the stream;
    */
   void writeEvent() {
-    hepeup.print(file);
+
+    if ( !heprup.eventfiles.empty() ) {
+      if ( currfileevent == heprup.eventfiles[curreventfile].neve &&
+           curreventfile + 1 < int(heprup.eventfiles.size()) )
+        openeventfile(curreventfile + 1);
+    }
+
+    hepeup.print(*file);
+
+    ++lastevent;
+    ++currfileevent;
   }
       
 protected:
@@ -3121,8 +3254,39 @@ protected:
    * The stream we are writing to. This may be a reference to an
    * external stream or the internal intstream.
    */
-  std::ostream & file;
+  std::ostream * file;
 
+  /**
+   * The original stream from where we read the init block.
+   */
+  std::ostream * initfile;
+  
+  /**
+   * A separate stream for reading multi-file runs.
+   */
+  std::ofstream efile;
+
+  /**
+   * The number of the last event written (starting from 1).
+   */
+  int lastevent;
+
+  /**
+   * The current event file being written to (-1 means there are no
+   * separate event files).
+   */
+  int curreventfile;
+
+  /**
+   * The number of the current event in the current event file.
+   */
+  int currfileevent;
+
+  /**
+   * The directory from where we are reading files.
+   */
+  std::string dirpath;
+  
 public:
 
   /**

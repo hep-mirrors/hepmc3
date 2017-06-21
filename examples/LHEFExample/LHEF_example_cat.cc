@@ -165,6 +165,10 @@ int main(int /*argc*/, char ** /*argv*/) {
 
             // Then we write out the HEPRUP object.
             writer.heprup = hepr->heprup;
+            if ( writer.heprup.eventfiles.size() >= 2 ) {
+              writer.heprup.eventfiles[0].filename = "LHEF_example_1_out.plhe";
+              writer.heprup.eventfiles[1].filename = "LHEF_example_2_out.plhe";
+            }
             writer.init();
 
         }
