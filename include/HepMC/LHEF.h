@@ -24,6 +24,15 @@
 #include <cmath>
 #include <limits>
 
+
+/**
+ * @brief Les Houches event file classes.
+ *
+ * The namespace containing helper classes and Reader and Writer
+ * classes for handling Les Houches event files.
+ *
+ * @ingroup LHEF
+ */
 namespace LHEF {
 
 /**
@@ -1292,7 +1301,7 @@ struct Clus : public TagBase {
 };
 
 /**
- * Store special scales from within a <scales> tag.
+ * Store special scales from within a scales tag.
  */
 
 struct Scale : public TagBase {
