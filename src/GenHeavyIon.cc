@@ -66,7 +66,7 @@ bool GenHeavyIon::to_string(string &att) const {
     ostringstream os;
     
 #ifndef HEPMC_NO_DEPRECATED
-    os << "v0 ";
+    if ( !forceoldformat ) os << "v0 ";
 #else
     os << "v1 ";
 #endif

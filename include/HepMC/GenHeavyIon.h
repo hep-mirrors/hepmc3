@@ -41,7 +41,7 @@ public:
 #endif
           sigma_inel_NN(-1.0), centrality(-1.0),
           Nspec_proj_n(-1), Nspec_targ_n(-1),
-          Nspec_proj_p(-1), Nspec_targ_p(-1) {}
+          Nspec_proj_p(-1), Nspec_targ_p(-1), forceoldformat(false) {}
 
 //
 // Fields
@@ -105,7 +105,7 @@ public:
     /// means that the information is not available.
     int    Nwounded_N_collisions;
 
-    /// @breif Non-diffractive or doubly diffractive collisions.
+    /// @brief Non-diffractive or doubly diffractive collisions.
     ///
     /// The number of nucleon-nucleon collisions where both projectile
     /// and target nucleons are wounded. A negative value means that
@@ -218,6 +218,12 @@ public:
     /// HEPMC_DEPRECATED("Each filed now have default values meaning
     /// that they have not been set")
     bool is_valid() const;
+
+    /// @brief force writing in old format for compatibility purposes.
+    ///
+    /// HEPMC_DEPRECATED("THis should really not be needed");
+    bool forceoldformat;
+    
 #endif
     
 };

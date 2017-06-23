@@ -52,7 +52,7 @@ public:
 	return value();
     }
 
-    /** @Brief get a pointer to the associated particle. */
+    /** @brief get a pointer to the associated particle. */
     GenParticlePtr associated() const {
         return m_associated;
     }
