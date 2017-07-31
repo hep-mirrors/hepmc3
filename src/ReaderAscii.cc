@@ -13,12 +13,11 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/Units.h"
-
 #include <cstring>
 #include <sstream>
-using namespace std;
 
 namespace HepMC {
+
 
 ReaderAscii::ReaderAscii(const string &filename)
  : m_file(filename), m_stream(0), m_isstream(false)
@@ -28,6 +27,7 @@ ReaderAscii::ReaderAscii(const string &filename)
     }
     set_run_info(make_shared<GenRunInfo>());
 }
+
 
 // Ctor for reading from stdin
 ReaderAscii::ReaderAscii(std::istream & stream)
@@ -188,7 +188,7 @@ pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *bu
         position.setT(atof(cursor));
         evt.shift_position_to( position );
     }
-    
+
     DEBUG( 10, "ReaderAscii: E: "<<event_no<<" ("<<ret.first<<"V, "<<ret.second<<"P)" )
 
     return ret;

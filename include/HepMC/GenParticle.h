@@ -20,10 +20,12 @@
 
 namespace HepMC {
 
+
 using namespace std;
 
 class GenEvent;
 class Attribute;
+
 
 class GenParticle {
 
@@ -52,23 +54,12 @@ public:
 // Accessors
 //
 public:
+
     GenEvent*              parent_event() const { return m_event; } //!< Get parent event
     int                    id()           const { return m_id;    } //!< Get particle id
     const GenParticleData& data()         const { return m_data;  } //!< Get particle data
 
-    int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
-    int   status()                const { return m_data.status;         } //!< Get status code
-    const FourVector& momentum()  const { return m_data.momentum;       } //!< Get momentum
-    bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
 
-    /** @brief Get generated mass
-     *
-     *  This function will return mass as set by a generator/tool.
-     *  If not set, it will return momentum().m()
-     */
-    double generated_mass() const;
-
-    /// @todo Should these accessors have also non-const version?
     const GenVertexPtr production_vertex() const;        //!< Get production vertex
     const GenVertexPtr end_vertex() const;               //!< Get end vertex
 
@@ -77,11 +68,30 @@ public:
 
     /// @brief Convenience access to immediate incoming particles via production vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> parents();
+    vector<GenParticlePtr> parents() const;
 
-    /// @brief Convenience access to immediate outcoming particles via end vertex
+    /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> children();
+    vector<GenParticlePtr> children() const;
+
+    /// @brief Convenience access to all incoming particles via production vertex
+    vector<GenParticlePtr> ancestors() const;
+
+    /// @brief Convenience access to all outgoing particles via end vertex
+    vector<GenParticlePtr> descendants() const;
+
+
+    int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
+    int   status()                const { return m_data.status;         } //!< Get status code
+    const FourVector& momentum()  const { return m_data.momentum;       } //!< Get momentum
+    bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
+
+    /// @brief Get generated mass
+    ///
+    /// This function will return mass as set by a generator/tool.
+    /// If not set, it will return momentum().m()
+    double generated_mass() const;
+
 
     void set_pid(int pid);                         //!< Set PDG ID
     void set_status(int status);                   //!< Set status code
@@ -89,7 +99,8 @@ public:
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
 
-    /** @brief Add event attribute to this particle
+
+    /** @brief Add an attribute to this particle
      *
      *  This will overwrite existing attribute if an attribute with
      *  the same name is present. The attribute will be stored in the
@@ -109,6 +120,7 @@ public:
 
     /// @brief Get attribute of any type as string
     string attribute_as_string(string name) const;
+
 
     /// @name Deprecated functionality
     //@{

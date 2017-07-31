@@ -30,8 +30,8 @@ namespace HepMC {
 
     /// Write event @a evt to output target
     virtual void write_event(const GenEvent &evt) = 0;
-    virtual bool failed()=0;
-    virtual void close()=0;
+    virtual bool failed() = 0;
+    virtual void close() = 0;
 
     /// Set the global GenRunInfo object.
     void set_run_info(shared_ptr<GenRunInfo> run) {

@@ -10,9 +10,19 @@
 #include <string>
 #include <stdexcept>
 #include <iostream>
-
+#include <memory>
 
 namespace HepMC {
+
+
+    // Use unqualified namespace std within the HepMC namespace
+    using namespace std;
+
+
+    /// Handy number squaring function
+    template <typename NUM>
+    inline NUM sqr(NUM x) { return x*x; }
+
 
     /** @brief List of methods of searching starting from a particle or vertex
         @todo Add 'family'='parents'+'children' and 'relatives'='ancestors'+'descendants'(+'siblings')?
@@ -146,17 +156,21 @@ typename T::reference deref(auto_any_base const& cur, T&)
 
 /// Deprecation macro
 #ifndef HEPMC_DEPRECATED
-#if __GNUC__ && __cplusplus && HEPMC_NO_DEPRECATION_WARNINGS == 0
-#define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-#if GCC_VERSION >= 40500
-  #define HEPMC_DEPRECATED(x) __attribute__((deprecated(x)))
-#else
-  #define HEPMC_DEPRECATED(x) __attribute__((deprecated))
+#define HEPMC_DEPRECATED(x)
 #endif
-#else
-  #define HEPMC_DEPRECATED(x)
-#endif
-#endif
+/// @todo Activate in version 3.1.0
+// #ifndef HEPMC_DEPRECATED
+// #if __GNUC__ && __cplusplus && HEPMC_NO_DEPRECATION_WARNINGS == 0
+// #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+// #if GCC_VERSION >= 40500
+//   #define HEPMC_DEPRECATED(x) __attribute__((deprecated(x)))
+// #else
+//   #define HEPMC_DEPRECATED(x) __attribute__((deprecated))
+// #endif
+// #else
+//   #define HEPMC_DEPRECATED(x)
+// #endif
+// #endif
 
 
 #endif

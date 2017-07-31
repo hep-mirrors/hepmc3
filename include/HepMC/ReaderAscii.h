@@ -22,6 +22,7 @@
 
 namespace HepMC {
 
+
 class ReaderAscii : public Reader {
 public:
 
@@ -150,16 +151,16 @@ public:
 
   private:
 
-  std::ifstream m_file; //!< Input file
-
-  std::istream* m_stream; // For ctor when reading from stdin
-  bool m_isstream; // Maybe not most elegant solution ---
-                   // toggles usage of m_file or m_stream
+    /// @todo Unify file/stream treatment
+    std::ifstream m_file; //!< Input file
+    std::istream* m_stream; // For ctor when reading from stdin
+    bool m_isstream; // toggles usage of m_file or m_stream
 
 
     /** @brief Store attributes global to the run being written/read. */
     std::map< std::string, shared_ptr<Attribute> > m_global_attributes;
-  };
+
+};
 
 
 } // namespace HepMC

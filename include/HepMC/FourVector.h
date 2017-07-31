@@ -15,11 +15,6 @@
 namespace HepMC {
 
 
-  /// Handy number squaring function
-  template <typename NUM>
-  inline NUM sqr(NUM x) { return x*x; }
-
-
 /**
  *  @brief Generic 4-vector
  *
@@ -146,6 +141,11 @@ public:
     double abs_eta() const { return std::abs( eta() ); }
     /// Absolute rapidity
     double abs_rap() const { return std::abs( rap() ); }
+
+    #ifndef HEPMC_NO_DEPRECATED
+    /// Same as eta
+    double pseudoRapidity() const { return eta(); }
+    #endif
 
     //@}
 

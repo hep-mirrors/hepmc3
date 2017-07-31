@@ -1,3 +1,19 @@
+  --------------------------  HepMC3.0.0  --------------------------
+
+2017-03-20 Witek Pokorski
+
+	* tagging HepMC3.0.0
+
+2017-01-31  Andy Buckley  <andy.buckley@cern.ch>
+
+	* Add a GenVertex::particles(range) method (as in HepMC 2.07).
+
+2017-01-30  Andy Buckley  <andy.buckley@cern.ch>
+
+	* Add ancestors() and descendants() methods to GenParticle, and make parents() and children() accessors const.
+
+	* Add stream constructors to IO_GenEvent wrapper, and an ostream implementation to WriterAscii.
+
 2017-01-27  Andy Buckley  <andy.buckley@cern.ch>
 
 	* Add unbound accessor functions in FindParticles.

@@ -86,7 +86,7 @@ public:
     }
     /// Get event weight names, if there are some
     /// @note Requires there to be an attached GenRunInfo with registered weight names, otherwise will throw an exception
-  const std::vector<std::string>& weight_names(const std::string& /*name*/) const {
+    const std::vector<std::string>& weight_names(const std::string& /*name*/) const {
       if (!run_info()) throw WeightError("GenEvent::weight_names(): access to event weight names requires the event to have a GenRunInfo");
       const std::vector<std::string>& weightnames = run_info()->weight_names();
       if (weightnames.empty()) throw WeightError("GenEvent::weight_names(): no event weight names are registered for this run");
@@ -120,6 +120,13 @@ public:
     /// @brief Change event units
     /// Converts event from current units to new ones
     void set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
+
+    #ifndef HEPMC_NO_DEPRECATED
+    /// Converts event from current units to new ones (compatibility name)
+    void use_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
+      set_units(new_momentum_unit, new_length_unit);
+    }
+    #endif
 
     /// @brief Get heavy ion generator additional information
     const GenHeavyIonPtr heavy_ion() const { return attribute<GenHeavyIon>("GenHeavyIon"); }
