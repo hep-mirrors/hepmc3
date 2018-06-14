@@ -15,28 +15,30 @@ namespace HepMC
 {
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
-    m_file(filename.c_str()),m_tree(0),m_events_count(0),m_tree_name("hepmc3_tree"),m_branch_name("hepmc3_event")
+    m_tree(0),m_events_count(0),m_tree_name("hepmc3_tree"),m_branch_name("hepmc3_event")
 {
+    m_file = TFile::Open(filename.c_str());
     if (!init()) return;
 }
 
 
 ReaderRootTree::ReaderRootTree(const std::string &filename,const std::string &treename,const std::string &branchname):
-    m_file(filename.c_str()),m_tree(0),m_events_count(0),m_tree_name(treename.c_str()),m_branch_name(branchname.c_str())
+    m_tree(0),m_events_count(0),m_tree_name(treename.c_str()),m_branch_name(branchname.c_str())
 {
+    m_file = TFile::Open(filename.c_str());
     if (!init()) return;
 }
 
 bool ReaderRootTree::init()
 {
-    if ( !m_file.IsOpen() )
+    if ( !m_file->IsOpen() )
         {
-            ERROR( "ReaderRootTree: problem opening file: " << m_file.GetName() )
+            ERROR( "ReaderRootTree: problem opening file: " << m_file->GetName() )
             return false;
         }
     shared_ptr<GenRunInfo> ri = make_shared<GenRunInfo>();
 
-    GenRunInfoData *run = (GenRunInfoData*)m_file.Get("GenRunInfoData");
+    GenRunInfoData *run = (GenRunInfoData*)m_file->Get("GenRunInfoData");
     
     if(run) {
         ri->read_data(*run);
@@ -47,7 +49,7 @@ bool ReaderRootTree::init()
         
         
         
-    m_tree=(TTree*)m_file.Get(m_tree_name.c_str());
+    m_tree=(TTree*)m_file->Get(m_tree_name.c_str());
     if (!m_tree)
         {
             ERROR( "ReaderRootTree: problem opening tree:  " << m_tree_name)
@@ -87,12 +89,12 @@ bool ReaderRootTree::read_event(GenEvent& evt)
 
 void ReaderRootTree::close()
 {
-    m_file.Close();
+    m_file->Close();
 }
 
 bool ReaderRootTree::failed()
 {
-    if ( !m_file.IsOpen() ) return true;
+    if ( !m_file->IsOpen() ) return true;
     if (m_events_count>m_tree->GetEntries()) return true;
     return false;
 }
