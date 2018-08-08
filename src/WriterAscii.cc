@@ -113,7 +113,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     if ( evt.weights().size() ) {
       m_cursor += sprintf(m_cursor, "W");
       FOREACH (double w, evt.weights())
-        m_cursor += sprintf(m_cursor, " %e", w);
+        m_cursor += sprintf(m_cursor, " %.*e",std::min(3*m_precision,22), w);
       m_cursor += sprintf(m_cursor, "\n");
       flush();
     }
