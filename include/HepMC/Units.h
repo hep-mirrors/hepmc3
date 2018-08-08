@@ -92,11 +92,11 @@ public:
 
         if( from == CM ) {
             // CM -> MM
-            m *= 100.;
+            m *= 10.0;
         }
         else if( from == MM ) {
             // MM -> CM
-            m *= 0.01;
+            m *= 0.1;
         }
     }
 
