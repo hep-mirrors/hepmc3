@@ -19,10 +19,11 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   cmake -DHEPMC_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3 
   ```
   
-4. In order to build with ROOTIO put: 
+4. In order to build with ROOTIO put the following flags and define LD_LIBRARY_PATH: 
   ```
-  -DHEPMC_ENABLE_ROOTIO=ON -DROOTDIR=path_to_ROOT6_installation
-  ``` 
+  -DHEPMC_ENABLE_ROOTIO=ON -DROOT_DIR=path_to_ROOT6_installation
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:path_to_ROOT6_libraries
+  ```
   
 5. In order to build with HepMC3 example put
   ```

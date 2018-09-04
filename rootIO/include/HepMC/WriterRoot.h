@@ -62,8 +62,8 @@ public:
 // Fields
 //
 private:
-    TFile m_file;         //!< File handler
-    int   m_events_count; //!< Events count. Needed to generate unique object name
+    TFile* m_file;         //!< File handler
+    int    m_events_count; //!< Events count. Needed to generate unique object name
 };
 
 } // namespace HepMC
