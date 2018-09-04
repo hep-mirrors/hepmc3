@@ -106,6 +106,8 @@ public:
     /// @brief Set the GenRunInfo object by smart pointer.
     void set_run_info(shared_ptr<GenRunInfo> run) {
       m_run_info = run;
+      if ( run && !run->weight_names().empty() )
+        m_weights.resize(run->weight_names().size(), 1.0);
     }
 
     /// @brief Get event number
