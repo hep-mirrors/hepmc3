@@ -39,7 +39,7 @@ public:
 #ifndef HEPMC_NO_DEPRECATED
           eccentricity(-1.0),
 #endif
-          sigma_inel_NN(-1.0), centrality(-1.0), user_cent_estimate(-1.0);
+          sigma_inel_NN(-1.0), centrality(-1.0), user_cent_estimate(-1.0),
           Nspec_proj_n(-1), Nspec_targ_n(-1),
           Nspec_proj_p(-1), Nspec_targ_p(-1), forceoldformat(false) {}
 
@@ -221,7 +221,8 @@ public:
     /// HEPMC_DEPRECATED("Set individual fields directly instead.")
     void set( int nh, int np, int nt, int nc, int ns, int nsp,
               int nnw=0, int nwn=0, int nwnw=0,
-              float im=0., float pl=0., float ec=0., float s=0., float cent=0. );
+              float im=0., float pl=0., float ec=0., float s=0.,
+              float cent=0., float ucent = 0.0);
 
     /// @brief Verify that the instance contains non-zero information.
     ///
