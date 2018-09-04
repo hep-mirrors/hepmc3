@@ -39,7 +39,7 @@ public:
 #ifndef HEPMC_NO_DEPRECATED
           eccentricity(-1.0),
 #endif
-          sigma_inel_NN(-1.0), centrality(-1.0),
+          sigma_inel_NN(-1.0), centrality(-1.0), user_cent_estimate(-1.0);
           Nspec_proj_n(-1), Nspec_targ_n(-1),
           Nspec_proj_p(-1), Nspec_targ_p(-1), forceoldformat(false) {}
 
@@ -142,10 +142,20 @@ public:
 
     /// @brief The centrality.
     ///
-    /// The generated centrality, where 0 is the maximally central and
-    /// 1 is the minimally central. A negative value means that the
-    /// information is not available.
+    /// The generated centrality in quantiles, where 0 is the
+    /// maximally central and 1 is the minimally central. A negative
+    /// value means that the information is not available.
     double centrality;
+
+    /// @brief A user defined centrality estimator.
+    ///
+    /// This variable may contain anything a generator feels is
+    /// reasonable for estimating centrality. The value should be
+    /// non-negative, and a low value corresponds to a low
+    /// centrality. A negative value indicatess that the information
+    /// is not available.
+    double user_cent_estimate;
+  
 
     /// @brief The number of spectator neutrons in the projectile
     ///

@@ -44,8 +44,9 @@ bool GenHeavyIon::from_string(const string &att) {
        >> Nwounded_Nwounded_collisions >> impact_parameter
        >> event_plane_angle;
     if ( version == "v0" ) is >> eccentricity;
-    is >> sigma_inel_NN >> centrality >> Nspec_proj_n >> Nspec_targ_n
-       >> Nspec_proj_p >> Nspec_targ_p;
+    is >> sigma_inel_NN >> centrality;
+    if ( version != "v0" ) is >> user_cent_estimate;
+    is >> Nspec_proj_n >> Nspec_targ_n >> Nspec_proj_p >> Nspec_targ_p;
 
     int N, ord;
     is >> N;
@@ -83,8 +84,9 @@ bool GenHeavyIon::to_string(string &att) const {
 #ifndef HEPMC_NO_DEPRECATED
        << eccentricity << " "
 #endif
-       << sigma_inel_NN << " " << centrality << " " << Nspec_proj_n << " "
-       << Nspec_targ_n << " " << Nspec_proj_p << " " << Nspec_targ_p << " ";
+       << sigma_inel_NN << " " << centrality << " " << user_cent_estimate << " "
+       << Nspec_proj_n << " " << Nspec_targ_n << " "
+       << Nspec_proj_p << " " << Nspec_targ_p << " ";
 
     os << participant_plane_angles.size();
     for ( map<int,double>::const_iterator it = participant_plane_angles.begin();
@@ -113,8 +115,9 @@ bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {
 }
 
 void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
-                    int nnw, int nwn, int nwnw,
-                    float im, float pl, float ec, float s, float cent ) {
+                       int nnw, int nwn, int nwnw,
+                       float im, float pl, float ec, float s,
+                       float cent, float usrcent ) {
     Ncoll_hard                   = nh;
     Npart_proj                   = np;
     Npart_targ                   = nt;
@@ -129,6 +132,7 @@ void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
     eccentricity                 = ec;
     sigma_inel_NN                = s;
     centrality                   = cent;
+    user_cent_estimate           = usrcent;
 }
 
 bool GenHeavyIon::is_valid() const {
