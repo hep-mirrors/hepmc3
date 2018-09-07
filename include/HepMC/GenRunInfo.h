@@ -15,6 +15,7 @@
 #include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Units.h"
 #include "HepMC/Attribute.h"
+#include <mutex>
 #endif // __CINT__
 
 #ifdef HEPMC_ROOTIO
@@ -93,11 +94,13 @@ public:
     /// with the same name is present
     void add_attribute(const string &name,
 		       const shared_ptr<Attribute> &att) {
+      std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
       if ( att ) m_attributes[name] = att;
     }
 
     /// @brief Remove attribute
     void remove_attribute(const string &name) {
+      std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
       m_attributes.erase(name);
     }
 
@@ -110,6 +113,7 @@ public:
 
     /// @brief Get list of attributes
     const std::map< std::string, shared_ptr<Attribute> > & attributes() const {
+      std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
       return m_attributes;
     }
 
@@ -148,6 +152,9 @@ private:
 
     /// @brief Map of attributes
     mutable std::map< std::string, shared_ptr<Attribute> > m_attributes;
+
+    /// @breif Mutex lock for the m_attibutes map.
+    mutable std::recursive_mutex m_lock_attributes;
     //@}
 
     #endif // __CINT__
@@ -161,6 +168,7 @@ private:
 
 template<class T>
 shared_ptr<T> GenRunInfo::attribute(const string &name) const {
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
 
     std::map< std::string, shared_ptr<Attribute> >::iterator i =
       m_attributes.find(name);

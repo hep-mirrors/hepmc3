@@ -19,6 +19,7 @@
 #include "HepMC/GenPdfInfo.h"
 #include "HepMC/GenCrossSection.h"
 #include "HepMC/GenRunInfo.h"
+#include <mutex>
 #endif // __CINT__
 
 #ifdef HEPMC_ROOTIO
@@ -176,6 +177,7 @@ public:
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const string &name, const shared_ptr<Attribute> &att, int id = 0) {
+      std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
       if ( att ) {
         m_attributes[name][id] = att;
         att->m_event = this;
@@ -198,7 +200,10 @@ public:
     std::vector<string> attribute_names(int id = 0) const;
 
     /// @brief Get list of attributes
-    const std::map< string, std::map<int, shared_ptr<Attribute> > >& attributes() const { return m_attributes; }
+    const std::map< string, std::map<int, shared_ptr<Attribute> > >& attributes() const {
+       std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+       return m_attributes;
+    }
 
     //@}
 
@@ -430,6 +435,10 @@ private:
 
     /// @brief Attribute map value type
     typedef std::map<int, shared_ptr<Attribute> >::value_type att_val_t;
+
+    /// @breif Mutex lock for the m_attibutes map.
+    mutable std::recursive_mutex m_lock_attributes;
+
     #endif // __CINT__
 
     //@}
@@ -446,8 +455,9 @@ private:
 
 template<class T>
 shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
-
-    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 =
+      m_attributes.find(name);
     if( i1 == m_attributes.end() ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute<T>(name);
