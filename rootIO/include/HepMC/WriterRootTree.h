@@ -71,7 +71,7 @@ private:
 // Fields
 //
 private:
-    TFile m_file;         //!< File handler
+    TFile* m_file;         //!< File handler
 public:
     TTree* m_tree;//!< Tree handler. Public to allow simple access, e.g. custom branches.
 private:

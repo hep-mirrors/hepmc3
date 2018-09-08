@@ -12,30 +12,30 @@ namespace HepMC
 {
 
 WriterRootTree::WriterRootTree(const std::string &filename, shared_ptr<GenRunInfo> run):
-    m_file(filename.c_str(),"RECREATE"),
     m_tree(0),    
     m_events_count(0),
     m_tree_name("hepmc3_tree"),
     m_branch_name("hepmc3_event")
 {
+    m_file = TFile::Open(filename.c_str(),"RECREATE");
     if (!init(run)) return;
 }
 
 WriterRootTree::WriterRootTree(const std::string &filename,const std::string &treename,const std::string &branchname, shared_ptr<GenRunInfo> run):
-    m_file(filename.c_str(),"RECREATE"),
     m_tree(0),    
     m_events_count(0),
     m_tree_name(treename.c_str()),
     m_branch_name(branchname.c_str())
 {
+    m_file = TFile::Open(filename.c_str(),"RECREATE");
     if (!init(run)) return;
 }
 
 bool WriterRootTree::init(shared_ptr<GenRunInfo> run )
 {
-    if ( !m_file.IsOpen() )
+    if ( !m_file->IsOpen() )
         {
-            ERROR( "WriterRootTree: problem opening file: " <<m_file.GetName() )
+            ERROR( "WriterRootTree: problem opening file: " <<m_file->GetName() )
             return false;
         }
     set_run_info(run);
@@ -48,7 +48,7 @@ bool WriterRootTree::init(shared_ptr<GenRunInfo> run )
 
 void WriterRootTree::write_event(const GenEvent &evt)
 {
-    if ( !m_file.IsOpen() ) return;
+    if ( !m_file->IsOpen() ) return;
     
         if ( !run_info() ) {
         set_run_info(evt.run_info());
@@ -77,16 +77,16 @@ void WriterRootTree::write_event(const GenEvent &evt)
 
 
 void WriterRootTree::write_run_info() {
-    if ( !m_file.IsOpen() || !run_info() ) return;
+    if ( !m_file->IsOpen() || !run_info() ) return;
 
     GenRunInfoData data;
     run_info()->write_data(data);
 
-    int nbytes = m_file.WriteObject(&data,"GenRunInfoData");
+    int nbytes = m_file->WriteObject(&data,"GenRunInfoData");
 
     if( nbytes == 0 ) {
         ERROR( "WriterRootTree: error writing GenRunInfo")
-        m_file.Close();
+        m_file->Close();
     }
 }
 
@@ -95,12 +95,12 @@ void WriterRootTree::close()
 {
 
     m_tree->Write();
-    m_file.Close();
+    m_file->Close();
 }
 
 bool WriterRootTree::failed()
 {
-    if ( !m_file.IsOpen() ) return true;
+    if ( !m_file->IsOpen() ) return true;
 
     return false;
 }
