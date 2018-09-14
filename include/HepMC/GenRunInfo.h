@@ -111,8 +111,12 @@ public:
     /// @brief Get attribute of any type as string
     string attribute_as_string(const string &name) const;
 
-    /// @brief Get list of attributes
-    const std::map< std::string, shared_ptr<Attribute> > & attributes() const {
+    /// @brief Get list of attribute names
+    std::vector<string> attribute_names() const;
+
+    /// @brief Get a copy of the list of attributes
+    /// @todo To avoid thread issues, this is returns a copy. Better solution may be needed.
+    std::map< std::string, shared_ptr<Attribute> > attributes() const {
       std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
       return m_attributes;
     }

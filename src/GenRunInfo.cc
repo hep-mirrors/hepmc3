@@ -56,7 +56,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     // Attributes
     typedef std::map<std::string, shared_ptr<Attribute> >::value_type att_val_t;
 
-    FOREACH( const att_val_t& vt, this->attributes() ) {
+    FOREACH( const att_val_t& vt, m_attributes ) {
         std::string att;
         vt.second->to_string(att);
 

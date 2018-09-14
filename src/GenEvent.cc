@@ -415,7 +415,7 @@ void GenEvent::remove_attribute(const string &name, int id) {
 vector<string> GenEvent::attribute_names(int id) const {
     vector<string> results;
 
-    FOREACH( const att_key_t& vt1, this->attributes() ) {
+    FOREACH( const att_key_t& vt1, m_attributes ) {
         FOREACH( const att_val_t& vt2, vt1.second ) {
             if( vt2.first == id ) results.push_back( vt1.first );
         }
@@ -430,9 +430,9 @@ void GenEvent::write_data(GenEventData& data) const {
     data.vertices.reserve( this->vertices().size() );
     data.links1.reserve( this->particles().size()*2 );
     data.links2.reserve( this->particles().size()*2 );
-    data.attribute_id.reserve( this->attributes().size() );
-    data.attribute_name.reserve( this->attributes().size() );
-    data.attribute_string.reserve( this->attributes().size() );
+    data.attribute_id.reserve( m_attributes.size() );
+    data.attribute_name.reserve( m_attributes.size() );
+    data.attribute_string.reserve( m_attributes.size() );
 
     // Fill event data
     data.event_number  = this->event_number();
@@ -462,7 +462,7 @@ void GenEvent::write_data(GenEventData& data) const {
         }
     }
 
-    FOREACH( const att_key_t& vt1, this->attributes() ) {
+    FOREACH( const att_key_t& vt1, m_attributes ) {
         FOREACH( const att_val_t& vt2, vt1.second ) {
 
             string st;
