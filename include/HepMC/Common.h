@@ -35,6 +35,7 @@ namespace HepMC {
       PRODUCTION_SIBLINGS = 4, FIND_PRODUCTION_SIBLINGS = 4
     };
 
+#ifndef __CINT__
     /// Compatibility name
     using FilterParticle = Relationship;
     #ifndef HEPMC_NO_DEPRECATED
@@ -42,6 +43,7 @@ namespace HepMC {
     using IteratorRange = Relationship;
     #endif
 
+#endif
 }
 
 
