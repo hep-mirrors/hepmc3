@@ -24,18 +24,21 @@ namespace HepMC {
 
 GenEvent::GenEvent(Units::MomentumUnit mu,
 		   Units::LengthUnit lu)
-  : m_event_number(0), m_momentum_unit(mu),
-    m_length_unit(lu),
+  : m_event_number(0), m_weights(std::vector<double>(1, 1.0)),
+    m_momentum_unit(mu), m_length_unit(lu),
     m_rootvertex(make_shared<GenVertex>()) {}
 
 
 GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
 	 Units::MomentumUnit mu,
 	 Units::LengthUnit lu)
-  : m_event_number(0), m_momentum_unit(mu),
-    m_length_unit(lu),
+  : m_event_number(0), m_weights(std::vector<double>(1, 1.0)),
+    m_momentum_unit(mu), m_length_unit(lu),
     m_rootvertex(make_shared<GenVertex>()),
-    m_run_info(run) {}
+    m_run_info(run) {
+  if ( run && !run->weight_names().empty() )
+    m_weights = std::vector<double>(run->weight_names().size(), 1.0);
+}
 
 
 // void GenEvent::add_particle( const GenParticlePtr &p ) {
