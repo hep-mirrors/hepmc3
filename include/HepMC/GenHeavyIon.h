@@ -142,8 +142,8 @@ public:
 
     /// @brief The centrality.
     ///
-    /// The generated centrality in quantiles, where 0 is the
-    /// maximally central and 1 is the minimally central. A negative
+    /// The generated centrality in percentiles, where 0 is the
+    /// maximally central and 100 is the minimally central. A negative
     /// value means that the information is not available.
     double centrality;
 
@@ -160,25 +160,29 @@ public:
     /// @brief The number of spectator neutrons in the projectile
     ///
     /// ie. those that thave not participated in any inelastic
-    /// nucleon-nucleon collision.
+    /// nucleon-nucleon collision. A negative value indicatess that
+    /// the information is not available.
     int Nspec_proj_n;
 
     /// @brief The number of spectator neutrons in the target
     ///
     /// ie. those that thave not participated in any inelastic
-    /// nucleon-nucleon collision.
+    /// nucleon-nucleon collision. A negative value indicatess that
+    /// the information is not available.
     int Nspec_targ_n;
 
     /// @brief The number of spectator protons in the projectile
     ///
     /// ie. those that thave not participated in any inelastic
-    /// nucleon-nucleon collision.
+    /// nucleon-nucleon collision. A negative value indicatess that
+    /// the information is not available.
     int Nspec_proj_p;
 
     /// @brief The number of spectator protons in the target
     ///
     /// ie. those that thave not participated in any inelastic
-    /// nucleon-nucleon collision.
+    /// nucleon-nucleon collision. A negative value indicatess that
+    /// the information is not available.
     int Nspec_targ_p;
 
     /// @brief Participant plane angles
@@ -232,7 +236,7 @@ public:
 
     /// @brief force writing in old format for compatibility purposes.
     ///
-    /// HEPMC_DEPRECATED("THis should really not be needed");
+    /// HEPMC_DEPRECATED("This should really not be needed");
     bool forceoldformat;
     
 #endif
