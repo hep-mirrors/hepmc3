@@ -94,7 +94,7 @@ void WriterRootTree::write_run_info() {
 void WriterRootTree::close()
 {
 
-    m_tree->Write();
+    m_file->WriteTObject(m_tree);
     m_file->Close();
 }
 
