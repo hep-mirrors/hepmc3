@@ -12,7 +12,6 @@
 
 #if !defined(__CINT__)
 #include "HepMC/Common.h"
-#include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Units.h"
 #include "HepMC/Attribute.h"
 #endif // __CINT__

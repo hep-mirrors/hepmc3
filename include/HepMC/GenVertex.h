@@ -9,8 +9,8 @@
 #ifndef HEPMC_GENVERTEX_H
 #define HEPMC_GENVERTEX_H
 
-#include "HepMC/GenParticle.h"
-#include "HepMC/Data/SmartPointer.h"
+#include "HepMC/GenParticle.fh"
+#include "HepMC/GenVertex.fh"
 #include "HepMC/Data/GenVertexData.h"
 #include "HepMC/FourVector.h"
 #include "HepMC/Common.h"
@@ -32,12 +32,10 @@ namespace HepMC {
 
 
     /// Stores vertex-related information
-    class GenVertex {
+    class GenVertex : public std::enable_shared_from_this<GenVertex>{
 
         /// @todo Are these really needed? Friends usually indicate a problem...
         friend class GenEvent;
-        friend class SmartPointer<GenVertex>;
-
 
     public:
 
@@ -214,7 +212,6 @@ namespace HepMC {
 
         vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
         vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
-        weak_ptr<GenVertex> m_this;          //!< Pointer to shared pointer managing this vertex
         //@}
 
     };

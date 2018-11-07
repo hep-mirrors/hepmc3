@@ -13,10 +13,12 @@
  *  @brief Stores particle-related information
  *
  */
-#include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Data/GenParticleData.h"
 #include "HepMC/FourVector.h"
 #include "HepMC/Common.h"
+
+#include "HepMC/GenParticle.fh"
+#include "HepMC/GenVertex.fh"
 
 namespace HepMC {
 
@@ -27,12 +29,11 @@ class GenEvent;
 class Attribute;
 
 
-class GenParticle {
+class GenParticle : public std::enable_shared_from_this<GenParticle>{
 
 friend class GenEvent;
 friend class GenVertex;
-friend class SmartPointer<GenParticle>;
-
+  
 //
 // Constructors
 //
@@ -150,9 +151,11 @@ private:
 
     weak_ptr<GenVertex>    m_production_vertex; //!< Production vertex
     weak_ptr<GenVertex>    m_end_vertex;        //!< End vertex
-    weak_ptr<GenParticle>  m_this;              //!< Pointer to shared pointer managing this particle
 };
 
+  //using GenParticlePtr = std::shared_ptr<GenParticle>;
+  //using ConstGenParticlePtr = std::shared_ptr<const GenParticle>;
+  
 } // namespace HepMC
 
 #include "HepMC/GenEvent.h"

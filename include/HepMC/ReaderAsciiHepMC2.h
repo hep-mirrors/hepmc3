@@ -17,7 +17,8 @@
  */
 #include "HepMC/Reader.h"
 
-#include "HepMC/Data/SmartPointer.h"
+#include "HepMC/GenParticle.fh"
+#include "HepMC/GenVertex.fh"
 
 #include <string>
 #include <fstream>
