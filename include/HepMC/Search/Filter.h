@@ -20,7 +20,7 @@
  *
  */
 #include "HepMC/Search/FilterBase.h"
-#include "HepMC/Data/SmartPointer.h"
+#include "HepMC/GenParticle.fh"
 #include "HepMC/Attribute.h"
 #include <string>
 

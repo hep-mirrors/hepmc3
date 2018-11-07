@@ -16,7 +16,8 @@
  *
  */
 #include "HepMC/Search/FilterList.h"
-#include "HepMC/Data/SmartPointer.h"
+
+#include "HepMC/GenVertex.fh"
 
 namespace HepMC {
 
