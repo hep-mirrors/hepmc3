@@ -68,12 +68,12 @@ void GenEvent::add_vertex( GenVertexPtr v ) {
     // Add all incoming and outgoing particles and restore their production/end vertices
     FOREACH( GenParticlePtr &p, v->m_particles_in ) {
         if(!p->in_event()) add_particle(p);
-        p->m_end_vertex = v->m_this.lock();
+      p->m_end_vertex = v->shared_from_this();
     }
 
     FOREACH( GenParticlePtr &p, v->m_particles_out ) {
         if(!p->in_event()) add_particle(p);
-        p->m_production_vertex = v->m_this.lock();
+        p->m_production_vertex = v->shared_from_this();
     }
 }
 

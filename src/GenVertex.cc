@@ -45,7 +45,7 @@ void GenVertex::add_particle_in( GenParticlePtr p ) {
 
     if( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
 
-    p->m_end_vertex = m_this.lock();
+    p->m_end_vertex = shared_from_this();
 
     if(m_event) m_event->add_particle(p);
 }
@@ -63,7 +63,7 @@ void GenVertex::add_particle_out( GenParticlePtr p ) {
 
     if( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
 
-    p->m_production_vertex = m_this.lock();
+    p->m_production_vertex = shared_from_this();
 
     if(m_event) m_event->add_particle(p);
 }
