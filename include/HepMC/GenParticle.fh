@@ -1,0 +1,25 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
+//
+///
+/// @file GenParticle.fh
+/// @brief Minimal forward declarations for GenParticle
+///
+
+#ifndef HEPMC_GENPARTICLE_FH
+#define HEPMC_GENPARTICLE_FH
+
+#include <memory>
+
+namespace HepMC{
+
+class GenParticle;
+
+using GenParticlePtr = std::shared_ptr<GenParticle>;
+using ConstGenParticlePtr = std::shared_ptr<const GenParticle>;
+
+}
+
+#endif

@@ -1,0 +1,25 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
+//
+///
+/// @file GenVertex.fh
+/// @brief Minimal forward declarations for GenVertex
+///
+
+#ifndef HEPMC_GENVERTEX_FH
+#define HEPMC_GENVERTEX_FH
+
+#include <memory>
+
+namespace HepMC{
+
+class GenVertex;
+
+using GenVertexPtr = std::shared_ptr<GenVertex>;
+using ConstGenVertexPtr = std::shared_ptr<const GenVertex>;
+
+}
+
+#endif
