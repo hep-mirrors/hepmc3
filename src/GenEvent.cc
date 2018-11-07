@@ -135,7 +135,7 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     FOREACH( att_key_t& vt1, m_attributes ) {
         changed_attributes.clear();
 
-        for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin();vt2!=vt1.second.end();vt2++){
+        for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin();vt2!=vt1.second.end();++vt2){
             if( (*vt2).first > p->id() ) {
                    changed_attributes.push_back(*vt2);
             }
@@ -239,7 +239,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     FOREACH( att_key_t& vt1, m_attributes ) {
         changed_attributes.clear();
 
-        for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin();vt2!=vt1.second.end();vt2++){			
+        for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin();vt2!=vt1.second.end();++vt2){
             if( (*vt2).first < v->id() ) {
                   changed_attributes.push_back(*vt2);
             }

@@ -97,11 +97,8 @@ bool ReaderHEPEVT::read_hepevt_particle( int i, bool iflong )
 bool ReaderHEPEVT::read_event(GenEvent& evt, bool iflong)
 {
     evt.clear();
-
-
-    bool fileok=true;
     HEPEVT_Wrapper::zero_everything();
-    fileok=read_hepevt_event_header();
+    bool fileok=read_hepevt_event_header();
     for (int i=1; (i<=HEPEVT_Wrapper::number_entries())&&fileok; i++)
         fileok=read_hepevt_particle(i, iflong);
     bool result=false;

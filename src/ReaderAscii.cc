@@ -45,7 +45,7 @@ ReaderAscii::~ReaderAscii() { if (!m_isstream) close(); }
 
 
 bool ReaderAscii::read_event(GenEvent &evt) {
-    if ( !m_file.is_open() &! m_isstream ) return false;
+    if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
     char               peek;
     char               buf[512*512];
@@ -239,7 +239,6 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     const char   *cursor          = buf;
     const char   *cursor2         = NULL;
     int           id              = 0;
-    int           particle_in     = 0;
     int           highest_id      = evt.particles().size();
 
     // id
@@ -256,7 +255,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     while(true) {
         ++cursor;             // skip the '[' or ',' character
         cursor2     = cursor; // save cursor position
-        particle_in = atoi(cursor);
+        int  particle_in = atoi(cursor);
 
         // add incoming particle to the vertex
         if( particle_in > 0 && particle_in <= highest_id) {
