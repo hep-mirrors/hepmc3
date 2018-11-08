@@ -215,23 +215,35 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     event_no = atoi(cursor);
     evt.set_event_number(event_no);
 
-    // SKIPPED: mpi
+    //mpi
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<IntAttribute> mpi = make_shared<IntAttribute>(atoi(cursor));
+    evt.add_attribute("mpi",mpi);
 
-    // SKIPPED: event scale
+    //event scale
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<DoubleAttribute> event_scale = make_shared<DoubleAttribute>(atof(cursor));
+    evt.add_attribute("event_scale",event_scale);
 
-    // SKIPPED: alpha_qcd
+    //alpha_qcd
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<DoubleAttribute> alphaQCD = make_shared<DoubleAttribute>(atof(cursor));
+    evt.add_attribute("alphaQCD",alphaQCD);
 
-    // SKIPPED: alpha_qed
+    //alpha_qed
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<DoubleAttribute> alphaQED = make_shared<DoubleAttribute>(atof(cursor));
+    evt.add_attribute("alphaQED",alphaQED);
 
-    // SKIPPED: signal_process_id
+    //signal_process_id
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<IntAttribute> signal_process_id = make_shared<IntAttribute>(atoi(cursor));
+    evt.add_attribute("signal_process_id",signal_process_id);
 
-    // SKIPPED: signal_process_vertex
+    //signal_process_vertex
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<IntAttribute> signal_process_vertex = make_shared<IntAttribute>(atoi(cursor));
+    evt.add_attribute("signal_process_vertex",signal_process_vertex);
 
     // num_vertices
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -243,7 +255,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     // SKIPPED: beam 2
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
 
-    // SKIPPED: random states
+    //random states
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     random_states_size = atoi(cursor);
     random_states.resize(random_states_size);
@@ -252,6 +264,9 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         if( !(cursor = strchr(cursor+1,' ')) ) return -1;
         random_states[i] = atoi(cursor);
     }
+    
+    for ( int i = 0; i < random_states_size; ++i ) 
+    evt.add_attribute("random_states"+to_string(i),make_shared<IntAttribute>(random_states[i]));
 
     // weights
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
