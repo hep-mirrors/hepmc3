@@ -240,11 +240,23 @@
         // HepMC2 code:
         evt.set_alphaQCD(m_alphas);
         evt.set_alphaQED(m_alpha);
+        evt.set_event_scale(m_event_scale);
+        evt.set_mpi(m_mpi);
+        evt.set_signal_process_id(m_signal_process_id);
+        evt.set_random_states(m_random_states);
         // Replace with:
-        evt.add_attribute("AlphaQCD",
+        evt.add_attribute("alphaQCD",
                            make_shared<DoubleAttribute>(m_alphas));
-        evt.add_attribute("AlphaEM",
+        evt.add_attribute("alphaEM",
                            make_shared<DoubleAttribute>(m_alpha));
+        evt.add_attribute("event_scale",
+                           make_shared<DoubleAttribute>(m_event_scale));
+        evt.add_attribute("mpi",
+                           make_shared<IntAttribute>(m_mpi));
+        evt.add_attribute("signal_process_id",
+                           make_shared<IntAttribute>(m_signal_process_id));
+        for ( size_t i=0;i<m_random_states.size();i++)        
+          evt.add_attribute("random_states"+to_string(i),make_shared<IntAttribute>(m_random_states[i]));
     @endcode
 
     @code{.cpp}
@@ -266,10 +278,13 @@
     @code{.cpp}
         // HepMC2 code:
         HepMC::GenParticle::set_flow(int code_index, int code = 0)	
+        HepMC::GenParticle::set_polarization( Polarization(theta,phi))	
         // Replace with:
-        TODO
+        HepMC::GenParticle::add_attribute("flow"+to_string(code_index),make_shared<IntAttribute>(code));
+        HepMC::GenParticle::add_attribute("theta",make_shared<DoubleAttribute>(theta));
+        HepMC::GenParticle::add_attribute("phi",make_shared<DoubleAttribute>(phi));
     @endcode
  
     <hr>
-    Last update 24 May 2015
+    Last update 8 Nov 2018
 */
