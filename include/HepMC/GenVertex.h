@@ -153,15 +153,10 @@ namespace HepMC {
         /// Define iterator by typedef
         typedef vector<GenParticlePtr>::const_iterator particles_in_const_iterator;
         /// Define iterator by typedef
-        /// @todo shouldn't this be vector<ConstGenParticlePtr>::const_iterator?
         typedef vector<GenParticlePtr>::const_iterator particles_out_const_iterator;
         /// Define iterator by typedef
         typedef vector<GenParticlePtr>::iterator       particle_iterator;
-        /// Define iterator by typedef
-        /// @todo shouldn't this be vector<ConstGenParticlePtr>::const_iterator?
-        typedef vector<GenParticlePtr>::const_iterator  particle_const_iterator;
 
-      
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
         particles_in_const_iterator  particles_in_const_begin()  const { return m_particles_in.begin();  } //!< @deprecated Backward compatibility iterators
