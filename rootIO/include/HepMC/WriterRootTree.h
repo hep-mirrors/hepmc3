@@ -25,8 +25,13 @@
 
 
 // ROOT header files
+#ifdef __CINT__
 #include "TFile.h"
 #include "TTree.h"
+#else
+class TFile;
+class TTree;
+#endif
 
 namespace HepMC
 {

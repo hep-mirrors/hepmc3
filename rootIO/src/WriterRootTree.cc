@@ -7,6 +7,9 @@
  */
 #include "HepMC/WriterRootTree.h"
 #include <cstdio>  // sprintf
+// ROOT header files
+#include "TFile.h"
+#include "TTree.h"
 
 namespace HepMC
 {
