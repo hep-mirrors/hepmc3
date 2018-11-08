@@ -28,6 +28,7 @@ m_file(filename) {
         ERROR( "ReaderAsciiHepMC2: could not open input file: "<<filename )
     }
     set_run_info(make_shared<GenRunInfo>());
+    m_event_ghost= new GenEvent();
 }
 
 bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
@@ -48,7 +49,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
     m_particle_cache.clear();
     m_end_vertex_barcodes.clear();
-
+    m_particle_cache_ghost.clear();
     //
     // Parse event, vertex and particle information
     //
@@ -198,6 +199,21 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Add whole event tree in topological order
     evt.add_tree( m_particle_cache );
 
+    for(unsigned int i=0; i<m_particle_cache.size(); ++i) {
+     if(m_particle_cache_ghost[i]->attribute_names().size()) 
+     {
+     shared_ptr<DoubleAttribute> phi = m_particle_cache_ghost[i]->attribute<DoubleAttribute>("phi");
+     if (phi) m_particle_cache[i]->add_attribute("phi",phi);
+     shared_ptr<DoubleAttribute> theta = m_particle_cache_ghost[i]->attribute<DoubleAttribute>("theta");
+     if (theta) m_particle_cache[i]->add_attribute("theta",theta);
+     shared_ptr<IntAttribute> flow1 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow1");
+     if (flow1) m_particle_cache[i]->add_attribute("flow1",flow1);
+     shared_ptr<IntAttribute> flow2 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow2");
+     if (flow2) m_particle_cache[i]->add_attribute("flow2",flow2);
+     }
+    }
+    m_particle_cache_ghost.clear();
+    m_event_ghost->clear(); 
     return 1;
 }
 
@@ -356,6 +372,8 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
 
 int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     GenParticlePtr  data = make_shared<GenParticle>();
+    GenParticlePtr  data_ghost = make_shared<GenParticle>();
+    m_event_ghost->add_particle(data_ghost);
     FourVector      momentum;
     const char     *cursor  = buf;
     int             end_vtx = 0;
@@ -392,17 +410,32 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     data->set_status( atoi(cursor) );
 
-    // SKIPPED: theta
+    //theta
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<DoubleAttribute> theta = make_shared<DoubleAttribute>(atof(cursor));
+    if (theta->value()!=0.0) data_ghost->add_attribute("theta",theta);
 
-    // SKIPPED: phi
+    //phi
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<DoubleAttribute> phi = make_shared<DoubleAttribute>(atof(cursor));
+    if (phi->value()!=0.0) data_ghost->add_attribute("phi",phi);
 
     // end_vtx_code
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     end_vtx = atoi(cursor);
 
-    // SKIPPING: flow_size, flow patterns
+    //flow
+    if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    int flowsize=atoi(cursor);
+    
+    for (int i=0;i<flowsize;i++)
+    {
+    if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    int flowindex=atoi(cursor);
+    if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    int flowvalue=atoi(cursor);
+    data_ghost->add_attribute("flow"+to_string(flowindex),make_shared<IntAttribute>(flowvalue));
+    }
 
     // Set prod_vtx link
     if( end_vtx == m_vertex_barcodes.back() ) {
@@ -414,6 +447,7 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     }
 
     m_particle_cache.push_back( data );
+    m_particle_cache_ghost.push_back( data_ghost );
     m_end_vertex_barcodes.push_back( end_vtx );
 
     DEBUG( 10, "ReaderAsciiHepMC2: P: "<<m_particle_cache.size()<<" ( pid: "<<data->pid()<<") end vertex: "<<end_vtx )
@@ -561,6 +595,7 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
 void ReaderAsciiHepMC2::close() {
     if( !m_file.is_open() ) return;
     m_file.close();
+    delete m_event_ghost;
 }
 
 } // namespace HepMC

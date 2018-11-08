@@ -125,6 +125,9 @@ private:
 
     vector<GenParticlePtr> m_particle_cache;      //!< Particle cache
     vector<int>            m_end_vertex_barcodes; //!< Old end vertex barcodes
+
+    GenEvent*              m_event_ghost;                      //!< To save particle and verstex attributes.
+    vector<GenParticlePtr> m_particle_cache_ghost;//!< Particle cache for attributes
 };
 
 } // namespace HepMC
