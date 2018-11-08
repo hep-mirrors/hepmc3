@@ -10,12 +10,10 @@
 namespace HepMC {
 
 /** What is not in current HepMC implementation:
- *  - units
  *  - color flow (will probably be removed altogether)
  *  - beam particles
- *  - PDF
- *  - process code, scale, alpha_em, alpha_s
- *  - weight, cross section
+ *  - random seeds 
+ *  - mpi
  */
 bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int ievnum, Pythia8::Info* pyinfo, Pythia8::Settings* pyset) {
 
@@ -155,15 +153,15 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
         // Store PDF information.
         evt->set_pdf_info( pdfinfo );
     }
-/*
+
     // Store process code, scale, alpha_em, alpha_s.
     if (m_store_proc && pyinfo != 0) {
-        evt->set_signal_process_id( pyinfo->code() );
-        evt->set_event_scale( pyinfo->QRen() );
-        if (evt->alphaQED() <= 0) evt->set_alphaQED( pyinfo->alphaEM() );
-        if (evt->alphaQCD() <= 0) evt->set_alphaQCD( pyinfo->alphaS() );
+        evt->add_attribute("signal_process_id",make_shared<IntAttribute>( pyinfo->code()));
+        evt->add_attribute("event_scale",make_shared<DoubleAttribute>(pyinfo->QRen()));
+        evt->add_attribute("alphaQCD",make_shared<DoubleAttribute>(pyinfo->alphaS()));
+        evt->add_attribute("alphaQED",make_shared<DoubleAttribute>(pyinfo->alphaEM()));
     }
-*/
+
     // Store cross-section information in pb.
     if (m_store_xsec && pyinfo != 0) {
         HepMC::GenCrossSectionPtr xsec = make_shared<HepMC::GenCrossSection>();
