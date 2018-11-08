@@ -1,14 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
 # Backup Files
 # CMake output files
 # Compiled Dynamic libraries
@@ -45,6 +35,8 @@
 *.so
 *.so.*
 *~
+.DS_Store
+._*
 .build
 .test
 /.inst
@@ -65,3 +57,4 @@ outputs
 rootIO/rootIO_Classes.cxx
 rootIO/rootIO_Classes.h
 test
+hepmc3-build
