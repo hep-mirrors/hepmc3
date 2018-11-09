@@ -45,20 +45,10 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
                                                               pyev[i].pz(), pyev[i].e() ),
                                                               pyev[i].id(), pyev[i].statusHepMC() )
                                   );
-
 /*
         hepevt_particles[i]->suggest_barcode(i);
 */
         hepevt_particles[i]->set_generated_mass( pyev[i].m() );
-
-/*
-        // Colour flow uses index 1 and 2.
-        int colType = pyev[i].colType();
-        if (colType ==  1 || colType == 2)
-            hepevt_particles[i]->set_flow(1, pyev[i].col());
-        if (colType == -1 || colType == 2)
-            hepevt_particles[i]->set_flow(2, pyev[i].acol());
-*/
     }
 
     // 3. Fill vertex information
@@ -99,6 +89,20 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
 
     // Add particles and vertices in topological order
     evt->add_tree( beam_particles );
+    //Attributes should be set after adding the particles to event
+    for(int i=0;i<pyev.size(); ++i) {
+        /* TODO: Set polarization */
+        // Colour flow uses index 1 and 2.
+        int colType = pyev[i].colType();
+        if (colType ==  -1 ||colType ==  1 || colType == 2)
+        {
+        int flow1=0, flow2=0;
+        if (colType ==  1 || colType == 2) flow1=pyev[i].col();
+        if (colType == -1 || colType == 2) flow2=pyev[i].acol();
+        hepevt_particles[i]->add_attribute("flow1",make_shared<IntAttribute>(flow1));
+        hepevt_particles[i]->add_attribute("flow2",make_shared<IntAttribute>(flow2));
+        }
+     }
 
 /*
     evt->set_beam_particles( hepevt_particles[1], hepevt_particles[2] );
