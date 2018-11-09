@@ -83,6 +83,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
 	    WARNING( "WriterAscii::write_event: GenEvents contain "
 		     "different GenRunInfo objects from - only the "
 		     "first such object will be serialized." )
+	else write_run_info();
     }
 
     // Write event info
