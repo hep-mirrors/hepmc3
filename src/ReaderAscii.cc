@@ -462,7 +462,7 @@ bool ReaderAscii::parse_tool(const char *buf) {
 }
 
 
-string ReaderAscii::unescape(const string s) {
+string ReaderAscii::unescape(const string& s) {
     string ret;
     ret.reserve(s.length());
     for ( string::const_iterator it = s.begin(); it != s.end(); ++it ) {

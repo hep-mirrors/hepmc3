@@ -24,7 +24,7 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
 
     shared_ptr<GenRunInfo> ri = make_shared<GenRunInfo>();
 
-    GenRunInfoData *run = (GenRunInfoData*)m_file->Get("GenRunInfoData");
+    GenRunInfoData *run = dynamic_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
     
     if(run) {
         ri->read_data(*run);
@@ -52,7 +52,7 @@ bool ReaderRoot::read_event(GenEvent& evt) {
         if( !cl ) continue;
         
         if( strncmp(cl,"HepMC::GenEventData",19) == 0 ) {
-            data = (GenEventData*)key->ReadObj();
+            data = dynamic_cast<GenEventData*>(key->ReadObj());
             break;
         }
     }

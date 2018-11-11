@@ -79,11 +79,13 @@ void WriterAscii::write_event(const GenEvent &evt) {
 	set_run_info(evt.run_info());
 	write_run_info();
     } else {
-	if ( evt.run_info() && run_info() != evt.run_info() )
+	if ( evt.run_info() && run_info() != evt.run_info() ) {
 	    WARNING( "WriterAscii::write_event: GenEvents contain "
 		     "different GenRunInfo objects from - only the "
 		     "first such object will be serialized." )
-	else write_run_info();
+	} else {
+	write_run_info();
+        }
     }
 
     // Write event info
@@ -194,7 +196,7 @@ void WriterAscii::allocate_buffer() {
 }
 
 
-string WriterAscii::escape(const string s) {
+string WriterAscii::escape(const string& s) {
     string ret;
     ret.reserve( s.length()*2 );
     for ( string::const_iterator it = s.begin(); it != s.end(); ++it ) {
