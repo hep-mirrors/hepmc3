@@ -155,7 +155,21 @@ void GenParticle::set_production_vertex(ConstGenVertexPtr vtx){
   m_production_vertex_const = vtx;
   return;
 }
-  
+ 
+void GenParticle::set_end_vertex(GenVertexPtr vtx){
+  m_end_vertex = vtx;
+  m_end_vertex_const = std::const_pointer_cast<const GenVertex>(vtx);
+  return;
+}
+ 
+void GenParticle::set_end_vertex(ConstGenVertexPtr vtx){
+  // In this case there cannot be access to the non-const version
+  // Therefore we reset it (equiv to ptr=0 for raw ptrs)
+  m_end_vertex.reset();
+  m_end_vertex_const = vtx;
+  return;
+}
+ 
 bool GenParticle::add_attribute(std::string name, shared_ptr<Attribute> att) {
   if ( !parent_event() ) return false;
   parent_event()->add_attribute(name, att, id());

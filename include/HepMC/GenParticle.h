@@ -32,7 +32,6 @@ class Attribute;
 class GenParticle : public std::enable_shared_from_this<GenParticle>{
 
 friend class GenEvent;
-friend class GenVertex;
   
 //
 // Constructors
@@ -127,9 +126,29 @@ public:
     /// This means no one will be able to modify the GenEvent from this GenParticle
     void set_gen_event(const GenEvent *evt);
   
+    /// @brief set the production vertex
+    /// This non-const version will allow the subsequent retrieval and modification of
+    /// the production GenVertex from this GenParticle.  If you don't want that to
+    /// happen, you should mark the GenParticle and/or GenVertex as const
     void set_production_vertex(GenVertexPtr vtx);
   
+    /// @brief set the production vertex
+    /// This const version will set the internal non-const production vertex ptr
+    /// to 0, meaning that it will not be possible to modify the GenVertex that is set
+    /// using this method, i.e. when it is marked const
     void set_production_vertex(ConstGenVertexPtr vtx);
+  
+    /// @brief set the end vertex
+    /// This non-const version will allow the subsequent retrieval and modification of
+    /// the end GenVertex from this GenParticle.  If you don't want that to
+    /// happen, you should mark the GenParticle and/or GenVertex as const
+    void set_end_vertex(GenVertexPtr vtx);
+  
+    /// @brief set the end vertex
+    /// This const version will set the internal non-const end vertex ptr
+    /// to 0, meaning that it will not be possible to modify the GenVertex that is set
+    /// using this method, i.e. when it is marked const
+    void set_end_vertex(ConstGenVertexPtr vtx);
   
     /** @brief Add an attribute to this particle
      *

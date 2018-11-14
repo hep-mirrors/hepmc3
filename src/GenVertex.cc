@@ -45,7 +45,7 @@ void GenVertex::add_particle_in( GenParticlePtr p ) {
 
     if( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
 
-    p->m_end_vertex = shared_from_this();
+    p->set_end_vertex(shared_from_this());
 
     if(m_event) m_event->add_particle(p);
 }
@@ -63,20 +63,20 @@ void GenVertex::add_particle_out( GenParticlePtr p ) {
 
     if( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
 
-    p->m_production_vertex = shared_from_this();
+    p->set_production_vertex(shared_from_this());
 
     if(m_event) m_event->add_particle(p);
 }
 
 
 void GenVertex::remove_particle_in( GenParticlePtr p ) {
-    p->m_end_vertex.reset();
+    p->set_end_vertex(GenVertexPtr(nullptr));
     m_particles_in.erase( std::remove( m_particles_in.begin(), m_particles_in.end(), p), m_particles_in.end());
 }
 
 
 void GenVertex::remove_particle_out( GenParticlePtr p ) {
-    p->m_production_vertex.reset();
+    p->set_production_vertex(GenVertexPtr(nullptr));
     m_particles_out.erase( std::remove( m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
 }
 
