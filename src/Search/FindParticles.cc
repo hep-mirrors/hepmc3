@@ -21,9 +21,9 @@ namespace HepMC {
 
 FindParticles::FindParticles(const GenEvent &evt, FilterEvent filter_type, FilterList filter_list) {
 
-    FOREACH( const GenParticlePtr &p, evt.particles() ) {
+    for(auto p: evt.particles() ) {
 
-        if( passed_all_filters(p,filter_list) ) {
+        if( passed_all_filters(p, filter_list) ) {
             if( filter_type == FIND_LAST ) m_results.clear();
 
             m_results.push_back( p );
@@ -34,8 +34,8 @@ FindParticles::FindParticles(const GenEvent &evt, FilterEvent filter_type, Filte
 }
 
 
-FindParticles::FindParticles(const GenParticlePtr &p, FilterParticle filter_type, FilterList filter_list) {
-
+FindParticles::FindParticles(ConstGenParticlePtr p, FilterParticle filter_type, FilterList filter_list) {
+/*
     switch(filter_type) {
         case FIND_ALL_ANCESTORS:
             if( !p->production_vertex() ) break;
@@ -78,11 +78,12 @@ FindParticles::FindParticles(const GenParticlePtr &p, FilterParticle filter_type
             }
             break;
     };
+    */
 }
 
 
-FindParticles::FindParticles(const GenVertexPtr &v, FilterParticle filter_type, FilterList filter_list) {
-
+FindParticles::FindParticles(ConstGenVertexPtr v, FilterParticle filter_type, FilterList filter_list) {
+/*
     switch(filter_type) {
         case FIND_ALL_ANCESTORS:
             recursive_check_ancestors( v, filter_list );
@@ -108,11 +109,12 @@ FindParticles::FindParticles(const GenVertexPtr &v, FilterParticle filter_type, 
         default:
             throw Exception("Invalid filter type provided for FindParticles(GenVertexPtr)");
     };
+    */
 }
 
 
 void FindParticles::narrow_down( FilterList filter_list ) {
-
+/*
     int first_null = -1;
 
     // cost-efficient removing of particles that didn't pass filters
@@ -130,7 +132,7 @@ void FindParticles::narrow_down( FilterList filter_list ) {
         }
     }
 
-    if( first_null >= 0 ) m_results.resize( first_null );
+    if( first_null >= 0 ) m_results.resize( first_null );*/
 }
 
 bool FindParticles::passed_all_filters(const GenParticlePtr &p, FilterList &filter_list) {
@@ -146,6 +148,7 @@ bool FindParticles::passed_all_filters(const GenParticlePtr &p, FilterList &filt
 
 void FindParticles::recursive_check_ancestors(const GenVertexPtr &v, FilterList &filter_list) {
 
+  /*
     FOREACH( const GenVertexPtr &v_list, m_checked_vertices ) {
         if( v_list->id() == v->id() ) return;
     }
@@ -161,10 +164,11 @@ void FindParticles::recursive_check_ancestors(const GenVertexPtr &v, FilterList 
         if( !p_in->production_vertex() ) continue;
         recursive_check_ancestors( p_in->production_vertex(), filter_list );
     }
+    */
 }
 
 void FindParticles::recursive_check_descendants(const GenVertexPtr &v, FilterList &filter_list) {
-
+  /*
     FOREACH( const GenVertexPtr &v_list, m_checked_vertices ) {
         if( v_list->id() == v->id() ) return;
     }
@@ -178,7 +182,7 @@ void FindParticles::recursive_check_descendants(const GenVertexPtr &v, FilterLis
 
         if( !p_out->end_vertex() ) continue;
         recursive_check_descendants( p_out->end_vertex(), filter_list );
-    }
+    }*/
 }
 
 } // namespace HepMC

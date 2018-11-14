@@ -80,19 +80,21 @@ void GenVertex::remove_particle_out( GenParticlePtr p ) {
     m_particles_out.erase( std::remove( m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
 }
 
-
-const vector<GenParticlePtr> GenVertex::particles(Relationship range) const {
-  return findParticles(GenVertexPtr(const_cast<GenVertex*>(this)), range);
+vector<GenParticlePtr> GenVertex::particles(Relationship range){
+  return findParticles(shared_from_this(), range);
 }
 
+vector<ConstGenParticlePtr> GenVertex::particles(Relationship range)const{
+  return findParticles(shared_from_this(), range);
+}
 
 const FourVector& GenVertex::position() const {
 
     if( has_set_position() ) return m_data.position;
 
     // No position information - search ancestors
-    FOREACH( const GenParticlePtr &p, particles_in() ) {
-        const GenVertexPtr &v = p->production_vertex();
+    for(auto p: particles_in() ) {
+        auto v = p->production_vertex();
         if(v) return v->position();
     }
 
