@@ -57,6 +57,7 @@ namespace HepMC {
 
 
 /// Define a FOREACH directive
+/// @todo this is unnecessary with c++11 - to be removed!
 #ifdef  HEPMC_HAS_CXX11
 #define FOREACH( iterator, container ) for ( iterator: container )
 #else

@@ -57,11 +57,15 @@ namespace HepMC {
 
         /// Get parent event
         /// @todo Should we be returning a smart ptr?
-        GenEvent* parent_event() const { return m_event; }
+        GenEvent* parent_event() { return m_event; }
+
+        /// Get parent event
+        /// @todo Should we be returning a smart ptr?
+        const GenEvent* parent_event() const { return m_event_const; }
 
         /// Check if this vertex belongs to an event
         /// @todo Needed? Wouldn't it be good enough to just rely on user testing nullness of parent_event()?
-        bool in_event() const { return parent_event() != NULL; }
+        bool in_event() const { return parent_event() != nullptr; }
 
         /// Get the vertex unique identifier
         ///
@@ -78,8 +82,12 @@ namespace HepMC {
 
         /// Add incoming particle
         void add_particle_in ( GenParticlePtr p);
+        /// Add incoming particle
+        void add_particle_in ( ConstGenParticlePtr p);
         /// Add outgoing particle
         void add_particle_out( GenParticlePtr p);
+        /// Add outgoing particle
+        void add_particle_out( ConstGenParticlePtr p);
         /// Remove incoming particle
         void remove_particle_in ( GenParticlePtr p);
         /// Remove outgoing particle
@@ -87,11 +95,18 @@ namespace HepMC {
 
         /// Get list of associated particles
         /// @note Note relatively inefficient return by value
-        const vector<GenParticlePtr> particles(Relationship range) const;
+        vector<GenParticlePtr> particles(Relationship range);
+        /// Get list of associated particles
+        /// @note Note relatively inefficient return by value
+        vector<ConstGenParticlePtr> particles(Relationship range) const;
         /// Get list of incoming particles
-        const vector<GenParticlePtr>& particles_in() const { return m_particles_in; }
+        const vector<GenParticlePtr>& particles_in() { return m_particles_in; }
+        /// Get list of incoming particles
+        const vector<ConstGenParticlePtr>& particles_in() const { return m_particles_in_const; }
         /// Get list of outgoing particles
-        const vector<GenParticlePtr>& particles_out() const { return m_particles_out; }
+        const vector<GenParticlePtr>& particles_out() { return m_particles_out; }
+        /// Get list of outgoing particles
+        const vector<ConstGenParticlePtr>& particles_out() const { return m_particles_out_const; }
 
         /// @brief Get vertex position
         ///
@@ -151,27 +166,27 @@ namespace HepMC {
         void add_particle_out( GenParticle *p ) { add_particle_out( GenParticlePtr(p) ); }
 
         /// Define iterator by typedef
-        typedef vector<GenParticlePtr>::const_iterator particles_in_const_iterator;
+        typedef vector<ConstGenParticlePtr>::const_iterator particles_in_const_iterator;
         /// Define iterator by typedef
-        typedef vector<GenParticlePtr>::const_iterator particles_out_const_iterator;
+        typedef vector<ConstGenParticlePtr>::const_iterator particles_out_const_iterator;
         /// Define iterator by typedef
         typedef vector<GenParticlePtr>::iterator       particle_iterator;
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
-        particles_in_const_iterator  particles_in_const_begin()  const { return m_particles_in.begin();  } //!< @deprecated Backward compatibility iterators
+        particles_in_const_iterator  particles_in_const_begin()  const { return m_particles_in_const.begin();  } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
-        particles_in_const_iterator  particles_in_const_end()    const { return m_particles_in.end();    } //!< @deprecated Backward compatibility iterators
+        particles_in_const_iterator  particles_in_const_end()    const { return m_particles_in_const.end();    } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
-        particles_out_const_iterator particles_out_const_begin() const { return m_particles_out.begin(); } //!< @deprecated Backward compatibility iterators
+        particles_out_const_iterator particles_out_const_begin() const { return m_particles_out_const.begin(); } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
-        particles_out_const_iterator particles_out_const_end()   const { return m_particles_out.end();   }
+        particles_out_const_iterator particles_out_const_end()   const { return m_particles_out_const.end();   }
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Use particles_in/out() functions instead")
@@ -191,11 +206,11 @@ namespace HepMC {
 
         /// @deprecated Backward compatibility
         HEPMC_DEPRECATED("Use particles_in().size() instead")
-        int particles_in_size()  const { return m_particles_in.size(); }
+        int particles_in_size()  const { return m_particles_in_const.size(); }
 
         /// @deprecated Backward compatibility
         HEPMC_DEPRECATED("Use particles_out().size() instead")
-        int particles_out_size() const { return m_particles_out.size(); }
+        int particles_out_size() const { return m_particles_out_const.size(); }
 
         #endif
 
@@ -206,12 +221,18 @@ namespace HepMC {
 
         /// @name Fields
         //@{
-        GenEvent      *m_event;  //!< Parent event
-        int            m_id;     //!< Vertex id
-        GenVertexData  m_data;   //!< Vertex data
+        /// @todo why is this a raw ptr?
+        GenEvent       *m_event;  //!< Parent event
+        const GenEvent *m_event_const;  //!< Parent event
+        int             m_id;     //!< Vertex id
+        GenVertexData   m_data;   //!< Vertex data
 
         vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
+        vector<ConstGenParticlePtr>  m_particles_in_const;  //!< Incoming particle list
+
         vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
+        vector<ConstGenParticlePtr>  m_particles_out_const; //!< Outgoing particle list
+
         //@}
 
     };

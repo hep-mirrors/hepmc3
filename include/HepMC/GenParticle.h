@@ -56,31 +56,47 @@ public:
 //
 public:
 
-    GenEvent*              parent_event() const { return m_event; } //!< Get parent event
+    /// @todo why is this a raw ptr and not a shared_ptr?
+    GenEvent*              parent_event() { return m_event; } //!< Get parent event
+    const GenEvent*              parent_event() const { return m_event_const; } //!< Get parent event
     int                    id()           const { return m_id;    } //!< Get particle id
     const GenParticleData& data()         const { return m_data;  } //!< Get particle data
 
 
-    const GenVertexPtr production_vertex() const;        //!< Get production vertex
-    const GenVertexPtr end_vertex() const;               //!< Get end vertex
-
+    ConstGenVertexPtr production_vertex() const;        //!< Get production vertex (const version)
+    ConstGenVertexPtr end_vertex() const;               //!< Get end vertex (const version)
+  
     GenVertexPtr production_vertex();        //!< Get production vertex
     GenVertexPtr end_vertex();               //!< Get end vertex
 
     /// @brief Convenience access to immediate incoming particles via production vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> parents() const;
+    vector<GenParticlePtr> parents();
+
+    /// @brief Convenience access to immediate incoming particles via production vertex (const version)
+    /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
+    vector<ConstGenParticlePtr> parents() const;
+  
+    /// @brief Convenience access to immediate outgoing particles via end vertex
+    /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
+    vector<GenParticlePtr> children();
 
     /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> children() const;
-
+    vector<ConstGenParticlePtr> children() const;
+  
     /// @brief Convenience access to all incoming particles via production vertex
-    vector<GenParticlePtr> ancestors() const;
+    vector<GenParticlePtr> ancestors();
+
+    /// @brief Convenience access to all incoming particles via production vertex (const version)
+    vector<ConstGenParticlePtr> ancestors() const;
+  
+    /// @brief Convenience access to all outgoing particles via end vertex
+    vector<GenParticlePtr> descendants();
 
     /// @brief Convenience access to all outgoing particles via end vertex
-    vector<GenParticlePtr> descendants() const;
-
+    vector<ConstGenParticlePtr> descendants() const;
+  
 
     int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
@@ -100,7 +116,21 @@ public:
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
 
+    /// @brief set the GenEvent
+    /// This non-const version will allow the subsequent retrieval and modification of
+    /// the GenEvent from this GenParticle.  If you don't want that to happen, you should
+    /// mark the GenParticle as const
+    void set_gen_event(GenEvent *evt);
 
+    /// @brief set the GenEvent
+    /// This const version will set the internal non-const GenEvent to 0
+    /// This means no one will be able to modify the GenEvent from this GenParticle
+    void set_gen_event(const GenEvent *evt);
+  
+    void set_production_vertex(GenVertexPtr vtx);
+  
+    void set_production_vertex(ConstGenVertexPtr vtx);
+  
     /** @brief Add an attribute to this particle
      *
      *  This will overwrite existing attribute if an attribute with
@@ -145,16 +175,24 @@ public:
 // Fields
 //
 private:
-    GenEvent        *m_event; //!< Parent event
-    int              m_id;    //!< Index
-    GenParticleData  m_data;  //!< Particle data
+  
+    /// @todo why is this a raw pointer?
+    GenEvent                  *m_event; //!< Parent event
+    const GenEvent            *m_event_const; //!< Parent event (const version)
 
-    weak_ptr<GenVertex>    m_production_vertex; //!< Production vertex
-    weak_ptr<GenVertex>    m_end_vertex;        //!< End vertex
+    int                        m_id;    //!< Index
+    GenParticleData            m_data;  //!< Particle data
+
+    weak_ptr<GenVertex>        m_production_vertex; //!< Production vertex
+    weak_ptr<GenVertex>        m_end_vertex;        //!< End vertex
+    weak_ptr<const GenVertex>  m_production_vertex_const; //!< Production vertex (const version)
+    weak_ptr<const GenVertex>  m_end_vertex_const;        //!< End vertex (const version)
+
+    /// @brief throws up if the const ptr is set and the non-const is expired
+    /// Not essential, but probably useful for debugging user code
+    void checkValidity(weak_ptr<GenVertex> vtx, weak_ptr<const GenVertex> vtx_const) const;
+  
 };
-
-  //using GenParticlePtr = std::shared_ptr<GenParticle>;
-  //using ConstGenParticlePtr = std::shared_ptr<const GenParticle>;
   
 } // namespace HepMC
 
