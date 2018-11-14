@@ -62,16 +62,16 @@ void GenEvent::add_vertex( GenVertexPtr v ) {
 
     m_vertices.push_back(v);
 
-    v->m_event = this;
-    v->m_id    = -(int)vertices().size();
+    v->set_gen_event(this);
+    v->set_id(-(int)vertices().size());
 
     // Add all incoming and outgoing particles and restore their production/end vertices
-    FOREACH( GenParticlePtr &p, v->m_particles_in ) {
+    for(auto p: v->particles_in() ) {
         if(!p->in_event()) add_particle(p);
       p->set_end_vertex(v->shared_from_this());
     }
 
-    FOREACH( GenParticlePtr &p, v->m_particles_out ) {
+    for(auto p: v->particles_out() ) {
         if(!p->in_event()) add_particle(p);
         p->set_production_vertex(v->shared_from_this());
     }
@@ -181,11 +181,11 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     DEBUG( 30, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
     shared_ptr<GenVertex> null_vtx;
 
-    FOREACH( GenParticlePtr &p, v->m_particles_in ) {
+    for(auto p: v->particles_in() ) {
         p->set_end_vertex(GenVertexPtr(nullptr));
     }
 
-    FOREACH( GenParticlePtr &p, v->m_particles_out ) {
+    for(auto p: v->particles_out() ) {
         p->set_production_vertex(GenVertexPtr(nullptr));
 
         // recursive delete rest of the tree
@@ -227,12 +227,12 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
 
     // Reassign id of particles with id above this one
     for(;it != m_vertices.end(); ++it) {
-        ++((*it)->m_id);
+        (*it)->set_id((*it)->id() + 1);
     }
 
     // Finally - set parent event and id of this vertex to 0
-    v->m_event = NULL;
-    v->m_id    = 0;
+    v->set_gen_event((GenEvent*)nullptr);
+    v->set_id(0);
 }
 #else
     vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
@@ -346,8 +346,8 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 
     if( new_length_unit != m_length_unit ) {
-        FOREACH( GenVertexPtr &v, m_vertices ) {
-            FourVector &fv = v->m_data.position;
+        for(GenVertexPtr &v: m_vertices ) {
+            FourVector &fv = v->data().position;
             if( !fv.is_zero() ) Units::convert( fv, m_length_unit, new_length_unit );
         }
 
@@ -504,8 +504,8 @@ void GenEvent::read_data(const GenEventData &data) {
 
         m_vertices.push_back(v);
 
-        v->m_event = this;
-        v->m_id    = -(int)vertices().size();
+        v->set_gen_event(this);
+        v->set_id(-(int)vertices().size());
     }
 
     // Restore links

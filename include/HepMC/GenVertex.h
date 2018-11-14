@@ -26,16 +26,11 @@ namespace HepMC {
     // enum IteratorRange { parents, children, family, ancestors, descendants, relatives };
     // #endif
 
-
     class GenEvent;
     class Attribute;
 
-
     /// Stores vertex-related information
     class GenVertex : public std::enable_shared_from_this<GenVertex>{
-
-        /// @todo Are these really needed? Friends usually indicate a problem...
-        friend class GenEvent;
 
     public:
 
@@ -63,6 +58,13 @@ namespace HepMC {
         /// @todo Should we be returning a smart ptr?
         const GenEvent* parent_event() const { return m_event_const; }
 
+        /// @brief Set the GenEvent with which this vertex is associated
+        void set_gen_event(GenEvent *evt);
+
+        /// @brief Set the GenEvent with which this vertex is associated
+        /// This const version means the event can only be retrieved in const form
+        void set_gen_event(const GenEvent *evt);
+
         /// Check if this vertex belongs to an event
         /// @todo Needed? Wouldn't it be good enough to just rely on user testing nullness of parent_event()?
         bool in_event() const { return parent_event() != nullptr; }
@@ -72,6 +74,9 @@ namespace HepMC {
         /// @note This is not the same as id() in HepMC v2, which is now @c status()
         int id() const { return m_id; }
 
+        /// @brief set the vertex identifier
+        void set_id(int id);
+
         /// Get vertex status code
         int status() const { return m_data.status; }
         /// Set vertex status code
@@ -79,6 +84,9 @@ namespace HepMC {
 
         /// Get vertex data
         const GenVertexData& data() const { return m_data; }
+
+        /// Get vertex data (mutable version)
+        GenVertexData& data() { return m_data; }
 
         /// Add incoming particle
         void add_particle_in ( GenParticlePtr p);

@@ -80,6 +80,23 @@ void GenVertex::remove_particle_out( GenParticlePtr p ) {
     m_particles_out.erase( std::remove( m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
 }
 
+void GenVertex::set_gen_event(GenEvent *evt){
+  m_event = evt;
+  m_event_const = evt;
+  return;
+}
+
+void GenVertex::set_gen_event(const GenEvent *evt){
+  m_event = 0;
+  m_event_const = evt;
+  return;
+}
+
+void GenVertex::set_id(int id){
+  m_id = id;
+  return;
+}
+
 vector<GenParticlePtr> GenVertex::particles(Relationship range){
   return findParticles(shared_from_this(), range);
 }
