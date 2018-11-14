@@ -1,6 +1,7 @@
 // -*- C++ -*-
 //
 #include "WriterRootTreeOPAL.h"
+#include "TTree.h"
 namespace HepMC
 {
 WriterRootTreeOPAL::WriterRootTreeOPAL(const std::string &filename,shared_ptr<GenRunInfo> run):WriterRootTree::WriterRootTree(filename,"h10","h10",run) {}

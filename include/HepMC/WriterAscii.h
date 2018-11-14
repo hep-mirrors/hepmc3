@@ -84,7 +84,7 @@ private:
     }
 
     /// @brief Escape '\' and '\n' characters in string
-    std::string escape(const std::string s);
+    std::string escape(const std::string& s);
 
     /// Inline function flushing buffer to output stream when close to buffer capacity
     void flush();
