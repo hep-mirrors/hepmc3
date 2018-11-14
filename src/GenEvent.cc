@@ -47,8 +47,8 @@ void GenEvent::add_particle( GenParticlePtr p ) {
 
     m_particles.push_back(p);
 
-    p->m_event = this;
-    p->m_id    = particles().size();
+    p->set_gen_event(this);
+    p->set_id(particles().size());
 
     // Particles without production vertex are added to the root vertex
     if( !p->production_vertex() )
@@ -68,12 +68,12 @@ void GenEvent::add_vertex( GenVertexPtr v ) {
     // Add all incoming and outgoing particles and restore their production/end vertices
     FOREACH( GenParticlePtr &p, v->m_particles_in ) {
         if(!p->in_event()) add_particle(p);
-      p->m_end_vertex = v->shared_from_this();
+      p->set_end_vertex(v->shared_from_this());
     }
 
     FOREACH( GenParticlePtr &p, v->m_particles_out ) {
         if(!p->in_event()) add_particle(p);
-        p->m_production_vertex = v->shared_from_this();
+        p->set_production_vertex(v->shared_from_this());
     }
 }
 
@@ -149,12 +149,13 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
 #endif
     // Reassign id of particles with id above this one
     for(;it != m_particles.end(); ++it) {
-        --((*it)->m_id);
+        (*it)->set_id((*it)->id()-1);
+        //--((*it)->m_id);
     }
 
     // Finally - set parent event and id of this particle to 0
-    p->m_event = NULL;
-    p->m_id    = 0;
+    p->set_gen_event((GenEvent*)nullptr);
+    p->set_id(0);
 }
 
     struct sort_by_id_asc {
@@ -181,11 +182,11 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     shared_ptr<GenVertex> null_vtx;
 
     FOREACH( GenParticlePtr &p, v->m_particles_in ) {
-        p->m_end_vertex.reset();
+        p->set_end_vertex(GenVertexPtr(nullptr));
     }
 
     FOREACH( GenParticlePtr &p, v->m_particles_out ) {
-        p->m_production_vertex.reset();
+        p->set_production_vertex(GenVertexPtr(nullptr));
 
         // recursive delete rest of the tree
         remove_particle(p);
@@ -338,7 +339,7 @@ void GenEvent::reserve(unsigned int parts, unsigned int verts) {
 void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
     if( new_momentum_unit != m_momentum_unit ) {
         FOREACH( GenParticlePtr &p, m_particles ) {
-            Units::convert( p->m_data.momentum, m_momentum_unit, new_momentum_unit );
+            Units::convert( p->data().momentum, m_momentum_unit, new_momentum_unit );
         }
 
         m_momentum_unit = new_momentum_unit;
@@ -493,8 +494,8 @@ void GenEvent::read_data(const GenEventData &data) {
 
         m_particles.push_back(p);
 
-        p->m_event = this;
-        p->m_id    = particles().size();
+        p->set_gen_event(this);
+        p->set_id(particles().size());
     }
 
     // Fill vertex information

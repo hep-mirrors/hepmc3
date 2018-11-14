@@ -28,10 +28,7 @@ using namespace std;
 class GenEvent;
 class Attribute;
 
-
 class GenParticle : public std::enable_shared_from_this<GenParticle>{
-
-friend class GenEvent;
   
 //
 // Constructors
@@ -60,6 +57,7 @@ public:
     const GenEvent*              parent_event() const { return m_event_const; } //!< Get parent event
     int                    id()           const { return m_id;    } //!< Get particle id
     const GenParticleData& data()         const { return m_data;  } //!< Get particle data
+    GenParticleData& data()                     { return m_data;  } //!< Get particle data
 
 
     ConstGenVertexPtr production_vertex() const;        //!< Get production vertex (const version)
@@ -125,6 +123,10 @@ public:
     /// This const version will set the internal non-const GenEvent to 0
     /// This means no one will be able to modify the GenEvent from this GenParticle
     void set_gen_event(const GenEvent *evt);
+  
+    /// @brief set the ID of the particle.
+    /// The ID is set by GenEvent
+    void set_id(int id);
   
     /// @brief set the production vertex
     /// This non-const version will allow the subsequent retrieval and modification of

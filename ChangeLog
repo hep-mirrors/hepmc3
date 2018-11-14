@@ -12,7 +12,7 @@
   * Search/FindParticles: The FindParticles functionality need not be a class, it should be a
     set of utility funcs.  Started migration to that, including SFINAE declarations to get the
     constness correct
-  * GenParticle is no longer friends with GenVertex
+  * GenParticle is no longer friends with GenVertex or GenEvent
 
 2018-11-09 James Monk
   * FindParticles.h: Do not pass GenParticlePtr by reference to findParticles, as that is not thread safe!

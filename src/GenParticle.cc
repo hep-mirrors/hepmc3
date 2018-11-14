@@ -142,6 +142,11 @@ void GenParticle::set_gen_event(const GenEvent *evt){
   return;
 }
 
+void GenParticle::set_id(int id){
+  m_id = id;
+  return;
+}
+
 void GenParticle::set_production_vertex(GenVertexPtr vtx){
   m_production_vertex = vtx;
   m_production_vertex_const = std::const_pointer_cast<const GenVertex>(vtx);
