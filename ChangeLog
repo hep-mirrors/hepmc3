@@ -1,5 +1,21 @@
   --------------------------  HepMC3.0.0  --------------------------
 
+2018-11-14 James Monk
+  * GenVertex and GenParticle: Add const and non-consted versions of accessors.
+    The idea is that if you have a consted object and ask for other objects, those objects should
+    also be consted.  Conversely, if you ask a non-consted object for some other object, that
+    output should also not be consted
+  * GenVertex and GenParticle: Add methods to assign vertices, particles and GenEvents.
+    Since we plan to use const correctly, we will no longer need to use friendship to set
+    the internals of the Vertex and Particle.  The proper way to do it will be to mark
+    the object const, so it will no longer be modifiable.
+  * Search/FindParticles: The FindParticles functionality need not be a class, it should be a
+    set of utility funcs.  Started migration to that, including SFINAE declarations to get the
+    constness correct
+
+2018-11-09 James Monk
+  * FindParticles.h: Do not pass GenParticlePtr by reference to findParticles, as that is not thread safe!
+
 2017-03-20 Witek Pokorski
 
 	* tagging HepMC3.0.0
