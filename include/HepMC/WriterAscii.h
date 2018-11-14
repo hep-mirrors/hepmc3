@@ -53,12 +53,15 @@ public:
 
     /// @brief Set output precision
     ///
-    /// Available range is [2,24]. Default is 16.
-    void set_precision( size_t prec ) {
+    /// So far available range is [2,24]. Default is 16.
+    void set_precision(const int& prec ) {
         if (prec < 2 || prec > 24) return;
         m_precision = prec;
     }
-
+    /// @brief Return output precision
+    int precision() const {
+        return m_precision;
+    }
 private:
 
     /// @name Buffer management
