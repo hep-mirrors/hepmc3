@@ -24,11 +24,13 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 option(HEPMC_ENABLE_ROOTIO "Enables building with ROOT O/I." ON)
 option(HEPMC_BUILD_EXAMPLES "Enables building of examples." OFF)
+option(HEPMC_ENABLE_VALIDATION "Enables building of validation executables." OFF)
 option(HEPMC_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces." OFF)
 
 
 message(STATUS "HepMC: HEPMC_ENABLE_ROOTIO         ${HEPMC_ENABLE_ROOTIO}") 
 message(STATUS "HepMC: HEPMC_BUILD_EXAMPLES        ${HEPMC_BUILD_EXAMPLES}") 
+message(STATUS "HepMC: HEPMC_ENABLE_VALIDATION     ${HEPMC_ENABLE_VALIDATION}") 
 message(STATUS "HepMC: HEPMC_INSTALL_INTERFACES    ${HEPMC_INSTALL_INTERFACES}")
 
 if(HEPMC_ENABLE_ROOTIO)
@@ -159,6 +161,12 @@ if(HEPMC_ENABLE_ROOTIO)
   endif()
 endif()
 
+#------------------------------------------------------------------------------
+# Add the validation subdirectories
+if(HEPMC_ENABLE_VALIDATION)
+  add_subdirectory(validation)
+endif()
+
 
 #---Select sources for the various libraries---------------------------------
 file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
@@ -205,11 +213,7 @@ add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}
                                    -DCOMPONENTS="devel"
                                    -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
 
-#------------------------------------------------------------------------------
-# Add the validation subdirectories
-if(HEPMC_ENABLE_VALIDATION)
-  add_subdirectory(validation)
-endif()
+
 
 
 # Generate config CMake files to be used by other projects
