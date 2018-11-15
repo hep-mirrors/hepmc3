@@ -5,6 +5,7 @@
 #include "HepMC/Reader.h"
 #include "HepMC/Writer.h"
 #include "HepMC/ReaderAsciiHepMC2.h"
+#include "HepMC/WriterAsciiHepMC2.h"
 #include "HepMC/ReaderAscii.h"
 #include "HepMC/WriterAscii.h"
 #include "HepMC/Print.h"
@@ -220,8 +221,8 @@ int main(int argc, char** argv)
             switch (format_map.at(convert_formats.second))
                 {
                 case hepmc2:
-                    printf("WARNING: hepmc3 format will be used instead of hepmc2.\n");
-                    output_file=new WriterAscii(convert_list[i].second.c_str());
+                    printf("WARNING: HepMC2 format is outdated. Please use HepMC3 format instead.\n");
+                    output_file=new WriterAsciiHepMC2(convert_list[i].second.c_str());
                     break;
                 case hepmc3:
                     output_file=new WriterAscii(convert_list[i].second.c_str());
