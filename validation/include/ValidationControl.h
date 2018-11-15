@@ -18,6 +18,7 @@
 #include "Timer.h"
 
 #include <vector>
+#include <string.h>
 
 class ValidationControl {
 //
