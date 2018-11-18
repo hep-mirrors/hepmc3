@@ -1,6 +1,6 @@
 // -*- C++ -*-
 #define HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
-#define HEPMCCONVERT_EXTENSION_HEPEVTZEUS
+//#define HEPMCCONVERT_EXTENSION_HEPEVTZEUS
 #include "HepMC/GenEvent.h"
 #include "HepMC/Reader.h"
 #include "HepMC/Writer.h"
@@ -174,7 +174,9 @@ int main(int argc, char** argv)
         ||
         (convert_list.back().second.substr(convert_list.back().second.find_last_of(".") + 1) != extention_map.at(convert_formats.second))
     )
-        { printf("The conversion mode=%s is not suitable for extensions of %s %s files\n",argv[1],argv[2],argv[3]); exit(1);}
+        { 
+         printf("The conversion mode=%s might be not suitable for extensions of %s %s files\n",argv[1],argv[2],argv[3]);
+        }
 
 #ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
     int Run=0;
