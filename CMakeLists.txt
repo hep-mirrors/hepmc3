@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 project(HepMC)
 set(PROJECT_VERSION 3)
 #---Enable FORTRAN (unfortunatelly is not not possible in all cases)-------------------------------
-if(NOT CMAKE_GENERATOR STREQUAL Xcode)
+if(${CMAKE_GENERATOR} STREQUAL "Unix Makefiles")
   enable_language(Fortran OPTIONAL)
 endif()
 
@@ -68,6 +68,7 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
 # fortran flags needed for some tests and examples
 
 # FFLAGS depend on the compiler
+if ( ${LANGUAGES} MATCHES "Fortran")
 get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
 if ("${CMAKE_Fortran_FLAGS}" STREQUAL "" )
 if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
@@ -77,7 +78,7 @@ elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
 endif()
 message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
 elseif()
-
+endif()
 endif()
 
 # setting linker flags
@@ -90,6 +91,8 @@ ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed")
   SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--as-needed")
   SET(STATIC_LIBRARY_FLAGS "-Wl,--as-needed")	
+ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+  message(STATUS "Compilation on Windows system is not well supported yet")
 ENDIF()
 
 #----------------------------------------------------------------------------
@@ -166,6 +169,7 @@ endif()
 if(HEPMC_ENABLE_VALIDATION)
   add_subdirectory(validation)
 endif()
+
 
 
 #---Select sources for the various libraries---------------------------------
