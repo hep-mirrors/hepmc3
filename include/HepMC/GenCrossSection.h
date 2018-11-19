@@ -55,7 +55,7 @@ public:
     bool to_string(string &att) const;
 
     /** @brief Set all fields */
-  void set_cross_section( double xs, double xs_err, long n_acc = -1, long n_att = -1) {
+  void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1) {
         cross_section       = xs;
         cross_section_error = xs_err;
 	accepted_events     = n_acc;

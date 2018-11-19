@@ -154,7 +154,7 @@ public:
     }
 
     /** @brief set the value associated to this Attribute. */
-    void set_value(int i) {
+    void set_value(const int& i) {
 	m_val = i;
     }
 
@@ -205,7 +205,7 @@ public:
     }
 
     /** @brief set the value associated to this Attribute. */
-    void set_value(long l) {
+    void set_value(const long& l) {
 	m_val = l;
     }
 
@@ -255,7 +255,7 @@ public:
     }
 
     /** @brief set the value associated to this Attribute. */
-    void set_value(double d) {
+    void set_value(const double& d) {
 	m_val = d;
     }
 
@@ -304,7 +304,7 @@ public:
     }
 
     /** @brief set the value associated to this Attribute. */
-    void set_value(float f) {
+    void set_value(const float& f) {
 	m_val = f;
     }
 
@@ -355,7 +355,7 @@ public:
     }
 
     /** @brief set the value associated to this Attribute. */
-    void set_value(string s) {
+    void set_value(const string& s) {
 	set_unparsed_string(s);
     }
 
