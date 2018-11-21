@@ -1,5 +1,16 @@
   --------------------------  HepMC3.0.0  --------------------------
 
+2018-11-21 James Monk
+  * Add Relatives class and interface for finding relatives of input particles and vertices.
+    Each implementation of the Relatives class has a templated operator ()(GenObject T) method that
+    returns the appropriate relatives of the input object.  e.g. Parents(GenParticlePtr p) returns
+    the parents of that particle.  Parents, Children, Ancestors and Descendants have been implemented
+  * Remove use of find_particles from GenParticle and GenVertex and replace with Relatives
+  * Alias for GenParticles_type<T> that will be the const-appropriate vector<GenParticlesPtr>
+    or vector<ConstGenParticlesPtr> type.  Used to simplify the return type of templated
+    functions e.g. template<typename T> GenParticles_type<T> foo(T input)
+  * Similar alias for GenVertex_type<T>
+
 2018-11-14 James Monk
   * GenVertex and GenParticle: Add const and non-consted versions of accessors.
     The idea is that if you have a consted object and ask for other objects, those objects should
