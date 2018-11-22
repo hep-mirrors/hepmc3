@@ -281,8 +281,8 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         random_states[i] = atoi(cursor);
     }
     
-    for ( int i = 0; i < random_states_size; ++i ) 
-    evt.add_attribute("random_states"+to_string(i),make_shared<IntAttribute>(random_states[i]));
+    for ( size_t i = 0; i < random_states_size; ++i ) 
+    evt.add_attribute("random_states"+to_string((long long unsigned int)i),make_shared<IntAttribute>(random_states[i])); //gcc-4.4.7 workaround
 
     // weights
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -431,10 +431,10 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     for (int i=0;i<flowsize;i++)
     {
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-    int flowindex=atoi(cursor);
+   int  flowindex=atoi(cursor); 
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     int flowvalue=atoi(cursor);
-    data_ghost->add_attribute("flow"+to_string(flowindex),make_shared<IntAttribute>(flowvalue));
+    data_ghost->add_attribute("flow"+to_string((long long int)flowindex),make_shared<IntAttribute>(flowvalue));//gcc-4.4.7 workaround
     }
 
     // Set prod_vtx link

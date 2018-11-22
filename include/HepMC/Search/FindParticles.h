@@ -30,9 +30,13 @@ enum FilterType {
     FIND_FIRST,
     FIND_LAST
 };
+
+#ifdef HEPMC_HAS_CXX0X_GCC_ONLY
+typedef     FilterType FilterEvent;
+#else
 /// Compatibility name
 using FilterEvent = FilterType;
-
+#endif
 
 class FindParticles {
 //

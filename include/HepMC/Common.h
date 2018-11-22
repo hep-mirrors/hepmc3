@@ -12,6 +12,15 @@
 #include <iostream>
 #include <memory>
 
+/// Neater/extensible C++11 availability test
+#if __cplusplus >= 201103L
+#define HEPMC_HAS_CXX11
+#endif
+#if !defined(HEPMC_HAS_CXX11) && (__GNUC__) && (__cplusplus) && (__GXX_EXPERIMENTAL_CXX0X__)
+#define HEPMC_HAS_CXX0X_GCC_ONLY
+#endif
+
+
 namespace HepMC {
 
 
@@ -34,26 +43,27 @@ namespace HepMC {
       CHILDREN = 3, FIND_CHILDREN = 3, FIND_DAUGHTERS = 3, children = 3,
       PRODUCTION_SIBLINGS = 4, FIND_PRODUCTION_SIBLINGS = 4
     };
-
+//The whole block can be removed as FilterParticle and IteratorRange are used only two or three times
 #ifndef __CINT__
     /// Compatibility name
-    using FilterParticle = Relationship;
-    #ifndef HEPMC_NO_DEPRECATED
+#ifdef HEPMC_HAS_CXX0X_GCC_ONLY
+      typedef   Relationship FilterParticle;
+#else      
+      using FilterParticle = Relationship;
+#endif
+#ifndef HEPMC_NO_DEPRECATED
     /// Compatibility name
-    using IteratorRange = Relationship;
-    #endif
-
+#ifdef HEPMC_HAS_CXX0X_GCC_ONLY
+       typedef   Relationship IteratorRange;
+#else
+       using IteratorRange = Relationship;
+#endif
+#endif
 #endif
 }
 
 
-/// Neater/extensible C++11 availability test
-#if __cplusplus >= 201103L
-#define HEPMC_HAS_CXX11
-#endif
-#if !defined(HEPMC_HAS_CXX11) && (__GNUC__) && (__cplusplus) && (__GXX_EXPERIMENTAL_CXX0X__)
-#define HEPMC_HAS_CXX0X_GCC_ONLY
-#endif
+
 
 
 /// Define a FOREACH directive

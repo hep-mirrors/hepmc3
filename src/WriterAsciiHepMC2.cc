@@ -113,7 +113,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         production_vertex=v->id();
         FOREACH ( const GenParticlePtr &p, v->particles_in())
         {
-            if (p->production_vertex()==NULL)         { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
+            if (!p->production_vertex())         { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
             else if (p->production_vertex()->id()==0) { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
         }
         FOREACH ( const GenParticlePtr &p, v->particles_out()) { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
@@ -205,7 +205,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         write_vertex(v);
         FOREACH ( const GenParticlePtr &p, v->particles_in())
         {
-            if (p->production_vertex()==NULL) write_particle( p, production_vertex );
+            if (!p->production_vertex()) write_particle( p, production_vertex );
             else
                 {
                     if (p->production_vertex()->id()==0)write_particle( p, production_vertex );
@@ -271,7 +271,7 @@ void WriterAsciiHepMC2::write_vertex(const GenVertexPtr &v)
     int orph=0;
     FOREACH ( const GenParticlePtr &p, v->particles_in())
     {
-        if (p->production_vertex()==NULL) orph++;
+        if (!p->production_vertex()) orph++;
         else
             {
                 if (p->production_vertex()->id()==0)orph++;
