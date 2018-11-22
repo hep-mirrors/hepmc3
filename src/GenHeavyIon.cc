@@ -86,9 +86,9 @@ bool GenHeavyIon::to_string(string &att) const {
     return true;
 }
 
-void GenHeavyIon::set( int nh, int np, int nt, int nc, int ns, int nsp,
-                    int nnw, int nwn, int nwnw,
-                    float im, float pl, float ec, float s, float cent ) {
+void GenHeavyIon::set( const int&nh, const int&np, const int&nt, const int&nc, const int&ns, const int&nsp,
+                    const int&nnw, const int&nwn, const int&nwnw,
+                    const double& im, const double& pl, const double& ec, const double& s, const double& cent ) {
     Ncoll_hard                   = nh;
     Npart_proj                   = np;
     Npart_targ                   = nt;

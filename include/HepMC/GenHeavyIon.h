@@ -75,9 +75,9 @@ public:
     bool to_string(string &att) const;
 
     /** @brief Set all fields */
-    void set( int nh, int np, int nt, int nc, int ns, int nsp,
-              int nnw=0, int nwn=0, int nwnw=0,
-              float im=0., float pl=0., float ec=0., float s=0., float cent=0. );
+    void set( const int&nh, const int&np, const int&nt, const int&nc, const int&ns, const int&nsp,
+              const int&nnw=0, const int&nwn=0, const int&nwnw=0,
+              const double& im=0., const double& pl=0., const double& ec=0., const double& s=0., const double& cent=0. );
 
     bool operator==( const GenHeavyIon& ) const; ///< Operator ==
     bool operator!=( const GenHeavyIon& ) const; ///< Operator !=
