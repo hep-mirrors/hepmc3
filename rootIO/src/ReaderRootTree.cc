@@ -38,7 +38,7 @@ bool ReaderRootTree::init()
         }
     shared_ptr<GenRunInfo> ri = make_shared<GenRunInfo>();
 
-    GenRunInfoData *run = dynamic_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
+    GenRunInfoData *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
     
     if(run) {
         ri->read_data(*run);
