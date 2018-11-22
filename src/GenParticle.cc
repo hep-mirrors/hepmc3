@@ -11,7 +11,7 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenEvent.h"
-#include "HepMC/Search/Relatives.h"
+#include "HepMC/Relatives.h"
 #include "HepMC/Setup.h"
 #include "HepMC/Attribute.h"
 
@@ -114,20 +114,20 @@ vector<ConstGenParticlePtr> GenParticle::children() const{
 
 vector<GenParticlePtr> GenParticle::ancestors() {
   checkValidity(m_production_vertex, m_production_vertex_const);
-  return (m_production_vertex.expired()) ? vector<GenParticlePtr>() : Ancestors()(shared_from_this());
+  return (m_production_vertex.expired()) ? vector<GenParticlePtr>() : Relatives::ANCESTORS(shared_from_this());
 }
 
 vector<ConstGenParticlePtr> GenParticle::ancestors() const {
-  return (m_production_vertex_const.expired()) ? vector<ConstGenParticlePtr>() : Ancestors()(shared_from_this());
+  return (m_production_vertex_const.expired()) ? vector<ConstGenParticlePtr>() : Relatives::ANCESTORS(shared_from_this());
 }
 
 vector<GenParticlePtr> GenParticle::descendants() {
   checkValidity(m_end_vertex, m_end_vertex_const);
-  return (m_end_vertex.expired()) ? vector<GenParticlePtr>() : Descendants()(shared_from_this());
+  return (m_end_vertex.expired()) ? vector<GenParticlePtr>() : Relatives::DESCENDANTS(shared_from_this());
 }
 
 vector<ConstGenParticlePtr> GenParticle::descendants() const {
-  return (m_end_vertex_const.expired()) ? vector<ConstGenParticlePtr>() : Descendants()(shared_from_this());
+  return (m_end_vertex_const.expired()) ? vector<ConstGenParticlePtr>() : Relatives::DESCENDANTS(shared_from_this());
 }
 
 void GenParticle::set_gen_event(GenEvent *evt){

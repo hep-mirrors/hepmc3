@@ -101,12 +101,6 @@ namespace HepMC {
         /// Remove outgoing particle
         void remove_particle_out( GenParticlePtr p);
 
-        /// Get list of associated particles
-        /// @note Note relatively inefficient return by value
-        vector<GenParticlePtr> particles(Relationship range);
-        /// Get list of associated particles
-        /// @note Note relatively inefficient return by value
-        vector<ConstGenParticlePtr> particles(Relationship range) const;
         /// Get list of incoming particles
         const vector<GenParticlePtr>& particles_in() { return m_particles_in; }
         /// Get list of incoming particles

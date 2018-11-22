@@ -11,7 +11,6 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenEvent.h"
-#include "HepMC/Search/FindParticles.h"
 #include "HepMC/Setup.h"
 #include "HepMC/Attribute.h"
 #include <algorithm> // std::remove
@@ -95,14 +94,6 @@ void GenVertex::set_gen_event(const GenEvent *evt){
 void GenVertex::set_id(int id){
   m_id = id;
   return;
-}
-
-vector<GenParticlePtr> GenVertex::particles(Relationship range){
-  return findParticles(shared_from_this(), range);
-}
-
-vector<ConstGenParticlePtr> GenVertex::particles(Relationship range)const{
-  return findParticles(shared_from_this(), range);
 }
 
 const FourVector& GenVertex::position() const {
