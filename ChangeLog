@@ -1,5 +1,9 @@
   --------------------------  HepMC3.0.0  --------------------------
 
+2018-11-22 James Monk
+  * Remove GenVertex::particles().  Not needed, since it would only call through to Relatives
+  * Relatives: add static PARENTS, CHILDREN, ANCESTORS, DESCENDANTS members. Can use e.g Relatives::ANCESTORS (which is an instance of both Relatives and Ancestors)
+
 2018-11-21 James Monk
   * Add Relatives class and interface for finding relatives of input particles and vertices.
     Each implementation of the Relatives class has a templated operator ()(GenObject T) method that
