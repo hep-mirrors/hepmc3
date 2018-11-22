@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC)
 set(PROJECT_VERSION 3)
-#---Enable FORTRAN (unfortunatelly is not not possible in all cases)-------------------------------
-if(${CMAKE_GENERATOR} STREQUAL "Unix Makefiles")
-  enable_language(Fortran OPTIONAL)
-endif()
 
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -53,63 +49,29 @@ set(CMAKE_MODULE_PATH
     ${PROJECT_SOURCE_DIR}/cmake/Modules
     ${CMAKE_MODULE_PATH})
 
-#---Compilation and Link options---------------------------------------------
-
-if(CMAKE_SYSTEM_NAME MATCHES Darwin)
-  set(CMAKE_SHARED_LIBRARY_CREATE_Fortran_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_Fortran_FLAGS} -flat_namespace -single_module -undefined dynamic_lookup")
-endif()
-
-set(CMAKE_CXX_FLAGS                "${CMAKE_CXX_FLAGS} -fPIC")
-set(CMAKE_CXX_FLAGS_DEBUG          "-g3 -Wall")
-set(CMAKE_CXX_FLAGS_MINSIZEREL     "-Os -DNDEBUG")
-set(CMAKE_CXX_FLAGS_RELEASE        "-O2 -DNDEBUG")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-g3 -O2")
-
-# fortran flags needed for some tests and examples
-
-# FFLAGS depend on the compiler
-if ( ${LANGUAGES} MATCHES "Fortran")
-get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
-if ("${CMAKE_Fortran_FLAGS}" STREQUAL "" )
-if (Fortran_COMPILER_NAME MATCHES "gfortran.*")
-   set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -ffixed-line-length-132")
-elseif (Fortran_COMPILER_NAME MATCHES "ifort.*")
-   set(CMAKE_Fortran_FLAGS            "-fno-automatic -fno-backslash -extend-source 132")	
-endif()
-message(STATUS "Fortran compiler : ${Fortran_COMPILER_NAME}")
-elseif()
-endif()
-endif()
-
-# setting linker flags
-
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") 
-  SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-dead_strip_dylibs")
-  SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,-dead_strip_dylibs") 
-  SET(STATIC_LIBRARY_FLAGS "-Wl,-dead_strip_dylibs")
-ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-  SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed")
-  SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--as-needed")
-  SET(STATIC_LIBRARY_FLAGS "-Wl,--as-needed")	
-ELSEIF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-  message(STATUS "Compilation on Windows system is not well supported yet")
-ENDIF()
-
-#----------------------------------------------------------------------------
-
-
 include(CheckCXXCompilerFlag)
+
+CHECK_CXX_COMPILER_FLAG("/Zc:__cplusplus" COMPILER_SUPPORTS_ZCPLUSPLUS)
+if(COMPILER_SUPPORTS_ZCPLUSPLUS)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:__cplusplus")
+endif()
+
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
 if(COMPILER_SUPPORTS_CXX11)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-elseif(COMPILER_SUPPORTS_CXX0X)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-else()
-message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support.")
+elseif()
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if(COMPILER_SUPPORTS_CXX0X)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+endif()
 endif()
 
-message(STATUS "HepMC: Fortran FLAGS ${CMAKE_Fortran_FLAGS}")
+if ( "${CMAKE_CXX_COMPILE_FEATURES}"  MATCHES "cxx_range_for" )
+message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has cxx_range_for support.")
+endif()
+
+
+
 message(STATUS "HepMC: CXX FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
 
 
@@ -169,33 +131,36 @@ endif()
 if(HEPMC_ENABLE_VALIDATION)
   add_subdirectory(validation)
 endif()
-
+#  add_subdirectory(test)
 
 
 #---Select sources for the various libraries---------------------------------
 file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
 
-add_library(objlib OBJECT ${hepmc3_sources})
 include_directories(include)
-# shared libraries need PIC:
-set_property(TARGET ${objlib} PROPERTY POSITION_INDEPENDENT_CODE 1)
+
+add_library(objlib OBJECT ${hepmc3_sources})
+# shared libraries need PIC
+set_property(TARGET objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 add_library(HepMC SHARED $<TARGET_OBJECTS:objlib>)
-add_library(HepMC_static STATIC $<TARGET_OBJECTS:objlib>)
-
-configure_file(HepMC-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config )
-
+add_library(HepMC_static STATIC  $<TARGET_OBJECTS:objlib>)
 
 #SET_TARGET_PROPERTIES(... PROPERTIES LINK_FLAGS "$ENV{MYLDFLAGS}")
-
-
 set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+if (WIN32)
+set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+elseif()
 set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+endif()
+configure_file(HepMC-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config )
 
 #---Install build products---------------------------------------------------
 install(TARGETS HepMC DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 install(TARGETS HepMC_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
+
+
 
 if (HEPMC_INSTALL_INTERFACES)
   install(DIRECTORY interfaces DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/../ COMPONENT devel)
@@ -216,8 +181,6 @@ endif()
 add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
                                    -DCOMPONENTS="devel"
                                    -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
-
-
 
 
 # Generate config CMake files to be used by other projects
@@ -243,6 +206,11 @@ endif()
 
 #General CPACK settings
 INCLUDE(InstallRequiredSystemLibraries)
+
+
+
+
+
 set(CPACK_PACKAGE_NAME "HepMC")
 set(CPACK_PACKAGE_VENDOR "HepMC Developers")
 #Should the version be defined above?
@@ -293,6 +261,9 @@ set(CPACK_DEBIAN_examples_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-libs" "$
 set(CPACK_DEBIAN_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${CPACK_PACKAGING_INSTALL_PREFIX} ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} )
 SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "HepMC Developers")
 
+
+#NSIS-specific settings
+SET(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_BINARY_DIR}/COPYING)
 
 if(ROOT_FOUND)
 set(CPACK_COMPONENTS_ALL   devel libs rootIO-devel rootIO-libs examples)
