@@ -15,7 +15,7 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/Units.h"
 #include <cstring>
-
+#include <algorithm>//min max for VS2017
 namespace HepMC {
 
 

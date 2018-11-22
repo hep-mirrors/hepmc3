@@ -68,6 +68,7 @@ struct HEPEVT
 #include <iostream>
 #include <cstdio>
 #include <cstring> // memset
+#include <algorithm> //min max for VS2017
 #ifndef HEPEVT_WRAPPER_HEADER_ONLY
 #include "HepMC/GenEvent.h"
 #endif
