@@ -6,7 +6,8 @@ macro( hepmc_test testname )
 
   find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR}
 ${CMAKE_CURRENT_BINARY_DIR} )
-  ADD_EXECUTABLE(${testname} ${${testname}_source}  CompareGenEvent.cc ${ARGN} )
+  #ADD_EXECUTABLE(${testname} ${${testname}_source}  CompareGenEvent.cc ${ARGN} )
+  ADD_EXECUTABLE(${testname} ${${testname}_source}   ${ARGN} )
   target_compile_options(${testname} PRIVATE -Werror )
   target_include_directories(${testname} BEFORE
     PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -42,7 +43,8 @@ macro( hepmc_simple_test testname )
   find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR}
 ${CMAKE_CURRENT_BINARY_DIR} )
   #message(STATUS "building simple test ${testname} from ${${testname}_source}")
-  ADD_EXECUTABLE(${testname} ${${testname}_source}   CompareGenEvent.cc ${ARGN} )
+  #ADD_EXECUTABLE(${testname} ${${testname}_source}   CompareGenEvent.cc ${ARGN} )
+  ADD_EXECUTABLE(${testname} ${${testname}_source}  ${ARGN} )
   target_compile_options(${testname} PRIVATE -Werror )
   target_include_directories(${testname} BEFORE
     PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -85,7 +87,7 @@ foreach( sfile ${process_source} )
                   ${CMAKE_CURRENT_BINARY_DIR}/${basename}.cc  @ONLY )
 endforeach( sfile ${process_source} )
 
-hepmc_test( testHepMC testHepMCMethods.cc )
+#hepmc_test( testHepMC testHepMCMethods.cc )
 #hepmc_test( testStreamIO testHepMCMethods.cc )
 
 foreach ( test ${HepMC_tests} )
