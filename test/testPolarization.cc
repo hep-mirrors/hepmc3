@@ -19,7 +19,7 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288
 #endif
-
+#include "HepMC3TestUtils.h"
 int main() {
     //
     // In this example we will place the following event into HepMC "by hand"
@@ -154,5 +154,8 @@ int main() {
     // deleting the event deletes all contained vertices, and all particles
     // contained in those vertices
     evt.clear();
+    
+    bool passed=((COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization5.out")==0)&&(COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization2.dat")!=0));
+    if (!passed) return 1;
     return 0;
 }

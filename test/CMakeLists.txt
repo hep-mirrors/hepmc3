@@ -8,7 +8,6 @@ macro( hepmc_test testname )
 ${CMAKE_CURRENT_BINARY_DIR} )
   #ADD_EXECUTABLE(${testname} ${${testname}_source}  CompareGenEvent.cc ${ARGN} )
   ADD_EXECUTABLE(${testname} ${${testname}_source}   ${ARGN} )
-  target_compile_options(${testname} PRIVATE -Werror )
   target_include_directories(${testname} BEFORE
     PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/
@@ -20,16 +19,9 @@ ${CMAKE_CURRENT_BINARY_DIR} )
 )
 
 
-  if( ${CMAKE_SYSTEM_NAME} MATCHES "Windows" )
-    message( STATUS "skipping ${testname}.sh on ${CMAKE_SYSTEM_NAME}")
-  else()
-    # automake/autoconf variables for ${testname}.sh.in
     set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
     set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
-    configure_file( ${testname}.sh.in
-                    ${CMAKE_CURRENT_BINARY_DIR}/${testname}.sh  @ONLY )
-    add_test( ${testname}.sh ${CMAKE_CURRENT_BINARY_DIR}/${testname}.sh )
-  endif()
+    add_test( ${testname} ${CMAKE_CURRENT_BINARY_DIR}/${testname} )
 
 endmacro( hepmc_test )
 
@@ -45,7 +37,6 @@ ${CMAKE_CURRENT_BINARY_DIR} )
   #message(STATUS "building simple test ${testname} from ${${testname}_source}")
   #ADD_EXECUTABLE(${testname} ${${testname}_source}   CompareGenEvent.cc ${ARGN} )
   ADD_EXECUTABLE(${testname} ${${testname}_source}  ${ARGN} )
-  target_compile_options(${testname} PRIVATE -Werror )
   target_include_directories(${testname} BEFORE
     PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/
