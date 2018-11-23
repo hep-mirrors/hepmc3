@@ -9,11 +9,11 @@ then
   exit 1;
 fi
 
-if [ ! -e testPolarization.cout ]
-then
-   echo "ERROR: testPolarization.cout does not exist"
-   exit 1;
-fi
+#if [ ! -e testPolarization.cout ]
+#then
+#   echo "ERROR: testPolarization.cout does not exist"
+#   exit 1;
+#fi
 
 OS=`uname`
 case "$OS" in
