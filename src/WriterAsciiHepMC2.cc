@@ -243,7 +243,7 @@ void WriterAsciiHepMC2::allocate_buffer()
 }
 
 
-string WriterAsciiHepMC2::escape(const string s)
+string WriterAsciiHepMC2::escape(const string& s) const
 {
     string ret;
     ret.reserve( s.length()*2 );

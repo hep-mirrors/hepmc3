@@ -65,14 +65,14 @@ public:
     }
 
     /// @brief Check if a weight name is present.
-    bool has_weight(string name) const {
+    bool has_weight(const string& name) const {
       return m_weight_indices.find(name) !=  m_weight_indices.end();
     }
 
     /// @brief Return the index corresponding to a weight name.
     /// @return -1 if name was not found
     /// @todo Throw exception instead? Or return ssize_t for better signed/unsigned safety?
-    int weight_index(string name) const {
+    int weight_index(const string& name) const {
 	std::map<std::string, int>::const_iterator it = m_weight_indices.find(name);
   	  return it == m_weight_indices.end()? -1: it->second;
     }

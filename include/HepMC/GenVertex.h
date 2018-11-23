@@ -117,20 +117,20 @@ namespace HepMC {
         /// This will overwrite existing attribute if an attribute with
         /// the same name is present. The attribute will be stored in the
         /// parent_event(). @return false if there is no parent_event();
-        bool add_attribute(string name, shared_ptr<Attribute> att);
+        bool add_attribute(const string& name, shared_ptr<Attribute> att);
 
         /// @brief Get list of names of attributes assigned to this particle
         vector<string> attribute_names() const;
 
         /// @brief Remove attribute
-        void remove_attribute(string name);
+        void remove_attribute(const string& name);
 
         /// @brief Get attribute of type T
         template<class T>
-        shared_ptr<T> attribute(string name) const;
+        shared_ptr<T> attribute(const string& name) const;
 
         /// @brief Get attribute of any type as string
-        string attribute_as_string(string name) const;
+        string attribute_as_string(const string& name) const;
 
         /// @name Deprecated functionality
         //@{
@@ -226,7 +226,7 @@ namespace HepMC {
 
 /// @brief Get attribute of type T
 template<class T>
-HepMC::shared_ptr<T> HepMC::GenVertex::attribute(string name) const {
+HepMC::shared_ptr<T> HepMC::GenVertex::attribute(const string& name) const {
   return parent_event()?
     parent_event()->attribute<T>(name, id()): HepMC::shared_ptr<T>();
 }

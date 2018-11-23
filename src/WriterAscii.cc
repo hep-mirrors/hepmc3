@@ -196,7 +196,7 @@ void WriterAscii::allocate_buffer() {
 }
 
 
-string WriterAscii::escape(const string& s) {
+string WriterAscii::escape(const string& s)  const {
     string ret;
     ret.reserve( s.length()*2 );
     for ( string::const_iterator it = s.begin(); it != s.end(); ++it ) {

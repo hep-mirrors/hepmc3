@@ -80,14 +80,14 @@ private:
     ///
     /// Default is 256kb. Minimum is 256b.
     /// Size can only be changed before first read/write operation.
-    void set_buffer_size( size_t size ) {
+    void set_buffer_size(const size_t& size ) {
         if (m_buffer) return;
         if (size < 256) return;
         m_buffer_size = size;
     }
 
     /// @brief Escape '\' and '\n' characters in string
-    std::string escape(const std::string& s);
+    std::string escape(const std::string& s)  const;
 
     /// Inline function flushing buffer to output stream when close to buffer capacity
     void flush();

@@ -105,17 +105,17 @@ void GenVertex::set_position(const FourVector& new_pos) {
     m_data.position = new_pos;
 }
 
-bool GenVertex::add_attribute(std::string name, shared_ptr<Attribute> att) {
+bool GenVertex::add_attribute(const std::string& name, shared_ptr<Attribute> att) {
   if ( !parent_event() ) return false;
   parent_event()->add_attribute(name, att, id());
   return true;
 }
 
-void GenVertex::remove_attribute(std::string name) {
+void GenVertex::remove_attribute(const std::string& name) {
   if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }
 
-string GenVertex::attribute_as_string(string name) const {
+string GenVertex::attribute_as_string(const std::string& name) const {
     return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
 }
 
