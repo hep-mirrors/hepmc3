@@ -168,8 +168,13 @@ void Print::listing( const GenParticlePtr &p ) {
 
     cout << endl;
 }
+void Print::line(const GenEvent &event, const bool& attributes) {
+    cout <<"GenEvent: #" << event.event_number();
+    if(attributes)FOREACH(const string s, event.attribute_names()) cout<<" "<<s<<"="<<event.attribute_as_string(s);
+    cout<<endl;
+}
 
-void Print::line(const GenVertexPtr &v) {
+void Print::line(const GenVertexPtr &v, const bool& attributes) {
     cout << "GenVertex:  " << v->id() << " stat: ";
     cout.width(3);
     cout << v->status();
@@ -182,10 +187,13 @@ void Print::line(const GenVertexPtr &v) {
     if( v->has_set_position() ) cout << "true";
     else                        cout << "false";
 
-    cout << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t() << endl;
+    cout << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t();
+    if(attributes)FOREACH(const string s, v->attribute_names()) cout<<" "<<s<<"="<<v->attribute_as_string(s);
+    cout<< endl;
+
 }
 
-void Print::line(const GenParticlePtr &p) {
+void Print::line(const GenParticlePtr &p, const bool& attributes) {
 
     cout << "GenParticle: ";
     cout.width(3);
@@ -221,8 +229,9 @@ void Print::line(const GenParticlePtr &p) {
 
     cout << " Stat: " << p->status()
          << " PV: " << prod_vtx_id
-         << " EV: " << end_vtx_id
-         << endl;
+         << " EV: " << end_vtx_id;
+         if(attributes)FOREACH(const string s, p->attribute_names()) cout<<" "<<s<<"="<<p->attribute_as_string(s);
+         cout<< endl;
 }
 
 void Print::line(shared_ptr<GenCrossSection> &cs) {

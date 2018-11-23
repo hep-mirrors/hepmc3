@@ -33,13 +33,13 @@ public:
     static void listing(const GenEvent &event, unsigned short precision = 2);
 
     /// @brief Print one-line info
-    static void line(const GenEvent &event);
+    static void line(const GenEvent &event, const bool& attributes=false);
 
     /// @brief Print one-line info
-    static void line(const GenVertexPtr &v);
+    static void line(const GenVertexPtr &v, const bool& attributes=false);
 
     /// @brief Print one-line info
-    static void line(const GenParticlePtr &p);
+    static void line(const GenParticlePtr &p, const bool& attributes=false);
 
     /// @brief Print one-line info
     static void line(shared_ptr<GenCrossSection> &cs);
