@@ -23,15 +23,28 @@
 namespace HepMC {
 
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
-m_file(filename) {
+m_file(filename), m_stream(0), m_isstream(false) {
     if( !m_file.is_open() ) {
         ERROR( "ReaderAsciiHepMC2: could not open input file: "<<filename )
     }
     set_run_info(make_shared<GenRunInfo>());
     m_event_ghost= new GenEvent();
 }
+// Ctor for reading from stdin
+ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
+ : m_stream(&stream), m_isstream(true)
+{
+    if( !m_stream ) {
+        ERROR( "ReaderAsciiHepMC2: could not open input stream " )
+    }
+    set_run_info(make_shared<GenRunInfo>());
+    m_event_ghost= new GenEvent();
+}
 
 bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
+    if ( (!m_file.is_open()) && (!m_isstream) ) return false;
+
+    char               peek;
     char          buf[512];
     bool          parsed_event_header            = false;
     bool          is_parsing_successful          = true;
@@ -54,7 +67,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Parse event, vertex and particle information
     //
     while(!failed()) {
-        m_file.getline(buf,512);
+        m_isstream ? m_stream->getline(buf,512) : m_file.getline(buf,512);
 
         if( strlen(buf) == 0 ) continue;
 
@@ -143,8 +156,8 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         if( !is_parsing_successful ) break;
 
         // Check for next event
-        buf[0] = m_file.peek();
-        if( parsed_event_header && buf[0]=='E' ) break;
+        m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
+        if( parsed_event_header && peek=='E' ) break;
     }
 
     // Check if all particles in last vertex were parsed
@@ -593,9 +606,9 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
 }
 
 void ReaderAsciiHepMC2::close() {
+    delete m_event_ghost;
     if( !m_file.is_open() ) return;
     m_file.close();
-    delete m_event_ghost;
 }
 
 } // namespace HepMC
