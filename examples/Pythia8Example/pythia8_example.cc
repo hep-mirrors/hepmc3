@@ -27,6 +27,14 @@ int main(int argc, char **argv) {
     shared_ptr<HepMC::GenRunInfo> run = make_shared<HepMC::GenRunInfo>();
     struct HepMC::GenRunInfo::ToolInfo generator={std::string("Pythia8"),std::to_string(PYTHIA_VERSION).substr(0,5),std::string("Used generator")};
     run->tools().push_back(generator);
+    std::vector<std::string> names;
+    for (int iWeight=0; iWeight < pythia.info.nWeights(); ++iWeight) {
+     std::string s=pythia.info.weightLabel(iWeight);
+     if (!s.length()) s=std::to_string((long long int)iWeight);
+     names.push_back(s);
+    }
+    if (!names.size()) names.push_back("default");
+    run->set_weight_names(names);
     WriterAscii file(argv[2],run);
 
     int nEvent = pythia.mode("Main:numberOfEvents");
