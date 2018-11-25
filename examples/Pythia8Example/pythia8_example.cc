@@ -24,8 +24,10 @@ int main(int argc, char **argv) {
     Pythia8ToHepMC3 pythiaToHepMC;
     pythia.readFile(argv[1]);
     pythia.init();
-
-    WriterAscii file(argv[2]);
+    shared_ptr<HepMC::GenRunInfo> run = make_shared<HepMC::GenRunInfo>();
+    struct HepMC::GenRunInfo::ToolInfo generator={std::string("Pythia8"),std::to_string(PYTHIA_VERSION).substr(0,5),std::string("Used generator")};
+    run->tools().push_back(generator);
+    WriterAscii file(argv[2],run);
 
     int nEvent = pythia.mode("Main:numberOfEvents");
 
