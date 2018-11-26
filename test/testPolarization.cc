@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////
 // testPolarization.cc
-// 
+//
 // garren@fnal.gov, Oct. 2010
 // andrii.verbytskyi@mpp.mpg.gov, Nov. 2018
 //////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,8 @@
 #define M_PI 3.14159265358979323846264338327950288
 #endif
 #include "HepMC3TestUtils.h"
-int main() {
+int main()
+{
     //
     // In this example we will place the following event into HepMC "by hand"
     //
@@ -42,7 +43,7 @@ int main() {
     // output in old format
     HepMC::WriterAsciiHepMC2 xout4( "testPolarization4.out" );
     HepMC::WriterAscii xout5( "testPolarization5.out" );
- 
+
     // build the graph, which will look like
     //                       p7                   #
     // p1                   /                     #
@@ -62,7 +63,7 @@ int main() {
     HepMC::GenEvent evt(HepMC::Units::GEV,HepMC::Units::MM);
     evt.set_event_number(1);
     evt.add_attribute("signal_process_id", std::make_shared<HepMC::IntAttribute>(20));
-    // create vertex 1 
+    // create vertex 1
     HepMC::GenVertexPtr v1=std::make_shared<HepMC::GenVertex>();
     evt.add_vertex( v1 );
     HepMC::GenParticlePtr p1=std::make_shared<HepMC::GenParticle>( HepMC::FourVector(0,0,7000,7000),2212, 3 );
@@ -71,7 +72,7 @@ int main() {
     p1->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(231));
     p1->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     p1->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
-    
+
     HepMC::GenVertexPtr v2=std::make_shared<HepMC::GenVertex>();
     evt.add_vertex( v2 );
     HepMC::GenParticlePtr p2=std::make_shared<HepMC::GenParticle>(  HepMC::FourVector(0,0,-7000,7000),2212, 3 );
@@ -83,7 +84,7 @@ int main() {
     //
     // create the outgoing particles of v1 and v2
     HepMC::GenParticlePtr p3=std::make_shared<HepMC::GenParticle>( HepMC::FourVector(.750,-1.569,32.191,32.238),1, 3 );
-	evt.add_particle( p3 );
+    evt.add_particle( p3 );
     p3->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(231));
     p3->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     p3->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
@@ -101,13 +102,13 @@ int main() {
     v3->add_particle_in( p3 );
     v3->add_particle_in( p4 );
     HepMC::GenParticlePtr p6=std::make_shared<HepMC::GenParticle>(  HepMC::FourVector(-3.813,0.113,-1.833,4.233 ),22, 1 );
-	evt.add_particle( p6 );
+    evt.add_particle( p6 );
     p6->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(231));
     p6->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     p6->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
     v3->add_particle_out( p6 );
     HepMC::GenParticlePtr p5=std::make_shared<HepMC::GenParticle>( HepMC::FourVector(1.517,-20.68,-20.605,85.925),-24, 3 );
-	evt.add_particle( p5 );
+    evt.add_particle( p5 );
     p5->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(243));
     p5->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     p5->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
@@ -123,10 +124,10 @@ int main() {
     HepMC::GenParticlePtr p8(new HepMC::GenParticle( HepMC::FourVector(3.962,-49.498,-26.687,56.373), -2,1 ));
     evt.add_particle( p8 );
     v4->add_particle_out( p8 );
-    //    
+    //
     // tell the event which vertex is the signal process vertex
-     //evt.set_signal_process_vertex( v3 );
-     evt.add_attribute("signal_process_vertex", std::make_shared<HepMC::IntAttribute>(v3->id()));
+    //evt.set_signal_process_vertex( v3 );
+    evt.add_attribute("signal_process_vertex", std::make_shared<HepMC::IntAttribute>(v3->id()));
     // the event is complete, we now print it out
     HepMC::Print::content(evt);
     //we now print it out in old format
@@ -134,7 +135,7 @@ int main() {
     // print each particle so we can see the polarization
     FOREACH( const HepMC::GenParticlePtr &ip, evt.particles() )
     {
-          HepMC::Print::line(ip,true);
+        HepMC::Print::line(ip,true);
     }
 
     // write event
@@ -154,7 +155,7 @@ int main() {
     // deleting the event deletes all contained vertices, and all particles
     // contained in those vertices
     evt.clear();
-    
+
     bool passed=((COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization5.out")==0)&&(COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization2.dat")!=0));
     if (!passed) return 1;
     return 0;
