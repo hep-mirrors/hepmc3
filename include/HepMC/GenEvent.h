@@ -84,6 +84,15 @@ public:
       if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
       return weight(run_info()->weight_index(name));
     }
+    /// Get event weight accessed by weight name
+    /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
+    /// @note It's the user's responsibility to ensure that the given name exists!
+    double& weight(const std::string& name) {
+      if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
+      int pos=run_info()->weight_index(name);
+      if (pos<0) throw WeightError("GenEvent::weight(str): no weight with given name in this run");
+      return m_weights[pos];
+    }
     /// Get event weight names, if there are some
     /// @note Requires there to be an attached GenRunInfo with registered weight names, otherwise will throw an exception
     const std::vector<std::string>& weight_names(const std::string& /*name*/) const {
