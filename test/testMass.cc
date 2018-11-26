@@ -50,46 +50,46 @@ int main()
             icount++;
             if ( icount%50==1 ) std::cout << "Processing Event Number " << icount<< " its # " << evt.event_number() << std::endl;
             if ( is_good_event(evt) )
-            {
-                if (num_good_events == 0 )
-                    {
-                        // add some arbitrary PDF information
-                        x1 = std::min(0.8, 0.07 * icount);
-                        x2 = 1-x1;
-                        q = 1.69 * icount;
-                        // use beam momentum
-                        if( evt.valid_beam_particles() )
-                            {
-                                HepMC::GenParticlePtr bp1 = evt.beams().at(0);
-                                HepMC::GenParticlePtr bp2 = evt.beams().at(1);
-                                xf1 = x1*bp1->momentum().p3mod();
-                                xf2 = x2*bp1->momentum().p3mod();
-                            }
-                        else
-                            {
-                                xf1 = x1*0.34;
-                                xf2 = x2*0.34;
-                            }
-                        // provide optional pdf set id numbers (two ints at the end of the constructor)
-                        std::shared_ptr< HepMC::GenPdfInfo> pdf = std::make_shared< HepMC::GenPdfInfo>();
-                        evt.add_attribute("GenPdfInfo",pdf);
-                        pdf->set( 2, 3, x1, x2, q, xf1, xf2, 230, 230);
-                        // add some arbitrary HeavyIon information
-                        std::shared_ptr< HepMC::GenHeavyIon> ion = std::make_shared< HepMC::GenHeavyIon>();
-                        evt.add_attribute("GenHeavyIon",ion);
-                        ion->set(23,11,12,15,3,5,0,0,0,0.0145,0.0,0.0,0.0,0.23);
-                    }
-                std::cout << "saving Event " << evt.event_number() << std::endl;
-                if( evt.weights().size() > 0 )
-                    {
-                        std::cout << "Weights: ";
-                        FOREACH( const double &w, evt.weights() )
-                        std::cout <<" "<<w;
-                        std::cout << std::endl;
-                    }
-                ascii_out.write_event(evt);
-                ++num_good_events;
-            }
+                {
+                    if (num_good_events == 0 )
+                        {
+                            // add some arbitrary PDF information
+                            x1 = std::min(0.8, 0.07 * icount);
+                            x2 = 1-x1;
+                            q = 1.69 * icount;
+                            // use beam momentum
+                            if( evt.valid_beam_particles() )
+                                {
+                                    HepMC::GenParticlePtr bp1 = evt.beams().at(0);
+                                    HepMC::GenParticlePtr bp2 = evt.beams().at(1);
+                                    xf1 = x1*bp1->momentum().p3mod();
+                                    xf2 = x2*bp1->momentum().p3mod();
+                                }
+                            else
+                                {
+                                    xf1 = x1*0.34;
+                                    xf2 = x2*0.34;
+                                }
+                            // provide optional pdf set id numbers (two ints at the end of the constructor)
+                            std::shared_ptr< HepMC::GenPdfInfo> pdf = std::make_shared< HepMC::GenPdfInfo>();
+                            evt.add_attribute("GenPdfInfo",pdf);
+                            pdf->set( 2, 3, x1, x2, q, xf1, xf2, 230, 230);
+                            // add some arbitrary HeavyIon information
+                            std::shared_ptr< HepMC::GenHeavyIon> ion = std::make_shared< HepMC::GenHeavyIon>();
+                            evt.add_attribute("GenHeavyIon",ion);
+                            ion->set(23,11,12,15,3,5,0,0,0,0.0145,0.0,0.0,0.0,0.23);
+                        }
+                    std::cout << "saving Event " << evt.event_number() << std::endl;
+                    if( evt.weights().size() > 0 )
+                        {
+                            std::cout << "Weights: ";
+                            FOREACH( const double &w, evt.weights() )
+                            std::cout <<" "<<w;
+                            std::cout << std::endl;
+                        }
+                    ascii_out.write_event(evt);
+                    ++num_good_events;
+                }
             // clean up and get next event
             evt.clear();
         }

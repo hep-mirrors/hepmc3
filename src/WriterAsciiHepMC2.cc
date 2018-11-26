@@ -30,6 +30,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, shared_ptr<Gen
 {
     WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
     set_run_info(run);
+    if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
     if ( !m_file.is_open() )
         {
             ERROR( "WriterAsciiHepMC2: could not open output file: "<<filename )
@@ -38,7 +39,6 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, shared_ptr<Gen
         {
             m_file << "HepMC::Version " << HepMC::version() << std::endl;
             m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
-            if ( run_info() ) write_run_info();
         }
 }
 
@@ -52,10 +52,9 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, shared_ptr<GenRunInfo
 {
     WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
     set_run_info(run);
+    if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
     (*m_stream) << "HepMC::Version " << HepMC::version() << std::endl;
     (*m_stream) << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
-    if ( run_info() ) write_run_info();
-    // }
 }
 
 
@@ -77,7 +76,6 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     if ( !run_info() )
         {
             set_run_info(evt.run_info());
-            write_run_info();
         }
     else
         {
@@ -320,42 +318,7 @@ inline void WriterAsciiHepMC2::forced_flush()
 }
 
 
-void WriterAsciiHepMC2::write_run_info()
-{
-    allocate_buffer();
-    // If no run info object set, create a dummy one.
-    if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
-
-    vector<string> names = run_info()->weight_names();
-
-    for ( int i = 0, N = run_info()->tools().size(); i < N; ++i  )
-        {
-            string out = "T " + run_info()->tools()[i].name + "\n"
-                         + run_info()->tools()[i].version + "\n"
-                         + run_info()->tools()[i].description;
-            write_string(escape(out));
-            m_cursor += sprintf(m_cursor, "\n");
-        }
-
-    typedef map< std::string, shared_ptr<Attribute> >::value_type value_type;
-    FOREACH( value_type att, run_info()->attributes() )
-    {
-        string st;
-        if ( ! att.second->to_string(st) )
-            {
-                WARNING ("WriterAsciiHepMC2::write_run_info: problem serializing attribute: "<< att.first )
-            }
-        else
-            {
-                m_cursor +=
-                    sprintf(m_cursor, "A %s ", att.first.c_str());
-                flush();
-                write_string(escape(st));
-                m_cursor += sprintf(m_cursor, "\n");
-                flush();
-            }
-    }
-}
+void WriterAsciiHepMC2::write_run_info(){}
 
 void WriterAsciiHepMC2::write_particle(const GenParticlePtr &p, int second_field)
 {

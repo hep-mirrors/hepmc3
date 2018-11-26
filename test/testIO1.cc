@@ -1,0 +1,40 @@
+// -*- C++ -*-
+#include "HepMC/GenEvent.h"
+#include "HepMC/ReaderAscii.h"
+#include "HepMC/WriterAscii.h"
+#include "HepMC/ReaderAsciiHepMC2.h"
+#include "HepMC/WriterAsciiHepMC2.h"
+#include "HepMC3TestUtils.h"
+int main()
+{
+    HepMC::ReaderAsciiHepMC2* inputA =new HepMC::ReaderAsciiHepMC2("inputIO1.hepmc");
+    if(inputA->failed()) return 1;
+    HepMC::WriterAscii*       outputA=new HepMC::WriterAscii("frominputIO1.hepmc");
+    if(outputA->failed()) return 2;
+    while( !inputA->failed() )
+        {
+            HepMC::GenEvent evt(HepMC::Units::GEV,HepMC::Units::MM);
+            inputA->read_event(evt);
+            if( inputA->failed() )  {printf("End of file reached. Exit.\n"); break;}
+            outputA->write_event(evt);
+            evt.clear();
+        }
+    inputA->close();
+    outputA->close();
+
+    HepMC::ReaderAscii* inputB =new HepMC::ReaderAscii("frominputIO1.hepmc");
+    if(inputB->failed()) return 3;
+    HepMC::WriterAsciiHepMC2*       outputB=new HepMC::WriterAsciiHepMC2("fromfrominputIO1.hepmc");
+    if(outputB->failed()) return 4;
+    while( !inputB->failed() )
+        {
+            HepMC::GenEvent evt(HepMC::Units::GEV,HepMC::Units::MM);
+            inputB->read_event(evt);
+            if( inputB->failed() )  {printf("End of file reached. Exit.\n"); break;}
+            outputB->write_event(evt);
+            evt.clear();
+        }
+    inputB->close();
+    outputB->close();
+    return COMPARE_ASCII_FILES("fromfrominputIO1.hepmc","inputIO1.hepmc");
+}

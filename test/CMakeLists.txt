@@ -17,15 +17,13 @@ ${CMAKE_CURRENT_BINARY_DIR} )
     PRIVATE
         HepMC
 )
-
-
     set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
     set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
     add_test( ${testname} ${CMAKE_CURRENT_BINARY_DIR}/${testname} )
 
 endmacro( hepmc_test )
 
-macro( hepmc_simple_test testname )
+macro( hepmc_root_test testname )
 
   message( STATUS "building simple test ${testname} " )
 
@@ -39,15 +37,18 @@ ${CMAKE_CURRENT_BINARY_DIR} )
   ADD_EXECUTABLE(${testname} ${${testname}_source}  ${ARGN} )
   target_include_directories(${testname} BEFORE
     PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/
+    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../rootIO/include/
         )
    LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../outputs/lib64/  )
-   target_link_libraries(${testname} HepMC )
+   target_link_libraries(${testname} HepMC HepMCrootIO)
+   
+       set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
+    set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
    
 
   add_test( ${testname} ${testname} )
 
-endmacro( hepmc_simple_test )
+endmacro( hepmc_root_test )
 
 
 #link_libraries( HepMC )
@@ -58,15 +59,25 @@ set( HepMC_tests
 		#testHepMCIteration
 		testMass
 		#testFlow
-        #testPrintBug
+        testPrintBug
 		testPolarization 
-		 )
-set( HepMC_simple_tests 
         #testSimpleVector
         testUnits
 		#testMultipleCopies
-		#testWeights 
+		testWeights 
+		testIO1
+		testIO3
+		 )
+if(HEPMC_ENABLE_ROOTIO)
+set( HepMC_root_tests 
+		testIO2
+		testIO4
 		)
+elseif()
+set( HepMC_root_tests 
+		)
+endif()
+
 
 # automake/autoconf variables for *.cc.in
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
@@ -85,6 +96,6 @@ foreach ( test ${HepMC_tests} )
   hepmc_test( ${test} )
 endforeach ( test ${HepMC_tests} )
 
-foreach ( test ${HepMC_simple_tests} )
-  hepmc_simple_test( ${test} )
-endforeach ( test ${HepMC_simple_tests} )
+foreach ( test ${HepMC_root_tests} )
+  hepmc_root_test( ${test} )
+endforeach ( test ${HepMC_root_tests} )
