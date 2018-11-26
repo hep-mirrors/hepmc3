@@ -2,7 +2,7 @@
 
 macro( hepmc_test testname )
 
-  message( STATUS "building ${testname} for ${testname}.sh" )
+  message( STATUS "building ${testname} for ${testname}" )
 
   find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR}
 ${CMAKE_CURRENT_BINARY_DIR} )
@@ -25,7 +25,7 @@ endmacro( hepmc_test )
 
 macro( hepmc_root_test testname )
 
-  message( STATUS "building simple test ${testname} " )
+  message( STATUS "building ROOT test ${testname} " )
 
   # include test in search path
 #  include_directories (BEFORE "${CMAKE_CURRENT_SOURCE_DIR}")
