@@ -20,7 +20,7 @@ ${CMAKE_CURRENT_BINARY_DIR} )
     set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
     set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
     add_test( ${testname} ${CMAKE_CURRENT_BINARY_DIR}/${testname} )
-
+ 
 endmacro( hepmc_test )
 
 macro( hepmc_root_test testname )
@@ -65,6 +65,7 @@ set( HepMC_tests
         testUnits
 		#testMultipleCopies
 		testWeights 
+		testLoops
 		testIO1
 		testIO3
 		 )
@@ -95,6 +96,7 @@ endforeach( sfile ${process_source} )
 foreach ( test ${HepMC_tests} )
   hepmc_test( ${test} )
 endforeach ( test ${HepMC_tests} )
+set_tests_properties(testLoops PROPERTIES TIMEOUT 5)
 
 foreach ( test ${HepMC_root_tests} )
   hepmc_root_test( ${test} )

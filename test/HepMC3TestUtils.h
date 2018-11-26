@@ -8,13 +8,13 @@ using namespace std;
 int COMPARE_ASCII_FILES(const string& f1,const string& f2)
 {
 	fstream file1(f1.c_str()), file2(f2.c_str());
-	char string1[4*256], string2[4*256];
+	char string1[16*256], string2[16*256];
 	int j; j = 0;
 	puts("Run comparison");
 	while((!file1.eof())&&(!file2.eof()))
 	{
-		file1.getline(string1,4*256);
-		file2.getline(string2,4*256);
+		file1.getline(string1,16*256);
+		file2.getline(string2,16*256);
 		j++;
 		if(strcmp(string1,string2) != 0)
 		{
