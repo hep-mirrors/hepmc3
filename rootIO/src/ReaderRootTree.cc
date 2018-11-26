@@ -49,7 +49,7 @@ bool ReaderRootTree::init()
         
         
         
-    m_tree=(TTree*)m_file->Get(m_tree_name.c_str());
+    m_tree=reinterpret_cast<TTree*>(m_file->Get(m_tree_name.c_str()));
     if (!m_tree)
         {
             ERROR( "ReaderRootTree: problem opening tree:  " << m_tree_name)

@@ -58,7 +58,7 @@ void WriterRootTree::write_event(const GenEvent &evt)
         write_run_info();
     } else {
         if ( evt.run_info() && run_info() != evt.run_info() )
-        WARNING( "WriterAscii::write_event: GenEvents contain "
+        WARNING( "WriterRootTree::write_event: GenEvents contain "
                  "different GenRunInfo objects from - only the "
                  "first such object will be serialized." )
     }

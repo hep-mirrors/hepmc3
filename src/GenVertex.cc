@@ -85,6 +85,10 @@ const vector<GenParticlePtr> GenVertex::particles(Relationship range) const {
   return findParticles(GenVertexPtr(const_cast<GenVertex*>(this)), range);
 }
 
+void GenVertex::set_id(const int& id){
+  m_id = id;
+  return;
+}
 
 const FourVector& GenVertex::position() const {
 
