@@ -63,7 +63,7 @@ set( HepMC_tests
 		 )
 set( HepMC_simple_tests 
         #testSimpleVector
-        #testUnits
+        testUnits
 		#testMultipleCopies
 		#testWeights 
 		)
