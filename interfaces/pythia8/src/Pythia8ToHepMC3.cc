@@ -175,6 +175,7 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
 
     // Store event weights.
     if (m_store_weights && pyinfo != 0) {
+        evt->weights().clear();
         for (int iweight=0; iweight < pyinfo->nWeights(); ++iweight) {
             evt->weights().push_back(pyinfo->weight(iweight));
         }

@@ -27,6 +27,8 @@ int main(int argc, char **argv) {
     shared_ptr<HepMC::GenRunInfo> run = make_shared<HepMC::GenRunInfo>();
     struct HepMC::GenRunInfo::ToolInfo generator={std::string("Pythia8"),std::to_string(PYTHIA_VERSION).substr(0,5),std::string("Used generator")};
     run->tools().push_back(generator);
+    struct HepMC::GenRunInfo::ToolInfo config={std::string(argv[1]),"1.0",std::string("Control cards")};
+    run->tools().push_back(config);
     std::vector<std::string> names;
     for (int iWeight=0; iWeight < pythia.info.nWeights(); ++iWeight) {
      std::string s=pythia.info.weightLabel(iWeight);

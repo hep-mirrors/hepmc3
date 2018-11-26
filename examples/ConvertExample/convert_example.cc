@@ -223,7 +223,6 @@ int main(int argc, char** argv)
             switch (format_map.at(convert_formats.second))
                 {
                 case hepmc2:
-                    printf("WARNING: HepMC2 format is outdated. Please use HepMC3 format instead.\n");
                     output_file=new WriterAsciiHepMC2(convert_list[i].second.c_str());
                     break;
                 case hepmc3:
@@ -267,6 +266,8 @@ int main(int argc, char** argv)
                     if( input_file->failed() )  {printf("End of file reached. Exit.\n"); break;}
                     if (evt.event_number()<first_event_number) continue;
                     if (evt.event_number()>last_event_number) continue;
+                    evt.set_run_info(input_file->run_info());
+                    //Note the difference between ROOT and Ascii readers. The former read GenRunInfo before first event and the later at the same time as first event. 
                     output_file->write_event(evt);
                     evt.clear();
                     ++events_parsed;
