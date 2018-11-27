@@ -37,6 +37,9 @@ public:
 
     /// The ctor to read from stdin
     ReaderAsciiHepMC2(std::istream &);
+
+    /// @brief Destructor
+    ~ReaderAsciiHepMC2();
 //
 // Functions
 //
