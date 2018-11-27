@@ -170,7 +170,8 @@ void Print::listing( const GenParticlePtr &p ) {
 }
 void Print::line(const GenEvent &event, const bool& attributes) {
     cout <<"GenEvent: #" << event.event_number();
-    if(attributes)FOREACH(const string s, event.attribute_names()) cout<<" "<<s<<"="<<event.attribute_as_string(s);
+    if(attributes) for (std::vector<std::string>::const_iterator s=event.attribute_names().begin();s!=event.attribute_names().end();++s) 
+    cout<<" "<<*s<<"="<<event.attribute_as_string(*s);
     cout<<endl;
 }
 
@@ -188,7 +189,8 @@ void Print::line(const GenVertexPtr &v, const bool& attributes) {
     else                        cout << "false";
 
     cout << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t();
-    if(attributes)FOREACH(const string s, v->attribute_names()) cout<<" "<<s<<"="<<v->attribute_as_string(s);
+    if(attributes)for (std::vector<std::string>::const_iterator s= v->attribute_names().begin();s!= v->attribute_names().end();++s)  
+    cout<<" "<<*s<<"="<<v->attribute_as_string(*s);
     cout<< endl;
 
 }
@@ -230,7 +232,9 @@ void Print::line(const GenParticlePtr &p, const bool& attributes) {
     cout << " Stat: " << p->status()
          << " PV: " << prod_vtx_id
          << " EV: " << end_vtx_id;
-         if(attributes)FOREACH(const string s, p->attribute_names()) cout<<" "<<s<<"="<<p->attribute_as_string(s);
+         if(attributes)
+         for (std::vector<std::string>::const_iterator s= p->attribute_names().begin();s!= p->attribute_names().end();++s)  
+         cout<<" "<<*s<<"="<<p->attribute_as_string(*s);
          cout<< endl;
 }
 
