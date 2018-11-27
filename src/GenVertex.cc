@@ -37,9 +37,10 @@ void GenVertex::add_particle_in( GenParticlePtr p ) {
     if(!p) return;
 
     // Avoid duplicates
-    FOREACH( const GenParticlePtr &pp, particles_in() ) {
-        if( pp == p ) return;
-    }
+//    FOREACH( const GenParticlePtr &pp, particles_in() ) {
+//        if( pp == p ) return;
+//    }
+    if (std::find(particles_in().begin(),particles_in().end(),p)!=particles_in().end()) return;
 
     m_particles_in.push_back(p);
 
@@ -55,9 +56,10 @@ void GenVertex::add_particle_out( GenParticlePtr p ) {
     if(!p) return;
 
     // Avoid duplicates
-    FOREACH( const GenParticlePtr &pp, particles_out() ) {
-        if( pp == p ) return;
-    }
+//    FOREACH( const GenParticlePtr &pp, particles_out() ) {
+//        if( pp == p ) return;
+//    }
+   if (std::find(particles_out().begin(),particles_out().end(),p)!=particles_out().end()) return;
 
     m_particles_out.push_back(p);
 

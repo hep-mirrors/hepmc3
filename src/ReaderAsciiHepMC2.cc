@@ -448,11 +448,11 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     //flow
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     int flowsize=atoi(cursor);
-    
+
     for (int i=0;i<flowsize;i++)
     {
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-   int  flowindex=atoi(cursor); 
+    int  flowindex=atoi(cursor); 
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     int flowvalue=atoi(cursor);
     data_ghost->add_attribute("flow"+to_string((long long int)flowindex),make_shared<IntAttribute>(flowvalue));//gcc-4.4.7 workaround
