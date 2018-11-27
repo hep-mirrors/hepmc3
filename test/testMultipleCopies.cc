@@ -169,7 +169,7 @@ int main()
     bool passed=(
     (COMPARE_ASCII_FILES("testMultipleCopies1.out","testMultipleCopies2.out")==0)
     &&
-    (COMPARE_ASCII_FILES("testMultipleCopies1.out","testMultipleOriginals.out")!=0)
+    (COMPARE_ASCII_FILES("testMultipleCopies1.out","testMultipleOriginals.out")==0)
     );
     if (!passed) return 1;
     return 0;
