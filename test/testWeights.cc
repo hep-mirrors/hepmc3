@@ -38,12 +38,6 @@ int main()
     evt.weights().pop_back();
     assert( evt.weights().size() == 14 );
 
-    // for asserts only
-#ifndef NDEBUG
-    double v1 = vec[0];
-    size_t vs = vec.size();
-#endif
-
     // new functionality
     std::vector<std::string> names;
     for( size_t i = 0; i < evt.weights().size(); ++i ) names.push_back(std::to_string(i));

@@ -26,7 +26,8 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, shared_ptr<Gen
       m_precision(16),
       m_buffer(NULL),
       m_cursor(NULL),
-      m_buffer_size( 256*1024 )
+      m_buffer_size( 256*1024 ),
+      m_particle_counter(0)
 {
     WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
     set_run_info(run);
@@ -48,7 +49,8 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, shared_ptr<GenRunInfo
       m_precision(16),
       m_buffer(NULL),
       m_cursor(NULL),
-      m_buffer_size( 256*1024 )
+      m_buffer_size( 256*1024 ),
+      m_particle_counter(0)
 {
     WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
     set_run_info(run);
@@ -134,7 +136,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
                        );
 
     flush();
-    m_cursor += sprintf(m_cursor, " %lu",m_random_states.size());
+    m_cursor += sprintf(m_cursor, " %zu",m_random_states.size());
     for (size_t  q=0; q<m_random_states.size(); q++)
         {
             m_cursor += sprintf(m_cursor, " %ii",(int)q);
@@ -323,7 +325,7 @@ void WriterAsciiHepMC2::write_run_info(){}
 void WriterAsciiHepMC2::write_particle(const GenParticlePtr &p, int second_field)
 {
 
-    m_cursor += sprintf(m_cursor,"P %i",10001+m_particle_counter);
+    m_cursor += sprintf(m_cursor,"P %i",int(10001+m_particle_counter));
     m_particle_counter++;
     flush();
     m_cursor += sprintf(m_cursor," %i",   p->pid() );

@@ -36,6 +36,7 @@ int main()
     //  6  !gamma! 1     22    1,2   -3.813    0.113   -1.833    4.233    0.000
     //  7  !d!     1      1    5,5   -2.445   28.816    6.082   29.552    0.010
     //  8  !u~!    1     -2    5,5    3.962  -49.498  -26.687   56.373    0.006
+    //  9  !gamma! 3     22    3,4    0.000    0.000    0.000    0.000    0.000
 
 
     // declare several WriterAscii instances for comparison
@@ -48,10 +49,10 @@ int main()
     // p1                   /                     #
     //   \v1__p3      p5---v4                     #
     //         \_v3_/       \                     #
-    //         /    \        p8                   #
-    //    v2__p4     \                            #
-    //   /            p6                          #
-    // p2                                         #
+    //         /   |\        p8                   #
+    //    v2__p4   | \                            #
+    //   /  \     /  p6                           #
+    // p2    \p9_/                                #
     //
     // define a flow pattern as  p1 -> p3 -> p6
     //                       and p2 -> p4 -> p5
@@ -154,32 +155,27 @@ int main()
     // deleting the event deletes all contained vertices, and all particles
     // contained in those vertices
     evt.clear();
-     xout1.close();
-     xout2.close();
+    xout1.close();
+    xout2.close();
 
-    HepMC::ReaderAscii* xin1= new HepMC::ReaderAscii("testLoops1.out");
-    if(xin1->failed()) return 2;
-    while( !xin1->failed() )
+    HepMC::ReaderAscii xin1("testLoops1.out");
+    if(xin1.failed()) {xin1.close(); return 2;}
+    while( !xin1.failed() )
         {
-            xin1->read_event(evt);
-            if( xin1->failed() )  {printf("End of file reached. Exit.\n"); break;}
+            xin1.read_event(evt);
+            if( xin1.failed() )  {printf("End of file reached. Exit.\n"); break;}
             evt.clear();
         }
-    xin1->close();
-   
-   
+    xin1.close();
 
-
-    HepMC::ReaderAsciiHepMC2* xin2= new HepMC::ReaderAsciiHepMC2("testLoops2.out");
-    if(xin2->failed()) return 2;
-    while( !xin2->failed() )
+    HepMC::ReaderAsciiHepMC2 xin2("testLoops2.out");
+    if(xin2.failed()) {xin2.close(); return 3;}
+    while( !xin2.failed() )
         {
-            xin2->read_event(evt);
-            if( xin2->failed() )  {printf("End of file reached. Exit.\n"); break;}
+            xin2.read_event(evt);
+            if( xin2.failed() )  {printf("End of file reached. Exit.\n"); break;}
             evt.clear();
         }
-    xin2->close();
-
-
+    xin2.close();
     return 0;
 }
