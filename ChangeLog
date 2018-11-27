@@ -1,5 +1,13 @@
   --------------------------  HepMC3.0.0  --------------------------
 
+2018-11-27 James Monk
+  * Add missing #ifndef to Relatives.h
+  * Add Filter - defines a std::function<bool(ConstGenParticlePtr)> and various operators
+    for combining Filters.  Filter can be used to pick particles
+  * Add Feature interface.  Features wrap functions for extracting features from Particles
+    and allow construction of Filters from those Features. e.g. Feature < value is a Filter
+  * Add Selector interface to default Features, e.g. Selector::STATUS, Selector::PT
+
 2018-11-22 James Monk
   * Remove GenVertex::particles().  Not needed, since it would only call through to Relatives
   * Relatives: add static PARENTS, CHILDREN, ANCESTORS, DESCENDANTS members. Can use e.g Relatives::ANCESTORS (which is an instance of both Relatives and Ancestors)
