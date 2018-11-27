@@ -26,3 +26,13 @@ int COMPARE_ASCII_FILES(const string& f1,const string& f2)
 	}
         return 0;
 }
+
+
+
+
+
+
+
+
+
+

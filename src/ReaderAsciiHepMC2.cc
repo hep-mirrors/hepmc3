@@ -41,6 +41,9 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
     m_event_ghost= new GenEvent();
 }
 
+ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=NULL; } if (!m_isstream) close(); }
+
+
 bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
@@ -73,6 +76,12 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
         // Check for IO_GenEvent header/footer
         if( strncmp(buf,"HepMC",5) == 0 ) {
+            if( strncmp(buf,"HepMC::Version",14) != 0 && strncmp(buf,"HepMC::IO_GenEvent",18)!=0 )
+            {
+            WARNING( "ReaderAsciiHepMC2: found unsupported expression in header. Will close the input." )
+            std::cout<<buf<<std::endl;
+            m_isstream ? m_stream->clear(ios::eofbit) : m_file.clear(ios::eofbit);
+            }
             if(parsed_event_header) {
                 is_parsing_successful = true;
                 break;
@@ -179,8 +188,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         DEBUG( 1, "Parsing failed at line:" << std::endl << buf )
 
         evt.clear();
-        m_file.clear(std::ios::badbit);
-
+        m_isstream ? m_stream->clear(ios::badbit) : m_file.clear(ios::badbit);
         return 0;
     }
 
@@ -594,11 +602,13 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     pi->xf[1] = atof(cursor);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->pdf_id[0] = atoi(cursor);
+    //For compatibility with original HepMC2
+    bool pdfids=true;
+    if( !(cursor = strchr(cursor+1,' ')) ) pdfids=false;
+    if(pdfids) pi->pdf_id[0] = atoi(cursor); else  pi->pdf_id[0] =0;
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    pi->pdf_id[1] = atoi(cursor);
+    if(pdfids) if( !(cursor = strchr(cursor+1,' ')) )  pdfids=false;
+    if(pdfids) pi->pdf_id[1] = atoi(cursor); else  pi->pdf_id[1] =0;
 
     evt.add_attribute("GenPdfInfo",pi);
 
@@ -606,7 +616,7 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
 }
 
 void ReaderAsciiHepMC2::close() {
-    delete m_event_ghost;
+    if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=NULL;}
     if( !m_file.is_open() ) return;
     m_file.close();
 }

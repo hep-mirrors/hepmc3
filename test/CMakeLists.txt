@@ -28,6 +28,20 @@ macro( hepmc_root_test testname )
 
 endmacro( hepmc_root_test )
 
+#One should use something else for Windows or use build-in Linux sybsystem
+find_program( MEMORYCHECK_COMMAND valgrind )
+if(MEMORYCHECK_COMMAND)
+set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
+endif()
+
+macro(add_memcheck_test binaryname )
+  set(memcheck_command "${CMAKE_MEMORYCHECK_COMMAND} ${CMAKE_MEMORYCHECK_COMMAND_OPTIONS}")
+  separate_arguments(memcheck_command)
+  add_test(memcheck_${binaryname} ${memcheck_command} ./${binaryname} ${ARGN})
+endmacro(add_memcheck_test)
+
+
+
 set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
 
 set( HepMC_tests
@@ -38,20 +52,17 @@ set( HepMC_tests
         testPolarization 
         #testSimpleVector
         testUnits
-        #testMultipleCopies
+        testMultipleCopies
         testWeights 
         testLoops
         testIO1
         testIO3
          )
-if(HEPMC_ENABLE_ROOTIO)
+
 set( HepMC_root_tests 
         testIO2
         testIO4
         )
-elseif()
-set( HepMC_root_tests )
-endif()
 
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
 
@@ -70,6 +81,21 @@ endforeach ( test ${HepMC_tests} )
 #So far we don't have loop support
 set_tests_properties(testLoops PROPERTIES TIMEOUT 10)
 
+if(HEPMC_ENABLE_ROOTIO)
 foreach ( test ${HepMC_root_tests} )
   hepmc_root_test( ${test} )
 endforeach ( test ${HepMC_root_tests} )
+endif()
+
+if(MEMORYCHECK_COMMAND)
+foreach ( test ${HepMC_tests} )
+  add_memcheck_test( ${test} )
+endforeach ( test ${HepMC_tests} )
+set_tests_properties(memcheck_testLoops PROPERTIES TIMEOUT 10)
+if(HEPMC_ENABLE_ROOTIO)
+foreach ( test ${HepMC_root_tests} )
+  add_memcheck_test( ${test} )
+endforeach ( test ${HepMC_root_tests} )
+endif()
+endif()
+

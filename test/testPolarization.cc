@@ -154,7 +154,7 @@ int main()
     xout2.close();
     xout4.close();
     xout5.close();
-    
+
     // now clean-up by deleteing all objects from memory
     //
     // deleting the event deletes all contained vertices, and all particles
