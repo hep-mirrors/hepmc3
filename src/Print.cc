@@ -231,11 +231,15 @@ void Print::line(const GenParticlePtr &p, const bool& attributes) {
 
     cout << " Stat: " << p->status()
          << " PV: " << prod_vtx_id
-         << " EV: " << end_vtx_id;
+         << " EV: " << end_vtx_id<<endl;
+    cout <<      (*p).attribute_names().size()<< " "<<endl;
          if(attributes)
-         for (std::vector<std::string>::const_iterator s= p->attribute_names().begin();s!= p->attribute_names().end();++s)  
-         cout<<" "<<*s<<"="<<p->attribute_as_string(*s);
+         {
+         std::vector<std::string> names	 =p->attribute_names();
+         FOREACH(const std::string &ss, names)
+         cout<<" "<<ss<<"="<<(*p).attribute_as_string(ss);
          cout<< endl;
+         }
 }
 
 void Print::line(shared_ptr<GenCrossSection> &cs) {
