@@ -72,6 +72,7 @@ public:
 private:
     int   m_events_count; //!< Events count. Needed to read the tree
     GenEventData* m_event_data;
+    GenRunInfoData* m_run_info_data;
     std::string m_tree_name;
     std::string m_branch_name;
 };

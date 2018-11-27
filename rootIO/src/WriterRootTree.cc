@@ -40,27 +40,31 @@ bool WriterRootTree::init(shared_ptr<GenRunInfo> run )
         {
             ERROR( "WriterRootTree: problem opening file: " <<m_file->GetName() )
             return false;
-        }
-    set_run_info(run);
+        }    
     m_event_data= new GenEventData();
+    m_run_info_data= new GenRunInfoData();
+    set_run_info(run);
+    if ( run_info() ) run_info()->write_data(*m_run_info_data);
     m_tree= new TTree(m_tree_name.c_str(),"hepmc3_tree");
     m_tree->Branch(m_branch_name.c_str(), m_event_data);
-    if ( run_info() ) write_run_info();
+    m_tree->Branch("GenRunInfo", m_run_info_data);
     return true;
 }
 
 void WriterRootTree::write_event(const GenEvent &evt)
 {
     if ( !m_file->IsOpen() ) return;
-    
-        if ( !run_info() ) {
-        set_run_info(evt.run_info());
-        write_run_info();
-    } else {
-        if ( evt.run_info() && run_info() != evt.run_info() )
-        WARNING( "WriterRootTree::write_event: GenEvents contain "
-                 "different GenRunInfo objects from - only the "
-                 "first such object will be serialized." )
+    bool refill=false;
+    if ( !run_info() || (run_info() != evt.run_info() ))  { set_run_info(evt.run_info()); refill=true;}
+    if (refill)
+    {
+    m_run_info_data->weight_names.clear();
+    m_run_info_data->tool_name.clear();
+    m_run_info_data->tool_version.clear();
+    m_run_info_data->tool_description.clear();
+    m_run_info_data->attribute_name.clear();
+    m_run_info_data->attribute_string.clear();
+    run_info()->write_data(*m_run_info_data);
     }
 
     
@@ -79,26 +83,15 @@ void WriterRootTree::write_event(const GenEvent &evt)
 }
 
 
-void WriterRootTree::write_run_info() {
-    if ( !m_file->IsOpen() || !run_info() ) return;
-
-    GenRunInfoData data;
-    run_info()->write_data(data);
-
-    int nbytes = m_file->WriteObject(&data,"GenRunInfoData");
-
-    if( nbytes == 0 ) {
-        ERROR( "WriterRootTree: error writing GenRunInfo")
-        m_file->Close();
-    }
-}
-
+void WriterRootTree::write_run_info() {}
 
 void WriterRootTree::close()
 {
 
     m_file->WriteTObject(m_tree);
     m_file->Close();
+    delete m_event_data;
+    delete m_run_info_data;
 }
 
 bool WriterRootTree::failed()
