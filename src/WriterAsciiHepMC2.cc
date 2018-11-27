@@ -75,17 +75,9 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     // Make sure nothing was left from previous event
     flush();
 
-    if ( !run_info() )
-        {
-            set_run_info(evt.run_info());
-        }
-    else
-        {
-            if ( evt.run_info() && run_info() != evt.run_info() )
-                WARNING( "WriterAsciiHepMC2::write_event: GenEvents contain "
-                         "different GenRunInfo objects from - only the "
-                         "first such object will be serialized." )
-            }
+    if ( !run_info() ) set_run_info(evt.run_info());
+    if ( evt.run_info() && run_info() != evt.run_info() ) set_run_info(evt.run_info());
+
 
     shared_ptr<DoubleAttribute> A_event_scale=evt.attribute<DoubleAttribute>("event_scale");
     shared_ptr<DoubleAttribute> A_alphaQED=evt.attribute<DoubleAttribute>("alphaQED");

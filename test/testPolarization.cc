@@ -150,6 +150,11 @@ int main()
     p2->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     xout2.write_event(evt);
 
+    xout1.close();
+    xout2.close();
+    xout4.close();
+    xout5.close();
+    
     // now clean-up by deleteing all objects from memory
     //
     // deleting the event deletes all contained vertices, and all particles
