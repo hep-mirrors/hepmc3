@@ -36,10 +36,12 @@ void GenVertex::add_particle_in( GenParticlePtr p ) {
     if(!p) return;
 
     // Avoid duplicates
-    FOREACH( const GenParticlePtr &pp, particles_in() ) {
+    for(GenParticlePtr pp: particles_in() ) {
         if( pp == p ) return;
     }
 
+    m_fillParticlesIn = true;
+  
     m_particles_in.push_back(p);
 
     if( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
@@ -50,14 +52,16 @@ void GenVertex::add_particle_in( GenParticlePtr p ) {
 }
 
 
-void GenVertex::add_particle_out( GenParticlePtr p ) {
+void GenVertex::add_particle_out(GenParticlePtr p ) {
     if(!p) return;
 
     // Avoid duplicates
-    FOREACH( const GenParticlePtr &pp, particles_out() ) {
+    for(GenParticlePtr pp: particles_out() ) {
         if( pp == p ) return;
     }
 
+    m_fillParticlesOut = true;
+  
     m_particles_out.push_back(p);
 
     if( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
@@ -68,26 +72,39 @@ void GenVertex::add_particle_out( GenParticlePtr p ) {
 }
 
 
-void GenVertex::remove_particle_in( GenParticlePtr p ) {
+void GenVertex::remove_particle_in(GenParticlePtr p ) {
+    m_fillParticlesIn = true;
     p->set_end_vertex(GenVertexPtr(nullptr));
     m_particles_in.erase( std::remove( m_particles_in.begin(), m_particles_in.end(), p), m_particles_in.end());
 }
 
 
 void GenVertex::remove_particle_out( GenParticlePtr p ) {
+    m_fillParticlesOut = true;
     p->set_production_vertex(GenVertexPtr(nullptr));
     m_particles_out.erase( std::remove( m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
 }
 
+const vector<ConstGenParticlePtr>& GenVertex::particles_in()const{
+  if(m_fillParticlesIn){
+    m_fillParticlesIn = false;
+    m_particles_in_const.clear();
+    m_particles_in_const = vector<ConstGenParticlePtr>(m_particles_in.begin(), m_particles_in.end());
+  }
+  return m_particles_in_const;
+}
+ 
+const vector<ConstGenParticlePtr>& GenVertex::particles_out()const{
+  if(m_fillParticlesOut){
+    m_fillParticlesOut = false;
+    m_particles_out_const.clear();
+    m_particles_out_const = vector<ConstGenParticlePtr>(m_particles_out.begin(), m_particles_out.end());
+  }
+  return m_particles_out_const;
+}
+  
 void GenVertex::set_gen_event(GenEvent *evt){
   m_event = evt;
-  m_event_const = evt;
-  return;
-}
-
-void GenVertex::set_gen_event(const GenEvent *evt){
-  m_event = 0;
-  m_event_const = evt;
   return;
 }
 

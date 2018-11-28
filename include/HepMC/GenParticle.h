@@ -54,7 +54,7 @@ public:
 
     /// @todo why is this a raw ptr and not a shared_ptr?
     GenEvent*              parent_event() { return m_event; } //!< Get parent event
-    const GenEvent*              parent_event() const { return m_event_const; } //!< Get parent event
+    const GenEvent*              parent_event() const { return m_event; } //!< Get parent event
     int                    id()           const { return m_id;    } //!< Get particle id
     const GenParticleData& data()         const { return m_data;  } //!< Get particle data
     GenParticleData& data()                     { return m_data;  } //!< Get particle data
@@ -118,11 +118,6 @@ public:
     /// the GenEvent from this GenParticle.  If you don't want that to happen, you should
     /// mark the GenParticle as const
     void set_gen_event(GenEvent *evt);
-
-    /// @brief set the GenEvent
-    /// This const version will set the internal non-const GenEvent to 0
-    /// This means no one will be able to modify the GenEvent from this GenParticle
-    void set_gen_event(const GenEvent *evt);
   
     /// @brief set the ID of the particle.
     /// The ID is set by GenEvent
@@ -131,26 +126,14 @@ public:
     /// @brief set the production vertex
     /// This non-const version will allow the subsequent retrieval and modification of
     /// the production GenVertex from this GenParticle.  If you don't want that to
-    /// happen, you should mark the GenParticle and/or GenVertex as const
+    /// happen, you should mark the GenParticle as const
     void set_production_vertex(GenVertexPtr vtx);
-  
-    /// @brief set the production vertex
-    /// This const version will set the internal non-const production vertex ptr
-    /// to 0, meaning that it will not be possible to modify the GenVertex that is set
-    /// using this method, i.e. when it is marked const
-    void set_production_vertex(ConstGenVertexPtr vtx);
   
     /// @brief set the end vertex
     /// This non-const version will allow the subsequent retrieval and modification of
     /// the end GenVertex from this GenParticle.  If you don't want that to
-    /// happen, you should mark the GenParticle and/or GenVertex as const
+    /// happen, you should mark the GenParticle as const
     void set_end_vertex(GenVertexPtr vtx);
-  
-    /// @brief set the end vertex
-    /// This const version will set the internal non-const end vertex ptr
-    /// to 0, meaning that it will not be possible to modify the GenVertex that is set
-    /// using this method, i.e. when it is marked const
-    void set_end_vertex(ConstGenVertexPtr vtx);
   
     /** @brief Add an attribute to this particle
      *
@@ -199,19 +182,12 @@ private:
   
     /// @todo why is this a raw pointer?
     GenEvent                  *m_event; //!< Parent event
-    const GenEvent            *m_event_const; //!< Parent event (const version)
 
     int                        m_id;    //!< Index
     GenParticleData            m_data;  //!< Particle data
 
     weak_ptr<GenVertex>        m_production_vertex; //!< Production vertex
     weak_ptr<GenVertex>        m_end_vertex;        //!< End vertex
-    weak_ptr<const GenVertex>  m_production_vertex_const; //!< Production vertex (const version)
-    weak_ptr<const GenVertex>  m_end_vertex_const;        //!< End vertex (const version)
-
-    /// @brief throws up if the const ptr is set and the non-const is expired
-    /// Not essential, but probably useful for debugging user code
-    void checkValidity(weak_ptr<GenVertex> vtx, weak_ptr<const GenVertex> vtx_const) const;
   
 };
   

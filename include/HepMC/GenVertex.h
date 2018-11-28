@@ -56,14 +56,10 @@ namespace HepMC {
 
         /// Get parent event
         /// @todo Should we be returning a smart ptr?
-        const GenEvent* parent_event() const { return m_event_const; }
+        const GenEvent* parent_event() const { return m_event; }
 
         /// @brief Set the GenEvent with which this vertex is associated
         void set_gen_event(GenEvent *evt);
-
-        /// @brief Set the GenEvent with which this vertex is associated
-        /// This const version means the event can only be retrieved in const form
-        void set_gen_event(const GenEvent *evt);
 
         /// Check if this vertex belongs to an event
         /// @todo Needed? Wouldn't it be good enough to just rely on user testing nullness of parent_event()?
@@ -90,12 +86,8 @@ namespace HepMC {
 
         /// Add incoming particle
         void add_particle_in ( GenParticlePtr p);
-        /// Add incoming particle
-        void add_particle_in ( ConstGenParticlePtr p);
         /// Add outgoing particle
         void add_particle_out( GenParticlePtr p);
-        /// Add outgoing particle
-        void add_particle_out( ConstGenParticlePtr p);
         /// Remove incoming particle
         void remove_particle_in ( GenParticlePtr p);
         /// Remove outgoing particle
@@ -104,11 +96,11 @@ namespace HepMC {
         /// Get list of incoming particles
         const vector<GenParticlePtr>& particles_in() { return m_particles_in; }
         /// Get list of incoming particles
-        const vector<ConstGenParticlePtr>& particles_in() const { return m_particles_in_const; }
+        const vector<ConstGenParticlePtr>& particles_in() const;
         /// Get list of outgoing particles
         const vector<GenParticlePtr>& particles_out() { return m_particles_out; }
         /// Get list of outgoing particles
-        const vector<ConstGenParticlePtr>& particles_out() const { return m_particles_out_const; }
+        const vector<ConstGenParticlePtr>& particles_out() const;
 
         /// @brief Get vertex position
         ///
@@ -225,16 +217,16 @@ namespace HepMC {
         //@{
         /// @todo why is this a raw ptr?
         GenEvent       *m_event;  //!< Parent event
-        const GenEvent *m_event_const;  //!< Parent event
         int             m_id;     //!< Vertex id
         GenVertexData   m_data;   //!< Vertex data
 
         vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
-        vector<ConstGenParticlePtr>  m_particles_in_const;  //!< Incoming particle list
-
+        mutable vector<ConstGenParticlePtr>  m_particles_in_const;  //!< Incoming particle list
+        mutable bool m_fillParticlesIn = true;
+      
         vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
-        vector<ConstGenParticlePtr>  m_particles_out_const; //!< Outgoing particle list
-
+        mutable vector<ConstGenParticlePtr>  m_particles_out_const; //!< Outgoing particle list
+        mutable bool m_fillParticlesOut = true;
         //@}
 
     };

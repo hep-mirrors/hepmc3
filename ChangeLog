@@ -1,6 +1,12 @@
   --------------------------  HepMC3.0.0  --------------------------
 2018-11-28 James Monk
   * Remove old Filter cc files that prevented compilation
+  * Remove GenParticle::set_gen_event(const GenEvent*), GenParticle::set_end_vertex(ConstGenVertexPtr),
+    GenParticle::set_production_vertex(ConstGenVertexPtr), GenVertex::set_gen_event(const GenEvent*),
+    GenVertex::add_particle_in(ConstGenParticlePtr), GenVertex::add_particle_out(ConstGenParticlePtr),
+    GenVertex::remove_particle_in(ConstGenParticlePtr)
+  * Remove internal consted version of vertex/Event ptrs.  Objects keep an internal
+    un-consted version of the pointer, and allow consted access as appropriate.
 
 2018-11-27 James Monk
   * Add missing #ifndef to Relatives.h

@@ -20,7 +20,6 @@ namespace HepMC {
 
 GenParticle::GenParticle( const FourVector &mom, int pidin, int stat):
 m_event(nullptr),
-m_event_const(nullptr),
 m_id(0) {
     m_data.pid               = pidin;
     m_data.momentum          = mom;
@@ -31,7 +30,6 @@ m_id(0) {
 
 GenParticle::GenParticle( const GenParticleData &dat ):
 m_event(nullptr),
-m_event_const(nullptr),
 m_id(0),
 m_data(dat) {
 }
@@ -62,83 +60,57 @@ void GenParticle::unset_generated_mass() {
     m_data.mass        = 0.;
     m_data.is_mass_set = false;
 }
-
-void GenParticle::checkValidity(weak_ptr<GenVertex> vtx, weak_ptr<const GenVertex> vtx_const)const{
-  // If the vertex has been set from a const vertex then there is no
-  // non-const version to return.  In principle we could simply
-  // access that default empty ptr, but that might be confusing and hard to debug
-  // I think throwing here will make any debugging much easier, since
-  // We can tell people to set the vertex via the non const version
-  // or request only the const version.
-  if(vtx.expired() && ! vtx_const.expired()){
-    throw std::runtime_error("You have requested access to a non-const GenVertex from a GenParticle whose vertex has been set from a const GenVertex.  Either set the GenVertex using a non-const, or request a ConstGenVertex instead.");
-  }
-  return;
-}
   
 GenVertexPtr GenParticle::production_vertex() {
-    checkValidity(m_production_vertex, m_production_vertex_const);
     return m_production_vertex.lock();
 }
 
 ConstGenVertexPtr GenParticle::production_vertex() const {
-    return m_production_vertex_const.lock();
+    return std::const_pointer_cast<const GenVertex>(m_production_vertex.lock());
 }
 
 GenVertexPtr GenParticle::end_vertex() {
-    checkValidity(m_end_vertex, m_end_vertex_const);
     return m_end_vertex.lock();
 }
 
 ConstGenVertexPtr GenParticle::end_vertex() const {
-    return m_end_vertex_const.lock();
+    return std::const_pointer_cast<const GenVertex>(m_end_vertex.lock());
 }
 
 vector<GenParticlePtr> GenParticle::parents(){
-    checkValidity(m_production_vertex, m_production_vertex_const);
-    return (m_production_vertex.expired())? vector<GenParticlePtr>() : m_production_vertex.lock()->particles_in();
+    return (m_production_vertex.expired())? vector<GenParticlePtr>() : Relatives::PARENTS(shared_from_this());
 }
 
 vector<ConstGenParticlePtr> GenParticle::parents() const{
-    return (m_production_vertex_const.expired()) ? vector<ConstGenParticlePtr>() : m_production_vertex_const.lock()->particles_in();
+    return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : Relatives::PARENTS(shared_from_this());
 }
   
 vector<GenParticlePtr> GenParticle::children(){
-    checkValidity(m_end_vertex, m_end_vertex_const);
-    return (m_end_vertex.expired())? vector<GenParticlePtr>() : m_end_vertex.lock()->particles_out();
+    return (m_end_vertex.expired())? vector<GenParticlePtr>() : Relatives::CHILDREN(shared_from_this());
 }
 
 vector<ConstGenParticlePtr> GenParticle::children() const{
-    return (m_end_vertex_const.expired()) ? vector<ConstGenParticlePtr>() : m_end_vertex_const.lock()->particles_out();
+    return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : Relatives::CHILDREN(shared_from_this());
 }
 
 vector<GenParticlePtr> GenParticle::ancestors() {
-  checkValidity(m_production_vertex, m_production_vertex_const);
   return (m_production_vertex.expired()) ? vector<GenParticlePtr>() : Relatives::ANCESTORS(shared_from_this());
 }
 
 vector<ConstGenParticlePtr> GenParticle::ancestors() const {
-  return (m_production_vertex_const.expired()) ? vector<ConstGenParticlePtr>() : Relatives::ANCESTORS(shared_from_this());
+  return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : Relatives::ANCESTORS(shared_from_this());
 }
 
 vector<GenParticlePtr> GenParticle::descendants() {
-  checkValidity(m_end_vertex, m_end_vertex_const);
   return (m_end_vertex.expired()) ? vector<GenParticlePtr>() : Relatives::DESCENDANTS(shared_from_this());
 }
 
 vector<ConstGenParticlePtr> GenParticle::descendants() const {
-  return (m_end_vertex_const.expired()) ? vector<ConstGenParticlePtr>() : Relatives::DESCENDANTS(shared_from_this());
+  return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : Relatives::DESCENDANTS(shared_from_this());
 }
 
 void GenParticle::set_gen_event(GenEvent *evt){
   m_event = evt;
-  m_event_const = evt;
-  return;
-}
-
-void GenParticle::set_gen_event(const GenEvent *evt){
-  m_event = 0;
-  m_event_const = evt;
   return;
 }
 
@@ -149,29 +121,11 @@ void GenParticle::set_id(int id){
 
 void GenParticle::set_production_vertex(GenVertexPtr vtx){
   m_production_vertex = vtx;
-  m_production_vertex_const = std::const_pointer_cast<const GenVertex>(vtx);
-  return;
-}
- 
-void GenParticle::set_production_vertex(ConstGenVertexPtr vtx){
-  // In this case there cannot be access to the non-const version
-  // Therefore we reset it (equiv to ptr=0 for raw ptrs)
-  m_production_vertex.reset();
-  m_production_vertex_const = vtx;
   return;
 }
  
 void GenParticle::set_end_vertex(GenVertexPtr vtx){
   m_end_vertex = vtx;
-  m_end_vertex_const = std::const_pointer_cast<const GenVertex>(vtx);
-  return;
-}
- 
-void GenParticle::set_end_vertex(ConstGenVertexPtr vtx){
-  // In this case there cannot be access to the non-const version
-  // Therefore we reset it (equiv to ptr=0 for raw ptrs)
-  m_end_vertex.reset();
-  m_end_vertex_const = vtx;
   return;
 }
  
