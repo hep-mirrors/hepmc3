@@ -1,4 +1,6 @@
   --------------------------  HepMC3.0.0  --------------------------
+2018-11-28 James Monk
+  * Remove old Filter cc files that prevented compilation
 
 2018-11-27 James Monk
   * Add missing #ifndef to Relatives.h
