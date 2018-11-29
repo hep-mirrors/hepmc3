@@ -2,7 +2,7 @@ C...A simple skeleton program, illustrating a typical Pythia run:
 C...Z0 production at LEP 1. 
 C...Toy task: compare multiplicity distribution with matrix elements
 C...and with parton showers (using same fragmentation parameters).
-
+C...This code contains modifications for HepMC3 examples
 C-----------------------------------------------------------------
 
 C...Preamble: declarations.
@@ -30,6 +30,8 @@ C...Parameters.
       COMMON/PYPARS/MSTP(200),PARP(200),MSTI(200),PARI(200)
 C...Supersymmetry parameters.
       COMMON/PYMSSM/IMSS(0:99),RMSS(0:99)
+C...Generation and cross section statistics.
+      COMMON/PYINT5/NGENPD,NGEN(0:500,3),XSEC(0:500,3)
 C...HepMC3
       PARAMETER (NMXHEP=4000)
       COMMON /HEPEVT/  NEVHEP,NHEP,ISTHEP(NMXHEP),IDHEP(NMXHEP),
@@ -38,6 +40,10 @@ C...HepMC3
       INTEGER          NEVHEP,NHEP,ISTHEP,IDHEP,JMOHEP,JDAHEP
       DOUBLE PRECISION PHEP,VHEP
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+C...These variables will be used for conversion. Block size is different
+C...in Pythia6 and in HepMC3, so the most simple portable way is to have
+C... a second block of same size as in HepMC3 and  copy the content of 
+C...block directly.
       PARAMETER (NMXHEPL=10000)
       COMMON /HEPEVTL/  NEVHEPL,NHEPL,ISTHEPL(NMXHEPL),IDHEPL(NMXHEPL),
      &           JMOHEPL(2,NMXHEPL),JDAHEPL(2,NMXHEPL),PHEPL(5,NMXHEPL),
@@ -46,10 +52,14 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       DOUBLE PRECISION PHEPL,VHEPL
       
       INTEGER OUTID(2), HEPMC3STATUS
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
+C...Glue functions
       INTEGER new_writer,delete_writer,set_hepevt_address
       INTEGER convert_event,write_event,clear_event
+      INTEGER set_attribute_int,set_attribute_double
       EXTERNAL new_writer,delete_writer,set_hepevt_address
       EXTERNAL convert_event,write_event,clear_event
+      EXTERNAL set_attribute_int,set_attribute_double
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C-----------------------------------------------------------------
 
@@ -79,8 +89,8 @@ C...Book histograms.
       CALL PYBOOK(2,'charged multiplicity PS',100,-0.5D0,99.5D0)
 C...Create output writers
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      OUTID(1)=new_writer(0,2,'ME.hepmc')
-      OUTID(2)=new_writer(0,2,'PS.hepmc')
+      OUTID(1)=new_writer(0,1,'ME.hepmc')
+      OUTID(2)=new_writer(0,1,'PS.hepmc')
       NEVHEP=-123456
       HEPMC3STATUS=set_hepevt_address(NEVHEPL)
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
@@ -128,6 +138,13 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
           VHEPL(4,J)=VHEP(4,J)
   500     CONTINUE          
           HEPMC3STATUS=convert_event(OUTID(ICA))
+C...Note: no XS uncertainty
+          HEPMC3STATUS=set_cross_section(OUTID(ICA),
+     &    1.0E9*XSEC(0,3),
+     &    1.0E9*XSEC(0,3)/sqrt(1.0*NGEN(0,3)),
+     &    NGEN(0,3),0)
+          HEPMC3STATUS=set_attribute_int(OUTID(ICA),
+     &    MSEL,'signal_process_id')
           HEPMC3STATUS=write_event(OUTID(ICA))
           HEPMC3STATUS=clear_event(OUTID(ICA))          
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 
