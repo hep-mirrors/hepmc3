@@ -1,4 +1,9 @@
   --------------------------  HepMC3.0.0  --------------------------
+2018-11-30 James Monk
+  * Make GenEvent::particles() const version work properly and return const particles.
+    Same for vertices()
+  * Constness handling cascaded through HEPEVT_Wrapper, WriterAscii and Print 
+
 2018-11-28 James Monk
   * Remove old Filter cc files that prevented compilation
   * Remove GenParticle::set_gen_event(const GenEvent*), GenParticle::set_end_vertex(ConstGenVertexPtr),
