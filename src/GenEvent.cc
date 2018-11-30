@@ -39,11 +39,31 @@ GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
     m_weights = std::vector<double>(run->weight_names().size(), 1.0);
 }
 
+const std::vector<ConstGenParticlePtr> &GenEvent::particles() const {
+  if(m_fillParticles){
+      m_fillParticles = false;
+      m_particles_const.clear();
+      m_particles_const = std::vector<ConstGenParticlePtr>(m_particles.begin(), m_particles.end());
+  }
+  return m_particles_const;
+}
 
+const std::vector<ConstGenVertexPtr> &GenEvent::vertices() const {
+  if(m_fillVertices){
+    m_fillVertices = false;
+    m_vertices_const.clear();
+    m_vertices_const = std::vector<ConstGenVertexPtr>(m_vertices.begin(), m_vertices.end());
+  }
+  return m_vertices_const;
+}
+
+  
 // void GenEvent::add_particle( const GenParticlePtr &p ) {
 void GenEvent::add_particle( GenParticlePtr p ) {
     if( p->in_event() ) return;
 
+    m_fillParticles = true;
+  
     m_particles.push_back(p);
 
     p->set_gen_event(this);
@@ -58,7 +78,7 @@ void GenEvent::add_particle( GenParticlePtr p ) {
 // void GenEvent::add_vertex( const GenVertexPtr &v ) {
 void GenEvent::add_vertex( GenVertexPtr v ) {
     if( v->in_event() ) return;
-
+    m_fillVertices = true;
     m_vertices.push_back(v);
 
     v->set_gen_event(this);
@@ -80,6 +100,8 @@ void GenEvent::add_vertex( GenVertexPtr v ) {
 void GenEvent::remove_particle( GenParticlePtr p ) {
     if( !p || p->parent_event() != this ) return;
 
+    m_fillParticles = true;
+  
     DEBUG( 30, "GenEvent::remove_particle - called with particle: "<<p->id() );
     GenVertexPtr end_vtx = p->end_vertex();
     if( end_vtx ) {
@@ -177,6 +199,8 @@ void GenEvent::remove_particles( vector<GenParticlePtr> v ) {
 void GenEvent::remove_vertex( GenVertexPtr v ) {
     if( !v || v->parent_event() != this ) return;
 
+    m_fillVertices = true;
+  
     DEBUG( 30, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
     shared_ptr<GenVertex> null_vtx;
 
@@ -337,7 +361,8 @@ void GenEvent::reserve(unsigned int parts, unsigned int verts) {
 
 void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
     if( new_momentum_unit != m_momentum_unit ) {
-        FOREACH( GenParticlePtr &p, m_particles ) {
+        m_fillParticles = true;
+        for( GenParticlePtr p: m_particles ) {
             Units::convert( p->data().momentum, m_momentum_unit, new_momentum_unit );
         }
 
@@ -345,6 +370,7 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 
     if( new_length_unit != m_length_unit ) {
+        m_fillVertices = true;
         for(GenVertexPtr &v: m_vertices ) {
             FourVector &fv = v->data().position;
             if( !fv.is_zero() ) Units::convert( fv, m_length_unit, new_length_unit );
@@ -367,7 +393,8 @@ void GenEvent::shift_position_by( const FourVector & delta ) {
     m_rootvertex->set_position( event_pos() + delta );
 
     // Offset all vertices
-    FOREACH ( GenVertexPtr &v, m_vertices ) {
+    m_fillVertices = true;
+    for ( GenVertexPtr v: m_vertices ) {
         if ( v->has_set_position() )
             v->set_position( v->position() + delta );
     }
@@ -380,7 +407,11 @@ void GenEvent::clear() {
     m_weights.clear();
     m_attributes.clear();
     m_particles.clear();
+    m_particles_const.clear();
+    m_fillParticles = true;
     m_vertices.clear();
+    m_vertices_const.clear();
+    m_fillVertices = true;
 }
 
 
@@ -439,27 +470,27 @@ void GenEvent::write_data(GenEventData& data) const {
     // Fill containers
     data.weights = this->weights();
 
-    FOREACH( const GenParticlePtr &p, this->particles() ) {
+    for( ConstGenParticlePtr p: this->particles() ) {
         data.particles.push_back( p->data() );
     }
 
-    FOREACH( const GenVertexPtr &v, this->vertices() ) {
+    for(ConstGenVertexPtr v: this->vertices() ) {
         data.vertices.push_back( v->data() );
         int v_id = v->id();
 
-        FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+        for(ConstGenParticlePtr p: v->particles_in() ) {
             data.links1.push_back( p->id() );
             data.links2.push_back( v_id    );
         }
 
-        FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+        for(ConstGenParticlePtr p: v->particles_out() ) {
             data.links1.push_back( v_id    );
             data.links2.push_back( p->id() );
         }
     }
 
-    FOREACH( const att_key_t& vt1, this->attributes() ) {
-        FOREACH( const att_val_t& vt2, vt1.second ) {
+    for( const att_key_t& vt1: this->attributes() ) {
+        for( const att_val_t& vt2: vt1.second ) {
 
             string st;
 
@@ -488,7 +519,8 @@ void GenEvent::read_data(const GenEventData &data) {
     this->weights() = data.weights;
 
     // Fill particle information
-    FOREACH( const GenParticleData &pd, data.particles ) {
+    m_fillParticles = true;
+    for( const GenParticleData &pd: data.particles ) {
       GenParticlePtr p = make_shared<GenParticle>(pd);
 
         m_particles.push_back(p);
@@ -498,7 +530,8 @@ void GenEvent::read_data(const GenEventData &data) {
     }
 
     // Fill vertex information
-    FOREACH( const GenVertexData &vd, data.vertices ) {
+    m_fillVertices = true;
+    for( const GenVertexData &vd: data.vertices ) {
       GenVertexPtr v = make_shared<GenVertex>(vd);
 
         m_vertices.push_back(v);
@@ -543,12 +576,16 @@ pair<GenParticlePtr,GenParticlePtr> GenEvent::beam_particles() const {
 
 void GenEvent::set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) {
     /// @todo Require/set status = 4
+    m_fillParticles = true;
+    m_fillVertices = true;
     m_rootvertex->add_particle_out(p1);
     m_rootvertex->add_particle_out(p2);
 }
 
 void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) {
     /// @todo Require/set status = 4
+    m_fillParticles = true;
+    m_fillVertices = true;
     m_rootvertex->add_particle_out(p.first);
     m_rootvertex->add_particle_out(p.second);
 }

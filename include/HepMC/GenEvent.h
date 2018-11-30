@@ -58,15 +58,15 @@ public:
     //@{
 
     /// @brief Get list of particles (const)
-    const std::vector<GenParticlePtr>& particles() const { return m_particles; }
+    const std::vector<ConstGenParticlePtr>& particles() const;
     /// @brief Get list of vertices (const)
-    const std::vector<GenVertexPtr>& vertices() const { return m_vertices; }
+    const std::vector<ConstGenVertexPtr>& vertices() const;
 
 
     /// @brief Get/set list of particles (non-const)
-    std::vector<GenParticlePtr>& particles() { return m_particles; }
+    const std::vector<GenParticlePtr>& particles() { return m_particles; }
     /// @brief Get/set list of vertices (non-const)
-    std::vector<GenVertexPtr>& vertices() { return m_vertices; }
+    const std::vector<GenVertexPtr>& vertices() { return m_vertices; }
 
     //@}
 
@@ -398,8 +398,12 @@ private:
 
     /// List of particles
     std::vector<GenParticlePtr> m_particles;
+    mutable std::vector<ConstGenParticlePtr> m_particles_const;
+    mutable bool m_fillParticles = true;
     /// List of vertices
     std::vector<GenVertexPtr> m_vertices;
+    mutable std::vector<ConstGenVertexPtr> m_vertices_const;
+    mutable bool m_fillVertices = true;
 
     /// Event number
     /// @todo Move to attributes?

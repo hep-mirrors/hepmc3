@@ -36,10 +36,10 @@ public:
     static void line(const GenEvent &event);
 
     /// @brief Print one-line info
-    static void line(const GenVertexPtr &v);
+    static void line(ConstGenVertexPtr v);
 
     /// @brief Print one-line info
-    static void line(const GenParticlePtr &p);
+    static void line(ConstGenParticlePtr p);
 
     /// @brief Print one-line info
     static void line(shared_ptr<GenCrossSection> &cs);
@@ -52,10 +52,10 @@ public:
 
 private:
     /// @brief Helper function for printing a vertex in listing format
-    static void listing(const GenVertexPtr &v);
+    static void listing(ConstGenVertexPtr v);
 
     /// @brief Helper function for printing a particle in listing format
-    static void listing(const GenParticlePtr &p);
+    static void listing(ConstGenParticlePtr p);
 
     virtual ~Print() {}
 };

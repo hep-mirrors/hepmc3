@@ -41,13 +41,13 @@ void Print::content( const GenEvent &event ) {
 
     cout<<"GenParticlePtr ("<<event.particles().size()<<")"<<endl;
 
-    FOREACH( const GenParticlePtr &p, event.particles() )
+    for( ConstGenParticlePtr p: event.particles() )
     {
         HepMC::Print::line(p);
     }
 
     cout<<"GenVertexPtr ("<<event.vertices().size()<<")"<<endl;
-    FOREACH( const GenVertexPtr &v, event.vertices() ) {
+    for( ConstGenVertexPtr v: event.vertices() ) {
         HepMC::Print::line(v);
     }
 
@@ -82,7 +82,7 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
     cout << "________________________________________________________________________" << endl;
 
     // Print all vertices
-    FOREACH( const GenVertexPtr &v, event.vertices() ) {
+    for(ConstGenVertexPtr v: event.vertices() ) {
         HepMC::Print::listing(v);
     }
 
@@ -92,7 +92,7 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
     cout << "________________________________________________________________________" << endl;
 }
 
-void Print::listing( const GenVertexPtr &v ) {
+void Print::listing( ConstGenVertexPtr v ) {
     cout << "Vtx: ";
     cout.width(6);
     cout << v->id() << " stat: ";
@@ -110,7 +110,7 @@ void Print::listing( const GenVertexPtr &v ) {
     bool printed_header = false;
 
     // Print out all the incoming particles
-    FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+    for(ConstGenParticlePtr p: v->particles_in() ) {
         if( !printed_header ) {
             cout << " I: ";
             printed_header = true;
@@ -123,7 +123,7 @@ void Print::listing( const GenVertexPtr &v ) {
     printed_header = false;
 
     // Print out all the outgoing particles
-    FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+    for(ConstGenParticlePtr p: v->particles_out() ) {
         if( !printed_header ) {
             cout << " O: ";
             printed_header = true;
@@ -134,7 +134,7 @@ void Print::listing( const GenVertexPtr &v ) {
     }
 }
 
-void Print::listing( const GenParticlePtr &p ) {
+void Print::listing(ConstGenParticlePtr p ) {
     cout << " ";
     cout.width(6);
     cout << p->id();
@@ -159,7 +159,7 @@ void Print::listing( const GenParticlePtr &p ) {
     cout.width(3);
     cout << p->status();
 
-    const GenVertexPtr prod = p->production_vertex();
+    ConstGenVertexPtr prod = p->production_vertex();
 
     if( prod ) {
         cout.width(6);
@@ -169,7 +169,7 @@ void Print::listing( const GenParticlePtr &p ) {
     cout << endl;
 }
 
-void Print::line(const GenVertexPtr &v) {
+void Print::line(ConstGenVertexPtr v) {
     cout << "GenVertex:  " << v->id() << " stat: ";
     cout.width(3);
     cout << v->status();
@@ -185,7 +185,7 @@ void Print::line(const GenVertexPtr &v) {
     cout << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t() << endl;
 }
 
-void Print::line(const GenParticlePtr &p) {
+void Print::line(ConstGenParticlePtr p) {
 
     cout << "GenParticle: ";
     cout.width(3);
@@ -214,8 +214,8 @@ void Print::line(const GenParticlePtr &p) {
     cout.flags(orig);
     cout.precision(prec);
 
-    GenVertexPtr prod = p->production_vertex();
-    GenVertexPtr end  = p->end_vertex();
+    ConstGenVertexPtr prod = p->production_vertex();
+    ConstGenVertexPtr end  = p->end_vertex();
     int prod_vtx_id   = (prod) ? prod->id() : 0;
     int end_vtx_id    = (end)  ? end->id()  : 0;
 
