@@ -233,7 +233,20 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
      if (flow2) m_particle_cache[i]->add_attribute("flow2",flow2);
      }
     }
+
+     for(unsigned int i=0; i<m_vertex_cache.size(); ++i) 
+     if(m_vertex_cache_ghost[i]->attribute_names().size()) 
+     {
+     for (int ii=0;ii<100;ii++) 
+     {
+	 shared_ptr<DoubleAttribute> rs=m_vertex_cache_ghost[i]->attribute<DoubleAttribute>("weight"+to_string((long long unsigned int)ii));
+     if (!rs) break;
+     m_vertex_cache[i]->add_attribute("weight"+to_string((long long unsigned int)ii),rs);
+     }
+     }
+
     m_particle_cache_ghost.clear();
+    m_vertex_cache_ghost.clear();
     m_event_ghost->clear(); 
     return 1;
 }
@@ -344,18 +357,21 @@ bool ReaderAsciiHepMC2::parse_units(GenEvent &evt, const char *buf) {
 
 int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     GenVertexPtr  data = make_shared<GenVertex>();
+    GenVertexPtr  data_ghost = make_shared<GenVertex>();
     FourVector    position;
     const char   *cursor            = buf;
     int           barcode           = 0;
     int           num_particles_out = 0;
-
+    int                  weights_size       = 0;
+    std::vector<double>  weights(0);
     // barcode
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     barcode = atoi(cursor);
 
-    // SKIPPED: id
+    // status
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-
+    data->set_status( atoi(cursor) );
+    
     // x
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     position.setX(atof(cursor));
@@ -380,12 +396,28 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     num_particles_out = atoi(cursor);
 
-    // SKIPPING: weights_size, weights
+    //  weights
+   
+    if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    weights_size = atoi(cursor);
+    weights.resize(weights_size);
+
+    for ( int i = 0; i < weights_size; ++i ) {
+        if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+        weights[i] = atof(cursor);
+    }
+    
+
 
     // Add original vertex barcode to the cache
     m_vertex_cache.push_back( data );
     m_vertex_barcodes.push_back( barcode );
-
+    
+    m_event_ghost->add_vertex(data_ghost);
+    for ( size_t i = 0; i < weights_size; ++i ) 
+    data_ghost->add_attribute("weight"+to_string((long long unsigned int)i),make_shared<DoubleAttribute>(weights[i])); //gcc-4.4.7 workaround
+    m_vertex_cache_ghost.push_back( data_ghost );
+    
     DEBUG( 10, "ReaderAsciiHepMC2: V: "<<-(int)m_vertex_cache.size()<<" (old barcode"<<barcode<<") "<<num_particles_out<<" particles)" )
 
     return num_particles_out;

@@ -94,7 +94,12 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     int signal_process_vertex=A_signal_process_vertex?(A_signal_process_vertex->value()):0;
 
     std::vector<long> m_random_states;
-
+    for (int i=0;i<100;i++) 
+    {
+	shared_ptr<IntAttribute> rs=evt.attribute<IntAttribute>("random_states"+to_string((long long unsigned int)i));
+    if (!rs) break;
+    m_random_states.push_back(rs->value());
+    }
     // Write event info
     //Find beam particles
     std::vector<int> beams;
@@ -258,6 +263,14 @@ string WriterAsciiHepMC2::escape(const string& s) const
 
 void WriterAsciiHepMC2::write_vertex(const GenVertexPtr &v)
 {
+	std::vector<double> weights;
+	for (int i=0;i<100;i++) 
+    {
+	shared_ptr<DoubleAttribute> rs=v->attribute<DoubleAttribute>("weight"+to_string((long long unsigned int)i));
+    if (!rs) break;
+    weights.push_back(rs->value());
+    }
+    
     m_cursor += sprintf( m_cursor, "V %i %i",v->id(),v->status() );
     flush();
     int orph=0;
@@ -285,7 +298,10 @@ void WriterAsciiHepMC2::write_vertex(const GenVertexPtr &v)
     m_cursor += sprintf(m_cursor," %.*e", m_precision,pos.t());
     flush();
     }
-    m_cursor += sprintf(m_cursor," %i %i %i\n",orph,v->particles_out().size(),0);
+    m_cursor += sprintf(m_cursor," %i %i %i",orph,v->particles_out().size(),weights.size());
+    flush();
+    for (size_t i=0;i<weights.size();i++) m_cursor += sprintf(m_cursor," %.*e",   m_precision,weights[i]);
+    m_cursor += sprintf(m_cursor,"\n"); 
     flush();
 }
 

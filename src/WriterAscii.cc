@@ -32,7 +32,7 @@ WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run
         ERROR( "WriterAscii: could not open output file: "<<filename )
     } else {
         m_file << "HepMC::Version " << HepMC::version() << std::endl;
-        m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
+        m_file << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
 	    if ( run_info() ) write_run_info();
     }
 }
@@ -53,7 +53,7 @@ WriterAscii::WriterAscii(std::ostream &stream, shared_ptr<GenRunInfo> run)
         // m_file << "HepMC::Version " << HepMC::version() << std::endl;
         // m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
     (*m_stream) << "HepMC::Version " << HepMC::version() << std::endl;
-    (*m_stream) << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
+    (*m_stream) << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
 	if ( run_info() ) write_run_info();
     // }
 }
@@ -360,7 +360,7 @@ void WriterAscii::close() {
 
   forced_flush();
   // m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
-  (*m_stream) << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
+  (*m_stream) << "HepMC::Asciiv3-END_EVENT_LISTING" << endl << endl;
 
   // m_file.close();
   if (ofs) ofs->close();

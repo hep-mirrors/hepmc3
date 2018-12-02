@@ -135,6 +135,7 @@ private:
 
     GenEvent*              m_event_ghost;                      //!< To save particle and verstex attributes.
     vector<GenParticlePtr> m_particle_cache_ghost;//!< Particle cache for attributes
+    vector<GenVertexPtr>   m_vertex_cache_ghost;        //!< Vertex cache for attributes
 };
 
 } // namespace HepMC

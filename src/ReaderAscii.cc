@@ -67,6 +67,12 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         // Check for ReaderAscii header/footer
         if( strncmp(buf,"HepMC",5) == 0 ) {
+			if( strncmp(buf,"HepMC::Version",14) != 0 && strncmp(buf,"HepMC::Asciiv3",14)!=0 )
+            {
+            WARNING( "ReaderAscii: found unsupported expression in header. Will close the input." )
+            std::cout<<buf<<std::endl;
+            m_isstream ? m_stream->clear(ios::eofbit) : m_file.clear(ios::eofbit);
+            }
             if(parsed_event_header) {
                 is_parsing_successful = true;
                 break;
@@ -124,15 +130,28 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
 
     // Check if all particles and vertices were parsed
-    if ((int)evt.particles().size() != vertices_and_particles.second ) {
-        ERROR( "ReaderAscii: too few or too many particles were parsed" )
+    if ((int)evt.particles().size() > vertices_and_particles.second ) {
+        ERROR( "ReaderAscii: too many particles were parsed" )
+        printf("%zu  vs  %i expected\n",evt.particles().size(),vertices_and_particles.second );
+        is_parsing_successful = false;
+    }
+    if ((int)evt.particles().size() < vertices_and_particles.second ) {
+        ERROR( "ReaderAscii: too few  particles were parsed" )
+        printf("%zu  vs  %i expected\n",evt.particles().size(),vertices_and_particles.second );
         is_parsing_successful = false;
     }
 
-    if ((int)evt.vertices().size()  != vertices_and_particles.first) {
-       ERROR( "ReaderAscii: too few or too many vertices were parsed" )
-        is_parsing_successful =  false;
+    if ((int)evt.vertices().size()  > vertices_and_particles.first) {
+       ERROR( "ReaderAscii: too many vertices were parsed" )
+       printf("%zu  vs  %i expected\n",evt.vertices().size(),vertices_and_particles.first );
+       is_parsing_successful =  false;
     }
+
+    if ((int)evt.vertices().size()  < vertices_and_particles.first) {
+       ERROR( "ReaderAscii: too few vertices were parsed" )
+       printf("%zu  vs  %i expected\n",evt.vertices().size(),vertices_and_particles.first );
+        is_parsing_successful =  false;
+    }    
     // Check if there were errors during parsing
     if( !is_parsing_successful ) {
         ERROR( "ReaderAscii: event parsing failed. Returning empty event" )
@@ -262,6 +281,16 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
             data->add_particle_in( evt.particles()[particle_in-1] );
         }
         else {
+			shared_ptr<IntAttribute> existing_hc=evt.attribute<IntAttribute>("cycles");            
+            if (existing_hc)
+            {
+            if (existing_hc->value()!=0&&particle_in > 0 )
+            {
+             WARNING( "ReaderAscii: event has cycles, this vertex might be repeated." )
+            //if( particle_in > 0 ) data->add_particle_in( evt.particles()[particle_in-1] );
+		    }
+		    }
+		    else
             return false;
         }
 

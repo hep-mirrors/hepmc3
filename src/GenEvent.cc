@@ -261,9 +261,46 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     v->m_id    = 0;
 }
 #endif
+static bool visit_children(std::map<const GenVertexPtr,int>  &a,const GenVertexPtr& v)
+{
+for ( std::vector<GenParticlePtr>::const_iterator p=v->particles_out().begin();p!=v->particles_out().end();++p) 
+ if ((*p)->end_vertex()) 
+ { 
+  if (a[(*p)->end_vertex()]!=0) return true;
+  else a[(*p)->end_vertex()]++;
+  if (visit_children(a,(*p)->end_vertex())) return true;
+ }
+return false;
+}
 
 void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
 
+    shared_ptr<IntAttribute> existing_hc=attribute<IntAttribute>("cycles");
+    bool has_cycles=false;
+    std::map<const GenVertexPtr,int>  sortingv;
+    std::vector<GenVertexPtr> noinv;
+    if (existing_hc)     if (existing_hc->value()!=0) has_cycles=true;
+    if(!existing_hc)
+    {
+    FOREACH( const GenParticlePtr &p, parts ) {
+        const GenVertexPtr &v = p->production_vertex();
+        if(v) sortingv[v]=0;
+        if( !v || v->particles_in().size()==0 ) {
+            const GenVertexPtr &v2 = p->end_vertex();
+            if(v2) {noinv.push_back(v2); sortingv[v2]=0;}
+        }
+    }
+    for (std::vector<GenVertexPtr>::const_iterator v=noinv.begin();v!=noinv.end();++v){
+    std::map<const GenVertexPtr,int>  sorting_temp=sortingv;
+    has_cycles=(has_cycles||visit_children(sorting_temp,*v));
+    } 
+    }
+    if (has_cycles) {	
+    add_attribute("cycles", std::make_shared<HepMC::IntAttribute>(1));
+    for( std::map<const GenVertexPtr,int>::iterator vi=sortingv.begin();vi!=sortingv.end();++vi) if( !vi->first->in_event() ) add_vertex(vi->first);
+    return;
+    }
+    
     deque<GenVertexPtr> sorting;
 
     // Find all starting vertices (end vertex of particles that have no production vertex)
@@ -326,6 +363,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
                    <<this->particles().size()<<", max deque size: "
                    <<max_deque_size<<", iterations: "<<sorting_loop_count )
     )
+return;
 }
 
 
