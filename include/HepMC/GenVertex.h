@@ -168,19 +168,19 @@ namespace HepMC {
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
-        particles_in_const_iterator  particles_in_const_begin()  const { return m_particles_in_const.begin();  } //!< @deprecated Backward compatibility iterators
+        particles_in_const_iterator  particles_in_const_begin()  const { return particles_in().begin();  } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
-        particles_in_const_iterator  particles_in_const_end()    const { return m_particles_in_const.end();    } //!< @deprecated Backward compatibility iterators
+        particles_in_const_iterator  particles_in_const_end()    const { return particles_in().end();    } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
-        particles_out_const_iterator particles_out_const_begin() const { return m_particles_out_const.begin(); } //!< @deprecated Backward compatibility iterators
+        particles_out_const_iterator particles_out_const_begin() const { return particles_out().begin(); } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
-        particles_out_const_iterator particles_out_const_end()   const { return m_particles_out_const.end();   }
+        particles_out_const_iterator particles_out_const_end()   const { return particles_out().end();   }
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Use particles_in/out() functions instead")
@@ -200,11 +200,11 @@ namespace HepMC {
 
         /// @deprecated Backward compatibility
         HEPMC_DEPRECATED("Use particles_in().size() instead")
-        int particles_in_size()  const { return m_particles_in_const.size(); }
+        int particles_in_size()  const { return particles_in().size(); }
 
         /// @deprecated Backward compatibility
         HEPMC_DEPRECATED("Use particles_out().size() instead")
-        int particles_out_size() const { return m_particles_out_const.size(); }
+        int particles_out_size() const { return particles_out().size(); }
 
         #endif
 
