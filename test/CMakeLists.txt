@@ -31,7 +31,7 @@ endmacro( hepmc_root_test )
 #One should use something else for Windows or use build-in Linux sybsystem
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)
-set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
+set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --tool=callgrind" )
 endif()
 
 macro(add_memcheck_test binaryname )
@@ -55,6 +55,7 @@ set( HepMC_tests
         testMultipleCopies
         testWeights 
         testLoops
+        testDelete
         testIO1
         testIO3
          )
