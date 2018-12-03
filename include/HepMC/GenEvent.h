@@ -159,8 +159,11 @@ public:
     const FourVector& event_pos() const;
 
     /// @brief Vector of beam particles
-    const std::vector<GenParticlePtr>& beams() const;
+    std::vector<ConstGenParticlePtr> beams() const;
 
+    /// @brief Vector of beam particles
+    std::vector<GenParticlePtr> beams();
+  
     /// @brief Shift position of all vertices in the event by @a delta
     void shift_position_by( const FourVector & delta );
 
