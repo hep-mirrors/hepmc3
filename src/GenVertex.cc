@@ -72,12 +72,16 @@ void GenVertex::add_particle_out( GenParticlePtr p ) {
 
 
 void GenVertex::remove_particle_in( GenParticlePtr p ) {
+    if(!p) return;
+    if (std::find(particles_in().begin(),particles_in().end(),p)==particles_in().end()) return;
     p->m_end_vertex.reset();
     m_particles_in.erase( std::remove( m_particles_in.begin(), m_particles_in.end(), p), m_particles_in.end());
 }
 
 
 void GenVertex::remove_particle_out( GenParticlePtr p ) {
+    if(!p) return;
+    if (std::find(particles_out().begin(),particles_out().end(),p)==particles_out().end()) return;
     p->m_production_vertex.reset();
     m_particles_out.erase( std::remove( m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
 }
