@@ -45,8 +45,10 @@ WriterAscii::WriterAscii(std::ostream &stream, shared_ptr<GenRunInfo> run)
     m_buffer(NULL),
     m_cursor(NULL),
     m_buffer_size( 256*1024 )
+
 {
     set_run_info(run);
+    
     // if ( !m_file.is_open() ) {
     //     ERROR( "WriterAscii: could not open output file: "<<filename )
 	// } else {
@@ -68,7 +70,6 @@ WriterAscii::~WriterAscii() {
 void WriterAscii::write_event(const GenEvent &evt) {
 
     // if ( !m_file.is_open() ) return;
-
     allocate_buffer();
     if ( !m_buffer ) return;
 
@@ -192,7 +193,6 @@ void WriterAscii::allocate_buffer() {
         ERROR( "WriterAscii::allocate_buffer: could not allocate buffer!" )
         return;
     }
-
     m_cursor = m_buffer;
 }
 
@@ -355,14 +355,9 @@ inline void WriterAscii::write_string( const string &str ) {
 
 void WriterAscii::close() {
   std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
-  // if ( !m_file.is_open() ) return;
   if (ofs && !ofs->is_open()) return;
-
   forced_flush();
-  // m_file << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
   (*m_stream) << "HepMC::Asciiv3-END_EVENT_LISTING" << endl << endl;
-
-  // m_file.close();
   if (ofs) ofs->close();
 }
 

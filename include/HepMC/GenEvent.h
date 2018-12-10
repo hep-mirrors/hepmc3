@@ -49,7 +49,13 @@ public:
              Units::MomentumUnit momentum_unit = Units::GEV,
              Units::LengthUnit length_unit = Units::MM);
 
+    /// @brief Copy constructor 
+     GenEvent(const GenEvent&);
 
+    /// @brief Destructor 
+    ~GenEvent();
+
+ 
     /// @name Particle and vertex access
     //@{
 

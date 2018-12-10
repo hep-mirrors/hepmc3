@@ -123,6 +123,7 @@ private:
 
     std::ofstream m_file; //!< Output file
     std::ostream* m_stream; //!< Output stream
+
     int m_precision; //!< Output precision
     char* m_buffer;  //!< Stream buffer
     char* m_cursor;  //!< Cursor inside stream buffer

@@ -162,7 +162,6 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         return false;
     }
-
     return true;
 }
 

@@ -100,14 +100,20 @@ const FourVector& GenVertex::position() const {
 
     if( has_set_position() ) return m_data.position;
 
-    // No position information - search ancestors
+    // No position information - look at event and/or search ancestors
+    if( parent_event() ) 
+    {
+    shared_ptr<IntAttribute> cycles=parent_event()->attribute<IntAttribute>("cycles");
+    //This could be a recussive call.  Try to prevent it.
+    if (!cycles||cycles->value()==0) 
+    {
     FOREACH( const GenParticlePtr &p, particles_in() ) {
         const GenVertexPtr &v = p->production_vertex();
         if(v) return v->position();
     }
-
-    if( parent_event() ) return parent_event()->event_pos();
-
+    }
+    return parent_event()->event_pos();
+    }
     return FourVector::ZERO_VECTOR();
 }
 

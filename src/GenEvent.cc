@@ -56,6 +56,19 @@ void GenEvent::add_particle( GenParticlePtr p ) {
 }
 
 
+GenEvent::GenEvent(const GenEvent&e) {
+    GenEventData tdata;
+    e.write_data(tdata);
+    read_data(tdata);
+}
+
+GenEvent::~GenEvent() {
+    FOREACH ( GenVertexPtr &v, m_vertices ) if (v->m_event=this) v->m_event=NULL;
+    FOREACH( GenParticlePtr &p, m_particles )if (p->m_event=this)  p->m_event=NULL;
+}
+
+
+
 // void GenEvent::add_vertex( const GenVertexPtr &v ) {
 void GenEvent::add_vertex( GenVertexPtr v ) {
     if( v->in_event() ) return;

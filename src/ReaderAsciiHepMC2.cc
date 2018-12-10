@@ -71,9 +71,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     //
     while(!failed()) {
         m_isstream ? m_stream->getline(buf,512) : m_file.getline(buf,512);
-
         if( strlen(buf) == 0 ) continue;
-
         // Check for IO_GenEvent header/footer
         if( strncmp(buf,"HepMC",5) == 0 ) {
             if( strncmp(buf,"HepMC::Version",14) != 0 && strncmp(buf,"HepMC::IO_GenEvent",18)!=0 )
@@ -88,7 +86,6 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             }
             continue;
         }
-
         switch(buf[0]) {
             case 'E':
                 parsing_result = parse_event_information(evt,buf);
@@ -170,7 +167,6 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     }
 
     // Check if all particles in last vertex were parsed
-
     /** @bug HepMC2 files produced with Pythia8 are known to have wrong
              information about number of particles in vertex. Hence '<' sign */
     if( is_parsing_successful && current_vertex_particles_parsed < current_vertex_particles_count ) {
@@ -186,7 +182,6 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if( !is_parsing_successful ) {
         ERROR( "ReaderAsciiHepMC2: event parsing failed. Returning empty event" )
         DEBUG( 1, "Parsing failed at line:" << std::endl << buf )
-
         evt.clear();
         m_isstream ? m_stream->clear(ios::badbit) : m_file.clear(ios::badbit);
         return 0;
@@ -244,7 +239,6 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
      m_vertex_cache[i]->add_attribute("weight"+to_string((long long unsigned int)ii),rs);
      }
      }
-
     m_particle_cache_ghost.clear();
     m_vertex_cache_ghost.clear();
     m_event_ghost->clear(); 
