@@ -73,56 +73,56 @@ public:
     /** @brief Set the cross section corresponding to the weight named
         \a wName.
      */
-    void set_xsec(string wName, double xs) {
+    void set_xsec(const string& wName,const double& xs) {
         set_xsec(windx(wName), xs);
     }
 
     /** @brief Set the cross section corresponding to the weight with
         index \a indx.
      */
-    void set_xsec(int indx, double xs) {
+    void set_xsec(const int& indx, const double& xs) {
         cross_sections[indx] = xs;
     }
     
     /** @brief Set the cross section error corresponding to the weight
         named \a wName.
      */
-    void set_xsec_err(string wName, double xs_err) {
+    void set_xsec_err(const string& wName, const double& xs_err) {
         set_xsec_err(windx(wName), xs_err);
     }
     
     /** @brief Set the cross section error corresponding to the weight
         with index \a indx.
      */
-    void set_xsec_err(int indx, double xs_err) {
+    void set_xsec_err(const int& indx, const double& xs_err) {
         cross_section_errors[indx] = xs_err;
     }
 
     /** @brief Get the cross section corresponding to the weight named
         \a wName.
      */
-    double xsec(string wName) {
+    double xsec(const string& wName) {
         return xsec(windx(wName));
     }
     
     /** @brief Get the cross section corresponding to the weight with index
         \a indx.
      */
-    double xsec(int indx = 0) {
+    double xsec(const int& indx = 0) {
         return cross_sections[indx];
     }
     
     /** @brief Get the cross section error corresponding to the weight
         named \a wName.
      */
-    double xsec_err(string wName) {
+    double xsec_err(const string& wName) {
         return xsec_err(windx(wName));
     }
     
     /** @brief Get the cross section error corresponding to the weight
         with index \a indx.
      */
-    double xsec_err(int indx = 0) {
+    double xsec_err(const int& indx = 0) {
         return cross_section_errors[indx];
     }
     

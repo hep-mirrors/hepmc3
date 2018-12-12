@@ -117,7 +117,9 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
 
     // Remove attributes of this particle
+/* LH17 Commented so far
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+*/
     vector<string> atts = p->attribute_names();
     FOREACH( string s, atts) {
         p->remove_attribute(s);
@@ -210,9 +212,10 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
 
     int idx = -v->id();
     vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
-
+/* LH17 Commented so far
     // Remove attributes of this vertex
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+*/
     vector<string> atts = v->attribute_names();
     FOREACH( string s, atts) {
         v->remove_attribute(s);
@@ -273,8 +276,8 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     // Finally - set parent event and id of this vertex to 0
     v->m_event = NULL;
     v->m_id    = 0;
-}
 #endif
+}
 static bool visit_children(std::map<const GenVertexPtr,int>  &a,const GenVertexPtr& v)
 {
 for ( std::vector<GenParticlePtr>::const_iterator p=v->particles_out().begin();p!=v->particles_out().end();++p) 
@@ -427,7 +430,9 @@ void GenEvent::shift_position_by( const FourVector & delta ) {
 
 
 void GenEvent::clear() {
+/* LH17 Commented so far
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+*/
     m_event_number = 0;
     m_rootvertex = make_shared<GenVertex>();
     m_weights.clear();
@@ -452,7 +457,9 @@ void GenEvent::add_vertex( GenVertex *v ) {
 
 
 void GenEvent::remove_attribute(const string &name, int id) {
+/* LH17 Commented so far
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+*/
     map< string, map<int, shared_ptr<Attribute> > >::iterator i1 =
       m_attributes.find(name);
     if( i1 == m_attributes.end() ) return;
@@ -611,8 +618,9 @@ void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) 
 #endif
 
 string GenEvent::attribute_as_string(const string &name, int id) const {
-
+/* LH17 Commented so far
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+*/
     std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 =
       m_attributes.find(name);
     if( i1 == m_attributes.end() ) {

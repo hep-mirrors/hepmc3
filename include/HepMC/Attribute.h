@@ -45,7 +45,8 @@ class Attribute {
 //
 public:
     /** @brief Default constructor */
-    Attribute():m_is_parsed(true) {}
+    //Note: m_event should be set to NULL in case event is deleted!
+    Attribute():m_is_parsed(true) {    m_event=NULL; }
 
     /** @brief Virtual destructor */
     virtual ~Attribute() {}
@@ -59,7 +60,8 @@ protected:
      *
      *  @note There should be no need for user class to ever use this constructor
      */
-    Attribute(const string &st):m_is_parsed(false),m_string(st) {}
+    //Note: m_event should be set to NULL in case event is deleted!
+    Attribute(const string &st):m_is_parsed(false),m_string(st) { m_event=NULL; }
 
     /** @brief GenEvent is a friend */
     friend class GenEvent;
