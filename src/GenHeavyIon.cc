@@ -12,78 +12,106 @@
 #include <cstring> // memcmp
 #include <cstdlib> // atoi
 #include <cstdio> // sprintf
+#include <sstream> // sprintf
 
 namespace HepMC {
 
 bool GenHeavyIon::from_string(const string &att) {
-    const char *cursor = att.data();
 
-    Ncoll_hard = atoi(cursor);
+#ifdef HEPMC_NO_DEPRECATED
+    double spectator_neutrons, spectator_protons, eccentricity;
+#endif
+    
+    istringstream is(att);
+    string version;
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    Npart_proj = atoi(cursor);
+    if ( att[0]  != 'v' ) {
+        is >> Ncoll_hard >> Npart_proj >> Npart_targ >> Ncoll
+           >> spectator_neutrons >> spectator_protons
+           >> N_Nwounded_collisions >> Nwounded_N_collisions
+           >> Nwounded_Nwounded_collisions >> impact_parameter
+           >> event_plane_angle >> eccentricity >> sigma_inel_NN
+           >> centrality;
+        return !is.fail();
+    } else
+        is >> version;
+    
+        
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    Npart_targ = atoi(cursor);
+    is >> Ncoll_hard >> Npart_proj >> Npart_targ >> Ncoll;
+    if ( version == "v0" ) is >> spectator_neutrons >> spectator_protons;
+    is >> N_Nwounded_collisions >> Nwounded_N_collisions
+       >> Nwounded_Nwounded_collisions >> impact_parameter
+       >> event_plane_angle;
+    if ( version == "v0" ) is >> eccentricity;
+    is >> sigma_inel_NN >> centrality;
+    if ( version != "v0" ) is >> user_cent_estimate;
+    is >> Nspec_proj_n >> Nspec_targ_n >> Nspec_proj_p >> Nspec_targ_p;
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    Ncoll = atoi(cursor);
+    int N, ord;
+    is >> N;
+    for ( int i = 0; i < N; ++i ) {
+        is >> ord;
+        is >> participant_plane_angles[ord];
+    }
+    is >> N;
+    for ( int i = 0; i < N; ++i ) {
+        is >> ord;
+        is >> eccentricities[ord];
+    }
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    spectator_neutrons = atoi(cursor);
+    return !is.fail();
+}
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    spectator_protons = atoi(cursor);
+bool GenHeavyIon::to_string(string &att) const {
+    ostringstream os;
+    
+#ifndef HEPMC_NO_DEPRECATED
+    if ( !forceoldformat ) os << "v0 ";
+#else
+    os << "v1 ";
+#endif
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    N_Nwounded_collisions = atoi(cursor);
+    os << setprecision(8)
+       << Ncoll_hard << " " << Npart_proj << " "
+       << Npart_targ << " " << Ncoll << " "
+#ifndef HEPMC_NO_DEPRECATED
+       << spectator_neutrons << " " << spectator_protons << " "
+#endif
+       << N_Nwounded_collisions << " " << Nwounded_N_collisions << " "
+       << Nwounded_Nwounded_collisions << " " << impact_parameter << " "
+       << event_plane_angle << " "
+#ifndef HEPMC_NO_DEPRECATED
+       << eccentricity << " "
+#endif
+       << sigma_inel_NN << " " << centrality << " " << user_cent_estimate << " "
+       << Nspec_proj_n << " " << Nspec_targ_n << " "
+       << Nspec_proj_p << " " << Nspec_targ_p << " ";
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    Nwounded_N_collisions = atoi(cursor);
+    os << participant_plane_angles.size();
+    for ( map<int,double>::const_iterator it = participant_plane_angles.begin();
+          it != participant_plane_angles.end(); ++it )
+        os << " " << it->first << " " << it->second;
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    Nwounded_Nwounded_collisions = atoi(cursor);
+    os << " " << eccentricities.size();
+    for ( map<int,double>::const_iterator it = eccentricities.begin();
+          it != eccentricities.end(); ++it )
+        os << " " << it->first << " " << it->second;
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    impact_parameter = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    event_plane_angle = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    eccentricity = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    sigma_inel_NN = atof(cursor);
-
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    centrality = atof(cursor);
+    att = os.str();
 
     return true;
 }
 
-bool GenHeavyIon::to_string(string &att) const {
-    char buf[255];
 
-    sprintf(buf,"%i %i %i %i %i %i %i %i %i %.8e %.8e %.8e %.8e %.8e",
-            Ncoll_hard,
-            Npart_proj,
-            Npart_targ,
-            Ncoll,
-            spectator_neutrons,
-            spectator_protons,
-            N_Nwounded_collisions,
-            Nwounded_N_collisions,
-            Nwounded_Nwounded_collisions,
-            impact_parameter,
-            event_plane_angle,
-            eccentricity,
-            sigma_inel_NN,
-            centrality);
+#ifndef HEPMC_NO_DEPRECATED
 
-    att = buf;
+bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
+  return ( memcmp( (void*) this, (void*) &a, sizeof(class GenHeavyIon) ) == 0 );
+}
 
-    return true;
+bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {
+    return !( a == *this );
 }
 
 void GenHeavyIon::set( const int&nh, const int&np, const int&nt, const int&nc, const int&ns, const int&nsp,
@@ -103,14 +131,7 @@ void GenHeavyIon::set( const int&nh, const int&np, const int&nt, const int&nc, c
     eccentricity                 = ec;
     sigma_inel_NN                = s;
     centrality                   = cent;
-}
-
-bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
-  return ( memcmp( (void*) this, (void*) &a, sizeof(class GenHeavyIon) ) == 0 );
-}
-
-bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {
-    return !( a == *this );
+    user_cent_estimate           = usrcent;
 }
 
 bool GenHeavyIon::is_valid() const {
@@ -130,5 +151,7 @@ bool GenHeavyIon::is_valid() const {
     if( centrality                   != 0 ) return true;
     return false;
 }
+
+#endif
 
 } // namespace HepMC

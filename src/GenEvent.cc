@@ -117,6 +117,7 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
 
     // Remove attributes of this particle
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     vector<string> atts = p->attribute_names();
     FOREACH( string s, atts) {
         p->remove_attribute(s);
@@ -211,6 +212,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
 
     // Remove attributes of this vertex
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     vector<string> atts = v->attribute_names();
     FOREACH( string s, atts) {
         v->remove_attribute(s);
@@ -245,7 +247,6 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     // Finally - set parent event and id of this vertex to 0
     v->m_event = NULL;
     v->m_id    = 0;
-}
 #else
     vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
 
@@ -426,6 +427,7 @@ void GenEvent::shift_position_by( const FourVector & delta ) {
 
 
 void GenEvent::clear() {
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     m_event_number = 0;
     m_rootvertex = make_shared<GenVertex>();
     m_weights.clear();
@@ -450,7 +452,9 @@ void GenEvent::add_vertex( GenVertex *v ) {
 
 
 void GenEvent::remove_attribute(const string &name, int id) {
-    map< string, map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    map< string, map<int, shared_ptr<Attribute> > >::iterator i1 =
+      m_attributes.find(name);
     if( i1 == m_attributes.end() ) return;
 
     map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
@@ -462,7 +466,7 @@ void GenEvent::remove_attribute(const string &name, int id) {
 vector<string> GenEvent::attribute_names(int id) const {
     vector<string> results;
 
-    FOREACH( const att_key_t& vt1, this->attributes() ) {
+    FOREACH( const att_key_t& vt1, m_attributes ) {
         FOREACH( const att_val_t& vt2, vt1.second ) {
             if( vt2.first == id ) results.push_back( vt1.first );
         }
@@ -477,9 +481,9 @@ void GenEvent::write_data(GenEventData& data) const {
     data.vertices.reserve( this->vertices().size() );
     data.links1.reserve( this->particles().size()*2 );
     data.links2.reserve( this->particles().size()*2 );
-    data.attribute_id.reserve( this->attributes().size() );
-    data.attribute_name.reserve( this->attributes().size() );
-    data.attribute_string.reserve( this->attributes().size() );
+    data.attribute_id.reserve( m_attributes.size() );
+    data.attribute_name.reserve( m_attributes.size() );
+    data.attribute_string.reserve( m_attributes.size() );
 
     // Fill event data
     data.event_number  = this->event_number();
@@ -509,7 +513,7 @@ void GenEvent::write_data(GenEventData& data) const {
         }
     }
 
-    FOREACH( const att_key_t& vt1, this->attributes() ) {
+    FOREACH( const att_key_t& vt1, m_attributes ) {
         FOREACH( const att_val_t& vt2, vt1.second ) {
 
             string st;
@@ -608,7 +612,9 @@ void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) 
 
 string GenEvent::attribute_as_string(const string &name, int id) const {
 
-    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 =
+      m_attributes.find(name);
     if( i1 == m_attributes.end() ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute_as_string(name);

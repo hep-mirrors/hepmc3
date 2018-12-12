@@ -36,6 +36,7 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
 
 string GenRunInfo::attribute_as_string(const string &name) const {
 
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std::map< std::string, shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
     if( i == m_attributes.end() ) return string();
 
@@ -55,7 +56,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     // Attributes
     typedef std::map<std::string, shared_ptr<Attribute> >::value_type att_val_t;
 
-    FOREACH( const att_val_t& vt, this->attributes() ) {
+    FOREACH( const att_val_t& vt, m_attributes ) {
         std::string att;
         vt.second->to_string(att);
 
