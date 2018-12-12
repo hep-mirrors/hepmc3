@@ -185,8 +185,8 @@ void GenEvent::remove_particles( vector<GenParticlePtr> v ) {
 
     sort( v.begin(), v.end(), sort_by_id_asc() );
 
-    FOREACH( GenParticlePtr &p, v ) {
-        remove_particle(p);
+    for (std::vector<GenParticlePtr>::iterator p=v.begin();p!=v.end();++p) {
+        remove_particle(*p);
     }
 }
 
