@@ -133,10 +133,9 @@ int main()
     //we now print it out in old format
     HepMC::Print::listing(evt,8);
     // print each particle so we can see the polarization
-    puts("Z");
-    FOREACH( const HepMC::GenParticlePtr &ip, evt.particles() )
+    for ( std::vector<HepMC::GenParticlePtr>::iterator  ip=evt.particles().begin(); ip!=evt.particles().end(); ++ip)
     {
-        HepMC::Print::line(ip,true);
+        HepMC::Print::line(*ip,true);
     }
 
     // write event

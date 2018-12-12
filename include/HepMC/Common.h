@@ -43,22 +43,9 @@ namespace HepMC {
       CHILDREN = 3, FIND_CHILDREN = 3, FIND_DAUGHTERS = 3, children = 3,
       PRODUCTION_SIBLINGS = 4, FIND_PRODUCTION_SIBLINGS = 4
     };
-//The whole block can be removed as FilterParticle and IteratorRange are used only two or three times
 #ifndef __CINT__
-    /// Compatibility name
-#ifdef HEPMC_HAS_CXX0X_GCC_ONLY
       typedef   Relationship FilterParticle;
-#else      
-      using FilterParticle = Relationship;
-#endif
-#ifndef HEPMC_NO_DEPRECATED
-    /// Compatibility name
-#ifdef HEPMC_HAS_CXX0X_GCC_ONLY
-       typedef   Relationship IteratorRange;
-#else
-       using IteratorRange = Relationship;
-#endif
-#endif
+      typedef   Relationship IteratorRange;
 #endif
 }
 
@@ -170,19 +157,5 @@ typename T::reference deref(auto_any_base const& cur, T&)
 #ifndef HEPMC_DEPRECATED
 #define HEPMC_DEPRECATED(x)
 #endif
-/// @todo Activate in version 3.1.0
-// #ifndef HEPMC_DEPRECATED
-// #if __GNUC__ && __cplusplus && HEPMC_NO_DEPRECATION_WARNINGS == 0
-// #define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-// #if GCC_VERSION >= 40500
-//   #define HEPMC_DEPRECATED(x) __attribute__((deprecated(x)))
-// #else
-//   #define HEPMC_DEPRECATED(x) __attribute__((deprecated))
-// #endif
-// #else
-//   #define HEPMC_DEPRECATED(x)
-// #endif
-// #endif
-
 
 #endif

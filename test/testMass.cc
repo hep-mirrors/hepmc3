@@ -83,8 +83,8 @@ int main()
                     if( evt.weights().size() > 0 )
                         {
                             std::cout << "Weights: ";
-                            FOREACH( const double &w, evt.weights() )
-                            std::cout <<" "<<w;
+                            for ( std::vector<double>::const_iterator w=evt.weights().begin();w!=evt.weights().end();++w )
+                            std::cout <<" "<<*w;
                             std::cout << std::endl;
                         }
                     ascii_out.write_event(evt);
@@ -122,8 +122,8 @@ int main()
             if( evt.weights().size() > 0 )
                 {
                     std::cout << "Weights: ";
-                    FOREACH( const double &w, evt.weights() )
-                    std::cout <<" "<<w;
+                    for ( std::vector<double>::const_iterator w=evt.weights().begin();w!=evt.weights().end();++w )
+                    std::cout <<" "<<*w;
                     std::cout << std::endl;
                 }
             xout.write_event(evt);

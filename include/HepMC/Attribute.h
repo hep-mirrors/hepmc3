@@ -147,11 +147,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) {
-#ifdef HEPMC_HAS_CXX11
-        m_val = std::stoi(att);
-#else
         m_val = atoi( att.c_str() );
-#endif
         return true;
     }
 
@@ -198,11 +194,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) {
-#ifdef HEPMC_HAS_CXX11
-        m_val = std::stoi(att);
-#else
         m_val = atoi( att.c_str() );
-#endif
         return true;
     }
 
@@ -251,11 +243,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) {
-#ifdef HEPMC_HAS_CXX11
-        m_val = std::stod(att);
-#else
         m_val = atof( att.c_str() );
-#endif
         return true;
     }
 
@@ -300,11 +288,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) {
-#ifdef HEPMC_HAS_CXX11
-        m_val = std::stof(att);
-#else
         m_val = float(atof( att.c_str() ));
-#endif
         return true;
     }
 

@@ -154,9 +154,9 @@ int main()
             HepMC::GenEvent evt(HepMC::Units::GEV,HepMC::Units::MM);
             inputA.read_event(evt);
             if( inputA.failed() )  {printf("End of file reached. Exit.\n"); break;}
-            FOREACH( const HepMC::GenParticlePtr &p, evt.particles() )
-            if ( std::abs(p->status()) == 1 && (std::abs(p->pdg_id()) == 211||std::abs(p->pdg_id()) == 11) )
-                H2.Fill( p->momentum().perp());
+            for ( std::vector<HepMC::GenParticlePtr>::iterator  p=evt.particles().begin(); p!=evt.particles().end(); ++p)
+            if ( std::abs((*p)->status()) == 1 && (std::abs((*p)->pdg_id()) == 211||std::abs((*p)->pdg_id()) == 11) )
+                H2.Fill( (*p)->momentum().perp());
             evt.clear();
         }
     inputA.close();

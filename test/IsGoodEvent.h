@@ -14,8 +14,8 @@
 class IsGoodEvent {
 public:
     bool operator()( const HepMC::GenEvent& evt ) { 
-	FOREACH( const HepMC::GenParticlePtr &p, evt.particles() )
-	if ( p->pdg_id() == 22 && p->momentum().perp() > 25. ) return 1;
+	for ( std::vector<HepMC::GenParticlePtr>::const_iterator  p=evt.particles().begin(); p!=evt.particles().end(); ++p)
+	if ( (*p)->pdg_id() == 22 && (*p)->momentum().perp() > 25. ) return 1;
 	return 0;
     }
 };
@@ -25,8 +25,8 @@ public:
 class IsGoodEventDIS {
 public:
     bool operator()( const HepMC::GenEvent& evt ) { 
-	FOREACH( const HepMC::GenParticlePtr &p, evt.particles() )
-	if ( p->status() == 1 &&  std::abs(p->pdg_id()) == 11 && p->momentum().e() > 10.) return 1;
+	 for ( std::vector<HepMC::GenParticlePtr>::const_iterator  p=evt.particles().begin(); p!=evt.particles().end(); ++p)
+	if ( (*p)->status() == 1 &&  std::abs((*p)->pdg_id()) == 11 && (*p)->momentum().e() > 10.) return 1;
 	return 0;
     }
 };

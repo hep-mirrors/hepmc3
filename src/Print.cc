@@ -24,9 +24,9 @@ void Print::content( const GenEvent &event ) {
     cout<<endl;
 
     cout<<"Weights (" << event.weights().size() <<"): "<<endl;
-    FOREACH( const double w, event.weights() ) {
-        cout << w << endl;
-    }
+    for (std::vector<double>::const_iterator w=event.weights().begin();w!=event.weights().end();++w )
+    std::cout <<" "<<*w;
+
 
     cout<<"Attributes:"<<endl;
 
@@ -41,9 +41,9 @@ void Print::content( const GenEvent &event ) {
 
     cout<<"GenParticlePtr ("<<event.particles().size()<<")"<<endl;
 
-    FOREACH( const GenParticlePtr &p, event.particles() )
+    for ( std::vector<HepMC::GenParticlePtr>::const_iterator  p=event.particles().begin(); p!=event.particles().end(); ++p)
     {
-        HepMC::Print::line(p);
+        HepMC::Print::line(*p,true);
     }
 
     cout<<"GenVertexPtr ("<<event.vertices().size()<<")"<<endl;
