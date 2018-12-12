@@ -63,8 +63,8 @@ GenEvent::GenEvent(const GenEvent&e) {
 }
 
 GenEvent::~GenEvent() {
-    FOREACH ( GenVertexPtr &v, m_vertices ) if (v->m_event=this) v->m_event=NULL;
-    FOREACH( GenParticlePtr &p, m_particles )if (p->m_event=this)  p->m_event=NULL;
+    for  ( std::vector<GenVertexPtr>::iterator v=m_vertices.begin();v!=m_vertices.end();++v ) if ((*v)->m_event=this) (*v)->m_event=NULL;
+    for  ( std::vector<GenParticlePtr>::iterator p=m_particles.begin();p!=m_particles.end();++p ) if ((*p)->m_event=this)  (*p)->m_event=NULL;
 }
 
 
