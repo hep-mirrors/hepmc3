@@ -40,6 +40,12 @@ GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
     m_weights = std::vector<double>(run->weight_names().size(), 1.0);
 }
 
+GenEvent::~GenEvent() {
+  std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+  for ( auto attm: m_attributes )
+    for ( auto att: attm.second ) att.second->m_event = 0;
+}
+
 
 // void GenEvent::add_particle( const GenParticlePtr &p ) {
 void GenEvent::add_particle( GenParticlePtr p ) {

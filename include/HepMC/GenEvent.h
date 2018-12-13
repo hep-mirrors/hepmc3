@@ -50,6 +50,8 @@ public:
              Units::MomentumUnit momentum_unit = Units::GEV,
              Units::LengthUnit length_unit = Units::MM);
 
+    /// @brief Destructor doing clean up on deletion.
+    ~GenEvent();
 
     /// @name Particle and vertex access
     //@{
