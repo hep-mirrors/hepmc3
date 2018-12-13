@@ -21,11 +21,6 @@ namespace HepMC {
 
     using namespace std;
 
-    // /** @brief Type of iteration. Used by backward-compatibility interface */
-    // #ifndef HEPMC_NO_DEPRECATED
-    // enum IteratorRange { parents, children, family, ancestors, descendants, relatives };
-    // #endif
-
 
     class GenEvent;
     class Attribute;

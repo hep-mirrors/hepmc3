@@ -294,26 +294,6 @@ public:
     HEPMC_DEPRECATED("Use GenVertexPtr instead of GenVertex*")
     void add_vertex  ( GenVertex *v );
 
-    /// @brief Set heavy ion generator additional information by raw pointer
-    /// @deprecated Use GenEvent::set_heavy_ion( GenHeavyIonPtr hi) instead
-    HEPMC_DEPRECATED("Use GenHeavyIonPtr instead of GenHeavyIon*")
-    void set_heavy_ion(GenHeavyIon *hi);
-
-    /// @brief Set PDF information by raw pointer
-    /// @deprecated Use GenEvent::set_pdf_info( GenPdfInfoPtr pi) instead
-    HEPMC_DEPRECATED("Use GenPdfInfoPtr instead of GenPdfInfo*")
-    void set_pdf_info(GenPdfInfo *pi);
-
-    /// @brief Set cross-section information by raw pointer
-    /// @deprecated Use GenEvent::set_cross_section( GenCrossSectionPtr cs) instead
-    HEPMC_DEPRECATED("Use GenCrossSectionPtr instead of GenCrossSection*")
-    void set_cross_section(GenCrossSection *cs);
-
-    /// @deprecated Backward compatibility typedefs
-    typedef std::vector<double>  GenWeights;
-    /// @deprecated Backward compatibility typedefs
-    typedef std::vector<double>  WeightContainer;
-
     /// @deprecated Backward compatibility iterators
     typedef std::vector<GenParticlePtr>::iterator  particle_iterator;
     /// @deprecated Backward compatibility iterators
@@ -513,15 +493,7 @@ shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
 #endif // __CINT__
 
 
-#ifndef HEPMC_NO_DEPRECATED
 
-/// Deprecated backward compatibility typedef
-///
-/// There is no distinct weight container type in HepMC3 -- the information
-/// comes from several sources spread between GenEvent and GenRunInfo.
-typedef std::vector<double> WeightContainer;
-
-#endif
 
 
 } // namespace HepMC
