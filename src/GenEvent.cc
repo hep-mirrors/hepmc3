@@ -13,7 +13,7 @@
 #include "HepMC/GenVertex.h"
 
 #include "HepMC/Data/GenEventData.h"
-#include "HepMC/Search/FindParticles.h"
+
 
 #include <deque>
 #include <algorithm> // sort

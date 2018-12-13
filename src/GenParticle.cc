@@ -11,7 +11,6 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenEvent.h"
-#include "HepMC/Search/FindParticles.h"
 #include "HepMC/Setup.h"
 #include "HepMC/Attribute.h"
 
@@ -83,14 +82,6 @@ vector<GenParticlePtr> GenParticle::parents() const {
 
 vector<GenParticlePtr> GenParticle::children() const {
     return end_vertex() ? end_vertex()->particles_out() : vector<GenParticlePtr>();
-}
-
-vector<GenParticlePtr> GenParticle::ancestors() const {
-  return production_vertex() ? findParticles(production_vertex(), ANCESTORS) : vector<GenParticlePtr>();
-}
-
-vector<GenParticlePtr> GenParticle::descendants() const {
-  return end_vertex() ? findParticles(end_vertex(), DESCENDANTS) : vector<GenParticlePtr>();
 }
 
 bool GenParticle::add_attribute(const std::string& name, shared_ptr<Attribute> att) {

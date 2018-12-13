@@ -11,7 +11,6 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenEvent.h"
-#include "HepMC/Search/FindParticles.h"
 #include "HepMC/Setup.h"
 #include "HepMC/Attribute.h"
 #include <algorithm> // std::remove
@@ -86,10 +85,6 @@ void GenVertex::remove_particle_out( GenParticlePtr p ) {
     m_particles_out.erase( std::remove( m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
 }
 
-
-const vector<GenParticlePtr> GenVertex::particles(Relationship range) const {
-  return findParticles(GenVertexPtr(const_cast<GenVertex*>(this)), range);
-}
 
 void GenVertex::set_id(const int& id){
   m_id = id;

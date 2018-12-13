@@ -74,12 +74,6 @@ public:
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
     vector<GenParticlePtr> children() const;
 
-    /// @brief Convenience access to all incoming particles via production vertex
-    vector<GenParticlePtr> ancestors() const;
-
-    /// @brief Convenience access to all outgoing particles via end vertex
-    vector<GenParticlePtr> descendants() const;
-
 
     int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
