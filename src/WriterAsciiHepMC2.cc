@@ -106,8 +106,6 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     int idbeam=0;
     FOREACH ( const GenVertexPtr &v, evt.vertices() )
     {
-        int production_vertex = 0;
-        production_vertex=v->id();
         FOREACH ( const GenParticlePtr &p, v->particles_in())
         {
             if (!p->production_vertex())         { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
@@ -147,7 +145,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
             m_cursor += sprintf(m_cursor, "\n");
             flush();
         }
-    m_cursor += sprintf(m_cursor, "N %i",evt.weights().size());
+    m_cursor += sprintf(m_cursor, "N %lu",evt.weights().size());
     vector<string> names = run_info()->weight_names();
     for (size_t q=0; q<evt.weights().size(); q++)
         {
@@ -298,7 +296,7 @@ void WriterAsciiHepMC2::write_vertex(const GenVertexPtr &v)
     m_cursor += sprintf(m_cursor," %.*e", m_precision,pos.t());
     flush();
     }
-    m_cursor += sprintf(m_cursor," %i %i %i",orph,v->particles_out().size(),weights.size());
+    m_cursor += sprintf(m_cursor," %i %lu %lu",orph,v->particles_out().size(),weights.size());
     flush();
     for (size_t i=0;i<weights.size();i++) m_cursor += sprintf(m_cursor," %.*e",   m_precision,weights[i]);
     m_cursor += sprintf(m_cursor,"\n"); 

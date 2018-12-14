@@ -120,7 +120,7 @@ extern "C" {
                 break;
 #endif
             default:
-                printf("Error in %s:Output format %s is unknown or not supported.\n",__FUNCTION__,mode);
+                printf("Error in %s:Output format %d is unknown or not supported.\n",__FUNCTION__,mode);
                 exit(2);
                 break;
             }

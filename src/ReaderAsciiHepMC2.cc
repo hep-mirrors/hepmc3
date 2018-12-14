@@ -309,7 +309,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         random_states[i] = atoi(cursor);
     }
     
-    for ( size_t i = 0; i < random_states_size; ++i ) 
+    for ( int i = 0; i < random_states_size; ++i ) 
     evt.add_attribute("random_states"+to_string((long long unsigned int)i),make_shared<IntAttribute>(random_states[i])); //gcc-4.4.7 workaround
 
     // weights
@@ -408,7 +408,7 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     m_vertex_barcodes.push_back( barcode );
     
     m_event_ghost->add_vertex(data_ghost);
-    for ( size_t i = 0; i < weights_size; ++i ) 
+    for ( int i = 0; i < weights_size; ++i ) 
     data_ghost->add_attribute("weight"+to_string((long long unsigned int)i),make_shared<DoubleAttribute>(weights[i])); //gcc-4.4.7 workaround
     m_vertex_cache_ghost.push_back( data_ghost );
     
