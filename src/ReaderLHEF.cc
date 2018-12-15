@@ -1,4 +1,5 @@
 #include "HepMC/ReaderLHEF.h"
+using namespace LHEF;
 namespace HepMC
 {
 ReaderLHEF::ReaderLHEF(const std::string& filename)

@@ -9,7 +9,7 @@
 #include "HepMC/GenVertex.h"
 #include <iomanip>
 
-using namespace LHEF;
+
 namespace HepMC 
 {
 class ReaderLHEF : public HepMC::Reader
