@@ -1,4 +1,9 @@
   --------------------------  HepMC3.0.0  --------------------------
+2018-12-17 James Monk
+  * ReaderFactory: new func to return Reader ptr of appropriate type for HepMC v2 or v3 file
+  * Print.h: Remove delcaration of unimplemented function
+  * GenEvent: Return Beams vector by reference
+
 2018-11-30 James Monk
   * Make GenEvent::particles() const version work properly and return const particles.
     Same for vertices()
