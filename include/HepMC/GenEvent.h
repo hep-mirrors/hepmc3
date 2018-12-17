@@ -135,7 +135,7 @@ public:
     #endif
 
     /// @brief Get heavy ion generator additional information
-    const GenHeavyIonPtr heavy_ion() const { return attribute<GenHeavyIon>("GenHeavyIon"); }
+    ConstGenHeavyIonPtr heavy_ion() const { return attribute<GenHeavyIon>("GenHeavyIon"); }
     /// @brief Set heavy ion generator additional information
     void set_heavy_ion(const GenHeavyIonPtr &hi) { add_attribute("GenHeavyIon",hi); }
 
@@ -159,10 +159,10 @@ public:
     const FourVector& event_pos() const;
 
     /// @brief Vector of beam particles
-    std::vector<ConstGenParticlePtr> beams() const;
+    const std::vector<ConstGenParticlePtr> & beams() const;
 
     /// @brief Vector of beam particles
-    std::vector<GenParticlePtr> beams();
+    const std::vector<GenParticlePtr> & beams();
   
     /// @brief Shift position of all vertices in the event by @a delta
     void shift_position_by( const FourVector & delta );

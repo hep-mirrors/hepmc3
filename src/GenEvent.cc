@@ -385,11 +385,11 @@ const FourVector& GenEvent::event_pos() const {
     return m_rootvertex->data().position;
 }
 
-vector<ConstGenParticlePtr> GenEvent::beams() const {
+const vector<ConstGenParticlePtr> & GenEvent::beams() const {
     return std::const_pointer_cast<const GenVertex>(m_rootvertex)->particles_out();
 }
 
-vector<GenParticlePtr> GenEvent::beams() {
+const vector<GenParticlePtr> & GenEvent::beams() {
   return m_rootvertex->particles_out();
 }
 
