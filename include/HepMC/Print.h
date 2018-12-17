@@ -33,7 +33,8 @@ public:
     static void listing(const GenEvent &event, unsigned short precision = 2);
 
     /// @brief Print one-line info
-    static void line(const GenEvent &event);
+    /// @todo this isn't actually implemented anywhere
+    //static void line(const GenEvent &event);
 
     /// @brief Print one-line info
     static void line(ConstGenVertexPtr v);
