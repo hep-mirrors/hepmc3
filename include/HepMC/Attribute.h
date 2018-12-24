@@ -112,6 +112,11 @@ public:
         return m_particle;
     }
 
+    /** return the GenVertex to which this Attribute belongs, if at all. */
+    GenVertexPtr vertex() const {
+        return m_vertex;
+    }
+
 protected:
     /** @brief Set is_parsed flag */
     void set_is_parsed(bool flag) { m_is_parsed = flag; }
@@ -128,6 +133,7 @@ private:
     const GenEvent * m_event;       //!< Possibility to be aware of the
                                     //!  controlling GenEvent object.
     GenParticlePtr m_particle; //!< Particle to which assigned.
+    GenVertexPtr m_vertex;      //!< Vertex to which assigned.
 };
 
 /**
