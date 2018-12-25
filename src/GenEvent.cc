@@ -387,7 +387,7 @@ return;
 }
 
 
-void GenEvent::reserve(unsigned int parts, unsigned int verts) {
+void GenEvent::reserve(const size_t& parts, const size_t& verts) {
     m_particles.reserve(parts);
     m_vertices.reserve(verts);
 }
@@ -445,21 +445,9 @@ void GenEvent::clear() {
 }
 
 
-//
-// Deprecated functions
-//
-
-void GenEvent::add_particle( GenParticle *p ) {
-    add_particle( GenParticlePtr(p) );
-}
 
 
-void GenEvent::add_vertex( GenVertex *v ) {
-    add_vertex( GenVertexPtr(v) );
-}
-
-
-void GenEvent::remove_attribute(const string &name, int id) {
+void GenEvent::remove_attribute(const string &name,  const int& id) {
 /* LH17 Commented so far
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
 */
@@ -473,7 +461,7 @@ void GenEvent::remove_attribute(const string &name, int id) {
     i1->second.erase(i2);
 }
 
-vector<string> GenEvent::attribute_names(int id) const {
+vector<string> GenEvent::attribute_names( const int& id) const {
     vector<string> results;
 
     FOREACH( const att_key_t& vt1, m_attributes ) {
@@ -592,6 +580,19 @@ void GenEvent::read_data(const GenEventData &data) {
 
 #ifndef HEPMC_NO_DEPRECATED
 
+//
+// Deprecated functions
+//
+
+void GenEvent::add_particle( GenParticle *p ) {
+    add_particle( GenParticlePtr(p) );
+}
+
+
+void GenEvent::add_vertex( GenVertex *v ) {
+    add_vertex( GenVertexPtr(v) );
+}
+
 bool GenEvent::valid_beam_particles() const {
     /// @todo Change this definition to require status = 4... and in principle there don't have to be two of them
     return (m_rootvertex->particles_out().size()==2);
@@ -620,7 +621,7 @@ void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) 
 
 #endif
 
-string GenEvent::attribute_as_string(const string &name, int id) const {
+string GenEvent::attribute_as_string(const string &name, const int& id) const {
 /* LH17 Commented so far
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
 */

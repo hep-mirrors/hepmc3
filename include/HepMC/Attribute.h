@@ -97,7 +97,7 @@ public:
 //
 public:
     /** @brief Check if this attribute is parsed */
-    bool is_parsed() { return m_is_parsed; }
+    bool is_parsed() const { return m_is_parsed; }
 
     /** @brief Get unparsed string */
     const string& unparsed_string() const { return m_string; }

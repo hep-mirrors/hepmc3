@@ -46,6 +46,9 @@ set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
 
 set( HepMC_tests
         #testHepMCIteration
+        #testAttributes
+        testThreads1
+        #testThreads2
         testMass
         #testFlow
         testPrintBug

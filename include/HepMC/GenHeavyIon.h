@@ -213,11 +213,9 @@ public:
 
     /// @brief Operator ==
     ///
-    /// HEPMC_DEPRECATED("Current implementation does not work for vectors")
     bool operator==( const GenHeavyIon& ) const;
     /// @brief Operator !=
     ///
-    /// HEPMC_DEPRECATED("Current implementation does not work for vectors")
     bool operator!=( const GenHeavyIon& ) const;
 
     /// @brief Set all fields.
