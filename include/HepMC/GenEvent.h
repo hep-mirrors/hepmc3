@@ -65,9 +65,9 @@ public:
     //@{
 
     /// @brief Get list of particles (const)
-    const std::vector<ConstGenParticlePtr>& particles() const;
+    std::vector<ConstGenParticlePtr> particles() const;
     /// @brief Get list of vertices (const)
-    const std::vector<ConstGenVertexPtr>& vertices() const;
+    std::vector<ConstGenVertexPtr> vertices() const;
 
 
     /// @brief Get/set list of particles (non-const)
@@ -175,7 +175,7 @@ public:
     const FourVector& event_pos() const;
 
     /// @brief Vector of beam particles
-    const std::vector<ConstGenParticlePtr> & beams() const;
+    std::vector<ConstGenParticlePtr> beams() const;
 
     /// @brief Vector of beam particles
     const std::vector<GenParticlePtr> & beams();
@@ -373,7 +373,7 @@ public:
     /// @deprecated Backward compatibility
     /// @todo Set/require status = 4 at the same time?
     HEPMC_DEPRECATED("instead add particle without production vertex to the event")
-    void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2);
+    void set_beam_particles(GenParticlePtr p1, GenParticlePtr p2);
 
     /// @brief Set incoming beam particles
     /// @deprecated Backward compatibility
@@ -412,12 +412,8 @@ private:
 
     /// List of particles
     std::vector<GenParticlePtr> m_particles;
-    mutable std::vector<ConstGenParticlePtr> m_particles_const;
-    mutable bool m_fillParticles = true;
     /// List of vertices
     std::vector<GenVertexPtr> m_vertices;
-    mutable std::vector<ConstGenVertexPtr> m_vertices_const;
-    mutable bool m_fillVertices = true;
 
     /// Event number
     /// @todo Move to attributes?
@@ -488,7 +484,7 @@ shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
         shared_ptr<T> att = make_shared<T>();
         att->m_event = this;
         if ( id > 0 && id < int(particles().size()) )
-          att->m_particle = particles()[id - 1];
+          att->m_particle = m_particles[id - 1];
         if ( att->from_string(i2->second->unparsed_string()) &&
              att->init() ) {
             // update map with new pointer

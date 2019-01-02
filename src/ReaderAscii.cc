@@ -255,7 +255,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     GenVertexPtr  data = make_shared<GenVertex>();
     FourVector    position;
     const char   *cursor          = buf;
-    const char   *cursor2         = NULL;
+    const char   *cursor2         = nullptr;
     int           id              = 0;
     int           highest_id      = evt.particles().size();
 

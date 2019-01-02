@@ -109,17 +109,17 @@ private:
     ///
     /// Since strings can be long (maybe even longer than buffer) they have to be dealt
     /// with separately.
-    void write_string( const std::string &str );
+    void write_string(const std::string &str );
 
     /// @brief Write vertex
     ///
     /// Helper routine for writing single vertex to file
-    void write_vertex  (const GenVertexPtr &v);
+    void write_vertex(ConstGenVertexPtr v);
 
     /// @brief Write particle
     ///
     /// Helper routine for writing single particle to file
-    void write_particle(const GenParticlePtr &p, int second_field);
+    void write_particle(ConstGenParticlePtr p, int second_field);
 
     //@}
 

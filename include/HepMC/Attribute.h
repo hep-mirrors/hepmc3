@@ -24,8 +24,11 @@
 #include <limits>
 #include <sstream>
 #include <iomanip>
+
 #include "HepMC/Common.h"
-#include "HepMC/Data/SmartPointer.h"
+#include "HepMC/GenParticle.fh"
+#include "HepMC/GenVertex.fh"
+
 using std::string;
 
 namespace HepMC {
@@ -46,7 +49,7 @@ class Attribute {
 public:
     /** @brief Default constructor */
     //Note: m_event should be set to NULL in case event is deleted!
-    Attribute():m_is_parsed(true) {    m_event=NULL; }
+    Attribute():m_is_parsed(true) {    m_event=nullptr; }
 
     /** @brief Virtual destructor */
     virtual ~Attribute() {}
@@ -61,7 +64,7 @@ protected:
      *  @note There should be no need for user class to ever use this constructor
      */
     //Note: m_event should be set to NULL in case event is deleted!
-    Attribute(const string &st):m_is_parsed(false),m_string(st) { m_event=NULL; }
+    Attribute(const string &st):m_is_parsed(false),m_string(st) { m_event=nullptr; }
 
     /** @brief GenEvent is a friend */
     friend class GenEvent;
@@ -108,10 +111,15 @@ public:
     }
 
     /** return the GenParticle to which this Attribute belongs, if at all. */
-    GenParticlePtr particle() const {
+    GenParticlePtr particle() {
         return m_particle;
     }
 
+  /** return the GenParticle to which this Attribute belongs, if at all. */
+  ConstGenParticlePtr particle() const {
+    return std::const_pointer_cast<GenParticle>(m_particle);
+  }
+  
 protected:
     /** @brief Set is_parsed flag */
     void set_is_parsed(bool flag) { m_is_parsed = flag; }

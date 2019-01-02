@@ -3,7 +3,7 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
 //
-#include "HepMC/Relatives.h"
+#include "HepMC/Search/Relatives.h"
 
 namespace HepMC {
   const Parents     Relatives::PARENTS;

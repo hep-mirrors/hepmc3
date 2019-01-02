@@ -12,13 +12,10 @@
 
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
+#include "HepMC/CoreRelatives.h"
 
 namespace HepMC{
 
-  // forward declaration of _parents class.  Usually you wouldn't use this
-  class _parents;
-  // forward declaration of _children class.  Usually you wouldn't use this
-  class _children;
   // forward declare the Relatives interface in which _parents and _children are wrapped
   template<typename T>
   class RelativesInterface;
@@ -88,51 +85,6 @@ namespace HepMC{
     Relative_type _internal;
     
   };
-  
-  /** @brief Provides operator to find the parent particles of a Vertex or Particle
-   *
-   * Note you would usually not instantiate this directly, but wrap it in a RelativesInterface
-   */
-  class _parents{
-    
-  public:
-    
-    template<typename GenObject_type, typename dummy>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
-    
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenVertex, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return input->particles_in();}
-
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenParticle, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return (*this)(vertex(input));}
-    
-    template<typename GenObject_type>
-    GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->production_vertex();}
-    
-  };
-  
-  /** @brief Provides operator to find the child particles of a Vertex or Particle
-   *
-   * Note you would usually not instantiate this directly, but wrap it in a RelativesInterface
-   */
-  class _children{
-    
-  public:
-    
-    template<typename GenObject_type, typename dummy>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
-    
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenVertex, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return input->particles_out();}
-    
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenParticle, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return (*this)(vertex(input));}
-    
-    template<typename GenObject_type>
-    GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->end_vertex();}
-    
-  };
-  
   
   template<typename Relation_type>
   class Recursive{
