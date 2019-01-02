@@ -24,9 +24,9 @@ void Print::content( const GenEvent &event ) {
     cout<<endl;
 
     cout<<"Weights (" << event.weights().size() <<"): "<<endl;
-    FOREACH( const double w, event.weights() ) {
-        cout << w << endl;
-    }
+    for (std::vector<double>::const_iterator w=event.weights().begin();w!=event.weights().end();++w )
+    std::cout <<" "<<*w;
+
 
     cout<<"Attributes:"<<endl;
 
@@ -41,9 +41,8 @@ void Print::content( const GenEvent &event ) {
 
     cout<<"GenParticlePtr ("<<event.particles().size()<<")"<<endl;
 
-    for( ConstGenParticlePtr p: event.particles() )
-    {
-        HepMC::Print::line(p);
+    for( ConstGenParticlePtr p: event.particles()){
+        HepMC::Print::line(p,true);
     }
 
     cout<<"GenVertexPtr ("<<event.vertices().size()<<")"<<endl;
@@ -168,8 +167,14 @@ void Print::listing(ConstGenParticlePtr p ) {
 
     cout << endl;
 }
+void Print::line(const GenEvent &event, const bool& attributes) {
+    cout <<"GenEvent: #" << event.event_number();
+    if(attributes) for (std::vector<std::string>::const_iterator s=event.attribute_names().begin();s!=event.attribute_names().end();++s) 
+    cout<<" "<<*s<<"="<<event.attribute_as_string(*s);
+    cout<<endl;
+}
 
-void Print::line(ConstGenVertexPtr v) {
+void Print::line(ConstGenVertexPtr v, const bool& attributes) {
     cout << "GenVertex:  " << v->id() << " stat: ";
     cout.width(3);
     cout << v->status();
@@ -182,11 +187,14 @@ void Print::line(ConstGenVertexPtr v) {
     if( v->has_set_position() ) cout << "true";
     else                        cout << "false";
 
-    cout << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t() << endl;
+    cout << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t();
+    if(attributes)for (std::vector<std::string>::const_iterator s= v->attribute_names().begin();s!= v->attribute_names().end();++s)  
+    cout<<" "<<*s<<"="<<v->attribute_as_string(*s);
+    cout<< endl;
+
 }
 
-void Print::line(ConstGenParticlePtr p) {
-
+void Print::line(ConstGenParticlePtr p, const bool& attributes) {
     cout << "GenParticle: ";
     cout.width(3);
     cout << p->id() <<" PDGID: ";
@@ -221,8 +229,15 @@ void Print::line(ConstGenParticlePtr p) {
 
     cout << " Stat: " << p->status()
          << " PV: " << prod_vtx_id
-         << " EV: " << end_vtx_id
-         << endl;
+         << " EV: " << end_vtx_id<<endl;
+    cout <<      (*p).attribute_names().size()<< " "<<endl;
+         if(attributes)
+         {
+         std::vector<std::string> names	 =p->attribute_names();
+         FOREACH(const std::string &ss, names)
+         cout<<" "<<ss<<"="<<(*p).attribute_as_string(ss);
+         cout<< endl;
+         }
 }
 
 void Print::line(shared_ptr<GenCrossSection> &cs) {

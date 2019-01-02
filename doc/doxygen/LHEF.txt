@@ -1,0 +1,92 @@
+/**
+    @defgroup LHEF LHEF - Handling Les Houches Event Files
+
+    This module contains helper classes and Reader and Writer classes
+    for handling Les Houches event files - LHEF.
+
+    @section lhef_intro Introduction
+
+    The Les Houches accord on an event file format (LHEF) to be used
+    for passing events from a matrix element generator program (MEG)
+    to an event generator program (EG) implementing parton showers,
+    underlying event models, and hadronisation models etc., was not
+    originally included in the HepMC event record format. But as the
+    demand for more information to be included in HepMC, it was
+    decided to allow HepMC to include also the original information
+    from a MEG in the LHEF format (see the run attribute
+    HepMC::HEPRUPAttribute and event attribute
+    HepMC::HEPEUPAttribute). A separate /standard/ implementation in
+    C++ of the LHEF format had already been maintained by Leif
+    Lönnblad, and it was decided to include this (header only -
+    LHEF.h) as a part of HepMC. This will both be used in above
+    mentioned HepHC::Attribute classes and as a kind of definition of
+    the LHEF format, which so far has not been extremely well
+    documented. From now on these pages will serve as the defining
+    information about the LHEF format.
+
+    @section lhef_background Background
+
+    The original Les Houches accord for communicating between MEGs and
+    EGs was agreed upon in
+    2001 <a href="http://archive.org/abs/hep-ph/0109068">
+    [arXiv:hep-ph/0109068]</a> and consisted of two simple FORTRAN
+    common blocks. In fact this structure survived in the LHEF format,
+    which was introduced in
+    2006 <a href="http://archive.org/abs/hep-ph/0609017">
+    [arXiv:hep-ph/0609017]</a>, and is still there after the updated
+    versions 2 in 2009 <a href="http://archive.org/abs/1003.1643">
+    [arXiv:1003.1643]</a>, and 3 in
+    2013 <a href="http://archive.org/abs/1405.1067">
+    [arXiv:1405.1067]</a>, and in the current proposal developed at
+    the Les Houches workshop on TeV Colliders 2015 <a href=""></a>.
+
+    As the methods for combining MEGs and EGs has advanced since the
+    first accord, from the tree-level merging methods and NLO matching
+    at the turn of the millennium, to the multi-jet (N)NLO matching
+    and merging methods being perfeted to day, the LHEF format has
+    developed and a lot of optional information can be passed beyond
+    the original common block structures. In the following all
+    features included will be described, also those that were added a
+    bit prematurely and later became deprecated.
+
+    @section lhef_basics The basic structure
+
+    The LHEF format is based on XML, but has some oddities that goes
+    beyond pure XML. As the name indicates, XML is extensible, and
+    anyone writing a LHEF file can add whatever information she or he
+    wants, however the following basic stucture must be observed.
+
+    @code
+    <LesHouchesEvents version="1.0">
+      <!--
+        # optional information in completely free format,
+        # except for the reserved end tag (see next line)
+      -->
+      <header>
+        <!-- individually designed XML tags, in fancy XML style -->
+      </header>
+      <init>
+        compulsory initialization information
+        # optional initialization information
+      </init>
+      <event>                            
+         compulsory event information       
+         # optional event information       
+      </event>                           
+      <event>
+        compulsory event information
+         <!-- more optional information --> 
+      </event>
+      <!-- and as many events that you want, but ending with -->
+    </LesHouchesEvents>
+    @endcode 
+
+    This looks like fairly normal XML tags, and indeed they are. The
+    only addition to the structure is that the <tt>init</tt> and
+    <tt>event</tt> (and their respective end tags) are required to be
+    alon on a line, and the content of these blocks are required to
+    start with a number of lines on a specific format:
+      - 
+    <hr>
+    Last update 21 June 2017
+*/

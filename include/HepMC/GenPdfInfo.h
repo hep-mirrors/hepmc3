@@ -52,9 +52,9 @@ public:
     bool to_string(string &att) const;
 
     /** @brief Set all fields */
-    void set( int parton_id1, int parton_id2, double x1, double x2,
-              double scale_in, double xf1, double xf2,
-              int pdf_id1 = 0, int pdf_id2 = 0 );
+    void set( const int& parton_id1, const int& parton_id2, const double& x1, const double& x2,
+              const double& scale_in, const double& xf1, const double& xf2,
+              const int& pdf_id1 = 0, const int& pdf_id2 = 0 );
 
     bool operator==( const GenPdfInfo& ) const; ///< Operator ==
     bool operator!=( const GenPdfInfo& ) const; ///< Operator !=

@@ -21,17 +21,14 @@ namespace HepMC {
 
     using namespace std;
 
-    // /** @brief Type of iteration. Used by backward-compatibility interface */
-    // #ifndef HEPMC_NO_DEPRECATED
-    // enum IteratorRange { parents, children, family, ancestors, descendants, relatives };
-    // #endif
-
-    class GenEvent;
     class Attribute;
+    class GenEvent;
 
     /// Stores vertex-related information
     class GenVertex : public std::enable_shared_from_this<GenVertex>{
 
+    friend class GenEvent;
+      
     public:
 
         /// @name Constructors
@@ -96,11 +93,11 @@ namespace HepMC {
         /// Get list of incoming particles
         const vector<GenParticlePtr>& particles_in() { return m_particles_in; }
         /// Get list of incoming particles
-        const vector<ConstGenParticlePtr>& particles_in() const;
+        vector<ConstGenParticlePtr> particles_in() const;
         /// Get list of outgoing particles
         const vector<GenParticlePtr>& particles_out() { return m_particles_out; }
         /// Get list of outgoing particles
-        const vector<ConstGenParticlePtr>& particles_out() const;
+        vector<ConstGenParticlePtr> particles_out() const;
 
         /// @brief Get vertex position
         ///
@@ -124,20 +121,20 @@ namespace HepMC {
         /// This will overwrite existing attribute if an attribute with
         /// the same name is present. The attribute will be stored in the
         /// parent_event(). @return false if there is no parent_event();
-        bool add_attribute(string name, shared_ptr<Attribute> att);
+        bool add_attribute(const string& name, shared_ptr<Attribute> att);
 
         /// @brief Get list of names of attributes assigned to this particle
         vector<string> attribute_names() const;
 
         /// @brief Remove attribute
-        void remove_attribute(string name);
+        void remove_attribute(const string& name);
 
         /// @brief Get attribute of type T
         template<class T>
-        shared_ptr<T> attribute(string name) const;
+        shared_ptr<T> attribute(const string& name) const;
 
         /// @brief Get attribute of any type as string
-        string attribute_as_string(string name) const;
+        string attribute_as_string(const string& name) const;
 
         /// @name Deprecated functionality
         //@{
@@ -160,27 +157,27 @@ namespace HepMC {
         void add_particle_out( GenParticle *p ) { add_particle_out( GenParticlePtr(p) ); }
 
         /// Define iterator by typedef
-        typedef vector<ConstGenParticlePtr>::const_iterator particles_in_const_iterator;
+        typedef vector<GenParticlePtr>::const_iterator particles_in_const_iterator;
         /// Define iterator by typedef
-        typedef vector<ConstGenParticlePtr>::const_iterator particles_out_const_iterator;
+        typedef vector<GenParticlePtr>::const_iterator particles_out_const_iterator;
         /// Define iterator by typedef
         typedef vector<GenParticlePtr>::iterator       particle_iterator;
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
-        particles_in_const_iterator  particles_in_const_begin()  const { return particles_in().begin();  } //!< @deprecated Backward compatibility iterators
+        particles_in_const_iterator  particles_in_const_begin()  const { return m_particles_in.begin();  } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
-        particles_in_const_iterator  particles_in_const_end()    const { return particles_in().end();    } //!< @deprecated Backward compatibility iterators
+        particles_in_const_iterator  particles_in_const_end()    const { return m_particles_in.end();    } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
-        particles_out_const_iterator particles_out_const_begin() const { return particles_out().begin(); } //!< @deprecated Backward compatibility iterators
+        particles_out_const_iterator particles_out_const_begin() const { return m_particles_out.begin(); } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
-        particles_out_const_iterator particles_out_const_end()   const { return particles_out().end();   }
+        particles_out_const_iterator particles_out_const_end()   const { return m_particles_out.end();   }
 
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Use particles_in/out() functions instead")
@@ -221,12 +218,8 @@ namespace HepMC {
         GenVertexData   m_data;   //!< Vertex data
 
         vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
-        mutable vector<ConstGenParticlePtr>  m_particles_in_const;  //!< Incoming particle list
-        mutable bool m_fillParticlesIn = true;
       
         vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
-        mutable vector<ConstGenParticlePtr>  m_particles_out_const; //!< Outgoing particle list
-        mutable bool m_fillParticlesOut = true;
         //@}
 
     };
@@ -238,7 +231,7 @@ namespace HepMC {
 
 /// @brief Get attribute of type T
 template<class T>
-HepMC::shared_ptr<T> HepMC::GenVertex::attribute(string name) const {
+HepMC::shared_ptr<T> HepMC::GenVertex::attribute(const string& name) const {
   return parent_event()?
     parent_event()->attribute<T>(name, id()): HepMC::shared_ptr<T>();
 }

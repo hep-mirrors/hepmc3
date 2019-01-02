@@ -17,6 +17,7 @@
 #include "HepMC/FourVector.h"
 #include "HepMC/Common.h"
 
+#include "HepMC/CoreRelatives.h"
 #include "HepMC/GenParticle.fh"
 #include "HepMC/GenVertex.fh"
 
@@ -29,6 +30,9 @@ class GenEvent;
 class Attribute;
 
 class GenParticle : public std::enable_shared_from_this<GenParticle>{
+  
+  friend class GenVertex;
+  friend class GenEvent;
   
 //
 // Constructors
@@ -81,19 +85,6 @@ public:
     /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
     vector<ConstGenParticlePtr> children() const;
-  
-    /// @brief Convenience access to all incoming particles via production vertex
-    vector<GenParticlePtr> ancestors();
-
-    /// @brief Convenience access to all incoming particles via production vertex (const version)
-    vector<ConstGenParticlePtr> ancestors() const;
-  
-    /// @brief Convenience access to all outgoing particles via end vertex
-    vector<GenParticlePtr> descendants();
-
-    /// @brief Convenience access to all outgoing particles via end vertex
-    vector<ConstGenParticlePtr> descendants() const;
-  
 
     int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
@@ -112,28 +103,6 @@ public:
     void set_momentum(const FourVector& momentum); //!< Set momentum
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
-
-    /// @brief set the GenEvent
-    /// This non-const version will allow the subsequent retrieval and modification of
-    /// the GenEvent from this GenParticle.  If you don't want that to happen, you should
-    /// mark the GenParticle as const
-    void set_gen_event(GenEvent *evt);
-  
-    /// @brief set the ID of the particle.
-    /// The ID is set by GenEvent
-    void set_id(int id);
-  
-    /// @brief set the production vertex
-    /// This non-const version will allow the subsequent retrieval and modification of
-    /// the production GenVertex from this GenParticle.  If you don't want that to
-    /// happen, you should mark the GenParticle as const
-    void set_production_vertex(GenVertexPtr vtx);
-  
-    /// @brief set the end vertex
-    /// This non-const version will allow the subsequent retrieval and modification of
-    /// the end GenVertex from this GenParticle.  If you don't want that to
-    /// happen, you should mark the GenParticle as const
-    void set_end_vertex(GenVertexPtr vtx);
   
     /** @brief Add an attribute to this particle
      *
@@ -141,20 +110,20 @@ public:
      *  the same name is present. The attribute will be stored in the
      *  parent_event(). @return false if there is no parent_event();
      */
-    bool add_attribute(string name, shared_ptr<Attribute> att);
+    bool add_attribute(const string& name, shared_ptr<Attribute> att);
 
     /// @brief Get list of names of attributes assigned to this particle
     vector<string> attribute_names() const;
 
     /// @brief Remove attribute
-    void remove_attribute(string name);
+    void remove_attribute(const string& name);
 
     /// @brief Get attribute of type T
     template<class T>
-    shared_ptr<T> attribute(string name) const;
+    shared_ptr<T> attribute(const string& name) const;
 
     /// @brief Get attribute of any type as string
-    string attribute_as_string(string name) const;
+    string attribute_as_string(const string& name) const;
 
 
     /// @name Deprecated functionality
@@ -189,6 +158,8 @@ private:
     weak_ptr<GenVertex>        m_production_vertex; //!< Production vertex
     weak_ptr<GenVertex>        m_end_vertex;        //!< End vertex
   
+    const static _parents s_parents;
+    const static _children s_children;
 };
   
 } // namespace HepMC
@@ -197,7 +168,7 @@ private:
 
 /// @brief Get attribute of type T
 template<class T>
-HepMC::shared_ptr<T> HepMC::GenParticle::attribute(string name) const {
+HepMC::shared_ptr<T> HepMC::GenParticle::attribute(const string& name) const {
   return parent_event()?
     parent_event()->attribute<T>(name, id()): HepMC::shared_ptr<T>();
 }

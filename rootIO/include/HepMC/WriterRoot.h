@@ -24,7 +24,11 @@
 #include "HepMC/Data/GenRunInfoData.h"
 
 // ROOT header files
+#ifdef __CINT__
 #include "TFile.h"
+#else
+class TFile;
+#endif
 
 namespace HepMC {
 

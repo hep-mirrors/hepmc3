@@ -11,12 +11,10 @@
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenEvent.h"
-#include "HepMC/Relatives.h"
 #include "HepMC/Setup.h"
 #include "HepMC/Attribute.h"
 
 namespace HepMC {
-
 
 GenParticle::GenParticle( const FourVector &mom, int pidin, int stat):
 m_event(nullptr),
@@ -78,58 +76,22 @@ ConstGenVertexPtr GenParticle::end_vertex() const {
 }
 
 vector<GenParticlePtr> GenParticle::parents(){
-    return (m_production_vertex.expired())? vector<GenParticlePtr>() : Relatives::PARENTS(shared_from_this());
+    return (m_production_vertex.expired())? vector<GenParticlePtr>() : s_parents(shared_from_this());
 }
 
 vector<ConstGenParticlePtr> GenParticle::parents() const{
-    return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : Relatives::PARENTS(shared_from_this());
+    return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : s_parents(shared_from_this());
 }
   
 vector<GenParticlePtr> GenParticle::children(){
-    return (m_end_vertex.expired())? vector<GenParticlePtr>() : Relatives::CHILDREN(shared_from_this());
+    return (m_end_vertex.expired())? vector<GenParticlePtr>() : s_children(shared_from_this());
 }
 
 vector<ConstGenParticlePtr> GenParticle::children() const{
-    return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : Relatives::CHILDREN(shared_from_this());
+    return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : s_children(shared_from_this());
 }
 
-vector<GenParticlePtr> GenParticle::ancestors() {
-  return (m_production_vertex.expired()) ? vector<GenParticlePtr>() : Relatives::ANCESTORS(shared_from_this());
-}
-
-vector<ConstGenParticlePtr> GenParticle::ancestors() const {
-  return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : Relatives::ANCESTORS(shared_from_this());
-}
-
-vector<GenParticlePtr> GenParticle::descendants() {
-  return (m_end_vertex.expired()) ? vector<GenParticlePtr>() : Relatives::DESCENDANTS(shared_from_this());
-}
-
-vector<ConstGenParticlePtr> GenParticle::descendants() const {
-  return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : Relatives::DESCENDANTS(shared_from_this());
-}
-
-void GenParticle::set_gen_event(GenEvent *evt){
-  m_event = evt;
-  return;
-}
-
-void GenParticle::set_id(int id){
-  m_id = id;
-  return;
-}
-
-void GenParticle::set_production_vertex(GenVertexPtr vtx){
-  m_production_vertex = vtx;
-  return;
-}
- 
-void GenParticle::set_end_vertex(GenVertexPtr vtx){
-  m_end_vertex = vtx;
-  return;
-}
- 
-bool GenParticle::add_attribute(std::string name, shared_ptr<Attribute> att) {
+bool GenParticle::add_attribute(const std::string& name, shared_ptr<Attribute> att) {
   if ( !parent_event() ) return false;
   parent_event()->add_attribute(name, att, id());
   return true;
@@ -141,12 +103,15 @@ vector<string> GenParticle::attribute_names() const {
   return vector<string>();
 }
 
-void GenParticle::remove_attribute(std::string name) {
+void GenParticle::remove_attribute(const std::string& name) {
   if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }
 
-string GenParticle::attribute_as_string(string name) const {
+string GenParticle::attribute_as_string(const std::string& name) const {
     return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
 }
 
+const _parents GenParticle::s_parents;
+const _children GenParticle::s_children;
+  
 } // namespace HepMC
