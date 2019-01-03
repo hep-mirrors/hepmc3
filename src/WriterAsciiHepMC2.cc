@@ -160,7 +160,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
     shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
-    if(cs) {m_cursor += sprintf(m_cursor, "C %.*e %.*e\n",m_precision, cs->cross_section,m_precision,cs->cross_section_error);  flush(); }
+    if(cs) {m_cursor += sprintf(m_cursor, "C %.*e %.*e\n",m_precision, cs->xsec(),m_precision,cs->xsec_err());  flush(); }
 
 
     // Write attributes

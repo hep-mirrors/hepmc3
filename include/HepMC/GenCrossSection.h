@@ -44,10 +44,9 @@ class GenCrossSection : public Attribute {
 //
 public:
 
-    double cross_section;       ///< Generated cross-section.
-    double cross_section_error; ///< Generated cross-section error.
     long accepted_events;       ///< The number of events generated so far.
     long attempted_events;      ///< The number of events attempted so far.
+
 
     vector<double> cross_sections;       ///< Per-weight cross-section.
     vector<double> cross_section_errors; ///< Per-weight errors.
@@ -62,13 +61,7 @@ public:
     bool to_string(string &att) const;
 
     /** @brief Set all fields */
-  void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1) {
-        cross_section       = xs;
-        cross_section_error = xs_err;
-	accepted_events     = n_acc;
-	attempted_events    = n_att;
-        setup();
-    }
+  void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1);
 
     /** @brief Set the cross section corresponding to the weight named
         \a wName.
@@ -131,9 +124,6 @@ public:
     bool is_valid()                           const; ///< Verify that the instance contains non-zero information
 
 private:
-
-    /** @brief setup vectors for different weights. */
-    void setup();
 
     /** @brief get the weight index given a weight name. */
     int windx(string wName) const;
