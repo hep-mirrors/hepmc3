@@ -42,7 +42,7 @@ class GenCrossSection : public Attribute {
 //
 // Fields
 //
-public:
+private:
 
     long accepted_events;       ///< The number of events generated so far.
     long attempted_events;      ///< The number of events attempted so far.
@@ -61,11 +61,33 @@ public:
     bool to_string(string &att) const;
 
     /** @brief Set all fields */
-  void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1);
+    void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1);
 
-    /** @brief Set the cross section corresponding to the weight named
-        \a wName.
+    /** @brief Set the number of accepted events
      */
+    void set_accepted_events(const long& n_acc ) {
+        accepted_events=n_acc;
+    }
+
+    /** @brief Set the number of attempted events
+     */
+    void set_attempted_events(const long& n_att ) {
+        attempted_events=n_att;
+    }
+
+    /** @brief Get the number of accepted events
+     */
+    long get_accepted_events() const {
+        return accepted_events;
+    }
+
+    /** @brief Get the number of attempted events
+     */
+    long get_attempted_events() const {
+        return  attempted_events;
+    }
+
+
     void set_xsec(const string& wName,const double& xs) {
         set_xsec(windx(wName), xs);
     }

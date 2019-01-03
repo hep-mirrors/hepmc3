@@ -245,10 +245,8 @@ void Print::line(const GenParticlePtr &p, const bool& attributes) {
 void Print::line(shared_ptr<GenCrossSection> &cs) {
     cout << " GenCrossSection: " << cs->xsec(0)
          << " " << cs->xsec_err(0)
-         << " " << cs->accepted_events
-         << " " << cs->attempted_events 
-         << " " << cs->cross_sections.size() 
-         << " " << cs->cross_section_errors.size() 
+         << " " << cs->get_accepted_events()
+         << " " << cs->get_attempted_events() 
          << " " << endl;
 }
 
