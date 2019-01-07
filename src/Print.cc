@@ -41,8 +41,7 @@ void Print::content( const GenEvent &event ) {
 
     cout<<"GenParticlePtr ("<<event.particles().size()<<")"<<endl;
 
-    for ( std::vector<HepMC::GenParticlePtr>::const_iterator  p=event.particles().begin(); p!=event.particles().end(); ++p)
-    {
+    for ( std::vector<HepMC::GenParticlePtr>::const_iterator  p=event.particles().begin(); p!=event.particles().end(); ++p){
         HepMC::Print::line(*p,true);
     }
 

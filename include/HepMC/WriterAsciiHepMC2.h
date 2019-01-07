@@ -109,7 +109,7 @@ private:
     ///
     /// Since strings can be long (maybe even longer than buffer) they have to be dealt
     /// with separately.
-    void write_string( const std::string &str );
+    void write_string(const std::string &str );
 
     /// @brief Write vertex
     ///

@@ -303,7 +303,7 @@ puts("OK2");
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     random_states_size = atoi(cursor);
     random_states.resize(random_states_size);
-puts("OK2");
+
     for ( int i = 0; i < random_states_size; ++i ) {
         if( !(cursor = strchr(cursor+1,' ')) ) return -1;
         random_states[i] = atoi(cursor);
@@ -311,19 +311,19 @@ puts("OK2");
     
     for ( int i = 0; i < random_states_size; ++i ) 
     evt.add_attribute("random_states"+to_string((long long unsigned int)i),make_shared<IntAttribute>(random_states[i])); //gcc-4.4.7 workaround
-puts("OK2");
+
     // weights
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     weights_size = atoi(cursor);
     weights.resize(weights_size);
-printf("%i  OK3\n",weights_size);
+
     for ( int i = 0; i < weights_size; ++i ) {
         if( !(cursor = strchr(cursor+1,' ')) ) return -1;
         weights[i] = atof(cursor);
     }
 
     evt.weights() = weights;
-puts("OK3");
+
     DEBUG( 10, "ReaderAsciiHepMC2: E: "<<event_no<<" ("<<vertices_count<<"V, "<<weights_size<<"W, "<<random_states_size<<"RS)" )
 
     return vertices_count;

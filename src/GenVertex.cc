@@ -40,7 +40,7 @@ void GenVertex::add_particle_in( GenParticlePtr p ) {
 //        if( pp == p ) return;
 //    }
     if (std::find(particles_in().begin(),particles_in().end(),p)!=particles_in().end()) return;
-
+  
     m_particles_in.push_back(p);
 
     if( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
@@ -59,7 +59,7 @@ void GenVertex::add_particle_out( GenParticlePtr p ) {
 //        if( pp == p ) return;
 //    }
    if (std::find(particles_out().begin(),particles_out().end(),p)!=particles_out().end()) return;
-
+  
     m_particles_out.push_back(p);
 
     if( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
@@ -68,7 +68,6 @@ void GenVertex::add_particle_out( GenParticlePtr p ) {
 
     if(m_event) m_event->add_particle(p);
 }
-
 
 void GenVertex::remove_particle_in( GenParticlePtr p ) {
     if(!p) return;

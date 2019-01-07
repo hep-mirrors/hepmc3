@@ -11,16 +11,13 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
-
 #include "HepMC/Data/GenEventData.h"
-
 
 #include <deque>
 #include <algorithm> // sort
 using namespace std;
 
 namespace HepMC {
-
 
 GenEvent::GenEvent(Units::MomentumUnit mu,
 		   Units::LengthUnit lu)
@@ -44,11 +41,11 @@ GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
 // void GenEvent::add_particle( const GenParticlePtr &p ) {
 void GenEvent::add_particle( GenParticlePtr p ) {
     if( p->in_event() ) return;
-
+  
     m_particles.push_back(p);
 
     p->m_event = this;
-    p->m_id    = particles().size();
+    p->m_id = particles().size();
 
     // Particles without production vertex are added to the root vertex
     if( !p->production_vertex() )
@@ -65,7 +62,7 @@ GenEvent::GenEvent(const GenEvent&e) {
     GenEventData tdata;
     e.write_data(tdata);
     read_data(tdata);
-    }
+}
 }
 
 GenEvent::~GenEvent() {
@@ -90,17 +87,13 @@ GenEvent& GenEvent::operator=(const HepMC::GenEvent& e){
 } 
 
 
-
-
-
 // void GenEvent::add_vertex( const GenVertexPtr &v ) {
 void GenEvent::add_vertex( GenVertexPtr v ) {
     if( v->in_event() ) return;
-
     m_vertices.push_back(v);
 
     v->m_event = this;
-    v->m_id    = -(int)vertices().size();
+    v->m_id = -(int)vertices().size();
 
     // Add all incoming and outgoing particles and restore their production/end vertices
     FOREACH( GenParticlePtr &p, v->m_particles_in ) {
@@ -117,7 +110,7 @@ void GenEvent::add_vertex( GenVertexPtr v ) {
 
 void GenEvent::remove_particle( GenParticlePtr p ) {
     if( !p || p->parent_event() != this ) return;
-
+  
     DEBUG( 30, "GenEvent::remove_particle - called with particle: "<<p->id() );
     GenVertexPtr end_vtx = p->end_vertex();
     if( end_vtx ) {
@@ -214,7 +207,7 @@ void GenEvent::remove_particles( vector<GenParticlePtr> v ) {
 
 void GenEvent::remove_vertex( GenVertexPtr v ) {
     if( !v || v->parent_event() != this ) return;
-
+  
     DEBUG( 30, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
     shared_ptr<GenVertex> null_vtx;
 
