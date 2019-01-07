@@ -92,8 +92,7 @@ public:
     void set_momentum(const FourVector& momentum); //!< Set momentum
     void set_generated_mass(const double& m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
-
-
+  
     /** @brief Add an attribute to this particle
      *
      *  This will overwrite existing attribute if an attribute with

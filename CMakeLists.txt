@@ -134,17 +134,19 @@ endif()
 #---Select sources for the various libraries---------------------------------
 file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
 
-include_directories(include)
+
 
 add_library(objlib OBJECT ${hepmc3_sources})
 # shared libraries need PIC
 set_property(TARGET objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
+target_include_directories(objlib PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 add_library(HepMC SHARED $<TARGET_OBJECTS:objlib>)
 add_library(HepMC_static STATIC  $<TARGET_OBJECTS:objlib>)
 
 #SET_TARGET_PROPERTIES(... PROPERTIES LINK_FLAGS "$ENV{MYLDFLAGS}")
 set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+
 if (WIN32)
 set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 elseif()

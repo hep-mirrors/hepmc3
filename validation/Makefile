@@ -59,6 +59,61 @@ CMAKE_BINARY_DIR = /home/andriish/Projects/HepMC3
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target package
+package: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
+	cd /home/andriish/Projects/HepMC3 && /usr/bin/cpack3 --config ./CPackConfig.cmake
+.PHONY : package
+
+# Special rule for the target package
+package/fast: package
+
+.PHONY : package/fast
+
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest3 --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
+# Special rule for the target package_source
+package_source:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
+	cd /home/andriish/Projects/HepMC3 && /usr/bin/cpack3 --config ./CPackSourceConfig.cmake /home/andriish/Projects/HepMC3/CPackSourceConfig.cmake
+.PHONY : package_source
+
+# Special rule for the target package_source
+package_source/fast: package_source
+
+.PHONY : package_source/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake3 -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake3 -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
+
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -71,17 +126,15 @@ install/strip/fast: preinstall/fast
 	/usr/bin/cmake3 -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake3 -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\" \"devel\" \"examples\" \"libs\" \"rootIO-devel\" \"rootIO-libs\""
+.PHONY : list_install_components
 
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/bin/cmake3 -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
 
 # Special rule for the target install
 install: preinstall
@@ -95,59 +148,17 @@ install/fast: preinstall/fast
 	/usr/bin/cmake3 -P cmake_install.cmake
 .PHONY : install/fast
 
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\" \"devel\" \"examples\" \"libs\" \"rootIO-devel\" \"rootIO-libs\""
-.PHONY : list_install_components
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake3 -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
 
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake3 -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake3 -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
-# Special rule for the target package_source
-package_source:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	cd /home/andriish/Projects/HepMC3 && /usr/bin/cpack3 --config ./CPackSourceConfig.cmake /home/andriish/Projects/HepMC3/CPackSourceConfig.cmake
-.PHONY : package_source
-
-# Special rule for the target package_source
-package_source/fast: package_source
-
-.PHONY : package_source/fast
-
-# Special rule for the target package
-package: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	cd /home/andriish/Projects/HepMC3 && /usr/bin/cpack3 --config ./CPackConfig.cmake
-.PHONY : package
-
-# Special rule for the target package
-package/fast: package
-
-.PHONY : package/fast
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake3 -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -182,21 +193,6 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-validation/CMakeFiles/validation_HEPMC2.exe.dir/rule:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f CMakeFiles/Makefile2 validation/CMakeFiles/validation_HEPMC2.exe.dir/rule
-.PHONY : validation/CMakeFiles/validation_HEPMC2.exe.dir/rule
-
-# Convenience name for target.
-validation_HEPMC2.exe: validation/CMakeFiles/validation_HEPMC2.exe.dir/rule
-
-.PHONY : validation_HEPMC2.exe
-
-# fast build rule for target.
-validation_HEPMC2.exe/fast:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/build
-.PHONY : validation_HEPMC2.exe/fast
-
-# Convenience name for target.
 validation/CMakeFiles/validation.exe.dir/rule:
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f CMakeFiles/Makefile2 validation/CMakeFiles/validation.exe.dir/rule
 .PHONY : validation/CMakeFiles/validation.exe.dir/rule
@@ -211,14 +207,29 @@ validation.exe/fast:
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/build
 .PHONY : validation.exe/fast
 
+# Convenience name for target.
+validation/CMakeFiles/validation_HEPMC2.exe.dir/rule:
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f CMakeFiles/Makefile2 validation/CMakeFiles/validation_HEPMC2.exe.dir/rule
+.PHONY : validation/CMakeFiles/validation_HEPMC2.exe.dir/rule
+
+# Convenience name for target.
+validation_HEPMC2.exe: validation/CMakeFiles/validation_HEPMC2.exe.dir/rule
+
+.PHONY : validation_HEPMC2.exe
+
+# fast build rule for target.
+validation_HEPMC2.exe/fast:
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/build
+.PHONY : validation_HEPMC2.exe/fast
+
 src/FileValidationTool.o: src/FileValidationTool.cc.o
 
 .PHONY : src/FileValidationTool.o
 
 # target to build an object file
 src/FileValidationTool.cc.o:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/FileValidationTool.cc.o
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/FileValidationTool.cc.o
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/FileValidationTool.cc.o
 .PHONY : src/FileValidationTool.cc.o
 
 src/FileValidationTool.i: src/FileValidationTool.cc.i
@@ -227,8 +238,8 @@ src/FileValidationTool.i: src/FileValidationTool.cc.i
 
 # target to preprocess a source file
 src/FileValidationTool.cc.i:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/FileValidationTool.cc.i
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/FileValidationTool.cc.i
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/FileValidationTool.cc.i
 .PHONY : src/FileValidationTool.cc.i
 
 src/FileValidationTool.s: src/FileValidationTool.cc.s
@@ -237,8 +248,8 @@ src/FileValidationTool.s: src/FileValidationTool.cc.s
 
 # target to generate assembly for a file
 src/FileValidationTool.cc.s:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/FileValidationTool.cc.s
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/FileValidationTool.cc.s
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/FileValidationTool.cc.s
 .PHONY : src/FileValidationTool.cc.s
 
 src/SimpleEventTool.o: src/SimpleEventTool.cc.o
@@ -247,8 +258,8 @@ src/SimpleEventTool.o: src/SimpleEventTool.cc.o
 
 # target to build an object file
 src/SimpleEventTool.cc.o:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/SimpleEventTool.cc.o
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/SimpleEventTool.cc.o
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/SimpleEventTool.cc.o
 .PHONY : src/SimpleEventTool.cc.o
 
 src/SimpleEventTool.i: src/SimpleEventTool.cc.i
@@ -257,8 +268,8 @@ src/SimpleEventTool.i: src/SimpleEventTool.cc.i
 
 # target to preprocess a source file
 src/SimpleEventTool.cc.i:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/SimpleEventTool.cc.i
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/SimpleEventTool.cc.i
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/SimpleEventTool.cc.i
 .PHONY : src/SimpleEventTool.cc.i
 
 src/SimpleEventTool.s: src/SimpleEventTool.cc.s
@@ -267,8 +278,8 @@ src/SimpleEventTool.s: src/SimpleEventTool.cc.s
 
 # target to generate assembly for a file
 src/SimpleEventTool.cc.s:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/SimpleEventTool.cc.s
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/SimpleEventTool.cc.s
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/SimpleEventTool.cc.s
 .PHONY : src/SimpleEventTool.cc.s
 
 src/ValidationControl.o: src/ValidationControl.cc.o
@@ -277,8 +288,8 @@ src/ValidationControl.o: src/ValidationControl.cc.o
 
 # target to build an object file
 src/ValidationControl.cc.o:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/ValidationControl.cc.o
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/ValidationControl.cc.o
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/ValidationControl.cc.o
 .PHONY : src/ValidationControl.cc.o
 
 src/ValidationControl.i: src/ValidationControl.cc.i
@@ -287,8 +298,8 @@ src/ValidationControl.i: src/ValidationControl.cc.i
 
 # target to preprocess a source file
 src/ValidationControl.cc.i:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/ValidationControl.cc.i
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/ValidationControl.cc.i
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/ValidationControl.cc.i
 .PHONY : src/ValidationControl.cc.i
 
 src/ValidationControl.s: src/ValidationControl.cc.s
@@ -297,8 +308,8 @@ src/ValidationControl.s: src/ValidationControl.cc.s
 
 # target to generate assembly for a file
 src/ValidationControl.cc.s:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/ValidationControl.cc.s
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/ValidationControl.cc.s
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/ValidationControl.cc.s
 .PHONY : src/ValidationControl.cc.s
 
 validation.o: validation.cc.o
@@ -307,8 +318,8 @@ validation.o: validation.cc.o
 
 # target to build an object file
 validation.cc.o:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/validation.cc.o
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/validation.cc.o
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/validation.cc.o
 .PHONY : validation.cc.o
 
 validation.i: validation.cc.i
@@ -317,8 +328,8 @@ validation.i: validation.cc.i
 
 # target to preprocess a source file
 validation.cc.i:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/validation.cc.i
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/validation.cc.i
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/validation.cc.i
 .PHONY : validation.cc.i
 
 validation.s: validation.cc.s
@@ -327,8 +338,8 @@ validation.s: validation.cc.s
 
 # target to generate assembly for a file
 validation.cc.s:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/validation.cc.s
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/validation.cc.s
+	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/validation.cc.s
 .PHONY : validation.cc.s
 
 # Help Target
@@ -337,16 +348,17 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
-	@echo "... install/local"
-	@echo "... install"
-	@echo "... list_install_components"
-	@echo "... rebuild_cache"
-	@echo "... edit_cache"
-	@echo "... package_source"
-	@echo "... package"
-	@echo "... validation_HEPMC2.exe"
 	@echo "... validation.exe"
+	@echo "... package"
+	@echo "... test"
+	@echo "... package_source"
+	@echo "... edit_cache"
+	@echo "... validation_HEPMC2.exe"
+	@echo "... rebuild_cache"
+	@echo "... install/strip"
+	@echo "... list_install_components"
+	@echo "... install"
+	@echo "... install/local"
 	@echo "... src/FileValidationTool.o"
 	@echo "... src/FileValidationTool.i"
 	@echo "... src/FileValidationTool.s"

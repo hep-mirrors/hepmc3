@@ -47,7 +47,6 @@ private:
     long accepted_events;       ///< The number of events generated so far.
     long attempted_events;      ///< The number of events attempted so far.
 
-
     vector<double> cross_sections;       ///< Per-weight cross-section.
     vector<double> cross_section_errors; ///< Per-weight errors.
 //
@@ -86,7 +85,6 @@ public:
     long get_attempted_events() const {
         return  attempted_events;
     }
-
 
     void set_xsec(const string& wName,const double& xs) {
         set_xsec(windx(wName), xs);

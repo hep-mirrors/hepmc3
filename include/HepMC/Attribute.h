@@ -24,8 +24,10 @@
 #include <limits>
 #include <sstream>
 #include <iomanip>
+
 #include "HepMC/Common.h"
 #include "HepMC/Data/SmartPointer.h"
+
 using std::string;
 
 namespace HepMC {

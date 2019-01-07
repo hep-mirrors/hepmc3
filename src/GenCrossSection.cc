@@ -73,9 +73,6 @@ bool GenCrossSection::from_string(const string &att) {
     return true;
 }
 
-
-
-
 bool GenCrossSection::to_string(string &att) const {
     std::ostringstream os;
 

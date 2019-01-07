@@ -76,3 +76,4 @@ HepMC2: ./configure --with-HepMC=$HEPMC2LOCATION
 
 NOTE: HepMC2 interface is compiled to separate library. Same configuration
       and same path can be used for HepMC2 and HepMC3.
+      

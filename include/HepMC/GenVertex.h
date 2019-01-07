@@ -21,10 +21,8 @@ namespace HepMC {
 
     using namespace std;
 
-
-    class GenEvent;
     class Attribute;
-
+    class GenEvent;
 
     /// Stores vertex-related information
     class GenVertex {
@@ -203,9 +201,9 @@ namespace HepMC {
 
         /// @name Fields
         //@{
-        GenEvent      *m_event;  //!< Parent event
-        int            m_id;     //!< Vertex id
-        GenVertexData  m_data;   //!< Vertex data
+        GenEvent       *m_event;  //!< Parent event
+        int             m_id;     //!< Vertex id
+        GenVertexData   m_data;   //!< Vertex data
 
         vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
         vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list

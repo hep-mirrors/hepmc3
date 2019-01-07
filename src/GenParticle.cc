@@ -59,7 +59,7 @@ void GenParticle::unset_generated_mass() {
     m_data.mass        = 0.;
     m_data.is_mass_set = false;
 }
-
+  
 GenVertexPtr GenParticle::production_vertex() {
     return m_production_vertex.lock();
 }

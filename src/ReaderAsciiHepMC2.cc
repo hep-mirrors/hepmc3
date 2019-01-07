@@ -288,14 +288,14 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     shared_ptr<IntAttribute> signal_process_vertex = make_shared<IntAttribute>(atoi(cursor));
     evt.add_attribute("signal_process_vertex",signal_process_vertex);
-puts("OK");
+
     // num_vertices
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     vertices_count = atoi(cursor);
 
     // SKIPPED: beam 1
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
-puts("OK2");
+
     // SKIPPED: beam 2
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
 

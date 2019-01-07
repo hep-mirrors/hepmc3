@@ -127,7 +127,7 @@ private:
     std::istream* m_stream; // For ctor when reading from stdin
     bool m_isstream; // toggles usage of m_file or m_stream
  
-   vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache
+    vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache
     vector<int>            m_vertex_barcodes;     //!< Old vertex barcodes
 
     vector<GenParticlePtr> m_particle_cache;      //!< Particle cache
