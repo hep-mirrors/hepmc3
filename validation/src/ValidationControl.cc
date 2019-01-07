@@ -10,122 +10,8 @@
 
 
 #ifdef HEPMC2
-/* NOTE: we have to copy this code frome HepMC/Version.h
-         as this header is not available when compiling
-         validation program with HepMC2 */
-
-
-/// Neater/extensible C++11 availability test
-#if __cplusplus >= 201103L
-#define HEPMC_HAS_CXX11
-#endif
-#if !defined(HEPMC_HAS_CXX11) && (__GNUC__) && (__cplusplus) && (__GXX_EXPERIMENTAL_CXX0X__)
-#define HEPMC_HAS_CXX0X_GCC_ONLY
-#endif
-
-
-/// Define a FOREACH directive
-#ifdef  HEPMC_HAS_CXX11
-#define FOREACH( iterator, container ) for ( iterator: container )
-#else
-#if !defined(__CINT__)
-/* This code was adapted from
- * https://github.com/assimp/assimp/blob/master/code/BoostWorkaround/boost/foreach.hpp
- * to rid of boost dependency.
- */
-///////////////////////////////////////////////////////////////////////////////
-// A stripped down version of FOREACH for
-// illustration purposes. NOT FOR GENERAL USE.
-// For a complete implementation, see BOOST_FOREACH at
-// http://boost-sandbox.sourceforge.net/vault/index.php?directory=eric_niebler
-//
-// Copyright 2004 Eric Niebler.
-// Distributed under the Boost Software License, Version 1.0. (See
-// accompanying file LICENSE_1_0.txt or copy at
-// http://www.boost.org/LICENSE_1_0.txt)
-//
-// Adapted to Assimp November 29th, 2008 (Alexander Gessler).
-// Added code to handle both const and non-const iterators, simplified some
-// parts.
-//////////////////////////////////////////////////////////////////////////////
-namespace hepmc_embedded_boost {
-namespace foreach_detail {
-
-///////////////////////////////////////////////////////////////////////////////
-// auto_any
-
-struct auto_any_base
-{
-    operator bool() const { return false; }
-};
-
-template<typename T>
-struct auto_any : auto_any_base
-{
-    auto_any(T const& t) : item(t) {}
-    mutable T item;
-};
-
-template<typename T>
-T& auto_any_cast(auto_any_base const& any)
-{
-    return static_cast<auto_any<T> const&>(any).item;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// FOREACH helper function
-
-template<typename T>
-auto_any<typename T::const_iterator> begin(T const& t)
-{
-    return t.begin();
-}
-
-template<typename T>
-auto_any<typename T::const_iterator> end(T const& t)
-{
-    return t.end();
-}
-
-// iterator
-template<typename T>
-bool done(auto_any_base const& cur, auto_any_base const& end, T&)
-{
-    typedef typename T::iterator iter_type;
-    return auto_any_cast<iter_type>(cur) == auto_any_cast<iter_type>(end);
-}
-
-template<typename T>
-void next(auto_any_base const& cur, T&)
-{
-    ++auto_any_cast<typename T::iterator>(cur);
-}
-
-template<typename T>
-typename T::reference deref(auto_any_base const& cur, T&)
-{
-    return *auto_any_cast<typename T::iterator>(cur);
-}
-
-} // end foreach_detail
-
-///////////////////////////////////////////////////////////////////////////////
-// FOREACH
-
-#define FOREACH(item, container)                      \
-	if(hepmc_embedded_boost::foreach_detail::auto_any_base const& b = hepmc_embedded_boost::foreach_detail::begin(container)) {} else       \
-    if(hepmc_embedded_boost::foreach_detail::auto_any_base const& e = hepmc_embedded_boost::foreach_detail::end(container))   {} else       \
-    for(;!hepmc_embedded_boost::foreach_detail::done(b,e,container);  hepmc_embedded_boost::foreach_detail::next(b,container))   \
-        if (bool ugly_and_unique_break = false) {} else							\
-        for(item = hepmc_embedded_boost::foreach_detail::deref(b,container); !ugly_and_unique_break; ugly_and_unique_break = true)
-
-} // end hepmc_embedded_boost
-#endif
-#endif
-
 // root not supported for HepMC2
 #undef ROOTCONFIG
-
 #endif // HEPMC2
 
 #ifdef ROOTCONFIG
@@ -164,9 +50,8 @@ m_has_input_source(0) {
 }
 
 ValidationControl::~ValidationControl() {
-    FOREACH( ValidationTool *t, m_toolchain ) {
-        delete t;
-    }
+    for (std::vector<ValidationTool *>::iterator t=m_toolchain.begin();t!=m_toolchain.end();++t)  
+        delete *t;
 }
 
 void ValidationControl::read_file(const std::string &filename) {
@@ -407,9 +292,7 @@ bool ValidationControl::new_event() {
 void ValidationControl::initialize() {
     printf("ValidationControl: initializing\n");
 
-    FOREACH( ValidationTool *tool, m_toolchain ) {
-        tool->initialize();
-    }
+   for (std::vector<ValidationTool *>::iterator tool=m_toolchain.begin();tool!=m_toolchain.end();++tool)  (*tool)->initialize();
 }
 
 void ValidationControl::process(GenEvent &hepmc) {
@@ -417,28 +300,27 @@ void ValidationControl::process(GenEvent &hepmc) {
     m_status = 0;
 
     FourVector input_momentum;
+    for (std::vector<ValidationTool *>::iterator tool=m_toolchain.begin();tool!=m_toolchain.end();++tool) {
 
-    FOREACH( ValidationTool *tool, m_toolchain ) {
-
-        Timer *timer = tool->timer();
+        Timer *timer = (*tool)->timer();
 
         if(timer) timer->start();
-        m_status = tool->process(hepmc);
+        m_status = (*tool)->process(hepmc);
         if(timer) timer->stop();
 
         // status != 0 means an error - stop processing current event
         if(m_status) return;
 
-        if(tool->tool_modifies_event() && m_print_events) {
+        if((*tool)->tool_modifies_event() && m_print_events) {
             printf("--------------------------------------------------------------\n");
-            printf("   Print event: %s\n",tool->name().c_str());
+            printf("   Print event: %s\n",(*tool)->name().c_str());
             printf("--------------------------------------------------------------\n");
 
             HEPMC2CODE( hepmc.print();           )
             HEPMC3CODE( Print::listing(hepmc,8); )
         }
 
-        if(tool->tool_modifies_event() && m_momentum_check_events ) {
+        if((*tool)->tool_modifies_event() && m_momentum_check_events ) {
             FourVector sum;
             double     delta = 0.0;
 
@@ -466,16 +348,12 @@ void ValidationControl::process(GenEvent &hepmc) {
             HEPMC3CODE(
                 FindParticles search( hepmc, FIND_ALL, STATUS == 1 );
                 //hepmc.set_print_precision(8);
-
-                FOREACH( const GenParticlePtr &p, search.results() ) {
-                    //p->print();
-                    sum += p->momentum();
-                }
-
+                  std::vector<GenParticlePtr> R=search.results();
+                  for (std::vector<GenParticlePtr>::iterator p=R.begin();p!=R.end();++p) sum += (*p)->momentum();
                 if(!input_momentum.is_zero()) delta = (input_momentum - sum).length();
             )
 
-            printf("Momentum sum: %+15.8e %+15.8e %+15.8e %+15.8e (evt: %7i, %s)",sum.px(),sum.py(),sum.pz(),sum.e(),m_event_counter,tool->name().c_str());
+            printf("Momentum sum: %+15.8e %+15.8e %+15.8e %+15.8e (evt: %7i, %s)",sum.px(),sum.py(),sum.pz(),sum.e(),m_event_counter,(*tool)->name().c_str());
 
             if( delta < m_momentum_check_threshold ) printf("\n");
             else                                     printf(" - WARNING! Difference = %+15.8e\n",delta);
@@ -489,21 +367,20 @@ void ValidationControl::finalize() {
     printf("ValidationControl: finalizing\n");
 
     // Finalize
-    FOREACH( ValidationTool *tool, m_toolchain ) {
-        tool->finalize();
-    }
+    for (std::vector<ValidationTool *>::iterator t=m_toolchain.begin();t!=m_toolchain.end();++t)
+    (*t)->finalize();
 
     printf("ValidationControl: printing timers\n");
 
     // Print timers
-    FOREACH( ValidationTool *tool, m_toolchain ) {
-        if(tool->timer()) tool->timer()->print();
-    }
+    for (std::vector<ValidationTool *>::iterator t=m_toolchain.begin();t!=m_toolchain.end();++t)
+    if((*t)->timer()) (*t)->timer()->print();
+    
 
     printf("ValidationControl: finished processing:\n");
 
     // List tools
-    FOREACH( ValidationTool *tool, m_toolchain ) {
-        printf("  tool: %s\n",tool->long_name().c_str());
-    }
+    for (std::vector<ValidationTool *>::iterator t=m_toolchain.begin();t!=m_toolchain.end();++t)
+    printf("  tool: %s\n",(*t)->long_name().c_str());
+
 }
