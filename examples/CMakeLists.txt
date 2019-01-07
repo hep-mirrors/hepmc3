@@ -1,6 +1,7 @@
 # building examples
 #------------------
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
+include_directories(${PROJECT_SOURCE_DIR}/include )
 
 include(CheckLanguage)
 check_language(Fortran)
