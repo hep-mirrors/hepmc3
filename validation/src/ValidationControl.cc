@@ -6,18 +6,6 @@
 #include "ValidationControl.h"
 
 #include "SimpleEventTool.h"
-#include "FileValidationTool.h"
-
-
-#ifdef HEPMC2
-// root not supported for HepMC2
-#undef ROOTCONFIG
-#endif // HEPMC2
-
-#ifdef ROOTCONFIG
-#include "RootTool.h"
-#include "RootTool2.h"
-#endif
 
 #ifdef PHOTOSPP
 #include "PhotosValidationTool.h"
@@ -96,37 +84,10 @@ void ValidationControl::read_file(const std::string &filename) {
                 if( strncmp(buf,"tool",4)==0 ) {
                     input = new SimpleEventTool();
                 }
-                else if( strncmp(buf,"hepmc2",6)==0) {
-                    in >> buf;
-
-                    FileValidationTool *tool = new FileValidationTool( buf, std::ios::in );
-                    if( tool->failed() ) status = CANNOT_OPEN_FILE;
-                    else input = tool;
-                }
                 else if( strncmp(buf,"pythia8",7)==0) {
 #ifdef PYTHIA8
                     in >> buf;
                     input = new PythiaValidationTool(buf);
-#else
-                    status = UNAVAILABLE_TOOL;
-#endif
-                }
-                else if( strncmp(buf,"root_reader",11)==0) {
-#ifdef ROOTCONFIG
-                    in >> buf;
-                    RootTool * tool = new RootTool(buf,ios::in);
-                    if( tool->failed() ) status = CANNOT_OPEN_FILE;
-                    else input = tool;
-#else
-                    status = UNAVAILABLE_TOOL;
-#endif
-                }
-                else if( strncmp(buf,"root_streamer",13)==0) {
-#ifdef ROOTCONFIG
-                    in >> buf;
-                    RootTool2 * tool = new RootTool2(buf,ios::in);
-                    if( tool->failed() ) status = CANNOT_OPEN_FILE;
-                    else input = tool;
 #else
                     status = UNAVAILABLE_TOOL;
 #endif
@@ -160,38 +121,6 @@ void ValidationControl::read_file(const std::string &filename) {
             else if( strncmp(buf,"mctester",8)==0 ) {
 #ifdef MCTESTER
                 m_toolchain.push_back( new McTesterValidationTool() );
-#else
-                status = UNAVAILABLE_TOOL;
-#endif
-            }
-            else status = UNRECOGNIZED_TOOL;
-        }
-        // Parse output file
-        else if( strncmp(buf,"OUTPUT",6)==0 ) {
-            in >> buf;
-
-            if( strncmp(buf,"ascii",5)==0) {
-                in >> buf;
-                FileValidationTool *tool = new FileValidationTool( buf, std::ios::out );
-                if( tool->failed() ) status = CANNOT_OPEN_FILE;
-                else m_toolchain.push_back(tool);
-            }
-            else if( strncmp(buf,"root_writer",11)==0) {
-                in >> buf;
-#ifdef ROOTCONFIG
-                RootTool *tool = new RootTool( buf, std::ios::out );
-                if( tool->failed() ) status = CANNOT_OPEN_FILE;
-                else m_toolchain.push_back(tool);
-#else
-                status = UNAVAILABLE_TOOL;
-#endif
-            }
-            else if( strncmp(buf,"root_streamer",13)==0) {
-                in >> buf;
-#ifdef ROOTCONFIG
-                RootTool2 *tool = new RootTool2( buf, std::ios::out );
-                if( tool->failed() ) status = CANNOT_OPEN_FILE;
-                else m_toolchain.push_back(tool);
 #else
                 status = UNAVAILABLE_TOOL;
 #endif

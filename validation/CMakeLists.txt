@@ -45,14 +45,14 @@ message(STATUS "PHOTOSPP_HEPMC2_INCLUDE_DIRS ${PHOTOSPP_HEPMC2_INCLUDE_DIRS}")
 
 # validation with HepMC3
 
-add_executable(validation.exe ${PROJECT_SOURCE_DIR}/validation/validation.cc ${CMAKE_CURRENT_SOURCE_DIR} src/ValidationControl.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/SimpleEventTool.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/FileValidationTool.cc )
+add_executable(validation.exe ${PROJECT_SOURCE_DIR}/validation/validation.cc ${CMAKE_CURRENT_SOURCE_DIR} src/ValidationControl.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/SimpleEventTool.cc  )
 target_include_directories(validation.exe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/include ${PHOTOSPP_HEPMC3_INCLUDE_DIRS})
 target_link_libraries(validation.exe HepMC ${PHOTOSPP_HEPMC3_LIBRARIES} )
 set_target_properties(validation.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/bin)
 
 # validation with HepMC2
 message(STATUS "HEPMC2_INCLUDE_DIRS ${HEPMC2_INCLUDE_DIRS}") 
-add_executable(validation_HEPMC2.exe ${PROJECT_SOURCE_DIR}/validation/validation.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/ValidationControl.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/SimpleEventTool.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/FileValidationTool.cc )
+add_executable(validation_HEPMC2.exe ${PROJECT_SOURCE_DIR}/validation/validation.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/ValidationControl.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/SimpleEventTool.cc  )
 target_include_directories(validation_HEPMC2.exe BEFORE PRIVATE  ${PROJECT_SOURCE_DIR}/validation/include ${PHOTOSPP_HEPMC2_INCLUDE_DIRS})
 target_include_directories(validation_HEPMC2.exe BEFORE PRIVATE /${HEPMC2_INCLUDE_DIRS} )
 target_link_libraries(validation_HEPMC2.exe ${HEPMC2_LIBRARIES} ${PHOTOSPP_HEPMC2_LIBRARIES})

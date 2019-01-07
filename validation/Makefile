@@ -222,36 +222,6 @@ validation_HEPMC2.exe/fast:
 	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/build
 .PHONY : validation_HEPMC2.exe/fast
 
-src/FileValidationTool.o: src/FileValidationTool.cc.o
-
-.PHONY : src/FileValidationTool.o
-
-# target to build an object file
-src/FileValidationTool.cc.o:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/FileValidationTool.cc.o
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/FileValidationTool.cc.o
-.PHONY : src/FileValidationTool.cc.o
-
-src/FileValidationTool.i: src/FileValidationTool.cc.i
-
-.PHONY : src/FileValidationTool.i
-
-# target to preprocess a source file
-src/FileValidationTool.cc.i:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/FileValidationTool.cc.i
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/FileValidationTool.cc.i
-.PHONY : src/FileValidationTool.cc.i
-
-src/FileValidationTool.s: src/FileValidationTool.cc.s
-
-.PHONY : src/FileValidationTool.s
-
-# target to generate assembly for a file
-src/FileValidationTool.cc.s:
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation.exe.dir/build.make validation/CMakeFiles/validation.exe.dir/src/FileValidationTool.cc.s
-	cd /home/andriish/Projects/HepMC3 && $(MAKE) -f validation/CMakeFiles/validation_HEPMC2.exe.dir/build.make validation/CMakeFiles/validation_HEPMC2.exe.dir/src/FileValidationTool.cc.s
-.PHONY : src/FileValidationTool.cc.s
-
 src/SimpleEventTool.o: src/SimpleEventTool.cc.o
 
 .PHONY : src/SimpleEventTool.o
@@ -359,9 +329,6 @@ help:
 	@echo "... list_install_components"
 	@echo "... install"
 	@echo "... install/local"
-	@echo "... src/FileValidationTool.o"
-	@echo "... src/FileValidationTool.i"
-	@echo "... src/FileValidationTool.s"
 	@echo "... src/SimpleEventTool.o"
 	@echo "... src/SimpleEventTool.i"
 	@echo "... src/SimpleEventTool.s"
