@@ -35,10 +35,7 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
 }
 
 string GenRunInfo::attribute_as_string(const string &name) const {
-
-/*LH17 commented
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
     std::map< std::string, shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
     if( i == m_attributes.end() ) return string();
 
@@ -97,4 +94,31 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
         this->tools().push_back(ti);
     }
 }
+
+    GenRunInfo::GenRunInfo(const GenRunInfo& r)
+    {
+     if (this != &r)
+     {
+        std::lock(m_lock_attributes, r.m_lock_attributes);
+        std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
+        std::lock_guard<std::recursive_mutex> rhs_lk(r.m_lock_attributes, std::adopt_lock);     
+        GenRunInfoData tdata;
+        r.write_data(tdata);
+        read_data(tdata);
+     }
+    }
+    GenRunInfo& GenRunInfo::operator=(const GenRunInfo& r)
+    {
+     if (this != &r)
+     {
+        std::lock(m_lock_attributes, r.m_lock_attributes);
+        std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
+        std::lock_guard<std::recursive_mutex> rhs_lk(r.m_lock_attributes, std::adopt_lock);     
+        GenRunInfoData tdata;
+        r.write_data(tdata);
+        read_data(tdata);
+     }
+     return *this;
+    }
+
 } // namespace HepMC

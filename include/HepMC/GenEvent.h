@@ -56,6 +56,8 @@ public:
     /// @brief Destructor 
     ~GenEvent();
 
+    /// @brief Assignment operator
+     GenEvent& operator=(const GenEvent&);
  
     /// @name Particle and vertex access
     //@{
@@ -192,9 +194,7 @@ public:
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const string &name, const shared_ptr<Attribute> &att,  const int& id = 0) {
-/*LH17:  Commented out so far
       std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
       if ( att ) {
         m_attributes[name][id] = att;
         att->m_event = this;
@@ -220,11 +220,8 @@ public:
 
     /// @brief Get a copy of the list of attributes
     /// @todo To avoid thread issues, this is returns a copy. Better solution may be needed.
-    const std::map< string, std::map<int, shared_ptr<Attribute> > >& attributes() const {
-/*LH17:  Commented out so far
-       std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
+std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
        std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
        return m_attributes;
     }
 
@@ -439,10 +436,8 @@ private:
     /// @brief Attribute map value type
     typedef std::map<int, shared_ptr<Attribute> >::value_type att_val_t;
 
-/*LH17 commented 
     /// @breif Mutex lock for the m_attibutes map.
     mutable std::recursive_mutex m_lock_attributes;
-*/
     #endif // __CINT__
 
     //@}
@@ -459,9 +454,7 @@ private:
 
 template<class T>
 shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const {
-/*LH17 commented 
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
     std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 =
       m_attributes.find(name);
     if( i1 == m_attributes.end() ) {
