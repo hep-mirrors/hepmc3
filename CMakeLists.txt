@@ -20,14 +20,12 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 option(HEPMC_ENABLE_ROOTIO "Enables building with ROOT O/I." ON)
 option(HEPMC_BUILD_EXAMPLES "Enables building of examples." OFF)
-option(HEPMC_ENABLE_VALIDATION "Enables building of validation executables." OFF)
 option(HEPMC_ENABLE_TEST "Enables building of tests." OFF)
 option(HEPMC_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces." OFF)
 
 
 message(STATUS "HepMC: HEPMC_ENABLE_ROOTIO         ${HEPMC_ENABLE_ROOTIO}") 
 message(STATUS "HepMC: HEPMC_BUILD_EXAMPLES        ${HEPMC_BUILD_EXAMPLES}") 
-message(STATUS "HepMC: HEPMC_ENABLE_VALIDATION     ${HEPMC_ENABLE_VALIDATION}") 
 message(STATUS "HepMC: HEPMC_ENABLE_TEST           ${HEPMC_ENABLE_TEST}") 
 message(STATUS "HepMC: HEPMC_INSTALL_INTERFACES    ${HEPMC_INSTALL_INTERFACES}")
 
@@ -178,10 +176,6 @@ if(HEPMC_BUILD_EXAMPLES)
 endif()
 
 #------------------------------------------------------------------------------
-# Add the validation subdirectories
-if(HEPMC_ENABLE_VALIDATION)
-  add_subdirectory(validation)
-endif()
 if(HEPMC_ENABLE_TEST)
   ENABLE_TESTING()
   add_subdirectory(test)
