@@ -18,7 +18,7 @@ namespace HepMC {
 
 
 GenParticle::GenParticle( const FourVector &mom, const int& pidin, const int& stat):
-m_event(NULL),
+m_event(nullptr),
 m_id(0) {
     m_data.pid               = pidin;
     m_data.momentum          = mom;
@@ -28,7 +28,7 @@ m_id(0) {
 }
 
 GenParticle::GenParticle( const GenParticleData &dat ):
-m_event(NULL),
+m_event(nullptr),
 m_id(0),
 m_data(dat) {
 }

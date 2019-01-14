@@ -18,6 +18,7 @@
 #endif
 #if !defined(HEPMC_HAS_CXX11) && (__GNUC__) && (__cplusplus) && (__GXX_EXPERIMENTAL_CXX0X__)
 #define HEPMC_HAS_CXX0X_GCC_ONLY
+#define nullptr NULL
 #endif
 
 

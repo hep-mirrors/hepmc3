@@ -24,8 +24,8 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, shared_ptr<Gen
     : m_file(filename),
       m_stream(&m_file),
       m_precision(16),
-      m_buffer(NULL),
-      m_cursor(NULL),
+      m_buffer(nullptr),
+      m_cursor(nullptr),
       m_buffer_size( 256*1024 ),
       m_particle_counter(0)
 {
@@ -47,8 +47,8 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, shared_ptr<GenRunInfo
     : m_file(),
       m_stream(&stream),
       m_precision(16),
-      m_buffer(NULL),
-      m_cursor(NULL),
+      m_buffer(nullptr),
+      m_cursor(nullptr),
       m_buffer_size( 256*1024 ),
       m_particle_counter(0)
 {

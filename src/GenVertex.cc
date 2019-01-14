@@ -19,14 +19,14 @@ namespace HepMC {
 
 
 GenVertex::GenVertex( const FourVector& pos):
-m_event(NULL),
+m_event(nullptr),
 m_id(0) {
     m_data.status   = 0;
     m_data.position = pos;
 }
 
 GenVertex::GenVertex( const GenVertexData &dat):
-m_event(NULL),
+m_event(nullptr),
 m_id(0),
 m_data(dat) {
 }

@@ -56,7 +56,7 @@ namespace HepMC {
 
         /// Check if this vertex belongs to an event
         /// @todo Needed? Wouldn't it be good enough to just rely on user testing nullness of parent_event()?
-        bool in_event() const { return parent_event() != NULL; }
+        bool in_event() const { return parent_event() != nullptr; }
 
         /// Get the vertex unique identifier
         ///

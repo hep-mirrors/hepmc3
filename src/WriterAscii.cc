@@ -23,8 +23,8 @@ WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run
   : m_file(filename),
     m_stream(&m_file),
     m_precision(16),
-    m_buffer(NULL),
-    m_cursor(NULL),
+    m_buffer(nullptr),
+    m_cursor(nullptr),
     m_buffer_size( 256*1024 )
 {
     set_run_info(run);
@@ -42,8 +42,8 @@ WriterAscii::WriterAscii(std::ostream &stream, shared_ptr<GenRunInfo> run)
   : m_file(),
     m_stream(&stream),
     m_precision(16),
-    m_buffer(NULL),
-    m_cursor(NULL),
+    m_buffer(nullptr),
+    m_cursor(nullptr),
     m_buffer_size( 256*1024 )
 
 {

@@ -67,10 +67,10 @@ GenEvent::GenEvent(const GenEvent&e) {
 
 GenEvent::~GenEvent() {
     for ( std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator attm=m_attributes.begin();attm!=m_attributes.end();++attm)
-    for ( std::map<int, shared_ptr<Attribute> >::iterator att=attm->second.begin();att!=attm->second.end();++att) att->second->m_event = NULL;
+    for ( std::map<int, shared_ptr<Attribute> >::iterator att=attm->second.begin();att!=attm->second.end();++att) att->second->m_event = nullptr;
      
-    for  ( std::vector<GenVertexPtr>::iterator v=m_vertices.begin();v!=m_vertices.end();++v ) if ((*v)->m_event==this) (*v)->m_event=NULL;
-    for  ( std::vector<GenParticlePtr>::iterator p=m_particles.begin();p!=m_particles.end();++p ) if ((*p)->m_event==this)  (*p)->m_event=NULL;
+    for  ( std::vector<GenVertexPtr>::iterator v=m_vertices.begin();v!=m_vertices.end();++v ) if ((*v)->m_event==this) (*v)->m_event=nullptr;
+    for  ( std::vector<GenParticlePtr>::iterator p=m_particles.begin();p!=m_particles.end();++p ) if ((*p)->m_event==this)  (*p)->m_event=nullptr;
 }
 
 GenEvent& GenEvent::operator=(const HepMC::GenEvent& e){
@@ -184,7 +184,7 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     }
 
     // Finally - set parent event and id of this particle to 0
-    p->m_event = NULL;
+    p->m_event = nullptr;
     p->m_id    = 0;
 }
 
@@ -261,7 +261,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     }
 
     // Finally - set parent event and id of this vertex to 0
-    v->m_event = NULL;
+    v->m_event = nullptr;
     v->m_id    = 0;
 #else
     vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
@@ -287,7 +287,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     }
 
     // Finally - set parent event and id of this vertex to 0
-    v->m_event = NULL;
+    v->m_event = nullptr;
     v->m_id    = 0;
 #endif
 }

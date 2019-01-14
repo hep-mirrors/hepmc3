@@ -41,7 +41,7 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
     m_event_ghost= new GenEvent();
 }
 
-ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=NULL; } if (!m_isstream) close(); }
+ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr; } if (!m_isstream) close(); }
 
 
 bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
@@ -202,10 +202,10 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Remove vertices with no incoming particles or no outgoing particles
     for(unsigned int i=0; i<m_vertex_cache.size(); ++i) {
         if( m_vertex_cache[i]->particles_in().size() == 0 ) {
-            m_vertex_cache[i] = NULL;
+            m_vertex_cache[i] = nullptr;
         }
         else if( m_vertex_cache[i]->particles_out().size() == 0 ) {
-            m_vertex_cache[i] = NULL;
+            m_vertex_cache[i] = nullptr;
         }
     }
 
@@ -642,7 +642,7 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
 }
 
 void ReaderAsciiHepMC2::close() {
-    if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=NULL;}
+    if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr;}
     if( !m_file.is_open() ) return;
     m_file.close();
 }
