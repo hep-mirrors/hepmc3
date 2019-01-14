@@ -78,6 +78,12 @@ void GenVertex::remove_particle_out( GenParticlePtr p ) {
     m_particles_out.erase( std::remove( m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
 }
 
+void GenVertex::set_id(int id){
+    m_id = id;
+    return;
+}
+
+  
 vector<ConstGenParticlePtr> GenVertex::particles_in()const{
   return vector<ConstGenParticlePtr>(m_particles_in.begin(), m_particles_in.end());
 }

@@ -1,4 +1,8 @@
   --------------------------  HepMC3.0.0  --------------------------
+2019-01-14 James Monk
+  * Merge changes from Master for thread locking onto const-correct
+  * Fix compilation problems with tests
+
 2018-12-17 James Monk
   * ReaderFactory: new func to return Reader ptr of appropriate type for HepMC v2 or v3 file
   * Print.h: Remove delcaration of unimplemented function
