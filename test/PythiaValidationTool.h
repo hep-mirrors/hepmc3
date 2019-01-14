@@ -6,9 +6,14 @@
 #ifndef PYTHIA_VALIDATION_TOOL_H
 #define PYTHIA_VALIDATION_TOOL_H
 
-#ifdef PYTHIA8_HEPMC2
+#ifdef HEPMC2
 #include "HepMC/GenEvent.h"
+#include "Pythia8/Pythia.h"
+#ifdef  PYTHIA_VERSION_INTEGER
+#include "Pythia8Plugins/HepMC2.h"
+#else
 #include "Pythia8/Pythia8ToHepMC.h"
+#endif
 #else
 #include "HepMC/GenEvent.h"
 #include "Pythia8/Pythia8ToHepMC3.h"
@@ -21,7 +26,7 @@
 
 class PythiaValidationTool : public ValidationTool {
 public:
-    PythiaValidationTool( const string &filename );
+    PythiaValidationTool( const std::string &filename );
 
     const std::string name()      { return "pythia8"; }
     const std::string long_name() { return name() + " config file: " + m_filename; }

@@ -6,13 +6,13 @@
 #ifndef MCTESTER_TOOL_H
 #define MCTESTER_TOOL_H
 
-#ifdef MCTESTER_HEPMC2
+#ifdef  HEPMC2
 #include "HepMC/GenEvent.h"
 #include "HepMCEvent.H"
 #else
 #include "HepMC/GenEvent.h"
 #include "HepMC3Event.h"
-#endif // ifdef MCTESTER_HEPMC2
+#endif // ifdef HEPMC2
 
 #include "ValidationTool.h"
 

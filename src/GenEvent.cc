@@ -62,9 +62,15 @@ void GenEvent::add_particle( GenParticlePtr p ) {
 
 
 GenEvent::GenEvent(const GenEvent&e) {
+    if (this != &e)
+    {
+    std::lock(m_lock_attributes, e.m_lock_attributes);
+    std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
+    std::lock_guard<std::recursive_mutex> rhs_lk(e.m_lock_attributes, std::adopt_lock);  
     GenEventData tdata;
     e.write_data(tdata);
     read_data(tdata);
+}
 }
 
 GenEvent::~GenEvent() {
@@ -75,6 +81,18 @@ GenEvent::~GenEvent() {
     for  ( std::vector<GenParticlePtr>::iterator p=m_particles.begin();p!=m_particles.end();++p ) if ((*p)->m_event==this)  (*p)->m_event=nullptr;
 }
 
+GenEvent& GenEvent::operator=(const HepMC::GenEvent& e){
+     if (this != &e)
+     {
+        std::lock(m_lock_attributes, e.m_lock_attributes);
+        std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
+        std::lock_guard<std::recursive_mutex> rhs_lk(e.m_lock_attributes, std::adopt_lock);     
+        GenEventData tdata;
+        e.write_data(tdata);
+        read_data(tdata);
+     }
+     return *this;
+} 
 
 
 // void GenEvent::add_vertex( const GenVertexPtr &v ) {
@@ -124,9 +142,7 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
 
     // Remove attributes of this particle
-/* LH17 Commented so far
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
     vector<string> atts = p->attribute_names();
     FOREACH( string s, atts) {
         p->remove_attribute(s);
@@ -220,10 +236,8 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
 
     int idx = -v->id();
     vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
-/* LH17 Commented so far
     // Remove attributes of this vertex
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
     vector<string> atts = v->attribute_names();
     FOREACH( string s, atts) {
         v->remove_attribute(s);
@@ -395,7 +409,7 @@ return;
 }
 
 
-void GenEvent::reserve(unsigned int parts, unsigned int verts) {
+void GenEvent::reserve(const size_t& parts, const size_t& verts) {
     m_particles.reserve(parts);
     m_vertices.reserve(verts);
 }
@@ -445,9 +459,7 @@ void GenEvent::shift_position_by( const FourVector & delta ) {
 
 
 void GenEvent::clear() {
-/* LH17 Commented so far
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
     m_event_number = 0;
     m_rootvertex = make_shared<GenVertex>();
     m_weights.clear();
@@ -457,24 +469,10 @@ void GenEvent::clear() {
 }
 
 
-//
-// Deprecated functions
-//
-
-void GenEvent::add_particle( GenParticle *p ) {
-    add_particle( GenParticlePtr(p) );
-}
 
 
-void GenEvent::add_vertex( GenVertex *v ) {
-    add_vertex( GenVertexPtr(v) );
-}
-
-
-void GenEvent::remove_attribute(const string &name, int id) {
-/* LH17 Commented so far
+void GenEvent::remove_attribute(const string &name,  const int& id) {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
     map< string, map<int, shared_ptr<Attribute> > >::iterator i1 =
       m_attributes.find(name);
     if( i1 == m_attributes.end() ) return;
@@ -485,7 +483,7 @@ void GenEvent::remove_attribute(const string &name, int id) {
     i1->second.erase(i2);
 }
 
-vector<string> GenEvent::attribute_names(int id) const {
+vector<string> GenEvent::attribute_names( const int& id) const {
     vector<string> results;
 
     FOREACH( const att_key_t& vt1, m_attributes ) {
@@ -604,6 +602,19 @@ void GenEvent::read_data(const GenEventData &data) {
 
 #ifndef HEPMC_NO_DEPRECATED
 
+//
+// Deprecated functions
+//
+
+void GenEvent::add_particle( GenParticle *p ) {
+    add_particle( GenParticlePtr(p) );
+}
+
+
+void GenEvent::add_vertex( GenVertex *v ) {
+    add_vertex( GenVertexPtr(v) );
+}
+
 bool GenEvent::valid_beam_particles() const {
     /// @todo Change this definition to require status = 4... and in principle there don't have to be two of them
     return (m_rootvertex->particles_out().size()==2);
@@ -632,10 +643,8 @@ void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) 
 
 #endif
 
-string GenEvent::attribute_as_string(const string &name, int id) const {
-/* LH17 Commented so far
+string GenEvent::attribute_as_string(const string &name, const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
     std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 =
       m_attributes.find(name);
     if( i1 == m_attributes.end() ) {

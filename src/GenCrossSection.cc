@@ -17,28 +17,35 @@
 
 namespace HepMC {
 
-void GenCrossSection::setup() {
-    if ( event() ) {
-        cross_sections = vector<double>(event()->weights().size(),
-                                        cross_section);
-        cross_section_errors = vector<double>(event()->weights().size(),
-                                              cross_section_error);
-    }
-}
 
 int GenCrossSection::windx(string wName) const {
     if ( !event() || !event()->run_info() ) return 0;
     return event()->run_info()->weight_index(wName);
 }
 
+void GenCrossSection::set_cross_section(const double& xs, const double& xs_err,const long& n_acc , const long& n_att ) {
+    double cross_section       = xs;
+    double cross_section_error = xs_err;
+	accepted_events     = n_acc;
+	attempted_events    = n_att;
+    size_t N=1;
+    if ( event() ) N=std::max(event()->weights().size(),N); 
+    cross_sections = vector<double>(N, cross_section);
+    cross_section_errors = vector<double>(N, cross_section_error);
+}
+
+
 bool GenCrossSection::from_string(const string &att) {
     const char *cursor = att.data();
+    cross_sections.clear();
+    cross_section_errors.clear();    
     
-    cross_section = atof(cursor);
+
+    double cross_section = atof(cursor);
     cross_sections.push_back(cross_section);
 
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
-    cross_section_error = atof(cursor);
+    double cross_section_error = atof(cursor);
     cross_section_errors.push_back(cross_section_error);
 
     if( !(cursor = strchr(cursor+1,' ')) ) accepted_events = -1;
@@ -47,15 +54,22 @@ bool GenCrossSection::from_string(const string &att) {
     if( !(cursor = strchr(cursor+1,' ')) ) attempted_events = -1;
     else attempted_events = atof(cursor);
 
-    setup();
-
-    for (int i = 0, N = cross_sections.size(); i < N; ++i ) {
+    size_t N=1;
+    if ( event() ) N=std::max(event()->weights().size(),N);  
+    const size_t max_n_cross_sections=1000;
+    while (cross_sections.size()<max_n_cross_sections) {
         if( !(cursor = strchr(cursor+1,' ')) ) break;
-        cross_sections[i] = atof(cursor);
+        cross_sections.push_back(atof(cursor));
         if( !(cursor = strchr(cursor+1,' ')) ) break;
-        cross_section_errors[i] = atof(cursor);
+        cross_section_errors.push_back(atof(cursor));
     }
-
+    if (cross_sections.size()>=max_n_cross_sections)
+    WARNING( "GenCrossSection::from_string: too many optional cross-sections  N="<<cross_sections.size()<<" or ill-formed input:"<<att )
+    if (cross_sections.size()!=N)
+//  So far it is not clear if there should be a warning or not 
+//  WARNING( "GenCrossSection::from_string: optional cross-sections are available not for all weights")    
+    for (size_t i=cross_sections.size();i<N;i++) {cross_sections[i]=cross_section; cross_section_errors[i]=cross_section_error;}
+    
     return true;
 }
 
@@ -63,14 +77,14 @@ bool GenCrossSection::to_string(string &att) const {
     std::ostringstream os;
 
     os << std::setprecision(8) << std::scientific
-       << cross_section << " "
-       << cross_section_error << " "
+       << cross_sections.at(0) << " "
+       << cross_section_errors.at(0) << " "
        << accepted_events << " "
        << attempted_events;
 
-    for (int i = 0, N = cross_sections.size(); i < N; ++i )
-        os << " " << cross_sections[i]
-           << " " << cross_section_errors[i];
+    for (size_t i = 1; i < cross_sections.size(); ++i )
+        os << " " << cross_sections.at(0)
+           << " " << cross_section_errors.at(0);
 
     att = os.str();
 
@@ -86,8 +100,11 @@ bool GenCrossSection::operator!=( const GenCrossSection& a ) const {
 }
 
 bool GenCrossSection::is_valid() const {
-    if( cross_section       != 0 ) return true;
-    if( cross_section_error != 0 ) return true;
+    if( cross_sections.size()       == 0 ) return false;
+    if( cross_section_errors.size() == 0 ) return false;
+    if( cross_section_errors.size()!=cross_sections.size() ) return false;
+    if( cross_sections.at(0)       != 0 ) return true;
+    if( cross_section_errors.at(0) != 0 ) return true;
     return false;
 }
 

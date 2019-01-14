@@ -60,6 +60,8 @@ public:
     /// @brief Destructor 
     ~GenEvent();
 
+    /// @brief Assignment operator
+     GenEvent& operator=(const GenEvent&);
  
     /// @name Particle and vertex access
     //@{
@@ -87,7 +89,7 @@ public:
     std::vector<double>& weights() { return m_weights; }
     /// Get event weight accessed by index (or the canonical/first one if there is no argument)
     /// @note It's the user's responsibility to ensure that the given index exists!
-    double weight(size_t index=0) const { return weights().at(index); }
+    double weight(const size_t& index=0) const { return weights().at(index); }
     /// Get event weight accessed by weight name
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
@@ -133,7 +135,7 @@ public:
     /// @brief Get event number
     int  event_number() const { return m_event_number; }
     /// @brief Set event number
-    void set_event_number(int num) { m_event_number = num; }
+    void set_event_number(const int& num) { m_event_number = num; }
 
     /// @brief Get momentum unit
     const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit; }
@@ -198,38 +200,35 @@ public:
     ///
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
-    void add_attribute(const string &name, const shared_ptr<Attribute> &att, int id = 0) {
-/*LH17:  Commented out so far
+    void add_attribute(const string &name, const shared_ptr<Attribute> &att,  const int& id = 0) {
       std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
       if ( att ) {
         m_attributes[name][id] = att;
         att->m_event = this;
         if ( id > 0 && id <= int(particles().size()) )
           att->m_particle = particles()[id - 1];
+        if ( id < 0 && -id <= int(vertices().size()) )
+          att->m_vertex = vertices()[-id - 1];
       }
    }
 
     /// @brief Remove attribute
-    void remove_attribute(const string &name, int id = 0);
+    void remove_attribute(const string &name,  const int& id = 0);
 
     /// @brief Get attribute of type T
     template<class T>
-    shared_ptr<T> attribute(const string &name, int id = 0) const;
+    shared_ptr<T> attribute(const string &name,  const int& id = 0) const;
 
     /// @brief Get attribute of any type as string
-    string attribute_as_string(const string &name, int id = 0) const;
+    string attribute_as_string(const string &name,  const int& id = 0) const;
 
     /// @brief Get list of attribute names
-    std::vector<string> attribute_names(int id = 0) const;
+    std::vector<string> attribute_names( const int& id = 0) const;
 
     /// @brief Get a copy of the list of attributes
     /// @todo To avoid thread issues, this is returns a copy. Better solution may be needed.
-    const std::map< string, std::map<int, shared_ptr<Attribute> > >& attributes() const {
-/*LH17:  Commented out so far
-       std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
+std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
        std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
        return m_attributes;
     }
 
@@ -279,7 +278,7 @@ public:
     /// @brief Reserve memory for particles and vertices
     ///
     /// Helps optimize event creation when size of the event is known beforehand
-    void reserve(unsigned int particles, unsigned int vertices = 0);
+    void reserve(const size_t& particles, const size_t& vertices = 0);
 
     /// @brief Remove contents of this event
     void clear();
@@ -444,10 +443,8 @@ private:
     /// @brief Attribute map value type
     typedef std::map<int, shared_ptr<Attribute> >::value_type att_val_t;
 
-/*LH17 commented 
     /// @breif Mutex lock for the m_attibutes map.
     mutable std::recursive_mutex m_lock_attributes;
-*/
     #endif // __CINT__
 
     //@}
@@ -463,10 +460,8 @@ private:
 //
 
 template<class T>
-shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
-/*LH17 commented 
+shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-*/
     std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 =
       m_attributes.find(name);
     if( i1 == m_attributes.end() ) {
@@ -483,8 +478,11 @@ shared_ptr<T> GenEvent::attribute(const std::string &name, int id) const {
 
         shared_ptr<T> att = make_shared<T>();
         att->m_event = this;
-        if ( id > 0 && id < int(particles().size()) )
+
+        if ( id > 0 && id <= int(particles().size()) )
           att->m_particle = m_particles[id - 1];
+        if ( id < 0 && -id <= int(vertices().size()) )
+          att->m_vertex = m_vertices[-id - 1];
         if ( att->from_string(i2->second->unparsed_string()) &&
              att->init() ) {
             // update map with new pointer

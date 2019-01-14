@@ -17,7 +17,14 @@
         HepMC/PdfInfo.h      ->  HepMC/GenPdfInfo.h     (now a POD struct)
         HepMC/SimpleVector.h ->  HepMC/FourVector.h     (ThreeVector class removed)
     @endcode
-
+    The structure of GenCrossSection class has been changed to handle multiple 
+    values of cross-sections. The cross-section values and errors (uncertainties) 
+    can be accessed only by public functions, the corresponding data members are 
+    private. By default, the number of cross-section values in every event is equal 
+    to the number of event weights.  Accordingly, each cross-section value can be 
+    accessed using the corresponding event weight name (std::string) or event 
+    weight index (int).
+     
     Following header files are no longer available:
 
     @code{.cpp}

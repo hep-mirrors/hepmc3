@@ -5,7 +5,7 @@
 //
 #include "PythiaValidationTool.h"
 
-PythiaValidationTool::PythiaValidationTool( const string &filename ):m_filename(filename),m_timer("pythia8 conversion time") {
+PythiaValidationTool::PythiaValidationTool( const std::string &filename ):m_filename(filename),m_timer("pythia8 conversion time") {
     m_pythia.readFile(m_filename);
 }
 
@@ -25,5 +25,10 @@ int PythiaValidationTool::process(GenEvent &hepmc) {
 }
 
 void PythiaValidationTool::finalize() {
-    m_pythia.statistics();
+#ifdef  PYTHIA_VERSION_INTEGER
+if  (PYTHIA_VERSION_INTEGER>8200)  m_pythia.stat();
+#else 
+m_pythia.statistics();
+#endif    
+    
 }

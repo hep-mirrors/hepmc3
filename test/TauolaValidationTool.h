@@ -6,13 +6,13 @@
 #ifndef TAUOLA_VALIDATION_TOOL_H
 #define TAUOLA_VALIDATION_TOOL_H
 
-#ifdef TAUOLAPP_HEPMC2
+#ifdef HEPMC2
 #include "Tauola/TauolaHepMCEvent.h"
 #include "HepMC/GenEvent.h"
 #else
 #include "Tauola/TauolaHepMC3Event.h"
 #include "HepMC/GenEvent.h"
-#endif // ifdef TAUOLAPP_HEPMC2
+#endif // ifdef HEPMC2
 
 #include "ValidationTool.h"
 #include "Timer.h"

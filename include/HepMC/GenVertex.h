@@ -212,7 +212,6 @@ namespace HepMC {
 
         /// @name Fields
         //@{
-        /// @todo why is this a raw ptr?
         GenEvent       *m_event;  //!< Parent event
         int             m_id;     //!< Vertex id
         GenVertexData   m_data;   //!< Vertex data

@@ -1,7 +1,7 @@
 #--------
 #-root IO
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} ${ROOT_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} ${ROOT_INCLUDE_DIRS})
 
 #----------------------------------------------------------------------------
 # Generate dictionaries
@@ -13,7 +13,6 @@ set_property(TARGET HepMCrootIO PROPERTY POSITION_INDEPENDENT_CODE 1)
 
 target_link_libraries(HepMCrootIO ${ROOT_LIBRARIES} HepMC)
 set_target_properties(HepMCrootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-
 
 # installs 
 install(TARGETS HepMCrootIO DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT rootIO-libs)

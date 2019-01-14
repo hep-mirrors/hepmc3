@@ -100,7 +100,7 @@ public:
 //
 public:
     /** @brief Check if this attribute is parsed */
-    bool is_parsed() { return m_is_parsed; }
+    bool is_parsed() const { return m_is_parsed; }
 
     /** @brief Get unparsed string */
     const string& unparsed_string() const { return m_string; }
@@ -115,11 +115,21 @@ public:
         return m_particle;
     }
 
-  /** return the GenParticle to which this Attribute belongs, if at all. */
-  ConstGenParticlePtr particle() const {
-    return std::const_pointer_cast<GenParticle>(m_particle);
+    /** return the GenParticle to which this Attribute belongs, if at all. */
+    ConstGenParticlePtr particle() const {
+      return std::const_pointer_cast<GenParticle>(m_particle);
+    }
+
+  /** return the GenVertex to which this Attribute belongs, if at all. */
+  GenVertexPtr vertex() {
+    return m_vertex;
   }
   
+    /** return the GenVertex to which this Attribute belongs, if at all. */
+    ConstGenVertexPtr vertex() const {
+        return std::const_pointer_cast<GenVertex>(m_vertex);
+    }
+
 protected:
     /** @brief Set is_parsed flag */
     void set_is_parsed(bool flag) { m_is_parsed = flag; }
@@ -136,6 +146,7 @@ private:
     const GenEvent * m_event;       //!< Possibility to be aware of the
                                     //!  controlling GenEvent object.
     GenParticlePtr m_particle; //!< Particle to which assigned.
+    GenVertexPtr m_vertex;      //!< Vertex to which assigned.
 };
 
 /**
