@@ -35,7 +35,7 @@ public:
     AssociatedParticle() {}
 
     /** @brief Constructor initializing attribute value */
-    AssociatedParticle(GenParticlePtr p)
+    AssociatedParticle(ConstGenParticlePtr p)
         : IntAttribute(p->id()), m_associated(p) {}
 
     /** @brief Implementation of Attribute::from_string */
@@ -53,19 +53,19 @@ public:
     }
 
     /** @brief get a pointer to the associated particle. */
-    GenParticlePtr associated() const {
+    ConstGenParticlePtr associated() const {
         return m_associated;
     }
 
     /** @brief set the value associated to this Attribute. */
-    void set_associated(GenParticlePtr p) {
+    void set_associated(ConstGenParticlePtr p) {
         IntAttribute::set_value(p->id());
         m_associated = p;
     }
 
 private:
     
-    GenParticlePtr m_associated; ///< The associated particle.
+    ConstGenParticlePtr m_associated; ///< The associated particle.
 
 };
 

@@ -11,8 +11,9 @@
 #include "HepMC/GenEvent.h"
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
-#include "HepMC/Search/FindParticles.h"
 #include "HepMC/Print.h"
+#include "HepMC/Search/Selector.h"
+#include "HepMC/Search/Relatives.h"
 
 using namespace HepMC;
 using namespace std;
@@ -93,38 +94,34 @@ int main() {
     // 1)
     cout << endl << "Find all stable particles: " << endl;
 
-    FindParticles search(evt, FIND_ALL, IS_STABLE);
-
-    FOREACH( const GenParticlePtr &p, search.results() ) {
-        Print::line(p);
+    for(ConstGenParticlePtr p: HepMC::applyFilter(Selector::STATUS == 1, evt.particles())){
+      Print::line(p);
     }
 
     // 2)
     cout << endl << "Find all ancestors of particle with id " << p5->id() << ": " << endl;
 
-    FindParticles search2(p5, FIND_ALL_ANCESTORS);
-
-    FOREACH( const GenParticlePtr &p, search2.results() ) {
-        Print::line(p);
+    for(ConstGenParticlePtr p: HepMC::Relatives::ANCESTORS(p5)){
+      Print::line(p);
     }
-
+  
     // 3)
     cout << endl << "Find stable descendants of particle with id " << p4->id() << ": " << endl;
     cout<<"We check both for STATUS == 1 (equivalent of IS_STABLE) and no end vertex, just to be safe" << endl;
 
-    FindParticles search3(p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX);
-
-    FOREACH( const GenParticlePtr &p, search3.results() ) {
-        Print::line(p);
+    HepMC::Filter has_end_vtx = [](ConstGenParticlePtr input)->bool{return (bool)input->end_vertex();};
+  
+    vector<GenParticlePtr> results3 = applyFilter(Selector::STATUS==1 && has_end_vtx, Relatives::DESCENDANTS(p4));
+    for(ConstGenParticlePtr p: results3){
+      Print::line(p);
     }
-
+  
     // 3b)
     cout << endl << "Narrow down results of previous search to quarks only: " << endl;
 
-    search3.narrow_down( PDG_ID >= -6 && PDG_ID <= 6 );
-
-    FOREACH( const GenParticlePtr &p, search3.results() ) {
-        Print::line(p);
+    // note the use of HepMC::abs to obtain the absolute value of pdg_id :)
+    for(ConstGenParticlePtr p: applyFilter( *HepMC::abs(Selector::PDG_ID) <= 6, results3)){
+      Print::line(p);
     }
 
     //
@@ -194,30 +191,39 @@ int main() {
     cout << endl << "Find all particles with attribute 'tool' "<< endl;
     cout << "(should return particles 2,4,6):" << endl;
 
-    FindParticles search_attributes(evt, FIND_ALL, ATTRIBUTE("tool") );
-
-    FOREACH( const GenParticlePtr &p, search_attributes.results() ) {
-        Print::line(p);
+    /// @todo can we add some utility funcs to simplify creation of Features from Attributes and check they exist.
+    /// Features and Attributes are quite similar concepts anyway, can they be unified (but Features can also be
+    ///  non-attribute-like e.g. pT, rapidity or any quantity it is possible to obtain from a particle)
+  /*
+    Filter toolExists = [](ConstGenParticlePtr  p)->bool{return p->attribute_as_string("tool").length() != 0;};
+    Filter otherExists = [](ConstGenParticlePtr  p)->bool{return p->attribute_as_string("other").length() != 0;};
+    Feature<const IntAttribute> tool([](ConstGenParticlePtr p)->const IntAttribute{return *(p->attribute<const IntAttribute>("tool"));});
+    Feature<const StringAttribute> other([](ConstGenParticlePtr p)->const StringAttribute{return *(p->attribute<const StringAttribute>("other"));});
+  
+    for(ConstGenParticlePtr p: applyFilter(toolExists, evt.particles())){
+      Print::line(p);
     }
 
     cout << endl << "Find all particles with attribute 'tool' equal 1 "<< endl;
     cout << "(should return particles 2,4):" << endl;
 
-    FindParticles search_attributes2(evt, FIND_ALL, ATTRIBUTE("tool") == tool1 );
-
-    FOREACH( const GenParticlePtr &p, search_attributes2.results() ) {
-        Print::line(p);
+    for(ConstGenParticlePtr p: applyFilter(toolExists && tool == 1, evt.particles())){
+      Print::line(p);
     }
 
     cout << endl << "Find all particles with a string attribute 'other' equal 'test attribute' "<< endl;
     cout << "(should return particle 2):" << endl;
 
+    for(ConstGenParticlePtr p: applyFilter(otherExists && (other == StringAttribute("test_attribute")), evt.particles())){
+      Print::line(p);
+    }
+    /*
     FindParticles search_attributes3(evt, FIND_ALL, ATTRIBUTE("other") == "test attribute" );
 
     FOREACH( const GenParticlePtr &p, search_attributes3.results() ) {
         Print::line(p);
     }
-
+*/
     cout << endl << "Offsetting event position by 5,5,5,5" << endl;
 
     evt.shift_position_by( FourVector(5,5,5,5) );

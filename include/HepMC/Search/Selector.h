@@ -141,5 +141,10 @@ namespace HepMC{
     Feature<Feature_type> m_internal;
     
   };
+  
+  ConstSelectorPtr abs(const Selector &input){
+    return input.abs();
+  }
+  
 }
 #endif
