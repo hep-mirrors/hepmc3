@@ -26,8 +26,10 @@
 #include <iomanip>
 
 #include "HepMC/Common.h"
-#include "HepMC/Data/SmartPointer.h"
-
+//FIXME, change the names
+#include "HepMC/GenParticle.fh"
+#include "HepMC/GenVertex.fh"
+//
 using std::string;
 
 namespace HepMC {
@@ -62,8 +64,8 @@ protected:
      *
      *  @note There should be no need for user class to ever use this constructor
      */
-    //Note: m_event should be set to nullptr in case event is deleted!
-    Attribute(const string &st):m_is_parsed(false),m_string(st) { m_event=nullptr; }
+    //Note: m_event should be set to nullptr n case event is deleted!
+    explicit Attribute(const string &st):m_is_parsed(false),m_string(st) { m_event=nullptr; }
 
     /** @brief GenEvent is a friend */
     friend class GenEvent;
@@ -110,13 +112,23 @@ public:
     }
 
     /** return the GenParticle to which this Attribute belongs, if at all. */
-    GenParticlePtr particle() const {
+    GenParticlePtr particle() {
         return m_particle;
     }
 
+    /** return the GenParticle to which this Attribute belongs, if at all. */
+    ConstGenParticlePtr particle() const {
+      return std::const_pointer_cast<GenParticle>(m_particle);
+    }
+
+  /** return the GenVertex to which this Attribute belongs, if at all. */
+  GenVertexPtr vertex() {
+    return m_vertex;
+  }
+  
     /** return the GenVertex to which this Attribute belongs, if at all. */
-    GenVertexPtr vertex() const {
-        return m_vertex;
+    ConstGenVertexPtr vertex() const {
+        return std::const_pointer_cast<GenVertex>(m_vertex);
     }
 
 protected:

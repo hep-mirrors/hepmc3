@@ -104,14 +104,14 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     //Find beam particles
     std::vector<int> beams;
     int idbeam=0;
-    FOREACH ( const GenVertexPtr &v, evt.vertices() )
+    for(ConstGenVertexPtr v: evt.vertices() )
     {
-        FOREACH ( const GenParticlePtr &p, v->particles_in())
+        for(ConstGenParticlePtr p: v->particles_in())
         {
             if (!p->production_vertex())         { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
             else if (p->production_vertex()->id()==0) { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
         }
-        FOREACH ( const GenParticlePtr &p, v->particles_out()) { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
+        for( ConstGenParticlePtr p: v->particles_out()) { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
     }
     //
     int idbeam1=10000;
@@ -193,12 +193,12 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         }
     }
     m_particle_counter=0;
-    FOREACH ( const GenVertexPtr &v, evt.vertices() )
+    for(ConstGenVertexPtr v: evt.vertices() )
     {
         int production_vertex = 0;
         production_vertex=v->id();
         write_vertex(v);
-        FOREACH ( const GenParticlePtr &p, v->particles_in())
+        for(ConstGenParticlePtr p: v->particles_in())
         {
             if (!p->production_vertex()) write_particle( p, production_vertex );
             else
@@ -206,7 +206,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
                     if (p->production_vertex()->id()==0)write_particle( p, production_vertex );
                 }
         }
-        FOREACH ( const GenParticlePtr &p, v->particles_out())
+        for(ConstGenParticlePtr p: v->particles_out())
         write_particle( p, production_vertex );
     }
 
@@ -259,7 +259,7 @@ string WriterAsciiHepMC2::escape(const string& s) const
     return ret;
 }
 
-void WriterAsciiHepMC2::write_vertex(const GenVertexPtr &v)
+void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
 {
 	std::vector<double> weights;
 	for (int i=0;i<100;i++) 
@@ -272,7 +272,7 @@ void WriterAsciiHepMC2::write_vertex(const GenVertexPtr &v)
     m_cursor += sprintf( m_cursor, "V %i %i",v->id(),v->status() );
     flush();
     int orph=0;
-    FOREACH ( const GenParticlePtr &p, v->particles_in())
+    for(ConstGenParticlePtr p: v->particles_in())
     {
         if (!p->production_vertex()) orph++;
         else
@@ -328,7 +328,7 @@ inline void WriterAsciiHepMC2::forced_flush()
 
 void WriterAsciiHepMC2::write_run_info(){}
 
-void WriterAsciiHepMC2::write_particle(const GenParticlePtr &p, int second_field)
+void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int second_field)
 {
 
     m_cursor += sprintf(m_cursor,"P %i",int(10001+m_particle_counter));

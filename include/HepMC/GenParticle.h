@@ -13,10 +13,13 @@
  *  @brief Stores particle-related information
  *
  */
-#include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Data/GenParticleData.h"
 #include "HepMC/FourVector.h"
 #include "HepMC/Common.h"
+
+
+#include "HepMC/GenParticle.fh"
+#include "HepMC/GenVertex.fh"
 
 namespace HepMC {
 
@@ -26,19 +29,17 @@ using namespace std;
 class GenEvent;
 class Attribute;
 
-
-class GenParticle {
-
-friend class GenEvent;
-friend class GenVertex;
-friend class SmartPointer<GenParticle>;
-
+class GenParticle : public std::enable_shared_from_this<GenParticle>{
+  
+  friend class GenVertex;
+  friend class GenEvent;
+  
 //
 // Constructors
 //
 public:
     /** @brief Default constructor */
-    GenParticle( const FourVector &momentum = FourVector::ZERO_VECTOR(), const int& pid = 0, const int& status = 0 );
+    GenParticle( const FourVector &momentum = FourVector::ZERO_VECTOR(), int pid = 0, int status = 0 );
 
     /** @brief Constructor based on particle data */
     GenParticle( const GenParticleData &data );
@@ -55,25 +56,34 @@ public:
 //
 public:
 
-    GenEvent*              parent_event() const { return m_event; } //!< Get parent event
+    /// @todo why is this a raw ptr and not a shared_ptr?
+    GenEvent*              parent_event() { return m_event; } //!< Get parent event
+    const GenEvent*              parent_event() const { return m_event; } //!< Get parent event
     int                    id()           const { return m_id;    } //!< Get particle id
     const GenParticleData& data()         const { return m_data;  } //!< Get particle data
 
 
-    const GenVertexPtr production_vertex() const;        //!< Get production vertex
-    const GenVertexPtr end_vertex() const;               //!< Get end vertex
-
+    ConstGenVertexPtr production_vertex() const;        //!< Get production vertex (const version)
+    ConstGenVertexPtr end_vertex() const;               //!< Get end vertex (const version)
+  
     GenVertexPtr production_vertex();        //!< Get production vertex
     GenVertexPtr end_vertex();               //!< Get end vertex
 
     /// @brief Convenience access to immediate incoming particles via production vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> parents() const;
+    vector<GenParticlePtr> parents();
+
+    /// @brief Convenience access to immediate incoming particles via production vertex (const version)
+    /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
+    vector<ConstGenParticlePtr> parents() const;
+  
+    /// @brief Convenience access to immediate outgoing particles via end vertex
+    /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
+    vector<GenParticlePtr> children();
 
     /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> children() const;
-
+    vector<ConstGenParticlePtr> children() const;
 
     int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
@@ -87,10 +97,10 @@ public:
     double generated_mass() const;
 
 
-    void set_pid(const int& pid);                         //!< Set PDG ID
-    void set_status(const int& status);                   //!< Set status code
+    void set_pid(int pid);                         //!< Set PDG ID
+    void set_status(int status);                   //!< Set status code
     void set_momentum(const FourVector& momentum); //!< Set momentum
-    void set_generated_mass(const double& m);             //!< Set generated mass
+    void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
   
     /** @brief Add an attribute to this particle

@@ -151,10 +151,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
     int lowest_vertex_id   = 0;
 
     // Print particles
-    FOREACH ( const GenParticlePtr &p, evt.particles() ) {
+    for(ConstGenParticlePtr p: evt.particles() ) {
 
         // Check to see if we need to write a vertex first
-        const GenVertexPtr &v = p->production_vertex();
+        ConstGenVertexPtr v = p->production_vertex();
         int production_vertex = 0;
 
         if (v) {
@@ -210,14 +210,14 @@ string WriterAscii::escape(const string& s)  const {
     return ret;
 }
 
-void WriterAscii::write_vertex(const GenVertexPtr &v) {
+void WriterAscii::write_vertex(ConstGenVertexPtr v) {
 
     m_cursor += sprintf( m_cursor, "V %i %i [",v->id(),v->status() );
     flush();
 
     bool printed_first = false;
 
-    FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+    for(ConstGenParticlePtr p: v->particles_in() ) {
 
         if ( !printed_first ) {
             m_cursor  += sprintf(m_cursor,"%i", p->id());
@@ -310,7 +310,7 @@ void WriterAscii::write_run_info() {
     }
 }
 
-void WriterAscii::write_particle(const GenParticlePtr &p, int second_field) {
+void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
 
     m_cursor += sprintf(m_cursor,"P %i",p->id());
     flush();

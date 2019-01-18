@@ -16,8 +16,7 @@
 
 namespace HepMC {
 
-
-GenParticle::GenParticle( const FourVector &mom, const int& pidin, const int& stat):
+GenParticle::GenParticle( const FourVector &mom, int pidin, int stat):
 m_event(nullptr),
 m_id(0) {
     m_data.pid               = pidin;
@@ -38,11 +37,11 @@ double GenParticle::generated_mass() const {
     else                   return m_data.momentum.m();
 }
 
-void GenParticle::set_pid(const int& pidin) {
+void GenParticle::set_pid(int pidin) {
     m_data.pid = pidin;
 }
 
-void GenParticle::set_status(const int& stat) {
+void GenParticle::set_status(int stat) {
     m_data.status = stat;
 }
 
@@ -50,7 +49,7 @@ void GenParticle::set_momentum(const FourVector& mom) {
     m_data.momentum = mom;
 }
 
-void GenParticle::set_generated_mass(const double& m) {
+void GenParticle::set_generated_mass(double m) {
     m_data.mass        = m;
     m_data.is_mass_set = true;
 }
@@ -64,23 +63,30 @@ GenVertexPtr GenParticle::production_vertex() {
     return m_production_vertex.lock();
 }
 
-const GenVertexPtr GenParticle::production_vertex() const {
-    return m_production_vertex.lock();
+ConstGenVertexPtr GenParticle::production_vertex() const {
+    return std::const_pointer_cast<const GenVertex>(m_production_vertex.lock());
 }
 
 GenVertexPtr GenParticle::end_vertex() {
     return m_end_vertex.lock();
 }
 
-const GenVertexPtr GenParticle::end_vertex() const {
-    return m_end_vertex.lock();
+ConstGenVertexPtr GenParticle::end_vertex() const {
+    return std::const_pointer_cast<const GenVertex>(m_end_vertex.lock());
 }
 
-vector<GenParticlePtr> GenParticle::parents() const {
+vector<ConstGenParticlePtr> GenParticle::parents() const {
+    return production_vertex() ? production_vertex()->particles_in() : vector<ConstGenParticlePtr>();
+}
+
+vector<ConstGenParticlePtr> GenParticle::children() const {
+    return end_vertex() ? end_vertex()->particles_out() : vector<ConstGenParticlePtr>();
+}
+vector<GenParticlePtr> GenParticle::parents() {
     return production_vertex() ? production_vertex()->particles_in() : vector<GenParticlePtr>();
 }
 
-vector<GenParticlePtr> GenParticle::children() const {
+vector<GenParticlePtr> GenParticle::children()  {
     return end_vertex() ? end_vertex()->particles_out() : vector<GenParticlePtr>();
 }
 

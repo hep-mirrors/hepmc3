@@ -1,0 +1,25 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
+//
+///
+/// @file GenPdfInfo.fh
+/// @brief Minimal forward declarations for GenPdfInfo
+///
+
+#ifndef HEPMC_GENPDFINFO_FH
+#define HEPMC_GENPDFINFO_FH
+
+#include <memory>
+
+namespace HepMC{
+
+class GenPdfInfo;
+
+using GenPdfInfoPtr = std::shared_ptr<GenPdfInfo>;
+using ConstGenPdfInfoPtr = std::shared_ptr<const GenPdfInfo>;
+
+}
+
+#endif

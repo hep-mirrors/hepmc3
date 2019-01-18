@@ -15,6 +15,5 @@
 #include "HepMC/GenVertex.h"
 
 #include "HepMC/Print.h"
-#include "HepMC/Search/FindParticles.h"
 
 #endif

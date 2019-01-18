@@ -106,15 +106,15 @@ public:
     //@{
 
     /// Squared magnitude of (x, y, z) 3-vector
-    double length2()  const { return sqr(x()) + sqr(y()) + sqr(z()); }
+    double length2()  const { return x()*x() + y()*y() + z()*z(); }
     /// Magnitude of spatial (x, y, z) 3-vector
     double length()  const { return sqrt(length2()); }
     /// Squared magnitude of (x, y) vector
-    double perp2()      const { return sqr(x()) + sqr(y()); }
+    double perp2()      const { return  x()*x() + y()*y(); }
     /// Magnitude of (x, y) vector
     double perp()      const { return sqrt(perp2()); }
     /// Spacetime invariant interval s^2 = t^2 - x^2 - y^2 - z^2
-    double interval() const { return sqr(t()) - length2(); }
+    double interval() const { return t()*t() - length2(); }
 
     /// Squared magnitude of p3 = (px, py, pz) vector
     double p3mod2()       const { return length2(); }
@@ -127,7 +127,7 @@ public:
     /// Squared invariant mass m^2 = E^2 - px^2 - py^2 - pz^2
     double m2()       const { return interval(); }
     /// Invariant mass. Returns -sqrt(-m) if e^2 - P^2 is negative
-    double m() const { return (m2() > 0.0) ? sqrt(m2()) : -sqrt(-m2()); }
+    double m() const { return (m2() > 0.0) ? std::sqrt(m2()) : -std::sqrt(-m2()); }
 
     /// Azimuthal angle
     double phi()     const { return atan2( y(), x() ); }
@@ -135,10 +135,10 @@ public:
     double theta()   const {  return atan2( perp(), z() ); }
     /// Pseudorapidity
     /// @todo Improve numerical stability
-    double eta()     const  { return 0.5*log( (p3mod() + pz()) / (p3mod() - pz()) ); }
+    double eta()     const  { return 0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) ); }
     /// Rapidity
     /// @todo Improve numerical stability
-    double rap()     const {   return 0.5*log( (e() + pz()) / (e() - pz()) ); }
+    double rap()     const {   return 0.5*std::log( (e() + pz()) / (e() - pz()) ); }
     /// Absolute pseudorapidity
     double abs_eta() const { return std::abs( eta() ); }
     /// Absolute rapidity
@@ -175,7 +175,7 @@ public:
 
     /// R_eta^2-distance separation dR^2 = dphi^2 + deta^2
     double delta_r2_eta(const FourVector &v) const {
-      return sqr(delta_phi(v)) + sqr(delta_eta(v));
+      return delta_phi(v)*delta_phi(v) + delta_eta(v)*delta_eta(v);
     }
 
     /// R_eta-distance separation dR = sqrt(dphi^2 + deta^2)
@@ -185,7 +185,7 @@ public:
 
     /// R_rap^2-distance separation dR^2 = dphi^2 + drap^2
     double delta_r2_rap(const FourVector &v) const {
-      return sqr(delta_phi(v)) + sqr(delta_rap(v));
+      return delta_phi(v)*delta_phi(v) + delta_rap(v)*delta_rap(v);
     }
 
     /// R-rap-distance separation dR = sqrt(dphi^2 + drap^2)

@@ -3,6 +3,7 @@
 
 #include "HepMC/Search/Filter.h"
 #include "HepMC/Search/Feature.h"
+#include "HepMC/Search/AttributeFeature.h"
 
 namespace HepMC{
   
@@ -72,6 +73,7 @@ namespace HepMC{
     static const SelectorWrapper<int>    PDG_ID;
     static const SelectorWrapper<double> PT;
     static const SelectorWrapper<double> RAPIDITY;
+    static AttributeFeature ATTRIBUTE(const std::string &name);
     
   };
   
@@ -141,5 +143,10 @@ namespace HepMC{
     Feature<Feature_type> m_internal;
     
   };
+  
+  ConstSelectorPtr abs(const Selector &input){
+    return input.abs();
+  }
+  
 }
 #endif

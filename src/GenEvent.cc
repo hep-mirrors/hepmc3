@@ -37,7 +37,15 @@ GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
     m_weights = std::vector<double>(run->weight_names().size(), 1.0);
 }
 
+std::vector<ConstGenParticlePtr> GenEvent::particles() const {
+  return std::vector<ConstGenParticlePtr>(m_particles.begin(), m_particles.end());
+}
 
+std::vector<ConstGenVertexPtr> GenEvent::vertices() const {
+  return std::vector<ConstGenVertexPtr>(m_vertices.begin(), m_vertices.end());
+}
+
+  
 // void GenEvent::add_particle( const GenParticlePtr &p ) {
 void GenEvent::add_particle( GenParticlePtr p ) {
     if( p->in_event() ) return;
@@ -96,14 +104,14 @@ void GenEvent::add_vertex( GenVertexPtr v ) {
     v->m_id = -(int)vertices().size();
 
     // Add all incoming and outgoing particles and restore their production/end vertices
-    FOREACH( GenParticlePtr &p, v->m_particles_in ) {
+    for(auto p: v->particles_in() ) {
         if(!p->in_event()) add_particle(p);
-        p->m_end_vertex = v->m_this.lock();
+      p->m_end_vertex = v->shared_from_this();
     }
 
-    FOREACH( GenParticlePtr &p, v->m_particles_out ) {
+    for(auto p: v->particles_out() ) {
         if(!p->in_event()) add_particle(p);
-        p->m_production_vertex = v->m_this.lock();
+        p->m_production_vertex = v;
     }
 }
 
@@ -211,12 +219,12 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     DEBUG( 30, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
     shared_ptr<GenVertex> null_vtx;
 
-    FOREACH( GenParticlePtr &p, v->m_particles_in ) {
-        p->m_end_vertex.reset();
+    for(auto p: v->particles_in() ) {
+        p->m_end_vertex = std::weak_ptr<GenVertex>();
     }
 
-    FOREACH( GenParticlePtr &p, v->m_particles_out ) {
-        p->m_production_vertex.reset();
+    for(auto p: v->particles_out() ) {
+        p->m_production_vertex = std::weak_ptr<GenVertex>();
 
         // recursive delete rest of the tree
         remove_particle(p);
@@ -291,14 +299,16 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     v->m_id    = 0;
 #endif
 }
-static bool visit_children(std::map<const GenVertexPtr,int>  &a,const GenVertexPtr& v)
+/// @todo This looks dangerously similar to the recusive event traversel that we forbade in the
+///       Core library due to wories about generator dependence
+static bool visit_children(std::map<ConstGenVertexPtr,int>  &a, ConstGenVertexPtr v)
 {
-for ( std::vector<GenParticlePtr>::const_iterator p=v->particles_out().begin();p!=v->particles_out().end();++p) 
- if ((*p)->end_vertex()) 
+for ( ConstGenParticlePtr p: v->particles_out())
+ if (p->end_vertex())
  { 
-  if (a[(*p)->end_vertex()]!=0) return true;
-  else a[(*p)->end_vertex()]++;
-  if (visit_children(a,(*p)->end_vertex())) return true;
+  if (a[p->end_vertex()]!=0) return true;
+  else a[p->end_vertex()]++;
+  if (visit_children(a, p->end_vertex())) return true;
  }
 return false;
 }
@@ -307,27 +317,27 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
 
     shared_ptr<IntAttribute> existing_hc=attribute<IntAttribute>("cycles");
     bool has_cycles=false;
-    std::map<const GenVertexPtr,int>  sortingv;
+    std::map<GenVertexPtr,int>  sortingv;
     std::vector<GenVertexPtr> noinv;
     if (existing_hc)     if (existing_hc->value()!=0) has_cycles=true;
     if(!existing_hc)
     {
-    FOREACH( const GenParticlePtr &p, parts ) {
-        const GenVertexPtr &v = p->production_vertex();
+    for(GenParticlePtr p: parts ) {
+        GenVertexPtr v = p->production_vertex();
         if(v) sortingv[v]=0;
         if( !v || v->particles_in().size()==0 ) {
-            const GenVertexPtr &v2 = p->end_vertex();
+            GenVertexPtr v2 = p->end_vertex();
             if(v2) {noinv.push_back(v2); sortingv[v2]=0;}
         }
     }
-    for (std::vector<GenVertexPtr>::const_iterator v=noinv.begin();v!=noinv.end();++v){
-    std::map<const GenVertexPtr,int>  sorting_temp=sortingv;
-    has_cycles=(has_cycles||visit_children(sorting_temp,*v));
+    for (GenVertexPtr v: noinv){
+    std::map<ConstGenVertexPtr,int>  sorting_temp(sortingv.begin(), sortingv.end());
+    has_cycles=(has_cycles||visit_children(sorting_temp, v));
     } 
     }
     if (has_cycles) {	
     add_attribute("cycles", std::make_shared<HepMC::IntAttribute>(1));
-    for( std::map<const GenVertexPtr,int>::iterator vi=sortingv.begin();vi!=sortingv.end();++vi) if( !vi->first->in_event() ) add_vertex(vi->first);
+    for( std::map<GenVertexPtr,int>::iterator vi=sortingv.begin();vi!=sortingv.end();++vi) if( !vi->first->in_event() ) add_vertex(vi->first);
     return;
     }
     
@@ -405,7 +415,7 @@ void GenEvent::reserve(const size_t& parts, const size_t& verts) {
 
 void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
     if( new_momentum_unit != m_momentum_unit ) {
-        FOREACH( GenParticlePtr &p, m_particles ) {
+        for( GenParticlePtr p: m_particles ) {
             Units::convert( p->m_data.momentum, m_momentum_unit, new_momentum_unit );
         }
 
@@ -413,7 +423,7 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     }
 
     if( new_length_unit != m_length_unit ) {
-        FOREACH( GenVertexPtr &v, m_vertices ) {
+        for(GenVertexPtr &v: m_vertices ) {
             FourVector &fv = v->m_data.position;
             if( !fv.is_zero() ) Units::convert( fv, m_length_unit, new_length_unit );
         }
@@ -427,15 +437,19 @@ const FourVector& GenEvent::event_pos() const {
     return m_rootvertex->data().position;
 }
 
-const vector<GenParticlePtr>& GenEvent::beams() const {
-    return m_rootvertex->particles_out();
+vector<ConstGenParticlePtr> GenEvent::beams() const {
+    return std::const_pointer_cast<const GenVertex>(m_rootvertex)->particles_out();
+}
+
+const vector<GenParticlePtr> & GenEvent::beams() {
+  return m_rootvertex->particles_out();
 }
 
 void GenEvent::shift_position_by( const FourVector & delta ) {
     m_rootvertex->set_position( event_pos() + delta );
 
     // Offset all vertices
-    FOREACH ( GenVertexPtr &v, m_vertices ) {
+    for ( GenVertexPtr v: m_vertices ) {
         if ( v->has_set_position() )
             v->set_position( v->position() + delta );
     }
@@ -498,27 +512,27 @@ void GenEvent::write_data(GenEventData& data) const {
     // Fill containers
     data.weights = this->weights();
 
-    FOREACH( const GenParticlePtr &p, this->particles() ) {
+    for( ConstGenParticlePtr p: this->particles() ) {
         data.particles.push_back( p->data() );
     }
 
-    FOREACH( const GenVertexPtr &v, this->vertices() ) {
+    for(ConstGenVertexPtr v: this->vertices() ) {
         data.vertices.push_back( v->data() );
         int v_id = v->id();
 
-        FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+        for(ConstGenParticlePtr p: v->particles_in() ) {
             data.links1.push_back( p->id() );
             data.links2.push_back( v_id    );
         }
 
-        FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+        for(ConstGenParticlePtr p: v->particles_out() ) {
             data.links1.push_back( v_id    );
             data.links2.push_back( p->id() );
         }
     }
 
-    FOREACH( const att_key_t& vt1, m_attributes ) {
-        FOREACH( const att_val_t& vt2, vt1.second ) {
+    for( const att_key_t& vt1: this->attributes() ) {
+        for( const att_val_t& vt2: vt1.second ) {
 
             string st;
 
@@ -547,23 +561,23 @@ void GenEvent::read_data(const GenEventData &data) {
     this->weights() = data.weights;
 
     // Fill particle information
-    FOREACH( const GenParticleData &pd, data.particles ) {
+    for( const GenParticleData &pd: data.particles ) {
       GenParticlePtr p = make_shared<GenParticle>(pd);
 
         m_particles.push_back(p);
 
         p->m_event = this;
-        p->m_id    = particles().size();
+        p->m_id    = m_particles.size();
     }
 
     // Fill vertex information
-    FOREACH( const GenVertexData &vd, data.vertices ) {
+    for( const GenVertexData &vd: data.vertices ) {
       GenVertexPtr v = make_shared<GenVertex>(vd);
 
         m_vertices.push_back(v);
 
         v->m_event = this;
-        v->m_id    = -(int)vertices().size();
+        v->m_id    = -(int)m_vertices.size();
     }
 
     // Restore links
@@ -613,7 +627,7 @@ pair<GenParticlePtr,GenParticlePtr> GenEvent::beam_particles() const {
     }
 }
 
-void GenEvent::set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2) {
+void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
     /// @todo Require/set status = 4
     m_rootvertex->add_particle_out(p1);
     m_rootvertex->add_particle_out(p2);

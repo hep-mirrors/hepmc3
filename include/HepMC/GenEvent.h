@@ -11,9 +11,14 @@
 #define HEPMC_GENEVENT_H
 
 #include "HepMC/Units.h"
-
+//Change later ->
+#include "HepMC/GenParticle.fh"
+#include "HepMC/GenVertex.fh"
+#include "HepMC/GenPdfInfo.fh"
+#include "HepMC/GenHeavyIon.fh"
+#include "HepMC/GenCrossSection.fh"
+//
 #if !defined(__CINT__)
-#include "HepMC/Data/SmartPointer.h"
 #include "HepMC/Errors.h"
 #include "HepMC/GenHeavyIon.h"
 #include "HepMC/GenPdfInfo.h"
@@ -63,15 +68,15 @@ public:
     //@{
 
     /// @brief Get list of particles (const)
-    const std::vector<GenParticlePtr>& particles() const { return m_particles; }
+    std::vector<ConstGenParticlePtr> particles() const;
     /// @brief Get list of vertices (const)
-    const std::vector<GenVertexPtr>& vertices() const { return m_vertices; }
+    std::vector<ConstGenVertexPtr> vertices() const;
 
 
     /// @brief Get/set list of particles (non-const)
-    std::vector<GenParticlePtr>& particles() { return m_particles; }
+    const std::vector<GenParticlePtr>& particles() { return m_particles; }
     /// @brief Get/set list of vertices (non-const)
-    std::vector<GenVertexPtr>& vertices() { return m_vertices; }
+    const std::vector<GenVertexPtr>& vertices() { return m_vertices; }
 
     //@}
 
@@ -149,11 +154,12 @@ public:
     #endif
 
     /// @brief Get heavy ion generator additional information
-    const GenHeavyIonPtr heavy_ion() const { return attribute<GenHeavyIon>("GenHeavyIon"); }
+    ConstGenHeavyIonPtr heavy_ion() const { return attribute<GenHeavyIon>("GenHeavyIon"); }
     /// @brief Set heavy ion generator additional information
     void set_heavy_ion(const GenHeavyIonPtr &hi) { add_attribute("GenHeavyIon",hi); }
 
     /// @brief Get PDF information
+//FIXME! 
     const GenPdfInfoPtr pdf_info() const { return attribute<GenPdfInfo>("GenPdfInfo"); }
     /// @brief Set PDF information
     void set_pdf_info(const GenPdfInfoPtr &pi) { add_attribute("GenPdfInfo",pi); }
@@ -173,8 +179,11 @@ public:
     const FourVector& event_pos() const;
 
     /// @brief Vector of beam particles
-    const std::vector<GenParticlePtr>& beams() const;
+    std::vector<ConstGenParticlePtr> beams() const;
 
+    /// @brief Vector of beam particles
+    const std::vector<GenParticlePtr> & beams();
+  
     /// @brief Shift position of all vertices in the event by @a delta
     void shift_position_by( const FourVector & delta );
 
@@ -365,7 +374,7 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
     /// @deprecated Backward compatibility
     /// @todo Set/require status = 4 at the same time?
     HEPMC_DEPRECATED("instead add particle without production vertex to the event")
-    void set_beam_particles(const GenParticlePtr& p1, const GenParticlePtr& p2);
+    void set_beam_particles(GenParticlePtr p1, GenParticlePtr p2);
 
     /// @brief Set incoming beam particles
     /// @deprecated Backward compatibility
@@ -471,10 +480,11 @@ shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const
 
         shared_ptr<T> att = make_shared<T>();
         att->m_event = this;
+
         if ( id > 0 && id <= int(particles().size()) )
-          att->m_particle = particles()[id - 1];
+          att->m_particle = m_particles[id - 1];
         if ( id < 0 && -id <= int(vertices().size()) )
-          att->m_vertex = vertices()[-id - 1];
+          att->m_vertex = m_vertices[-id - 1];
         if ( att->from_string(i2->second->unparsed_string()) &&
              att->init() ) {
             // update map with new pointer

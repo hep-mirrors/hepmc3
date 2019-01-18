@@ -36,42 +36,36 @@ void GenVertex::add_particle_in( GenParticlePtr p ) {
     if(!p) return;
 
     // Avoid duplicates
-//    FOREACH( const GenParticlePtr &pp, particles_in() ) {
-//        if( pp == p ) return;
-//    }
     if (std::find(particles_in().begin(),particles_in().end(),p)!=particles_in().end()) return;
   
     m_particles_in.push_back(p);
 
     if( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
 
-    p->m_end_vertex = m_this.lock();
+    p->m_end_vertex = shared_from_this();
 
     if(m_event) m_event->add_particle(p);
 }
 
 
-void GenVertex::add_particle_out( GenParticlePtr p ) {
+void GenVertex::add_particle_out(GenParticlePtr p ) {
     if(!p) return;
 
     // Avoid duplicates
-//    FOREACH( const GenParticlePtr &pp, particles_out() ) {
-//        if( pp == p ) return;
-//    }
    if (std::find(particles_out().begin(),particles_out().end(),p)!=particles_out().end()) return;
   
     m_particles_out.push_back(p);
 
     if( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
 
-    p->m_production_vertex = m_this.lock();
+    p->m_production_vertex = shared_from_this();
 
     if(m_event) m_event->add_particle(p);
 }
 
 void GenVertex::remove_particle_in( GenParticlePtr p ) {
     if(!p) return;
-    if (std::find(particles_in().begin(),particles_in().end(),p)==particles_in().end()) return;
+    if (std::find(m_particles_in.begin(),m_particles_in.end(),p)==m_particles_in.end()) return;
     p->m_end_vertex.reset();
     m_particles_in.erase( std::remove( m_particles_in.begin(), m_particles_in.end(), p), m_particles_in.end());
 }
@@ -79,15 +73,23 @@ void GenVertex::remove_particle_in( GenParticlePtr p ) {
 
 void GenVertex::remove_particle_out( GenParticlePtr p ) {
     if(!p) return;
-    if (std::find(particles_out().begin(),particles_out().end(),p)==particles_out().end()) return;
+    if (std::find(m_particles_out.begin(),m_particles_out.end(),p)==m_particles_out.end()) return;
     p->m_production_vertex.reset();
     m_particles_out.erase( std::remove( m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
 }
 
+void GenVertex::set_id(int id){
+    m_id = id;
+    return;
+}
 
-void GenVertex::set_id(const int& idi){
-  m_id = idi;
-  return;
+  
+vector<ConstGenParticlePtr> GenVertex::particles_in()const{
+  return vector<ConstGenParticlePtr>(m_particles_in.begin(), m_particles_in.end());
+}
+ 
+vector<ConstGenParticlePtr> GenVertex::particles_out()const{
+  return vector<ConstGenParticlePtr>(m_particles_out.begin(), m_particles_out.end());
 }
 
 const FourVector& GenVertex::position() const {
@@ -101,8 +103,9 @@ const FourVector& GenVertex::position() const {
     //This could be a recussive call.  Try to prevent it.
     if (!cycles||cycles->value()==0) 
     {
-    FOREACH( const GenParticlePtr &p, particles_in() ) {
-        const GenVertexPtr &v = p->production_vertex();
+      
+    for(ConstGenParticlePtr p: m_particles_in ) {
+        ConstGenVertexPtr v = p->production_vertex();
         if(v) return v->position();
     }
     }

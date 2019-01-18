@@ -27,27 +27,10 @@ namespace HepMC {
 
     // Use unqualified namespace std within the HepMC namespace
     using namespace std;
-
-
-    /// Handy number squaring function
-    template <typename NUM>
-    inline NUM sqr(NUM x) { return x*x; }
-
-
-    /** @brief List of methods of searching starting from a particle or vertex
-        @todo Add 'family'='parents'+'children' and 'relatives'='ancestors'+'descendants'(+'siblings')?
-    */
-    enum Relationship {
-      ANCESTORS = 0, FIND_ANCESTORS = 0, FIND_ALL_ANCESTORS = 0, ancestors = 0,
-      DESCENDANTS = 1, FIND_DESCENDANTS = 1, FIND_ALL_DESCENDANTS = 1, descendants = 1,
-      PARENTS = 2, FIND_PARENTS = 2, FIND_MOTHERS = 2, parents = 2,
-      CHILDREN = 3, FIND_CHILDREN = 3, FIND_DAUGHTERS = 3, children = 3,
-      PRODUCTION_SIBLINGS = 4, FIND_PRODUCTION_SIBLINGS = 4
-    };
-#ifndef __CINT__
-      typedef   Relationship FilterParticle;
-      typedef   Relationship IteratorRange;
-#endif
+//#ifndef __CINT__
+//      typedef   Relationship FilterParticle;
+//      typedef   Relationship IteratorRange;
+//#endif
 }
 
 

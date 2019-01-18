@@ -8,9 +8,10 @@
 //
 #ifndef HEPMC_GENVERTEX_H
 #define HEPMC_GENVERTEX_H
-
-#include "HepMC/GenParticle.h"
-#include "HepMC/Data/SmartPointer.h"
+//To be changed->
+#include "HepMC/GenParticle.fh"
+#include "HepMC/GenVertex.fh"
+//<-
 #include "HepMC/Data/GenVertexData.h"
 #include "HepMC/FourVector.h"
 #include "HepMC/Common.h"
@@ -25,13 +26,10 @@ namespace HepMC {
     class GenEvent;
 
     /// Stores vertex-related information
-    class GenVertex {
+    class GenVertex : public std::enable_shared_from_this<GenVertex>{
 
-        /// @todo Are these really needed? Friends usually indicate a problem...
-        friend class GenEvent;
-        friend class SmartPointer<GenVertex>;
-
-
+    friend class GenEvent;
+      
     public:
 
         /// @name Constructors
@@ -52,7 +50,12 @@ namespace HepMC {
 
         /// Get parent event
         /// @todo Should we be returning a smart ptr?
-        GenEvent* parent_event() const { return m_event; }
+        GenEvent* parent_event() { return m_event; }
+
+        /// Get parent event
+        /// @todo Should we be returning a smart ptr?
+        const GenEvent* parent_event() const { return m_event; }
+
 
         /// Check if this vertex belongs to an event
         /// @todo Needed? Wouldn't it be good enough to just rely on user testing nullness of parent_event()?
@@ -64,12 +67,12 @@ namespace HepMC {
         int id() const { return m_id; }
 
         /// @brief set the vertex identifier
-        void set_id(const int& id);
+        void set_id(int id);
 
         /// Get vertex status code
         int status() const { return m_data.status; }
         /// Set vertex status code
-        void set_status(const int& stat) { m_data.status = stat; }
+        void set_status(int stat) { m_data.status = stat; }
 
         /// Get vertex data
         const GenVertexData& data() const { return m_data; }
@@ -84,9 +87,13 @@ namespace HepMC {
         void remove_particle_out( GenParticlePtr p);
 
         /// Get list of incoming particles
-        const vector<GenParticlePtr>& particles_in() const { return m_particles_in; }
+        const vector<GenParticlePtr>& particles_in() { return m_particles_in; }
+        /// Get list of incoming particles
+        vector<ConstGenParticlePtr> particles_in() const;
         /// Get list of outgoing particles
-        const vector<GenParticlePtr>& particles_out() const { return m_particles_out; }
+        const vector<GenParticlePtr>& particles_out() { return m_particles_out; }
+        /// Get list of outgoing particles
+        vector<ConstGenParticlePtr> particles_out() const;
 
         /// @brief Get vertex position
         ///
@@ -168,6 +175,7 @@ namespace HepMC {
         HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
         particles_out_const_iterator particles_out_const_end()   const { return m_particles_out.end();   }
 
+/*
         /// @deprecated Backward compatibility iterators
         HEPMC_DEPRECATED("Use particles_in/out() functions instead")
         particle_iterator particles_begin(IteratorRange range) {
@@ -183,7 +191,7 @@ namespace HepMC {
             if (range == children) return m_particles_out.end();
             throw Exception("GenVertex::particles_end: Only 'parents' and 'children' ranges allowed.");
         }
-
+*/
         /// @deprecated Backward compatibility
         HEPMC_DEPRECATED("Use particles_in().size() instead")
         int particles_in_size()  const { return m_particles_in.size(); }
@@ -206,8 +214,8 @@ namespace HepMC {
         GenVertexData   m_data;   //!< Vertex data
 
         vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
+      
         vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
-        weak_ptr<GenVertex> m_this;          //!< Pointer to shared pointer managing this vertex
         //@}
 
     };
