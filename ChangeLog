@@ -4,6 +4,7 @@
   * update examples/BasicExamples/basic_tree.cc to use the AttributeFeature
   * Attribute.h: Mark the protected cast from string as explicit - this made compilation errors easier to understand
   * GenParticle and GenVertex: remove the non-consted data() functions and use freiendhsip to access the underlying data directly from GenEvent
+  * Remove CoreRelatives and put _children and _parents in Search/Relatives instead
 
 2019-01-16 James Monk
   * Fix examples with const-correct.  Note Attributes examples have been commented out until re-implemented
