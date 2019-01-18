@@ -17,7 +17,6 @@
 #include "HepMC/FourVector.h"
 #include "HepMC/Common.h"
 
-#include "HepMC/CoreRelatives.h"
 #include "HepMC/GenParticle.fh"
 #include "HepMC/GenVertex.fh"
 
@@ -157,8 +156,6 @@ private:
     weak_ptr<GenVertex>        m_production_vertex; //!< Production vertex
     weak_ptr<GenVertex>        m_end_vertex;        //!< End vertex
   
-    const static _parents s_parents;
-    const static _children s_children;
 };
   
 } // namespace HepMC

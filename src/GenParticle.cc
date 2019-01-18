@@ -76,19 +76,19 @@ ConstGenVertexPtr GenParticle::end_vertex() const {
 }
 
 vector<GenParticlePtr> GenParticle::parents(){
-    return (m_production_vertex.expired())? vector<GenParticlePtr>() : s_parents(shared_from_this());
+    return (m_production_vertex.expired())? vector<GenParticlePtr>() : production_vertex()->particles_in();
 }
 
 vector<ConstGenParticlePtr> GenParticle::parents() const{
-    return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : s_parents(shared_from_this());
+    return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : production_vertex()->particles_in();
 }
   
 vector<GenParticlePtr> GenParticle::children(){
-    return (m_end_vertex.expired())? vector<GenParticlePtr>() : s_children(shared_from_this());
+    return (m_end_vertex.expired())? vector<GenParticlePtr>() : end_vertex()->particles_out();
 }
 
 vector<ConstGenParticlePtr> GenParticle::children() const{
-    return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : s_children(shared_from_this());
+    return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : end_vertex()->particles_out();
 }
 
 bool GenParticle::add_attribute(const std::string& name, shared_ptr<Attribute> att) {
@@ -110,8 +110,5 @@ void GenParticle::remove_attribute(const std::string& name) {
 string GenParticle::attribute_as_string(const std::string& name) const {
     return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
 }
-
-const _parents GenParticle::s_parents;
-const _children GenParticle::s_children;
   
 } // namespace HepMC
