@@ -55,9 +55,6 @@ namespace HepMC {
         /// @todo Should we be returning a smart ptr?
         const GenEvent* parent_event() const { return m_event; }
 
-        /// @brief Set the GenEvent with which this vertex is associated
-        void set_gen_event(GenEvent *evt);
-
         /// Check if this vertex belongs to an event
         /// @todo Needed? Wouldn't it be good enough to just rely on user testing nullness of parent_event()?
         bool in_event() const { return parent_event() != nullptr; }
@@ -77,9 +74,6 @@ namespace HepMC {
 
         /// Get vertex data
         const GenVertexData& data() const { return m_data; }
-
-        /// Get vertex data (mutable version)
-        GenVertexData& data() { return m_data; }
 
         /// Add incoming particle
         void add_particle_in ( GenParticlePtr p);

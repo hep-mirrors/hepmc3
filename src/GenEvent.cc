@@ -418,7 +418,7 @@ void GenEvent::reserve(const size_t& parts, const size_t& verts) {
 void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
     if( new_momentum_unit != m_momentum_unit ) {
         for( GenParticlePtr p: m_particles ) {
-            Units::convert( p->data().momentum, m_momentum_unit, new_momentum_unit );
+            Units::convert( p->m_data.momentum, m_momentum_unit, new_momentum_unit );
         }
 
         m_momentum_unit = new_momentum_unit;
@@ -426,7 +426,7 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
 
     if( new_length_unit != m_length_unit ) {
         for(GenVertexPtr &v: m_vertices ) {
-            FourVector &fv = v->data().position;
+            FourVector &fv = v->m_data.position;
             if( !fv.is_zero() ) Units::convert( fv, m_length_unit, new_length_unit );
         }
 

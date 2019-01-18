@@ -194,36 +194,26 @@ int main() {
     /// @todo can we add some utility funcs to simplify creation of Features from Attributes and check they exist.
     /// Features and Attributes are quite similar concepts anyway, can they be unified (but Features can also be
     ///  non-attribute-like e.g. pT, rapidity or any quantity it is possible to obtain from a particle)
-  /*
-    Filter toolExists = [](ConstGenParticlePtr  p)->bool{return p->attribute_as_string("tool").length() != 0;};
-    Filter otherExists = [](ConstGenParticlePtr  p)->bool{return p->attribute_as_string("other").length() != 0;};
-    Feature<const IntAttribute> tool([](ConstGenParticlePtr p)->const IntAttribute{return *(p->attribute<const IntAttribute>("tool"));});
-    Feature<const StringAttribute> other([](ConstGenParticlePtr p)->const StringAttribute{return *(p->attribute<const StringAttribute>("other"));});
   
-    for(ConstGenParticlePtr p: applyFilter(toolExists, evt.particles())){
+    for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("tool"), evt.particles())){
       Print::line(p);
     }
-
+  
     cout << endl << "Find all particles with attribute 'tool' equal 1 "<< endl;
     cout << "(should return particles 2,4):" << endl;
-
-    for(ConstGenParticlePtr p: applyFilter(toolExists && tool == 1, evt.particles())){
+  
+    for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("tool") && Selector::ATTRIBUTE("tool") == tool1, evt.particles())){
       Print::line(p);
     }
-
+  
     cout << endl << "Find all particles with a string attribute 'other' equal 'test attribute' "<< endl;
     cout << "(should return particle 2):" << endl;
-
-    for(ConstGenParticlePtr p: applyFilter(otherExists && (other == StringAttribute("test_attribute")), evt.particles())){
+  
+  
+    for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("other") && Selector::ATTRIBUTE("other") == "test_attribute", evt.particles())){
       Print::line(p);
     }
-    /*
-    FindParticles search_attributes3(evt, FIND_ALL, ATTRIBUTE("other") == "test attribute" );
-
-    FOREACH( const GenParticlePtr &p, search_attributes3.results() ) {
-        Print::line(p);
-    }
-*/
+  
     cout << endl << "Offsetting event position by 5,5,5,5" << endl;
 
     evt.shift_position_by( FourVector(5,5,5,5) );

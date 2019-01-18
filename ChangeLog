@@ -1,4 +1,10 @@
   --------------------------  HepMC3.0.0  --------------------------
+2019-01-18  James Monk
+  * Add Search/AttributeFeature for allowing search by Attribute, e.g. Selector::ATTRIBUTE("foo") == "bar" is a valid Filter that looks for an Attribute called foo to be equal to bar
+  * update examples/BasicExamples/basic_tree.cc to use the AttributeFeature
+  * Attribute.h: Mark the protected cast from string as explicit - this made compilation errors easier to understand
+  * GenParticle and GenVertex: remove the non-consted data() functions and use freiendhsip to access the underlying data directly from GenEvent
+
 2019-01-16 James Monk
   * Fix examples with const-correct.  Note Attributes examples have been commented out until re-implemented
 

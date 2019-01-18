@@ -61,7 +61,6 @@ public:
     const GenEvent*              parent_event() const { return m_event; } //!< Get parent event
     int                    id()           const { return m_id;    } //!< Get particle id
     const GenParticleData& data()         const { return m_data;  } //!< Get particle data
-    GenParticleData& data()                     { return m_data;  } //!< Get particle data
 
 
     ConstGenVertexPtr production_vertex() const;        //!< Get production vertex (const version)

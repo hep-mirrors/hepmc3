@@ -5,5 +5,8 @@ namespace HepMC{
   const SelectorWrapper<int> Selector::PDG_ID      = SelectorWrapper<int>([](ConstGenParticlePtr p)->int{return p->pdg_id();});
   const SelectorWrapper<double> Selector::PT       = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().pt();});
   const SelectorWrapper<double> Selector::RAPIDITY = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().rap();});
+  
+  AttributeFeature Selector::ATTRIBUTE(const std::string &name){return AttributeFeature(name);}
+  
 }
 
