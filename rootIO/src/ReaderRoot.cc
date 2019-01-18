@@ -37,7 +37,7 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
 bool ReaderRoot::read_event(GenEvent& evt) {
 
     // Skip object of different type than GenEventData
-    GenEventData *data = NULL;
+    GenEventData *data = nullptr;
 
     while(true) {
         TKey *key = (TKey*) (*m_next)();

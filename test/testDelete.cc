@@ -30,16 +30,16 @@ int main()
     }
     evts[i].remove_particles(evts[j].particles());
 
-    for (std::vector<HepMC::GenParticlePtr>::const_iterator p=evts.at(i).particles().begin();p!=evts.at(i).particles().end();++p)
-    evts[j].remove_particle(*p);
+    for (HepMC::GenParticlePtr p: evts.at(i).particles())
+      evts[j].remove_particle(p);
         
-    for (std::vector<HepMC::GenParticlePtr>::const_iterator p=evts.at(i).particles().begin();p!=evts.at(i).particles().end();++p)
-    for (std::vector<HepMC::GenVertexPtr>::iterator v=evts.at(j).vertices().begin();v!=evts.at(j).vertices().end();++v)
-    {
-    (*v)->remove_particle_in(*p);
-    (*v)->remove_particle_out(*p);
+    for (HepMC::GenParticlePtr p: evts.at(i).particles()){
+      for (HepMC::GenVertexPtr v: evts.at(j).vertices()){
+        (v)->remove_particle_in(p);
+        (v)->remove_particle_out(p);
+      }
     }
-
+  
     HepMC::WriterAscii       outputA("frominputDelete.hepmc");
     if(outputA.failed()) return 2;
     for (size_t i=0;i<evts.size();i++) outputA.write_event(evts[i]);

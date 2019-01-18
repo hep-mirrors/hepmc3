@@ -141,15 +141,14 @@ int main()
 
 bool massInfo( const HepMC::GenEvent& e, std::ostream& os )
 {
-    for (std::vector<HepMC::GenParticlePtr>::const_iterator  p=e.particles().begin(); p!=e.particles().end();++p)
-    {
-        double gm = (*p)->generated_mass();
-        double m = (*p)->momentum().m();
+    for (HepMC::ConstGenParticlePtr  p: e.particles()){
+        double gm = p->generated_mass();
+        double m = p->momentum().m();
         double d = std::abs(m-gm);
         if( d > 1.0e-4 && gm>1.0e-4)
             {
                 os << "Event " << e.event_number()
-                   << " Particle " << (*p)->pdg_id()
+                   << " Particle " << (p)->pdg_id()
                    << " generated mass " << gm
                    << " mass from momentum " << m
                    << " difference " << d << std::endl;

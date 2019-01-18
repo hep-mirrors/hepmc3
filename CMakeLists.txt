@@ -130,7 +130,28 @@ endif()
 
 
 #---Select sources for the various libraries---------------------------------
-file(GLOB hepmc3_sources ${PROJECT_SOURCE_DIR}/src/*.cc ${PROJECT_SOURCE_DIR}/src/Search/*.cc)
+set( hepmc3_sources 
+${PROJECT_SOURCE_DIR}/src/GenCrossSection.cc 
+${PROJECT_SOURCE_DIR}/ src/GenParticle.cc  
+${PROJECT_SOURCE_DIR}/src/GenVertex.cc      
+${PROJECT_SOURCE_DIR}/ src/Print.cc             
+${PROJECT_SOURCE_DIR}/ src/ReaderFactory.cc 
+${PROJECT_SOURCE_DIR}/ src/Setup.cc             
+${PROJECT_SOURCE_DIR}/ src/WriterHEPEVT.cc
+${PROJECT_SOURCE_DIR}/src/GenEvent.cc         
+${PROJECT_SOURCE_DIR}/src/GenPdfInfo.cc   
+${PROJECT_SOURCE_DIR}/src/HEPEVT_Wrapper.cc  
+${PROJECT_SOURCE_DIR}/src/ReaderAscii.cc        
+${PROJECT_SOURCE_DIR}/src/ReaderHEPEVT.cc   
+${PROJECT_SOURCE_DIR}/src/WriterAscii.cc
+${PROJECT_SOURCE_DIR}/src/GenHeavyIon.cc      
+${PROJECT_SOURCE_DIR}/src/GenRunInfo.cc   
+${PROJECT_SOURCE_DIR}/src/LHEFAttributes.cc  
+${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc  
+${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc     
+${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
+${PROJECT_SOURCE_DIR}/src/Search/Relatives.cc 
+${PROJECT_SOURCE_DIR}/src/Search/Selector.cc)
 
 
 
