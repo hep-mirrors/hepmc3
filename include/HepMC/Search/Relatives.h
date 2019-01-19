@@ -12,7 +12,7 @@
 
 #include "HepMC/GenParticle.h"
 #include "HepMC/GenVertex.h"
-#include "HepMC/CoreRelatives.h"
+#include "HepMC/Search/CoreRelatives.h"
 
 namespace HepMC{
 
