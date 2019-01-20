@@ -11,7 +11,7 @@
 #define HEPMC_FILTER_H
 
 #include "HepMC/GenParticle.h"
-
+#include <functional>
 namespace HepMC{
   
   using Filter = std::function<bool(ConstGenParticlePtr)>;
