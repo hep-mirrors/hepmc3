@@ -12,8 +12,8 @@
 #include "HepMC/GenVertex.h"
 #include "HepMC/GenParticle.h"
 #include "HepMC/Print.h"
-#include "HepMC/Search/Selector.h"
-#include "HepMC/Search/Relatives.h"
+#include "HepMC/Selector.h"
+#include "HepMC/Relatives.h"
 
 using namespace HepMC;
 using namespace std;

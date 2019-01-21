@@ -17,7 +17,7 @@
 /// and examples of its use.
 ///
 /// @ingroup search_engine
-#include "HepMC/Search/Filter.h"
+#include "HepMC/Filter.h"
 #include "HepMC/Attribute.h"
 #include <string>
 

@@ -12,7 +12,7 @@
 #define HEPMC_FEATURE_H
 
 #include "HepMC/GenParticle.h"
-#include "HepMC/Search/Filter.h"
+#include "HepMC/Filter.h"
 #include <functional>
 
 namespace HepMC{

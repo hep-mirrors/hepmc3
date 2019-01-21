@@ -1,4 +1,4 @@
-#include "HepMC/Search/Selector.h"
+#include "HepMC/Selector.h"
 
 namespace HepMC{
   const SelectorWrapper<int> Selector::STATUS      = SelectorWrapper<int>([](ConstGenParticlePtr p)->int{return p->status();});

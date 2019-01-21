@@ -1,9 +1,9 @@
 #ifndef HEPMC_SELECTOR_H
 #define HEPMC_SELECTOR_H
 
-#include "HepMC/Search/Filter.h"
-#include "HepMC/Search/Feature.h"
-#include "HepMC/Search/AttributeFeature.h"
+#include "HepMC/Filter.h"
+#include "HepMC/Feature.h"
+#include "HepMC/AttributeFeature.h"
 
 namespace HepMC{
   

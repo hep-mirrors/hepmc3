@@ -12,7 +12,7 @@
 #define HEPMC_ATTRIBUTE_FEATURE_H
 
 #include "HepMC/Attribute.h"
-#include "HepMC/Search/Filter.h"
+#include "HepMC/Filter.h"
 
 namespace HepMC{
   

@@ -154,41 +154,20 @@ ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
 )
 
 
-
-
-##AV set( hepmc3search_sources 
-##AV ${PROJECT_SOURCE_DIR}/src/Search/Relatives.cc 
-##AV ${PROJECT_SOURCE_DIR}/src/Search/Selector.cc)
-
-
-
-
 add_library(objlibcore OBJECT ${hepmc3core_sources})
-##AV add_library(objlibsearch OBJECT ${hepmc3search_sources})
 # shared libraries need PIC
 set_property(TARGET objlibcore PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(objlibcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-##AV set_property(TARGET objlibsearch PROPERTY POSITION_INDEPENDENT_CODE 1)
-##AV target_include_directories(objlibsearch PUBLIC ${PROJECT_SOURCE_DIR}/include)
-
-
 add_library(HepMC SHARED $<TARGET_OBJECTS:objlibcore>)
 add_library(HepMC_static STATIC  $<TARGET_OBJECTS:objlibcore>)
 
-##AV add_library(HepMCsearch SHARED $<TARGET_OBJECTS:objlibsearch>)
-##AV add_library(HepMCsearch_static STATIC  $<TARGET_OBJECTS:objlibsearch>)
-
-
 set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-##AV set_target_properties(HepMCsearch PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 
 if (WIN32)
 set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-##AV set_target_properties(HepMCsearch_static PROPERTIES OUTPUT_NAME HepMCsearch-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 elseif()
 set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-##AV set_target_properties(HepMCsearch_static PROPERTIES OUTPUT_NAME HepMCsearch ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 endif()
 configure_file(HepMC-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config )
 
@@ -196,16 +175,12 @@ configure_file(HepMC-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BI
 install(TARGETS HepMC DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 install(TARGETS HepMC_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 
-##AV install(TARGETS HepMCsearch DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
-##AV install(TARGETS HepMCsearch_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
-
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
 add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
                                    -DCOMPONENTS="devel"
                                    -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
 
 install(FILES  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config  DESTINATION  ${CMAKE_INSTALL_BINDIR} COMPONENT libs   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ  GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
 
 # Generate config CMake files to be used by other projects
 #
