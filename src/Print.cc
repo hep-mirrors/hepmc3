@@ -42,12 +42,12 @@ void Print::content( const GenEvent &event ) {
     cout<<"GenParticlePtr ("<<event.particles().size()<<")"<<endl;
 
     for( ConstGenParticlePtr p: event.particles()){
-        HepMC::Print::line(p,true);
+        Print::line(p,true);
     }
 
     cout<<"GenVertexPtr ("<<event.vertices().size()<<")"<<endl;
     for( ConstGenVertexPtr v: event.vertices() ) {
-        HepMC::Print::line(v);
+        Print::line(v);
     }
 
     cout<<"-----------------------------"<<endl;
@@ -82,7 +82,7 @@ void Print::listing( const GenEvent &event, unsigned short precision ) {
 
     // Print all vertices
     for(ConstGenVertexPtr v: event.vertices() ) {
-        HepMC::Print::listing(v);
+        Print::listing(v);
     }
 
     // Restore the stream state
@@ -116,7 +116,7 @@ void Print::listing( ConstGenVertexPtr v ) {
         }
         else cout << "    ";
 
-        HepMC::Print::listing(p);
+        Print::listing(p);
     }
 
     printed_header = false;
@@ -129,7 +129,7 @@ void Print::listing( ConstGenVertexPtr v ) {
         }
         else cout << "    ";
 
-        HepMC::Print::listing(p);
+        Print::listing(p);
     }
 }
 

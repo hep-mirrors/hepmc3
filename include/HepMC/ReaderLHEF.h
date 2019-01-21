@@ -12,7 +12,7 @@
 
 namespace HepMC 
 {
-class ReaderLHEF : public HepMC::Reader
+class ReaderLHEF : public Reader
 {
 public:
     ReaderLHEF(const std::string& filename);

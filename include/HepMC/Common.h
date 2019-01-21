@@ -21,21 +21,11 @@
 #define nullptr NULL
 #endif
 
-
 namespace HepMC {
 
-
-    // Use unqualified namespace std within the HepMC namespace
+// Use unqualified namespace std within the HepMC namespace
     using namespace std;
-//#ifndef __CINT__
-//      typedef   Relationship FilterParticle;
-//      typedef   Relationship IteratorRange;
-//#endif
 }
-
-
-
-
 
 /// Define a FOREACH directive
 #ifdef  HEPMC_HAS_CXX11

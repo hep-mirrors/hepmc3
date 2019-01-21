@@ -81,7 +81,7 @@ GenEvent::~GenEvent() {
     for  ( std::vector<GenParticlePtr>::iterator p=m_particles.begin();p!=m_particles.end();++p ) if ((*p)->m_event==this)  (*p)->m_event=nullptr;
 }
 
-GenEvent& GenEvent::operator=(const HepMC::GenEvent& e){
+GenEvent& GenEvent::operator=(const GenEvent& e){
      if (this != &e)
      {
         std::lock(m_lock_attributes, e.m_lock_attributes);
@@ -336,7 +336,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
     } 
     }
     if (has_cycles) {	
-    add_attribute("cycles", std::make_shared<HepMC::IntAttribute>(1));
+    add_attribute("cycles", std::make_shared<IntAttribute>(1));
     for( std::map<GenVertexPtr,int>::iterator vi=sortingv.begin();vi!=sortingv.end();++vi) if( !vi->first->in_event() ) add_vertex(vi->first);
     return;
     }

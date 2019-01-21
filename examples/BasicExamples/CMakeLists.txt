@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #---Add executables------------------------------------------------------------
 
 add_executable(basic_tree.exe ${CMAKE_CURRENT_SOURCE_DIR}/basic_tree.cc)
-target_link_libraries(basic_tree.exe HepMC ${ROOT_LIBRARIES})
+target_link_libraries(basic_tree.exe HepMC HepMCsearch ${ROOT_LIBRARIES})
 set_target_properties(basic_tree.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 
 install(TARGETS basic_tree.exe DESTINATION ${CMAKE_INSTALL_BINDIR})

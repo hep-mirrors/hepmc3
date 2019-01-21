@@ -128,16 +128,17 @@ endif()
 
 
 
-
-#---Select sources for the various libraries---------------------------------
-set( hepmc3_sources 
+########################################################################
+## Core
+########################################################################
+set( hepmc3core_sources 
 ${PROJECT_SOURCE_DIR}/src/GenCrossSection.cc 
-${PROJECT_SOURCE_DIR}/ src/GenParticle.cc  
+${PROJECT_SOURCE_DIR}/src/GenParticle.cc  
 ${PROJECT_SOURCE_DIR}/src/GenVertex.cc      
-${PROJECT_SOURCE_DIR}/ src/Print.cc             
-${PROJECT_SOURCE_DIR}/ src/ReaderFactory.cc 
-${PROJECT_SOURCE_DIR}/ src/Setup.cc             
-${PROJECT_SOURCE_DIR}/ src/WriterHEPEVT.cc
+${PROJECT_SOURCE_DIR}/src/Print.cc             
+${PROJECT_SOURCE_DIR}/src/ReaderFactory.cc 
+${PROJECT_SOURCE_DIR}/src/Setup.cc             
+${PROJECT_SOURCE_DIR}/src/WriterHEPEVT.cc
 ${PROJECT_SOURCE_DIR}/src/GenEvent.cc         
 ${PROJECT_SOURCE_DIR}/src/GenPdfInfo.cc   
 ${PROJECT_SOURCE_DIR}/src/HEPEVT_Wrapper.cc  
@@ -150,64 +151,60 @@ ${PROJECT_SOURCE_DIR}/src/LHEFAttributes.cc
 ${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc  
 ${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc     
 ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
-${PROJECT_SOURCE_DIR}/src/Search/Relatives.cc 
-${PROJECT_SOURCE_DIR}/src/Search/Selector.cc)
+)
 
 
 
-add_library(objlib OBJECT ${hepmc3_sources})
+
+##AV set( hepmc3search_sources 
+##AV ${PROJECT_SOURCE_DIR}/src/Search/Relatives.cc 
+##AV ${PROJECT_SOURCE_DIR}/src/Search/Selector.cc)
+
+
+
+
+add_library(objlibcore OBJECT ${hepmc3core_sources})
+##AV add_library(objlibsearch OBJECT ${hepmc3search_sources})
 # shared libraries need PIC
-set_property(TARGET objlib PROPERTY POSITION_INDEPENDENT_CODE 1)
-target_include_directories(objlib PUBLIC ${PROJECT_SOURCE_DIR}/include)
+set_property(TARGET objlibcore PROPERTY POSITION_INDEPENDENT_CODE 1)
+target_include_directories(objlibcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-add_library(HepMC SHARED $<TARGET_OBJECTS:objlib>)
-add_library(HepMC_static STATIC  $<TARGET_OBJECTS:objlib>)
+##AV set_property(TARGET objlibsearch PROPERTY POSITION_INDEPENDENT_CODE 1)
+##AV target_include_directories(objlibsearch PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-#SET_TARGET_PROPERTIES(... PROPERTIES LINK_FLAGS "$ENV{MYLDFLAGS}")
+
+add_library(HepMC SHARED $<TARGET_OBJECTS:objlibcore>)
+add_library(HepMC_static STATIC  $<TARGET_OBJECTS:objlibcore>)
+
+##AV add_library(HepMCsearch SHARED $<TARGET_OBJECTS:objlibsearch>)
+##AV add_library(HepMCsearch_static STATIC  $<TARGET_OBJECTS:objlibsearch>)
+
+
 set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+##AV set_target_properties(HepMCsearch PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 
 if (WIN32)
 set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+##AV set_target_properties(HepMCsearch_static PROPERTIES OUTPUT_NAME HepMCsearch-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 elseif()
 set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+##AV set_target_properties(HepMCsearch_static PROPERTIES OUTPUT_NAME HepMCsearch ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 endif()
 configure_file(HepMC-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config )
 
 #---Install build products---------------------------------------------------
 install(TARGETS HepMC DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 install(TARGETS HepMC_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+
+##AV install(TARGETS HepMCsearch DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+##AV install(TARGETS HepMCsearch_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
-
-
-
-if (HEPMC_INSTALL_INTERFACES)
-  install(DIRECTORY interfaces DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/../ COMPONENT devel)
-endif()
-
-install(FILES  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config  DESTINATION  ${CMAKE_INSTALL_BINDIR} COMPONENT libs   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ  GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
-if(ROOT_FOUND)
-   add_subdirectory(rootIO)
-endif()
-# Add the examples subdirectories
-
-if(HEPMC_BUILD_EXAMPLES)
-  set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
-  add_subdirectory(examples)
-endif()
-
-#------------------------------------------------------------------------------
-if(HEPMC_ENABLE_TEST)
-  ENABLE_TESTING()
-  add_subdirectory(test)
-endif()
-
-
-
-
 add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
                                    -DCOMPONENTS="devel"
                                    -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
+
+install(FILES  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config  DESTINATION  ${CMAKE_INSTALL_BINDIR} COMPONENT libs   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ  GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 
 # Generate config CMake files to be used by other projects
@@ -223,20 +220,43 @@ configure_package_config_file(cmake/Templates/HepMCConfig.cmake.in ${CMAKE_CURRE
                                  INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
                                  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC/cmake/HepMCConfig.cmake 
-           DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC/cmake/HepMCConfig.cmake  DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
 
-if(HEPMC_BUILD_EXAMPLES)
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/
-           DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT examples)
+########################################################################
+## Optional packages
+########################################################################
+#Search engine
+add_subdirectory(search)
+
+#Interfaces for some MCEGs
+if (HEPMC_INSTALL_INTERFACES)
+  install(DIRECTORY interfaces DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/../ COMPONENT devel)
 endif()
 
+# ROOT support
+if(ROOT_FOUND)
+   add_subdirectory(rootIO)
+endif()
+
+# Add the examples subdirectories
+if(HEPMC_BUILD_EXAMPLES)
+  set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
+  add_subdirectory(examples)
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT examples)
+endif()
+
+#test suite
+if(HEPMC_ENABLE_TEST)
+  ENABLE_TESTING()
+  add_subdirectory(test)
+endif()
+
+
+########################################################################
+## CPACK
+########################################################################
 #General CPACK settings
 INCLUDE(InstallRequiredSystemLibraries)
-
-
-
-
 
 set(CPACK_PACKAGE_NAME "HepMC")
 set(CPACK_PACKAGE_VENDOR "HepMC Developers")
