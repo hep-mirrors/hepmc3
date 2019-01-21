@@ -4,12 +4,12 @@
 // Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
 //
 ///
-/// @file GenVertex.fh
+/// @file GenVertex_fwd.h
 /// @brief Minimal forward declarations for GenVertex
 ///
 
-#ifndef HEPMC_GENVERTEX_FH
-#define HEPMC_GENVERTEX_FH
+#ifndef HEPMC_GENVERTEX_FWD_H
+#define HEPMC_GENVERTEX_FWD_H
 
 #include <memory>
 

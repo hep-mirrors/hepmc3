@@ -84,8 +84,8 @@ void GenVertex::set_id(int id){
 }
 
   
-vector<ConstGenParticlePtr> GenVertex::particles_in()const{
-  return vector<ConstGenParticlePtr>(m_particles_in.begin(), m_particles_in.end());
+const vector<ConstGenParticlePtr>& GenVertex::particles_in()const{
+  return *(reinterpret_cast<const vector<ConstGenParticlePtr>*>(&m_particles_in));
 }
  
 vector<ConstGenParticlePtr> GenVertex::particles_out()const{

@@ -9,8 +9,8 @@
 #ifndef HEPMC_GENVERTEX_H
 #define HEPMC_GENVERTEX_H
 
-#include "HepMC/GenParticle.fh"
-#include "HepMC/GenVertex.fh"
+#include "HepMC/GenParticle_fwd.h"
+#include "HepMC/GenVertex_fwd.h"
 #include "HepMC/Data/GenVertexData.h"
 #include "HepMC/FourVector.h"
 #include "HepMC/Common.h"
@@ -87,7 +87,7 @@ namespace HepMC {
         /// Get list of incoming particles
         const vector<GenParticlePtr>& particles_in() { return m_particles_in; }
         /// Get list of incoming particles
-        vector<ConstGenParticlePtr> particles_in() const;
+        const vector<ConstGenParticlePtr>& particles_in() const;
         /// Get list of outgoing particles
         const vector<GenParticlePtr>& particles_out() { return m_particles_out; }
         /// Get list of outgoing particles

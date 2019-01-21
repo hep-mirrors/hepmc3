@@ -1,4 +1,8 @@
   --------------------------  HepMC3.0.0  --------------------------
+2019-01-21  James Monk
+  * Remove unnecessary duplicated Relatives.h
+  * Rename forward delcaration files from .fh to _fwd.h
+
 2019-01-18  James Monk
   * Add Search/AttributeFeature for allowing search by Attribute, e.g. Selector::ATTRIBUTE("foo") == "bar" is a valid Filter that looks for an Attribute called foo to be equal to bar
   * update examples/BasicExamples/basic_tree.cc to use the AttributeFeature

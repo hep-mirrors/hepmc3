@@ -4,12 +4,12 @@
 // Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
 //
 ///
-/// @file GenHeavyIon.fh
+/// @file GenHeavyIon_fwd.h
 /// @brief Minimal forward declarations for GenHeavyIon
 ///
 
-#ifndef HEPMC_GENHEAVYION_FH
-#define HEPMC_GENHEAVYION_FH
+#ifndef HEPMC_GENHEAVYION_FWD_H
+#define HEPMC_GENHEAVYION_FWD_H
 
 #include <memory>
 

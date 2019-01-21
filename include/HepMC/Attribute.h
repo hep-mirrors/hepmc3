@@ -26,8 +26,8 @@
 #include <iomanip>
 
 #include "HepMC/Common.h"
-#include "HepMC/GenParticle.fh"
-#include "HepMC/GenVertex.fh"
+#include "HepMC/GenParticle_fwd.h"
+#include "HepMC/GenVertex_fwd.h"
 
 using std::string;
 
