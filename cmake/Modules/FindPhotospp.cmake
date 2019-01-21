@@ -7,7 +7,7 @@ set(PHOTOSPP_ROOT_DIR  "/usr")
 endif()
 endif()
 find_path(PHOTOSPP_INCLUDE_DIR Photos/Photos.h
-          HINTS $ENV{PHOTOSPP_ROOT_DIR}/include ${PHOTOSPP_ROOT_DIR}/include)
+          HINTS $ENV{PHOTOSPP_ROOT_DIR}/include ${PHOTOSPP_ROOT_DIR}/include NO_DEFAULT_PATH)
 
 find_library(PHOTOSPP_CxxInterface_LIBRARY NAMES PhotosCxxInterface
              HINTS $ENV{PHOTOSPP_ROOT_DIR}/lib ${PHOTOSPP_ROOT_DIR}/lib
