@@ -17,9 +17,8 @@
 #include "HepMC/FourVector.h"
 #include "HepMC/Common.h"
 
-
-#include "HepMC/GenParticle.fh"
-#include "HepMC/GenVertex.fh"
+#include "HepMC/GenParticle_fwd.h"
+#include "HepMC/GenVertex_fwd.h"
 
 namespace HepMC {
 

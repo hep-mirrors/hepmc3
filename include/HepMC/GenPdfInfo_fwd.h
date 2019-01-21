@@ -4,12 +4,12 @@
 // Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
 //
 ///
-/// @file GenPdfInfo.fh
+/// @file GenPdfInfo_fwd.h
 /// @brief Minimal forward declarations for GenPdfInfo
 ///
 
-#ifndef HEPMC_GENPDFINFO_FH
-#define HEPMC_GENPDFINFO_FH
+#ifndef HEPMC_GENPDFINFO_FWD_H
+#define HEPMC_GENPDFINFO_FWD_H
 
 #include <memory>
 

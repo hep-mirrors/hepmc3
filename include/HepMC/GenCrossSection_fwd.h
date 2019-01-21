@@ -4,12 +4,12 @@
 // Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
 //
 ///
-/// @file GenCrossSection.fh
+/// @file GenCrossSection_fwd.h
 /// @brief Minimal forward declarations for GenCrossSection
 ///
 
-#ifndef HEPMC_GENCROSSSECTION_FH
-#define HEPMC_GENCROSSSECTION_FH
+#ifndef HEPMC_GENCROSSSECTION_FWD_H
+#define HEPMC_GENCROSSSECTION_FWD_H
 
 #include <memory>
 

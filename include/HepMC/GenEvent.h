@@ -11,13 +11,12 @@
 #define HEPMC_GENEVENT_H
 
 #include "HepMC/Units.h"
-//Change later ->
-#include "HepMC/GenParticle.fh"
-#include "HepMC/GenVertex.fh"
-#include "HepMC/GenPdfInfo.fh"
-#include "HepMC/GenHeavyIon.fh"
-#include "HepMC/GenCrossSection.fh"
-//
+#include "HepMC/GenParticle_fwd.h"
+#include "HepMC/GenVertex_fwd.h"
+#include "HepMC/GenPdfInfo_fwd.h"
+#include "HepMC/GenHeavyIon_fwd.h"
+#include "HepMC/GenCrossSection_fwd.h"
+
 #if !defined(__CINT__)
 #include "HepMC/Errors.h"
 #include "HepMC/GenHeavyIon.h"

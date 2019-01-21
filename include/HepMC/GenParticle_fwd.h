@@ -4,12 +4,12 @@
 // Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
 //
 ///
-/// @file GenParticle.fh
+/// @file GenParticle_fwd.h
 /// @brief Minimal forward declarations for GenParticle
 ///
 
-#ifndef HEPMC_GENPARTICLE_FH
-#define HEPMC_GENPARTICLE_FH
+#ifndef HEPMC_GENPARTICLE_FWD_H
+#define HEPMC_GENPARTICLE_FWD_H
 
 #include <memory>
 #include <vector>

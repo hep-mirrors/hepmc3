@@ -8,10 +8,9 @@
 //
 #ifndef HEPMC_GENVERTEX_H
 #define HEPMC_GENVERTEX_H
-//To be changed->
-#include "HepMC/GenParticle.fh"
-#include "HepMC/GenVertex.fh"
-//<-
+
+#include "HepMC/GenParticle_fwd.h"
+#include "HepMC/GenVertex_fwd.h"
 #include "HepMC/Data/GenVertexData.h"
 #include "HepMC/FourVector.h"
 #include "HepMC/Common.h"
@@ -55,7 +54,6 @@ namespace HepMC {
         /// Get parent event
         /// @todo Should we be returning a smart ptr?
         const GenEvent* parent_event() const { return m_event; }
-
 
         /// Check if this vertex belongs to an event
         /// @todo Needed? Wouldn't it be good enough to just rely on user testing nullness of parent_event()?
