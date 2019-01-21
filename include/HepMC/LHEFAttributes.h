@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef  HEPMC_LHEFATTRIBUTES_H
 #define  HEPMC_LHEFATTRIBUTES_H
@@ -103,7 +103,7 @@ public:
   /** @brief Get momentum */
   FourVector momentum(int i) const {
     return FourVector(hepeup.PUP[i][0], hepeup.PUP[i][1],
-		      hepeup.PUP[i][2], hepeup.PUP[i][3]);
+              hepeup.PUP[i][2], hepeup.PUP[i][3]);
   }
 
   /** @brief Clear this object. */

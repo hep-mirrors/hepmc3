@@ -2,7 +2,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef  HEPMC_AssociatedParticle_H
 #define  HEPMC_AssociatedParticle_H
@@ -49,7 +49,7 @@ public:
 
     /** @brief get id of the associated particle. */
     int associatedId() const {
-	return value();
+    return value();
     }
 
     /** @brief get a pointer to the associated particle. */

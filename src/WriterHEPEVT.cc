@@ -1,5 +1,8 @@
 // -*- C++ -*-
 //
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file WriterHEPEVT.cc
  *  @brief Implementation of \b class WriterHEPEVT

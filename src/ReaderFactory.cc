@@ -1,5 +1,9 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
 #include "HepMC/ReaderFactory.h"
-
 namespace HepMC{
   
   std::shared_ptr<Reader> make_reader(const std::string &filename){

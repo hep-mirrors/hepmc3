@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file Print.cc
@@ -233,7 +233,7 @@ void Print::line(ConstGenParticlePtr p, const bool& attributes) {
     cout <<      (*p).attribute_names().size()<< " "<<endl;
          if(attributes)
          {
-         std::vector<std::string> names	 =p->attribute_names();
+         std::vector<std::string> names     =p->attribute_names();
          FOREACH(const std::string &ss, names)
          cout<<" "<<ss<<"="<<(*p).attribute_as_string(ss);
          cout<< endl;

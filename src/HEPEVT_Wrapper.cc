@@ -1,4 +1,8 @@
 // -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file HEPEVT_Wrapper.cc
  *  @brief Implementation of conversion functions for HEPEVT block

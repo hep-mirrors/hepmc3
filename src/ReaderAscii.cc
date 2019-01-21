@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file ReaderAscii.cc
@@ -67,7 +67,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         // Check for ReaderAscii header/footer
         if( strncmp(buf,"HepMC",5) == 0 ) {
-			if( strncmp(buf,"HepMC::Version",14) != 0 && strncmp(buf,"HepMC::Asciiv3",14)!=0 )
+            if( strncmp(buf,"HepMC::Version",14) != 0 && strncmp(buf,"HepMC::Asciiv3",14)!=0 )
             {
             WARNING( "ReaderAscii: found unsupported expression in header. Will close the input." )
             std::cout<<buf<<std::endl;
@@ -280,16 +280,16 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
             data->add_particle_in( evt.particles()[particle_in-1] );
         }
         else {
-			shared_ptr<IntAttribute> existing_hc=evt.attribute<IntAttribute>("cycles");            
+            shared_ptr<IntAttribute> existing_hc=evt.attribute<IntAttribute>("cycles");            
             if (existing_hc)
             {
             if (existing_hc->value()!=0&&particle_in > 0 )
             {
              WARNING( "ReaderAscii: event has cycles, this vertex might be repeated." )
             //if( particle_in > 0 ) data->add_particle_in( evt.particles()[particle_in-1] );
-		    }
-		    }
-		    else
+            }
+            }
+            else
             return false;
         }
 

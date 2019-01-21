@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenEvent.h
@@ -123,7 +123,7 @@ public:
 
     /// @brief Get a pointer to the the GenRunInfo object.
     shared_ptr<GenRunInfo> run_info() const {
-	  return m_run_info;
+      return m_run_info;
     }
     /// @brief Set the GenRunInfo object by smart pointer.
     void set_run_info(shared_ptr<GenRunInfo> run) {
@@ -452,14 +452,10 @@ private:
 
 };
 
-
-
 #if !defined(__CINT__)
-
 //
 // Template methods
 //
-
 template<class T>
 shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
@@ -495,13 +491,7 @@ shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const
     }
     else return dynamic_pointer_cast<T>(i2->second);
 }
-
 #endif // __CINT__
 
-
-
-
-
 } // namespace HepMC
-
 #endif

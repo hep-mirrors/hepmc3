@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenEvent.cc
@@ -20,15 +20,15 @@ using namespace std;
 namespace HepMC {
 
 GenEvent::GenEvent(Units::MomentumUnit mu,
-		   Units::LengthUnit lu)
+           Units::LengthUnit lu)
   : m_event_number(0), m_weights(std::vector<double>(1, 1.0)),
     m_momentum_unit(mu), m_length_unit(lu),
     m_rootvertex(make_shared<GenVertex>()) {}
 
 
 GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
-	 Units::MomentumUnit mu,
-	 Units::LengthUnit lu)
+     Units::MomentumUnit mu,
+     Units::LengthUnit lu)
   : m_event_number(0), m_weights(std::vector<double>(1, 1.0)),
     m_momentum_unit(mu), m_length_unit(lu),
     m_rootvertex(make_shared<GenVertex>()),
@@ -335,7 +335,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
     has_cycles=(has_cycles||visit_children(sorting_temp, v));
     } 
     }
-    if (has_cycles) {	
+    if (has_cycles) {    
     add_attribute("cycles", std::make_shared<IntAttribute>(1));
     for( std::map<GenVertexPtr,int>::iterator vi=sortingv.begin();vi!=sortingv.end();++vi) if( !vi->first->in_event() ) add_vertex(vi->first);
     return;

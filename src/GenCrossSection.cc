@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenCrossSection.cc
@@ -26,8 +26,8 @@ int GenCrossSection::windx(string wName) const {
 void GenCrossSection::set_cross_section(const double& xs, const double& xs_err,const long& n_acc , const long& n_att ) {
     double cross_section       = xs;
     double cross_section_error = xs_err;
-	accepted_events     = n_acc;
-	attempted_events    = n_att;
+    accepted_events     = n_acc;
+    attempted_events    = n_att;
     size_t N=1;
     if ( event() ) N=std::max(event()->weights().size(),N); 
     cross_sections = vector<double>(N, cross_section);

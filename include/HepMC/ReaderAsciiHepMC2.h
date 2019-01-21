@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef  HEPMC_READER_ASCII_HEPMC2_H
 #define  HEPMC_READER_ASCII_HEPMC2_H

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef  HEPMC_ATTRIBUTE_H
 #define  HEPMC_ATTRIBUTE_H
@@ -89,7 +89,7 @@ public:
      * Attribute belongs.
      */
     virtual bool init(const GenRunInfo & ) {
-	return true;
+    return true;
     }
 
     /** @brief Fill string from class content */
@@ -184,12 +184,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     int value() const {
-	return m_val;
+    return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const int& i) {
-	m_val = i;
+    m_val = i;
     }
 
 private:
@@ -231,12 +231,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     long value() const {
-	return m_val;
+    return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const long& l) {
-	m_val = l;
+    m_val = l;
     }
 
 private:
@@ -270,19 +270,19 @@ public:
     bool to_string(string &att) const {
       std::ostringstream oss;
       oss << std::setprecision(std::numeric_limits<double>::digits10)
-	  << m_val;
+      << m_val;
       att = oss.str();
       return true;
     }
 
     /** @brief get the value associated to this Attribute. */
     double value() const {
-	return m_val;
+    return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const double& d) {
-	m_val = d;
+    m_val = d;
     }
 
 private:
@@ -315,19 +315,19 @@ public:
     bool to_string(string &att) const {
       std::ostringstream oss;
       oss << std::setprecision(std::numeric_limits<float>::digits10)
-	  << m_val;
+      << m_val;
       att = oss.str();
       return true;
     }
 
     /** @brief get the value associated to this Attribute. */
     float value() const {
-	return m_val;
+    return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const float& f) {
-	m_val = f;
+    m_val = f;
     }
 
 private:
@@ -373,12 +373,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     string value() const {
-	return unparsed_string();
+    return unparsed_string();
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const string& s) {
-	set_unparsed_string(s);
+    set_unparsed_string(s);
     }
 
 };

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file WriterAsciiHepMC2.cc
@@ -96,7 +96,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     std::vector<long> m_random_states;
     for (int i=0;i<100;i++) 
     {
-	shared_ptr<IntAttribute> rs=evt.attribute<IntAttribute>("random_states"+to_string((long long unsigned int)i));
+    shared_ptr<IntAttribute> rs=evt.attribute<IntAttribute>("random_states"+to_string((long long unsigned int)i));
     if (!rs) break;
     m_random_states.push_back(rs->value());
     }
@@ -261,10 +261,10 @@ string WriterAsciiHepMC2::escape(const string& s) const
 
 void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
 {
-	std::vector<double> weights;
-	for (int i=0;i<100;i++) 
+    std::vector<double> weights;
+    for (int i=0;i<100;i++) 
     {
-	shared_ptr<DoubleAttribute> rs=v->attribute<DoubleAttribute>("weight"+to_string((long long unsigned int)i));
+    shared_ptr<DoubleAttribute> rs=v->attribute<DoubleAttribute>("weight"+to_string((long long unsigned int)i));
     if (!rs) break;
     weights.push_back(rs->value());
     }

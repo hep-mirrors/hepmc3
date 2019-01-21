@@ -1,4 +1,8 @@
 // -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef  HEPMC_WRITERHEPEVT_H
 #define  HEPMC_WRITERHEPEVT_H
 /**

@@ -1,10 +1,15 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
 #include "HepMC/ReaderLHEF.h"
 using namespace LHEF;
 namespace HepMC
 {
 ReaderLHEF::ReaderLHEF(const std::string& filename)
 {
-	m_reader = new LHEF::Reader(filename);
+    m_reader = new LHEF::Reader(filename);
     m_neve=0;
     m_failed=false;
     // Create a HEPRUP attribute and initialize it from the reader.

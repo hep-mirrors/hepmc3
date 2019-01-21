@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /// @file Setup.h
 /// @brief Definition of \b class Setup
@@ -9,7 +9,7 @@
 #ifndef HEPMC_SETUP_H
 #define HEPMC_SETUP_H
 
-// #include <iostream>
+
 
 namespace HepMC {
 

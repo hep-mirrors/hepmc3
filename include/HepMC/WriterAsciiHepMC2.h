@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2018 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC_WRITERASCIIHEPMC2_H
 #define HEPMC_WRITERASCIIHEPMC2_H

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /// @file GenVertex.h
 /// @brief Definition of \b class GenVertex
@@ -206,12 +206,12 @@ namespace HepMC {
 } // namespace HepMC
 
 #include "HepMC/GenEvent.h"
-
+namespace HepMC {
 /// @brief Get attribute of type T
-template<class T>
-HepMC::shared_ptr<T> HepMC::GenVertex::attribute(const string& name) const {
+template<class T> shared_ptr<T> GenVertex::attribute(const string& name) const {
   return parent_event()?
-    parent_event()->attribute<T>(name, id()): HepMC::shared_ptr<T>();
+    parent_event()->attribute<T>(name, id()): shared_ptr<T>();
+}
 }
 
 #endif

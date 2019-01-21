@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderAsciiHepMC2.cc
@@ -234,7 +234,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
      {
      for (int ii=0;ii<100;ii++) 
      {
-	 shared_ptr<DoubleAttribute> rs=m_vertex_cache_ghost[i]->attribute<DoubleAttribute>("weight"+to_string((long long unsigned int)ii));
+     shared_ptr<DoubleAttribute> rs=m_vertex_cache_ghost[i]->attribute<DoubleAttribute>("weight"+to_string((long long unsigned int)ii));
      if (!rs) break;
      m_vertex_cache[i]->add_attribute("weight"+to_string((long long unsigned int)ii),rs);
      }

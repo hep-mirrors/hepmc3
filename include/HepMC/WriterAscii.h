@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC_WRITERASCII_H
 #define HEPMC_WRITERASCII_H
@@ -28,11 +28,11 @@ public:
     /// @brief Constructor
     /// @warning If file already exists, it will be cleared before writing
     WriterAscii(const std::string& filename,
-		shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+        shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
     /// @brief Constructor from ostream
     WriterAscii(std::ostream& stream,
-		shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+        shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
     /// @brief Destructor
     ~WriterAscii();

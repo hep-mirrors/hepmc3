@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file WriterAscii.cc
@@ -33,7 +33,7 @@ WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run
     } else {
         m_file << "HepMC::Version " << HepMC::version() << std::endl;
         m_file << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
-	    if ( run_info() ) write_run_info();
+        if ( run_info() ) write_run_info();
     }
 }
 
@@ -70,16 +70,16 @@ void WriterAscii::write_event(const GenEvent &evt) {
     flush();
 
     if ( !run_info() ) {
-	set_run_info(evt.run_info());
-	write_run_info();
+    set_run_info(evt.run_info());
+    write_run_info();
     } else {
-	if ( evt.run_info() && run_info() != evt.run_info() ) {
-	    WARNING( "WriterAscii::write_event: GenEvents contain "
-		     "different GenRunInfo objects from - only the "
-		     "first such object will be serialized." )
-	}
-	// else {
-	//write_run_info();
+    if ( evt.run_info() && run_info() != evt.run_info() ) {
+        WARNING( "WriterAscii::write_event: GenEvents contain "
+             "different GenRunInfo objects from - only the "
+             "first such object will be serialized." )
+    }
+    // else {
+    //write_run_info();
     //    }
     }
 
@@ -271,7 +271,7 @@ void WriterAscii::write_run_info() {
     if ( !names.empty() ) {
       string out = names[0];
       for ( int i = 1, N = names.size(); i < N; ++i )
-	out += "\n" + names[i];
+    out += "\n" + names[i];
       m_cursor += sprintf(m_cursor, "W ");
       flush();
       write_string(escape(out));
@@ -280,26 +280,26 @@ void WriterAscii::write_run_info() {
 
     for ( int i = 0, N = run_info()->tools().size(); i < N; ++i  ) {
       string out = "T " + run_info()->tools()[i].name + "\n"
-	+ run_info()->tools()[i].version + "\n"
-	+ run_info()->tools()[i].description;
+    + run_info()->tools()[i].version + "\n"
+    + run_info()->tools()[i].description;
       write_string(escape(out));
       m_cursor += sprintf(m_cursor, "\n");
     }
 
     typedef map< std::string, shared_ptr<Attribute> >::value_type value_type;
     FOREACH( value_type att, run_info()->attributes() ) {
-	string st;
-	if ( ! att.second->to_string(st) ) {
-	    WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
-		}
-	else {
-	    m_cursor +=
-		sprintf(m_cursor, "A %s ", att.first.c_str());
-	    flush();
-	    write_string(escape(st));
-	    m_cursor += sprintf(m_cursor, "\n");
-	    flush();
-	}
+    string st;
+    if ( ! att.second->to_string(st) ) {
+        WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
+        }
+    else {
+        m_cursor +=
+        sprintf(m_cursor, "A %s ", att.first.c_str());
+        flush();
+        write_string(escape(st));
+        m_cursor += sprintf(m_cursor, "\n");
+        flush();
+    }
     }
 }
 
