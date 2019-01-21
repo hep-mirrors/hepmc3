@@ -15,8 +15,8 @@
 #ifndef HEPMC_CORE_RELATIVES_H
 #define HEPMC_CORE_RELATIVES_H
 
-#include "HepMC/GenParticle.fh"
-#include "HepMC/GenVertex.fh"
+#include "HepMC/GenParticle_fwd.h"
+#include "HepMC/GenVertex_fwd.h"
 
 namespace HepMC{
   
