@@ -75,19 +75,20 @@ ConstGenVertexPtr GenParticle::end_vertex() const {
     return std::const_pointer_cast<const GenVertex>(m_end_vertex.lock());
 }
 
-vector<ConstGenParticlePtr> GenParticle::parents() const {
-    return production_vertex() ? production_vertex()->particles_in() : vector<ConstGenParticlePtr>();
+vector<GenParticlePtr> GenParticle::parents(){
+    return (m_production_vertex.expired())? vector<GenParticlePtr>() : production_vertex()->particles_in();
 }
 
-vector<ConstGenParticlePtr> GenParticle::children() const {
-    return end_vertex() ? end_vertex()->particles_out() : vector<ConstGenParticlePtr>();
+vector<ConstGenParticlePtr> GenParticle::parents() const{
+    return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : production_vertex()->particles_in();
 }
-vector<GenParticlePtr> GenParticle::parents() {
-    return production_vertex() ? production_vertex()->particles_in() : vector<GenParticlePtr>();
+  
+vector<GenParticlePtr> GenParticle::children(){
+    return (m_end_vertex.expired())? vector<GenParticlePtr>() : end_vertex()->particles_out();
 }
 
-vector<GenParticlePtr> GenParticle::children()  {
-    return end_vertex() ? end_vertex()->particles_out() : vector<GenParticlePtr>();
+vector<ConstGenParticlePtr> GenParticle::children() const{
+    return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : end_vertex()->particles_out();
 }
 
 bool GenParticle::add_attribute(const std::string& name, shared_ptr<Attribute> att) {
@@ -109,5 +110,5 @@ void GenParticle::remove_attribute(const std::string& name) {
 string GenParticle::attribute_as_string(const std::string& name) const {
     return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
 }
-
+  
 } // namespace HepMC

@@ -173,23 +173,7 @@ namespace HepMC {
         HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
         particles_out_const_iterator particles_out_const_end()   const { return m_particles_out.end();   }
 
-/*
-        /// @deprecated Backward compatibility iterators
-        HEPMC_DEPRECATED("Use particles_in/out() functions instead")
-        particle_iterator particles_begin(IteratorRange range) {
-            if (range == parents) return m_particles_in.begin();
-            if (range == children) return m_particles_out.begin();
-            throw Exception("GenVertex::particles_begin: Only 'parents' and 'children' ranges allowed.");
-        }
 
-        /// @deprecated Backward compatibility iterators
-        HEPMC_DEPRECATED("Use particles_in/out() functions instead")
-        particle_iterator particles_end(IteratorRange range) {
-            if (range == parents) return m_particles_in.end();
-            if (range == children) return m_particles_out.end();
-            throw Exception("GenVertex::particles_end: Only 'parents' and 'children' ranges allowed.");
-        }
-*/
         /// @deprecated Backward compatibility
         HEPMC_DEPRECATED("Use particles_in().size() instead")
         int particles_in_size()  const { return m_particles_in.size(); }
