@@ -2,8 +2,8 @@
 //
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
-#ifndef HEPMC_COMMON_H
-#define HEPMC_COMMON_H
+#ifndef HEPMC3_COMMON_H
+#define HEPMC3_COMMON_H
 
 #include <vector>
 #include <map>
@@ -14,10 +14,10 @@
 
 /// Neater/extensible C++11 availability test
 #if __cplusplus >= 201103L
-#define HEPMC_HAS_CXX11
+#define HEPMC3_HAS_CXX11
 #endif
-#if !defined(HEPMC_HAS_CXX11) && (__GNUC__) && (__cplusplus) && (__GXX_EXPERIMENTAL_CXX0X__)
-#define HEPMC_HAS_CXX0X_GCC_ONLY
+#if !defined(HEPMC3_HAS_CXX11) && (__GNUC__) && (__cplusplus) && (__GXX_EXPERIMENTAL_CXX0X__)
+#define HEPMC3_HAS_CXX0X_GCC_ONLY
 #define nullptr NULL
 #endif
 
@@ -28,7 +28,7 @@ namespace HepMC {
 }
 
 /// Define a FOREACH directive
-#ifdef  HEPMC_HAS_CXX11
+#ifdef  HEPMC3_HAS_CXX11
 #define FOREACH( iterator, container ) for ( iterator: container )
 #else
 #if !defined(__CINT__)
@@ -128,8 +128,8 @@ typename T::reference deref(auto_any_base const& cur, T&)
 
 
 /// Deprecation macro
-#ifndef HEPMC_DEPRECATED
-#define HEPMC_DEPRECATED(x)
+#ifndef HEPMC3_DEPRECATED
+#define HEPMC3_DEPRECATED(x)
 #endif
 
 #endif

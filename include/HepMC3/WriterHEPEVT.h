@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_WRITERHEPEVT_H
-#define  HEPMC_WRITERHEPEVT_H
+#ifndef HEPMC3_WRITERHEPEVT_H
+#define HEPMC3_WRITERHEPEVT_H
 /**
  *  @file  WriterHEPEVT.h
  *  @brief Definition of \b class WriterHEPEVT
@@ -16,9 +16,9 @@
  *  @ingroup IO
  *
  */
-#include "HepMC/Writer.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/Data/GenEventData.h"
+#include "HepMC3/Writer.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/Data/GenEventData.h"
 
 #include <fstream>
 namespace HepMC

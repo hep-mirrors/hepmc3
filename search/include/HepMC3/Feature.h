@@ -8,11 +8,11 @@
 /// @brief Defines Feature interface for selecting Particles according to extracted Features.
 ///
 
-#ifndef HEPMC_FEATURE_H
-#define HEPMC_FEATURE_H
+#ifndef HEPMC3_FEATURE_H
+#define HEPMC3_FEATURE_H
 
-#include "HepMC/GenParticle.h"
-#include "HepMC/Filter.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/Filter.h"
 #include <functional>
 
 namespace HepMC{

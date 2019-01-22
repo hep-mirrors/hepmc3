@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_WRITERROOT_H
-#define  HEPMC_WRITERROOT_H
+#ifndef HEPMC3_WRITERROOT_H
+#define HEPMC3_WRITERROOT_H
 /**
  *  @file  WriterRoot.h
  *  @brief Definition of \b class WriterRoot
@@ -18,10 +18,10 @@
  *  @ingroup IO
  *
  */
-#include "HepMC/Writer.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/Data/GenEventData.h"
-#include "HepMC/Data/GenRunInfoData.h"
+#include "HepMC3/Writer.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/Data/GenEventData.h"
+#include "HepMC3/Data/GenRunInfoData.h"
 
 // ROOT header files
 #ifdef __CINT__

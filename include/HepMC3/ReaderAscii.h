@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC_READERASCII_H
-#define HEPMC_READERASCII_H
+#ifndef HEPMC3_READERASCII_H
+#define HEPMC3_READERASCII_H
 ///
 /// @file  ReaderAscii.h
 /// @brief Definition of class \b ReaderAscii
@@ -14,8 +14,8 @@
 ///
 /// @ingroup IO
 ///
-#include "HepMC/Reader.h"
-#include "HepMC/GenEvent.h"
+#include "HepMC3/Reader.h"
+#include "HepMC3/GenEvent.h"
 #include <string>
 #include <fstream>
 #include <istream>

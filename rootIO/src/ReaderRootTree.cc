@@ -8,8 +8,8 @@
  *  @brief Implementation of \b class ReaderRootTree
  *
  */
-#include "HepMC/ReaderRootTree.h"
-#include "HepMC/Units.h"
+#include "HepMC3/ReaderRootTree.h"
+#include "HepMC3/Units.h"
 
 namespace HepMC
 {

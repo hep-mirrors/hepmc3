@@ -7,10 +7,10 @@
 /// @file Filter.h
 /// @brief Defines Filter operations for combingin Filters
 ///
-#ifndef HEPMC_FILTER_H
-#define HEPMC_FILTER_H
+#ifndef HEPMC3_FILTER_H
+#define HEPMC3_FILTER_H
 
-#include "HepMC/GenParticle.h"
+#include "HepMC3/GenParticle.h"
 #include <functional>
 namespace HepMC{
   
@@ -38,7 +38,7 @@ namespace HepMC{
   
   /// @brief A Filter that will accept all particles
   /// This might be needed if a signature requires a default Filter
-  bool ACCEPT_ALL(ConstGenParticlePtr dummy){
+  inline bool ACCEPT_ALL(ConstGenParticlePtr dummy){
     return true;
   }
   

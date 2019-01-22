@@ -11,8 +11,8 @@
 #include "HepMC/GenEvent.h"
 #else
 #include "Photos/PhotosHepMC3Event.h"
-#include "HepMC/Search/FindParticles.h"
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/Selector.h"
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"

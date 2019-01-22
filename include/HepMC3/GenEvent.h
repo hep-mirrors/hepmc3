@@ -7,26 +7,26 @@
 /// @file GenEvent.h
 /// @brief Definition of \b class GenEvent
 ///
-#ifndef HEPMC_GENEVENT_H
-#define HEPMC_GENEVENT_H
+#ifndef HEPMC3_GENEVENT_H
+#define HEPMC3_GENEVENT_H
 
-#include "HepMC/Units.h"
-#include "HepMC/GenParticle_fwd.h"
-#include "HepMC/GenVertex_fwd.h"
-#include "HepMC/GenPdfInfo_fwd.h"
-#include "HepMC/GenHeavyIon_fwd.h"
-#include "HepMC/GenCrossSection_fwd.h"
+#include "HepMC3/Units.h"
+#include "HepMC3/GenParticle_fwd.h"
+#include "HepMC3/GenVertex_fwd.h"
+#include "HepMC3/GenPdfInfo_fwd.h"
+#include "HepMC3/GenHeavyIon_fwd.h"
+#include "HepMC3/GenCrossSection_fwd.h"
 
 #if !defined(__CINT__)
-#include "HepMC/Errors.h"
-#include "HepMC/GenHeavyIon.h"
-#include "HepMC/GenPdfInfo.h"
-#include "HepMC/GenCrossSection.h"
-#include "HepMC/GenRunInfo.h"
+#include "HepMC3/Errors.h"
+#include "HepMC3/GenHeavyIon.h"
+#include "HepMC3/GenPdfInfo.h"
+#include "HepMC3/GenCrossSection.h"
+#include "HepMC3/GenRunInfo.h"
 #include <mutex>
 #endif // __CINT__
 
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
 class TBuffer;
 #endif
 
@@ -145,7 +145,7 @@ public:
     /// Converts event from current units to new ones
     void set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
 
-    #ifndef HEPMC_NO_DEPRECATED
+    #ifndef HEPMC3_NO_DEPRECATED
     /// Converts event from current units to new ones (compatibility name)
     void use_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
       set_units(new_momentum_unit, new_length_unit);
@@ -289,16 +289,16 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
     /// @name Deprecated functionality
     //@{
 
-    #ifndef HEPMC_NO_DEPRECATED
+    #ifndef HEPMC3_NO_DEPRECATED
 
     /// @brief Add particle by raw pointer
     /// @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
-    HEPMC_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
+    HEPMC3_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
     void add_particle( GenParticle *p );
 
     /// @brief Add vertex by raw pointer
     /// @deprecated Use GenEvent::add_vertex( const GenVertexPtr& ) instead
-    HEPMC_DEPRECATED("Use GenVertexPtr instead of GenVertex*")
+    HEPMC3_DEPRECATED("Use GenVertexPtr instead of GenVertex*")
     void add_vertex  ( GenVertex *v );
 
     /// @deprecated Backward compatibility iterators
@@ -312,73 +312,73 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
     typedef std::vector<GenVertexPtr>::const_iterator  vertex_const_iterator;
 
     /// @deprecated Backward compatibility iterators
-    HEPMC_DEPRECATED("Iterate over std container particles() instead")
+    HEPMC3_DEPRECATED("Iterate over std container particles() instead")
     particle_iterator       particles_begin()       { return m_particles.begin(); }
 
     /// @deprecated Backward compatibility iterators
-    HEPMC_DEPRECATED("Iterate over std container particles() instead")
+    HEPMC3_DEPRECATED("Iterate over std container particles() instead")
     particle_iterator       particles_end()         { return m_particles.end();   }
 
     /// @deprecated Backward compatibility iterators
-    HEPMC_DEPRECATED("Iterate over std container particles() instead")
+    HEPMC3_DEPRECATED("Iterate over std container particles() instead")
     particle_const_iterator particles_begin() const { return m_particles.begin(); }
 
     /// @deprecated Backward compatibility iterators
-    HEPMC_DEPRECATED("Iterate over std container particles() instead")
+    HEPMC3_DEPRECATED("Iterate over std container particles() instead")
     particle_const_iterator particles_end()   const { return m_particles.end();   }
 
     /// @deprecated Backward compatibility iterators
-    HEPMC_DEPRECATED("Iterate over std container vertices() instead")
+    HEPMC3_DEPRECATED("Iterate over std container vertices() instead")
     vertex_iterator         vertices_begin()        { return m_vertices.begin();  }
 
     /// @deprecated Backward compatibility iterators
-    HEPMC_DEPRECATED("Iterate over std container vertices() instead")
+    HEPMC3_DEPRECATED("Iterate over std container vertices() instead")
     vertex_iterator         vertices_end()          { return m_vertices.end();    }
 
     /// @deprecated Backward compatibility iterators
-    HEPMC_DEPRECATED("Iterate over std container vertices() instead")
+    HEPMC3_DEPRECATED("Iterate over std container vertices() instead")
     vertex_const_iterator   vertices_begin()  const { return m_vertices.begin();  }
 
     /// @deprecated Backward compatibility iterators
-    HEPMC_DEPRECATED("Iterate over std container vertices() instead")
+    HEPMC3_DEPRECATED("Iterate over std container vertices() instead")
     vertex_const_iterator   vertices_end()    const { return m_vertices.end();    }
 
     /// @deprecated Backward compatibility
-    HEPMC_DEPRECATED("Use particles().size() instead")
+    HEPMC3_DEPRECATED("Use particles().size() instead")
     int  particles_size()  const { return m_particles.size();  }
 
     /// @deprecated Backward compatibility
-    HEPMC_DEPRECATED("Use particles().empty() instead")
+    HEPMC3_DEPRECATED("Use particles().empty() instead")
     bool particles_empty() const { return m_particles.empty(); }
 
     /// @deprecated Backward compatibility
-    HEPMC_DEPRECATED("Use vertices().size() instead")
+    HEPMC3_DEPRECATED("Use vertices().size() instead")
     int  vertices_size()   const { return m_vertices.size();   }
 
     /// @deprecated Backward compatibility
-    HEPMC_DEPRECATED("Use vertices().empty() instead")
+    HEPMC3_DEPRECATED("Use vertices().empty() instead")
     bool vertices_empty()  const { return m_vertices.empty();  }
 
     /// @brief Test to see if we have exactly two particles in event_pos() vertex
     /// @deprecated Backward compatibility
-    HEPMC_DEPRECATED("Use beams() to access beam particles")
+    HEPMC3_DEPRECATED("Use beams() to access beam particles")
     bool valid_beam_particles() const;
 
     /// @brief Get first two particles of the event_pos() vertex
     /// @deprecated Backward compatibility
-    HEPMC_DEPRECATED("Use beams() to access beam particles")
+    HEPMC3_DEPRECATED("Use beams() to access beam particles")
     std::pair<GenParticlePtr,GenParticlePtr> beam_particles() const;
 
     /// @brief Set incoming beam particles
     /// @deprecated Backward compatibility
     /// @todo Set/require status = 4 at the same time?
-    HEPMC_DEPRECATED("instead add particle without production vertex to the event")
+    HEPMC3_DEPRECATED("instead add particle without production vertex to the event")
     void set_beam_particles(GenParticlePtr p1, GenParticlePtr p2);
 
     /// @brief Set incoming beam particles
     /// @deprecated Backward compatibility
     /// @todo Set/require status = 4 at the same time?
-    HEPMC_DEPRECATED("instead add particle without production vertex to the event")
+    HEPMC3_DEPRECATED("instead add particle without production vertex to the event")
     void set_beam_particles(const std::pair<GenParticlePtr,GenParticlePtr>& p);
 
     #endif
@@ -397,7 +397,7 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
     /// @brief Fill GenEvent based on GenEventData
     void read_data(const GenEventData &data);
 
-    #ifdef HEPMC_ROOTIO
+    #ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
     //@}

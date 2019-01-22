@@ -24,7 +24,7 @@
  */
 
 #include <vector>
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 #include "Photos/PhotosEvent.h"
 #include "Photos/PhotosParticle.h"
 

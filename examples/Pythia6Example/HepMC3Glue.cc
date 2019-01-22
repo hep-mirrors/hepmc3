@@ -1,16 +1,16 @@
-#include "HepMC/HEPEVT_Wrapper.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/Writer.h"
-#include "HepMC/WriterHEPEVT.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/WriterAsciiHepMC2.h"
-#include "HepMC/Print.h"
-#include "HepMC/Attribute.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenRunInfo.h"
-#ifdef HEPMC_ROOTIO
-#include "HepMC/WriterRoot.h"
-#include "HepMC/WriterRootTree.h"
+#include "HepMC3/HEPEVT_Wrapper.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/Writer.h"
+#include "HepMC3/WriterHEPEVT.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/WriterAsciiHepMC2.h"
+#include "HepMC3/Print.h"
+#include "HepMC3/Attribute.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenRunInfo.h"
+#ifdef HEPMC3_ROOTIO
+#include "HepMC3/WriterRoot.h"
+#include "HepMC3/WriterRootTree.h"
 #endif
 std::map<int,std::pair<HepMC::Writer*,HepMC::GenEvent*> > gWriters;
 extern "C" {
@@ -111,7 +111,7 @@ extern "C" {
             case 3:
                 gWriters[r_position]=std::pair<HepMC::Writer*,HepMC::GenEvent*>(new HepMC::WriterHEPEVT(filename.c_str()),new HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM));
                 break;
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
             case 4:
                 gWriters[r_position]=std::pair<HepMC::Writer*,HepMC::GenEvent*>(new HepMC::WriterRoot(filename.c_str()),new HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM));
                 break;

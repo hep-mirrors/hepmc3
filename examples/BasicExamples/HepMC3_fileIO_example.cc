@@ -11,10 +11,10 @@
  *  The resulting file should be an exact copy of the input file
  *
  */
-#include "HepMC/GenEvent.h"
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/Print.h"
 
 #include <iostream>
 using namespace HepMC;

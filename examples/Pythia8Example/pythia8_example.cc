@@ -3,9 +3,9 @@
  *  @brief Basic example of use for pythia8 interface
  *
  */
-#include "HepMC/GenEvent.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/Print.h"
 
 #include "Pythia8/Pythia.h"
 #include "Pythia8/Pythia8ToHepMC3.h"

@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_GENPDFINFO_H
-#define  HEPMC_GENPDFINFO_H
+#ifndef HEPMC3_GENPDFINFO_H
+#define HEPMC3_GENPDFINFO_H
 /**
  *  @file GenPdfInfo.h
  *  @brief Definition of event attribute \b class GenPdfInfo
@@ -25,7 +25,7 @@
  *
  */
 #include <iostream>
-#include "HepMC/Attribute.h"
+#include "HepMC3/Attribute.h"
 
 namespace HepMC {
 

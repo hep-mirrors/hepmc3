@@ -9,12 +9,12 @@
  *
  */
 
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 
-#include "HepMC/Data/GenEventData.h"
-#include "HepMC/Data/GenRunInfoData.h"
+#include "HepMC3/Data/GenEventData.h"
+#include "HepMC3/Data/GenRunInfoData.h"
 
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
 #include "TBuffer.h"
 #include "TClass.h"
 #endif
@@ -22,7 +22,7 @@
 
 namespace HepMC {
   
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
   
   void GenEvent::Streamer(TBuffer &b){
     

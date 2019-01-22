@@ -8,7 +8,7 @@
  *  @brief Implementation of \b class WriterRootTree
  *
  */
-#include "HepMC/WriterRootTree.h"
+#include "HepMC3/WriterRootTree.h"
 #include <cstdio>  // sprintf
 // ROOT header files
 #include "TFile.h"

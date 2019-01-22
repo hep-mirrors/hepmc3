@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_READERROOTTREE_H
-#define  HEPMC_READERROOTTREE_H
+#ifndef HEPMC3_READERROOTTREE_H
+#define HEPMC3_READERROOTTREE_H
 /**
  *  @file  ReaderRootTree.h
  *  @brief Definition of \b class ReaderRootTree
@@ -18,10 +18,10 @@
  *  @ingroup IO
  *
  */
-#include "HepMC/Reader.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/Data/GenEventData.h"
-#include "HepMC/Data/GenRunInfoData.h"
+#include "HepMC3/Reader.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/Data/GenEventData.h"
+#include "HepMC3/Data/GenRunInfoData.h"
 
 // ROOT header files
 #include "TFile.h"

@@ -8,8 +8,8 @@
 /// @brief Minimal forward declarations for GenHeavyIon
 ///
 
-#ifndef HEPMC_GENHEAVYION_FWD_H
-#define HEPMC_GENHEAVYION_FWD_H
+#ifndef HEPMC3_GENHEAVYION_FWD_H
+#define HEPMC3_GENHEAVYION_FWD_H
 
 #include <memory>
 

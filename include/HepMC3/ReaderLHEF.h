@@ -3,15 +3,15 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#include "HepMC/Reader.h"
-#include "HepMC/GenEvent.h"
+#include "HepMC3/Reader.h"
+#include "HepMC3/GenEvent.h"
 #include <string>
 #include <fstream>
 #include <istream>
-#include "HepMC/LHEFAttributes.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
+#include "HepMC3/LHEFAttributes.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
 #include <iomanip>
 
 

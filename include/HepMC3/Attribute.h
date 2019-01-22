@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_ATTRIBUTE_H
-#define  HEPMC_ATTRIBUTE_H
+#ifndef HEPMC3_ATTRIBUTE_H
+#define HEPMC3_ATTRIBUTE_H
 /**
  *  @file Attribute.h
  *  @brief Definition of \b class Attribute, \b class IntAttribute and \b class StringAttribute
@@ -25,9 +25,9 @@
 #include <sstream>
 #include <iomanip>
 
-#include "HepMC/Common.h"
-#include "HepMC/GenParticle_fwd.h"
-#include "HepMC/GenVertex_fwd.h"
+#include "HepMC3/Common.h"
+#include "HepMC3/GenParticle_fwd.h"
+#include "HepMC3/GenVertex_fwd.h"
 
 using std::string;
 
@@ -172,7 +172,7 @@ public:
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(string &att) const {
-#ifdef HEPMC_HAS_CXX11
+#ifdef HEPMC3_HAS_CXX11
         att = std::to_string(m_val);
 #else
         char buf[24];
@@ -219,7 +219,7 @@ public:
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(string &att) const {
-#ifdef HEPMC_HAS_CXX11
+#ifdef HEPMC3_HAS_CXX11
         att = std::to_string(m_val);
 #else
         char buf[24];

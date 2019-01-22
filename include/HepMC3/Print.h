@@ -3,16 +3,16 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_PRINT_H
-#define  HEPMC_PRINT_H
+#ifndef HEPMC3_PRINT_H
+#define HEPMC3_PRINT_H
 ///
 /// @file Print.h
 /// @brief Definition of static \b class Print
 ///
 
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/GenParticle.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
 
 namespace HepMC {
 

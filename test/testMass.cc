@@ -12,15 +12,15 @@
 #include <cmath>	// for min()
 #include <ostream>
 
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenPdfInfo.h"
-#include "HepMC/GenHeavyIon.h"
-#include "HepMC/Version.h"
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/ReaderAsciiHepMC2.h"
-#include "HepMC/WriterAsciiHepMC2.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenPdfInfo.h"
+#include "HepMC3/GenHeavyIon.h"
+#include "HepMC3/Version.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/ReaderAsciiHepMC2.h"
+#include "HepMC3/WriterAsciiHepMC2.h"
 
 // define methods and classes used by this test
 #include "IsGoodEvent.h"

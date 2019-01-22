@@ -8,7 +8,7 @@
  *  @brief Implementation of Setup class
  *
  */
-#include "HepMC/Setup.h"
+#include "HepMC3/Setup.h"
 
 namespace HepMC {
 

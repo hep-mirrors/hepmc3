@@ -8,7 +8,7 @@
  *  @brief Implementation of \b class WriterRoot
  *
  */
-#include "HepMC/WriterRoot.h"
+#include "HepMC3/WriterRoot.h"
 #include <cstdio>  // sprintf
 // ROOT header files
 #include "TFile.h"

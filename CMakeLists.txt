@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #----------------------------------------------------------------------------
-project(HepMC)
+project(HepMC3)
 set(PROJECT_VERSION 3)
 
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-#---Setting HepMC Build type-----------------------------------------------
+#---Setting HepMC3 Build type-----------------------------------------------
 if(CMAKE_BUILD_TYPE)
   message(STATUS "HepMC3 Build type: ${CMAKE_BUILD_TYPE}")
 else(CMAKE_BUILD_TYPE)
@@ -18,25 +18,25 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 #-------------Options-------------------------------------------------------
 
-option(HEPMC_ENABLE_ROOTIO "Enables building with ROOT O/I." ON)
-option(HEPMC_BUILD_EXAMPLES "Enables building of examples." OFF)
-option(HEPMC_ENABLE_TEST "Enables building of tests." OFF)
-option(HEPMC_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces." OFF)
+option(HEPMC3_ENABLE_ROOTIO "Enables building with ROOT O/I." ON)
+option(HEPMC3_BUILD_EXAMPLES "Enables building of examples." OFF)
+option(HEPMC3_ENABLE_TEST "Enables building of tests." OFF)
+option(HEPMC3_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces." OFF)
 
 
-message(STATUS "HepMC: HEPMC_ENABLE_ROOTIO         ${HEPMC_ENABLE_ROOTIO}") 
-message(STATUS "HepMC: HEPMC_BUILD_EXAMPLES        ${HEPMC_BUILD_EXAMPLES}") 
-message(STATUS "HepMC: HEPMC_ENABLE_TEST           ${HEPMC_ENABLE_TEST}") 
-message(STATUS "HepMC: HEPMC_INSTALL_INTERFACES    ${HEPMC_INSTALL_INTERFACES}")
+message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}") 
+message(STATUS "HepMC3: HEPMC3_BUILD_EXAMPLES        ${HEPMC3_BUILD_EXAMPLES}") 
+message(STATUS "HepMC3: HEPMC3_ENABLE_TEST           ${HEPMC3_ENABLE_TEST}") 
+message(STATUS "HepMC3: HEPMC3_INSTALL_INTERFACES    ${HEPMC3_INSTALL_INTERFACES}")
 
-if(HEPMC_ENABLE_ROOTIO)
+if(HEPMC3_ENABLE_ROOTIO)
   if( EXISTS "$ENV{ROOTSYS}" )
-    message(STATUS "HepMC: ROOTSYS provided $ENV{ROOTSYS}")
+    message(STATUS "HepMC3: ROOTSYS provided $ENV{ROOTSYS}")
   elseif(ROOT_DIR)
-    message(STATUS "HepMC: ROOT_DIR provided ${ROOT_DIR}")
+    message(STATUS "HepMC3: ROOT_DIR provided ${ROOT_DIR}")
   else() 
-    message(STATUS "HepMC warning: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
-    message(STATUS "HepMC warning: Build will use ROOTConfig.cmake or FindROOT.cmake")
+    message(STATUS "HepMC3 warning: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
+    message(STATUS "HepMC3 warning: Build will use ROOTConfig.cmake or FindROOT.cmake")
   endif()
 endif()
 
@@ -72,7 +72,7 @@ endif()
 
 
 
-message(STATUS "HepMC: CXX FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
+message(STATUS "HepMC3: CXX FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
 
 
 #This module respects HFS, e.g. defines lib or lib64 when it is needed. 
@@ -103,7 +103,7 @@ ENDIF("${isSystemDir}" STREQUAL "-1")
 
 #---Optional build of rootIO-------------------------------------------------
 
-if(HEPMC_ENABLE_ROOTIO)
+if(HEPMC3_ENABLE_ROOTIO)
   set (ROOT_FIND_COMPONENTS Core RIO Tree)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
   list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
@@ -117,12 +117,12 @@ if(HEPMC_ENABLE_ROOTIO)
 
   if(ROOT_FOUND)
     include_directories(${ROOT_INCLUDE_DIRS})
-    add_definitions(-DHEPMC_ROOTIO)
-    set(HEPMC_ROOTIO_LIBRARY "-lHepMCrootIO" )
+    add_definitions(-DHEPMC3_ROOTIO)
+    set(HEPMC3_ROOTIO_LIBRARY "-lHepMC3rootIO" )
   else()
-    message(STATUS "HepMC warning: ROOT needed for ROOTIO but not found")
-    message(STATUS "HepMC warning: Skipping HepMC ROOT IO libraries")
-    set(HEPMC_ENABLE_ROOTIO OFF)
+    message(STATUS "HepMC3 warning: ROOT needed for ROOTIO but not found")
+    message(STATUS "HepMC3 warning: Skipping HepMC ROOT IO libraries")
+    set(HEPMC3_ENABLE_ROOTIO OFF)
   endif()
 endif()
 
@@ -159,28 +159,28 @@ add_library(objlibcore OBJECT ${hepmc3core_sources})
 set_property(TARGET objlibcore PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_include_directories(objlibcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-add_library(HepMC SHARED $<TARGET_OBJECTS:objlibcore>)
-add_library(HepMC_static STATIC  $<TARGET_OBJECTS:objlibcore>)
+add_library(HepMC3 SHARED $<TARGET_OBJECTS:objlibcore>)
+add_library(HepMC3_static STATIC  $<TARGET_OBJECTS:objlibcore>)
 
-set_target_properties(HepMC PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+set_target_properties(HepMC3 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 
 if (WIN32)
-set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 elseif()
-set_target_properties(HepMC_static PROPERTIES OUTPUT_NAME HepMC ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3 ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 endif()
-configure_file(HepMC-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config )
+configure_file(HepMC3-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-config )
 
 #---Install build products---------------------------------------------------
-install(TARGETS HepMC DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
-install(TARGETS HepMC_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+install(TARGETS HepMC3 DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+install(TARGETS HepMC3_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
 add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
                                    -DCOMPONENTS="devel"
                                    -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
 
-install(FILES  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC-config  DESTINATION  ${CMAKE_INSTALL_BINDIR} COMPONENT libs   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ  GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+install(FILES  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-config  DESTINATION  ${CMAKE_INSTALL_BINDIR} COMPONENT libs   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ  GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 # Generate config CMake files to be used by other projects
 #
@@ -189,13 +189,13 @@ include(CMakePackageConfigHelpers)
 
 set(INCLUDE_INSTALL_DIR include )
 set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
-set(CONFIG_INSTALL_DIR share/HepMC/cmake )
+set(CONFIG_INSTALL_DIR share/HepMC3/cmake )
 
-configure_package_config_file(cmake/Templates/HepMCConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC/cmake/HepMCConfig.cmake
+configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake
                                  INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
                                  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC/cmake/HepMCConfig.cmake  DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake  DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
 
 ########################################################################
 ## Optional packages
@@ -204,7 +204,7 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC/cmake/HepMCConfig.
 add_subdirectory(search)
 
 #Interfaces for some MCEGs
-if (HEPMC_INSTALL_INTERFACES)
+if (HEPMC3_INSTALL_INTERFACES)
   install(DIRECTORY interfaces DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/../ COMPONENT devel)
 endif()
 
@@ -214,14 +214,14 @@ if(ROOT_FOUND)
 endif()
 
 # Add the examples subdirectories
-if(HEPMC_BUILD_EXAMPLES)
+if(HEPMC3_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
   add_subdirectory(examples)
   install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT examples)
 endif()
 
 #test suite
-if(HEPMC_ENABLE_TEST)
+if(HEPMC3_ENABLE_TEST)
   ENABLE_TESTING()
   add_subdirectory(test)
 endif()
@@ -233,15 +233,15 @@ endif()
 #General CPACK settings
 INCLUDE(InstallRequiredSystemLibraries)
 
-set(CPACK_PACKAGE_NAME "HepMC")
-set(CPACK_PACKAGE_VENDOR "HepMC Developers")
+set(CPACK_PACKAGE_NAME "HepMC3")
+set(CPACK_PACKAGE_VENDOR "HepMC3 Developers")
 #Should the version be defined above?
 set(CPACK_PACKAGE_VERSION 3)
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 0)
 set(CPACK_PACKAGE_VERSION_PATCH 0)
 set(CPACK_PACKAGE_RELEASE 0)
-set(CPACK_PACKAGE_FILE_NAME "HepMC")
+set(CPACK_PACKAGE_FILE_NAME "HepMC3")
 set(CPACK_PACKAGE_DESCRIPTION "Event record library for high energy physics Monte Carlo")
 
 set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
@@ -252,19 +252,24 @@ SET(CPACK_OUTPUT_FILE_PREFIX binpackages)
 SET(CPACK_BINARY_RPM "ON")
 #RPM-specific settings
 set(CPACK_RPM_PACKAGE_DEBUG ON)
-set(CPACK_RPM_PACKAGE_NAME "HepMC")
+set(CPACK_RPM_PACKAGE_NAME "HepMC3")
 set(CPACK_RPM_COMPONENT_INSTALL ON)
 set(CPACK_RPM_PACKAGE_LICENSE "GPL")
 set(CPACK_RPM_PACKAGE_GROUP "General")
 set(CPACK_RPM_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${CPACK_PACKAGE_RELEASE}")
-set(CPACK_RPM_libs_PACKAGE_SUMMARY  "HepMC libraries")
-set(CPACK_RPM_devel_PACKAGE_SUMMARY "Headers for HepMC libraries")
-set(CPACK_RPM_examples_PACKAGE_SUMMARY "Examples for HepMC library")
+set(CPACK_RPM_libs_PACKAGE_SUMMARY  "HepMC3 libraries")
+set(CPACK_RPM_devel_PACKAGE_SUMMARY "Headers for HepMC3 libraries")
+set(CPACK_RPM_search_libs_PACKAGE_SUMMARY  "HepMC3 headers for event navigation")
+set(CPACK_RPM_search_devel_PACKAGE_SUMMARY  "HepMC3 libraries for event navigation")
+set(CPACK_RPM_examples_PACKAGE_SUMMARY "Examples for HepMC3 library")
 set(CPACK_RPM_libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
 set(CPACK_RPM_devel_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
+set(CPACK_RPM_search_libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
+set(CPACK_RPM_search_devel_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
 set(CPACK_RPM_examples_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
 set(CPACK_RPM_devel_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-libs")
-set(CPACK_RPM_examples_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-libs" "${CPACK_RPM_PACKAGE_NAME}-rootIO-libs")
+set(CPACK_RPM_search_devel_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-search-libs")
+set(CPACK_RPM_examples_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-libs" "${CPACK_RPM_PACKAGE_NAME}-rootIO-libs" "${CPACK_RPM_PACKAGE_NAME}-search-libs")
 #Everything that goes before  HepMC , i.e. top level directories,should be excluded
 #This feature is working fine only in the recent CPackRPM module -- see cmake/modules directory.
 set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${CPACK_PACKAGING_INSTALL_PREFIX} ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} )
@@ -273,24 +278,25 @@ set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${CPACK_PACKAGING_INSTALL_PREF
 
 SET(CPACK_BINARY_DEB "ON")
 #DEB-specific settings
-set(CPACK_DEBIAN_PACKAGE_NAME "HepMC")
+set(CPACK_DEBIAN_PACKAGE_NAME "HepMC3")
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_DEBIAN_PACKAGE_LICENSE "GPL")
 set(CPACK_DEBIAN_PACKAGE_GROUP "General")
 set(CPACK_DEBIAN_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${CPACK_PACKAGE_RELEASE}")
 set(CPACK_DEBIAN_devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-libs")
+set(CPACK_DEBIAN_search_devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-search-libs")
 set(CPACK_DEBIAN_examples_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-libs" "${CPACK_DEBIAN_PACKAGE_NAME}-rootIO-libs")
 set(CPACK_DEBIAN_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${CPACK_PACKAGING_INSTALL_PREFIX} ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} )
-SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "HepMC Developers")
+SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "HepMC3 Developers")
 
 
 #NSIS-specific settings
 SET(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SOURCE_DIR}/COPYING)
 
 if(ROOT_FOUND)
-set(CPACK_COMPONENTS_ALL   devel libs rootIO-devel rootIO-libs examples)
-set(CPACK_RPM_rootIO-libs_PACKAGE_SUMMARY  "HepMC libraries with ROOT I/O support")
-set(CPACK_RPM_rootIO-devel_PACKAGE_SUMMARY "Headers for HepMC libraries with ROOT I/O support")
+set(CPACK_COMPONENTS_ALL   devel libs rootIO-devel rootIO-libs   search-libs   search-devel  examples)
+set(CPACK_RPM_rootIO-libs_PACKAGE_SUMMARY  "HepMC3 libraries with ROOT I/O support")
+set(CPACK_RPM_rootIO-devel_PACKAGE_SUMMARY "Headers for HepMC3 libraries with ROOT I/O support")
 set(CPACK_RPM_rootIO-libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
 set(CPACK_RPM_rootIO-devel_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
 set(CPACK_RPM_rootIO-libs_PACKAGE_REQUIRES   "root, ${CPACK_RPM_PACKAGE_NAME}-libs")
@@ -298,6 +304,6 @@ set(CPACK_RPM_rootIO-devel_PACKAGE_REQUIRES   "${CPACK_RPM_PACKAGE_NAME}-devel, 
 SET(CPACK_DEBIAN_rootIO-libs_PACKAGE_DEPENDS "libroot, ${CPACK_DEBIAN_PACKAGE_NAME}-libs")
 SET(CPACK_DEBIAN_rootIO-devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-devel, ${CPACK_DEBIAN_PACKAGE_NAME}-rootIO-libs")
 else()
-set(CPACK_COMPONENTS_ALL   devel libs)
+set(CPACK_COMPONENTS_ALL   devel libs  search-libs   search-devel )
 endif()
 INCLUDE(CPack)

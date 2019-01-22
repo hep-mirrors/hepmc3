@@ -10,10 +10,10 @@
  *  @author Witold Pokorski
  *  @date   16/10/14
  */
-#include "HepMC/GenEvent.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/ReaderRoot.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/ReaderRoot.h"
+#include "HepMC3/Print.h"
 
 #include <iostream>
 

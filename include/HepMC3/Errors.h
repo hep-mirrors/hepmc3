@@ -3,10 +3,10 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 
-#ifndef HEPMC_ERRORS_H
-#define HEPMC_ERRORS_H
+#ifndef HEPMC3_ERRORS_H
+#define HEPMC3_ERRORS_H
 
-#include "HepMC/Common.h"
+#include "HepMC3/Common.h"
 
 namespace HepMC {
 
@@ -21,7 +21,7 @@ namespace HepMC {
     #define WARNING(MESSAGE) if ( Setup::print_warnings() ) { std::cout << "WARNING::" << MESSAGE << std::endl; }
 
     // Debug messages and code that will not go to the release version
-    #ifndef HEPMC_RELEASE_VERSION
+    #ifndef HEPMC3_RELEASE_VERSION
 
     /** @brief Macro for printing debug messages with appropriate debug level */
     #define DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }

@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_DATA_GENRUNINFODATA_H
-#define  HEPMC_DATA_GENRUNINFODATA_H
+#ifndef HEPMC3_DATA_GENRUNINFODATA_H
+#define HEPMC3_DATA_GENRUNINFODATA_H
 /**
  *  @file GenRunInfoData.h
  *  @brief Definition of \b struct GenRunInfoData

@@ -25,7 +25,7 @@
 
 #include <vector>
 
-#include "HepMC/GenParticle.h"
+#include "HepMC3/GenParticle.h"
 #include "Photos/PhotosParticle.h"
 
 using namespace std;

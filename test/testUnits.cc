@@ -3,8 +3,8 @@
 //
 #include <iostream>
 
-#include "HepMC/Units.h"
-#include "HepMC/GenEvent.h"
+#include "HepMC3/Units.h"
+#include "HepMC3/GenEvent.h"
 
 double conversion_factor( HepMC::Units::MomentumUnit from, HepMC::Units::MomentumUnit  to )
 {

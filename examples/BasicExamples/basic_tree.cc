@@ -8,12 +8,12 @@
 ///
 ///  Based on HepMC2/examples/example_BuildEventFromScratch.cc
 
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/Print.h"
-#include "HepMC/Selector.h"
-#include "HepMC/Relatives.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/Print.h"
+#include "HepMC3/Selector.h"
+#include "HepMC3/Relatives.h"
 
 using namespace HepMC;
 using namespace std;
@@ -48,12 +48,12 @@ int main() {
     GenEvent evt(Units::GEV,Units::MM);
 
     //                                                               px      py        pz       e     pdgid status
-    GenParticlePtr p1 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr p2 = make_shared<HepMC::GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
-    GenParticlePtr p3 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr p4 = make_shared<HepMC::GenParticle>( FourVector(-3.047,-19.0,    -54.629,  57.920),  -2,  3 );
+    GenParticlePtr p1 = make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
+    GenParticlePtr p2 = make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
+    GenParticlePtr p3 = make_shared<GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
+    GenParticlePtr p4 = make_shared<GenParticle>( FourVector(-3.047,-19.0,    -54.629,  57.920),  -2,  3 );
 
-    GenVertexPtr v1 = make_shared<HepMC::GenVertex>();
+    GenVertexPtr v1 = make_shared<GenVertex>();
     v1->add_particle_in (p1);
     v1->add_particle_out(p2);
     evt.add_vertex(v1);
@@ -61,28 +61,28 @@ int main() {
     // Set vertex status if needed
     v1->set_status(4);
 
-    GenVertexPtr v2 = make_shared<HepMC::GenVertex>();
+    GenVertexPtr v2 = make_shared<GenVertex>();
     v2->add_particle_in (p3);
     v2->add_particle_out(p4);
     evt.add_vertex(v2);
 
-    GenVertexPtr v3 = make_shared<HepMC::GenVertex>();
+    GenVertexPtr v3 = make_shared<GenVertex>();
     v3->add_particle_in(p2);
     v3->add_particle_in(p4);
     evt.add_vertex(v3);
 
-    GenParticlePtr p5 = make_shared<HepMC::GenParticle>( FourVector(-3.813,  0.113, -1.833, 4.233),  22, 1 );
-    GenParticlePtr p6 = make_shared<HepMC::GenParticle>( FourVector( 1.517,-20.68, -20.605,85.925), -24, 3 );
+    GenParticlePtr p5 = make_shared<GenParticle>( FourVector(-3.813,  0.113, -1.833, 4.233),  22, 1 );
+    GenParticlePtr p6 = make_shared<GenParticle>( FourVector( 1.517,-20.68, -20.605,85.925), -24, 3 );
 
     v3->add_particle_out(p5);
     v3->add_particle_out(p6);
 
-    GenVertexPtr v4 = make_shared<HepMC::GenVertex>();
+    GenVertexPtr v4 = make_shared<GenVertex>();
     v4->add_particle_in (p6);
     evt.add_vertex(v4);
 
-    GenParticlePtr p7 = make_shared<HepMC::GenParticle>( FourVector(-2.445, 28.816,  6.082,29.552),  1, 1 );
-    GenParticlePtr p8 = make_shared<HepMC::GenParticle>( FourVector( 3.962,-49.498,-26.687,56.373), -2, 1 );
+    GenParticlePtr p7 = make_shared<GenParticle>( FourVector(-2.445, 28.816,  6.082,29.552),  1, 1 );
+    GenParticlePtr p8 = make_shared<GenParticle>( FourVector( 3.962,-49.498,-26.687,56.373), -2, 1 );
 
     v4->add_particle_out(p7);
     v4->add_particle_out(p8);
@@ -94,14 +94,14 @@ int main() {
     // 1)
     cout << endl << "Find all stable particles: " << endl;
 
-    for(ConstGenParticlePtr p: HepMC::applyFilter(Selector::STATUS == 1, evt.particles())){
+    for(ConstGenParticlePtr p: applyFilter(Selector::STATUS == 1, evt.particles())){
       Print::line(p);
     }
 
     // 2)
     cout << endl << "Find all ancestors of particle with id " << p5->id() << ": " << endl;
 
-    for(ConstGenParticlePtr p: HepMC::Relatives::ANCESTORS(p5)){
+    for(ConstGenParticlePtr p: Relatives::ANCESTORS(p5)){
       Print::line(p);
     }
   
@@ -109,7 +109,7 @@ int main() {
     cout << endl << "Find stable descendants of particle with id " << p4->id() << ": " << endl;
     cout<<"We check both for STATUS == 1 (equivalent of IS_STABLE) and no end vertex, just to be safe" << endl;
 
-    HepMC::Filter has_end_vtx = [](ConstGenParticlePtr input)->bool{return (bool)input->end_vertex();};
+    Filter has_end_vtx = [](ConstGenParticlePtr input)->bool{return (bool)input->end_vertex();};
   
     vector<GenParticlePtr> results3 = applyFilter(Selector::STATUS==1 && has_end_vtx, Relatives::DESCENDANTS(p4));
     for(ConstGenParticlePtr p: results3){
@@ -119,8 +119,8 @@ int main() {
     // 3b)
     cout << endl << "Narrow down results of previous search to quarks only: " << endl;
 
-    // note the use of HepMC::abs to obtain the absolute value of pdg_id :)
-    for(ConstGenParticlePtr p: applyFilter( *HepMC::abs(Selector::PDG_ID) <= 6, results3)){
+    // note the use of abs to obtain the absolute value of pdg_id :)
+    for(ConstGenParticlePtr p: applyFilter( *abs(Selector::PDG_ID) <= 6, results3)){
       Print::line(p);
     }
 

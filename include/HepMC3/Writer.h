@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC_WRITER_H
-#define HEPMC_WRITER_H
+#ifndef HEPMC3_WRITER_H
+#define HEPMC3_WRITER_H
 ///
 /// @file  Writer.h
 /// @brief Definition of interface \b Writer
@@ -15,7 +15,7 @@
 /// @ingroup IO
 ///
 
-#include "HepMC/GenRunInfo.h"
+#include "HepMC3/GenRunInfo.h"
 
 namespace HepMC {
 

@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC_HEPEVT_WRAPPER_H
-#define HEPMC_HEPEVT_WRAPPER_H
+#ifndef HEPMC3_HEPEVT_WRAPPER_H
+#define HEPMC3_HEPEVT_WRAPPER_H
 /**
  *  @file HEPEVT_Wrapper.h
  *  @brief Definition of \b class HEPEVT_Wrapper
@@ -22,14 +22,14 @@
  *  @todo Do we just make write_event and fill_next_event instead?
  */
 
-#ifndef HEPMC_HEPEVT_NMXHEP
+#ifndef HEPMC3_HEPEVT_NMXHEP
 /** Default number of particles in the HEPEVT structure */
-#define HEPMC_HEPEVT_NMXHEP 10000
+#define HEPMC3_HEPEVT_NMXHEP 10000
 #endif
 
-#ifndef HEPMC_HEPEVT_PRECISION
+#ifndef HEPMC3_HEPEVT_PRECISION
 /** Default precision of the 4-momentum, time-space position and mass */
-#define HEPMC_HEPEVT_PRECISION double
+#define HEPMC3_HEPEVT_PRECISION double
 #endif
 
 /* This definition of HEPEVT corresponds to FORTRAN definition:
@@ -41,8 +41,8 @@
       DOUBLE PRECISION PHEP,VHEP
 */
 
-static const int NMXHEP = HEPMC_HEPEVT_NMXHEP; //!< Number of particles in the HEPEVT structure
-typedef HEPMC_HEPEVT_PRECISION momentum_t;     //!< Precision of the 4-momentum, time-space position and mass
+static const int NMXHEP = HEPMC3_HEPEVT_NMXHEP; //!< Number of particles in the HEPEVT structure
+typedef HEPMC3_HEPEVT_PRECISION momentum_t;     //!< Precision of the 4-momentum, time-space position and mass
 
 /** @struct HEPEVT
  *  @brief  C structure representing Fortran common block HEPEVT
@@ -70,7 +70,7 @@ struct HEPEVT
 #include <cstring> // memset
 #include <algorithm> //min max for VS2017
 #ifndef HEPEVT_WRAPPER_HEADER_ONLY
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 #endif
 using std::endl;
 

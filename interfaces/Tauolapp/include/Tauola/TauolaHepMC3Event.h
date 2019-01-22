@@ -21,9 +21,9 @@
  */
 
 #include <iostream>
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/GenParticle.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
 #include "Tauola/TauolaEvent.h"
 #include "Tauola/TauolaParticle.h"
 #include "Tauola/TauolaHepMC3Particle.h"

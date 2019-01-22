@@ -1,7 +1,7 @@
 #ifndef MYCLASS_H
 #define MYCLASS_H
 
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 
 /** @class MyClass
  *  @brief Sample class for root I/O test

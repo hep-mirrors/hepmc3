@@ -8,11 +8,11 @@
  *  @brief Implementation of \b class WriterHEPEVT
  *
  */
-#include "HepMC/WriterHEPEVT.h"
-#include "HepMC/HEPEVT_Wrapper.h"
-#include <cstdio>  // sprintf
-#include "HepMC/Print.h"
 #include <sstream>
+#include <cstdio>  // sprintf
+#include "HepMC3/WriterHEPEVT.h"
+#include "HepMC3/HEPEVT_Wrapper.h"
+#include "HepMC3/Print.h"
 namespace HepMC
 {
 

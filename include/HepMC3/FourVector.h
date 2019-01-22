@@ -3,13 +3,13 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_FOURVECTOR_H
-#define  HEPMC_FOURVECTOR_H
+#ifndef HEPMC3_FOURVECTOR_H
+#define HEPMC3_FOURVECTOR_H
 /**
  *  @file FourVector.h
  *  @brief Definition of \b class FourVector
  */
-#include "HepMC/Common.h"
+#include "HepMC3/Common.h"
 #include <cmath>
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288
@@ -144,7 +144,7 @@ public:
     /// Absolute rapidity
     double abs_rap() const { return std::abs( rap() ); }
 
-    #ifndef HEPMC_NO_DEPRECATED
+    #ifndef HEPMC3_NO_DEPRECATED
     /// Same as eta
     double pseudoRapidity() const { return eta(); }
     #endif

@@ -9,13 +9,13 @@
 #include <fstream>
 #include <vector>
 
-#include "HepMC/Attribute.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/WriterAsciiHepMC2.h"
-#include "HepMC/Print.h"
+#include "HepMC3/Attribute.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/WriterAsciiHepMC2.h"
+#include "HepMC3/Print.h"
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288
 #endif

@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC_UNITS_H
-#define HEPMC_UNITS_H
+#ifndef HEPMC3_UNITS_H
+#define HEPMC3_UNITS_H
 /**
  *  @file Units.h
  *  @brief Definition of \b class Units
@@ -16,9 +16,9 @@
  *
  */
 
-#include "HepMC/Errors.h"
-#include "HepMC/Setup.h"
-#include "HepMC/FourVector.h"
+#include "HepMC3/Errors.h"
+#include "HepMC3/Setup.h"
+#include "HepMC3/FourVector.h"
 
 namespace HepMC {
 

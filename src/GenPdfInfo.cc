@@ -8,7 +8,7 @@
  *  @brief Implementation of \b class GenPdfInfo
  *
  */
-#include "HepMC/GenPdfInfo.h"
+#include "HepMC3/GenPdfInfo.h"
 #include <cstring> // memcmp
 #include <cstdlib> // atoi
 #include <cstdio> // sprintf

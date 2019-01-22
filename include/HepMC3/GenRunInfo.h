@@ -7,17 +7,17 @@
 /// @file GenRunInfo.h
 /// @brief Definition of \b class GenRunInfo
 ///
-#ifndef  HEPMC_GENRUNINFO_H
-#define  HEPMC_GENRUNINFO_H
+#ifndef HEPMC3_GENRUNINFO_H
+#define HEPMC3_GENRUNINFO_H
 
 #if !defined(__CINT__)
-#include "HepMC/Common.h"
-#include "HepMC/Units.h"
-#include "HepMC/Attribute.h"
+#include "HepMC3/Common.h"
+#include "HepMC3/Units.h"
+#include "HepMC3/Attribute.h"
 #include <mutex>
 #endif // __CINT__
 
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
 class TBuffer;
 #endif
 
@@ -133,7 +133,7 @@ public:
     /// @brief Fill GenRunInfo based on GenRunInfoData
     void read_data(const GenRunInfoData &data);
 
-    #ifdef HEPMC_ROOTIO
+    #ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
     //@}

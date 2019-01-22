@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_CROSS_SECTION_H
-#define  HEPMC_CROSS_SECTION_H
+#ifndef HEPMC3_CROSS_SECTION_H
+#define HEPMC3_CROSS_SECTION_H
 /**
  *  @file GenCrossSection.h
  *  @brief Definition of attribute \b class GenCrossSection
@@ -32,7 +32,7 @@
  *
  */
 #include <iostream>
-#include "HepMC/Attribute.h"
+#include "HepMC3/Attribute.h"
 
 namespace HepMC {
 

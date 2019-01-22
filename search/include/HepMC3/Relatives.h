@@ -7,11 +7,11 @@
 /// @file Relatives.h
 /// @brief Defines helper classes to extract relatives of an input GenParticle or GenVertex
 ///
-#ifndef HEPMC_RELATIVES_H
-#define HEPMC_RELATIVES_H
+#ifndef HEPMC3_RELATIVES_H
+#define HEPMC3_RELATIVES_H
 
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
 
 namespace HepMC{
 

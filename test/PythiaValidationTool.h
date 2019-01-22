@@ -15,7 +15,7 @@
 #include "Pythia8/Pythia8ToHepMC.h"
 #endif
 #else
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 #include "Pythia8/Pythia8ToHepMC3.h"
 #endif // ifdef PYTHIA8_HEPMC2
 

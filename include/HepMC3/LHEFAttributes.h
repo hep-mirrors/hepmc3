@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_LHEFATTRIBUTES_H
-#define  HEPMC_LHEFATTRIBUTES_H
+#ifndef HEPMC3_LHEFATTRIBUTES_H
+#define HEPMC3_LHEFATTRIBUTES_H
 /**
  *  @file LHEFAttributes.h
  *  @brief Definition of \b class HEPRUPAttribute and \b class HEPEUAttribute
@@ -13,7 +13,7 @@
  *
  */
 
-#include "HepMC/Attribute.h"
+#include "HepMC3/Attribute.h"
 #include "LHEF.h"
 #include "FourVector.h"
 

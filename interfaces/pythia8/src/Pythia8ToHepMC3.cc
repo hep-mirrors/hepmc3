@@ -1,8 +1,8 @@
 #include "Pythia8/Pythia8ToHepMC3.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/FourVector.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/FourVector.h"
 
 #include <deque>
 #include <cassert>

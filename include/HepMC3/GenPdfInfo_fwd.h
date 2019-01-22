@@ -8,8 +8,8 @@
 /// @brief Minimal forward declarations for GenPdfInfo
 ///
 
-#ifndef HEPMC_GENPDFINFO_FWD_H
-#define HEPMC_GENPDFINFO_FWD_H
+#ifndef HEPMC3_GENPDFINFO_FWD_H
+#define HEPMC3_GENPDFINFO_FWD_H
 
 #include <memory>
 

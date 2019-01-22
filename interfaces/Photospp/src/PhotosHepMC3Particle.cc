@@ -3,11 +3,11 @@
 // This file is part of HepMC
 // Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/Common.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/Common.h"
+#include "HepMC3/Print.h"
 #include "Photos/PhotosHepMC3Particle.h"
 #include "Photos/Log.h"
 #include "Photos/Photos.h"

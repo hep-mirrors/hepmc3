@@ -8,8 +8,8 @@
 /// @brief Minimal forward declarations for GenParticle
 ///
 
-#ifndef HEPMC_GENPARTICLE_FWD_H
-#define HEPMC_GENPARTICLE_FWD_H
+#ifndef HEPMC3_GENPARTICLE_FWD_H
+#define HEPMC3_GENPARTICLE_FWD_H
 
 #include <memory>
 #include <vector>

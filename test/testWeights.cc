@@ -10,9 +10,9 @@
 #include <string>
 #include <vector>
 
-#include "HepMC/GenRunInfo.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenRunInfo.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/Print.h"
 #include <stdexcept>
 int main()
 {

@@ -7,13 +7,13 @@
 /// @file WriterAscii.cc
 /// @brief Implementation of \b class WriterAscii
 ///
-#include "HepMC/WriterAscii.h"
+#include "HepMC3/WriterAscii.h"
 
-#include "HepMC/Version.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/Units.h"
+#include "HepMC3/Version.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/Units.h"
 #include <cstring>
 #include <algorithm>//min max for VS2017
 namespace HepMC {

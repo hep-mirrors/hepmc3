@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_DATA_GENEVENTDATA_H
-#define  HEPMC_DATA_GENEVENTDATA_H
+#ifndef HEPMC3_DATA_GENEVENTDATA_H
+#define HEPMC3_DATA_GENEVENTDATA_H
 /**
  *  @file GenEventData.h
  *  @brief Definition of \b struct GenEventData
@@ -17,9 +17,9 @@
  */
 #include <vector>
 #include <string>
-#include "HepMC/Data/GenParticleData.h"
-#include "HepMC/Data/GenVertexData.h"
-#include "HepMC/Units.h"
+#include "HepMC3/Data/GenParticleData.h"
+#include "HepMC3/Data/GenVertexData.h"
+#include "HepMC3/Units.h"
 
 namespace HepMC {
 

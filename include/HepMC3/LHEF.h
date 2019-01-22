@@ -1,6 +1,6 @@
 // -*- C++ -*-
-#ifndef HEPMC_LHEF_H
-#define HEPMC_LHEF_H
+#ifndef HEPMC3_LHEF_H
+#define HEPMC3_LHEF_H
 //
 // This is the declaration of the Les Houches Event File classes,
 // implementing a simple C++ parser/writer for Les Houches Event files.
@@ -3397,4 +3397,4 @@ workshop at CERN 2006.
  */
 
 
-#endif /* HEPMC_LHEF_H */
+#endif /* HEPMC3_LHEF_H */

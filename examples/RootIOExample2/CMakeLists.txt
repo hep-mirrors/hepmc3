@@ -6,7 +6,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_D
 # Generate dictionaries
 #
 
-ROOT_GENERATE_DICTIONARY(myclass_Classes include/myclass_Classes.h LINKDEF include/LinkDef.h OPTIONS -inlineInputHeader -DHEPMC_ROOTIO)
+ROOT_GENERATE_DICTIONARY(myclass_Classes include/myclass_Classes.h LINKDEF include/LinkDef.h OPTIONS -inlineInputHeader -DHEPMC3_ROOTIO)
 
 add_custom_target (dictionary DEPENDS myclass_Classes.cxx)
 
@@ -15,7 +15,7 @@ add_executable(class_example_read.exe
         ${CMAKE_CURRENT_SOURCE_DIR}/class_example_read.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyRunClass.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyClass.cc myclass_Classes.cxx)
-target_link_libraries(class_example_read.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
+target_link_libraries(class_example_read.exe ${ROOT_LIBRARIES} HepMC3 HepMC3rootIO)
 set_target_properties(class_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 add_dependencies( class_example_read.exe dictionary )
 
@@ -23,7 +23,7 @@ add_executable(class_example_write.exe
         ${CMAKE_CURRENT_SOURCE_DIR}/class_example_write.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyRunClass.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyClass.cc myclass_Classes.cxx)
-target_link_libraries(class_example_write.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
+target_link_libraries(class_example_write.exe ${ROOT_LIBRARIES} HepMC3 HepMC3rootIO)
 set_target_properties(class_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 add_dependencies( class_example_write.exe dictionary )
 

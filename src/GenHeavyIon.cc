@@ -8,7 +8,7 @@
  *  @brief Implementation of \b class GenHeavyIon
  *
  */
-#include "HepMC/GenHeavyIon.h"
+#include "HepMC3/GenHeavyIon.h"
 #include <cstring> // memcmp
 #include <cstdlib> // atoi
 #include <cstdio> // sprintf
@@ -18,7 +18,7 @@ namespace HepMC {
 
 bool GenHeavyIon::from_string(const string &att) {
 
-#ifdef HEPMC_NO_DEPRECATED
+#ifdef HEPMC3_NO_DEPRECATED
     double spectator_neutrons, spectator_protons, eccentricity;
 #endif
     
@@ -66,7 +66,7 @@ bool GenHeavyIon::from_string(const string &att) {
 bool GenHeavyIon::to_string(string &att) const {
     ostringstream os;
     
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
     if ( !forceoldformat ) os << "v0 ";
 #else
     os << "v1 ";
@@ -75,13 +75,13 @@ bool GenHeavyIon::to_string(string &att) const {
     os << setprecision(8)
        << Ncoll_hard << " " << Npart_proj << " "
        << Npart_targ << " " << Ncoll << " "
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
        << spectator_neutrons << " " << spectator_protons << " "
 #endif
        << N_Nwounded_collisions << " " << Nwounded_N_collisions << " "
        << Nwounded_Nwounded_collisions << " " << impact_parameter << " "
        << event_plane_angle << " "
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
        << eccentricity << " "
 #endif
        << sigma_inel_NN << " " << centrality << " " << user_cent_estimate << " "
@@ -104,7 +104,7 @@ bool GenHeavyIon::to_string(string &att) const {
 }
 
 
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
 
 bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
   return ( memcmp( (void*) this, (void*) &a, sizeof(class GenHeavyIon) ) == 0 );

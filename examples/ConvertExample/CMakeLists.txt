@@ -13,7 +13,7 @@ add_executable(convert_example.exe
         ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterRootTreeOPAL.cc 
         ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterHEPEVTZEUS.cc )
-target_link_libraries(convert_example.exe ${ROOT_LIBRARIES} HepMC HepMCrootIO)
+target_link_libraries(convert_example.exe ${ROOT_LIBRARIES} HepMC3 HepMC3rootIO)
 set_target_properties(convert_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 target_compile_definitions(convert_example.exe PRIVATE HEPMCCONVERT_EXTENSION_ROOTTREEOPAL=1 HEPMCCONVERT_EXTENSION_HEPEVTZEUS=1)
 add_dependencies( convert_example.exe dictionary )
@@ -33,7 +33,7 @@ add_executable(convert_example.exe
         ${CMAKE_CURRENT_SOURCE_DIR}/convert_example.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c
         ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterHEPEVTZEUS.cc )
-target_link_libraries(convert_example.exe HepMC )
+target_link_libraries(convert_example.exe HepMC3 )
 set_target_properties(convert_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 target_compile_definitions(convert_example.exe PRIVATE  HEPMCCONVERT_EXTENSION_HEPEVTZEUS=1)
 # create environment scripts

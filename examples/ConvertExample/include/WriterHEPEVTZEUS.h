@@ -1,9 +1,9 @@
-#ifndef  HEPMC_WRITERHEPEVTZEUS_H
-#define  HEPMC_WRITERHEPEVTZEUS_H
-#include "HepMC/WriterHEPEVT.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/Data/GenEventData.h"
+#ifndef HEPMC3_WRITERHEPEVTZEUS_H
+#define HEPMC3_WRITERHEPEVTZEUS_H
+#include "HepMC3/WriterHEPEVT.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/Data/GenEventData.h"
 namespace HepMC
 {
 class WriterHEPEVTZEUS : public  WriterHEPEVT

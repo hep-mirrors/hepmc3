@@ -21,7 +21,7 @@
 #ifndef _HepMC3Event_H
 #define _HepMC3Event_H
 
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 #include "HepMC3Particle.h"
 #include "HEPEvent.H"
 

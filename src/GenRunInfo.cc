@@ -8,8 +8,8 @@
  *  @brief Implementation of \b class GenRunInfo
  *
  */
-#include "HepMC/GenRunInfo.h"
-#include "HepMC/Data/GenRunInfoData.h"
+#include "HepMC3/GenRunInfo.h"
+#include "HepMC3/Data/GenRunInfoData.h"
 #include <sstream>
 
 namespace HepMC {

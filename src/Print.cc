@@ -9,8 +9,8 @@
 ///
 /// @todo AB: Why a static class rather than some namespaced free functions?
 ///
-#include "HepMC/Print.h"
-#include "HepMC/Attribute.h"
+#include "HepMC3/Print.h"
+#include "HepMC3/Attribute.h"
 
 using namespace std;
 

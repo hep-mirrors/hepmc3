@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_DATA_GENVERTEXDATA_H
-#define  HEPMC_DATA_GENVERTEXDATA_H
+#ifndef HEPMC3_DATA_GENVERTEXDATA_H
+#define HEPMC3_DATA_GENVERTEXDATA_H
 /**
  *  @file GenVertexData.h
  *  @brief Definition of \b class GenVertexData
@@ -15,7 +15,7 @@
  *  @ingroup data
  *
  */
-#include "HepMC/FourVector.h"
+#include "HepMC3/FourVector.h"
 
 namespace HepMC {
 

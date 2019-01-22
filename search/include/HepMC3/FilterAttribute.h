@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_SEARCH_FILTEATTRIBUTE_H
-#define  HEPMC_SEARCH_FILTEATTRIBUTE_H
+#ifndef HEPMC3_SEARCH_FILTEATTRIBUTE_H
+#define HEPMC3_SEARCH_FILTEATTRIBUTE_H
 ///
 /// @file FilterAttribute.h
 /// @brief Definition of \b class ATTRIBUTE
@@ -17,8 +17,8 @@
 /// and examples of its use.
 ///
 /// @ingroup search_engine
-#include "HepMC/Filter.h"
-#include "HepMC/Attribute.h"
+#include "HepMC3/Filter.h"
+#include "HepMC3/Attribute.h"
 #include <string>
 
 namespace HepMC {

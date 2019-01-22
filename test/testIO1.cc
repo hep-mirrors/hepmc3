@@ -1,9 +1,9 @@
 // -*- C++ -*-
-#include "HepMC/GenEvent.h"
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/ReaderAsciiHepMC2.h"
-#include "HepMC/WriterAsciiHepMC2.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/ReaderAsciiHepMC2.h"
+#include "HepMC3/WriterAsciiHepMC2.h"
 #include "HepMC3TestUtils.h"
 int main()
 {

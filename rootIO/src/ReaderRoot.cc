@@ -8,7 +8,7 @@
  *  @brief Implementation of \b class ReaderRoot
  *
  */
-#include "HepMC/ReaderRoot.h"
+#include "HepMC3/ReaderRoot.h"
 
 namespace HepMC {
 

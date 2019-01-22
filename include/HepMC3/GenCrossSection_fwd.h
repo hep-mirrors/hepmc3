@@ -8,8 +8,8 @@
 /// @brief Minimal forward declarations for GenCrossSection
 ///
 
-#ifndef HEPMC_GENCROSSSECTION_FWD_H
-#define HEPMC_GENCROSSSECTION_FWD_H
+#ifndef HEPMC3_GENCROSSSECTION_FWD_H
+#define HEPMC3_GENCROSSSECTION_FWD_H
 
 #include <memory>
 

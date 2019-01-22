@@ -7,13 +7,13 @@
 /// @file WriterAsciiHepMC2.cc
 /// @brief Implementation of \b class WriterAsciiHepMC2
 ///
-#include "HepMC/WriterAsciiHepMC2.h"
+#include "HepMC3/WriterAsciiHepMC2.h"
 
-#include "HepMC/Version.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/Units.h"
+#include "HepMC3/Version.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/Units.h"
 #include <cstring>
 
 namespace HepMC

@@ -1,9 +1,9 @@
 #include "Tauola/TauolaHepMC3Particle.h"
 #include "Tauola/Log.h"
 
-#include "HepMC/GenVertex.h"
-#include "HepMC/Common.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/Common.h"
+#include "HepMC3/Print.h"
 using namespace HepMC;
 
 namespace Tauolapp

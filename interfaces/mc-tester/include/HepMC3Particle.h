@@ -17,8 +17,8 @@
 #define _HepMC3Particle_H
 
 #include "HEPParticle.H"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
 
 #ifdef _USE_ROOT_
 #include <TObject.h>

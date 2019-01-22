@@ -8,8 +8,8 @@
  *  @brief Implementation of \b class HEPRUPAttribute and HEPEUPAttribute
  */
 
-#include "HepMC/LHEFAttributes.h"
-#include "HepMC/GenEvent.h"
+#include "HepMC3/LHEFAttributes.h"
+#include "HepMC3/GenEvent.h"
 
 using namespace HepMC;
 using namespace LHEF;

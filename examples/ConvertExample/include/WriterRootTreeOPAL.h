@@ -1,9 +1,9 @@
-#ifndef  HEPMC_WRITERROOTTREEOPAL_H
-#define  HEPMC_WRITERROOTTREEOPAL_H
-#include "HepMC/WriterRootTree.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/Data/GenEventData.h"
+#ifndef HEPMC3_WRITERROOTTREEOPAL_H
+#define HEPMC3_WRITERROOTTREEOPAL_H
+#include "HepMC3/WriterRootTree.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/Data/GenEventData.h"
 namespace HepMC
 {
 class WriterRootTreeOPAL : public WriterRootTree

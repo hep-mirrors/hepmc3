@@ -1,5 +1,5 @@
 #include "WriterHEPEVTZEUS.h"
-#include "HepMC/HEPEVT_Wrapper.h"
+#include "HepMC3/HEPEVT_Wrapper.h"
 namespace HepMC
 {
 WriterHEPEVTZEUS::WriterHEPEVTZEUS(const std::string &filename):WriterHEPEVT(filename) {}

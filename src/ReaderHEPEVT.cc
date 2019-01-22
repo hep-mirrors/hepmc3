@@ -8,8 +8,8 @@
  *  @brief Implementation of \b class ReaderHEPEVT
  *
  */
-#include "HepMC/ReaderHEPEVT.h"
-#include "HepMC/HEPEVT_Wrapper.h"
+#include "HepMC3/ReaderHEPEVT.h"
+#include "HepMC3/HEPEVT_Wrapper.h"
 
 #include <sstream>
 namespace HepMC
@@ -31,7 +31,7 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename):
 
 }
 
-#define  READERHEPEVTBUFFERSIZE 255
+#define READERHEPEVTBUFFERSIZE 255
 bool ReaderHEPEVT::read_hepevt_event_header()
 {
     char buf_e[READERHEPEVTBUFFERSIZE];

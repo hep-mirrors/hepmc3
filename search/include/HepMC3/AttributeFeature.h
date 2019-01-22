@@ -8,11 +8,11 @@
 /// @brief Defines AttributeFeature for obtaining Filters to search by Attribute.
 ///
 
-#ifndef HEPMC_ATTRIBUTE_FEATURE_H
-#define HEPMC_ATTRIBUTE_FEATURE_H
+#ifndef HEPMC3_ATTRIBUTE_FEATURE_H
+#define HEPMC3_ATTRIBUTE_FEATURE_H
 
-#include "HepMC/Attribute.h"
-#include "HepMC/Filter.h"
+#include "HepMC3/Attribute.h"
+#include "HepMC3/Filter.h"
 
 namespace HepMC{
   

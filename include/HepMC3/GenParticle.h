@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_GENPARTICLE_H
-#define  HEPMC_GENPARTICLE_H
+#ifndef HEPMC3_GENPARTICLE_H
+#define HEPMC3_GENPARTICLE_H
 /**
  *  @file GenParticle.h
  *  @brief Definition of \b class GenParticle
@@ -13,12 +13,12 @@
  *  @brief Stores particle-related information
  *
  */
-#include "HepMC/Data/GenParticleData.h"
-#include "HepMC/FourVector.h"
-#include "HepMC/Common.h"
+#include "HepMC3/Data/GenParticleData.h"
+#include "HepMC3/FourVector.h"
+#include "HepMC3/Common.h"
 
-#include "HepMC/GenParticle_fwd.h"
-#include "HepMC/GenVertex_fwd.h"
+#include "HepMC3/GenParticle_fwd.h"
+#include "HepMC3/GenVertex_fwd.h"
 
 namespace HepMC {
 
@@ -127,16 +127,16 @@ public:
     /// @name Deprecated functionality
     //@{
 
-    #ifndef HEPMC_NO_DEPRECATED
+    #ifndef HEPMC3_NO_DEPRECATED
 
     /// @brief Get PDG ID
     /// @deprecated Use pid() instead
-    // HEPMC_DEPRECATED("Use pid() instead")
+    // HEPMC3_DEPRECATED("Use pid() instead")
     int pdg_id() const { return m_data.pid; }
 
     /// @brief Set PDG ID
     /// @deprecated Use set_pid() instead
-    // HEPMC_DEPRECATED("Use set_pid() instead")
+    // HEPMC3_DEPRECATED("Use set_pid() instead")
     void set_pdg_id(const int& pidin) { set_pid(pidin); }
 
     #endif
@@ -157,7 +157,7 @@ private:
 
 } // namespace HepMC
 
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 namespace HepMC {
 /// @brief Get attribute of type T
 template<class T> shared_ptr<T> GenParticle::attribute(const string& name) const {

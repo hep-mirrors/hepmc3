@@ -10,7 +10,7 @@
  *  Fills HEPEVT twice - once using FORTRAN and second time using C++
  *  Tests that both times printouts from FORTRAN and C++ match
  *
- *  Note that HepMC/HEPEVT_Wrapper.h file is a standalone header file
+ *  Note that HEPEVT_Wrapper.h file is a standalone header file
  *  and can be copied over to user directory. No linking to HepMC library
  *  is needed to use this wrapper.
  */
@@ -23,9 +23,9 @@
 
    NOTE: default is NMXHEP=10000 and double precision */
 
-//#define HEPMC_HEPEVT_NMXHEP 4000
-//#define HEPMC_HEPEVT_PRECISION float
-#include "HepMC/HEPEVT_Wrapper.h"
+//#define HEPMC3_HEPEVT_NMXHEP 4000
+//#define HEPMC3_HEPEVT_PRECISION float
+#include "HepMC3/HEPEVT_Wrapper.h"
 
 #include <iostream>
 using HepMC::HEPEVT_Wrapper;

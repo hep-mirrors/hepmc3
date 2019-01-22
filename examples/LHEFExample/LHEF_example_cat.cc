@@ -2,13 +2,13 @@
  *  @example LHEF_example_cat.cc
  *  @brief Basic example of use of LHEF for reading and writing LHE files
  */
-#include "HepMC/LHEFAttributes.h"
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/AssociatedParticle.h"
+#include "HepMC3/LHEFAttributes.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/AssociatedParticle.h"
 #include <iomanip>
 
 using namespace HepMC;

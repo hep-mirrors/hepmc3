@@ -3,11 +3,11 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC_CONTRIB_READER_FACTORY_H
-#define HEPMC_CONTRIB_READER_FACTORY_H
+#ifndef HEPMC3_CONTRIB_READER_FACTORY_H
+#define HEPMC3_CONTRIB_READER_FACTORY_H
 
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/ReaderAsciiHepMC2.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/ReaderAsciiHepMC2.h"
 
 #include <memory>
 #include <string>

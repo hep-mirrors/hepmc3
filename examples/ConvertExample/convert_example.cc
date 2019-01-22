@@ -1,24 +1,24 @@
-#include "HepMC/Print.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/ReaderAsciiHepMC2.h"
-#include "HepMC/WriterAsciiHepMC2.h"
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/WriterHEPEVT.h"
-#include "HepMC/ReaderHEPEVT.h"
-#include "HepMC/ReaderLHEF.h"
+#include "HepMC3/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/ReaderAsciiHepMC2.h"
+#include "HepMC3/WriterAsciiHepMC2.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/WriterHEPEVT.h"
+#include "HepMC3/ReaderHEPEVT.h"
+#include "HepMC3/ReaderLHEF.h"
 
-#ifdef HEPMC_ROOTIO
-#include "HepMC/ReaderRoot.h"
-#include "HepMC/WriterRoot.h"
-#include "HepMC/ReaderRootTree.h"
-#include "HepMC/WriterRootTree.h"
+#ifdef HEPMC3_ROOTIO
+#include "HepMC3/ReaderRoot.h"
+#include "HepMC3/WriterRoot.h"
+#include "HepMC3/ReaderRootTree.h"
+#include "HepMC3/WriterRootTree.h"
 #endif
 
 /* Extension example*/
 #ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
-#ifndef HEPMC_ROOTIO
-#warning "HEPMCCONVERT_EXTENSION_ROOTTREEOPAL requires  compilation with of HepMC with ROOT, i.e. HEPMC_ROOTIO.This extension will be disabled."
+#ifndef HEPMC3_ROOTIO
+#warning "HEPMCCONVERT_EXTENSION_ROOTTREEOPAL requires  compilation with of HepMC with ROOT, i.e. HEPMC3_ROOTIO.This extension will be disabled."
 #undef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
 #else
 #include "WriterRootTreeOPAL.h"
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
         input_file=new ReaderLHEF(ai.inputs[0]);
         break;
     case treeroot:
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
         input_file=new ReaderRootTree(ai.inputs[0]);
         break;
 #else
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
         exit(2);
 #endif
     case root:
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
         input_file=new ReaderRoot(ai.inputs[0]);
         break;
 #else
@@ -114,7 +114,7 @@ int main(int argc, char** argv)
         output_file=new WriterHEPEVT(ai.inputs[1]);
         break;
     case root:
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
         output_file=new WriterRoot(ai.inputs[1]);
         break;
 #else
@@ -122,7 +122,7 @@ int main(int argc, char** argv)
         exit(2);
 #endif
     case treeroot:
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
         output_file=new WriterRootTree(ai.inputs[1]);
         break;
 #else

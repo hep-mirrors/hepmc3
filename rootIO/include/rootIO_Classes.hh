@@ -1,2 +1,2 @@
-#include "HepMC/Data/GenEventData.h"
-#include "HepMC/Data/GenRunInfoData.h"
+#include "HepMC3/Data/GenEventData.h"
+#include "HepMC3/Data/GenRunInfoData.h"

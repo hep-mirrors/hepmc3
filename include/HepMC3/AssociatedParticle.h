@@ -4,8 +4,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_AssociatedParticle_H
-#define  HEPMC_AssociatedParticle_H
+#ifndef HEPMC3_AssociatedParticle_H
+#define HEPMC3_AssociatedParticle_H
 /**
  *  @file AssociatedParticle.h
  *  @brief Definition of \b class AssociatedParticle,
@@ -17,8 +17,8 @@
  *
  */
 
-#include "HepMC/Attribute.h"
-#include "HepMC/GenParticle.h"
+#include "HepMC3/Attribute.h"
+#include "HepMC3/GenParticle.h"
 
 namespace HepMC {
 

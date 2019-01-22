@@ -8,10 +8,10 @@
  *  @brief Implementation of \b class GenEvent
  *
  */
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/Data/GenEventData.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/Data/GenEventData.h"
 
 #include <deque>
 #include <algorithm> // sort
@@ -151,7 +151,7 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     //
     // Reassign id of attributes with id above this one
     //
-#ifndef HEPMC_HAS_CXX0X_GCC_ONLY
+#ifndef HEPMC3_HAS_CXX0X_GCC_ONLY
        vector<att_val_t> changed_attributes;
 
     FOREACH( att_key_t& vt1, m_attributes ) {
@@ -245,7 +245,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     //
     // Reassign id of attributes with id below this one
     //
-#ifndef HEPMC_HAS_CXX0X_GCC_ONLY
+#ifndef HEPMC3_HAS_CXX0X_GCC_ONLY
     vector<att_val_t> changed_attributes;
 
     FOREACH( att_key_t& vt1, m_attributes ) {
@@ -598,7 +598,7 @@ void GenEvent::read_data(const GenEventData &data) {
 }
 
 
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
 
 //
 // Deprecated functions

@@ -280,14 +280,13 @@ void ValidationControl::process(GenEvent &hepmc) {
                     delta = sqrt(px*px + py*py + pz*pz + e*e);
                 }
             )
-            HEPMC3CODE(
-                FindParticles search( hepmc, FIND_ALL, STATUS == 1 );
-                //hepmc.set_print_precision(8);
-                  std::vector<GenParticlePtr> R=search.results();
-                  for (std::vector<GenParticlePtr>::iterator p=R.begin();p!=R.end();++p) sum += (*p)->momentum();
-                if(!input_momentum.is_zero()) delta = (input_momentum - sum).length();
-            )
 
+           HEPMC3CODE(
+           vector<GenParticlePtr> results = applyFilter(Selector::STATUS==1,hepmc.particles());
+           for (auto p: results) sum += p->momentum();
+            if(!input_momentum.is_zero()) delta = (input_momentum - sum).length();
+            )
+ 
             printf("Momentum sum: %+15.8e %+15.8e %+15.8e %+15.8e (evt: %7i, %s)",sum.px(),sum.py(),sum.pz(),sum.e(),m_event_counter,(*tool)->name().c_str());
 
             if( delta < m_momentum_check_threshold ) printf("\n");

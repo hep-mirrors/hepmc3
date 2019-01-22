@@ -10,7 +10,7 @@
 #include "HepMC/GenEvent.h"
 #include "HepMCEvent.H"
 #else
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 #include "HepMC3Event.h"
 #endif // ifdef HEPMC2
 

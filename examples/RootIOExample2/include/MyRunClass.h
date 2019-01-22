@@ -1,7 +1,7 @@
 #ifndef MYRUNCLASS_H
 #define MYRUNCLASS_H
 
-#include "HepMC/GenRunInfo.h"
+#include "HepMC3/GenRunInfo.h"
 
 /** @class MyRunClass
  *  @brief Sample class for root I/O test

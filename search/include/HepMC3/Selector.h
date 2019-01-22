@@ -3,12 +3,12 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC_SELECTOR_H
-#define HEPMC_SELECTOR_H
+#ifndef HEPMC3_SELECTOR_H
+#define HEPMC3_SELECTOR_H
 
-#include "HepMC/Filter.h"
-#include "HepMC/Feature.h"
-#include "HepMC/AttributeFeature.h"
+#include "HepMC3/Filter.h"
+#include "HepMC3/Feature.h"
+#include "HepMC3/AttributeFeature.h"
 
 namespace HepMC{
   
@@ -149,9 +149,7 @@ namespace HepMC{
     
   };
   
-  ConstSelectorPtr abs(const Selector &input){
-    return input.abs();
-  }
+  ConstSelectorPtr abs(const Selector &input);
   
 }
 #endif

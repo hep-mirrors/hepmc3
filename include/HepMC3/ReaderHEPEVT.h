@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_READERHEPEVT_H
-#define  HEPMC_READERHEPEVT_H
+#ifndef HEPMC3_READERHEPEVT_H
+#define HEPMC3_READERHEPEVT_H
 /**
  *  @file  ReaderHEPEVT.h
  *  @brief Definition of \b class ReaderHEPEVT
@@ -16,10 +16,10 @@
  *  @ingroup IO
  *
  */
-#include "HepMC/Reader.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenRunInfo.h"
-#include "HepMC/Data/GenEventData.h"
+#include "HepMC3/Reader.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenRunInfo.h"
+#include "HepMC3/Data/GenEventData.h"
 
 
 namespace HepMC

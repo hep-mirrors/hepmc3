@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC_WRITERASCII_H
-#define HEPMC_WRITERASCII_H
+#ifndef HEPMC3_WRITERASCII_H
+#define HEPMC3_WRITERASCII_H
 ///
 /// @file  WriterAscii.h
 /// @brief Definition of class \b WriterAscii
@@ -14,9 +14,9 @@
 ///
 /// @ingroup IO
 ///
-#include "HepMC/Writer.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenRunInfo.h"
+#include "HepMC3/Writer.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenRunInfo.h"
 #include <string>
 #include <fstream>
 

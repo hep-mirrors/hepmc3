@@ -5,12 +5,12 @@
 //
 /// @brief Definition of \b template \b class SmartPointer
 
-#ifndef  HEPMC_DATA_SMARTPOINTER_H
-#define  HEPMC_DATA_SMARTPOINTER_H
+#ifndef HEPMC3_DATA_SMARTPOINTER_H
+#define HEPMC3_DATA_SMARTPOINTER_H
 
-#include "HepMC/Common.h"
+#include "HepMC3/Common.h"
 
-#if defined(HEPMC_HAS_CXX11) || defined(HEPMC_HAS_CXX0X_GCC_ONLY)
+#if defined(HEPMC3_HAS_CXX11) || defined(HEPMC3_HAS_CXX0X_GCC_ONLY)
 
 #include <memory>
 namespace HepMC {
@@ -97,7 +97,7 @@ namespace HepMC {
         /// Bool cast operator
         /// @note This should ideally use the 'safe bool idiom' in C++98 -- in C++11 an implicit explicit
         ///       cast / contextual conversion with the new 'explicit' keyword will be used for safety
-        #ifdef HEPMC_HAS_CXX11
+        #ifdef HEPMC3_HAS_CXX11
         explicit
         #endif
         operator bool() const { return (bool) m_data; }
@@ -108,11 +108,11 @@ namespace HepMC {
         /// @name Deprecated functions
         //@{
 
-        #ifndef HEPMC_NO_DEPRECATED
+        #ifndef HEPMC3_NO_DEPRECATED
 
         /// Cast to raw pointer
         /// @deprecated Should not be used at all
-        HEPMC_DEPRECATED("Use smart pointers instead of raw pointers")
+        HEPMC3_DEPRECATED("Use smart pointers instead of raw pointers")
         operator T*() { return m_data.get(); }
 
         /// Cast to bool
@@ -150,6 +150,6 @@ namespace HepMC {
 
 } // namespace HepMC
 
-#include "HepMC/Data/SmartPointer.icc"
+#include "HepMC3/Data/SmartPointer.icc"
 
 #endif

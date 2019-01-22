@@ -6,8 +6,8 @@
 /// @file Setup.h
 /// @brief Definition of \b class Setup
 
-#ifndef HEPMC_SETUP_H
-#define HEPMC_SETUP_H
+#ifndef HEPMC3_SETUP_H
+#define HEPMC3_SETUP_H
 
 
 

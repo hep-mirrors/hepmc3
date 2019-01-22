@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef  HEPMC_HEAVYION_H
-#define  HEPMC_HEAVYION_H
+#ifndef HEPMC3_HEAVYION_H
+#define HEPMC3_HEAVYION_H
 /**
  *  @file GenHeavyIon.h
  *  @brief Definition of attribute \b class GenHeavyIon
@@ -18,7 +18,7 @@
  *
  */
 #include <iostream>
-#include "HepMC/Attribute.h"
+#include "HepMC3/Attribute.h"
 
 namespace HepMC {
 
@@ -30,13 +30,13 @@ public:
     /// Empty default constructor.
     GenHeavyIon()
         : Ncoll_hard(-1), Npart_proj(-1), Npart_targ(-1), Ncoll(-1),
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
           spectator_neutrons(-1), spectator_protons(-1),
 #endif
           N_Nwounded_collisions(-1), Nwounded_N_collisions(-1),
           Nwounded_Nwounded_collisions(-1), impact_parameter(-1.0),
           event_plane_angle(-1.0),
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
           eccentricity(-1.0),
 #endif
           sigma_inel_NN(-1.0), centrality(-1.0), user_cent_estimate(-1.0),
@@ -79,15 +79,15 @@ public:
     /// 
     int    Ncoll;
 
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
     /// @brief Total number of spectator neutrons.
     ///
-    /// HEPMC_DEPRECATED("Use Nspec_proj_n and Nspec_targ_n instead.")
+    /// HEPMC3_DEPRECATED("Use Nspec_proj_n and Nspec_targ_n instead.")
     int    spectator_neutrons;
 
     /// @brief Total number of spectator protons.
     ///
-    /// HEPMC_DEPRECATED("Use Nspec_proj_p and Nspec_targ_p instead.")
+    /// HEPMC3_DEPRECATED("Use Nspec_proj_p and Nspec_targ_p instead.")
     int    spectator_protons;
 #endif
 
@@ -126,10 +126,10 @@ public:
     /// information is not available.
     double event_plane_angle;
 
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
     /// @brief The eccentricity.
     /// 
-    /// HEPMC_DEPRECATED("Use eccentricities insted.")
+    /// HEPMC3_DEPRECATED("Use eccentricities insted.")
     double eccentricity;
 #endif
 
@@ -209,7 +209,7 @@ public:
     /// @brief Implementation of Attribute::to_string.
     bool to_string(string &att) const;
 
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
 
     /// @brief Operator ==
     ///
@@ -220,7 +220,7 @@ public:
 
     /// @brief Set all fields.
     ///
-    /// HEPMC_DEPRECATED("Set individual fields directly instead.")
+    /// HEPMC3_DEPRECATED("Set individual fields directly instead.")
     /** @brief Set all fields */
     void set( const int&nh, const int&np, const int&nt, const int&nc, const int&ns, const int&nsp,
               const int&nnw=0, const int&nwn=0, const int&nwnw=0,
@@ -228,13 +228,13 @@ public:
 
     /// @brief Verify that the instance contains non-zero information.
     ///
-    /// HEPMC_DEPRECATED("Each filed now have default values meaning
+    /// HEPMC3_DEPRECATED("Each filed now have default values meaning
     /// that they have not been set")
     bool is_valid() const;
 
     /// @brief force writing in old format for compatibility purposes.
     ///
-    /// HEPMC_DEPRECATED("This should really not be needed");
+    /// HEPMC3_DEPRECATED("This should really not be needed");
     bool forceoldformat;
     
 #endif
@@ -242,7 +242,7 @@ public:
 };
 
 
-#ifndef HEPMC_NO_DEPRECATED
+#ifndef HEPMC3_NO_DEPRECATED
 typedef GenHeavyIon HeavyIon; ///< Backward compatibility typedef
 #endif
 

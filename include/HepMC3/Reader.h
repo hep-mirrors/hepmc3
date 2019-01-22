@@ -3,8 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC_READER_H
-#define HEPMC_READER_H
+#ifndef HEPMC3_READER_H
+#define HEPMC3_READER_H
 ///
 /// @file  Reader.h
 /// @brief Definition of interface \b Reader
@@ -15,7 +15,7 @@
 /// @ingroup IO
 ///
 
-#include "HepMC/GenRunInfo.h"
+#include "HepMC3/GenRunInfo.h"
 
 namespace HepMC {
 

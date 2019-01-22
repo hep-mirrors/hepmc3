@@ -8,14 +8,14 @@
  *  @brief Implementation of \b class ReaderAsciiHepMC2
  *
  */
-#include "HepMC/ReaderAsciiHepMC2.h"
+#include "HepMC3/ReaderAsciiHepMC2.h"
 
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenHeavyIon.h"
-#include "HepMC/GenPdfInfo.h"
-#include "HepMC/Setup.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenHeavyIon.h"
+#include "HepMC3/GenPdfInfo.h"
+#include "HepMC3/Setup.h"
 
 #include <cstring>
 #include <cstdlib>

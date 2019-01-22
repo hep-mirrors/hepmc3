@@ -8,8 +8,8 @@
 #include "Photos/PhotosHepMC3Event.h"
 #include "Photos/Log.h"
 
-#include "HepMC/Common.h"
-#include "HepMC/Print.h"
+#include "HepMC3/Common.h"
+#include "HepMC3/Print.h"
 
 using namespace std;
 

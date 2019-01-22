@@ -14,10 +14,10 @@
  *
  */
 #ifndef HEPEVT_WRAPPER_HEADER_ONLY
-#include "HepMC/HEPEVT_Wrapper.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
+#include "HepMC3/HEPEVT_Wrapper.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
 #include <algorithm>
 #include <set>
 #include <vector>

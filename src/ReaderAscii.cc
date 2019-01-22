@@ -7,12 +7,12 @@
 /// @file ReaderAscii.cc
 /// @brief Implementation of \b class ReaderAscii
 ///
-#include "HepMC/ReaderAscii.h"
+#include "HepMC3/ReaderAscii.h"
 
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/Units.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/Units.h"
 #include <cstring>
 #include <sstream>
 

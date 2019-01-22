@@ -10,11 +10,11 @@
  *  Converts selected HepMC2 file to HepMC3 file
  *
  */
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 
-#include "HepMC/ReaderAsciiHepMC2.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/Print.h"
+#include "HepMC3/ReaderAsciiHepMC2.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/Print.h"
 
 #include <iostream>
 #include <cstdlib> // atoi

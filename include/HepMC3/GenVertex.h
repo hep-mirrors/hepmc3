@@ -6,15 +6,15 @@
 /// @file GenVertex.h
 /// @brief Definition of \b class GenVertex
 //
-#ifndef HEPMC_GENVERTEX_H
-#define HEPMC_GENVERTEX_H
+#ifndef HEPMC3_GENVERTEX_H
+#define HEPMC3_GENVERTEX_H
 
-#include "HepMC/GenParticle_fwd.h"
-#include "HepMC/GenVertex_fwd.h"
-#include "HepMC/Data/GenVertexData.h"
-#include "HepMC/FourVector.h"
-#include "HepMC/Common.h"
-#include "HepMC/Errors.h"
+#include "HepMC3/GenParticle_fwd.h"
+#include "HepMC3/GenVertex_fwd.h"
+#include "HepMC3/Data/GenVertexData.h"
+#include "HepMC3/FourVector.h"
+#include "HepMC3/Common.h"
+#include "HepMC3/Errors.h"
 
 namespace HepMC {
 
@@ -133,7 +133,7 @@ namespace HepMC {
         /// @name Deprecated functionality
         //@{
 
-        #ifndef HEPMC_NO_DEPRECATED
+        #ifndef HEPMC3_NO_DEPRECATED
 
         /// Get barcode
         ///
@@ -142,12 +142,12 @@ namespace HepMC {
 
         /// Add incoming particle by raw pointer
         /// @deprecated Use GenVertex::add_particle_in( const GenParticlePtr &p ) instead
-        HEPMC_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
+        HEPMC3_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
         void add_particle_in ( GenParticle *p ) { add_particle_in( GenParticlePtr(p) ); }
 
         /// Add outgoing particle by raw pointer
         /// @deprecated Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead
-        HEPMC_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
+        HEPMC3_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
         void add_particle_out( GenParticle *p ) { add_particle_out( GenParticlePtr(p) ); }
 
         /// Define iterator by typedef
@@ -158,28 +158,28 @@ namespace HepMC {
         typedef vector<GenParticlePtr>::iterator       particle_iterator;
 
         /// @deprecated Backward compatibility iterators
-        HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
+        HEPMC3_DEPRECATED("Iterate over std container particles_in() instead")
         particles_in_const_iterator  particles_in_const_begin()  const { return m_particles_in.begin();  } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
-        HEPMC_DEPRECATED("Iterate over std container particles_in() instead")
+        HEPMC3_DEPRECATED("Iterate over std container particles_in() instead")
         particles_in_const_iterator  particles_in_const_end()    const { return m_particles_in.end();    } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
-        HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
+        HEPMC3_DEPRECATED("Iterate over std container particles_out() instead")
         particles_out_const_iterator particles_out_const_begin() const { return m_particles_out.begin(); } //!< @deprecated Backward compatibility iterators
 
         /// @deprecated Backward compatibility iterators
-        HEPMC_DEPRECATED("Iterate over std container particles_out() instead")
+        HEPMC3_DEPRECATED("Iterate over std container particles_out() instead")
         particles_out_const_iterator particles_out_const_end()   const { return m_particles_out.end();   }
 
 
         /// @deprecated Backward compatibility
-        HEPMC_DEPRECATED("Use particles_in().size() instead")
+        HEPMC3_DEPRECATED("Use particles_in().size() instead")
         int particles_in_size()  const { return m_particles_in.size(); }
 
         /// @deprecated Backward compatibility
-        HEPMC_DEPRECATED("Use particles_out().size() instead")
+        HEPMC3_DEPRECATED("Use particles_out().size() instead")
         int particles_out_size() const { return m_particles_out.size(); }
 
         #endif
@@ -205,7 +205,7 @@ namespace HepMC {
 
 } // namespace HepMC
 
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 namespace HepMC {
 /// @brief Get attribute of type T
 template<class T> shared_ptr<T> GenVertex::attribute(const string& name) const {

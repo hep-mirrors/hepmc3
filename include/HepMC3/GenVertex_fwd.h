@@ -8,8 +8,8 @@
 /// @brief Minimal forward declarations for GenVertex
 ///
 
-#ifndef HEPMC_GENVERTEX_FWD_H
-#define HEPMC_GENVERTEX_FWD_H
+#ifndef HEPMC3_GENVERTEX_FWD_H
+#define HEPMC3_GENVERTEX_FWD_H
 
 #include <memory>
 

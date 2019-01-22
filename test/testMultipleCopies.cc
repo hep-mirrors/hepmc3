@@ -8,13 +8,13 @@
 //
 
 #include <fstream>
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenCrossSection.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/ReaderAsciiHepMC2.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenCrossSection.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/ReaderAsciiHepMC2.h"
+#include "HepMC3/Print.h"
 #include "HepMC3TestUtils.h"
 
 // define methods and classes used by this test

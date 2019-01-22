@@ -23,9 +23,9 @@
 #include <iostream>
 #include <vector>
 
-#include "HepMC/GenParticle.h"
-#include "HepMC/FourVector.h"
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/FourVector.h"
+#include "HepMC3/GenEvent.h"
 
 //#include "DecayList.h"
 #include "Tauola/TauolaParticle.h"
