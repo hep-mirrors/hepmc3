@@ -21,4 +21,4 @@ configure_file(${CMAKE_SOURCE_DIR}/examples/Pythia8Example/pythia8_example_env.s
 install(TARGETS pythia8_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES pythia8_ee_to_Z_to_tautau.conf DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING PATTERN "*.sh")
+        FILES_MATCHING PATTERN "*env.sh")

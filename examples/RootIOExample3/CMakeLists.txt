@@ -24,4 +24,4 @@ ${CMAKE_SOURCE_DIR}/examples/RootIOExample3/rootIOTree_example_env.sh.in
 install(TARGETS rootIOTree_example_write.exe rootIOTree_example_read.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
 #install(FILES example.hepmc3 DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING PATTERN "*.sh")
+        FILES_MATCHING PATTERN "*env.sh")
