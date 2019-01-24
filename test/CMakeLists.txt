@@ -139,7 +139,7 @@ endif()
 
 
 
-
+if(HEPMC3_ENABLE_ROOTIO)
 find_package(MCTester )
 if(NOT MCTESTER_FOUND)
   message(STATUS "Validation: MCTester package not found. Please check if MCTESTER_ROOT_DIR is set properly.") 
@@ -156,7 +156,7 @@ else()
 
   list( APPEND  MCEG_tests "testMCTester1" )   
 endif()
-
+endif()
 
 
 add_library(MCEG3 SHARED ${libMCEG_sources} ${libMCEG_sources_HEPMC3})
