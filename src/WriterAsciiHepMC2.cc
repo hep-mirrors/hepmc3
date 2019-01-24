@@ -16,7 +16,7 @@
 #include "HepMC3/Units.h"
 #include <cstring>
 
-namespace HepMC
+namespace HepMC3
 {
 
 
@@ -405,4 +405,4 @@ void WriterAsciiHepMC2::close()
     if (ofs) ofs->close();
 }
 
-} // namespace HepMC
+} // namespace HepMC3

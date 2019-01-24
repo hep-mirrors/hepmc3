@@ -9,7 +9,7 @@
 #include "HepMC3/WriterAsciiHepMC2.h"
 #include "HepMC3TestUtils.h"
 #include <thread>
-using namespace HepMC;
+using namespace HepMC3;
 const int NinputCopies=4;
 const int NmaxThreads=3;
 void attribute_function1(const GenEvent& e, const int& id)

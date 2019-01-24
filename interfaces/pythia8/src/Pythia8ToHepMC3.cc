@@ -7,7 +7,7 @@
 #include <deque>
 #include <cassert>
 
-namespace HepMC {
+namespace HepMC3 {
 
 /** What is not in current HepMC implementation:
  *  - color flow (will probably be removed altogether)
@@ -185,4 +185,4 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
     return true;
 }
 
-} // end namespace HepMC
+} // end namespace HepMC3

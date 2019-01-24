@@ -21,7 +21,7 @@
 #include <algorithm>
 #include <set>
 #include <vector>
-namespace HepMC
+namespace HepMC3
 {
 
 struct HEPEVT*  hepevtptr;

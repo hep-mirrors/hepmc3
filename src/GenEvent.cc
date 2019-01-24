@@ -17,7 +17,7 @@
 #include <algorithm> // sort
 using namespace std;
 
-namespace HepMC {
+namespace HepMC3 {
 
 GenEvent::GenEvent(Units::MomentumUnit mu,
            Units::LengthUnit lu)
@@ -663,4 +663,4 @@ string GenEvent::attribute_as_string(const string &name, const int& id) const {
     return ret;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

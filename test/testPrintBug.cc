@@ -8,7 +8,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Print.h"
-using namespace HepMC;
+using namespace HepMC3;
 int main()
 {
     GenEvent p_event(Units::GEV, Units::MM);

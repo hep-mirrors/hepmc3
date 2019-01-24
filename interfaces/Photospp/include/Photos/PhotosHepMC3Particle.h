@@ -31,7 +31,7 @@
 namespace Photospp
 {
 using namespace std;
-using namespace HepMC;
+using namespace HepMC3;
 class PhotosHepMC3Particle: public PhotosParticle{
 
  public:

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_DATA_GENEVENTDATA_H
 #define HEPMC3_DATA_GENEVENTDATA_H
@@ -21,7 +21,7 @@
 #include "HepMC3/Data/GenVertexData.h"
 #include "HepMC3/Units.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 struct GenEventData {
     int                 event_number;  ///< Event number

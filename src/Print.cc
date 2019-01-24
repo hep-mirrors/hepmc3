@@ -14,7 +14,7 @@
 
 
 
-namespace HepMC {
+namespace HepMC3 {
 using namespace std;
 
 void Print::content( const GenEvent &event ) {
@@ -278,4 +278,4 @@ void Print::line(shared_ptr<GenPdfInfo> &pi) {
          << " " << endl;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

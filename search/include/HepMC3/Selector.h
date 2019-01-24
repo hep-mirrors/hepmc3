@@ -10,7 +10,7 @@
 #include "HepMC3/Feature.h"
 #include "HepMC3/AttributeFeature.h"
 
-namespace HepMC{
+namespace HepMC3{
   
   template<typename T>
   class SelectorWrapper;

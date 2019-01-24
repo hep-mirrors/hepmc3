@@ -74,7 +74,7 @@ struct HEPEVT
 #endif
 using std::endl;
 
-namespace HepMC
+namespace HepMC3
 {
 extern struct HEPEVT*  hepevtptr;
 
@@ -264,6 +264,6 @@ inline bool HEPEVT_Wrapper::fix_daughters()
 
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

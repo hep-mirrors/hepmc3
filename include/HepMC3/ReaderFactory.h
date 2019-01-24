@@ -12,7 +12,7 @@
 #include <memory>
 #include <string>
 
-namespace HepMC{
+namespace HepMC3{
   
   /** @brief Make a reader suitable for reading HepMC2 or HepMC 3 files, depending on which type of file is passed
    *

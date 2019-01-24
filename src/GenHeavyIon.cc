@@ -14,7 +14,7 @@
 #include <cstdio> // sprintf
 #include <sstream> // sprintf
 
-namespace HepMC {
+namespace HepMC3 {
 
 bool GenHeavyIon::from_string(const string &att) {
 
@@ -154,4 +154,4 @@ bool GenHeavyIon::is_valid() const {
 
 #endif
 
-} // namespace HepMC
+} // namespace HepMC3

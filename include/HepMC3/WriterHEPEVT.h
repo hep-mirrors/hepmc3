@@ -21,7 +21,7 @@
 #include "HepMC3/Data/GenEventData.h"
 
 #include <fstream>
-namespace HepMC
+namespace HepMC3
 {
 
 class WriterHEPEVT : public Writer
@@ -71,5 +71,5 @@ private:
     int   m_events_count; //!< Events count. Needed to generate unique object name
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 #endif

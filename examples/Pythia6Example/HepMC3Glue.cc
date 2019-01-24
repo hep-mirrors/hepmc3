@@ -12,7 +12,7 @@
 #include "HepMC3/WriterRoot.h"
 #include "HepMC3/WriterRootTree.h"
 #endif
-using namespace HepMC;
+using namespace HepMC3;
 std::map<int,std::pair<Writer*,GenEvent*> > gWriters;
 extern "C" {
 

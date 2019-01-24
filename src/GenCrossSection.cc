@@ -15,7 +15,7 @@
 #include <sstream>
 #include <iomanip>
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 int GenCrossSection::windx(string wName) const {
@@ -108,4 +108,4 @@ bool GenCrossSection::is_valid() const {
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

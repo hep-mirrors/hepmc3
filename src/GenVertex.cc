@@ -15,7 +15,7 @@
 #include "HepMC3/Attribute.h"
 #include <algorithm> // std::remove
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 GenVertex::GenVertex( const FourVector& pos):
@@ -138,4 +138,4 @@ vector<string> GenVertex::attribute_names() const {
   return vector<string>();
 }
 
-} // namespace HepMC
+} // namespace HepMC3

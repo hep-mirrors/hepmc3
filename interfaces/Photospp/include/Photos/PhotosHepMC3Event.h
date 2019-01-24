@@ -30,7 +30,7 @@
 
 namespace Photospp
 {
-using namespace HepMC;
+using namespace HepMC3;
 class PhotosHepMC3Event : public PhotosEvent
 {
 public:

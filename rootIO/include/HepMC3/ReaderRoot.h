@@ -27,7 +27,7 @@
 #include "TFile.h"
 #include "TKey.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
   class ReaderRoot : public Reader {
 //
@@ -61,6 +61,6 @@ private:
     TIter* m_next; //!< Iterator for event reading
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

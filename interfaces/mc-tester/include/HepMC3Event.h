@@ -31,7 +31,7 @@
 
 namespace MCTester
 {
-using namespace HepMC;
+using namespace HepMC3;
 class HepMC3Event: public HEPEvent
 {
 private:

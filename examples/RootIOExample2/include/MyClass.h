@@ -2,7 +2,7 @@
 #define MYCLASS_H
 
 #include "HepMC3/GenEvent.h"
-using namespace HepMC;
+using namespace HepMC3;
 /** @class MyClass
  *  @brief Sample class for root I/O test
  */

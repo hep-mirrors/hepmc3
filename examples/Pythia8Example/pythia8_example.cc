@@ -11,7 +11,7 @@
 #include "Pythia8/Pythia8ToHepMC3.h"
 
 #include <iostream>
-using namespace HepMC;
+using namespace HepMC3;
 
 /** Main program */
 int main(int argc, char **argv) {

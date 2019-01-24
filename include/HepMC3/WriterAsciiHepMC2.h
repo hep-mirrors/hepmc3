@@ -20,7 +20,7 @@
 #include <string>
 #include <fstream>
 
-namespace HepMC
+namespace HepMC3
 {
 
 class WriterAsciiHepMC2 : public Writer
@@ -136,6 +136,6 @@ private:
 };
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

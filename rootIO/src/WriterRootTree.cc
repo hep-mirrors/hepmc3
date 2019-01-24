@@ -14,7 +14,7 @@
 #include "TFile.h"
 #include "TTree.h"
 
-namespace HepMC
+namespace HepMC3
 {
 
 WriterRootTree::WriterRootTree(const std::string &filename, shared_ptr<GenRunInfo> run):
@@ -104,4 +104,4 @@ bool WriterRootTree::failed()
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

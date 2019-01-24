@@ -21,7 +21,7 @@
 class TBuffer;
 #endif
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 struct GenRunInfoData;
@@ -196,6 +196,6 @@ shared_ptr<T> GenRunInfo::attribute(const string &name) const {
 
 #endif // __CINT__
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

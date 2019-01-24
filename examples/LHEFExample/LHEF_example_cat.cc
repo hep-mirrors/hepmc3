@@ -11,7 +11,7 @@
 #include "HepMC3/AssociatedParticle.h"
 #include <iomanip>
 
-using namespace HepMC;
+using namespace HepMC3;
 using namespace LHEF;
 
 int main(int /*argc*/, char ** /*argv*/) {

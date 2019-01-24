@@ -11,7 +11,7 @@
 
 
 
-namespace HepMC {
+namespace HepMC3 {
 
 
     /// @todo Move some of the helper functions, logging, exceptions, etc. to specific files
@@ -72,6 +72,6 @@ namespace HepMC {
     };
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

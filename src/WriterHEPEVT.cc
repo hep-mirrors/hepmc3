@@ -13,7 +13,7 @@
 #include "HepMC3/WriterHEPEVT.h"
 #include "HepMC3/HEPEVT_Wrapper.h"
 #include "HepMC3/Print.h"
-namespace HepMC
+namespace HepMC3
 {
 
 WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_events_count(0)
@@ -64,4 +64,4 @@ bool WriterHEPEVT::failed()
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

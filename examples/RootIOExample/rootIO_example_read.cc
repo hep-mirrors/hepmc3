@@ -17,7 +17,7 @@
 
 #include <iostream>
 
-using namespace HepMC;
+using namespace HepMC3;
 
 /** Main */
 int main(int argc, char **argv) {

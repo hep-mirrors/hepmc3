@@ -5,7 +5,7 @@
 //
 #include "HepMC3/Relatives.h"
 
-namespace HepMC {
+namespace HepMC3 {
   const Parents     Relatives::PARENTS;
   const Children    Relatives::CHILDREN;
   const Ancestors   Relatives::ANCESTORS;

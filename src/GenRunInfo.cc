@@ -12,7 +12,7 @@
 #include "HepMC3/Data/GenRunInfoData.h"
 #include <sstream>
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
@@ -121,4 +121,4 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
      return *this;
     }
 
-} // namespace HepMC
+} // namespace HepMC3

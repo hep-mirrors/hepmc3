@@ -23,7 +23,7 @@
 #include <fstream>
 #include <istream>
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 
@@ -138,6 +138,6 @@ private:
     vector<GenVertexPtr>   m_vertex_cache_ghost;        //!< Vertex cache for attributes
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

@@ -14,7 +14,7 @@
 #include "HepMC3/Attribute.h"
 #include "HepMC3/Filter.h"
 
-namespace HepMC{
+namespace HepMC3{
   
   class AttributeFeature{
     

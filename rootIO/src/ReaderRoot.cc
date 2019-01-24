@@ -10,7 +10,7 @@
  */
 #include "HepMC3/ReaderRoot.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 ReaderRoot::ReaderRoot(const std::string &filename) {
 
@@ -50,8 +50,10 @@ bool ReaderRoot::read_event(GenEvent& evt) {
         const char *cl = key->GetClassName();
 
         if( !cl ) continue;
-        
-        if( strncmp(cl,"HepMC::GenEventData",19) == 0 ) {
+        size_t geneventdata30=strncmp(cl,"HepMC::GenEventData",19);
+        size_t geneventdata31=strncmp(cl,"HepMC3::GenEventData",20);
+        if( geneventdata31==0 || geneventdata30==0 ) {
+            if (geneventdata30==0) WARNING( "ReaderRoot::read_event: The object was written with HepMC3 version 3.0" )
             data = reinterpret_cast<GenEventData*>(key->ReadObj());
             break;
         }
@@ -80,4 +82,4 @@ bool ReaderRoot::failed() {
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

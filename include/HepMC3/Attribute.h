@@ -31,7 +31,7 @@
 
 using std::string;
 
-namespace HepMC {
+namespace HepMC3 {
 
 /** @brief Forward declaration of GenEvent. */
 class GenEvent;
@@ -383,6 +383,6 @@ public:
 
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

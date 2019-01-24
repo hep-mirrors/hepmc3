@@ -5,7 +5,7 @@
 
 #include "HepMC3/Units.h"
 #include "HepMC3/GenEvent.h"
-using namespace HepMC;
+using namespace HepMC3;
 double conversion_factor( Units::MomentumUnit from, Units::MomentumUnit  to )
 {
     FourVector m( 0.5*RAND_MAX-std::rand(), 0.5*RAND_MAX-std::rand(), 0.5*RAND_MAX-std::rand(), 0.5*RAND_MAX-std::rand());

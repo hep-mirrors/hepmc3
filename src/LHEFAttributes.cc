@@ -11,7 +11,7 @@
 #include "HepMC3/LHEFAttributes.h"
 #include "HepMC3/GenEvent.h"
 
-using namespace HepMC;
+using namespace HepMC3;
 using namespace LHEF;
 
 void HEPRUPAttribute::clear() {

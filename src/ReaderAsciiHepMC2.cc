@@ -20,7 +20,7 @@
 #include <cstring>
 #include <cstdlib>
 
-namespace HepMC {
+namespace HepMC3 {
 
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
 m_file(filename), m_stream(0), m_isstream(false) {
@@ -647,4 +647,4 @@ void ReaderAsciiHepMC2::close() {
     m_file.close();
 }
 
-} // namespace HepMC
+} // namespace HepMC3

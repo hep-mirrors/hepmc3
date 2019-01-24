@@ -5,7 +5,7 @@
 //
 #include "HepMC3/ReaderLHEF.h"
 using namespace LHEF;
-namespace HepMC
+namespace HepMC3
 {
 ReaderLHEF::ReaderLHEF(const std::string& filename)
 {
@@ -109,6 +109,6 @@ bool ReaderLHEF::failed() { return m_failed;}
 
 /// @brief Close file stream
 void ReaderLHEF::close() { delete m_reader; };
-} // namespace HepMC
+} // namespace HepMC3
 
 

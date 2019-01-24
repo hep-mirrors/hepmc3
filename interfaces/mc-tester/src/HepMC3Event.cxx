@@ -3,7 +3,7 @@
 namespace MCTester
 {
 using namespace std;
-using namespace HepMC;
+using namespace HepMC3;
 
 #ifdef _USE_ROOT_
 ClassImp(HepMCEvent)

@@ -7,7 +7,7 @@
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
 #include "HepMC3TestUtils.h"
-using namespace HepMC;
+using namespace HepMC3;
 int main()
 {
     ReaderAsciiHepMC2 inputA("inputDelete.hepmc");

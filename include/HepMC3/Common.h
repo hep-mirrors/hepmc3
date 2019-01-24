@@ -21,7 +21,7 @@
 #define nullptr NULL
 #endif
 
-namespace HepMC {
+namespace HepMC3 {
 
 // Use unqualified namespace std within the HepMC namespace
     using namespace std;

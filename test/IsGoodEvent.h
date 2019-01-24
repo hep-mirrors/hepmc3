@@ -7,7 +7,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 //! used in the tests
-using namespace HepMC;
+using namespace HepMC3;
 /// \class  IsGoodEvent
 /// event selection predicate. returns true if the event contains
 /// a photon with pT > 50 GeV

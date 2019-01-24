@@ -20,7 +20,7 @@
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 using namespace std;
@@ -155,10 +155,10 @@ private:
     weak_ptr<GenParticle>  m_this;              //!< Pointer to shared pointer managing this particle
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #include "HepMC3/GenEvent.h"
-namespace HepMC {
+namespace HepMC3 {
 /// @brief Get attribute of type T
 template<class T> shared_ptr<T> GenParticle::attribute(const string& name) const {
   return parent_event()?

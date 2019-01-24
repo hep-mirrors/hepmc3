@@ -16,7 +16,7 @@
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/Print.h"
 #include "HepMC3TestUtils.h"
-using namespace HepMC;
+using namespace HepMC3;
 int main()
 {
     // use output file

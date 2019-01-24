@@ -1,6 +1,6 @@
 #include "WriterHEPEVTZEUS.h"
 #include "HepMC3/HEPEVT_Wrapper.h"
-namespace HepMC
+namespace HepMC3
 {
 WriterHEPEVTZEUS::WriterHEPEVTZEUS(const std::string &filename):WriterHEPEVT(filename) {}
 void WriterHEPEVTZEUS::write_hepevt_event_header()
@@ -15,4 +15,4 @@ void WriterHEPEVTZEUS::write_hepevt_event_header()
     fprintf(m_file,      "% 19.11E% 19.11E% 19.11E% 19.11E% 19.11E\n",HEPEVT_Wrapper::px(index),HEPEVT_Wrapper::py(index),HEPEVT_Wrapper::pz(index),HEPEVT_Wrapper::e(index),HEPEVT_Wrapper::m(index));
     fprintf(m_file, "%-52s% 19.11E% 19.11E% 19.11E% 19.11E% 19.11E\n"," ",HEPEVT_Wrapper::x(index),HEPEVT_Wrapper::y(index),HEPEVT_Wrapper::z(index),HEPEVT_Wrapper::t(index),0.0);
 }
-}// namespace HepMC
+}// namespace HepMC3

@@ -20,7 +20,7 @@
 #include "HepMC3/Attribute.h"
 #include "HepMC3/GenParticle.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 /**
  *  @class HepMC::IntAttribute
@@ -69,6 +69,6 @@ private:
 
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

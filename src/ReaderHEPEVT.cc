@@ -12,7 +12,7 @@
 #include "HepMC3/HEPEVT_Wrapper.h"
 
 #include <sstream>
-namespace HepMC
+namespace HepMC3
 {
 
 ReaderHEPEVT::ReaderHEPEVT(const std::string &filename):
@@ -136,4 +136,4 @@ bool ReaderHEPEVT::failed()
     return m_failed;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

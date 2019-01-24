@@ -21,7 +21,7 @@
 #include "HepMC3/Attribute.h"
 #include <string>
 
-namespace HepMC {
+namespace HepMC3 {
 
 using std::string;
 
@@ -77,6 +77,6 @@ public:
     }
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

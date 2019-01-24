@@ -17,7 +17,7 @@
 
 #include "HepMC3/GenRunInfo.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
   // Forward declaration
   class GenEvent;
@@ -53,6 +53,6 @@ namespace HepMC {
   };
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

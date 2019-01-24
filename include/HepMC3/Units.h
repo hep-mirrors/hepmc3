@@ -20,7 +20,7 @@
 #include "HepMC3/Setup.h"
 #include "HepMC3/FourVector.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 class Units {
@@ -102,6 +102,6 @@ public:
 
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

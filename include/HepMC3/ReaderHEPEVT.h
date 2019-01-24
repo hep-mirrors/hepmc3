@@ -22,7 +22,7 @@
 #include "HepMC3/Data/GenEventData.h"
 
 
-namespace HepMC
+namespace HepMC3
 {
 
 class ReaderHEPEVT : public Reader
@@ -78,6 +78,6 @@ public:
     int m_events_count; //!< Event count
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

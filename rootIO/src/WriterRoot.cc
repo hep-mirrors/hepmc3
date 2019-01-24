@@ -14,7 +14,7 @@
 #include "TFile.h"
 #include "TTree.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 WriterRoot::WriterRoot(const std::string &filename, shared_ptr<GenRunInfo> run):
 m_events_count(0) {
@@ -80,4 +80,4 @@ bool WriterRoot::failed() {
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

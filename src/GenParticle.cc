@@ -14,7 +14,7 @@
 #include "HepMC3/Setup.h"
 #include "HepMC3/Attribute.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 GenParticle::GenParticle( const FourVector &mom, int pidin, int stat):
 m_event(nullptr),
@@ -111,4 +111,4 @@ string GenParticle::attribute_as_string(const std::string& name) const {
     return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
 }
   
-} // namespace HepMC
+} // namespace HepMC3

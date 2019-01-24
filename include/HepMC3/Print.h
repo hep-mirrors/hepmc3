@@ -14,7 +14,7 @@
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 class GenPdfInfo;
@@ -61,6 +61,6 @@ private:
 };
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

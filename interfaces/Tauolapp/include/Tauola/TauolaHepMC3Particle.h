@@ -32,7 +32,7 @@
 #include "Tauola/f_Decay.h"
 namespace Tauolapp
 {
-using namespace HepMC;
+using namespace HepMC3;
 
 class TauolaHepMC3Particle: public TauolaParticle{
 

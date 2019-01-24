@@ -20,7 +20,7 @@
 #endif
 
 
-namespace HepMC {
+namespace HepMC3 {
   
 #ifdef HEPMC3_ROOTIO
   
@@ -30,7 +30,7 @@ namespace HepMC {
       
       GenEventData data;
       
-      b.ReadClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
+      b.ReadClassBuffer(TClass::GetClass("HepMC3::GenEventData"), &data);
       
       read_data(data);
       
@@ -40,7 +40,7 @@ namespace HepMC {
       GenEventData data;
       write_data(data);
       
-      b.WriteClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
+      b.WriteClassBuffer(TClass::GetClass("HepMC3::GenEventData"), &data);
     }
   }
 
@@ -51,7 +51,7 @@ namespace HepMC {
 
       GenRunInfoData data;
       
-      b.ReadClassBuffer(TClass::GetClass("HepMC::GenRunInfoData"), &data);
+      b.ReadClassBuffer(TClass::GetClass("HepMC3::GenRunInfoData"), &data);
       
       read_data(data);
       
@@ -61,10 +61,10 @@ namespace HepMC {
       GenRunInfoData data;
       write_data(data);
       
-      b.WriteClassBuffer(TClass::GetClass("HepMC::GenRunInfoData"), &data);
+      b.WriteClassBuffer(TClass::GetClass("HepMC3::GenRunInfoData"), &data);
     }
   }
   
 #endif
   
-} // namespace HepMC
+} // namespace HepMC3

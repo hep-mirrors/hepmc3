@@ -2,7 +2,7 @@
 //
 #include "WriterRootTreeOPAL.h"
 #include "TTree.h"
-namespace HepMC
+namespace HepMC3
 {
 WriterRootTreeOPAL::WriterRootTreeOPAL(const std::string &filename,shared_ptr<GenRunInfo> run):WriterRootTree::WriterRootTree(filename,"h10","h10",run) {}
 void WriterRootTreeOPAL::init_branches()
@@ -26,4 +26,4 @@ void WriterRootTreeOPAL::write_event(const GenEvent &evt)
     WriterRootTree::write_event(evt);
 }
 void WriterRootTreeOPAL::set_run_number(const int nr) {m_Irun=nr;}
-} // namespace HepMC
+} // namespace HepMC3

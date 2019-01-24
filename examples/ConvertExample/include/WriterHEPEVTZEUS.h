@@ -4,7 +4,7 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/Data/GenEventData.h"
-namespace HepMC
+namespace HepMC3
 {
 class WriterHEPEVTZEUS : public  WriterHEPEVT
 {

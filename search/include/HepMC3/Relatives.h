@@ -13,7 +13,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 
-namespace HepMC{
+namespace HepMC3{
 
   // forward declare the Relatives interface in which _parents and _children are wrapped
   template<typename T>

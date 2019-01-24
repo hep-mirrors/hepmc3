@@ -15,7 +15,7 @@
 #include <iomanip>
 
 
-namespace HepMC 
+namespace HepMC3 
 {
 class ReaderLHEF : public Reader
 {

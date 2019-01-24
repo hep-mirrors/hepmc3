@@ -14,7 +14,7 @@
 #include <memory>
 #include <vector>
 
-namespace HepMC{
+namespace HepMC3{
 
 class GenParticle;
 

@@ -18,7 +18,7 @@ using namespace HepMC;
 // Ignore HepMC2 code, use HepMC3 code
 #define HEPMC2CODE( x )
 #define HEPMC3CODE( x ) x
-using namespace HepMC;
+using namespace HepMC3;
 
 #endif // ifdef HEPMC2
 

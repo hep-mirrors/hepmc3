@@ -5,7 +5,7 @@
 #include "HepMC3/ReaderHEPEVT.h"
 #include "HepMC3/WriterHEPEVT.h"
 #include "HepMC3TestUtils.h"
-using namespace HepMC;
+using namespace HepMC3;
 int main()
 {
     ReaderHEPEVT inputA("inputIO3.hepevt");

@@ -28,7 +28,7 @@
 #include "HepMC3/HEPEVT_Wrapper.h"
 
 #include <iostream>
-using  namespace HepMC;
+using  namespace HepMC3;
 
 extern "C" void simple_tau_hepevt_event_(); //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
 extern "C" void phodmp_();                  //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f

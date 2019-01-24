@@ -20,7 +20,7 @@
 #include <fstream>
 #include <istream>
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 class ReaderAscii : public Reader {
@@ -163,6 +163,6 @@ public:
 };
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

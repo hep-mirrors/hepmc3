@@ -29,7 +29,7 @@
 #endif
 
 #include "cmdline.h"
-using namespace HepMC;
+using namespace HepMC3;
 enum formats {hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump};
 int main(int argc, char** argv)
 {

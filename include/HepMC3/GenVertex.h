@@ -16,7 +16,7 @@
 #include "HepMC3/Common.h"
 #include "HepMC3/Errors.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 
     using namespace std;
@@ -203,10 +203,10 @@ namespace HepMC {
     };
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #include "HepMC3/GenEvent.h"
-namespace HepMC {
+namespace HepMC3 {
 /// @brief Get attribute of type T
 template<class T> shared_ptr<T> GenVertex::attribute(const string& name) const {
   return parent_event()?

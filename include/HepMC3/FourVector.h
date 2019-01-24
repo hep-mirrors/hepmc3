@@ -14,7 +14,7 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846264338327950288
 #endif
-namespace HepMC {
+namespace HepMC3 {
 
 
 /**
@@ -299,7 +299,7 @@ inline double delta_r_rap(const FourVector &a, const FourVector &b) { return b.d
 //@}
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 
 #endif

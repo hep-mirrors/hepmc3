@@ -12,7 +12,7 @@
 #include "Photos/Log.h"
 #include "Photos/Photos.h"
 
-using namespace HepMC;
+using namespace HepMC3;
 
 namespace Photospp
 {

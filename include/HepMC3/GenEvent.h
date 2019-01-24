@@ -31,7 +31,7 @@ class TBuffer;
 #endif
 
 
-namespace HepMC {
+namespace HepMC3 {
 
 struct GenEventData;
 
@@ -493,5 +493,5 @@ shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const
 }
 #endif // __CINT__
 
-} // namespace HepMC
+} // namespace HepMC3
 #endif

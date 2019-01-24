@@ -15,7 +15,7 @@
 #include "HepMC3/Selector.h"
 #include "HepMC3/Relatives.h"
 
-using namespace HepMC;
+using namespace HepMC3;
 
 
 /** Main program */

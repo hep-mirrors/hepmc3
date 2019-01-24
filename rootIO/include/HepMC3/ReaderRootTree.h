@@ -28,7 +28,7 @@
 #include "TTree.h"
 #include "TBranch.h"
 
-namespace HepMC
+namespace HepMC3
 {
 
 class ReaderRootTree : public Reader
@@ -77,6 +77,6 @@ private:
     std::string m_branch_name;
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

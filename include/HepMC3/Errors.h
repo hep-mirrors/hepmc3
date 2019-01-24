@@ -8,7 +8,7 @@
 
 #include "HepMC3/Common.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 
     /// @name Printing macros
@@ -57,6 +57,6 @@ namespace HepMC {
     //@}
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

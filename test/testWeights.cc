@@ -14,7 +14,7 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Print.h"
 #include <stdexcept>
-using namespace HepMC;
+using namespace HepMC3;
 int main()
 {
     GenEvent evt;

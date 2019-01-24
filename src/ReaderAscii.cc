@@ -16,7 +16,7 @@
 #include <cstring>
 #include <sstream>
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 ReaderAscii::ReaderAscii(const string &filename)
@@ -514,4 +514,4 @@ void ReaderAscii::close() {
 }
 
 
-} // namespace HepMC
+} // namespace HepMC3

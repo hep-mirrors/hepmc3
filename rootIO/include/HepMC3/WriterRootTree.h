@@ -33,7 +33,7 @@ class TFile;
 class TTree;
 #endif
 
-namespace HepMC
+namespace HepMC3
 {
 class WriterRootTree : public Writer
 {
@@ -87,6 +87,6 @@ private:
     std::string m_branch_name;
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

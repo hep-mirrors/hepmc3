@@ -11,7 +11,7 @@
 #include "HepMC3/ReaderRootTree.h"
 #include "HepMC3/Units.h"
 
-namespace HepMC
+namespace HepMC3
 {
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
@@ -51,7 +51,7 @@ bool ReaderRootTree::init()
             ERROR( "ReaderRootTree: problem reading branch tree:  " << m_tree_name)
             return false;
         }
- m_run_info_data= new GenRunInfoData();
+    m_run_info_data= new GenRunInfoData();
     result=m_tree->SetBranchAddress("GenRunInfo",&m_run_info_data);
     if (result<0)
         {
@@ -105,4 +105,4 @@ bool ReaderRootTree::failed()
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_DATA_GENPARTICLEDATA_H
 #define HEPMC3_DATA_GENPARTICLEDATA_H
@@ -17,7 +17,7 @@
  */
 #include "HepMC3/FourVector.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 // NOTE: Keep in mind the data alignment
 //       Currently it's 8b alignment = 56b total

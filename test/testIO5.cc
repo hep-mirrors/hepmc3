@@ -8,7 +8,7 @@
 #include <fstream>
 #include <iostream>     // std::ios, std::istream, std::cout
 #include <fstream>      // std::filebuf
-using namespace HepMC;
+using namespace HepMC3;
 int main()
 {
 	

@@ -10,7 +10,7 @@
 #include <TFile.h>
 #include <TROOT.h>
 #include <TH1D.h>
-using namespace HepMC;
+using namespace HepMC3;
 const Int_t kMaxparticles = 2000;
 const Int_t kMaxvertices = 2000;
 class SomeAnalysis

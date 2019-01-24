@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-using namespace HepMC;
+using namespace HepMC3;
 using std::cout;
 using std::endl;
 

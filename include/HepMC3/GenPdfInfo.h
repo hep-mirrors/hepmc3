@@ -27,7 +27,7 @@
 #include <iostream>
 #include "HepMC3/Attribute.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 class GenPdfInfo : public Attribute {
 
@@ -61,6 +61,6 @@ public:
     bool is_valid()                      const; ///< Verify that the instance contains non-zero information
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

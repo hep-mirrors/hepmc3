@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_DATA_GENRUNINFODATA_H
 #define HEPMC3_DATA_GENRUNINFODATA_H
@@ -18,7 +18,7 @@
 #include <vector>
 #include <string>
 
-namespace HepMC {
+namespace HepMC3 {
 
 struct GenRunInfoData {
     std::vector<std::string> weight_names;     ///< Weight names

@@ -20,7 +20,7 @@
 #include <iostream>
 #include "HepMC3/Attribute.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 class GenHeavyIon : public Attribute {
@@ -247,6 +247,6 @@ typedef GenHeavyIon HeavyIon; ///< Backward compatibility typedef
 #endif
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

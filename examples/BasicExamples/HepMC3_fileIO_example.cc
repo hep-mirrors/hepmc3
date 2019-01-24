@@ -17,7 +17,7 @@
 #include "HepMC3/Print.h"
 
 #include <iostream>
-using namespace HepMC;
+using namespace HepMC3;
 
 /** Main program */
 int main(int argc, char **argv) {

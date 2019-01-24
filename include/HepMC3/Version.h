@@ -22,7 +22,7 @@
 /// @todo Add feature detection macros? (clearly version-related)
 
 
-namespace HepMC {
+namespace HepMC3 {
 
 
   /// Get the HepMC library version string

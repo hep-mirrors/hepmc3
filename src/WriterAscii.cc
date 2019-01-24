@@ -16,7 +16,7 @@
 #include "HepMC3/Units.h"
 #include <cstring>
 #include <algorithm>//min max for VS2017
-namespace HepMC {
+namespace HepMC3 {
 
 
 WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run)
@@ -355,4 +355,4 @@ void WriterAscii::close() {
 }
 
 
-} // namespace HepMC
+} // namespace HepMC3

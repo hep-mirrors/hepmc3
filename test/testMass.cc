@@ -24,7 +24,7 @@
 
 // define methods and classes used by this test
 #include "IsGoodEvent.h"
-using namespace HepMC;
+using namespace HepMC3;
 bool   massInfo( const GenEvent&, std::ostream& );
 
 int main()

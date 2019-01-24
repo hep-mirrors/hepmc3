@@ -34,7 +34,7 @@
 #include <iostream>
 #include "HepMC3/Attribute.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 class GenCrossSection : public Attribute {
@@ -151,6 +151,6 @@ private:
 };
 
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

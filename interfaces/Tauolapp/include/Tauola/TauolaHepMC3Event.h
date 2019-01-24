@@ -29,7 +29,7 @@
 #include "Tauola/TauolaHepMC3Particle.h"
 namespace Tauolapp
 {
-using namespace HepMC;
+using namespace HepMC3;
 class TauolaHepMC3Event : public TauolaEvent{
 
  public:

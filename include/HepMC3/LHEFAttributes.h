@@ -17,7 +17,7 @@
 #include "LHEF.h"
 #include "FourVector.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 /**
  *  @class HepMC::HEPRUPAttribute
@@ -118,7 +118,7 @@ public:
       
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif
 

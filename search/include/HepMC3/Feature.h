@@ -15,7 +15,7 @@
 #include "HepMC3/Filter.h"
 #include <functional>
 
-namespace HepMC{
+namespace HepMC3{
   
   //////////////////////////////////////////////////////////////////////
   

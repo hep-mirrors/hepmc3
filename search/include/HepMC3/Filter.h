@@ -12,7 +12,7 @@
 
 #include "HepMC3/GenParticle.h"
 #include <functional>
-namespace HepMC{
+namespace HepMC3{
   
   using Filter = std::function<bool(ConstGenParticlePtr)>;
   

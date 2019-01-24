@@ -30,7 +30,7 @@
 class TFile;
 #endif
 
-namespace HepMC {
+namespace HepMC3 {
 
   class WriterRoot : public Writer {
 //
@@ -70,6 +70,6 @@ private:
     int    m_events_count; //!< Events count. Needed to generate unique object name
 };
 
-} // namespace HepMC
+} // namespace HepMC3
 
 #endif

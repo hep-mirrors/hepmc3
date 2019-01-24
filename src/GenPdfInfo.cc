@@ -13,7 +13,7 @@
 #include <cstdlib> // atoi
 #include <cstdio> // sprintf
 
-namespace HepMC {
+namespace HepMC3 {
 
 bool GenPdfInfo::from_string(const string &att) {
     const char *cursor = att.data();
@@ -103,4 +103,4 @@ bool GenPdfInfo::is_valid() const
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

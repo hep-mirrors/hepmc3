@@ -2,7 +2,7 @@
 #define MYRUNCLASS_H
 
 #include "HepMC3/GenRunInfo.h"
-
+using namespace HepMC3;
 /** @class MyRunClass
  *  @brief Sample class for root I/O test
  */
@@ -13,10 +13,10 @@ public:
     MyRunClass();
 
     /// @brief Set HepMC event
-    void SetRunInfo(HepMC::GenRunInfo*);
+    void SetRunInfo(GenRunInfo*);
 
     /// @brief Get HepMC event
-    HepMC::GenRunInfo* GetRunInfo();
+    GenRunInfo* GetRunInfo();
 
     /// @brief Set someint
     void SetInt(int);
@@ -26,7 +26,7 @@ public:
 
 private:
     int someint;            ///< Test int
-    HepMC::GenRunInfo* run; ///< Test run info
+    GenRunInfo* run; ///< Test run info
 };
 
 #endif
