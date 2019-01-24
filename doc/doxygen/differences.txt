@@ -13,9 +13,9 @@
 
     Following changes in header files have been applied:
     @code{.cpp}
-        HepMC/HeavyIons.h    ->  HepMC/GenHeavyIons.h   (now a POD struct)
-        HepMC/PdfInfo.h      ->  HepMC/GenPdfInfo.h     (now a POD struct)
-        HepMC/SimpleVector.h ->  HepMC/FourVector.h     (ThreeVector class removed)
+        HepMC/HeavyIons.h    ->  HepMC3/GenHeavyIons.h   (now a POD struct)
+        HepMC/PdfInfo.h      ->  HepMC3/GenPdfInfo.h     (now a POD struct)
+        HepMC/SimpleVector.h ->  HepMC3/FourVector.h     (ThreeVector class removed)
     @endcode
     The structure of GenCrossSection class has been changed to handle multiple 
     values of cross-sections. The cross-section values and errors (uncertainties) 
@@ -227,13 +227,15 @@
    
     
     @code{.cpp}
-        HepMC::FourVector position(pos[1],pos[2],pos[3],pos[0]);
+        
         
         // HepMC2 code:
+        HepMC::FourVector position(pos[1],pos[2],pos[3],pos[0]);
         vertex = new HepMC::GenVertex(position, id);
         
         // Replace with:
-        HepMC::GenVertexPtr vertex = HepMC::make_shared<HepMC::GenVertex>(position);
+        HepMC3::FourVector position(pos[1],pos[2],pos[3],pos[0]);
+        HepMC3::GenVertexPtr vertex = std::make_shared<HepMC3::GenVertex>(position);
         vertex->set_id(1);
     @endcode
     
@@ -244,7 +246,7 @@
         event.set_beam_particles(beamparticles[0],beamparticles[1]);
     
         // Replace with:
-        std::vector<HepMC::GenParticlePtr> beamparticles;
+        std::vector<HepMC3::GenParticlePtr> beamparticles;
         // ...
         event.add_particle(beamparticles[0]);
         event.add_particle(beamparticles[1]);
@@ -257,7 +259,7 @@
         vertex->id();
     
         // Replace with:
-        HepMC::GenVertexPtr vertex = HepMC::make_shared<HepMC::GenVertex>();
+        HepMC3::GenVertexPtr vertex = std::make_shared<HepMC3::GenVertex>();
         vertex->set_status(1);
         vertex->status();
     @endcode
@@ -270,8 +272,8 @@
              pout!=(*vit)->particles_out_const_end(); ++pout) { }
 
         // Replace with (similarly for particles_in):
-        HepMC::GenVertexPtr vertex = HepMC::make_shared<HepMC::GenVertex>();
-        for (HepMC::GenParticlePtr pout : vertex->particles_out() ) { }
+        HepMC3::GenVertexPtr vertex = std::make_shared<HepMC3::GenVertex>();
+        for (HepMC3::GenParticlePtr pout : vertex->particles_out() ) { }
     @endcode
 
     @code{.cpp}
@@ -328,9 +330,9 @@
         HepMC::GenParticle::set_flow(int code_index, int code = 0)	
         HepMC::GenParticle::set_polarization( Polarization(theta,phi))	
         // Replace with:
-        HepMC::GenParticle::add_attribute("flow"+to_string(code_index),make_shared<IntAttribute>(code));
-        HepMC::GenParticle::add_attribute("theta",make_shared<DoubleAttribute>(theta));
-        HepMC::GenParticle::add_attribute("phi",make_shared<DoubleAttribute>(phi));
+        HepMC3::GenParticle::add_attribute("flow"+to_string(code_index),make_shared<IntAttribute>(code));
+        HepMC3::GenParticle::add_attribute("theta",make_shared<DoubleAttribute>(theta));
+        HepMC3::GenParticle::add_attribute("phi",make_shared<DoubleAttribute>(phi));
     @endcode
     ###########################################################################
     @subsection attributes Standard attributes
@@ -371,5 +373,5 @@
      that belong to a GenEvent object.
      
     <hr>
-    Last update 14 Dec 2018
+    Last update 24 Jan 2019
 */

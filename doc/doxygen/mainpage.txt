@@ -6,8 +6,14 @@
     The HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation. The original code was written by M. Dobbs and J.B. Hansen (Comput. Phys. Commun. 134 (2001) 41). Since the first implementation, the package has undergone several modifications and in particular, the latest HepMC3 series is a completely new re-write using currently available C++11 techniques.
 
     @section releases Status of releases
-    The current development effort is concentrated on the HepMC3 series. Users are encouraged to integrate that version in their applications and to provide any feedback they may have.
-    The HepMC2 series development has been essentially stopped and in particular HepMC2.06.x (with the latest being 2.06.08) versions are frozen. Some of the new features of HepMC3 series are now also available in HepMC2.07.x versions, but this should be regarded (for those who need it) as an intermediate step before migrating to HepMC3.
+    The current development effort is concentrated on the HepMC3 series. Users 
+    are encouraged to integrate that version in their applications and to provide 
+    any feedback they may have.
+    The HepMC2 series development has been essentially stopped and in particular 
+    HepMC2.06.x (with the latest being 2.06.08) versions are frozen. Some of the 
+    new features of HepMC3 series are now also available in HepMC2.07.x versions, 
+    but this should be regarded (for those who need it) as an intermediate step before migrating to HepMC3.
+    Since HepMC3 version 3.1 both HepMC2 and HepMC3 can be installed in the same preficx simultaneously.
     Finally, HepMC1 series is by now fully deprecated.
 
     @section tarfiles Available tarfiles
@@ -55,5 +61,5 @@
     <img src="class_diagram.png">
 
     <hr>
-    Last update 20 March 2017
+    Last update 24 Jan 2019
 */
