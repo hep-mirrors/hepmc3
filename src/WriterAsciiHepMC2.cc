@@ -38,7 +38,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, shared_ptr<Gen
         }
     else
         {
-            m_file << "HepMC::Version " << HepMC::version() << std::endl;
+            m_file << "HepMC::Version " << version() << std::endl;
             m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
         }
 }
@@ -55,7 +55,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, shared_ptr<GenRunInfo
     WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
     set_run_info(run);
     if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
-    (*m_stream) << "HepMC::Version " << HepMC::version() << std::endl;
+    (*m_stream) << "HepMC::Version " << version() << std::endl;
     (*m_stream) << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
 }
 

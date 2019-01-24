@@ -14,10 +14,11 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Print.h"
 #include <stdexcept>
+using namespace HepMC;
 int main()
 {
-    HepMC::GenEvent evt;
-    std::shared_ptr<HepMC::GenRunInfo> run = std::make_shared<HepMC::GenRunInfo>();;
+    GenEvent evt;
+    std::shared_ptr<GenRunInfo> run = std::make_shared<GenRunInfo>();;
     evt.set_run_info(run);
     // original functionality
     evt.weights().push_back(2.0);
@@ -59,6 +60,6 @@ int main()
             std::cout << e.what() << std::endl;
             std::cout << "HepMC testWeights: the above error is intentional" << std::endl;
         }
-    HepMC::Print::listing(evt);
+    Print::listing(evt);
     return 0;
 }

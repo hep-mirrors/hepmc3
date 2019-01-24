@@ -7,14 +7,15 @@
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
 #include "HepMC3TestUtils.h"
+using namespace HepMC;
 int main()
 {
-    HepMC::ReaderAsciiHepMC2 inputA("inputDelete.hepmc");
+    ReaderAsciiHepMC2 inputA("inputDelete.hepmc");
     if(inputA.failed()) return 1;
-    std::vector<HepMC::GenEvent> evts;
+    std::vector<GenEvent> evts;
     while( !inputA.failed() )
         {
-            HepMC::GenEvent evt=HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM);
+            GenEvent evt=GenEvent(Units::GEV,Units::MM);
             inputA.read_event(evt);
             if( inputA.failed() )  {printf("End of file reached. Exit.\n"); break;}
             evts.push_back(evt);
@@ -30,30 +31,30 @@ int main()
     }
     evts[i].remove_particles(evts[j].particles());
 
-    for (HepMC::GenParticlePtr p: evts.at(i).particles())
+    for (GenParticlePtr p: evts.at(i).particles())
       evts[j].remove_particle(p);
         
-    for (HepMC::GenParticlePtr p: evts.at(i).particles()){
-      for (HepMC::GenVertexPtr v: evts.at(j).vertices()){
+    for (GenParticlePtr p: evts.at(i).particles()){
+      for (GenVertexPtr v: evts.at(j).vertices()){
         (v)->remove_particle_in(p);
         (v)->remove_particle_out(p);
       }
     }
   
-    HepMC::WriterAscii       outputA("frominputDelete.hepmc");
+    WriterAscii       outputA("frominputDelete.hepmc");
     if(outputA.failed()) return 2;
     for (size_t i=0;i<evts.size();i++) outputA.write_event(evts[i]);
     evts.clear();
     outputA.close();
 
 
-    HepMC::ReaderAscii inputB("frominputDelete.hepmc");
+    ReaderAscii inputB("frominputDelete.hepmc");
     if(inputB.failed()) return 3;
-    HepMC::WriterAsciiHepMC2       outputB("fromfrominputDelete.hepmc");
+    WriterAsciiHepMC2       outputB("fromfrominputDelete.hepmc");
     if(outputB.failed()) return 4;
     while( !inputB.failed() )
         {
-            HepMC::GenEvent evt(HepMC::Units::GEV,HepMC::Units::MM);
+            GenEvent evt(Units::GEV,Units::MM);
             inputB.read_event(evt);
             if( inputB.failed() )  {printf("End of file reached. Exit.\n"); break;}
             outputB.write_event(evt);

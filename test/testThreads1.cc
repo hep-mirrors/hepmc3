@@ -9,21 +9,22 @@
 #include "HepMC3/WriterAsciiHepMC2.h"
 #include "HepMC3TestUtils.h"
 #include <thread>
+using namespace HepMC;
 const int NinputCopies=4;
 const int NmaxThreads=3;
-void attribute_function1(const HepMC::GenEvent& e, const int& id)
+void attribute_function1(const GenEvent& e, const int& id)
 {
-    shared_ptr<HepMC::GenCrossSection>  xs     = e.attribute<HepMC::GenCrossSection>("GenCrossSection",0);
+    shared_ptr<GenCrossSection>  xs     = e.attribute<GenCrossSection>("GenCrossSection",0);
     printf("XS in event  %i  is %f, id=%i\n",e.event_number(),xs->xsec(),id);
 }
 int main()
 {
-    HepMC::ReaderAsciiHepMC2 inputA("inputCommon.hepmc");
+    ReaderAsciiHepMC2 inputA("inputCommon.hepmc");
     if(inputA.failed()) return 1;
-    std::vector<HepMC::GenEvent> evts;
+    std::vector<GenEvent> evts;
     while( !inputA.failed() )
     {
-        HepMC::GenEvent evt=HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM);
+        GenEvent evt=GenEvent(Units::GEV,Units::MM);
         inputA.read_event(evt);
         if( inputA.failed() )  {
             printf("End of file reached. Exit.\n");
@@ -32,7 +33,7 @@ int main()
         evts.push_back(evt);
     }
     inputA.close();
-    std::vector<HepMC::GenEvent> thr_evts[NinputCopies];
+    std::vector<GenEvent> thr_evts[NinputCopies];
     for (int i=0; i<NinputCopies; i++)thr_evts[i]=evts;
 
     for (int i=0; i<NinputCopies; i++)
@@ -57,7 +58,7 @@ int main()
         }
     for (int k=0; k<NinputCopies; k++)
     {
-        HepMC::WriterAscii       outputA("outputThreads1_"+std::to_string(k)+".hepmc");
+        WriterAscii       outputA("outputThreads1_"+std::to_string(k)+".hepmc");
         if(outputA.failed()) return 2;
         for (size_t i=0; i<thr_evts[k].size(); i++) outputA.write_event(thr_evts[k].at(i));
         thr_evts[k].clear();

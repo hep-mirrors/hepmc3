@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef _TauolaHepMC3Particle_h_included_
 #define _TauolaHepMC3Particle_h_included_
@@ -9,12 +9,12 @@
 /**
  * @class TauolaHepMC3Particle
  *
- * @brief Interface to HepMC::GenParticle objects
+ * @brief Interface to GenParticle objects
  *
  * This class implements the virtual methods of
  * TauolaParticle. In this way it provides an
  * interface between the generic TauolaParticle class
- * and a HepMC::GenParticle object.
+ * and a GenParticle object.
  *
  * This code is licensed under GNU General Public Licence.
  * For more informations, see: http://www.gnu.org/licenses/
@@ -30,9 +30,9 @@
 //#include "DecayList.h"
 #include "Tauola/TauolaParticle.h"
 #include "Tauola/f_Decay.h"
-
 namespace Tauolapp
 {
+using namespace HepMC;
 
 class TauolaHepMC3Particle: public TauolaParticle{
 
@@ -42,15 +42,15 @@ class TauolaHepMC3Particle: public TauolaParticle{
 
   ~TauolaHepMC3Particle();
 
-  /** Constructor which keeps a pointer to the HepMC::GenParticle*/
-  TauolaHepMC3Particle(HepMC::GenParticlePtr particle);
+  /** Constructor which keeps a pointer to the GenParticle*/
+  TauolaHepMC3Particle(GenParticlePtr particle);
 
-  /** Constructor which creates a new HepMC::GenParticle and
+  /** Constructor which creates a new GenParticle and
        sets the properties pdg_id, statu and mass. */
   TauolaHepMC3Particle(int pdg_id, int status, double mass);
 
-  /** Returns the HepMC::GenParticlePtr */
-  HepMC::GenParticlePtr getHepMC3();
+  /** Returns the GenParticlePtr */
+  GenParticlePtr getHepMC3();
 
   /** Remove the decay branch from the event record and reset the particle status code to stable. */
   void undecay();
@@ -136,10 +136,10 @@ class TauolaHepMC3Particle: public TauolaParticle{
 private:
 
   /** Sets the position for whole decay tree starting from given particle */
-  void recursiveSetPosition(HepMC::GenParticlePtr p,HepMC::FourVector pos);
+  void recursiveSetPosition(GenParticlePtr p,FourVector pos);
 
-  /** A pointer to the HepMC::GenParticle particle */
-  HepMC::GenParticlePtr m_particle;
+  /** A pointer to the GenParticle particle */
+  GenParticlePtr m_particle;
 
   /** A list of mothers */
   std::vector<TauolaParticle*> m_mothers;

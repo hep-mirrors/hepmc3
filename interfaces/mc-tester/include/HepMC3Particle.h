@@ -1,13 +1,13 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  * @class HepMC3Particle
  * @brief HEPParticle interface to HepMC classes
  *
- * HepMC3Particle extends HepMC::GenParticle class, so that
+ * HepMC3Particle extends GenParticle class, so that
  * MC-TESTER can accesses the particle information through
  * the common HEPEvent methods
  *
@@ -23,7 +23,9 @@
 #ifdef _USE_ROOT_
 #include <TObject.h>
 #endif
-
+namespace MCTester
+{
+using namespace HepMC;
 class HepMC3Event;
 
 class HepMC3Particle : public HEPParticle
@@ -33,14 +35,14 @@ private:
   /** Event which the particle belongs to.*/
   HepMC3Event *   event;
   /** ID number of particle as given by MC-TESTER (not the same as
-    HepMC::GenParticle pdg_id or barcode).*/
+    GenParticle pdg_id or barcode).*/
   int           id ;
 
 public:
   /** Plain constructor.*/
   HepMC3Particle();
-  /** Constructor which makes a HepMC3Particle from HepMC::GenParticle. */
-  HepMC3Particle(HepMC::GenParticle& particle, HEPEvent * e, int Id);
+  /** Constructor which makes a HepMC3Particle from GenParticle. */
+  HepMC3Particle(GenParticle& particle, HEPEvent * e, int Id);
   /** Destructor*/
   ~HepMC3Particle();
 
@@ -50,7 +52,7 @@ public:
   /** Returns the event that this particle belongs to.*/
   HEPEvent* GetEvent()            ;
   /** returns the ID number of particle as used by MC-TESTER (not
-    the same as HepMC::GenParticle pdg_id or barcode).*/
+    the same as GenParticle pdg_id or barcode).*/
   int    const GetId()            ;
   /** Dummy function definition. Do not use.*/
   int    const GetMother()        ;
@@ -144,11 +146,11 @@ public:
   /** Returns a list of daughter particles of this particle.*/
   HEPParticleList*  GetMotherList(HEPParticleList *list);
 public:
-  HepMC::GenParticle *part;
+  GenParticle *part;
 
 #ifdef _USE_ROOT_
   ClassDef(HepMC3Particle,0)
 #endif
 };
-
+}
 #endif // _HepMC3Particle_H

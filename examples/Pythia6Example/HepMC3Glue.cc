@@ -12,7 +12,8 @@
 #include "HepMC3/WriterRoot.h"
 #include "HepMC3/WriterRootTree.h"
 #endif
-std::map<int,std::pair<HepMC::Writer*,HepMC::GenEvent*> > gWriters;
+using namespace HepMC;
+std::map<int,std::pair<Writer*,GenEvent*> > gWriters;
 extern "C" {
 
     int delete_writer_(const int & position)
@@ -26,17 +27,17 @@ extern "C" {
     int convert_event_(const int & position)
     {
         if (gWriters.find(position)==gWriters.end()) { printf("Warning in %s: Writer at position %i does not exist\n",__FUNCTION__,position); return 1;}
-        if (!HepMC::hepevtptr)
+        if (!hepevtptr)
             {
                 printf("Error in %s: HEPEVT block does not exist\n",__FUNCTION__);
                 return 1;
             }
-        gWriters[position].second=new HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM);
-        for( int i=1; i<=HepMC::HEPEVT_Wrapper::number_entries(); i++ )
-            if (HepMC::hepevtptr->jmohep[i-1][1]<HepMC::hepevtptr->jmohep[i-1][0])  HepMC::hepevtptr->jmohep[i-1][1]=HepMC::hepevtptr->jmohep[i-1][0];
+        gWriters[position].second=new GenEvent(Units::GEV,Units::MM);
+        for( int i=1; i<=HEPEVT_Wrapper::number_entries(); i++ )
+            if (hepevtptr->jmohep[i-1][1]<hepevtptr->jmohep[i-1][0])  hepevtptr->jmohep[i-1][1]=hepevtptr->jmohep[i-1][0];
 
-        HepMC::HEPEVT_Wrapper::HEPEVT_to_GenEvent(gWriters[position].second);
-        std::shared_ptr<HepMC::GenRunInfo> run=std::make_shared<HepMC::GenRunInfo>();
+        HEPEVT_Wrapper::HEPEVT_to_GenEvent(gWriters[position].second);
+        std::shared_ptr<GenRunInfo> run=std::make_shared<GenRunInfo>();
         std::vector<std::string>  names;
         names.push_back("Default");
         run->set_weight_names(names);
@@ -58,17 +59,17 @@ extern "C" {
     int set_cross_section_(const int & position, const double& x,const double& xe, const int& n1,const int& n2)
     {
       if (gWriters.find(position)==gWriters.end()) { printf("Warning in %s: Writer at position %i does not exist\n",__FUNCTION__,position); return 1;}
-        HepMC::GenCrossSectionPtr cs=std::make_shared< HepMC::GenCrossSection>();
+        GenCrossSectionPtr cs=std::make_shared< GenCrossSection>();
        cs->set_cross_section(x,xe,n1,n2);
        gWriters[position].second->set_cross_section(cs);
        return 0;
     }
     int set_hepevt_address_(int* a)
     {
-        if (!HepMC::hepevtptr)
+        if (!hepevtptr)
             {
                 printf("Info in %s: setting /hepevt/ block adress\n",__FUNCTION__);
-                HepMC::HEPEVT_Wrapper::set_hepevt_address((char*)a);
+                HEPEVT_Wrapper::set_hepevt_address((char*)a);
                 return 0;
             }
         else
@@ -80,13 +81,13 @@ extern "C" {
     int set_attribute_int_(const int & position,const int & attval,const char* attname, size_t len)
     {
     if (gWriters.find(position)==gWriters.end()) { printf("Warning in %s: Writer at position %i does not exist\n",__FUNCTION__,position); return 1;}
-    gWriters[position].second->add_attribute(attname,std::make_shared<HepMC::IntAttribute>(attval));
+    gWriters[position].second->add_attribute(attname,std::make_shared<IntAttribute>(attval));
     return 0;
     }
     int set_attribute_double_(const int & position,const double & attval,const char* attname, size_t len)
     {
     if (gWriters.find(position)==gWriters.end()) { printf("Warning in %s: Writer at position %i does not exist\n",__FUNCTION__,position); return 1;}
-    gWriters[position].second->add_attribute(attname,std::make_shared<HepMC::DoubleAttribute>(attval));
+    gWriters[position].second->add_attribute(attname,std::make_shared<DoubleAttribute>(attval));
     return 0;
     }
 
@@ -103,20 +104,20 @@ extern "C" {
         switch (mode)
             {
             case 1:
-                gWriters[r_position]=std::pair<HepMC::Writer*,HepMC::GenEvent*>(new HepMC::WriterAscii(filename.c_str()),new HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM));
+                gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterAscii(filename.c_str()),new GenEvent(Units::GEV,Units::MM));
                 break;
             case 2:
-                gWriters[r_position]=std::pair<HepMC::Writer*,HepMC::GenEvent*>(new HepMC::WriterAsciiHepMC2(filename.c_str()),new HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM));
+                gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterAsciiHepMC2(filename.c_str()),new GenEvent(Units::GEV,Units::MM));
                 break;
             case 3:
-                gWriters[r_position]=std::pair<HepMC::Writer*,HepMC::GenEvent*>(new HepMC::WriterHEPEVT(filename.c_str()),new HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM));
+                gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterHEPEVT(filename.c_str()),new GenEvent(Units::GEV,Units::MM));
                 break;
 #ifdef HEPMC3_ROOTIO
             case 4:
-                gWriters[r_position]=std::pair<HepMC::Writer*,HepMC::GenEvent*>(new HepMC::WriterRoot(filename.c_str()),new HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM));
+                gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterRoot(filename.c_str()),new GenEvent(Units::GEV,Units::MM));
                 break;
             case 5:
-                gWriters[r_position]=std::pair<HepMC::Writer*,HepMC::GenEvent*>(new HepMC::WriterRootTree(filename.c_str()),new HepMC::GenEvent(HepMC::Units::GEV,HepMC::Units::MM));
+                gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterRootTree(filename.c_str()),new GenEvent(Units::GEV,Units::MM));
                 break;
 #endif
             default:

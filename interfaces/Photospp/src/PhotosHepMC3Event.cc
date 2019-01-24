@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #include <vector>
 #include "Photos/PhotosHepMC3Particle.h"
@@ -11,15 +11,13 @@
 #include "HepMC3/Common.h"
 #include "HepMC3/Print.h"
 
-using namespace std;
-
 namespace Photospp
 {
-
-PhotosHepMC3Event::PhotosHepMC3Event(HepMC::GenEvent * event)
+using namespace std;
+PhotosHepMC3Event::PhotosHepMC3Event(GenEvent * event)
 {
         m_event=event;
-        FOREACH( const HepMC::GenParticlePtr &p, m_event->particles() )
+        FOREACH( const GenParticlePtr &p, m_event->particles() )
         {
                 PhotosParticle *particle = new PhotosHepMC3Particle(p);
                 particles.push_back(particle);
@@ -36,7 +34,7 @@ PhotosHepMC3Event::~PhotosHepMC3Event()
         }
 }
 
-HepMC::GenEvent * PhotosHepMC3Event::getEvent()
+GenEvent * PhotosHepMC3Event::getEvent()
 {
         return m_event;
 }
@@ -44,7 +42,7 @@ HepMC::GenEvent * PhotosHepMC3Event::getEvent()
 void PhotosHepMC3Event::print()
 {
         if(!m_event) return;
-        HepMC::Print::listing(*m_event);
+        Print::listing(*m_event);
 }
 
 vector<PhotosParticle*> PhotosHepMC3Event::getParticleList()

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef PYTHIA_VALIDATION_TOOL_H
 #define PYTHIA_VALIDATION_TOOL_H
@@ -18,7 +18,7 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Selector.h"
 #include "Pythia8/Pythia8ToHepMC3.h"
-#endif // ifdef PYTHIA8_HEPMC2
+#endif 
 
 #include "ValidationTool.h"
 #include "Timer.h"
@@ -43,8 +43,8 @@ private:
     Pythia8::Pythia m_pythia;
     std::string     m_filename;
     Timer           m_timer;
-    HEPMC2CODE( HepMC::Pythia8ToHepMC   m_tohepmc; )
-    HEPMC3CODE( HepMC::Pythia8ToHepMC3 m_tohepmc; )
+    HEPMC2CODE( Pythia8ToHepMC   m_tohepmc; )
+    HEPMC3CODE( Pythia8ToHepMC3 m_tohepmc; )
 };
 
 #endif

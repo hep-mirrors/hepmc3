@@ -8,29 +8,29 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Print.h"
-
+using namespace HepMC;
 int main()
 {
-    HepMC::GenEvent p_event(HepMC::Units::GEV, HepMC::Units::MM);
+    GenEvent p_event(Units::GEV, Units::MM);
     for(int i=0; i<10; i++)
         {
-            HepMC::FourVector vector(1.0,1.0,1.0,1.0);
-            HepMC::GenVertexPtr vertex=std::make_shared<HepMC::GenVertex>();
+            FourVector vector(1.0,1.0,1.0,1.0);
+            GenVertexPtr vertex=std::make_shared<GenVertex>();
             vertex->set_position(vector);
             vertex->set_id(i);
             for(int j=0; j<3; j++)
                 {
-                    HepMC::GenParticlePtr particle = std::make_shared<HepMC::GenParticle>(vector,1,2);
+                    GenParticlePtr particle = std::make_shared<GenParticle>(vector,1,2);
                     vertex->add_particle_in(particle);
                 }
             for(int j=0; j<3; j++)
                 {
-                    HepMC::GenParticlePtr particle = std::make_shared<HepMC::GenParticle>(vector,1,2);
+                    GenParticlePtr particle = std::make_shared<GenParticle>(vector,1,2);
                     vertex->add_particle_out(particle);
                 }
             p_event.add_vertex(vertex);
         }
-    HepMC::Print::listing(p_event);
+    Print::listing(p_event);
     // cleanup
     p_event.clear();
     return 0;

@@ -19,7 +19,7 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
 
     // 1. Error if no event passed.
     if (!evt) {
-        std::cerr << "Pythia8ToHepMC::fill_next_event error - passed null event."
+        std::cerr << "Pythia8Tofill_next_event error - passed null event."
                   << std::endl;
         return 0;
     }
@@ -34,7 +34,7 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
         ++m_internal_event_number;
     }
 
-    evt->set_units(HepMC::Units::GEV,HepMC::Units::MM);
+    evt->set_units(Units::GEV,Units::MM);
 
     // 2. Fill particle information
     std::vector<GenParticlePtr> hepevt_particles;
@@ -151,7 +151,7 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
             if (id2pdf == 21) id2pdf = 0;
         }
 
-        HepMC::GenPdfInfoPtr pdfinfo = make_shared<HepMC::GenPdfInfo>();
+        GenPdfInfoPtr pdfinfo = make_shared<GenPdfInfo>();
         pdfinfo->set(id1pdf, id2pdf, pyinfo->x1pdf(),
                      pyinfo->x2pdf(), pyinfo->QFac(), pyinfo->pdf1(), pyinfo->pdf2() );
         // Store PDF information.
@@ -168,7 +168,7 @@ bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int 
 
     // Store cross-section information in pb.
     if (m_store_xsec && pyinfo != 0) {
-        HepMC::GenCrossSectionPtr xsec = make_shared<HepMC::GenCrossSection>();
+        GenCrossSectionPtr xsec = make_shared<GenCrossSection>();
         xsec->set_cross_section( pyinfo->sigmaGen() * 1e9, pyinfo->sigmaErr() * 1e9);
         evt->set_cross_section(xsec);
     }

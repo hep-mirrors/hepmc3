@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @example HepMC3_fileIO_example.cc
@@ -18,8 +18,6 @@
 
 #include <iostream>
 using namespace HepMC;
-using std::cout;
-using std::endl;
 
 /** Main program */
 int main(int argc, char **argv) {

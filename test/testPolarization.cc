@@ -20,6 +20,7 @@
 #define M_PI 3.14159265358979323846264338327950288
 #endif
 #include "HepMC3TestUtils.h"
+using namespace HepMC;
 int main()
 {
     //
@@ -38,11 +39,11 @@ int main()
 
 
     // declare several WriterAscii instances for comparison
-    HepMC::WriterAscii xout1("testPolarization1.dat");
-    HepMC::WriterAscii xout2("testPolarization2.dat");
+    WriterAscii xout1("testPolarization1.dat");
+    WriterAscii xout2("testPolarization2.dat");
     // output in old format
-    HepMC::WriterAsciiHepMC2 xout4( "testPolarization4.out" );
-    HepMC::WriterAscii xout5( "testPolarization5.out" );
+    WriterAsciiHepMC2 xout4( "testPolarization4.out" );
+    WriterAscii xout5( "testPolarization5.out" );
 
     // build the graph, which will look like
     //                       p7                   #
@@ -60,81 +61,81 @@ int main()
 
     // First create the event container, with Signal Process 20, event number 1
     //
-    HepMC::GenEvent evt(HepMC::Units::GEV,HepMC::Units::MM);
+    GenEvent evt(Units::GEV,Units::MM);
     evt.set_event_number(1);
-    evt.add_attribute("signal_process_id", std::make_shared<HepMC::IntAttribute>(20));
+    evt.add_attribute("signal_process_id", std::make_shared<IntAttribute>(20));
     // create vertex 1
-    HepMC::GenVertexPtr v1=std::make_shared<HepMC::GenVertex>();
+    GenVertexPtr v1=std::make_shared<GenVertex>();
     evt.add_vertex( v1 );
-    HepMC::GenParticlePtr p1=std::make_shared<HepMC::GenParticle>( HepMC::FourVector(0,0,7000,7000),2212, 3 );
+    GenParticlePtr p1=std::make_shared<GenParticle>( FourVector(0,0,7000,7000),2212, 3 );
     evt.add_particle( p1 );
-    p1->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(231));
-    p1->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(231));
-    p1->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p1->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
+    p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
+    p1->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
+    p1->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
 
-    HepMC::GenVertexPtr v2=std::make_shared<HepMC::GenVertex>();
+    GenVertexPtr v2=std::make_shared<GenVertex>();
     evt.add_vertex( v2 );
-    HepMC::GenParticlePtr p2=std::make_shared<HepMC::GenParticle>(  HepMC::FourVector(0,0,-7000,7000),2212, 3 );
+    GenParticlePtr p2=std::make_shared<GenParticle>(  FourVector(0,0,-7000,7000),2212, 3 );
     evt.add_particle( p2 );
-    p2->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(243));
-    p2->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p2->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p2->add_attribute("flow1", std::make_shared<IntAttribute>(243));
+    p2->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
+    p2->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
     v2->add_particle_in( p2 );
     //
     // create the outgoing particles of v1 and v2
-    HepMC::GenParticlePtr p3=std::make_shared<HepMC::GenParticle>( HepMC::FourVector(.750,-1.569,32.191,32.238),1, 3 );
+    GenParticlePtr p3=std::make_shared<GenParticle>( FourVector(.750,-1.569,32.191,32.238),1, 3 );
     evt.add_particle( p3 );
-    p3->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(231));
-    p3->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p3->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p3->add_attribute("flow1", std::make_shared<IntAttribute>(231));
+    p3->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
+    p3->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
     v1->add_particle_out( p3 );
-    HepMC::GenParticlePtr p4=std::make_shared<HepMC::GenParticle>( HepMC::FourVector(-3.047,-19.,-54.629,57.920),-2, 3 );
+    GenParticlePtr p4=std::make_shared<GenParticle>( FourVector(-3.047,-19.,-54.629,57.920),-2, 3 );
     evt.add_particle( p4 );
-    p4->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(243));
-    p4->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p4->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p4->add_attribute("flow1", std::make_shared<IntAttribute>(243));
+    p4->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
+    p4->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
     v2->add_particle_out( p4 );
     //
     // create v3
-    HepMC::GenVertexPtr v3=std::make_shared<HepMC::GenVertex>();
+    GenVertexPtr v3=std::make_shared<GenVertex>();
     evt.add_vertex( v3 );
     v3->add_particle_in( p3 );
     v3->add_particle_in( p4 );
-    HepMC::GenParticlePtr p6=std::make_shared<HepMC::GenParticle>(  HepMC::FourVector(-3.813,0.113,-1.833,4.233 ),22, 1 );
+    GenParticlePtr p6=std::make_shared<GenParticle>(  FourVector(-3.813,0.113,-1.833,4.233 ),22, 1 );
     evt.add_particle( p6 );
-    p6->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(231));
-    p6->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p6->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p6->add_attribute("flow1", std::make_shared<IntAttribute>(231));
+    p6->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
+    p6->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
     v3->add_particle_out( p6 );
-    HepMC::GenParticlePtr p5=std::make_shared<HepMC::GenParticle>( HepMC::FourVector(1.517,-20.68,-20.605,85.925),-24, 3 );
+    GenParticlePtr p5=std::make_shared<GenParticle>( FourVector(1.517,-20.68,-20.605,85.925),-24, 3 );
     evt.add_particle( p5 );
-    p5->add_attribute("flow1", std::make_shared<HepMC::IntAttribute>(243));
-    p5->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p5->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p5->add_attribute("flow1", std::make_shared<IntAttribute>(243));
+    p5->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
+    p5->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
     v3->add_particle_out( p5 );
     //
     // create v4
-    HepMC::GenVertexPtr v4=std::make_shared<HepMC::GenVertex>(HepMC::FourVector(0.12,-0.3,0.05,0.004));
+    GenVertexPtr v4=std::make_shared<GenVertex>(FourVector(0.12,-0.3,0.05,0.004));
     evt.add_vertex( v4 );
     v4->add_particle_in( p5 );
-    HepMC::GenParticlePtr p7(new HepMC::GenParticle( HepMC::FourVector(-2.445,28.816,6.082,29.552), 1,1 ));
+    GenParticlePtr p7(new GenParticle( FourVector(-2.445,28.816,6.082,29.552), 1,1 ));
     evt.add_particle( p7 );
     v4->add_particle_out( p7 );
-    HepMC::GenParticlePtr p8(new HepMC::GenParticle( HepMC::FourVector(3.962,-49.498,-26.687,56.373), -2,1 ));
+    GenParticlePtr p8(new GenParticle( FourVector(3.962,-49.498,-26.687,56.373), -2,1 ));
     evt.add_particle( p8 );
     v4->add_particle_out( p8 );
     //
     // tell the event which vertex is the signal process vertex
     //evt.set_signal_process_vertex( v3 );
-    evt.add_attribute("signal_process_vertex", std::make_shared<HepMC::IntAttribute>(v3->id()));
+    evt.add_attribute("signal_process_vertex", std::make_shared<IntAttribute>(v3->id()));
     // the event is complete, we now print it out
-    HepMC::Print::content(evt);
+    Print::content(evt);
     //we now print it out in old format
-    HepMC::Print::listing(evt,8);
+    Print::listing(evt,8);
     // print each particle so we can see the polarization
-    for ( HepMC::GenParticlePtr ip: evt.particles()){
-        HepMC::Print::line(ip,true);
+    for ( GenParticlePtr ip: evt.particles()){
+        Print::line(ip,true);
     }
 
     // write event
@@ -142,11 +143,11 @@ int main()
     // write event in old format
     xout4.write_event(evt);
     // make a copy and write it
-    xout5.write_event(HepMC::GenEvent(evt));
+    xout5.write_event(GenEvent(evt));
 
     // try changing polarization
-    p2->add_attribute("theta", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p2->add_attribute("phi", std::make_shared<HepMC::DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
+    p2->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
+    p2->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     xout2.write_event(evt);
 
     xout1.close();

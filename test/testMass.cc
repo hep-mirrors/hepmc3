@@ -24,25 +24,25 @@
 
 // define methods and classes used by this test
 #include "IsGoodEvent.h"
-
-bool   massInfo( const HepMC::GenEvent&, std::ostream& );
+using namespace HepMC;
+bool   massInfo( const GenEvent&, std::ostream& );
 
 int main()
 {
     // declare an input strategy to read the data produced with the
-    HepMC::ReaderAsciiHepMC2 ascii_in("testIOGenEvent.input");
+    ReaderAsciiHepMC2 ascii_in("testIOGenEvent.input");
     if (ascii_in.failed()) return 1;
     // declare another IO_GenEvent for output
-    HepMC::WriterAsciiHepMC2 ascii_out("testMass1.out");
+    WriterAsciiHepMC2 ascii_out("testMass1.out");
     // declare an instance of the event selection predicate
     IsGoodEventDIS is_good_event;
     // send version to output
-    HepMC::version();
+    version();
     //........................................EVENT LOOP
     int icount=0;
     int num_good_events=0;
     double x1=0., x2=0., q=0., xf1=0., xf2=0.;
-    HepMC::GenEvent evt;
+    GenEvent evt;
     while ( !ascii_in.failed() )
         {
             bool readOK=ascii_in.read_event(evt);
@@ -60,8 +60,8 @@ int main()
                             // use beam momentum
                             if( evt.valid_beam_particles() )
                                 {
-                                    HepMC::GenParticlePtr bp1 = evt.beams().at(0);
-                                    HepMC::GenParticlePtr bp2 = evt.beams().at(1);
+                                    GenParticlePtr bp1 = evt.beams().at(0);
+                                    GenParticlePtr bp2 = evt.beams().at(1);
                                     xf1 = x1*bp1->momentum().p3mod();
                                     xf2 = x2*bp1->momentum().p3mod();
                                 }
@@ -71,11 +71,11 @@ int main()
                                     xf2 = x2*0.34;
                                 }
                             // provide optional pdf set id numbers (two ints at the end of the constructor)
-                            std::shared_ptr< HepMC::GenPdfInfo> pdf = std::make_shared< HepMC::GenPdfInfo>();
+                            std::shared_ptr< GenPdfInfo> pdf = std::make_shared< GenPdfInfo>();
                             evt.add_attribute("GenPdfInfo",pdf);
                             pdf->set( 2, 3, x1, x2, q, xf1, xf2, 230, 230);
                             // add some arbitrary HeavyIon information
-                            std::shared_ptr< HepMC::GenHeavyIon> ion = std::make_shared< HepMC::GenHeavyIon>();
+                            std::shared_ptr< GenHeavyIon> ion = std::make_shared< GenHeavyIon>();
                             evt.add_attribute("GenHeavyIon",ion);
                             ion->set(23,11,12,15,3,5,0,0,0,0.0145,0.0,0.0,0.0,0.23);
                         }
@@ -106,10 +106,10 @@ int main()
             std::cerr << "testMass: cannot open " << std::endl;
             exit(1);
         }
-    HepMC::ReaderAsciiHepMC2 xin(istr);
+    ReaderAsciiHepMC2 xin(istr);
     if (xin.failed()) return 1;
     // declare another IO_GenEvent for output
-    HepMC::WriterAsciiHepMC2 xout("testMass2.out");
+    WriterAsciiHepMC2 xout("testMass2.out");
     if (xout.failed()) return 1;
     //........................................EVENT LOOP
     int ixin=0;
@@ -139,9 +139,9 @@ int main()
     return 0;
 }
 
-bool massInfo( const HepMC::GenEvent& e, std::ostream& os )
+bool massInfo( const GenEvent& e, std::ostream& os )
 {
-    for (HepMC::ConstGenParticlePtr  p: e.particles()){
+    for (ConstGenParticlePtr  p: e.particles()){
         double gm = p->generated_mass();
         double m = p->momentum().m();
         double d = std::abs(m-gm);

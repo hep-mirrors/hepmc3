@@ -31,7 +31,7 @@ WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run
     if ( !m_file.is_open() ) {
         ERROR( "WriterAscii: could not open output file: "<<filename )
     } else {
-        m_file << "HepMC::Version " << HepMC::version() << std::endl;
+        m_file << "HepMC::Version " << version() << std::endl;
         m_file << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
         if ( run_info() ) write_run_info();
     }
@@ -48,7 +48,7 @@ WriterAscii::WriterAscii(std::ostream &stream, shared_ptr<GenRunInfo> run)
 
 {
     set_run_info(run);
-    (*m_stream) << "HepMC::Version " << HepMC::version() << std::endl;
+    (*m_stream) << "HepMC::Version " << version() << std::endl;
     (*m_stream) << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
     if ( run_info() ) write_run_info();
 }

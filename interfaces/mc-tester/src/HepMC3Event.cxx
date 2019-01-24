@@ -1,17 +1,20 @@
 #include "HepMC3Event.h"
 #include <iostream>
+namespace MCTester
+{
 using namespace std;
+using namespace HepMC;
 
 #ifdef _USE_ROOT_
 ClassImp(HepMCEvent)
 #endif
 
-HepMC3Event::HepMC3Event( HepMC::GenEvent &e, bool include_self_decay){
+HepMC3Event::HepMC3Event( GenEvent &e, bool include_self_decay){
 
   evt = &e;
   // Make a list of the particles in the event.
   // (Modifying these will not effect the GenParticles
-  // in the HepMC::GenEvent). The pcle IDs given start at 1
+  // in the GenEvent). The pcle IDs given start at 1
   // (and may differ from "id" in the GenEvent)
   count_self_decays=include_self_decay;
 
@@ -72,7 +75,7 @@ HEPParticleList* HepMC3Event::FindParticle(int pdg, HEPParticleList *list)
     HEPParticle * p = GetParticle(i);
     if(p->GetPDGId()==pdg){
       list->push_back(p);
-      HepMC::GenVertexPtr end = ((HepMC3Particle *) p)->part->end_vertex();
+      GenVertexPtr end = ((HepMC3Particle *) p)->part->end_vertex();
       //if we want to ignore cases like tau->tau+gamma:
       if(!CountSelfDecays()&&end){
         //Check for daughters that are the same particle type
@@ -137,3 +140,6 @@ void HepMC3Event::Streamer(TBuffer &)
   // streamer class for ROOT compatibility
 }
 #endif
+
+
+}

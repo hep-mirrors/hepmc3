@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef _PhotosHepMC3Particle_h_included_
 #define _PhotosHepMC3Particle_h_included_
@@ -9,12 +9,12 @@
 /**
  * @class PhotosHepMC3Particle
  *
- * @brief Interface to HepMC::GenParticle objects
+ * @brief Interface to GenParticle objects
  *
  * This class implements the virtual methods of
  * PhotosParticle. In this way it provides an
  * interface between the generic PhotosParticle class
- * and a HepMC::GenParticle object.
+ * and a GenParticle object.
  *
  * @author Nadia Davidson
  * @date 17 June 2008
@@ -28,29 +28,28 @@
 #include "HepMC3/GenParticle.h"
 #include "Photos/PhotosParticle.h"
 
-using namespace std;
-
 namespace Photospp
 {
-
+using namespace std;
+using namespace HepMC;
 class PhotosHepMC3Particle: public PhotosParticle{
 
  public:
   /** General constructor */
   PhotosHepMC3Particle();
 
-  /** Constructor which keeps a pointer to the HepMC::GenParticle*/
-  PhotosHepMC3Particle(HepMC::GenParticlePtr particle);
+  /** Constructor which keeps a pointer to the GenParticle*/
+  PhotosHepMC3Particle(GenParticlePtr particle);
 
-  /** Constructor which creates a new HepMC::GenParticle and
+  /** Constructor which creates a new GenParticle and
        sets the properties pdg_id, statu and mass. */
   PhotosHepMC3Particle(int pdg_id, int status, double mass);
 
   /** Destructor */
   ~PhotosHepMC3Particle();
 
-  /** return the HepMC::GenParticlePtr */
-  HepMC::GenParticlePtr getHepMC3();
+  /** return the GenParticlePtr */
+  GenParticlePtr getHepMC3();
 
   /** Set the mothers of this particle via a vector of PhotosParticle*/
   void setMothers(std::vector<PhotosParticle*> mothers);
@@ -148,8 +147,8 @@ class PhotosHepMC3Particle: public PhotosParticle{
   /** Internal function used to clear particles from the vector */
   void clear(std::vector<PhotosParticle*> v);
 
-  /** A pointer to the HepMC::GenParticle particle */
-  HepMC::GenParticlePtr m_particle;
+  /** A pointer to the GenParticle particle */
+  GenParticlePtr m_particle;
 
   /** A vector of this particles mothers */
   std::vector<PhotosParticle*> m_mothers;

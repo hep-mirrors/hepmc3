@@ -10,7 +10,7 @@
 #include <TFile.h>
 #include <TROOT.h>
 #include <TH1D.h>
-
+using namespace HepMC;
 const Int_t kMaxparticles = 2000;
 const Int_t kMaxvertices = 2000;
 class SomeAnalysis
@@ -18,7 +18,7 @@ class SomeAnalysis
 public :
     TChain         *fChain;   //!pointer to the analyzed TTree or TChain
     // Declaration of leaf types
-//HepMC::GenEventData *hepmc3_event;
+//GenEventData *hepmc3_event;
     Int_t           event_number;
     Int_t           momentum_unit;
     Int_t           length_unit;
@@ -147,14 +147,14 @@ int main()
     delete A;
 //GenEvent
     TH1D H2("H2","Pt of pions;Events/100MeV;P_{T},GeV",1000,0,100);
-    HepMC::ReaderRootTree inputA("inputIO4.root");
+    ReaderRootTree inputA("inputIO4.root");
     if(inputA.failed()) return 10002;
     while( !inputA.failed() )
         {
-            HepMC::GenEvent evt(HepMC::Units::GEV,HepMC::Units::MM);
+            GenEvent evt(Units::GEV,Units::MM);
             inputA.read_event(evt);
             if( inputA.failed() )  {printf("End of file reached. Exit.\n"); break;}
-            for (HepMC::ConstGenParticlePtr p: evt.particles())
+            for (ConstGenParticlePtr p: evt.particles())
             if ( std::abs(p->status()) == 1 && (std::abs(p->pdg_id()) == 211||std::abs(p->pdg_id()) == 11) )
                 H2.Fill( p->momentum().perp());
             evt.clear();

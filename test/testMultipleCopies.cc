@@ -16,27 +16,24 @@
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/Print.h"
 #include "HepMC3TestUtils.h"
-
-// define methods and classes used by this test
-//#include "IsGoodEvent.h"
-
+using namespace HepMC;
 int main()
 {
     // use output file
     std::ofstream os( "testMultipleCopies.out" );
     {
         // declare an input strategy
-        HepMC::ReaderAsciiHepMC2 ascii_in("testIOGenEvent.input");
+        ReaderAsciiHepMC2 ascii_in("testIOGenEvent.input");
         if (ascii_in.failed()) return 1;
         // declare another input strategy
-        HepMC::ReaderAsciiHepMC2 ascii_in2("testHepMCVarious.input");
+        ReaderAsciiHepMC2 ascii_in2("testHepMCVarious.input");
         if (ascii_in2.failed()) return 2;
         std::ofstream os1( "testMultipleOriginals.out"  );
         std::ofstream os2( "testMultipleCopies1.out" ) ;
         std::ofstream os3( "testMultipleCopies2.out" ) ;
-        HepMC::WriterAscii out1(os1);
-        HepMC::WriterAscii out2(os2);
-        HepMC::WriterAscii out3(os3);
+        WriterAscii out1(os1);
+        WriterAscii out2(os2);
+        WriterAscii out3(os3);
         // declare an instance of the event selection predicate
 //        IsGoodEvent is_good_event;
 
@@ -44,13 +41,13 @@ int main()
         int icount=0;
         int num_good_events=0;
         int icnt;
-        HepMC::GenEvent evt1;
+        GenEvent evt1;
         ascii_in.read_event(evt1);
         if (ascii_in.failed()) return 3;
-        HepMC::GenEvent evt2;
+        GenEvent evt2;
         ascii_in2.read_event(evt2);
         if (ascii_in2.failed()) return 4;
-        HepMC::GenEvent evt3;
+        GenEvent evt3;
         ascii_in.read_event(evt3);
         if (ascii_in.failed()) return 5;
         while ( !ascii_in.failed() && !ascii_in2.failed() )
@@ -69,16 +66,16 @@ int main()
                        << evt1.event_number() << std::endl;
                     out1.write_event(evt1);
                     ++num_good_events;
-                    HepMC::GenEvent ec = evt1;
+                    GenEvent ec = evt1;
                     out3.write_event(ec);
                     icnt=0;
-                    for ( HepMC::GenEvent::particle_const_iterator p1 =  ec.particles_begin();
+                    for ( GenEvent::particle_const_iterator p1 =  ec.particles_begin();
                             p1 !=  ec.particles_end(); ++p1 )
                         {
                             ++icnt;
                             os << "particle " << icnt << " barcode " << std::endl;
                         }
-                    HepMC::GenEvent evt4(evt1);
+                    GenEvent evt4(evt1);
                     out2.write_event(evt4);
                     //AV if( !compareGenEvent(&evt1,&evt4) ) { return -1; }
                     evt4.clear();
@@ -108,12 +105,12 @@ int main()
     // test operator= and swap
     {
         // declare an input strategy
-        HepMC::ReaderAsciiHepMC2 ascii_in("testIOGenEvent.input");
+        ReaderAsciiHepMC2 ascii_in("testIOGenEvent.input");
         if (ascii_in.failed()) return 4;
         //
-        HepMC::GenEvent evt5;
+        GenEvent evt5;
         ascii_in.read_event(evt5);
-        HepMC::GenEvent evt6;
+        GenEvent evt6;
         os << "event number for evt5: " << evt5.event_number() << std::endl;
         os << "event number for evt6: " << evt6.event_number() << std::endl;
         // copy  GenEvent object
@@ -130,8 +127,8 @@ int main()
         if (ascii_in.failed()) return 5;
         ascii_in.read_event(evt6);
         if (ascii_in.failed()) return 6;
-        HepMC::GenEvent evt7(evt5);
-        HepMC::GenEvent evt8(evt6);
+        GenEvent evt7(evt5);
+        GenEvent evt8(evt6);
         os << "event number for evt5: " << evt5.event_number() << std::endl;
         os << "event number for evt6: " << evt6.event_number() << std::endl;
         os << "before swap, evt5 has: " << evt5.vertices_size() << " vertices and "

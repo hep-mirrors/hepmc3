@@ -12,10 +12,10 @@
 #include "HepMC3/Print.h"
 #include "HepMC3/Attribute.h"
 
-using namespace std;
+
 
 namespace HepMC {
-
+using namespace std;
 
 void Print::content( const GenEvent &event ) {
     cout<<"--------------------------------"<<endl;

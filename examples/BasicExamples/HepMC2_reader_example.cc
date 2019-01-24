@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @example HepMC2_reader_example.cc
@@ -19,8 +19,6 @@
 #include <iostream>
 #include <cstdlib> // atoi
 using namespace HepMC;
-using std::cout;
-using std::endl;
 
 /** Main program */
 int main(int argc, char **argv) {
