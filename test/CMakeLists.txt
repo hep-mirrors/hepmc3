@@ -182,7 +182,11 @@ macro( hepmc_mceghepmc3_test testname )
   #The flag is needed for Taoula that conflates generic C++ interface with the HepMC2 interface
   #FIXME put here Visual studio flags when needed
   #For Darwin target_link_libraries(${testname}  "-undefined dynamic_lookup"  HepMC3  MCEG3)   
+if (APPLE)  
+  target_link_libraries(${testname}  "-undefined dynamic_lookup"  HepMC3  MCEG3)   
+else()
   target_link_libraries(${testname}  "-Wl,--allow-shlib-undefined"  HepMC3  MCEG3)   
+endif()
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${testname} )
