@@ -15,7 +15,7 @@
  *  Manages units used by HepMC::GenEvent
  *
  */
-
+#include <string>
 #include "HepMC3/Errors.h"
 #include "HepMC3/Setup.h"
 #include "HepMC3/FourVector.h"
