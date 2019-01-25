@@ -10,7 +10,8 @@
 
 /// HepMC version string
 /// @todo Insert value from build system
-#define HEPMC3_VERSION "3.0.0"
+#define HEPMC3_VERSION "3.01.00"
+
 
 /// @brief HepMC version as an integer, HepMC X.Y.Z = 1000000*X + 1000*Y + Z
 ///

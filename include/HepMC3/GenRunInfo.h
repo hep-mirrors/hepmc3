@@ -11,7 +11,6 @@
 #define HEPMC3_GENRUNINFO_H
 
 #if !defined(__CINT__)
-#include "HepMC3/Common.h"
 #include "HepMC3/Units.h"
 #include "HepMC3/Attribute.h"
 #include <mutex>
@@ -22,7 +21,7 @@ class TBuffer;
 #endif
 
 namespace HepMC3 {
-
+using namespace std;
 
 struct GenRunInfoData;
 
