@@ -167,7 +167,7 @@ void TauolaHepMC3Particle::setDaughters(vector<TauolaParticle*> daughters){
 std::vector<TauolaParticle*> TauolaHepMC3Particle::getMothers(){
 
   if(m_mothers.size()==0&&m_particle->production_vertex()){
-    for(ConstGenParticlePtr p: m_particle->production_vertex()->particles_in() ) {
+    for(auto p: m_particle->production_vertex()->particles_in() ) {
       m_mothers.push_back(new TauolaHepMC3Particle(p));
     }
   }
@@ -177,7 +177,7 @@ std::vector<TauolaParticle*> TauolaHepMC3Particle::getMothers(){
 std::vector<TauolaParticle*> TauolaHepMC3Particle::getDaughters(){
 
   if(m_daughters.size()==0&&m_particle->end_vertex()){
-    for(ConstGenParticlePtr p: m_particle->end_vertex()->particles_out() ) {
+    for(auto p: m_particle->end_vertex()->particles_out() ) {
       m_daughters.push_back(new TauolaHepMC3Particle(p));
     }
   }
@@ -268,7 +268,7 @@ void TauolaHepMC3Particle::recursiveSetPosition(GenParticlePtr p, FourVector pos
   if(!p->end_vertex()) return;
 
   // Iterate over all outgoing particles
-  for(ConstGenParticlePtr pp: p->end_vertex()->particles_out() ) {
+  for(auto pp: p->end_vertex()->particles_out() ) {
     if( !pp->end_vertex() ) continue;
 
     // Set position

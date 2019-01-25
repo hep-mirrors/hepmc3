@@ -16,7 +16,7 @@ using namespace std;
 PhotosHepMC3Event::PhotosHepMC3Event(GenEvent * event)
 {
         m_event=event;
-        for(ConstGenParticlePtr p: m_event->particles() )
+        for(auto p: m_event->particles() )
         {
                 PhotosParticle *particle = new PhotosHepMC3Particle(p);
                 particles.push_back(particle);
