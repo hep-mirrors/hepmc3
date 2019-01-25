@@ -8,7 +8,6 @@
 #include "Photos/PhotosHepMC3Event.h"
 #include "Photos/Log.h"
 
-#include "HepMC3/Common.h"
 #include "HepMC3/Print.h"
 
 namespace Photospp
@@ -17,7 +16,7 @@ using namespace std;
 PhotosHepMC3Event::PhotosHepMC3Event(GenEvent * event)
 {
         m_event=event;
-        FOREACH( const GenParticlePtr &p, m_event->particles() )
+        for(ConstGenParticlePtr p: m_event->particles() )
         {
                 PhotosParticle *particle = new PhotosHepMC3Particle(p);
                 particles.push_back(particle);
