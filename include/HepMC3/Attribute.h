@@ -25,7 +25,6 @@
 #include <sstream>
 #include <iomanip>
 
-#include "HepMC3/Common.h"
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"
 
