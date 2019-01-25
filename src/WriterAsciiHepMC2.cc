@@ -164,11 +164,9 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
 
 
     // Write attributes
-    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
-    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
-    FOREACH ( const value_type1& vt1, evt.attributes() )
+    for ( auto vt1: evt.attributes() )
     {
-        FOREACH ( const value_type2& vt2, vt1.second )
+        for ( auto vt2:, vt1.second )
         {
 
             string st;

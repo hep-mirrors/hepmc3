@@ -110,17 +110,15 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Write weight values if present
     if ( evt.weights().size() ) {
       m_cursor += sprintf(m_cursor, "W");
-      FOREACH (double w, evt.weights())
+      for (auto  w: evt.weights())
         m_cursor += sprintf(m_cursor, " %.*e",std::min(3*m_precision,22), w);
       m_cursor += sprintf(m_cursor, "\n");
       flush();
     }
 
     // Write attributes
-    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
-    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
-    FOREACH ( const value_type1& vt1, evt.attributes() ) {
-        FOREACH ( const value_type2& vt2, vt1.second ) {
+    for ( auto vt1: evt.attributes() ) {
+        for ( auto vt2: vt1.second ) {
 
             string st;
             /// @todo This would be nicer as a return value of string & throw exception if there's a conversion problem...
@@ -286,8 +284,8 @@ void WriterAscii::write_run_info() {
       m_cursor += sprintf(m_cursor, "\n");
     }
 
-    typedef map< std::string, shared_ptr<Attribute> >::value_type value_type;
-    FOREACH( value_type att, run_info()->attributes() ) {
+
+    for ( auto att: run_info()->attributes() ) {
     string st;
     if ( ! att.second->to_string(st) ) {
         WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
