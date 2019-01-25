@@ -144,34 +144,16 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     // Remove attributes of this particle
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     vector<string> atts = p->attribute_names();
-    FOREACH( string s, atts) {
+    for(const string &s: atts) {
         p->remove_attribute(s);
     }
 
     //
     // Reassign id of attributes with id above this one
     //
-#ifndef HEPMC3_HAS_CXX0X_GCC_ONLY
-       vector<att_val_t> changed_attributes;
-
-    FOREACH( att_key_t& vt1, m_attributes ) {
-        changed_attributes.clear();
-
-      FOREACH( const att_val_t& vt2, vt1.second ) {
-            if( vt2.first > p->id() ) {
-                changed_attributes.push_back(vt2);
-            }
-        }
-
-        FOREACH( att_val_t val, changed_attributes ) {
-            vt1.second.erase(val.first);
-            vt1.second[val.first-1] = val.second;
-        }
-    }
-#else
        vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
 
-    FOREACH( att_key_t& vt1, m_attributes ) {
+    for(att_key_t& vt1: m_attributes ) {
         changed_attributes.clear();
 
         for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin();vt2!=vt1.second.end();++vt2){
@@ -180,12 +162,11 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
             }
         }
 
-        FOREACH( att_val_t val, changed_attributes ) {
+        for( att_val_t val, changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first-1] = val.second;
         }
     }
-#endif
     // Reassign id of particles with id above this one
     for(;it != m_particles.end(); ++it) {
         --((*it)->m_id);
@@ -238,43 +219,17 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     // Remove attributes of this vertex
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     vector<string> atts = v->attribute_names();
-    FOREACH( string s, atts) {
+    for(string s: atts) {
         v->remove_attribute(s);
     }
 
     //
     // Reassign id of attributes with id below this one
     //
-#ifndef HEPMC3_HAS_CXX0X_GCC_ONLY
-    vector<att_val_t> changed_attributes;
 
-    FOREACH( att_key_t& vt1, m_attributes ) {
-        changed_attributes.clear();
-
-        FOREACH( const att_val_t& vt2, vt1.second ) {
-            if( vt2.first < v->id() ) {
-                changed_attributes.push_back(vt2);
-            }
-        }
-
-        FOREACH( att_val_t val, changed_attributes ) {
-            vt1.second.erase(val.first);
-            vt1.second[val.first+1] = val.second;
-        }
-    }
-
-    // Reassign id of particles with id above this one
-    for(;it != m_vertices.end(); ++it) {
-        ++((*it)->m_id);
-    }
-
-    // Finally - set parent event and id of this vertex to 0
-    v->m_event = nullptr;
-    v->m_id    = 0;
-#else
     vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
 
-    FOREACH( att_key_t& vt1, m_attributes ) {
+    for( att_key_t& vt1: m_attributes ) {
         changed_attributes.clear();
 
         for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin();vt2!=vt1.second.end();++vt2){
@@ -283,7 +238,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
             }
         }
 
-        FOREACH( att_val_t val, changed_attributes ) {
+        for( att_val_t val: changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first+1] = val.second;
         }
@@ -297,7 +252,6 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     // Finally - set parent event and id of this vertex to 0
     v->m_event = nullptr;
     v->m_id    = 0;
-#endif
 }
 /// @todo This looks dangerously similar to the recusive event traversel that we forbade in the
 ///       Core library due to wories about generator dependence
@@ -344,7 +298,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
     deque<GenVertexPtr> sorting;
 
     // Find all starting vertices (end vertex of particles that have no production vertex)
-    FOREACH( const GenParticlePtr &p, parts ) {
+    for(ConstGenParticlePtr p: parts ) {
         const GenVertexPtr &v = p->production_vertex();
         if( !v || v->particles_in().size()==0 ) {
             const GenVertexPtr &v2 = p->end_vertex();
@@ -369,7 +323,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
         bool added = false;
 
         // Add all mothers to the front of the list
-        FOREACH( const GenParticlePtr &p, v->particles_in() ) {
+        for( ConstGenParticlePtr p: v->particles_in() ) {
             GenVertexPtr v2 = p->production_vertex();
             if( v2 && !v2->in_event() ) {
                 sorting.push_front(v2);
@@ -387,7 +341,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
             add_vertex(v);
 
             // Add all end vertices to the end of the list
-            FOREACH( const GenParticlePtr &p, v->particles_out() ) {
+            for(ConstGenParticlePtr p: v->particles_out() ) {
                 GenVertexPtr v2 = p->end_vertex();
                 if( v2 && !v2->in_event() ) {
                     sorting.push_back(v2);
@@ -484,8 +438,8 @@ void GenEvent::remove_attribute(const string &name,  const int& id) {
 vector<string> GenEvent::attribute_names( const int& id) const {
     vector<string> results;
 
-    FOREACH( const att_key_t& vt1, m_attributes ) {
-        FOREACH( const att_val_t& vt2, vt1.second ) {
+    for(const att_key_t& vt1: m_attributes ) {
+        for( const att_val_t& vt2: vt1.second ) {
             if( vt2.first == id ) results.push_back( vt1.first );
         }
     }

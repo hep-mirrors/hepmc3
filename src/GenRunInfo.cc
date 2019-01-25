@@ -55,7 +55,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     // Attributes
     typedef std::map<std::string, shared_ptr<Attribute> >::value_type att_val_t;
 
-    FOREACH( const att_val_t& vt, m_attributes ) {
+    for(const att_val_t& vt: m_attributes ) {
         std::string att;
         vt.second->to_string(att);
 
@@ -64,7 +64,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     }
 
     // Tools
-    FOREACH( const ToolInfo &tool, this->tools() ) {
+    for( const ToolInfo &tool: this->tools() ) {
         data.tool_name.       push_back(tool.name);
         data.tool_version.    push_back(tool.version);
         data.tool_description.push_back(tool.description);

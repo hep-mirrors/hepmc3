@@ -146,20 +146,25 @@ public:
     void set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit);
 
     /// @brief Get heavy ion generator additional information
+    GenHeavyIonPtr heavy_ion() { return attribute<GenHeavyIon>("GenHeavyIon"); }
+    /// @brief Get heavy ion generator additional information (const version)
     ConstGenHeavyIonPtr heavy_ion() const { return attribute<GenHeavyIon>("GenHeavyIon"); }
     /// @brief Set heavy ion generator additional information
-    void set_heavy_ion(const GenHeavyIonPtr &hi) { add_attribute("GenHeavyIon",hi); }
+    void set_heavy_ion(GenHeavyIonPtr hi) { add_attribute("GenHeavyIon",hi); }
 
     /// @brief Get PDF information
-//FIXME! 
-    const GenPdfInfoPtr pdf_info() const { return attribute<GenPdfInfo>("GenPdfInfo"); }
+    GenPdfInfoPtr pdf_info() { return attribute<GenPdfInfo>("GenPdfInfo"); }
+    /// @brief Get PDF information (const version)
+    ConstGenPdfInfoPtr pdf_info() const { return attribute<GenPdfInfo>("GenPdfInfo"); }
     /// @brief Set PDF information
-    void set_pdf_info(const GenPdfInfoPtr &pi) { add_attribute("GenPdfInfo",pi); }
+    void set_pdf_info(GenPdfInfoPtr pi) { add_attribute("GenPdfInfo",pi); }
 
     /// @brief Get cross-section information
-    const GenCrossSectionPtr cross_section() const { return attribute<GenCrossSection>("GenCrossSection"); }
+    GenCrossSectionPtr cross_section() { return attribute<GenCrossSection>("GenCrossSection"); }
+    /// @brief Get cross-section information (const version)
+    ConstGenCrossSectionPtr cross_section() const { return attribute<GenCrossSection>("GenCrossSection"); }
     /// @brief Set cross-section information
-    void set_cross_section(const GenCrossSectionPtr &cs) { add_attribute("GenCrossSection",cs); }
+    void set_cross_section(GenCrossSectionPtr cs) { add_attribute("GenCrossSection",cs); }
 
     //@}
 
