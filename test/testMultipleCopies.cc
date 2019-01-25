@@ -69,8 +69,7 @@ int main()
                     GenEvent ec = evt1;
                     out3.write_event(ec);
                     icnt=0;
-                    for ( GenEvent::particle_const_iterator p1 =  ec.particles_begin();
-                            p1 !=  ec.particles_end(); ++p1 )
+                    for ( auto p1: ec.particles())
                         {
                             ++icnt;
                             os << "particle " << icnt << " barcode " << std::endl;
@@ -131,28 +130,28 @@ int main()
         GenEvent evt8(evt6);
         os << "event number for evt5: " << evt5.event_number() << std::endl;
         os << "event number for evt6: " << evt6.event_number() << std::endl;
-        os << "before swap, evt5 has: " << evt5.vertices_size() << " vertices and "
-           << evt5.particles_size() << " particles" << std::endl;
-        os << "before swap, evt6 has: " << evt6.vertices_size() << " vertices and "
-           << evt6.particles_size() << " particles" << std::endl;
-        os << "before swap, evt7 has: " << evt7.vertices_size() << " vertices and "
-           << evt7.particles_size() << " particles" << std::endl;
-        os << "before swap, evt8 has: " << evt8.vertices_size() << " vertices and "
-           << evt8.particles_size() << " particles" << std::endl;
+        os << "before swap, evt5 has: " << evt5.vertices().size() << " vertices and "
+           << evt5.particles().size() << " particles" << std::endl;
+        os << "before swap, evt6 has: " << evt6.vertices().size() << " vertices and "
+           << evt6.particles().size() << " particles" << std::endl;
+        os << "before swap, evt7 has: " << evt7.vertices().size() << " vertices and "
+           << evt7.particles().size() << " particles" << std::endl;
+        os << "before swap, evt8 has: " << evt8.vertices().size() << " vertices and "
+           << evt8.particles().size() << " particles" << std::endl;
         std::swap(evt6,evt5);
         os << "event number for evt5 after swap: " << evt5.event_number() << std::endl;
         os << "event number for evt6 after swap: " << evt6.event_number() << std::endl;
         // evt6 should now match evt7
-        os << "after swap, evt6 has: " << evt6.vertices_size() << " vertices and "
-           << evt6.particles_size() << " particles" << std::endl;
-        os << "after swap, evt7 has: " << evt7.vertices_size() << " vertices and "
-           << evt7.particles_size() << " particles" << std::endl;
+        os << "after swap, evt6 has: " << evt6.vertices().size() << " vertices and "
+           << evt6.particles().size() << " particles" << std::endl;
+        os << "after swap, evt7 has: " << evt7.vertices().size() << " vertices and "
+           << evt7.particles().size() << " particles" << std::endl;
         //AV  if( !compareGenEvent(&evt6,&evt7) ) { return -6; }
         // evt5 should now match evt8
-        os << "after swap, evt5 has: " << evt5.vertices_size() << " vertices and "
-           << evt5.particles_size() << " particles" << std::endl;
-        os << "after swap, evt8 has: " << evt8.vertices_size() << " vertices and "
-           << evt8.particles_size() << " particles" << std::endl;
+        os << "after swap, evt5 has: " << evt5.vertices().size() << " vertices and "
+           << evt5.particles().size() << " particles" << std::endl;
+        os << "after swap, evt8 has: " << evt8.vertices().size() << " vertices and "
+           << evt8.particles().size() << " particles" << std::endl;
         //AV   if( !compareGenEvent(&evt5,&evt8) ) { return -5; }
         os << std::endl;
         os << " GenEvent swap passes the test" << std::endl;

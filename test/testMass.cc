@@ -58,7 +58,7 @@ int main()
                             x2 = 1-x1;
                             q = 1.69 * icount;
                             // use beam momentum
-                            if( evt.valid_beam_particles() )
+                            if( evt.beams().size()==2 )
                                 {
                                     GenParticlePtr bp1 = evt.beams().at(0);
                                     GenParticlePtr bp2 = evt.beams().at(1);
