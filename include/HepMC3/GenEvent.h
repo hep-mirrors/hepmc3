@@ -297,6 +297,11 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
     void set_beam_particles(GenParticlePtr p1, GenParticlePtr p2);
 
 
+    /// @brief Add  particle to root vertex
+
+    void add_beam_particles(GenParticlePtr p1);
+
+
     //@}
 
     #endif // __CINT__

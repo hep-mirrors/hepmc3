@@ -619,7 +619,9 @@ void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
     m_rootvertex->add_particle_out(p2);
 }
 
-
+void GenEvent::add_beam_particles(GenParticlePtr p1){
+	m_rootvertex->add_particle_out(p1);
+}
 
 
 string GenEvent::attribute_as_string(const string &name, const int& id) const {
