@@ -24,8 +24,8 @@
 #include <limits>
 #include <sstream>
 #include <iomanip>
+#include <map>
 
-#include "HepMC3/Common.h"
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"
 
@@ -172,13 +172,7 @@ public:
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(string &att) const {
-#ifdef HEPMC3_HAS_CXX11
         att = std::to_string(m_val);
-#else
-        char buf[24];
-        sprintf(buf,"%23i",m_val);
-        att = buf;
-#endif
         return true;
     }
 
@@ -219,13 +213,7 @@ public:
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(string &att) const {
-#ifdef HEPMC3_HAS_CXX11
         att = std::to_string(m_val);
-#else
-        char buf[24];
-        sprintf(buf,"%23li",m_val);
-        att = buf;
-#endif
         return true;
     }
 

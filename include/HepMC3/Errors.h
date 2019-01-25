@@ -5,8 +5,8 @@
 
 #ifndef HEPMC3_ERRORS_H
 #define HEPMC3_ERRORS_H
-
-#include "HepMC3/Common.h"
+#include <iostream>
+#include <stdexcept>
 
 namespace HepMC3 {
 

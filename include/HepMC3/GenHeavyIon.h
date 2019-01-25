@@ -18,6 +18,7 @@
  *
  */
 #include <iostream>
+#include <map>
 #include "HepMC3/Attribute.h"
 
 namespace HepMC3 {

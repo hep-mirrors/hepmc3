@@ -15,7 +15,6 @@
  */
 #include "HepMC3/Data/GenParticleData.h"
 #include "HepMC3/FourVector.h"
-#include "HepMC3/Common.h"
 
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"

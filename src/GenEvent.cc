@@ -162,7 +162,7 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
             }
         }
 
-        for( att_val_t val, changed_attributes ) {
+        for( att_val_t val: changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first-1] = val.second;
         }
@@ -298,7 +298,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
     deque<GenVertexPtr> sorting;
 
     // Find all starting vertices (end vertex of particles that have no production vertex)
-    for(ConstGenParticlePtr p: parts ) {
+    for(auto p: parts ) {
         const GenVertexPtr &v = p->production_vertex();
         if( !v || v->particles_in().size()==0 ) {
             const GenVertexPtr &v2 = p->end_vertex();
@@ -323,7 +323,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
         bool added = false;
 
         // Add all mothers to the front of the list
-        for( ConstGenParticlePtr p: v->particles_in() ) {
+        for( auto p: v->particles_in() ) {
             GenVertexPtr v2 = p->production_vertex();
             if( v2 && !v2->in_event() ) {
                 sorting.push_front(v2);
@@ -341,7 +341,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
             add_vertex(v);
 
             // Add all end vertices to the end of the list
-            for(ConstGenParticlePtr p: v->particles_out() ) {
+            for(auto p: v->particles_out() ) {
                 GenVertexPtr v2 = p->end_vertex();
                 if( v2 && !v2->in_event() ) {
                     sorting.push_back(v2);

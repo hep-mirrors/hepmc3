@@ -140,7 +140,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     if ( evt.weights().size() )
         {
             m_cursor += sprintf(m_cursor, " %lu",evt.weights().size());
-            FOREACH (double w, evt.weights())
+            for (double w: evt.weights())
             m_cursor += sprintf(m_cursor, " %.*e",m_precision, w);
             m_cursor += sprintf(m_cursor, "\n");
             flush();
@@ -166,7 +166,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     // Write attributes
     for ( auto vt1: evt.attributes() )
     {
-        for ( auto vt2:, vt1.second )
+        for ( auto vt2: vt1.second )
         {
 
             string st;
