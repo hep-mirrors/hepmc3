@@ -299,7 +299,7 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
 
     /// @brief Add  particle to root vertex
 
-    void add_beam_particles(GenParticlePtr p1);
+    void add_beam_particle(GenParticlePtr p1);
 
 
     //@}

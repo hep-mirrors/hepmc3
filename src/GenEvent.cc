@@ -619,7 +619,7 @@ void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
     m_rootvertex->add_particle_out(p2);
 }
 
-void GenEvent::add_beam_particles(GenParticlePtr p1){
+void GenEvent::add_beam_particle(GenParticlePtr p1){
 	m_rootvertex->add_particle_out(p1);
 }
 
