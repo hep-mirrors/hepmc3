@@ -5,6 +5,7 @@
 
 #ifndef HEPMC3_ERRORS_H
 #define HEPMC3_ERRORS_H
+
 #include <iostream>
 #include <stdexcept>
 
