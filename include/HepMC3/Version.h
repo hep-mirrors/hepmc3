@@ -17,7 +17,7 @@
 ///
 /// Use like "#if HEPMC3_VERSION_CODE < 3001004" for < 3.01.04
 /// @todo Insert value from build system
-#define HEPMC3_VERSION_CODE 3000000
+#define HEPMC3_VERSION_CODE 3001000
 
 
 /// @todo Add feature detection macros? (clearly version-related)
