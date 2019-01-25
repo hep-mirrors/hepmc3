@@ -159,7 +159,7 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getMothers(){
 
   if(m_mothers.size()==0&&m_particle->production_vertex()){
 
-    for(ConstGenParticlePtr p: m_particle->production_vertex()->particles_in() ) {
+    for(auto p: m_particle->production_vertex()->particles_in() ) {
       m_mothers.push_back(new PhotosHepMC3Particle(p));
     }
   }
@@ -170,7 +170,7 @@ std::vector<PhotosParticle*> PhotosHepMC3Particle::getDaughters(){
 
   if(m_daughters.size()==0&&m_particle->end_vertex()){
 
-    for(ConstGenParticlePtr p: m_particle->end_vertex()->particles_out() ) {
+    for(auto p: m_particle->end_vertex()->particles_out() ) {
 
       // ommit particles if their status code is ignored by Photos
       if( Photos::isStatusCodeIgnored( p->status() ) ) continue;
