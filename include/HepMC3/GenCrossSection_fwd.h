@@ -18,7 +18,7 @@ namespace HepMC3{
 class GenCrossSection;
 
 using GenCrossSectionPtr = std::shared_ptr<GenCrossSection>;
-using ConstGenCrossSectionnPtr = std::shared_ptr<const GenCrossSection>;
+using ConstGenCrossSectionPtr = std::shared_ptr<const GenCrossSection>;
 
 }
 
