@@ -2,7 +2,6 @@
 #include "Tauola/Log.h"
 
 #include "HepMC3/GenVertex.h"
-#include "HepMC3/Common.h"
 #include "HepMC3/Print.h"
 
 
@@ -168,7 +167,7 @@ void TauolaHepMC3Particle::setDaughters(vector<TauolaParticle*> daughters){
 std::vector<TauolaParticle*> TauolaHepMC3Particle::getMothers(){
 
   if(m_mothers.size()==0&&m_particle->production_vertex()){
-    FOREACH( const GenParticlePtr &p, m_particle->production_vertex()->particles_in() ) {
+    for(ConstGenParticlePtr p: m_particle->production_vertex()->particles_in() ) {
       m_mothers.push_back(new TauolaHepMC3Particle(p));
     }
   }
@@ -178,7 +177,7 @@ std::vector<TauolaParticle*> TauolaHepMC3Particle::getMothers(){
 std::vector<TauolaParticle*> TauolaHepMC3Particle::getDaughters(){
 
   if(m_daughters.size()==0&&m_particle->end_vertex()){
-    FOREACH( const GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
+    for(ConstGenParticlePtr p: m_particle->end_vertex()->particles_out() ) {
       m_daughters.push_back(new TauolaHepMC3Particle(p));
     }
   }
@@ -193,11 +192,11 @@ void TauolaHepMC3Particle::checkMomentumConservation(){
   // with added energy check
 
   FourVector sum;
-  FOREACH( const GenParticlePtr &p, m_particle->end_vertex()->particles_in() ) {
+  for(ConstGenParticlePtr p: m_particle->end_vertex()->particles_in() ) {
     sum += p->momentum();
   }
 
-  FOREACH( const GenParticlePtr &p, m_particle->end_vertex()->particles_out() ) {
+  for(ConstGenParticlePtr p: m_particle->end_vertex()->particles_out() ) {
     sum -= p->momentum();
   }
 
@@ -269,7 +268,7 @@ void TauolaHepMC3Particle::recursiveSetPosition(GenParticlePtr p, FourVector pos
   if(!p->end_vertex()) return;
 
   // Iterate over all outgoing particles
-  FOREACH( const GenParticlePtr &pp, p->end_vertex()->particles_out() ) {
+  for(ConstGenParticlePtr pp: p->end_vertex()->particles_out() ) {
     if( !pp->end_vertex() ) continue;
 
     // Set position
