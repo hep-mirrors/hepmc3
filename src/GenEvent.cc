@@ -598,7 +598,6 @@ void GenEvent::read_data(const GenEventData &data) {
 }
 
 
-#ifndef HEPMC3_NO_DEPRECATED
 
 //
 // Deprecated functions
@@ -613,19 +612,6 @@ void GenEvent::add_vertex( GenVertex *v ) {
     add_vertex( GenVertexPtr(v) );
 }
 
-bool GenEvent::valid_beam_particles() const {
-    /// @todo Change this definition to require status = 4... and in principle there don't have to be two of them
-    return (m_rootvertex->particles_out().size()==2);
-}
-
-pair<GenParticlePtr,GenParticlePtr> GenEvent::beam_particles() const {
-    /// @todo Change this definition to require status = 4... and in principle there don't have to be two of them
-    switch( m_rootvertex->particles_out().size() ) {
-        case 0:  return make_pair(GenParticlePtr(),              GenParticlePtr());
-        case 1:  return make_pair(m_rootvertex->particles_out()[0], GenParticlePtr());
-        default: return make_pair(m_rootvertex->particles_out()[0], m_rootvertex->particles_out()[1]);
-    }
-}
 
 void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
     /// @todo Require/set status = 4
@@ -633,13 +619,8 @@ void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
     m_rootvertex->add_particle_out(p2);
 }
 
-void GenEvent::set_beam_particles(const pair<GenParticlePtr,GenParticlePtr>& p) {
-    /// @todo Require/set status = 4
-    m_rootvertex->add_particle_out(p.first);
-    m_rootvertex->add_particle_out(p.second);
-}
 
-#endif
+
 
 string GenEvent::attribute_as_string(const string &name, const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);

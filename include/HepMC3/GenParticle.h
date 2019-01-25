@@ -127,19 +127,14 @@ public:
     /// @name Deprecated functionality
     //@{
 
-    #ifndef HEPMC3_NO_DEPRECATED
-
     /// @brief Get PDG ID
     /// @deprecated Use pid() instead
-    // HEPMC3_DEPRECATED("Use pid() instead")
-    int pdg_id() const { return m_data.pid; }
+    int pdg_id() const { return pid(); }
 
     /// @brief Set PDG ID
     /// @deprecated Use set_pid() instead
-    // HEPMC3_DEPRECATED("Use set_pid() instead")
     void set_pdg_id(const int& pidin) { set_pid(pidin); }
 
-    #endif
 
     //@}
 //

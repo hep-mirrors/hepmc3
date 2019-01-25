@@ -133,56 +133,15 @@ namespace HepMC3 {
         /// @name Deprecated functionality
         //@{
 
-        #ifndef HEPMC3_NO_DEPRECATED
-
-        /// Get barcode
-        ///
-        /// @note Currently barcode = id
-        // int barcode() const { return m_id; }
 
         /// Add incoming particle by raw pointer
         /// @deprecated Use GenVertex::add_particle_in( const GenParticlePtr &p ) instead
-        HEPMC3_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
         void add_particle_in ( GenParticle *p ) { add_particle_in( GenParticlePtr(p) ); }
 
         /// Add outgoing particle by raw pointer
         /// @deprecated Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead
-        HEPMC3_DEPRECATED("Use GenParticlePtr instead of GenParticle*")
         void add_particle_out( GenParticle *p ) { add_particle_out( GenParticlePtr(p) ); }
 
-        /// Define iterator by typedef
-        typedef vector<GenParticlePtr>::const_iterator particles_in_const_iterator;
-        /// Define iterator by typedef
-        typedef vector<GenParticlePtr>::const_iterator particles_out_const_iterator;
-        /// Define iterator by typedef
-        typedef vector<GenParticlePtr>::iterator       particle_iterator;
-
-        /// @deprecated Backward compatibility iterators
-        HEPMC3_DEPRECATED("Iterate over std container particles_in() instead")
-        particles_in_const_iterator  particles_in_const_begin()  const { return m_particles_in.begin();  } //!< @deprecated Backward compatibility iterators
-
-        /// @deprecated Backward compatibility iterators
-        HEPMC3_DEPRECATED("Iterate over std container particles_in() instead")
-        particles_in_const_iterator  particles_in_const_end()    const { return m_particles_in.end();    } //!< @deprecated Backward compatibility iterators
-
-        /// @deprecated Backward compatibility iterators
-        HEPMC3_DEPRECATED("Iterate over std container particles_out() instead")
-        particles_out_const_iterator particles_out_const_begin() const { return m_particles_out.begin(); } //!< @deprecated Backward compatibility iterators
-
-        /// @deprecated Backward compatibility iterators
-        HEPMC3_DEPRECATED("Iterate over std container particles_out() instead")
-        particles_out_const_iterator particles_out_const_end()   const { return m_particles_out.end();   }
-
-
-        /// @deprecated Backward compatibility
-        HEPMC3_DEPRECATED("Use particles_in().size() instead")
-        int particles_in_size()  const { return m_particles_in.size(); }
-
-        /// @deprecated Backward compatibility
-        HEPMC3_DEPRECATED("Use particles_out().size() instead")
-        int particles_out_size() const { return m_particles_out.size(); }
-
-        #endif
 
         //@}
 

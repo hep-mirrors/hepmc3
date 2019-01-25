@@ -144,10 +144,8 @@ public:
     /// Absolute rapidity
     double abs_rap() const { return std::abs( rap() ); }
 
-    #ifndef HEPMC3_NO_DEPRECATED
     /// Same as eta
     double pseudoRapidity() const { return eta(); }
-    #endif
 
     //@}
 

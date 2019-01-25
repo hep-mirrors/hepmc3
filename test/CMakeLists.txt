@@ -10,6 +10,8 @@ macro( hepmc_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${CMAKE_CURRENT_BINARY_DIR}/${testname} )
+#  file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
+#  file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endmacro( hepmc_test )
 
 macro( hepmc_root_test testname )
@@ -24,7 +26,8 @@ macro( hepmc_root_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${testname} )
-
+#  file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
+#  file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endmacro( hepmc_root_test )
 
 
@@ -149,8 +152,8 @@ else()
   message(STATUS "MCTESTER_INCLUDE_DIRS ${MCTESTER_INCLUDE_DIRS}")
   list( APPEND  libMCEG_sources "McTesterValidationTool.cc" )
   list( APPEND  libMCEG_sources_HEPMC3 "${PROJECT_SOURCE_DIR}/interfaces/mc-tester/src/HepMC3Event.cxx" "${PROJECT_SOURCE_DIR}/interfaces/mc-tester/src/HepMC3Particle.cxx"   )
-  list( APPEND  libMCEG_link_libraries_HEPMC2  "${MCTESTER_LIBRARIES}" "libCore.so" )
-  list( APPEND  libMCEG_link_libraries_HEPMC3  "${MCTESTER_LIBRARIES}" "libCore.so" )
+  list( APPEND  libMCEG_link_libraries_HEPMC2  "${MCTESTER_LIBRARIES}" "${ROOT_LIBRARIES}" )
+  list( APPEND  libMCEG_link_libraries_HEPMC3  "${MCTESTER_LIBRARIES}" "${ROOT_LIBRARIES}" )
   list( APPEND  libMCEG_include_directories  "${PROJECT_SOURCE_DIR}/interfaces/mc-tester/include" "${MCTESTER_INCLUDE_DIRS}"  "${ROOT_INCLUDE_DIRS}")
   list( APPEND  libMCEG_compile_definitions  "-DMCTESTER")
 
@@ -178,11 +181,13 @@ macro( hepmc_mceghepmc3_test testname )
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/  ${CMAKE_CURRENT_SOURCE_DIR}/../search/include/ )
   #The flag is needed for Taoula that conflates generic C++ interface with the HepMC2 interface
   #FIXME put here Visual studio flags when needed
+  #For Darwin target_link_libraries(${testname}  "-undefined dynamic_lookup"  HepMC3  MCEG3)   
   target_link_libraries(${testname}  "-Wl,--allow-shlib-undefined"  HepMC3  MCEG3)   
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${testname} )
-
+#  file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
+#  file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endmacro( hepmc_mceghepmc3_test )
 
 
@@ -223,7 +228,8 @@ macro( hepmc_mceghepmc2_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( hepmc2_${testname} hepmc2_${testname} )
-
+#  file(GLOB INPUThepmc2_${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
+#  file(COPY ${INPUThepmc2_${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endmacro( hepmc_mceghepmc2_test )
 
 
@@ -244,6 +250,8 @@ macro(add_memcheck_test binaryname )
   set(memcheck_command "${CMAKE_MEMORYCHECK_COMMAND} ${CMAKE_MEMORYCHECK_COMMAND_OPTIONS}")
   separate_arguments(memcheck_command)
   add_test(memcheck_${binaryname} ${memcheck_command} ./${binaryname} ${ARGN})
+  file(GLOB INPUTmemcheck_${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
+  file(COPY ${INPUTmemcheck_${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endmacro(add_memcheck_test)
 
 
