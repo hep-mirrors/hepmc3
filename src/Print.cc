@@ -33,8 +33,8 @@ void Print::content( const GenEvent &event ) {
     typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
     typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
 
-    FOREACH( const value_type1& vt1, event.attributes() ) {
-        FOREACH( const value_type2& vt2, vt1.second ) {
+    for( auto vt1: event.attributes() ) {
+        for( auto vt2: vt1.second ) {
             cout << vt2.first << ": " << vt1.first << endl;
         }
     }
@@ -234,7 +234,7 @@ void Print::line(ConstGenParticlePtr p, const bool& attributes) {
          if(attributes)
          {
          std::vector<std::string> names     =p->attribute_names();
-         FOREACH(const std::string &ss, names)
+         for (auto ss: names)
          cout<<" "<<ss<<"="<<(*p).attribute_as_string(ss);
          cout<< endl;
          }
