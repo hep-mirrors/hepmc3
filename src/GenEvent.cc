@@ -37,12 +37,12 @@ GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
     m_weights = std::vector<double>(run->weight_names().size(), 1.0);
 }
 
-std::vector<ConstGenParticlePtr> GenEvent::particles() const {
-  return std::vector<ConstGenParticlePtr>(m_particles.begin(), m_particles.end());
+const std::vector<ConstGenParticlePtr>& GenEvent::particles() const {
+  return *(reinterpret_cast<const std::vector<ConstGenParticlePtr>*>(&m_particles));
 }
 
-std::vector<ConstGenVertexPtr> GenEvent::vertices() const {
-  return std::vector<ConstGenVertexPtr>(m_vertices.begin(), m_vertices.end());
+const std::vector<ConstGenVertexPtr>& GenEvent::vertices() const {
+  return *(reinterpret_cast<const std::vector<ConstGenVertexPtr>*>(&m_vertices));
 }
 
   

@@ -67,9 +67,9 @@ public:
     //@{
 
     /// @brief Get list of particles (const)
-    std::vector<ConstGenParticlePtr> particles() const;
+    const std::vector<ConstGenParticlePtr>& particles() const;
     /// @brief Get list of vertices (const)
-    std::vector<ConstGenVertexPtr> vertices() const;
+    const std::vector<ConstGenVertexPtr>& vertices() const;
 
 
     /// @brief Get/set list of particles (non-const)

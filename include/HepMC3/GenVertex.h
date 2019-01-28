@@ -85,12 +85,12 @@ namespace HepMC3 {
 
         /// Get list of incoming particles
         const vector<GenParticlePtr>& particles_in() { return m_particles_in; }
-        /// Get list of incoming particles
-        vector<ConstGenParticlePtr> particles_in() const;
+        /// Get list of incoming particles (for const access)
+        const vector<ConstGenParticlePtr>& particles_in() const;
         /// Get list of outgoing particles
         const vector<GenParticlePtr>& particles_out() { return m_particles_out; }
-        /// Get list of outgoing particles
-        vector<ConstGenParticlePtr> particles_out() const;
+        /// Get list of outgoing particles (for const access)
+        const vector<ConstGenParticlePtr>& particles_out() const;
 
         /// @brief Get vertex position
         ///
