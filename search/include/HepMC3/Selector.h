@@ -77,7 +77,12 @@ namespace HepMC3{
     static const SelectorWrapper<int>    STATUS;
     static const SelectorWrapper<int>    PDG_ID;
     static const SelectorWrapper<double> PT;
+    static const SelectorWrapper<double> ENERGY;
     static const SelectorWrapper<double> RAPIDITY;
+    static const SelectorWrapper<double> ETA;
+    static const SelectorWrapper<double> PHI;
+    static const SelectorWrapper<double> ET;
+    static const SelectorWrapper<double> MASS;
     static AttributeFeature ATTRIBUTE(const std::string &name);
     
   };
