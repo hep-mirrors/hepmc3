@@ -195,4 +195,54 @@
     @section Standard Selectors and SelectorWrapper
     ###########################################################################
 
+    Selector is a simplified interface that contains some predefined Features
+    that can be used to search.  Selector defines comparisons operators for
+    both integral and floating point types, as well as the following selection
+    Features:
+
+    Selector::STATUS
+    Selector::PDG_ID
+    Selector::PT
+    Selector::ENERGY
+    Selector::RAPIDITY
+    Selector::ETA
+    Selector::PHI
+    Selector::ET
+    Selector::MASS
+    Selector::ATTRIBUTE(const std::string)
+
+    So, for example, a filter can be defined as follows
+
+    @code{.cpp}
+    Filter f = (Selector::STATUS == 1 && Selector::PT > 60.) || (Selector::Mass > 70. && Selector::Mass < 110.);
+    GenParticlePtr p;
+    bool passesCuts = f(p);
+    @endcode
+
+    As with Feature, it is possible to take tbe absolute value of a Selector.
+    However, note that while Featue is templated, Selector is abstract and so
+    it is not possible for abs() to return a Selector object directly, only a
+    pointer
+
+    @code{.cpp}
+    Filter f = *abs(Selector::RAPIDITY) < 2.5;
+    bool passRapidity = f(p);
+    @endcode
+
+    Note that the ATTRIBUTE selection is different from the others and does not
+    have the full set of comparison operators.  This is a current limitation of
+    the Attributes, which are not guaranteed to offer all comparisons.
+    ATTRIBUTE takes a string, which is the name of the attribute, and permits
+    the equality operator and the method exists, which checks if the attribute is
+    even present
+
+    @code{.cpp}
+    string name = "MyAttribute";
+    Filter f = Selector::ATTRIBUTE(name).exists() && Selector::ATTRIBUTE(name) == "My Value";
+    bool passesAttribute = f(p);
+    @endcode
+
+
+
+
 */
