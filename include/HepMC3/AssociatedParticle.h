@@ -10,7 +10,8 @@
  *  @file AssociatedParticle.h
  *  @brief Definition of \b class AssociatedParticle,
  *
- *  @class HepMC::AssociatedParticle @brief Attribute class allowing
+ *  @class HepMC3::AssociatedParticle 
+ *  @brief Attribute class allowing
  *  eg. a GenParticle to refer to another GenParticle.
 
  *  @ingroup attributes
@@ -23,7 +24,7 @@
 namespace HepMC3 {
 
 /**
- *  @class HepMC::IntAttribute
+ *  @class HepMC3::IntAttribute
  *  @brief Attribute that holds an Integer implemented as an int
  *
  *  @ingroup attributes

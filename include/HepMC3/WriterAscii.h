@@ -9,7 +9,7 @@
 /// @file  WriterAscii.h
 /// @brief Definition of class \b WriterAscii
 ///
-/// @class HepMC::WriterAscii
+/// @class HepMC3::WriterAscii
 /// @brief GenEvent I/O serialization for structured text files
 ///
 /// @ingroup IO

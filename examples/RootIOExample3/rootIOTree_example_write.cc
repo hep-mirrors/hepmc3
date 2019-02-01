@@ -4,7 +4,7 @@
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
- *  @file rootIO_example_write.cc
+ *  @file rootIOTree_example_write.cc
  *  @brief Basic example of use of root I/O: writing events to file
  *
  *  @author Witold Pokorski/Andrii Verbytskyi

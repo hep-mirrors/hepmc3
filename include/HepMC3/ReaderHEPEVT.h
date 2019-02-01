@@ -9,7 +9,7 @@
  *  @file  ReaderHEPEVT.h
  *  @brief Definition of \b class ReaderHEPEVT
  *
- *  @class HepMC::ReaderHEPEVT
+ *  @class HepMC3::ReaderHEPEVT
  *  @brief GenEvent I/O parsing and serialization for HEPEVT files
  *
  *

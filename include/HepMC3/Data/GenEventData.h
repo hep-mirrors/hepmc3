@@ -9,7 +9,7 @@
  *  @file GenEventData.h
  *  @brief Definition of \b struct GenEventData
  *
- *  @struct HepMC::GenEventData
+ *  @struct HepMC3::GenEventData
  *  @brief Stores serializable event information
  *
  *  @ingroup data

@@ -13,6 +13,7 @@
 using namespace HepMC3;
 const Int_t kMaxparticles = 2000;
 const Int_t kMaxvertices = 2000;
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 class SomeAnalysis
 {
 public :
@@ -129,7 +130,7 @@ public :
         Init(TempChain);
     }
 };
-
+#endif
 
 int main()
 {

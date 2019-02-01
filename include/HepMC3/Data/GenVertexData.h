@@ -9,7 +9,7 @@
  *  @file GenVertexData.h
  *  @brief Definition of \b class GenVertexData
  *
- *  @struct HepMC::GenVertexData
+ *  @struct HepMC3::GenVertexData
  *  @brief Stores serializable vertex information
  *
  *  @ingroup data

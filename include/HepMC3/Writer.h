@@ -9,7 +9,7 @@
 /// @file  Writer.h
 /// @brief Definition of interface \b Writer
 ///
-/// @class HepMC::Writer
+/// @class HepMC3::Writer
 /// @brief Base class for all I/O writers
 ///
 /// @ingroup IO

@@ -9,7 +9,7 @@
 /// @file  Reader.h
 /// @brief Definition of interface \b Reader
 ///
-/// @class HepMC::Reader
+/// @class HepMC3::Reader
 /// @brief Base class for all I/O readers
 ///
 /// @ingroup IO

@@ -20,7 +20,7 @@
 namespace HepMC3 {
 
 /**
- *  @class HepMC::HEPRUPAttribute
+ *  @class HepMC3::HEPRUPAttribute
  *  @brief Class for storing data for LHEF run information
  */
 class HEPRUPAttribute: public Attribute {
@@ -62,7 +62,7 @@ public:
 };
 
 /**
- *  @class HepMC::HEPEUPAttribute
+ *  @class HepMC3::HEPEUPAttribute
  *  @brief Class for storing data for LHEF run information
  */
 class HEPEUPAttribute: public Attribute {

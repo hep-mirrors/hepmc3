@@ -9,7 +9,7 @@
 /// @file FilterAttribute.h
 /// @brief Definition of \b class ATTRIBUTE
 ///
-/// @class HepMC::ATTRIBUTE
+/// @class HepMC3::ATTRIBUTE
 /// @brief Filter for the attributes
 ///
 /// Used to construct filters that can check if an attribute exists

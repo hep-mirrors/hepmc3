@@ -9,7 +9,7 @@
  *  @file GenRunInfoData.h
  *  @brief Definition of \b struct GenRunInfoData
  *
- *  @struct HepMC::GenRunInfoData
+ *  @struct HepMC3::GenRunInfoData
  *  @brief Stores serializable run information
  *
  *  @ingroup data

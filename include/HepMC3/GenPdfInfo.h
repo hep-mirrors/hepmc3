@@ -9,7 +9,7 @@
  *  @file GenPdfInfo.h
  *  @brief Definition of event attribute \b class GenPdfInfo
  *
- *  @class HepMC::GenPdfInfo
+ *  @class HepMC3::GenPdfInfo
  *  @brief Stores additional information about PDFs
  *
  *  This is an example of event attribute used to store PDF-related information

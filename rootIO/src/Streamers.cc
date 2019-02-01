@@ -4,7 +4,7 @@
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
- *  @file GenEventStreamer.cc
+ *  @file Streamers.cc
  *  @brief Implementation of \b methods GenEvent::Streamer and GenRunInfo::Streamer
  *
  */

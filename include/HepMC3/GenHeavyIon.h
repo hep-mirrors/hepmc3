@@ -9,7 +9,7 @@
  *  @file GenHeavyIon.h
  *  @brief Definition of attribute \b class GenHeavyIon
  *
- *  @class HepMC::GenHeavyIon
+ *  @class HepMC3::GenHeavyIon
  *  @brief Stores additional information about Heavy Ion generator
  *
  *  This is an example of event attribute used to store Heavy Ion information

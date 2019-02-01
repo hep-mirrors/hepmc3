@@ -9,7 +9,7 @@
 /// @file  WriterAsciiHepMC2.h
 /// @brief Definition of class \b WriterAsciiHepMC2
 ///
-/// @class HepMC::WriterAsciiHepMC2
+/// @class HepMC3::WriterAsciiHepMC2
 /// @brief GenEvent I/O serialization for structured text files
 ///
 /// @ingroup IO

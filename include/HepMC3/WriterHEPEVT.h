@@ -9,7 +9,7 @@
  *  @file  WriterHEPEVT.h
  *  @brief Definition of \b class WriterHEPEVT
  *
- *  @class HepMC::WriterHEPEVT
+ *  @class HepMC3::WriterHEPEVT
  *  @brief GenEvent I/O serialization for HEPEVT files
  *
  *

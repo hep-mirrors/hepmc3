@@ -365,7 +365,7 @@ private:
     /// @brief Attribute map value type
     typedef std::map<int, shared_ptr<Attribute> >::value_type att_val_t;
 
-    /// @breif Mutex lock for the m_attibutes map.
+    /// @brief Mutex lock for the m_attibutes map.
     mutable std::recursive_mutex m_lock_attributes;
     #endif // __CINT__
 

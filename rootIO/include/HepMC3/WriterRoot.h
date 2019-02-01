@@ -9,7 +9,7 @@
  *  @file  WriterRoot.h
  *  @brief Definition of \b class WriterRoot
  *
- *  @class HepMC::WriterRoot
+ *  @class HepMC3::WriterRoot
  *  @brief GenEvent I/O serialization for root files
  *
  *  If HepMC was compiled with path to ROOT available, this class can be used

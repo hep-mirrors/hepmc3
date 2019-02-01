@@ -9,7 +9,7 @@
  *  @file Attribute.h
  *  @brief Definition of \b class Attribute, \b class IntAttribute and \b class StringAttribute
  *
- *  @class HepMC::Attribute
+ *  @class HepMC3::Attribute
  *  @brief Base class for all attributes
  *
  *  Contains virtual functions to_string and from_string that
@@ -150,7 +150,7 @@ private:
 };
 
 /**
- *  @class HepMC::IntAttribute
+ *  @class HepMC3::IntAttribute
  *  @brief Attribute that holds an Integer implemented as an int
  *
  *  @ingroup attributes
@@ -191,7 +191,7 @@ private:
 };
 
 /**
- *  @class HepMC::LongAttribute
+ *  @class HepMC3::LongAttribute
  *  @brief Attribute that holds an Integer implemented as an int
  *
  *  @ingroup attributes
@@ -234,7 +234,7 @@ private:
 };
 
 /**
- *  @class HepMC::DoubleAttribute
+ *  @class HepMC3::DoubleAttribute
  *  @brief Attribute that holds a real number as a double.
  *
  *  @ingroup attributes
@@ -279,7 +279,7 @@ private:
 };
 
 /**
- *  @class HepMC::FloatAttribute
+ *  @class HepMC3::FloatAttribute
  *  @brief Attribute that holds a real number as a float.
  *
  *  @ingroup attributes
@@ -324,7 +324,7 @@ private:
 };
 
 /**
- *  @class HepMC::StringAttribute
+ *  @class HepMC3::StringAttribute
  *  @brief Attribute that holds a string
  *
  *  Default attribute constructed when reading input files.

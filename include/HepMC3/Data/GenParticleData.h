@@ -9,7 +9,7 @@
  *  @file GenParticleData.h
  *  @brief Definition of \b class GenParticleData
  *
- *  @struct HepMC::GenParticleData
+ *  @struct HepMC3::GenParticleData
  *  @brief Stores serializable particle information
  *
  *  @ingroup data

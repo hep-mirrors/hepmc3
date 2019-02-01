@@ -4,7 +4,7 @@
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
- *  @file rootIO_example_read.cc
+ *  @file rootIOTree_example_read.cc
  *  @brief Basic example of use of root I/O with tree: reading events from file
  *
  *  @author Witold Pokorski/Andrii Verbytskyi

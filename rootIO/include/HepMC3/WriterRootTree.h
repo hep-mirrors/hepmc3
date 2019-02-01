@@ -9,7 +9,7 @@
  *  @file  WriterRootTree.h
  *  @brief Definition of \b class WriterRootTree
  *
- *  @class HepMC::WriterRootTree
+ *  @class HepMC3::WriterRootTree
  *  @brief GenEvent I/O serialization for root files based on root TTree
  *
  *  If HepMC was compiled with path to ROOT available, this class can be used

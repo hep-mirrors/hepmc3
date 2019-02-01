@@ -9,7 +9,7 @@
  *  @file GenCrossSection.h
  *  @brief Definition of attribute \b class GenCrossSection
  *
- *  @class HepMC::GenCrossSection
+ *  @class HepMC3::GenCrossSection
  *  @brief Stores additional information about cross-section
  *
  *  This is an example of event attribute used to store cross-section information
@@ -87,6 +87,9 @@ public:
         return  attempted_events;
     }
 
+    /** @brief Set the cross section  corresponding to the weight
+        named \a wName.
+     */
     void set_xsec(const string& wName,const double& xs) {
         set_xsec(windx(wName), xs);
     }

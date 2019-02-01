@@ -9,7 +9,7 @@
  *  @file  ReaderRoot.h
  *  @brief Definition of \b class ReaderRoot
  *
- *  @class HepMC::ReaderRoot
+ *  @class HepMC3::ReaderRoot
  *  @brief GenEvent I/O parsing and serialization for root files
  *
  *  If HepMC was compiled with path to ROOT available, this class can be used

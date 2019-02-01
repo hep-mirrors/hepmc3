@@ -9,7 +9,7 @@
  *  @file Units.h
  *  @brief Definition of \b class Units
  *
- *  @class HepMC::Units
+ *  @class HepMC3::Units
  *  @brief Stores units-related enums and conversion functions
  *
  *  Manages units used by HepMC::GenEvent

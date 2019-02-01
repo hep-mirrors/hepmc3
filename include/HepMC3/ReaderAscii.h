@@ -9,7 +9,7 @@
 /// @file  ReaderAscii.h
 /// @brief Definition of class \b ReaderAscii
 ///
-/// @class HepMC::ReaderAscii
+/// @class HepMC3::ReaderAscii
 /// @brief GenEvent I/O parsing for structured text files
 ///
 /// @ingroup IO

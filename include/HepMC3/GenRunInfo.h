@@ -156,7 +156,7 @@ private:
     /// @brief Map of attributes
     mutable std::map< std::string, shared_ptr<Attribute> > m_attributes;
 
-    /// @breif Mutex lock for the m_attibutes map.
+    /// @brief Mutex lock for the m_attibutes map.
     mutable std::recursive_mutex m_lock_attributes;
     //@}
 

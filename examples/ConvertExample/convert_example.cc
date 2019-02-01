@@ -1,3 +1,11 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
+/// @example convert_example.cc
+/// @brief Utility to convert between different types of event records
+///
 #include "HepMC3/Print.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"

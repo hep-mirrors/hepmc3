@@ -138,7 +138,6 @@ ${PROJECT_SOURCE_DIR}/src/GenCrossSection.cc
 ${PROJECT_SOURCE_DIR}/src/GenParticle.cc  
 ${PROJECT_SOURCE_DIR}/src/GenVertex.cc      
 ${PROJECT_SOURCE_DIR}/src/Print.cc             
-${PROJECT_SOURCE_DIR}/src/ReaderFactory.cc 
 ${PROJECT_SOURCE_DIR}/src/Setup.cc             
 ${PROJECT_SOURCE_DIR}/src/WriterHEPEVT.cc
 ${PROJECT_SOURCE_DIR}/src/GenEvent.cc         

@@ -9,7 +9,7 @@
  *  @file  ReaderAsciiHepMC2.h
  *  @brief Definition of \b class ReaderAsciiHepMC2
  *
- *  @class HepMC::ReaderAsciiHepMC2
+ *  @class HepMC3::ReaderAsciiHepMC2
  *  @brief Parser for HepMC2 I/O files
  *
  *  @ingroup IO

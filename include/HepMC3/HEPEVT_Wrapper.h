@@ -9,7 +9,7 @@
  *  @file HEPEVT_Wrapper.h
  *  @brief Definition of \b class HEPEVT_Wrapper
  *
- *  @class HepMC::HEPEVT_Wrapper
+ *  @class HepMC3::HEPEVT_Wrapper
  *  @brief An interface to HEPEVT common block
  *
  *  @note This header file does not include HEPEVT definition, only declaration.

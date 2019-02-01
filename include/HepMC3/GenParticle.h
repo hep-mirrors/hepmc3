@@ -9,7 +9,7 @@
  *  @file GenParticle.h
  *  @brief Definition of \b class GenParticle
  *
- *  @class HepMC::GenParticle
+ *  @class HepMC3::GenParticle
  *  @brief Stores particle-related information
  *
  */
