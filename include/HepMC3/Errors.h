@@ -2,7 +2,11 @@
 //
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
-
+/**
+ *  @file Errors.h
+ *  @brief Implementation of  error and warning macros
+ *
+ */
 #ifndef HEPMC3_ERRORS_H
 #define HEPMC3_ERRORS_H
 

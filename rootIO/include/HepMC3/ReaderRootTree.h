@@ -9,7 +9,7 @@
  *  @file  ReaderRootTree.h
  *  @brief Definition of \b class ReaderRootTree
  *
- *  @class HepMC3::ReaderRootTreeTree
+ *  @class HepMC3::ReaderRootTree
  *  @brief GenEvent I/O parsing and serialization for root files  based on root TTree
  *
  *  If HepMC was compiled with path to ROOT available, this class can be used

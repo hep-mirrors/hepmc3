@@ -3,6 +3,11 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
+/**
+ *  @file ReaderLHEF.cc
+ *  @brief Implementation of \b class ReaderLHEF
+ *
+ */
 #include "HepMC3/ReaderLHEF.h"
 using namespace LHEF;
 namespace HepMC3

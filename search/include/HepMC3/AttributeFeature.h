@@ -6,7 +6,8 @@
 ///
 /// @file AttributeFeature.h
 /// @brief Defines AttributeFeature for obtaining Filters to search by Attribute.
-///
+/// @class HepMC3::AttributeFeature
+/// @brief AttributeFeature
 
 #ifndef HEPMC3_ATTRIBUTE_FEATURE_H
 #define HEPMC3_ATTRIBUTE_FEATURE_H

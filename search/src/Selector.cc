@@ -3,6 +3,10 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
+///
+/// @file Selector.cc
+/// @brief Implementation  of Selector wrappers
+///
 #include "HepMC3/Selector.h"
 
 namespace HepMC3 {

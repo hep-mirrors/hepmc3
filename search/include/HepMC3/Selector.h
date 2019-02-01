@@ -3,6 +3,10 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
+///
+/// @file Selector.h
+/// @brief definition of /b Selector class
+///
 #ifndef HEPMC3_SELECTOR_H
 #define HEPMC3_SELECTOR_H
 

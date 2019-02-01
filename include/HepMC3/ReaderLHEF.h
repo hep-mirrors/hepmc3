@@ -1,8 +1,22 @@
 // -*- C++ -*-
+// -*- C++ -*-
 //
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
+#ifndef HEPMC3_READERLHEF_H
+#define HEPMC3_READERLHEF_H
+/**
+ *  @file  ReaderLHEF.h
+ *  @brief Definition of \b class ReaderLHEF
+ *
+ *  @class HepMC3::ReaderLHEF
+ *  @brief GenEvent I/O parsing and serialization for LHEF files
+ *
+ *
+ *  @ingroup IO
+ *
+ */
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
 #include <string>
@@ -32,7 +46,4 @@ private:
     bool m_failed;
 };
 }
-
-
-
-
+#endif

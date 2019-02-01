@@ -15,7 +15,6 @@
 ///
 /// Use like "#if HEPMC3_VERSION_CODE < 3001004" for < 3.01.04
 #define HEPMC3_VERSION_CODE 3001000
-
 namespace HepMC3 {
   /// Get the HepMC library version string
   inline std::string version() {
