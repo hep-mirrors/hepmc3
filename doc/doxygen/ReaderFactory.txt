@@ -1,6 +1,6 @@
 /**
 
-  @page ReaderFactory
+  @defgroup factory ReaderFactory
 
   HepMC includes an abstract Reader interface that can be implemented to read
   a wide range of different file types.  Example file types include the old
