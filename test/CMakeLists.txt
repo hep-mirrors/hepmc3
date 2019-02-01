@@ -53,12 +53,13 @@ set( HepMC_tests
         testDelete
         testIO1
         testIO3
-        testReaderFactory
+        testReaderFactory1
          )
 
 set( HepMC_root_tests 
         testIO2
         testIO4
+        testReaderFactory2
         )
 
 

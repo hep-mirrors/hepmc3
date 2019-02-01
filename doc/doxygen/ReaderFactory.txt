@@ -12,9 +12,9 @@
   ReaderFactory has a static make_reader(string) method, which takes the
   name of a file as the input.  When this is called, the ReaderFactory will
   test each of the possible Readers that it is aware of and return one if it
-  matches the file type.  For an example of the use, see test/testReaderFactory.cc.  
-  Note that in the test, the derived type of the Reader
-  does not need to be specified, even though the test reads a few different
+  matches the file type.  For an example of the use, see test/testReaderFactory1.cc or
+  test/testReaderFactory2.cc.  Note that in both tests, the derived type of the Reader
+  does not need to be specified, even though the tests read a few different
   file types.
 
   Users can implement their own derived Reader types for reading custom files

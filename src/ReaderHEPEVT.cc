@@ -31,21 +31,6 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename):
 
 }
 
-void ReaderHEPEVT::initialize(const string &filename){
-  m_events_count = 0;
-  m_failed=false;
-  set_run_info(make_shared<GenRunInfo>());
-  
-  m_file= fopen(filename.c_str(),"r");
-  if (!m_file) {m_failed=true;  ERROR( "ReaderHEPEVT: file opening failed" ); }
-  else
-  {
-    hepevtbuffer=(char*)(new struct HEPEVT());
-    HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
-  }
-  return;
-}
-  
 #define READERHEPEVTBUFFERSIZE 255
 bool ReaderHEPEVT::read_hepevt_event_header()
 {

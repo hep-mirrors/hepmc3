@@ -8,7 +8,6 @@
 /// @brief Implementation of \b class ReaderAscii
 ///
 #include "HepMC3/ReaderAscii.h"
-#include "HepMC3/ReaderFactory.h"
 
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
@@ -19,28 +18,16 @@
 
 namespace HepMC3 {
 
-ReaderFactory::Creator<ReaderAscii> ReaderAsciiCreator;
 
 ReaderAscii::ReaderAscii(const string &filename)
  : m_file(filename), m_stream(0), m_isstream(false)
 {
-  ///@todo could call initialize here instead
     if( !m_file.is_open() ) {
         ERROR( "ReaderAscii: could not open input file: "<<filename )
     }
     set_run_info(make_shared<GenRunInfo>());
 }
 
-void ReaderAscii::initialize(const string &filename){
-  m_stream = nullptr;
-  m_isstream = false;
-  m_file.open(filename);
-  
-  if( !m_file.is_open() || !m_file.good()) {
-    ERROR( "ReaderAscii: could not open input file: "<<filename )
-  }
-  set_run_info(make_shared<GenRunInfo>());
-}
 
 // Ctor for reading from stdin
 ReaderAscii::ReaderAscii(std::istream & stream)
@@ -56,10 +43,7 @@ ReaderAscii::ReaderAscii(std::istream & stream)
 
 ReaderAscii::~ReaderAscii() { if (!m_isstream) close(); }
 
-vector<string> ReaderAscii::fileSignatures()const{
-    return {"HepMC::Version", "HepMC::Asciiv3"};
-}
-  
+
 bool ReaderAscii::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 

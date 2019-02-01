@@ -20,12 +20,10 @@ namespace HepMC3
 class ReaderLHEF : public Reader
 {
 public:
-    ReaderLHEF(){};
     ReaderLHEF(const std::string& filename);
-    void initialize(const string &filename) override;
-    bool read_event(GenEvent& ev) override;
-    void close() override;
-    bool failed() override;
+    bool read_event(GenEvent& ev);
+    void close();
+    bool failed();
     ~ReaderLHEF() ;
 private:
     LHEF::Reader* m_reader;

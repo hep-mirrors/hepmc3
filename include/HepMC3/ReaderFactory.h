@@ -3,65 +3,99 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC3_CONTRIB_READER_FACTORY_H
-#define HEPMC3_CONTRIB_READER_FACTORY_H
+#ifndef HEPMC3_READERFACTORY_H
+#define HEPMC3_READERFACTORY_H
 
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
+#include "HepMC3/ReaderHEPEVT.h"
+#include "HepMC3/ReaderLHEF.h"
 
 #include <memory>
 #include <string>
+#include <sys/stat.h>
+#include <string.h>
 
-namespace HepMC3{
-  
-  using ReaderPtr = std::shared_ptr<Reader>;
-  
-  class ReaderFactory{
-  
-  public:
-    
-  /** @brief Make a reader suitable for reading HepMC2 or HepMC 3 files, depending on which type of file is passed
-   *
-   *  HepMC uses different implementations of the Reader niterface for HepMC 2 and HepMC 3
-   *  input files.  This means a user needs to know which kind of file they will be opening.
-   *  This convenience function will attempt to discover which type the file is and return
-   *  the appropriate reader.
-   */
-  static ReaderPtr make_reader(const std::string &filename);
-    
-  private:
-  
-    class ICreator{
-      
-      public:
-        virtual ReaderPtr create() const = 0;
-    };
-    
-  public:
-    /** @brief Helper class to be able to construct a Reader without knowing its type
-     *
-     *  When defining a new file Reader type, you can register it with the ReaderFactory
-     *  by a simple call to ReaderFactory::Creator<MyReaderType>(); in a single compilation block
-     *  This allows additional file readers to be added dynamically at runtime simply by loading
-     *  an appropriate library, which does not need to be part of HepMC.
-     */
-    template<class Reader_type>
-    class Creator: public ICreator{
-      
-      public:
-      
-      Creator(){
-        ReaderFactory::s_creators().push_back(this);
-      }
-      
-      ReaderPtr create() const override{return make_shared<Reader_type>();}
-    };
-   
-    /// static list of available Reader Creators accessed via func to ensure
-    /// objects have been created in correct order at runtime
-    static vector<const ICreator*> &s_creators();
-    
-  };
+namespace HepMC3 {
+
+
+std::shared_ptr<Reader> deduce_reader(const std::string &filename)
+{
+    bool remote=false;
+    if (filename.find("http://")!=std::string::npos) 	 remote=true;
+    if (filename.find("https://")!=std::string::npos) 	 remote=true;
+    if (filename.find("root://")!=std::string::npos) 	 remote=true;
+    if (filename.find("gsidcap://")!=std::string::npos) remote=true;
+
+    std::vector<std::string> head;
+    if (!remote)
+    {
+        struct stat   buffer;
+        if (stat (filename.c_str(), &buffer)!=0)
+        {
+            ERROR("deduce_reader: file does not exist: "<<filename);
+            return std::shared_ptr<Reader> (nullptr);
+        }
+
+        std::ifstream file(filename);
+        if(!file.is_open()) {
+            ERROR("deduce_reader: could not open file for testing HepMC version: "<<filename);
+            return shared_ptr<Reader>(nullptr);
+        }
+
+        std::string line;
+        size_t nonempty=0;
+        while (std::getline(file, line)&&nonempty<3) {
+            if (line.empty()) continue;
+            nonempty++;
+            head.push_back(line);
+        }
+        file.close();
+    }
+#ifdef HEPMC3_READERROOTTREE_H
+    WARNING("deduce_reader: Attempt ReaderRootTree for: "<<filename);
+    if( strncmp(head.at(0).c_str(),"root",4) == 0||remote)
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderRootTree(filename)));
+#else
+    WARNING("deduce_reader: Will not attempt ReaderRootTree. include ReaderRootTree.h to enable ROOT support");
+    if (remote)
+    {
+        WARNING("deduce_reader: file is on remote filesystem, but no root support is enabled: "<<filename);
+        return shared_ptr<Reader>(nullptr);
+    }
+#endif
+    WARNING("deduce_reader: Attempt ReaderAscii for: "<<filename);
+    if( strncmp(head.at(0).c_str(),"HepMC::Version",14) == 0 && strncmp(head.at(1).c_str(),"HepMC::Asciiv3",14)==0 )
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderAscii(filename)));
+    WARNING("deduce_reader: Attempt ReaderAsciiHepMC2 for: "<<filename);
+    if( strncmp(head.at(0).c_str(),"HepMC::Version",14) == 0 && strncmp(head.at(1).c_str(),"HepMC::IO_GenEvent",18)==0 )
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderAsciiHepMC2(filename)));
+    WARNING("deduce_reader: Attempt ReaderLHEF for: "<<filename);
+    if( strncmp(head.at(0).c_str(),"<LesHouchesEvents",17) == 0)
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderLHEF(filename)));
+    WARNING("deduce_reader: Attempt ReaderHEPEVT for: "<<filename);
+    std::stringstream st_e(head.at(0).c_str());
+    char attr=' ';
+    bool HEPEVT=true;
+    int m_i,m_p;
+    while (true)
+    {
+        if (!(st_e>>attr)) {
+            HEPEVT=false;
+            break;
+        }
+        if (attr==' ') continue;
+        if (attr!='E') {
+            HEPEVT=false;
+            break;
+        }
+        HEPEVT=static_cast<bool>(st_e>>m_i>>m_p);
+        break;
+    }
+    if (HEPEVT) return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(filename)));
+    WARNING("deduce_reader: All attempts failed for: "<<filename);
+    return shared_ptr<Reader>(nullptr);
 }
 
+}
 #endif

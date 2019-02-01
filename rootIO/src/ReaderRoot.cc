@@ -9,17 +9,10 @@
  *
  */
 #include "HepMC3/ReaderRoot.h"
-#include "HepMC3/ReaderFactory.h"
 
 namespace HepMC3 {
 
-ReaderFactory::Creator<ReaderRoot> ReaderRootCreator;
-  
-ReaderRoot::ReaderRoot(const string &filename){
-  initialize(filename);
-}
-
-void ReaderRoot::initialize(const std::string &filename) {
+ReaderRoot::ReaderRoot(const std::string &filename) {
 
     m_file = TFile::Open(filename.c_str());
     m_next = new TIter(m_file->GetListOfKeys()); 
@@ -40,7 +33,7 @@ void ReaderRoot::initialize(const std::string &filename) {
 
     set_run_info(ri);
 }
-  
+
 bool ReaderRoot::read_event(GenEvent& evt) {
 
     // Skip object of different type than GenEventData
