@@ -81,7 +81,6 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         }
 
         switch(buf[0]) {
-            /// @todo Should consider exceptions for reporting parsing problems more locally to the source of trouble
             case 'E':
                 vertices_and_particles = parse_event_information(evt,buf);
                 if (vertices_and_particles.second < 0) {

@@ -49,11 +49,6 @@ public:
 
   private:
 
-    /// @brief Get global attribute
-    ///
-    /// @todo rewrite global attributes
-    shared_ptr<Attribute> get_global(std::string name);
-
     /// @brief Unsecape '\' and '\n' characters in string
     std::string unescape(const std::string& s);
 
@@ -151,7 +146,6 @@ public:
 
   private:
 
-    /// @todo Unify file/stream treatment
     std::ifstream m_file; //!< Input file
     std::istream* m_stream; // For ctor when reading from stdin
     bool m_isstream; // toggles usage of m_file or m_stream

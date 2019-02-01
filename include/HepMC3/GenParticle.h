@@ -54,7 +54,6 @@ public:
 //
 public:
 
-    /// @todo why is this a raw ptr and not a shared_ptr?
     GenEvent*              parent_event() { return m_event; } //!< Get parent event
     const GenEvent*              parent_event() const { return m_event; } //!< Get parent event
     int                    id()           const { return m_id;    } //!< Get particle id

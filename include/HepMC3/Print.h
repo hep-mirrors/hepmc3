@@ -23,7 +23,6 @@ class GenCrossSection;
 
 
 /// @brief Provides different printing formats
-/// @todo This class has no state -- why isn't it just a namespace with free functions?
 class Print {
 public:
     /// @brief Print content of all GenEvent containers

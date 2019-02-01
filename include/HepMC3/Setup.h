@@ -13,17 +13,12 @@
 
 namespace HepMC3 {
 
-
-    /// @todo Move some of the helper functions, logging, exceptions, etc. to specific files
-
-
     /// @brief Configuration for HepMC
     ///
     /// Contains macro definitions for printing debug output, feature deprecation, etc.
     /// Static class - configuration is shared among all HepMC events
     /// and program threads
     ///
-    /// @todo Change to a namespace
     class Setup {
 
         /// Private constructor

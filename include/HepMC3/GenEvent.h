@@ -225,7 +225,7 @@ public:
     std::vector<string> attribute_names( const int& id = 0) const;
 
     /// @brief Get a copy of the list of attributes
-    /// @todo To avoid thread issues, this is returns a copy. Better solution may be needed.
+    /// @note To avoid thread issues, this is returns a copy. Better solution may be needed.
 std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
        std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
        return m_attributes;
@@ -260,7 +260,6 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
     /// @brief Remove vertex from the event
     ///
     /// This will remove all sub-trees of all outgoing particles of this vertex
-    /// @todo Optimize. Currently each particle/vertex is erased separately
     void remove_vertex( GenVertexPtr v );
 
     /// @brief Add whole tree in topological order
@@ -298,7 +297,6 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
 
     /// @brief Set incoming beam particles
     /// @deprecated Backward compatibility
-    /// @todo Set/require status = 4 at the same time?
     void set_beam_particles(GenParticlePtr p1, GenParticlePtr p2);
 
 
@@ -340,7 +338,6 @@ private:
     std::vector<GenVertexPtr> m_vertices;
 
     /// Event number
-    /// @todo Move to attributes?
     int m_event_number;
 
     /// Event weights

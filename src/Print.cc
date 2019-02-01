@@ -7,7 +7,6 @@
 /// @file Print.cc
 /// @brief Implementation of static \b class Print
 ///
-/// @todo AB: Why a static class rather than some namespaced free functions?
 ///
 #include "HepMC3/Print.h"
 #include "HepMC3/Attribute.h"

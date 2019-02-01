@@ -19,7 +19,6 @@
  *  @note Make sure that HEPEVT definition in project matches this definition
  *        (NMXHEP, double precision, etc.) Change this definition if necessary.
  *
- *  @todo Do we just make write_event and fill_next_event instead?
  */
 
 #ifndef HEPMC3_HEPEVT_NMXHEP
@@ -173,8 +172,8 @@ inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr
 
 inline bool HEPEVT_Wrapper::check_hepevt_consistency( std::ostream& /*ostr*/ )
 {
-    //!< @todo HEPEVT_Wrapper::check_hepevt_consistency unimplemented!
-    printf("HEPEVT_Wrapper::check_hepevt_consistency unimplemented!\n");
+    //!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
+    printf("HEPEVT_Wrapper::check_hepevt_consistency is not implemented!\n");
     return true;
 }
 

@@ -122,7 +122,6 @@ private:
 // Fields
 //
 private:
-     /// @todo Unify file/stream treatment
     std::ifstream m_file; //!< Input file
     std::istream* m_stream; // For ctor when reading from stdin
     bool m_isstream; // toggles usage of m_file or m_stream

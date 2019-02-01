@@ -47,15 +47,12 @@ namespace HepMC3 {
         //@{
 
         /// Get parent event
-        /// @todo Should we be returning a smart ptr?
         GenEvent* parent_event() { return m_event; }
 
         /// Get parent event
-        /// @todo Should we be returning a smart ptr?
         const GenEvent* parent_event() const { return m_event; }
 
         /// Check if this vertex belongs to an event
-        /// @todo Needed? Wouldn't it be good enough to just rely on user testing nullness of parent_event()?
         bool in_event() const { return parent_event() != nullptr; }
 
         /// Get the vertex unique identifier
@@ -98,16 +95,12 @@ namespace HepMC3 {
         /// the production vertices of ancestors are searched to find the inherited position.
         /// FourVector(0,0,0,0) is returned if no position information is found.
         ///
-        /// @todo We need a way to check if there is a position on _this_ vertex, without messing up the interface. Is has_position() too intrusive?
         const FourVector& position() const;
         /// @brief Check if position of this vertex is set
         bool has_set_position() const { return !(m_data.position.is_zero()); }
 
         /// Set vertex position
         void set_position(const FourVector& new_pos); //!<
-
-        /// @todo We need a way to check if there is a position on _this_ vertex, without messing up the interface. Is has_position() too intrusive?
-
 
         /// @brief Add event attribute to this vertex
         ///

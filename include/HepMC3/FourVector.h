@@ -133,10 +133,8 @@ public:
     /// Polar angle w.r.t. z direction
     double theta()   const {  return atan2( perp(), z() ); }
     /// Pseudorapidity
-    /// @todo Improve numerical stability
     double eta()     const  { return 0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) ); }
     /// Rapidity
-    /// @todo Improve numerical stability
     double rap()     const {   return 0.5*std::log( (e() + pz()) / (e() - pz()) ); }
     /// Absolute pseudorapidity
     double abs_eta() const { return std::abs( eta() ); }

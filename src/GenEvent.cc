@@ -184,8 +184,6 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     };
 
 void GenEvent::remove_particles( vector<GenParticlePtr> v ) {
-    /// @todo Currently the only optimization is sort by id in ascending order.
-    ///       Needs better optimization!
 
     sort( v.begin(), v.end(), sort_by_id_asc() );
 
@@ -568,7 +566,6 @@ void GenEvent::add_vertex( GenVertex *v ) {
 
 
 void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
-    /// @todo Require/set status = 4
     m_rootvertex->add_particle_out(p1);
     m_rootvertex->add_particle_out(p2);
 }

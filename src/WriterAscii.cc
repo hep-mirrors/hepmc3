@@ -121,7 +121,6 @@ void WriterAscii::write_event(const GenEvent &evt) {
         for ( auto vt2: vt1.second ) {
 
             string st;
-            /// @todo This would be nicer as a return value of string & throw exception if there's a conversion problem...
             bool status = vt2.second->to_string(st);
 
             if( !status ) {
