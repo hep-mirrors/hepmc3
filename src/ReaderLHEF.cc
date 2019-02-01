@@ -7,7 +7,12 @@
 using namespace LHEF;
 namespace HepMC3
 {
-ReaderLHEF::ReaderLHEF(const std::string& filename)
+  
+ReaderLHEF::ReaderLHEF(const string &filename){
+  initialize(filename);
+}
+  
+void ReaderLHEF::initialize(const std::string& filename)
 {
     m_reader = new LHEF::Reader(filename);
     m_neve=0;

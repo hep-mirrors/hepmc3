@@ -32,6 +32,12 @@ class ReaderAsciiHepMC2 : public Reader {
 // Constructors
 //
 public:
+  
+    /// @brief Default Constructor
+    /// If an empty ReaderAsciiHepMC2 is constructed, the initialize method must
+    /// be called to set the file prior to use
+    ReaderAsciiHepMC2();
+  
     /** @brief Default constructor */
     ReaderAsciiHepMC2(const std::string& filename);
 
@@ -44,15 +50,21 @@ public:
 // Functions
 //
 public:
+  
+    /// @brief initialise the reader on a filename
+    void initialize(const string &filename) override;
+  
     /** @brief Implementation of Reader::read_event */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt) override;
 
     /// @brief Return status of the stream
-    bool failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+    bool failed() override { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
 
     /// @brief Close file stream
-    void close();
+    void close() override;
 
+    vector<string> fileSignatures()const override;
+  
 private:
     /** @brief Parse event
      *

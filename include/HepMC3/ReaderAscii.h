@@ -26,6 +26,11 @@ namespace HepMC3 {
 class ReaderAscii : public Reader {
 public:
 
+    /// @brief Default Constructor
+    /// If an empty ReaderAscii is constructed, the initialize method must
+    /// be called to set the file prior to use
+    ReaderAscii(){}
+  
     /// @brief Constructor
     /// @warning If file already exists, it will be cleared before writing
     ReaderAscii(const std::string& filename);
@@ -36,17 +41,21 @@ public:
     /// @brief Destructor
     ~ReaderAscii();
 
+    void initialize(const string &filename) override;
+    
     /// @brief Load event from file
     ///
     /// @param[out] evt Event to be filled
-    bool read_event(GenEvent& evt);
+    bool read_event(GenEvent& evt) override;
 
     /// @brief Return status of the stream
-    bool failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+    bool failed() override { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
 
     /// @brief Close file stream
-    void close();
+    void close() override;
 
+    vector<string> fileSignatures()const override;
+  
   private:
 
     /// @brief Get global attribute

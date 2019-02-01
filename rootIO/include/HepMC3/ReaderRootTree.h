@@ -37,6 +37,8 @@ class ReaderRootTree : public Reader
 // Constructors
 //
 public:
+  /// @brief default no-arg constructor
+    ReaderRootTree();
     /** @brief Default constructor */
     ReaderRootTree(const std::string &filename);
     /** @brief Constructor with tree name*/
@@ -47,18 +49,22 @@ public:
 //
 public:
 
+    void initialize(const string &filename)override;
+  
     /** @brief Read event from file
      *
      *  @param[out] evt Contains parsed event
      */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt) override;
 
     /** @brief Close file stream */
-    void close();
+    void close() override;
 
     /** @brief Get stream error state */
-    bool failed();
+    bool failed() override;
 
+    bool matchesFile(const string &filename) const override;
+  
 private:
     /** @brief init routine */
     bool init();

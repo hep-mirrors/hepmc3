@@ -34,6 +34,8 @@ namespace HepMC3 {
 // Constructors
 //
 public:
+    /// @brief default no-arg ctor
+    ReaderRoot(){};
     /** @brief Default constructor */
     ReaderRoot(const std::string &filename);
 
@@ -42,17 +44,24 @@ public:
 //
 public:
 
+    void initialize(const string &filename) override;
+    
     /** @brief Read event from file
      *
      *  @param[out] evt Contains parsed event
      */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt) override;
 
     /** @brief Close file stream */
-    void close();
+    void close() override;
 
     /** @brief Get stream error state */
-    bool failed();
+    bool failed() override;
+
+    /// @brief strings to identify the files matching this reader
+    vector<string> fileSignatures()const override{return {"root"};};
+
+    
 //
 // Fields
 //

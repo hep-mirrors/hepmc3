@@ -1,6 +1,7 @@
 // -*- C++ -*-
 #include "HepMC3/GenEvent.h"
-#include "HepMC3/ReaderRootTree.h"
+#include "HepMC3/ReaderFactory.h"
+//#include "HepMC3/Reader.h"
 #include "HepMC3/WriterRootTree.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
@@ -23,19 +24,22 @@ int main()
     inputA.close();
     outputA.close();
 
-    ReaderRootTree inputB("frominputIO2.root");
-    if(inputB.failed()) return 3;
+    //ReaderRootTree inputB("frominputIO2.root");
+  
+    ReaderPtr inputB = ReaderFactory::make_reader("frominputIO2.root");
+  
+    if(inputB->failed()) return 3;
     WriterAsciiHepMC2       outputB("fromfrominputIO2.hepmc");
     if(outputB.failed()) return 4;
-    while( !inputB.failed() )
+    while( !inputB->failed() )
         {
             GenEvent evt(Units::GEV,Units::MM);
-            inputB.read_event(evt);
-            if( inputB.failed() )  {printf("End of file reached. Exit.\n"); break;}
+            inputB->read_event(evt);
+            if( inputB->failed() )  {printf("End of file reached. Exit.\n"); break;}
             outputB.write_event(evt);
             evt.clear();
         }
-    inputB.close();
+    inputB->close();
     outputB.close();
     return COMPARE_ASCII_FILES("fromfrominputIO2.hepmc","inputIO2.hepmc");
 }

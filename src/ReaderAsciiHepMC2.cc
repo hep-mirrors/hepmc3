@@ -9,6 +9,7 @@
  *
  */
 #include "HepMC3/ReaderAsciiHepMC2.h"
+#include "HepMC3/ReaderFactory.h"
 
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenVertex.h"
@@ -22,14 +23,32 @@
 
 namespace HepMC3 {
 
+ReaderFactory::Creator<ReaderAsciiHepMC2> ReaderAsciiHepMC2Creator;
+  
+ReaderAsciiHepMC2::ReaderAsciiHepMC2():m_stream(0), m_event_ghost(nullptr){}
+  
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
 m_file(filename), m_stream(0), m_isstream(false) {
+  ///@todo could call initialize here instead
     if( !m_file.is_open() ) {
         ERROR( "ReaderAsciiHepMC2: could not open input file: "<<filename )
     }
     set_run_info(make_shared<GenRunInfo>());
     m_event_ghost= new GenEvent();
 }
+  
+void ReaderAsciiHepMC2::initialize(const string &filename){
+    m_stream = nullptr;
+    m_isstream = false;
+    m_file.open(filename);
+    
+    if( !m_file.is_open() || !m_file.good()) {
+      ERROR( "ReaderAscii: could not open input file: "<<filename )
+    }
+    set_run_info(make_shared<GenRunInfo>());
+    m_event_ghost= new GenEvent();
+}
+  
 // Ctor for reading from stdin
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
  : m_stream(&stream), m_isstream(true)
@@ -43,7 +62,11 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
 
 ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr; } if (!m_isstream) close(); }
 
-
+vector<string> ReaderAsciiHepMC2::fileSignatures()const{
+  return {"HepMC::Version", "HepMC::IO_GenEvent"};
+}
+  
+  
 bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 

@@ -31,6 +31,9 @@ class ReaderHEPEVT : public Reader
 // Constructors
 //
 public:
+  
+    ReaderHEPEVT(): m_events_count(0){}
+  
     /** @brief Default constructor */
     ReaderHEPEVT(const std::string &filename);
 
@@ -38,6 +41,9 @@ public:
 // Functions
 //
 public:
+  
+    void initialize(const string &filename) override;
+  
     /** @brief Find and read event header line  from file
     *
     */
@@ -61,14 +67,14 @@ public:
      *
      *  @param[out] evt Contains parsed even
      */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt) override;
 
 
     /** @brief Close file stream */
-    void close();
+    void close() override;
 
     /** @brief Get stream error state */
-    bool failed();
+    bool failed() override;
 
 
 public:

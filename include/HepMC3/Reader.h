@@ -24,15 +24,33 @@ namespace HepMC3 {
 
   class Reader {
   public:
-
+    
     /// Virtual destructor
     virtual ~Reader() {}
 
+    virtual void initialize(const string &filename) = 0;
+    
     /// Fill next event from input into @a evt
     virtual bool read_event(GenEvent& evt) = 0;
     virtual bool failed()=0;
     virtual void close()=0;
 
+    /// Return a list of strings to search for to match the file the reader can read
+    /// The idea is a factory can check line-by-line for each of these entries
+    virtual vector<string> fileSignatures() const {return vector<string>();}
+    
+    /// In the case of more complicated file signatures, users can implement this
+    /// to fall back on to id a file that the reader is capable of reading.
+    /// e.g. eventually a gzip reader might implement this
+    /// By default it returns false, so is not used
+    virtual bool matchesFile(const string &filename) const {return false;}
+    
+    /// In the case of more complicated file signatures, users can implement this
+    /// to fall back on to id a file that the reader is capable of reading.
+    /// e.g. eventually a gzip reader might implement this
+    /// By default it returns false, so is not used
+    virtual bool matchesFile(std::istream & stream) const {return false;}
+    
     /// Get the global GenRunInfo object.
     shared_ptr<GenRunInfo> run_info() const {
       return m_run_info;

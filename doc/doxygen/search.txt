@@ -242,7 +242,18 @@
     bool passesAttribute = f(p);
     @endcode
 
+    ###########################################################################
+    @section Applying Filters
+    ###########################################################################
 
+    The function applyFilter is used to apply the Filter to a set of particles.
+    See for example examples/BasicExamples/basic_tree.cc
+
+    @code{.cpp}
+    for(ConstGenParticlePtr p: applyFilter( *abs(Selector::PDG_ID) <= 6, someParticles)){
+      Print::line(p);
+    }
+    @endcode
 
 
 */

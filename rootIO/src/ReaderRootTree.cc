@@ -9,10 +9,16 @@
  *
  */
 #include "HepMC3/ReaderRootTree.h"
+#include "HepMC3/ReaderFactory.h"
 #include "HepMC3/Units.h"
 
 namespace HepMC3
 {
+
+ReaderFactory::Creator<ReaderRootTree> ReaderRootTreeCreator;
+  
+ReaderRootTree::ReaderRootTree(): m_tree(0), m_events_count(0), m_tree_name("hepmc3_tree"),m_branch_name("hepmc3_event"){
+}
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
     m_tree(0),m_events_count(0),m_tree_name("hepmc3_tree"),m_branch_name("hepmc3_event")
@@ -21,6 +27,33 @@ ReaderRootTree::ReaderRootTree(const std::string &filename):
     if (!init()) return;
 }
 
+bool ReaderRootTree::matchesFile(const string& filename)const{
+  
+  std::ifstream file(filename);
+  if(!file.is_open()){
+    ERROR("make_reader: could not open file for testing HepMC version: "<<filename);
+  }
+  
+  string line;
+  std::getline(file, line);
+  if(line.find("root") == std::string::npos){
+    file.close();
+    return false;
+  }
+  
+  TFile * testFile = TFile::Open(filename.c_str());
+  if(!testFile->IsOpen()) return false;
+  TKey* testKey = testFile->GetKey(m_tree_name.c_str());
+  if(testKey == nullptr) return false;
+  
+  return true;
+}
+  
+void ReaderRootTree::initialize(const string &filename){
+  m_file = TFile::Open(filename.c_str());
+  init();
+  return;
+}
 
 ReaderRootTree::ReaderRootTree(const std::string &filename,const std::string &treename,const std::string &branchname):
     m_tree(0),m_events_count(0),m_tree_name(treename.c_str()),m_branch_name(branchname.c_str())
