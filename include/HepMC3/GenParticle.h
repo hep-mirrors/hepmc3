@@ -145,7 +145,7 @@ private:
 
     weak_ptr<GenVertex>    m_production_vertex; //!< Production vertex
     weak_ptr<GenVertex>    m_end_vertex;        //!< End vertex
-    weak_ptr<GenParticle>  m_this;              //!< Pointer to shared pointer managing this particle
+//    weak_ptr<GenParticle>  m_this;              //!< Pointer to shared pointer managing this particle
 };
 
 } // namespace HepMC3
