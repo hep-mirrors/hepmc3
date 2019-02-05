@@ -154,6 +154,8 @@ ${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc
 ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
 )
 
+#We need to export all symbols on WIn to build .lib files
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_library(objlibcore OBJECT ${hepmc3core_sources})
 # shared libraries need PIC
