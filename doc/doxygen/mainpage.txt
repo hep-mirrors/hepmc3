@@ -57,6 +57,7 @@
     @subsection diagram HepMC3 class diagram
 
     @note Some of the classes and less significant relations omitted for clarity
+    @note The classes related to rootIO, Search engine and LHEF are not shown.
 
     <img src="class_diagram.png">
 

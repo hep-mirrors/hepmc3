@@ -7,6 +7,23 @@
 #define BENCHMARK_TIMER_H
 
 #include <iostream>
+
+#if defined(_MSC_VER)  
+class Timer {
+public:
+    /** Default constructor */
+    Timer(const char* name):m_name(name) { reset(); }
+    void start() {}
+    int elapsed_time() {return 0;}
+    int total_time() {return 0;}
+    void stop() {}
+    void reset() {}
+    void print() { printf("<sys/times.h> header is not present in MS Visual Studio. Dummy implementation of Timer class is used.\n");}
+private:
+    const char *m_name;
+
+};
+#else
 #include <sys/times.h>
 
 class Timer {
@@ -63,5 +80,5 @@ private:
     const char *m_name;
     struct tms  m_start,m_stop,m_stored;
 };
-
+#endif
 #endif

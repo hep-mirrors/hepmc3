@@ -282,8 +282,8 @@ void ValidationControl::process(GenEvent &hepmc) {
             )
 
            HEPMC3CODE(
-           vector<GenParticlePtr> results = applyFilter(Selector::STATUS==1,hepmc.particles());
-           for (auto p: results) sum += p->momentum();
+           //vector<GenParticlePtr> results = applyFilter(Selector::STATUS==1,hepmc.particles());
+           for (auto p: hepmc.particles()) if( p->status() != 1 ) continue; else  sum += p->momentum();
             if(!input_momentum.is_zero()) delta = (input_momentum - sum).length();
             )
  
