@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#if defined(_WIN32)||defined(WIN32)
+#if defined(WIN32)
 class Timer {
 public:
     /** Default constructor */
