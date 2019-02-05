@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#if defined(WIN32)
+#if defined(_MSC_VER)  
 class Timer {
 public:
     /** Default constructor */
@@ -18,7 +18,11 @@ public:
     int total_time() {return 0;}
     void stop() {}
     void reset() {}
-    void print() { printf("<sys/times.h> header is not present on some Windows systems. Dummy implementation of Timer class is used.\n");}
+    void print() { printf("<sys/times.h> header is not present in MS Visual Studio. Dummy implementation of Timer class is used.\n");}
+private:
+    const char *m_name;
+
+};
 #else
 #include <sys/times.h>
 
