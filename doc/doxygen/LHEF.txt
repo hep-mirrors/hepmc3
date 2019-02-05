@@ -57,7 +57,7 @@
     wants, however the following basic stucture must be observed.
 
     @code
-    <LesHouchesEvents version="1.0">
+    <LesHouchesEvents version="3.0">
       <!--
         # optional information in completely free format,
         # except for the reserved end tag (see next line)
@@ -84,9 +84,57 @@
     This looks like fairly normal XML tags, and indeed they are. The
     only addition to the structure is that the <tt>init</tt> and
     <tt>event</tt> (and their respective end tags) are required to be
-    alon on a line, and the content of these blocks are required to
-    start with a number of lines on a specific format:
-      - 
+    alone on a line, and the content of these blocks are required to
+    start with a number of lines on a specific format that follows
+    exactly the structure of the fortran common block in original Les
+    Houches Accord. This means that the first line in the
+    <tt>init</tt> block should start with
+    @code
+    IDBMUP(1) IDBMUP(2) EBMUP(1) EBMUP(2) PDFGUP(1) PDFGUP(2) PDFSUP(1) PDFSUP(2) IDWTUP NPRUP
+    @endcode
+    and the following <tt>NPRUP</tt> lines should be on the form
+    @code
+    XSECUP(IPR) XERRUP(IPR) XMAXUP(IPR) LPRUP(IPR)
+    @endcode
+    where the different  variables are defined as follows:
+    <ul>
+      <li>
+        <tt>IDBMUP</tt>: the PDG numbers for the incoming beams;
+      </li>
+      <li>
+        <tt>EBMUP</tt>: the energy (in GeV) of the incoming beams;
+      </li>
+      <li>
+        <tt>PDFGUP</tt> and <tt>PDFSUP</tt>: the LHAPDF group and set
+        numbers for the corresponding parton densities used;
+      </li>
+      <li>
+        <tt>IDWTUP</tt>: the weight strategy used;
+      </li>
+      <li>
+        <tt>NPRUP</tt> The number of different processes included in the file;
+      </li>
+    </ul>
+    and for each process <tt>IPR</tt>:
+    <ul>
+      <li>
+        <tt>XSECUP</tt>, <tt>XERRUP</tt>: the Monte Carlo integrated
+        cross section and error estimate;
+      </li>
+      <li>
+        <tt>XMAXUP</tt>: the overestimated cross section such that the
+        sum over the individual weights in each <tt><event></tt> times
+        this file times <tt>XMAXUP</tt> equals <tt>XSECUP</tt>;
+      </li>
+      <li>
+        <tt>LPRUP</tt>: a unique integer identifying the corresponding
+        process.
+      </li>
+    </ul>
+    
+
     <hr>
-    Last update 24 Jan 2019
-*/
+
+    Last update 5 Feb 2019
+
+    */
