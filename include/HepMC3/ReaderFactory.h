@@ -33,13 +33,13 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         struct stat   buffer;
         if (stat (filename.c_str(), &buffer)!=0)
         {
-            ERROR("deduce_reader: file does not exist: "<<filename);
+            printf("Error  in deduce_reader: file does not exist: %s\n",filename.c_str());
             return std::shared_ptr<Reader> (nullptr);
         }
 
         std::ifstream file(filename);
         if(!file.is_open()) {
-            ERROR("deduce_reader: could not open file for testing HepMC version: "<<filename);
+            printf("Error in deduce_reader: could not open file for testing HepMC version: %s\n",filename.c_str());
             return shared_ptr<Reader>(nullptr);
         }
 
@@ -53,27 +53,27 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         file.close();
     }
 #ifdef HEPMC3_READERROOTTREE_H
-    WARNING("deduce_reader: Attempt ReaderRootTree for: "<<filename);
+    printf("Info in deduce_reader: Attempt ReaderRootTree for:  %s\n",filename.c_str());
     if( strncmp(head.at(0).c_str(),"root",4) == 0||remote)
         return std::shared_ptr<Reader>((Reader*) ( new ReaderRootTree(filename)));
 #else
-    WARNING("deduce_reader: Will not attempt ReaderRootTree. include ReaderRootTree.h to enable ROOT support");
+    printf("Info in deduce_reader: Will not attempt ReaderRootTree. include ReaderRootTree.h to enable ROOT support");
     if (remote)
     {
-        WARNING("deduce_reader: file is on remote filesystem, but no root support is enabled: "<<filename);
+        printf("Info in deduce_reader: file is on remote filesystem, but no root support is enabled:  %s\n",filename.c_str());
         return shared_ptr<Reader>(nullptr);
     }
 #endif
-    WARNING("deduce_reader: Attempt ReaderAscii for: "<<filename);
+    printf("Info in deduce_reader: Attempt ReaderAscii for:  %s\n",filename.c_str());
     if( strncmp(head.at(0).c_str(),"HepMC::Version",14) == 0 && strncmp(head.at(1).c_str(),"HepMC::Asciiv3",14)==0 )
         return std::shared_ptr<Reader>((Reader*) ( new ReaderAscii(filename)));
-    WARNING("deduce_reader: Attempt ReaderAsciiHepMC2 for: "<<filename);
+    printf("Info in deduce_reader: Attempt ReaderAsciiHepMC2 for: %s\n",filename.c_str());
     if( strncmp(head.at(0).c_str(),"HepMC::Version",14) == 0 && strncmp(head.at(1).c_str(),"HepMC::IO_GenEvent",18)==0 )
         return std::shared_ptr<Reader>((Reader*) ( new ReaderAsciiHepMC2(filename)));
-    WARNING("deduce_reader: Attempt ReaderLHEF for: "<<filename);
+    printf("Info in deduce_reader: Attempt ReaderLHEF for:  %s\n",filename.c_str());
     if( strncmp(head.at(0).c_str(),"<LesHouchesEvents",17) == 0)
         return std::shared_ptr<Reader>((Reader*) ( new ReaderLHEF(filename)));
-    WARNING("deduce_reader: Attempt ReaderHEPEVT for: "<<filename);
+    printf("Info in deduce_reader: Attempt ReaderHEPEVT for:  %s\n",filename.c_str());
     std::stringstream st_e(head.at(0).c_str());
     char attr=' ';
     bool HEPEVT=true;
@@ -93,7 +93,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         break;
     }
     if (HEPEVT) return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(filename)));
-    WARNING("deduce_reader: All attempts failed for: "<<filename);
+    printf("Info in deduce_reader: All attempts failed for:  %s\n",filename.c_str());
     return shared_ptr<Reader>(nullptr);
 }
 
