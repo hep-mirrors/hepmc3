@@ -169,7 +169,6 @@ void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
     os <<"GenEvent: #" << event.event_number();
     if(attributes) for (std::vector<std::string>::const_iterator s=event.attribute_names().begin();s!=event.attribute_names().end();++s) 
     os<<" "<<*s<<"="<<event.attribute_as_string(*s);
-    os<<endl;
 }
 
 void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
@@ -242,8 +241,7 @@ void Print::line(std::ostream& os, shared_ptr<GenCrossSection> &cs) {
     os << " GenCrossSection: " << cs->xsec(0)
          << " " << cs->xsec_err(0)
          << " " << cs->get_accepted_events()
-         << " " << cs->get_attempted_events() 
-         << " " << endl;
+         << " " << cs->get_attempted_events();
 }
 
 void Print::line(std::ostream& os, shared_ptr<GenHeavyIon> &hi) {
@@ -259,8 +257,7 @@ void Print::line(std::ostream& os, shared_ptr<GenHeavyIon> &hi) {
          << " " << hi->impact_parameter
          << " " << hi->event_plane_angle
          << " " << hi->eccentricity
-         << " " << hi->sigma_inel_NN
-         << endl;
+         << " " << hi->sigma_inel_NN;
 }
 
 void Print::line(std::ostream& os, shared_ptr<GenPdfInfo> &pi) {
@@ -272,8 +269,7 @@ void Print::line(std::ostream& os, shared_ptr<GenPdfInfo> &pi) {
          << " " << pi->xf[0]
          << " " << pi->xf[1]
          << " " << pi->pdf_id[0]
-         << " " << pi->pdf_id[1]
-         << " " << endl;
+         << " " << pi->pdf_id[1];
 }
 
 } // namespace HepMC3

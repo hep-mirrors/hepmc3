@@ -38,7 +38,7 @@ public:
     /// @brief Print one-line info
     static void line(std::ostream& os, const GenEvent &event, bool attributes=false);
     inline static void line(const GenEvent &event, bool attributes=false) {
-      line(std::cout, event, attributes);
+      line(std::cout, event, attributes); std::cout<<std::endl;
     }
 
     /// @brief Print one-line info
@@ -56,19 +56,19 @@ public:
     /// @brief Print one-line info
     static void line(std::ostream& os, shared_ptr<GenCrossSection> &cs);
     inline static void line(shared_ptr<GenCrossSection> &cs) {
-      line(std::cout, cs);
+      line(std::cout, cs); std::cout<<std::endl;
     }
 
     /// @brief Print one-line info
     static void line(std::ostream& os, shared_ptr<GenHeavyIon> &hi);
     inline static void line(shared_ptr<GenHeavyIon> &hi) {
-      line(std::cout, hi);
+      line(std::cout, hi); std::cout<<std::endl;
     }
 
     /// @brief Print one-line info
     static void line(std::ostream& os, shared_ptr<GenPdfInfo> &pi);
     inline static void line(shared_ptr<GenPdfInfo> &pi) {
-      line(std::cout, pi);
+      line(std::cout, pi); std::cout<<std::endl;
     }
 
 private:
