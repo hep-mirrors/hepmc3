@@ -50,7 +50,7 @@ test -n "$tmp" && OUT="$OUT -I$prefix/${CMAKE_INSTALL_INCLUDEDIR}"
 
 
 tmp=$( echo "$*" | egrep -- '--\<static\>')
-if [ test -n "$tmp" ]; then 
+if test -n "$tmp"; then 
 
 tmp=$( echo "$*" | egrep -- '--\<ldflags|libs\>')
 OUT="$OUT $prefix/${CMAKE_INSTALL_LIBDIR}/libHepMC3_static.a -lHepMC3"
