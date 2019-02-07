@@ -611,6 +611,10 @@ struct XSecInfo : public TagBase {
  */
 typedef std::map<std::string,XSecInfo> XSecInfos;
 
+/**
+ * Simple struct to store information about separate eventfiles to be
+ * loaded.
+ */
 struct EventFile : public TagBase {
 
   /**

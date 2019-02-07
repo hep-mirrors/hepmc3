@@ -380,7 +380,7 @@ following tags are defined.
     The content of this tag is a string with arbitrary information about the process. 
   </li>
   <li><b><tt><mergeinfo></tt></b>(DEPRECATED, multiple, see LHEF::HEPRUP::mergeinfo)<br>
-        For some merging schemes (eg. for CKKW) it is possible to reweight the
+    For some merging schemes (eg. for CKKW) it is possible to reweight the
     the events with Sudakov form factors already in the MEG. If this has
     been done the content of the mergetype tag for the corresponding
     process should give a name corresponding to the scheme used. The
@@ -399,11 +399,96 @@ following tags are defined.
         (ie. the Sudakov for the last step down to the merging scale
         is not included.
       </li>
-  </ul>
-</li>
+    </ul>
+  </li>
+  <li><b><tt><eventfile></tt></b>(optional, multiple, see LHEF::HEPRUP::eventfiles)<br>
+    Sometimes it is desirable to have the events in a separate file(s)
+    from the <tt>init</tt> block, eg. when the event files become
+    extremely long or when one wants to write the <tt>init</tt> block
+    after having generated all events in order to collect the correct
+    information from the run. The names of these files are then
+    specified in <tt>eventfile</tt> tags with attributes:
+    <ul>
+      <li>
+        <tt>name</tt> (R): the file name, interpreted as an absolute
+        path if starting with "/", otherwise as a relative path to
+        where the file with the <tt>init</tt> block is located;
+      </li>
+      <li>
+        <tt>neve</tt>: the number of events in the file
+      </li>
+      <li>
+        <tt>ntries</tt>: the number of attempts the generator needed
+        to produce the <tt>neve</tt> events (for statistics purposes.
+      </li>
+    </ul>
+  </li>
+  <li><b><tt><weightinfo></tt></b>(optional, multiple, see LHEF::HEPRUP::weightinfo)<br>
+    When using multiple weights for events, each weight is given an
+    index and a name using the <tt>weightinfo</tt> tag. The default
+    weight (as given by the LHEF:HEPEUP::XWGTUP variable) is always
+    treated as index 0 and given the name "Default", while the
+    additional weights are indexed by the order of
+    the <tt>weightinfo</tt> tags. The attributes are:
+    <ul>
+      <li>
+        <tt>name</tt> (R): the name of the weight (in the best of all
+        worlds this would be standardised);
+      </li>
+      <li>
+        <tt>muf</tt>: he factor multiplying the nominal factorisation
+        scale of the event for the given weight;
+      </li>
+      <li>
+        <tt>mur</tt>: he factor multiplying the nominal
+        renormalisation scale of the event for the given weight;
+      </li>
+      <li>
+        <tt>pdf</tt> (D=0): the LHAPDF code used for the given weight
+        (where 0 corresponds to the default PDF of the run);
+      </li>
+      <li>
+        <tt>pdf2</tt> (D=pdf): the LHAPDF code used for the second
+        beam for the given weight;
+      </li>
+    </ul>
+  </li>
+  <li><b><tt><weightgroup></tt></b>(optional, multiple, see LHEF::HEPRUP::weightgroup)<br>
+    This tag can be used to group <tt>weightinfo</tt> tags together.  The only attribute is
+    <tt>name</tt> giving a string which will be combined with
+    the <tt>name</tt> attribute of the included <tt>weightinfo</tt>
+    tags to give the HepMC weight names.
+  </li>
+  <li><b><tt><initrwgt></tt></b>(optional, multiple, see LHEF::HEPRUP::weightinfo)<br>
+    Due to an initial confusion some generators uses this tag instead
+    of the <tt>weightinfo</tt> tag. It accepts the same attributes
+    as <tt>weightinfo</tt>, except that the name attribute is
+    named <tt>id</tt>.  Note that some generators puts these tags in
+    the <tt>header</tt> block. The current implementation of
+    LHEF::Reader cannot handle this.
+  </li>
 </ul>
 
+@subsection LHEF-init Standardised tags in the events block.
 
+After the <tt>init</tt> block any number of events can be given. In
+addition events can be given in separate files declared
+with <tt>eventfile</tt> tags in the <tt>init</tt> block.
+
+The main tag here is simply called <tt>event</tt> and can (for
+statistics purposes) have an attribute <tt>ntries</tt> specifying how
+many attempts the generator needed to produce the event. Also other
+attributes can be given (and will be stored in the
+LHEF::HEPEUP::attributes member variable).
+
+The <tt>event</tt> tags may be grouped together in
+a <tt>eventgroup</tt> tag. This is useful mainly for NLO generators
+that produces a (number) "real" event(s) accompanied with a number of
+"counter" events, where these events should be treated together for
+statistics purposes. For this reason the <tt>eventgroup</tt> tag can
+be provided with the optional tags <tt>nreal</tt>
+and <tt>ncounter</tt> to indicate the number of <tt>event</tt> tags
+included of each type.
 
 <hr>
 
