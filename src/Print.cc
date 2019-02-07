@@ -28,9 +28,6 @@ void Print::content( std::ostream& os, const GenEvent &event ) {
 
     os<<"Attributes:"<<endl;
 
-    typedef map< string, map<int, shared_ptr<Attribute> > >::value_type value_type1;
-    typedef map<int, shared_ptr<Attribute> >::value_type                value_type2;
-
     for( auto vt1: event.attributes() ) {
         for( auto vt2: vt1.second ) {
             os << vt2.first << ": " << vt1.first << endl;
