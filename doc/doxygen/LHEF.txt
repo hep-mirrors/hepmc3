@@ -1,8 +1,6 @@
 /**
 @defgroup LHEF LHEF - Handling Les Houches Event Files
 
-<h1>This sections is still under construction</h1>
-
 This module contains helper classes and Reader and Writer classes
 for handling Les Houches event files - LHEF.
 
@@ -453,11 +451,15 @@ following tags are defined.
       </li>
     </ul>
   </li>
-  <li><b><tt><weightgroup></tt></b>(optional, multiple, see LHEF::HEPRUP::weightgroup)<br>
-    This tag can be used to group <tt>weightinfo</tt> tags together.  The only attribute is
+  <li><b><tt><weightgroup></tt></b>(optional, multiple, see
+    LHEF::HEPRUP::weightgroup)<br> This tag can be used to
+    group <tt>weightinfo</tt> tags together.  The only well defined
+    attribute is
     <tt>name</tt> giving a string which will be combined with
     the <tt>name</tt> attribute of the included <tt>weightinfo</tt>
-    tags to give the HepMC weight names.
+    tags to give the HepMC weight names. Also other attributes can be
+    included to include information about the weight variation used
+    and is available in LHEF::WeightGroup::attributes.
   </li>
   <li><b><tt><initrwgt></tt></b>(optional, multiple, see LHEF::HEPRUP::weightinfo)<br>
     Due to an initial confusion some generators uses this tag instead
@@ -465,7 +467,9 @@ following tags are defined.
     as <tt>weightinfo</tt>, except that the name attribute is
     named <tt>id</tt>.  Note that some generators puts these tags in
     the <tt>header</tt> block. The current implementation of
-    LHEF::Reader cannot handle this.
+    LHEF::Reader cannot handle this. Note that this is handled by the
+    same classes (LHEF::WeightInfo and LHEF::WeightGroup) in
+    LHEF::Reader and LHEF::Writer.
   </li>
 </ul>
 
@@ -489,6 +493,52 @@ statistics purposes. For this reason the <tt>eventgroup</tt> tag can
 be provided with the optional tags <tt>nreal</tt>
 and <tt>ncounter</tt> to indicate the number of <tt>event</tt> tags
 included of each type.
+
+As indicated above the block must start with required information
+corresponding to the original Les Houches Accord Fortran common
+block. Here is a list of additional tags that may be provided.
+
+<ul>
+  <li><b><tt><weights></tt></b> (optional, see LHEF::HEPEUP::weights)<br> 
+    This tag should contain a list of weights or the events given in
+    the order they are defined by the <tt>weightinfo</tt> tags in the <tt>init</tt>
+    block. If for some obscure reason a weight is absent, it should be
+    anyway be included as a zero weight. Note that the weight for the
+    nominal event is still given by <tt>XWGTUP</tt>. This tag has no attributes.
+  </li>
+  <li><b><tt><rwgt></tt></b> (optional, see LHEF::HEPEUP::weights)<br> 
+    For weights declared in <tt>initrwgt</tt> this should contain the
+    weights for this event. The difference wrt. the <tt>weights</tt>
+    tag is that each weight needs to be given in an <tt>wgt</tt> tag.
+  </li>
+  <li><b><tt><wgt></tt></b> (optional, see LHEF::HEPEUP::weights)<br> 
+    This tag contains a single weight correspoding to a weight
+    declared in the <tt>initrwgt</tt> tag. The only attribute is
+    the <tt>id</tt> of the weight defined in the
+    corresponing <tt>weightinfo</tt> tag.
+  </li>
+  <li><b><tt><scales></tt></b> (optional, see LHEF::HEPEUP::scales)<br> 
+    Since it is often necessary to define more than one scale in an
+    event, this tag is provided to specify these. The scales are given
+    as the followin attributes:
+    <ul>
+      <li>
+        <tt>muf</tt> (D=SCLAUP): the factorisation scale (in GeV);
+      </li>
+      <li>
+        <tt>mur</tt> (D=SCLAUP): the renormalisation scale (in GeV);
+      </li>
+      <li>
+        <tt>mups</tt> (D=SCLAUP): the suggested parton shower starting
+        scale (in GeV).
+      </li>
+    </ul>
+    Also other attributes are allowed and will be stored in
+    LHEF::Scales::attributes.
+  </li>
+</ul>
+
+
 
 <hr>
 
