@@ -33,7 +33,7 @@ ReaderAscii::ReaderAscii(const string &filename)
 ReaderAscii::ReaderAscii(std::istream & stream)
  : m_stream(&stream), m_isstream(true)
 {
-    if( !m_stream ) {
+    if( !m_stream.good() ) {
         ERROR( "ReaderAscii: could not open input stream " )
     }
     set_run_info(make_shared<GenRunInfo>());
