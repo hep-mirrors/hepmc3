@@ -113,6 +113,7 @@ namespace HepMC3{
     GenParticles_type<GenObject_type> _recursive(GenObject_type input) const {
       
       GenParticles_type <GenObject_type> results;
+      if ( !input ) return results;
       for(auto v: m_checkedObjects){
         if(v->id() == input->id()) return results;
       }
