@@ -215,6 +215,18 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Add whole event tree in topological order
     evt.add_tree( m_particle_cache );
 
+    // Prepare trying to find the beam particles
+    int bid1 = -1;
+    shared_ptr<IntAttribute> tmpbeam = evt.attribute<IntAttribute>("TMPBEAM1");
+    evt.remove_attribute("TMPBEAM1");
+    if ( tmpbeam ) bid1 = tmpbeam->value();
+    int bid2 = -1;
+    tmpbeam = evt.attribute<IntAttribute>("TMPBEAM2");
+    evt.remove_attribute("TMPBEAM2");
+    if ( tmpbeam ) bid2 = tmpbeam->value();
+    GenParticlePtr b1, b2;
+
+
     for(unsigned int i=0; i<m_particle_cache.size(); ++i) {
      if(m_particle_cache_ghost[i]->attribute_names().size()) 
      {
@@ -226,8 +238,16 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
      if (flow1) m_particle_cache[i]->add_attribute("flow1",flow1);
      shared_ptr<IntAttribute> flow2 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow2");
      if (flow2) m_particle_cache[i]->add_attribute("flow2",flow2);
+     shared_ptr<IntAttribute> tmpbarcode = m_particle_cache_ghost[i]->attribute<IntAttribute>("TMPBARCODE");
+     if ( tmpbarcode ) {
+       if ( tmpbarcode->value() == bid1 ) b1 = m_particle_cache[i];
+       if ( tmpbarcode->value() == bid2 ) b2 = m_particle_cache[i];
+     }
      }
     }
+
+    if ( b1 ) evt.add_beam_particle(b1);
+    if ( b2 ) evt.add_beam_particle(b2);
 
      for(unsigned int i=0; i<m_vertex_cache.size(); ++i) 
      if(m_vertex_cache_ghost[i]->attribute_names().size()) 
@@ -241,7 +261,8 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
      }
     m_particle_cache_ghost.clear();
     m_vertex_cache_ghost.clear();
-    m_event_ghost->clear(); 
+    m_event_ghost->clear();
+
     return 1;
 }
 
@@ -293,11 +314,16 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     vertices_count = atoi(cursor);
 
-    // SKIPPED: beam 1
+    // Storing beam 1 in temporary attribute
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<IntAttribute> bid1 = make_shared<IntAttribute>(atoi(cursor));
+    evt.add_attribute("TMPBEAM1",bid1);
+    
 
-    // SKIPPED: beam 2
+    // Storing beam 2 in temporary attribute
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<IntAttribute> bid2 = make_shared<IntAttribute>(atoi(cursor));
+    evt.add_attribute("TMPBEAM2",bid2);
 
     //random states
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
@@ -427,6 +453,8 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
 
     /// @todo barcode ignored but maybe should be put as an attribute?...
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
+    shared_ptr<IntAttribute> barcode = make_shared<IntAttribute>(atoi(cursor));
+    data_ghost->add_attribute("TMPBARCODE", barcode);
 
     // id
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
