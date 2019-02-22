@@ -482,6 +482,16 @@ void GenEvent::write_data(GenEventData& data) const {
             data.links2.push_back( p->id() );
         }
     }
+    data.vertices.push_back( m_rootvertex->data() );
+    for(ConstGenParticlePtr p: m_rootvertex->particles_in() ) {
+      data.links1.push_back( p->id() );
+      data.links2.push_back( 0       );
+    }
+
+    for(ConstGenParticlePtr p: m_rootvertex->particles_out() ) {
+      data.links1.push_back( 0       );
+      data.links2.push_back( p->id() );
+    }
 
     for( const att_key_t& vt1: this->attributes() ) {
         for( const att_val_t& vt2: vt1.second ) {
@@ -523,22 +533,28 @@ void GenEvent::read_data(const GenEventData &data) {
     }
 
     // Fill vertex information
+    m_rootvertex = make_shared<GenVertex>(data.vertices.back());
     for( const GenVertexData &vd: data.vertices ) {
       GenVertexPtr v = make_shared<GenVertex>(vd);
-
-        m_vertices.push_back(v);
-
-        v->m_event = this;
-        v->m_id    = -(int)m_vertices.size();
+      m_vertices.push_back(v);
+      v->m_event = this;
+      v->m_id    = -(int)m_vertices.size();
     }
+    m_vertices.pop_back();
 
     // Restore links
     for( unsigned int i=0; i<data.links1.size(); ++i) {
       int id1 = data.links1[i];
       int id2 = data.links2[i];
 
-      if( id1 > 0 ) m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] );
-      else          m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );
+      if( id1 > 0 && id2 < 0 )
+        m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] );
+      else if ( id1 < 0 && id2 > 0 )
+        m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );
+      else if ( id1 == 0 )
+        m_rootvertex->add_particle_out( m_particles[ id2-1 ] );
+      else if ( id2 == 0 )
+        m_rootvertex->add_particle_in( m_particles[ id1-1 ] );
     }
 
     // Read attributes
