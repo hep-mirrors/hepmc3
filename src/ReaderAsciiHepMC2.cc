@@ -34,7 +34,7 @@ m_file(filename), m_stream(0), m_isstream(false) {
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
  : m_stream(&stream), m_isstream(true)
 {
-    if( !m_stream ) {
+    if( !m_stream->good() ) {
         ERROR( "ReaderAsciiHepMC2: could not open input stream " )
     }
     set_run_info(make_shared<GenRunInfo>());
@@ -425,7 +425,7 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     const char     *cursor  = buf;
     int             end_vtx = 0;
 
-    /// @todo barcode ignored but maybe should be put as an attribute?...
+    /// @note barcode is ignored
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
 
     // id

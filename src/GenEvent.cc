@@ -95,7 +95,6 @@ GenEvent& GenEvent::operator=(const GenEvent& e){
 } 
 
 
-// void GenEvent::add_vertex( const GenVertexPtr &v ) {
 void GenEvent::add_vertex( GenVertexPtr v ) {
     if( v->in_event() ) return;
     m_vertices.push_back(v);
@@ -536,10 +535,15 @@ void GenEvent::read_data(const GenEventData &data) {
     for( unsigned int i=0; i<data.links1.size(); ++i) {
       int id1 = data.links1[i];
       int id2 = data.links2[i];
-
+/* @note: 
+The  meaningfull combinations for (id1,id2) are: 
+(+-)  --  particle has end vertex
+(-+)  --  particle  has production vertex
+*/
       if( id1 > 0 ) m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] );
-      else          m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );
+      else        m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );
     }
+     for (auto p:  m_particles) if (!p->production_vertex()) m_rootvertex->add_particle_out(p);
 
     // Read attributes
     for( unsigned int i=0; i<data.attribute_id.size(); ++i) {
@@ -571,7 +575,16 @@ void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
 }
 
 void GenEvent::add_beam_particle(GenParticlePtr p1){
-	m_rootvertex->add_particle_out(p1);
+      if( p1->in_event()) if (p1->parent_event()!=this)
+       {
+       WARNING("Attempting to add particle from anothe event. Ignored.")
+       return;
+       }
+       if (p1->production_vertex())  p1->production_vertex()->remove_particle_out(p1);
+//Particle w/o production vertex is added to root vertex.
+       add_particle(p1);
+       p1->set_status(4);
+      return;
 }
 
 
