@@ -5,7 +5,7 @@ cc7:
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
   stage: test
   before_script:
-    - source source /cvmfs/sft.cern.ch/lcg/contrib/gcc/8.2.0/x86_64-centos7-gcc8-opt/setup.sh
+    - source /cvmfs/sft.cern.ch/lcg/contrib/gcc/8.2.0/x86_64-centos7-gcc8-opt/setup.sh
     - export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/3.13.4/Linux-x86_64/bin/:${PATH}
     - export ROOTSYS=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/x86_64-centos7-gcc8-opt/
   script:    
