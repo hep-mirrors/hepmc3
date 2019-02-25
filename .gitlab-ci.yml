@@ -5,12 +5,13 @@ cc7:
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
   stage: test
   before_script:
-    - source /cvmfs/sft.cern.ch/lcg/contrib/gcc/8.2.0/x86_64-centos7-gcc8-opt/setup.sh
-    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/x86_64-centos7-gcc8-opt/ROOT-env.sh 
+    - export LCGPLATFORM=x86_64-centos7-gcc8-opt
+    - source /cvmfs/sft.cern.ch/lcg/contrib/gcc/8.2.0/${LCGPLATFORM}/setup.sh
+    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/ROOT-env.sh 
     - export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/3.13.4/Linux-x86_64/bin/:${PATH}
-    - export ROOTSYS=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/x86_64-centos7-gcc8-opt/
+    - export ROOTSYS=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/
   script:    
     - mkdir build
     - cd build
-    - cmake .. -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/x86_64-centos7-gcc8-opt -DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/x86_64-centos7-gcc8-opt/ -DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/x86_64-centos7-gcc8-opt/ -DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/x86_64-centos7-gcc8-opt/ -DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/x86_64-centos7-gcc8-opt/
+    - cmake .. -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM} -DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/ -DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/ -DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ -DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/
     - make -j 
