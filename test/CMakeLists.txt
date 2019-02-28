@@ -42,7 +42,6 @@ endmacro( hepmc_root_test )
 set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
 
 set( HepMC_tests
-        testThreads1
         testMass
         testPrintBug
         testPolarization 
@@ -65,13 +64,26 @@ set( HepMC_root_tests
 
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
 
-
+find_package(Threads)
+if(Threads_FOUND)
+  list( APPEND HepMC_tests "testThreads1" )   
+else()
+  message(STATUS "No threads library found, testThreads1 is disabled")
+endif()
 
 foreach ( test ${HepMC_tests} )
   hepmc_test( ${test} )
   set_tests_properties(${test} PROPERTIES TIMEOUT 10)  #Relevant for testLoops
 endforeach ( test ${HepMC_tests} )
 
+if(Threads_FOUND)
+if(THREADS_HAVE_PTHREAD_ARG)
+  target_compile_options(testThreads1 PUBLIC "-pthread")
+endif()
+if(CMAKE_THREAD_LIBS_INIT)
+  target_link_libraries(testThreads1  "${CMAKE_THREAD_LIBS_INIT}")
+endif()
+endif()
 
 if(HEPMC3_ENABLE_ROOTIO)
 foreach ( test ${HepMC_root_tests} )
