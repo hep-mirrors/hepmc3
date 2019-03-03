@@ -41,7 +41,7 @@ int main()
 
     // new functionality
     std::vector<std::string> names;
-    for( size_t i = 0; i < evt.weights().size(); ++i ) names.push_back(std::to_string((unsigned long long)i));
+    for( size_t i = 0; i < evt.weights().size() - 1; ++i ) names.push_back(std::to_string((unsigned long long)i));
     std::string nm = "tau";
     names.push_back(nm);
     run->set_weight_names(names);
