@@ -128,7 +128,8 @@ bool ReaderHEPEVT::read_event(GenEvent& evt)
 
 void ReaderHEPEVT::close()
 {
-    if (m_file) fclose(m_file);
+    if (m_file)  fclose(m_file); 
+    if (hepevtbuffer) delete hepevtbuffer;
 }
 
 bool ReaderHEPEVT::failed()

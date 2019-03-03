@@ -73,7 +73,7 @@ endif()
 
 foreach ( test ${HepMC_tests} )
   hepmc_test( ${test} )
-  set_tests_properties(${test} PROPERTIES TIMEOUT 10)  #Relevant for testLoops
+  set_tests_properties(${test} PROPERTIES TIMEOUT 20)  #Relevant for testLoops
 endforeach ( test ${HepMC_tests} )
 
 if(Threads_FOUND)
@@ -262,7 +262,7 @@ endif()
 #One should use something else for Windows or use build-in Linux sybsystem
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)
-set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
+set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --error-exitcode=1" )
 endif()
 
 macro(add_memcheck_test binaryname )
@@ -278,13 +278,6 @@ if(MEMORYCHECK_COMMAND)
 foreach ( test ${HepMC_tests} )
   add_memcheck_test( ${test} )
   set_tests_properties(memcheck_${test} PROPERTIES DEPENDS ${test})
-  set_tests_properties(${test} PROPERTIES TIMEOUT 10)  #Relevant for testLoops
 endforeach ( test ${HepMC_tests} )
-if(HEPMC3_ENABLE_ROOTIO)
-foreach ( test ${HepMC_root_tests} )
-  add_memcheck_test( ${test} )
-  set_tests_properties(memcheck_${test} PROPERTIES DEPENDS ${test})
-endforeach ( test ${HepMC_root_tests} )
-endif()
 endif()
 
