@@ -251,11 +251,11 @@ endif()
 #One should use something else for Windows or use build-in Linux sybsystem
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)
-set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --tool=callgrind" )
+set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
 endif()
 
 macro(add_memcheck_test binaryname )
-  set(memcheck_command "${CMAKE_MEMORYCHECK_COMMAND} ${CMAKE_MEMORYCHECK_COMMAND_OPTIONS}")
+  set(memcheck_command "${MEMORYCHECK_COMMAND} ${MEMORYCHECK_COMMAND_OPTIONS}")
   separate_arguments(memcheck_command)
   add_test(memcheck_${binaryname} ${memcheck_command} ./${binaryname} ${ARGN})
   file(GLOB INPUTmemcheck_${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
