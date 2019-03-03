@@ -77,6 +77,8 @@ if(HEPMC3_ENABLE_ROOTIO)
 foreach ( test ${HepMC_root_tests} )
   hepmc_root_test( ${test} )
 endforeach ( test ${HepMC_root_tests} )
+
+target_link_libraries(testIO4 ${ROOT_Hist_LIBRARY})
 endif()
 
 
