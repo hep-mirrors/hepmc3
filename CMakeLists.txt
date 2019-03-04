@@ -166,7 +166,7 @@ add_library(HepMC3 SHARED $<TARGET_OBJECTS:objlibcore>)
 add_library(HepMC3_static STATIC  $<TARGET_OBJECTS:objlibcore>)
 
 set_target_properties(HepMC3 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-
+set_target_properties(HepMC3 PROPERTIES SOVERSION 1)
 if (WIN32)
 set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 elseif()
@@ -179,9 +179,6 @@ install(TARGETS HepMC3 DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 install(TARGETS HepMC3_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
-#add_custom_target(move_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
-#                                   -DCOMPONENTS="devel"
-#                                   -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
 
 install(FILES  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-config  DESTINATION  ${CMAKE_INSTALL_BINDIR} COMPONENT libs   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ  GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
