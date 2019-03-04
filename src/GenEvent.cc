@@ -21,7 +21,7 @@ namespace HepMC3 {
 
 GenEvent::GenEvent(Units::MomentumUnit mu,
            Units::LengthUnit lu)
-  : m_event_number(0), m_weights(std::vector<double>(1, 1.0)),
+  : m_event_number(0), m_weights(std::vector<double>()), //m_weights(std::vector<double>(1, 1.0)),//Prevent from  different number of weights and names
     m_momentum_unit(mu), m_length_unit(lu),
     m_rootvertex(make_shared<GenVertex>()) {}
 
@@ -29,7 +29,7 @@ GenEvent::GenEvent(Units::MomentumUnit mu,
 GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
      Units::MomentumUnit mu,
      Units::LengthUnit lu)
-  : m_event_number(0), m_weights(std::vector<double>(1, 1.0)),
+  : m_event_number(0), m_weights(std::vector<double>()), //m_weights(std::vector<double>(1, 1.0)),//Prevent from  different number of weights and names
     m_momentum_unit(mu), m_length_unit(lu),
     m_rootvertex(make_shared<GenVertex>()),
     m_run_info(run) {
