@@ -14,6 +14,7 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Print.h"
 #include <stdexcept>
+#include <limits>
 using namespace HepMC3;
 int main()
 {
@@ -23,8 +24,8 @@ int main()
     // original functionality
     evt.weights().push_back(2.0);
     evt.weights().push_back(4.56);
-    assert( evt.weights()[0] == 2.0 );
-    assert( evt.weights()[1] == 4.56 );
+    assert( std::abs(evt.weights()[0] - 2.0) < std::numeric_limits<double>::epsilon() );
+    assert( std::abs(evt.weights()[1] - 4.56) < std::numeric_limits<double>::epsilon() );
     assert( evt.weights().size() == 2 );
     assert( !evt.weights().empty() );
 

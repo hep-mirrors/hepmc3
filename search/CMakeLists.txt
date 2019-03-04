@@ -17,7 +17,7 @@ add_library(HepMC3search_static STATIC  $<TARGET_OBJECTS:objlibsearch>)
 
 target_link_libraries(HepMC3search  HepMC3)
 set_target_properties(HepMC3search PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-
+set_target_properties(HepMC3search PROPERTIES SOVERSION 1)
 if (WIN32)
 set_target_properties(HepMC3search_static PROPERTIES OUTPUT_NAME HepMC3search-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 elseif()
@@ -31,6 +31,3 @@ install(TARGETS HepMC3search_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONEN
 
 install(DIRECTORY ${PROJECT_BINARY_DIR}/search/ DESTINATION  ${CMAKE_INSTALL_LIBDIR}  COMPONENT search-libs  FILES_MATCHING PATTERN "CMakeFiles"  EXCLUDE  PATTERN "src"  EXCLUDE PATTERN "include"  EXCLUDE)
 install(DIRECTORY include/HepMC3 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT search-devel)
-#add_custom_target(move_search_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
-#                                   -DCOMPONENTS="search-devel"
-#                                   -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
