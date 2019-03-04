@@ -84,7 +84,7 @@ struct pair_GenVertexPtr_int_greater
         for (unsigned int i=0; i<lx_mom_out.size(); i++) if (lx_mom_out[i]!=rx_mom_out[i]) return  (lx_mom_out[i]<rx_mom_out[i]);
 /* The code above is usefull mainly for debug*/
         
-        return true; /*This  is random. This should never happen*/
+        return (lx.first<lx.first); /*This  is random. This should never happen*/
     }
 };
 
