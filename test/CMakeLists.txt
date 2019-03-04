@@ -42,7 +42,6 @@ endmacro( hepmc_root_test )
 set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
 
 set( HepMC_tests
-        testThreads1
         testMass
         testPrintBug
         testPolarization 
@@ -65,19 +64,31 @@ set( HepMC_root_tests
 
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
 
-
+find_package(Threads)
+if(Threads_FOUND)
+  list( APPEND HepMC_tests "testThreads1" )   
+else()
+  message(STATUS "No threads library found, testThreads1 is disabled")
+endif()
 
 foreach ( test ${HepMC_tests} )
   hepmc_test( ${test} )
-  set_tests_properties(${test} PROPERTIES TIMEOUT 10)  #Relevant for testLoops
+  set_tests_properties(${test} PROPERTIES TIMEOUT 20)  #Relevant for testLoops
 endforeach ( test ${HepMC_tests} )
 
+if(Threads_FOUND)
+if(THREADS_HAVE_PTHREAD_ARG)
+  target_compile_options(testThreads1 PUBLIC "-pthread")
+endif()
+if(CMAKE_THREAD_LIBS_INIT)
+  target_link_libraries(testThreads1  "${CMAKE_THREAD_LIBS_INIT}")
+endif()
+endif()
 
 if(HEPMC3_ENABLE_ROOTIO)
 foreach ( test ${HepMC_root_tests} )
   hepmc_root_test( ${test} )
 endforeach ( test ${HepMC_root_tests} )
-
 target_link_libraries(testIO4 ${ROOT_Hist_LIBRARY})
 endif()
 
@@ -251,7 +262,7 @@ endif()
 #One should use something else for Windows or use build-in Linux sybsystem
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)
-set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full" )
+set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --error-exitcode=1" )
 endif()
 
 macro(add_memcheck_test binaryname )
@@ -268,11 +279,5 @@ foreach ( test ${HepMC_tests} )
   add_memcheck_test( ${test} )
   set_tests_properties(memcheck_${test} PROPERTIES DEPENDS ${test})
 endforeach ( test ${HepMC_tests} )
-if(HEPMC3_ENABLE_ROOTIO)
-foreach ( test ${HepMC_root_tests} )
-  add_memcheck_test( ${test} )
-  set_tests_properties(memcheck_${test} PROPERTIES DEPENDS ${test})
-endforeach ( test ${HepMC_root_tests} )
-endif()
 endif()
 

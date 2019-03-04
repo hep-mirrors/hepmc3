@@ -216,21 +216,21 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
 void WriterAsciiHepMC2::allocate_buffer()
 {
     if ( m_buffer ) return;
-    while( !m_buffer && m_buffer_size >= 256 )
-        {
-            m_buffer = new char[ m_buffer_size ]();
-            if (!m_buffer)
-                {
-                    m_buffer_size /= 2;
-                    WARNING( "WriterAsciiHepMC2::allocate_buffer: buffer size too large. Dividing by 2. New size: " << m_buffer_size )
-                }
+    while( m_buffer==nullptr && m_buffer_size >= 256 ) {
+    try {
+        m_buffer = new char[ m_buffer_size ]();
+    }     catch (const std::bad_alloc& e) {
+          delete[] m_buffer;
+          m_buffer_size /= 2;
+          WARNING( "WriterAsciiHepMC2::allocate_buffer: buffer size too large. Dividing by 2. New size: " << m_buffer_size )
         }
+    }
 
     if ( !m_buffer )
         {
-            ERROR( "WriterAsciiHepMC2::allocate_buffer: could not allocate buffer!" )
-            return;
-        }
+        ERROR( "WriterAsciiHepMC2::allocate_buffer: could not allocate buffer!" )
+        return;
+    }
 
     m_cursor = m_buffer;
 }

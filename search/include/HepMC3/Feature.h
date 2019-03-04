@@ -103,7 +103,7 @@ namespace HepMC3{
     /// @return Filter function
     virtual Filter operator != (Feature_type value) const {
       EvaluatorPtr functor = m_internal;
-      return [value, functor](ConstGenParticlePtr input)->bool{return (*functor)(input) == value;};
+      return [value, functor](ConstGenParticlePtr input)->bool{return (*functor)(input) != value;};
     }
     
   protected:
