@@ -24,6 +24,9 @@ ubuntu18:
     - export LCGPLATFORM=x86_64-ubuntu1804-gcc8-opt
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/ROOT-env.sh
     - export ROOTSYS=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/
+    - export CXX=/usr/bin/g++-8
+    - export CC=/usr/bin/gcc-8
+    - export FC=/usr/bin/gfortran-8
   script:
     - mkdir build
     - cd build
