@@ -10,6 +10,7 @@ cc7:
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/ROOT-env.sh 
     - export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/3.13.4/Linux-x86_64/bin/:${PATH}
     - export ROOTSYS=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/
+    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
   script:    
     - mkdir build
     - cd build
@@ -32,6 +33,7 @@ ubuntu18:
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
+    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
   script:
     - mkdir build
     - cd build
