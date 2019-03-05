@@ -154,6 +154,21 @@ public:
     /** @brief Store attributes global to the run being written/read. */
     std::map< std::string, shared_ptr<Attribute> > m_global_attributes;
 
+    /** @brief Store particles before connecting and sending to GenEvent. */
+    std::vector<GenParticlePtr> m_particles;
+
+    /** @brief Store particle production vertices before connecting and
+        sending to GenEvent. */
+    std::vector<int> m_ppvx;
+
+    /** @brief Store verices before connecting and sending to
+        GenEvent. */
+    std::map<int,GenVertexPtr> m_vertices;
+
+    /** @brief Store incoming particles to verices before connecting
+        and sending to GenEvent. */
+    std::map< int,vector<int> > m_vpin;
+
 };
 
 

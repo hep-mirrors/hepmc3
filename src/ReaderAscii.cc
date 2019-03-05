@@ -53,7 +53,13 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     bool               is_parsing_successful  = true;
     pair<int,int> vertices_and_particles(0,0);
 
+    // Clear stuff before reading new event.
     evt.clear();
+    m_particles.clear();
+    m_ppvx.clear();
+    m_vertices.clear();
+    m_vpin.clear();
+
     evt.set_run_info(run_info());
 
     //
@@ -127,6 +133,21 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         if( parsed_event_header && peek=='E' ) break;
     }
 
+    // Now we have all particles and vertices and need to connect them together-
+    // First set the production vertex for all particles.
+    for ( int ip = 0, Np = m_particles.size(); ip < Np; ++ip )
+      if ( m_ppvx[ip] && m_vertices[m_ppvx[ip]] )
+        m_vertices[m_ppvx[ip]]->add_particle_out(m_particles[ip]);
+    // note: if no production vertex the particle will be added to the root vertex later.
+
+    // Then add the incoming particles to all vertices
+    for ( auto iv : m_vertices )
+      for ( auto ip : m_vpin[iv.first] ) iv.second->add_particle_in(m_particles[ip - 1]);
+
+    // Finally, when all particles and vertices are connected we add
+    // all of them to the event.
+    for ( auto p : m_particles ) evt.add_particle(p);
+    for ( auto v : m_vertices ) evt.add_vertex(v.second);
 
     // Check if all particles and vertices were parsed
     if ((int)evt.particles().size() > vertices_and_particles.second ) {
@@ -256,7 +277,6 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     const char   *cursor          = buf;
     const char   *cursor2         = nullptr;
     int           id              = 0;
-    int           highest_id      = evt.particles().size();
 
     // id
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
@@ -268,29 +288,11 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
 
     // skip to the list of particles
     if( !(cursor = strchr(cursor+1,'[')) ) return false;
-
+    vector<int> incoming;
     while(true) {
         ++cursor;             // skip the '[' or ',' character
         cursor2     = cursor; // save cursor position
-        int  particle_in = atoi(cursor);
-
-        // add incoming particle to the vertex
-        if( particle_in > 0 && particle_in <= highest_id) {
-            data->add_particle_in( evt.particles()[particle_in-1] );
-        }
-        else {
-            shared_ptr<IntAttribute> existing_hc=evt.attribute<IntAttribute>("cycles");            
-            if (existing_hc)
-            {
-            if (existing_hc->value()!=0&&particle_in > 0 )
-            {
-             WARNING( "ReaderAscii: event has cycles, this vertex might be repeated." )
-            //if( particle_in > 0 ) data->add_particle_in( evt.particles()[particle_in-1] );
-            }
-            }
-            else
-            return false;
-        }
+        incoming.push_back(atoi(cursor));
 
         // check for next particle or end of particle list
         if( !(cursor = strchr(cursor+1,',')) ) {
@@ -323,7 +325,9 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
 
     DEBUG( 10, "ReaderAscii: V: "<<id<<" with "<<data->particles_in().size()<<" particles)" )
 
-    evt.add_vertex(data);
+      // note: use positive id for vertices here.
+    m_vertices[-id] = data;
+    m_vpin[-id] = incoming;
 
     return true;
 }
@@ -338,7 +342,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     // verify id
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
 
-    if( atoi(cursor) != (int)evt.particles().size() + 1 ) {
+    if( atoi(cursor) != m_particles.size() + 1 ) {
         /// @todo Should be an exception
         ERROR( "ReaderAscii: particle ID mismatch" )
         return false;
@@ -348,24 +352,6 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     mother_id = atoi(cursor);
 
-    // add particle to corresponding vertex
-    if( mother_id > 0 && mother_id <= (int)evt.particles().size() ) {
-
-        GenParticlePtr mother = evt.particles()[ mother_id-1 ];
-        GenVertexPtr   vertex = mother->end_vertex();
-
-        // create new vertex if needed
-        if( !vertex ) {
-            vertex = make_shared<GenVertex>();
-            vertex->add_particle_in(mother);
-        }
-
-        vertex->add_particle_out(data);
-        evt.add_vertex(vertex);
-    }
-    else if( mother_id < 0 && -mother_id <= (int)evt.vertices().size() ) {
-        evt.vertices()[ (-mother_id)-1 ]->add_particle_out(data);
-    }
 
     // pdg id
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
@@ -396,7 +382,9 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     data->set_status( atoi(cursor) );
 
-    evt.add_particle(data);
+    m_particles.push_back(data);
+    // note: use positive id for vertices here.
+    m_ppvx.push_back(-mother_id);
 
     DEBUG( 10, "ReaderAscii: P: "<<data->id()<<" ( mother: "<<mother_id<<", pid: "<<data->pid()<<")" )
 
