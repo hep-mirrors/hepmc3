@@ -1,4 +1,3 @@
-
 macro( hepmc_test testname )
   message( STATUS "building ${testname} for ${testname}" )
   find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
@@ -10,7 +9,7 @@ macro( hepmc_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${CMAKE_CURRENT_BINARY_DIR}/${testname} )
-  file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
+  file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endmacro( hepmc_test )
 
