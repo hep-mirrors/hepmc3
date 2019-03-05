@@ -29,6 +29,9 @@ ubuntu18:
     - export FC=/usr/bin/gfortran-8
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/lib:${LD_LIBRARY_PATH}
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
+    - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
+    - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
+    - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
   script:
     - mkdir build
     - cd build
