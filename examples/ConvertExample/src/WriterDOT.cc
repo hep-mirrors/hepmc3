@@ -79,7 +79,7 @@ void WriterDOT::write_event(const GenEvent &evt)
             }
         }
     }
-    m_cursor += sprintf(m_cursor, "labelloc=\"t\";\nlabel=\"Event %d; Particles %lu; Vertices %lu;\";\n", evt.event_number(), evt.vertices().size(), evt.particles().size());
+    m_cursor += sprintf(m_cursor, "labelloc=\"t\";\nlabel=\"Event %d; Vertices %lu; Particles %lu;\";\n", evt.event_number(), evt.vertices().size(), evt.particles().size());
     m_cursor += sprintf(m_cursor,"}\n\n");
     forced_flush();
 }
