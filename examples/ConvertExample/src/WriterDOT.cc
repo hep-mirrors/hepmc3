@@ -75,8 +75,7 @@ void WriterDOT::write_event(const GenEvent &evt)
                 {
                     if (m_style==1) //paint suspected partons and 81/82 in red
                     {
-
-                        if (is_parton(std::abs(p->pid()))) m_cursor += sprintf(m_cursor, "edge [color=\"red\"];\n");
+                        if (is_parton(std::abs(p->pid()))&&p->status()!=1) m_cursor += sprintf(m_cursor, "edge [color=\"red\"];\n");
                         else        m_cursor +=sprintf(m_cursor, "edge [color=\"black\"];\n");
                     }
                 }
