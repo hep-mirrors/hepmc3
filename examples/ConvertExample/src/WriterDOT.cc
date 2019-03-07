@@ -29,7 +29,19 @@ void WriterDOT::close() {
     forced_flush();
     if (ofs) ofs->close();
 }
+bool is_parton(const int& pd )
+{
+    bool parton=false;
 
+    if (pd==81||pd==82||pd<25) parton=true;
+    if (
+        (pd/1000==1||pd/1000==2||pd/1000==3||pd/1000==4||pd/1000==5)
+        &&(pd%1000/100==1||pd%1000/100==2||pd%1000/100==3||pd%1000/100==4)
+        &&(pd%100==1||pd%100==3)
+    )
+        parton=true;
+    return parton;
+}
 void WriterDOT::write_event(const GenEvent &evt)
 {
     allocate_buffer();
@@ -46,34 +58,36 @@ void WriterDOT::write_event(const GenEvent &evt)
                 else  m_cursor += sprintf(m_cursor, "node [color=\"black\"];\n");
             }
         }
+        m_cursor += sprintf(m_cursor, "node [shape=ellipse];\n");
         m_cursor += sprintf(m_cursor, "v%d[label=\"%d\"];\n", -v->id(),v->id());
         flush();
     }
     for(auto p: evt.beams() ) {
         if (!p->end_vertex()) continue;
+        m_cursor += sprintf(m_cursor, "node [shape=point];\n");
         m_cursor += sprintf(m_cursor, "v0 -> v%d [label=\"%d(%d)\"];\n", -p->end_vertex()->id(),p->id(),p->pid());
     }
 
     for(auto v: evt.vertices() ) {
         for(auto p: v->particles_out() ) {
             {
-                if (!p->end_vertex()) continue;
                 if (m_style!=0)
                 {
                     if (m_style==1) //paint suspected partons and 81/82 in red
                     {
-                        bool parton=false;
-                        if (p->pid()==81||p->pid()==82||std::abs(p->pid())<25) parton=true;
-                        if (
-                            (p->pid()/1000==1||p->pid()/1000==2||p->pid()/1000==3||p->pid()/1000==4||p->pid()/1000==5)
-                            &&(p->pid()%1000/100==1||p->pid()%1000/100==2||p->pid()%1000/100==3||p->pid()%1000/100==4)
-                            &&(p->pid()%100==1||p->pid()%100==3)
-                        )
-                            parton=true;
-                        if (parton) m_cursor += sprintf(m_cursor, "edge [color=\"red\"];\n");
+
+                        if (is_parton(std::abs(p->pid()))) m_cursor += sprintf(m_cursor, "edge [color=\"red\"];\n");
                         else        m_cursor +=sprintf(m_cursor, "edge [color=\"black\"];\n");
                     }
                 }
+                if (!p->end_vertex())
+                {
+                    m_cursor += sprintf(m_cursor, "node [shape=point];\n");
+                    m_cursor += sprintf(m_cursor, "v%d -> o%d [label=\"%d(%d)\"];\n", -v->id(),p->id(),p->id(),p->pid());
+                    flush();
+                    continue;
+                }
+                m_cursor += sprintf(m_cursor, "node [shape=ellipse];\n");
                 m_cursor += sprintf(m_cursor, "v%d -> v%d [label=\"%d(%d)\"];\n", -v->id(),-p->end_vertex()->id(),p->id(),p->pid());
                 flush();
             }
