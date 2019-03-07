@@ -1,4 +1,3 @@
-
 macro( hepmc_test testname )
   message( STATUS "building ${testname} for ${testname}" )
   find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
