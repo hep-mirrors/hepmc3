@@ -48,7 +48,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
     char               peek;
-    char               buf[512*512];
+    const size_t       max_buffer_size=512*512;
+    char               buf[max_buffer_size];
     bool               parsed_event_header    = false;
     bool               is_parsing_successful  = true;
     pair<int,int> vertices_and_particles(0,0);
@@ -61,7 +62,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     //
     while(!failed()) {
 
-        m_isstream ? m_stream->getline(buf,512*512) : m_file.getline(buf,512*512);
+        m_isstream ? m_stream->getline(buf,max_buffer_size) : m_file.getline(buf,max_buffer_size);
 
         if( strlen(buf) == 0 ) continue;
 
