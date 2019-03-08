@@ -35,10 +35,14 @@
 #ifdef HEPMCCONVERT_EXTENSION_HEPEVTZEUS
 #include "WriterHEPEVTZEUS.h"
 #endif
+#ifdef HEPMCCONVERT_EXTENSION_DOT
+#include "WriterDOT.h"
+#endif
+
 
 #include "cmdline.h"
 using namespace HepMC3;
-enum formats {hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump};
+enum formats {hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot};
 int main(int argc, char** argv)
 {
     gengetopt_args_info ai;
@@ -60,6 +64,7 @@ int main(int argc, char** argv)
     format_map.insert(std::pair<std::string,formats> ( "hpezeus", hpezeus ));
     format_map.insert(std::pair<std::string,formats> ( "lhef", lhef ));
     format_map.insert(std::pair<std::string,formats> ( "dump", dump ));
+    format_map.insert(std::pair<std::string,formats> ( "dot", dot ));
     std::map<std::string, std::string> options;
     for (size_t i=0; i<ai.extensions_given; i++)
     {
@@ -156,6 +161,16 @@ int main(int argc, char** argv)
 #else
         printf("Output format %s  is not supported\n",ai.output_format_arg);
         exit(2);
+#endif
+    case dot:
+#ifdef HEPMCCONVERT_EXTENSION_DOT 
+       output_file=new WriterDOT(ai.inputs[1]);
+       if (options.find("Style")!=options.end()) ((WriterDOT*)(output_file))->set_style(std::atoi(options.at("Style").c_str()));
+       break;
+#else
+        printf("Output format %s  is not supported\n",ai.output_format_arg);
+        exit(2);
+        break;
 #endif
     case dump:
         output_file=NULL;
