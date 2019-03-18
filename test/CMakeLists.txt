@@ -9,7 +9,7 @@ macro( hepmc_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${CMAKE_CURRENT_BINARY_DIR}/${testname} )
-  file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input*" )
+  file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endmacro( hepmc_test )
 
@@ -54,6 +54,7 @@ set( HepMC_tests
         testDelete
         testIO1
         testIO3
+        testIO6
         testReaderFactory1
          )
 
