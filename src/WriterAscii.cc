@@ -137,32 +137,30 @@ void WriterAscii::write_event(const GenEvent &evt) {
         }
     }
 
-    int vertices_processed = 0;
-    int lowest_vertex_id   = 0;
 
     // Print particles
+    std::map<ConstGenVertexPtr,bool>  alreadywritten;
     for(ConstGenParticlePtr p: evt.particles() ) {
 
         // Check to see if we need to write a vertex first
         ConstGenVertexPtr v = p->production_vertex();
-        int production_vertex = 0;
+        int parent_object = 0;
 
         if (v) {
-
             // Check if we need this vertex at all
-            if ( v->particles_in().size() > 1 || !v->data().is_zero() ) production_vertex = v->id();
-            else if ( v->particles_in().size() == 1 )                   production_vertex = v->particles_in()[0]->id();
-
-            if (production_vertex < lowest_vertex_id) {
-                write_vertex(v);
-            }
-
-            ++vertices_processed;
-            lowest_vertex_id = v->id();
+            //Yes, use vertex as parent object
+            if ( v->particles_in().size() > 1 || !v->data().is_zero() ) parent_object = v->id();
+            //No, use particle as parent object
+            //TODO: add check for attributes of this vertex
+            else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in()[0]->id();
+            //Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
+            if (alreadywritten.find(v)==alreadywritten.end()&&parent_object<0)
+             { write_vertex(v); alreadywritten[v]=true;}
         }
 
-        write_particle( p, production_vertex );
+        write_particle( p, parent_object );
     }
+    alreadywritten.clear();
 
     // Flush rest of the buffer to file
     forced_flush();
@@ -208,14 +206,17 @@ void WriterAscii::write_vertex(ConstGenVertexPtr v) {
     flush();
 
     bool printed_first = false;
-
-    for(ConstGenParticlePtr p: v->particles_in() ) {
+    std::vector<int> pids;
+    for(ConstGenParticlePtr p: v->particles_in() ) pids.push_back(p->id());
+//We order pids to be able to compare ascii files
+    std::sort(pids.begin(),pids.end());
+    for(auto pid: pids ) {
 
         if ( !printed_first ) {
-            m_cursor  += sprintf(m_cursor,"%i", p->id());
+            m_cursor  += sprintf(m_cursor,"%i", pid);
             printed_first = true;
         }
-        else m_cursor += sprintf(m_cursor,",%i",p->id());
+        else m_cursor += sprintf(m_cursor,",%i",pid);
 
         flush();
     }

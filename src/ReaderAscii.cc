@@ -56,7 +56,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
     evt.clear();
     evt.set_run_info(run_info());
-
+    m_forward_daughters.clear();
+    m_forward_mothers.clear();
     //
     // Parse event, vertex and particle information
     //
@@ -162,6 +163,26 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         return false;
     }
+     for ( auto p : m_forward_daughters ) 
+     for (auto v: evt.vertices()) 
+     if (p.second==v->id()) 
+     v->add_particle_out(p.first);
+     for ( auto v : m_forward_mothers )  for ( auto idpm : v.second )  v.first->add_particle_in(evt.particles()[idpm-1]);
+
+    /* restore ids of vertices using a bank of available ids*/
+    std::vector<int> all_ids;
+    std::vector<int> filled_ids;
+    std::vector<int> diff;
+    for (auto v: evt.vertices()) if (v->id()!=0) filled_ids.push_back(v->id());
+    for (int i=-evt.vertices().size();i<0;i++) all_ids.push_back(i);
+    std::sort(all_ids.begin(),all_ids.end());
+    std::sort(filled_ids.begin(),filled_ids.end());
+    //The bank of available ids is created as a difference between all range of ids and the set of used ids
+    std::set_difference(all_ids.begin(), all_ids.end(), filled_ids.begin(), filled_ids.end(), std::inserter(diff, diff.begin()));
+    auto it= diff.rbegin();                    
+    //Set available ids to vertices sequentially.
+    for (auto v: evt.vertices()) if (v->id()==0) { v->set_id(*it); it++;}
+
     return true;
 }
 
@@ -276,21 +297,12 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
         int  particle_in = atoi(cursor);
 
         // add incoming particle to the vertex
-        if( particle_in > 0 && particle_in <= highest_id) {
+        if( particle_in > 0) {
+//Particles are always ordered, so id==position in event.
+            if (particle_in <= highest_id) 
             data->add_particle_in( evt.particles()[particle_in-1] );
-        }
-        else {
-            shared_ptr<IntAttribute> existing_hc=evt.attribute<IntAttribute>("cycles");            
-            if (existing_hc)
-            {
-            if (existing_hc->value()!=0&&particle_in > 0 )
-            {
-             WARNING( "ReaderAscii: event has cycles, this vertex might be repeated." )
-            //if( particle_in > 0 ) data->add_particle_in( evt.particles()[particle_in-1] );
-            }
-            }
-            else
-            return false;
+//If the particle has not been red yet, we store its id to add the particle later.
+            else m_forward_mothers[data].insert(particle_in);
         }
 
         // check for next particle or end of particle list
@@ -325,6 +337,8 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     DEBUG( 10, "ReaderAscii: V: "<<id<<" with "<<data->particles_in().size()<<" particles)" )
 
     evt.add_vertex(data);
+//Restore vertex id, as it is used to build connections inside event.
+    data->set_id(id);
 
     return true;
 }
@@ -349,7 +363,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     mother_id = atoi(cursor);
 
-    // add particle to corresponding vertex
+    // Parent object is a particle. Particleas are always ordered id==position in event.
     if( mother_id > 0 && mother_id <= (int)evt.particles().size() ) {
 
         GenParticlePtr mother = evt.particles()[ mother_id-1 ];
@@ -363,9 +377,22 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 
         vertex->add_particle_out(data);
         evt.add_vertex(vertex);
+//ID of this vertex is not explicitely set in the input. We set it to zero to prevent overlap with other ids. It will be restored later.
+        vertex->set_id(0);
     }
-    else if( mother_id < 0 && -mother_id <= (int)evt.vertices().size() ) {
-        evt.vertices()[ (-mother_id)-1 ]->add_particle_out(data);
+    // Parent object is vertex
+    else if( mother_id < 0 )
+   {
+     //Vertices are not always ordered, e.g. when one reads HepMC2 event, so we check their ids.
+      bool found=false;
+      for (auto v: evt.vertices()) if (v->id()==mother_id) {v->add_particle_out(data); found=true; break; }
+      if (!found)
+      {
+//This should happen  in case of unordered event.
+//      WARNING("ReaderAscii: Unordered event, id of mother vertex  is out of range of known ids:   " <<mother_id<<" evt.vertices().size()="<<evt.vertices().size() ) 
+//Save the mother id to reconnect later.
+      m_forward_daughters[data]=mother_id;
+      }
     }
 
     // pdg id

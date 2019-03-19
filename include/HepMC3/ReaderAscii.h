@@ -16,6 +16,7 @@
 ///
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
+#include <set>
 #include <string>
 #include <fstream>
 #include <istream>
@@ -153,6 +154,11 @@ public:
 
     /** @brief Store attributes global to the run being written/read. */
     std::map< std::string, shared_ptr<Attribute> > m_global_attributes;
+
+    /** @brief Temp storage for  outgoing particle ids */
+    std::map<GenVertexPtr, std::set<int> >  m_forward_mothers;
+    /** @brief Temp storage for  prod vertex ids */
+    std::map<GenParticlePtr, int >  m_forward_daughters;
 
 };
 

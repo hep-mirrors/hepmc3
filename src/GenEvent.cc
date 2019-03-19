@@ -288,8 +288,10 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
     }
     if (has_cycles) {    
     add_attribute("cycles", std::make_shared<IntAttribute>(1));
+   /* Commented out  as improvemnts allow us to do sorting in other way.
     for( std::map<GenVertexPtr,int>::iterator vi=sortingv.begin();vi!=sortingv.end();++vi) if( !vi->first->in_event() ) add_vertex(vi->first);
     return;
+    */
     }
     
     deque<GenVertexPtr> sorting;
@@ -322,7 +324,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
         // Add all mothers to the front of the list
         for( auto p: v->particles_in() ) {
             GenVertexPtr v2 = p->production_vertex();
-            if( v2 && !v2->in_event() ) {
+            if( v2 && !v2->in_event() && find(sorting.begin(),sorting.end(),v2)==sorting.end()){
                 sorting.push_front(v2);
                 added = true;
             }
@@ -340,7 +342,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
             // Add all end vertices to the end of the list
             for(auto p: v->particles_out() ) {
                 GenVertexPtr v2 = p->end_vertex();
-                if( v2 && !v2->in_event() ) {
+                if( v2 && !v2->in_event()&& find(sorting.begin(),sorting.end(),v2)==sorting.end() ) {
                     sorting.push_back(v2);
                 }
             }
