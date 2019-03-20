@@ -2,15 +2,10 @@
 #include <TBuffer.h>
 #include <TGButton.h>
 #include <TGFrame.h>
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/Reader.h"
 #include "TImage.h"
 #include "TCanvas.h"
 #include "TGCanvas.h"
 #include "TRootEmbeddedCanvas.h"
-#include <vector>
 #include <TGClient.h>
 #include <TCanvas.h>
 #include <TBuffer.h>
@@ -20,25 +15,37 @@
 #include "TImage.h"
 #include "TH1S.h"
 #include "TGFileDialog.h"
+
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/Reader.h"
 class HepMC3ViewerFrame : public TGMainFrame
 {
 private:
-    TGCompositeFrame *fCframe;
-    TGCompositeFrame *fCframe2,*fCframe1;
-    TGTextButton     *fStart, *fPause, *fExit, *fChoose,*fClearCache;
-    TRootEmbeddedCanvas*  fCanvas,*  fCanvas1;
+    TGCompositeFrame *fMainFrame;
+    TGCompositeFrame *fButtonFrame;
+    TGTextButton     *fNextEvent, *fPreviousEvent, *fExit, *fChooseInput,*fClearEventCache;
+    TRootEmbeddedCanvas *fEmbEventImageCanvas, *fEmbAnalysisCanvas;
+    //Reader
+    std::shared_ptr<HepMC3::Reader> fReader;
+    //Pointer to current event in cache
+    HepMC3::GenEvent *fCurrentEvent;
+    //Event cache
+    std::vector<HepMC3::GenEvent*> fEventsCache;
+    TCanvas* fEventImageCanvas, *fAnalysisCanvas;
+    //Image passed from graphviz
+    TImage *fGraphImage;
+    std::map<std::string, TH1*> fAnalysisH;
+    static const size_t m_char_buffer_size=100000;
 public:
-    std::shared_ptr<HepMC3::Reader> R;
-    HepMC3::GenEvent *evt;
-    std::vector<HepMC3::GenEvent*> events;
-    TCanvas* C, *C1;
-    TImage *im2;
-    void read_file(const char* a);
+    void ReadFile(const char* a);
     HepMC3ViewerFrame(const TGWindow *p, UInt_t w, UInt_t h);
     virtual ~HepMC3ViewerFrame();
-    // slots
+//Helper functions
+//To get image from graphviz
     void DrawEvent();
+//To do extra analysiz of the event
     void DoAnalysis();
+    // slots
     void NextEvent();
     void PreviousEvent();
     void ClearEventCache();

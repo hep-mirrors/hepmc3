@@ -15,6 +15,6 @@ int main(int argc, char **argv)
         return 1;
     }
     HepMC3ViewerFrame *G=new HepMC3ViewerFrame(gClient->GetRoot(), 350, 80);
-    if (theApp.Argc()>1) G->read_file(theApp.Argv()[1]);
+    if (theApp.Argc()>1) G->ReadFile(theApp.Argv()[1]);
     theApp.Run();
 }
