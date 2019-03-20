@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/bin/bash
 #Adopted from
 #https://yoda.hepforge.org/trac/browser/bin/yoda-config.in
 #Docs from https://cmake.org/cmake/help/v3.2/command/configure_file.html
