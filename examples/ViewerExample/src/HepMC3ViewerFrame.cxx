@@ -2,8 +2,6 @@
 #include "HepMC3/ReaderFactory.h"
 #include "HepMC3ViewerFrame.h"
 
-
-#include <graphviz/cgraph.h>
 #include <gvc.h>
 
 #include "HepMC3/GenEvent.h"

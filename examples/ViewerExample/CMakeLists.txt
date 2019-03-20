@@ -1,5 +1,6 @@
 set(CMAKE_MODULE_PATH    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules    ${CMAKE_MODULE_PATH})
 find_package(Graphviz)
+if(GRAPHVIZ_FOUND)
 find_package(ROOT REQUIRED COMPONENTS Core RIO Tree Gui Graf Hist Gpad )
 include_directories(${PROJECT_SOURCE_DIR}/rootIO/include ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}  ${ROOT_INCLUDE_DIRS} ${GRAPHVIZ_INCLUDE_DIRS} ./)
 
@@ -17,7 +18,10 @@ install(TARGETS ${VIEWER_EXE} DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY ${PROJECT_BINARY_DIR}/examples/ViewerExample/ DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" EXCLUDE )
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*env.sh")
-
+elseif()
+  message(STATUS "Examples: Graphviz package not found. ")
+  message(STATUS "ViewExample disabled")
+endif()
 
 
 #  GRAPHVIZ_INCLUDE_DIRS - Graphviz include directories
