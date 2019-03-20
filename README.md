@@ -62,6 +62,20 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
 7. Build and install HepMC3
   ```
   make -jN install
-  ```
-  
 
+  ```
+where N denotes a number of desired parallel jobs.
+
+
+# HepMC3 is shipped with multiple examples. These can be compiled during installation as descibed above  
+or after the installation (for HepMC3>3.1.0). 
+To compile the examples after the installation  copy the installed derectory with examples to desired directory 
+and run cmake, e.g. 
+
+```
+mkdir -p myexamples
+cd myexamples
+cp -r /usr/share/doc/HepMC3-3.1.0/examples
+cd examples
+cmake -DUSE_INSTALLED_HEPMC3=ON CMakeLists.txt
+```

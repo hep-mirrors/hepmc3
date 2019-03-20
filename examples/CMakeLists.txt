@@ -3,6 +3,51 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 include_directories(${PROJECT_SOURCE_DIR}/include )
 
+
+#This is needed for standalone compilation
+if (USE_INSTALLED_HEPMC3)
+find_package(HepMC3 REQUIRED)
+include_directories(${HEPMC3_INCLUDE_DIR})
+if (HEPMC3_ROOTIO_LIBRARY)
+  set (ROOT_FIND_COMPONENTS Core RIO Tree)
+  list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
+  list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
+  find_package(ROOT REQUIRED COMPONENTS Core RIO Tree)
+  message(STATUS "ROOT_USE_FILE ${ROOT_USE_FILE}")
+  include(${ROOT_USE_FILE})
+
+  message(STATUS "ROOT includes: ${ROOT_INCLUDE_DIRS}")
+  message(STATUS "ROOT libraries: ${ROOT_LIBRARIES}")
+  message(STATUS "ROOT_FOUND: ${ROOT_FOUND}")
+
+  if(ROOT_FOUND)
+    include_directories(${ROOT_INCLUDE_DIRS})
+    add_definitions(-DHEPMC3_ROOTIO)
+    set(HEPMC3_ROOTIO_LIBRARY ${HEPMC3_ROOTIO_LIB} )
+  endif()
+endif()
+
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("/Zc:__cplusplus" COMPILER_SUPPORTS_ZCPLUSPLUS)
+if(COMPILER_SUPPORTS_ZCPLUSPLUS)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:__cplusplus")
+endif()
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+if(COMPILER_SUPPORTS_CXX11)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+else()
+CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+if(COMPILER_SUPPORTS_CXX0X)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+endif()
+endif()
+endif()
+#<-This is needed for standalone compilation 
+
+
+
+
+
 include(CheckLanguage)
 check_language(Fortran)
 if (CMAKE_Fortran_COMPILER)

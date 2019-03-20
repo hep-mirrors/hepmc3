@@ -1,5 +1,5 @@
-
 if (USE_INSTALLED_HEPMC3)
+set(CMAKE_MODULE_PATH    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules    ${CMAKE_MODULE_PATH})
 include_directories(${PROJECT_SOURCE_DIR}/include ${HEPMC3_PREFIX_DIR}/share/HepMC3/interfaces/pythia8/include ${PYTHIA8_INCLUDE_DIR})
 add_executable(pythia8_example.exe ${CMAKE_CURRENT_SOURCE_DIR}/pythia8_example.cc ${HEPMC3_PREFIX_DIR}/share/HepMC3/interfaces/pythia8/src/Pythia8ToHepMC3.cc)
 else()
@@ -26,4 +26,4 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pythia8_example_env.sh.in
 install(TARGETS pythia8_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES pythia8_ee_to_Z_to_tautau.conf DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
-        FILES_MATCHING PATTERN "*env.sh")
+        FILES_MATCHING PATTERN "*env.sh*")
