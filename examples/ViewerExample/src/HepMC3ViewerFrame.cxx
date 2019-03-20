@@ -1,11 +1,9 @@
-#include <stdlib.h>
 #include "HepMC3/ReaderRootTree.h"
 #include "HepMC3/ReaderFactory.h"
 #include "HepMC3ViewerFrame.h"
 
 
 #include <graphviz/cgraph.h>
-#include <graphviz/types.h>
 #include <gvc.h>
 
 #include "HepMC3/GenEvent.h"
@@ -147,7 +145,7 @@ void HepMC3ViewerFrame::DrawEvent()
 
     fEventImageCanvas->cd();
     fEventImageCanvas->Clear();
-    float d=0.60;
+    double d=0.60;
 
     fGraphImage = TImage::Create();
     fGraphImage->SetName("Event");
