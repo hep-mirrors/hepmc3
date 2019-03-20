@@ -2,13 +2,35 @@
 #include "HepMC3/ReaderFactory.h"
 #include "HepMC3ViewerFrame.h"
 
-#include <gvc.h>
+
 
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 
+#include <graphviz/gvc.h>
 #define CONSERVATION_TOLERANCE 1e-5
+
+static  char*  create_image_from_dot(char* m_buffer)
+{
+    GVC_t * gvc=gvContext();
+    Agraph_t *g= agmemread(m_buffer);
+    gvLayout(gvc,g,"dot");
+
+    int err;
+    char *data;
+    unsigned int length;
+
+    if (!g)
+        return NULL;
+    err = gvRenderData(gvc, g, "png", &data, &length);
+    if (err)
+        return NULL;
+    data = (char*)realloc(data, length + 1);
+    delete g;
+    delete gvc;
+    return data;
+}
 
 static bool show_as_parton(HepMC3::ConstGenParticlePtr p )
 {
@@ -111,26 +133,7 @@ static char*  write_event_to_dot(char* m_cursor,const HepMC3::GenEvent &evt)
     return m_cursor;
 }
 
-static  char*  create_image_from_dot(char* m_buffer)
-{
-    GVC_t * gvc=gvContext();
-    Agraph_t *g= agmemread(m_buffer);
-    gvLayout(gvc,g,"dot");
 
-    int err;
-    char *data;
-    unsigned int length;
-
-    if (!g)
-        return NULL;
-    err = gvRenderData(gvc, g, "png", &data, &length);
-    if (err)
-        return NULL;
-    data = (char*)realloc(data, length + 1);
-    delete g;
-    delete gvc;
-    return data;
-}
 void HepMC3ViewerFrame::DrawEvent()
 {
     char* m_buffer = new char[m_char_buffer_size]();
@@ -227,7 +230,7 @@ void HepMC3ViewerFrame::PreviousEvent()
     if (pos==fEventsCache.begin()) return;
     pos--;
     fCurrentEvent=*(pos);
-    if (pos==fEventsCache.end()) printf("This event was not foundin the cache.  Cache size is %i\n",fEventsCache.size());
+    if (pos==fEventsCache.end()) printf("This event was not found in the cache.  Cache size is %zu\n",fEventsCache.size());
     DrawEvent();
 }
 
