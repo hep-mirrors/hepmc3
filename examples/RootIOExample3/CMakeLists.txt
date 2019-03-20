@@ -15,7 +15,7 @@ set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}:${ROOT_LIBRARY_DIR}")
  
 configure_file(
-${CMAKE_SOURCE_DIR}/examples/RootIOExample3/rootIOTree_example_env.sh.in
+${CMAKE_CURRENT_SOURCE_DIR}/rootIOTree_example_env.sh.in
 	    ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/rootIOTree_example_env.sh
      	     @ONLY
       	     )

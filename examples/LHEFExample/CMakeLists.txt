@@ -11,7 +11,7 @@ set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
  
 configure_file(
-${CMAKE_SOURCE_DIR}/examples/LHEFExample/LHEF_example_env.sh.in
+${CMAKE_CURRENT_SOURCE_DIR}/LHEF_example_env.sh.in
 	    ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/LHEF_example_env.sh
      	     @ONLY
       	     )

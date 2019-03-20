@@ -44,14 +44,14 @@ set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 endif()
  
 configure_file(
-${CMAKE_SOURCE_DIR}/examples/ConvertExample/convert_example_env.sh.in
+        ${CMAKE_CURRENT_SOURCE_DIR}/convert_example_env.sh.in
 	    ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/convert_example_env.sh
      	     @ONLY
       	     )
 
 # installs 
 install(TARGETS convert_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(DIRECTORY ${PROJECT_BINARY_DIR}/examples/ConvertExample/ DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" EXCLUDE )
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" EXCLUDE )
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*env.sh")
 
