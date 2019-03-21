@@ -48,7 +48,9 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
     char               peek;
-    char          buf[512];
+    const size_t  max_buffer_size=512*512;
+    const size_t  max_weights_size=256;
+    char          buf[max_buffer_size];
     bool          parsed_event_header            = false;
     bool          is_parsing_successful          = true;
     int           parsing_result                 = 0;
@@ -70,7 +72,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Parse event, vertex and particle information
     //
     while(!failed()) {
-        m_isstream ? m_stream->getline(buf,512) : m_file.getline(buf,512);
+        m_isstream ? m_stream->getline(buf,max_buffer_size) : m_file.getline(buf,max_buffer_size);
         if( strlen(buf) == 0 ) continue;
         // Check for IO_GenEvent header/footer
         if( strncmp(buf,"HepMC",5) == 0 ) {
@@ -232,7 +234,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
      for(unsigned int i=0; i<m_vertex_cache.size(); ++i) 
      if(m_vertex_cache_ghost[i]->attribute_names().size()) 
      {
-     for (int ii=0;ii<100;ii++) 
+     for (size_t ii=0;ii<max_weights_size;ii++) 
      {
      shared_ptr<DoubleAttribute> rs=m_vertex_cache_ghost[i]->attribute<DoubleAttribute>("weight"+to_string((long long unsigned int)ii));
      if (!rs) break;

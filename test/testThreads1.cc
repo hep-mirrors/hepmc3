@@ -37,7 +37,7 @@ int main()
     for (int i=0; i<NinputCopies; i++)thr_evts[i]=evts;
 
     for (int i=0; i<NinputCopies; i++)
-        for (int e=0; e<evts.size(); e++)
+        for (size_t e=0; e<evts.size(); e++)
         {
             std::vector<std::thread> threads;
             int j1=-thr_evts[i].at(e).vertices().size();
@@ -51,7 +51,7 @@ int main()
             If a reference argument needs to be passed to the thread function, it
             has to be wrapped (e.g. with std::ref or std::cref).
             */
-            for (int j=0; j<ids.size(); j++)
+            for (size_t j=0; j<ids.size(); j++)
                 threads.push_back(std::thread(attribute_function1,std::cref(thr_evts[i].at(e)),ids[j]));
             for (auto& th : threads) th.join();
             threads.clear();
