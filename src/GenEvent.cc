@@ -349,6 +349,32 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
         sorting.pop_front();
     }
 
+    // LL: Make sure root vertex has index zero and is not written out
+    if ( m_rootvertex->id() != 0 ) {
+      const int vx = -1 - m_rootvertex->id();
+      const int rootid = m_rootvertex->id();
+      if ( vx >= 0 && vx < m_vertices.size() && m_vertices[vx] == m_rootvertex ) {
+        auto next = m_vertices.erase(m_vertices.begin() + vx);
+        std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+        for(auto & vt1: m_attributes ) {
+          vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
+          for ( auto vt2 : vt1.second )
+            if( vt2.first <= rootid )
+              changed_attributes.push_back(vt2);
+          for( auto val : changed_attributes ) {
+            vt1.second.erase(val.first);
+            vt1.second[val.first == rootid? 0: val.first + 1] = val.second;
+          }
+        }
+        m_rootvertex->set_id(0);
+        while ( next != m_vertices.end() ) {
+          ++((*next++)->m_id);
+        }
+      } else {
+        WARNING( "ReaderAsciiHepMC2: Suspicious looking rootvertex found. Will try to cope." )
+          }
+    }
+
     DEBUG_CODE_BLOCK(
         DEBUG( 6, "GenEvent - particles sorted: "
                    <<this->particles().size()<<", max deque size: "
@@ -416,8 +442,6 @@ void GenEvent::clear() {
     m_particles.clear();
     m_vertices.clear();
 }
-
-
 
 
 void GenEvent::remove_attribute(const string &name,  const int& id) {

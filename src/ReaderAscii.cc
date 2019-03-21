@@ -174,7 +174,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     }    
     // Check if there were errors during parsing
     if( !is_parsing_successful ) {
-        ERROR( "ReaderAscii: event parsing failed. Returning empty event" )
+        ERROR( "ReaderAscii: parsing of event " << evt.event_number() <<
+               " failed. Returning empty event." )
         DEBUG( 1, "Parsing failed at line:" << endl << buf )
 
         evt.clear();
