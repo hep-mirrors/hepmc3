@@ -125,6 +125,44 @@
           is available for backward-compatibility. It is marked as deprecated.
 
     ###########################################################################
+    @subsection iterators Iterators
+    ###########################################################################
+
+    The iterator-bases classe and access functions from HepMC2, e.g.
+    @code{.cpp}
+    class particle_iterator;
+    class vertex_iterator;
+    class edge_iterator;
+    ...
+    inline int GenEvent::particles_size() const;
+    inline int GenEvent::vertices_size() const;
+    ...
+    
+    @endcode
+    were removed. 
+    The C++11 itarations should be used instead, e.g. instead of 
+    @code{.cpp}
+    for (GenEvent::particle_const_iterator p = evt->particles_begin(); p != evt->particles_end(); ++p ) {
+    ...
+    }
+    @endcode
+    one should use    
+    @code{.cpp}
+    for (auto p: evt->particles()) {
+    ...
+    }
+    @endcode
+    or alternatively
+    @code{.cpp}
+    for (size_t i=0;i<evt->particles().size();++i) {
+    ...
+    evt->particles().at(i)
+    ...
+    }
+    @endcode
+
+
+    ###########################################################################
     @subsection topological_order Topological order
     ###########################################################################
 
