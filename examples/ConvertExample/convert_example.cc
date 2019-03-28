@@ -42,7 +42,7 @@
 
 #include "cmdline.h"
 using namespace HepMC3;
-enum formats {hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot};
+enum formats {hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, none};
 int main(int argc, char** argv)
 {
     gengetopt_args_info ai;
@@ -65,6 +65,7 @@ int main(int argc, char** argv)
     format_map.insert(std::pair<std::string,formats> ( "lhef", lhef ));
     format_map.insert(std::pair<std::string,formats> ( "dump", dump ));
     format_map.insert(std::pair<std::string,formats> ( "dot", dot ));
+    format_map.insert(std::pair<std::string,formats> ( "none", none ));
     std::map<std::string, std::string> options;
     for (size_t i=0; i<ai.extensions_given; i++)
     {
@@ -79,6 +80,7 @@ int main(int argc, char** argv)
     long int  last_event_number = ai.last_event_number_arg;
     long int  print_each_events_parsed = ai.print_every_events_parsed_arg;
     Reader*      input_file=0;
+    bool ignore_writer=false;
     switch (format_map.at(std::string(ai.input_format_arg)))
     {
     case hepmc2:
@@ -175,6 +177,10 @@ int main(int argc, char** argv)
     case dump:
         output_file=NULL;
         break;
+    case none:
+        output_file=NULL;
+        ignore_writer=true;
+        break;
     default:
         printf("Output format %s  is not known\n",ai.output_format_arg);
         exit(2);
@@ -192,6 +198,7 @@ int main(int argc, char** argv)
         if (evt.event_number()>last_event_number) continue;
         evt.set_run_info(input_file->run_info());
         //Note the difference between ROOT and Ascii readers. The former read GenRunInfo before first event and the later at the same time as first event.
+        if (!ignore_writer) 
         if (output_file) output_file->write_event(evt);
         else Print::content(evt);
         evt.clear();
