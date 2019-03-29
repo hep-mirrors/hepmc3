@@ -31,10 +31,10 @@ int main()
 
     std::vector<double> vec;
     for( int i = 0; i < 15; ++i )
-        {
-            double x = (double)i + 0.14*(double)i;
-            vec.push_back( x );
-        }
+    {
+        double x = (double)i + 0.14*(double)i;
+        vec.push_back( x );
+    }
     evt.weights() = vec;
     assert( evt.weights().size() == 15 );
     evt.weights().pop_back();
@@ -52,15 +52,15 @@ int main()
 
     // lookup a nonexistent name
     try
-        {
-            double x = evt.weight("bad");
-            std::cout << "lookup of nonexistent name returns " << x << std::endl;
-        }
+    {
+        double x = evt.weight("bad");
+        std::cout << "lookup of nonexistent name returns " << x << std::endl;
+    }
     catch (std::exception& e)
-        {
-            std::cout << e.what() << std::endl;
-            std::cout << "HepMC testWeights: the above error is intentional" << std::endl;
-        }
+    {
+        std::cout << e.what() << std::endl;
+        std::cout << "HepMC testWeights: the above error is intentional" << std::endl;
+    }
     Print::listing(evt);
     return 0;
 }

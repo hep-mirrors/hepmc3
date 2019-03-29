@@ -8,8 +8,8 @@
 #include <stdio.h>
 int main(int argc, char **argv)
 {
-FILE* F=fopen("testTauola1.config","w");
-fprintf(F,"\
+    FILE* F=fopen("testTauola1.config","w");
+    fprintf(F,"\
 #\n\
 # Process: ee -> Z -> tau+ tau- @ 92GeV\n\
 #\n\
@@ -36,7 +36,7 @@ PartonLevel:FSR = off\n\
 15:mayDecay  = off\n\
 -15:mayDecay = off\n\
 \n");
-fclose(F);
+    fclose(F);
 
     ValidationControl control;
     control.read_file("testTauola1.config");

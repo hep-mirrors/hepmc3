@@ -57,14 +57,14 @@ void PhotosValidationTool::finalize() {
     Photospp::Log::Summary();
 
     int sum = m_more_photons_added;
-    for(int i=0;i<MAX_PHOTONS_TO_KEEP_TRACK_OF; ++i) sum += m_photons_added[i];
+    for(int i=0; i<MAX_PHOTONS_TO_KEEP_TRACK_OF; ++i) sum += m_photons_added[i];
 
     if( sum == 0 ) sum = 1;
 
     printf("---------------------------------------------------\n");
     printf(" Number of photons added by Photos++ (per event):\n");
     printf("---------------------------------------------------\n");
-    for(int i=0;i<MAX_PHOTONS_TO_KEEP_TRACK_OF; ++i) {
+    for(int i=0; i<MAX_PHOTONS_TO_KEEP_TRACK_OF; ++i) {
         printf("%5i: %7i events (%6.2f%%)\n",i,m_photons_added[i],m_photons_added[i]*100./sum );
     }
     printf(" more: %7i events (%6.2f%%)\n",m_more_photons_added,m_more_photons_added*100./sum );

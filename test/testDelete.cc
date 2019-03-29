@@ -14,36 +14,39 @@ int main()
     if(inputA.failed()) return 1;
     std::vector<GenEvent> evts;
     while( !inputA.failed() )
-        {
-            GenEvent evt=GenEvent(Units::GEV,Units::MM);
-            inputA.read_event(evt);
-            if( inputA.failed() )  {printf("End of file reached. Exit.\n"); break;}
-            evts.push_back(evt);
+    {
+        GenEvent evt=GenEvent(Units::GEV,Units::MM);
+        inputA.read_event(evt);
+        if( inputA.failed() )  {
+            printf("End of file reached. Exit.\n");
+            break;
         }
+        evts.push_back(evt);
+    }
     inputA.close();
 //No alien particles should be detached from vertices or removed from events
     int i=0;
     int j=0;
     while(i==j)
     {
-    i=rand()% evts.size();
-    j=rand()% evts.size();    
+        i=rand()% evts.size();
+        j=rand()% evts.size();
     }
     evts[i].remove_particles(evts[j].particles());
 
     for (GenParticlePtr p: evts.at(i).particles())
-      evts[j].remove_particle(p);
-        
-    for (GenParticlePtr p: evts.at(i).particles()){
-      for (GenVertexPtr v: evts.at(j).vertices()){
-        (v)->remove_particle_in(p);
-        (v)->remove_particle_out(p);
-      }
+        evts[j].remove_particle(p);
+
+    for (GenParticlePtr p: evts.at(i).particles()) {
+        for (GenVertexPtr v: evts.at(j).vertices()) {
+            (v)->remove_particle_in(p);
+            (v)->remove_particle_out(p);
+        }
     }
-  
+
     WriterAscii       outputA("frominputDelete.hepmc");
     if(outputA.failed()) return 2;
-    for (size_t i=0;i<evts.size();i++) outputA.write_event(evts[i]);
+    for (size_t i=0; i<evts.size(); i++) outputA.write_event(evts[i]);
     evts.clear();
     outputA.close();
 
@@ -53,13 +56,16 @@ int main()
     WriterAsciiHepMC2       outputB("fromfrominputDelete.hepmc");
     if(outputB.failed()) return 4;
     while( !inputB.failed() )
-        {
-            GenEvent evt(Units::GEV,Units::MM);
-            inputB.read_event(evt);
-            if( inputB.failed() )  {printf("End of file reached. Exit.\n"); break;}
-            outputB.write_event(evt);
-            evt.clear();
+    {
+        GenEvent evt(Units::GEV,Units::MM);
+        inputB.read_event(evt);
+        if( inputB.failed() )  {
+            printf("End of file reached. Exit.\n");
+            break;
         }
+        outputB.write_event(evt);
+        evt.clear();
+    }
     inputB.close();
     outputB.close();
     return COMPARE_ASCII_FILES("fromfrominputDelete.hepmc","inputDelete.hepmc");

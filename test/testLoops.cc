@@ -141,7 +141,7 @@ int main()
     //we now print it out in old format
     Print::listing(evt,8);
     // print each particle so we can see the polarization
-    for ( ConstGenParticlePtr ip: evt.particles()){
+    for ( ConstGenParticlePtr ip: evt.particles()) {
         Print::line(ip,true);
     }
 
@@ -159,23 +159,35 @@ int main()
     xout2.close();
 
     ReaderAscii xin1("testLoops1.out");
-    if(xin1.failed()) {xin1.close(); return 2;}
+    if(xin1.failed()) {
+        xin1.close();
+        return 2;
+    }
     while( !xin1.failed() )
-        {
-            xin1.read_event(evt);
-            if( xin1.failed() )  {printf("End of file reached. Exit.\n"); break;}
-            evt.clear();
+    {
+        xin1.read_event(evt);
+        if( xin1.failed() )  {
+            printf("End of file reached. Exit.\n");
+            break;
         }
+        evt.clear();
+    }
     xin1.close();
 
     ReaderAsciiHepMC2 xin2("testLoops2.out");
-    if(xin2.failed()) {xin2.close(); return 3;}
+    if(xin2.failed()) {
+        xin2.close();
+        return 3;
+    }
     while( !xin2.failed() )
-        {
-            xin2.read_event(evt);
-            if( xin2.failed() )  {printf("End of file reached. Exit.\n"); break;}
-            evt.clear();
+    {
+        xin2.read_event(evt);
+        if( xin2.failed() )  {
+            printf("End of file reached. Exit.\n");
+            break;
         }
+        evt.clear();
+    }
     xin2.close();
     return 0;
 }

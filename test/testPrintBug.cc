@@ -13,23 +13,23 @@ int main()
 {
     GenEvent p_event(Units::GEV, Units::MM);
     for(int i=0; i<10; i++)
+    {
+        FourVector vector(1.0,1.0,1.0,1.0);
+        GenVertexPtr vertex=std::make_shared<GenVertex>();
+        vertex->set_position(vector);
+        vertex->set_id(i);
+        for(int j=0; j<3; j++)
         {
-            FourVector vector(1.0,1.0,1.0,1.0);
-            GenVertexPtr vertex=std::make_shared<GenVertex>();
-            vertex->set_position(vector);
-            vertex->set_id(i);
-            for(int j=0; j<3; j++)
-                {
-                    GenParticlePtr particle = std::make_shared<GenParticle>(vector,1,2);
-                    vertex->add_particle_in(particle);
-                }
-            for(int j=0; j<3; j++)
-                {
-                    GenParticlePtr particle = std::make_shared<GenParticle>(vector,1,2);
-                    vertex->add_particle_out(particle);
-                }
-            p_event.add_vertex(vertex);
+            GenParticlePtr particle = std::make_shared<GenParticle>(vector,1,2);
+            vertex->add_particle_in(particle);
         }
+        for(int j=0; j<3; j++)
+        {
+            GenParticlePtr particle = std::make_shared<GenParticle>(vector,1,2);
+            vertex->add_particle_out(particle);
+        }
+        p_event.add_vertex(vertex);
+    }
     Print::listing(p_event);
     // cleanup
     p_event.clear();

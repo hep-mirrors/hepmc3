@@ -19,7 +19,7 @@ void attribute_function1(const GenEvent& e, const int& id)
 }
 int main()
 {
-    ReaderAsciiHepMC2 inputA("inputCommon.hepmc");
+    ReaderAsciiHepMC2 inputA("inputThreads1.hepmc");
     if(inputA.failed()) return 1;
     std::vector<GenEvent> evts;
     while( !inputA.failed() )

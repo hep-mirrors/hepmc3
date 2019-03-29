@@ -134,7 +134,7 @@ int main()
     //we now print it out in old format
     Print::listing(evt,8);
     // print each particle so we can see the polarization
-    for ( GenParticlePtr ip: evt.particles()){
+    for ( GenParticlePtr ip: evt.particles()) {
         Print::line(ip,true);
     }
 

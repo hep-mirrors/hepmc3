@@ -23,10 +23,10 @@ int main()
     std::ofstream os( "testMultipleCopies.out" );
     {
         // declare an input strategy
-        ReaderAsciiHepMC2 ascii_in("testIOGenEvent.input");
+        ReaderAsciiHepMC2 ascii_in("inputMultipleCopies1.hepmc");
         if (ascii_in.failed()) return 1;
         // declare another input strategy
-        ReaderAsciiHepMC2 ascii_in2("testHepMCVarious.input");
+        ReaderAsciiHepMC2 ascii_in2("inputMultipleCopies2.hepmc");
         if (ascii_in2.failed()) return 2;
         std::ofstream os1( "testMultipleOriginals.out"  );
         std::ofstream os2( "testMultipleCopies1.out" ) ;
@@ -51,40 +51,40 @@ int main()
         ascii_in.read_event(evt3);
         if (ascii_in.failed()) return 5;
         while ( !ascii_in.failed() && !ascii_in2.failed() )
+        {
+            icount++;
+            //if ( icount%50==1 )
+            os << "Processing Event Number " << icount
+               << " stream 1 # " << evt1.event_number()
+               << " stream 2 # " << evt2.event_number()
+               << std::endl;
+
+            //AV     if ( is_good_event(&evt1) )
             {
-                icount++;
-                //if ( icount%50==1 )
-                os << "Processing Event Number " << icount
-                   << " stream 1 # " << evt1.event_number()
-                   << " stream 2 # " << evt2.event_number()
-                   << std::endl;
 
-                //AV     if ( is_good_event(&evt1) )
+                os << "good event in stream 1 # "
+                   << evt1.event_number() << std::endl;
+                out1.write_event(evt1);
+                ++num_good_events;
+                GenEvent ec = evt1;
+                out3.write_event(ec);
+                icnt=0;
+                for ( auto p1: ec.particles())
                 {
-
-                    os << "good event in stream 1 # "
-                       << evt1.event_number() << std::endl;
-                    out1.write_event(evt1);
-                    ++num_good_events;
-                    GenEvent ec = evt1;
-                    out3.write_event(ec);
-                    icnt=0;
-                    for ( auto p1: ec.particles())
-                        {
-                            ++icnt;
-                            os << "particle " << icnt << " barcode " << std::endl;
-                        }
-                    GenEvent evt4(evt1);
-                    out2.write_event(evt4);
-                    //AV if( !compareGenEvent(&evt1,&evt4) ) { return -1; }
-                    evt4.clear();
+                    ++icnt;
+                    os << "particle " << icnt << " barcode " << std::endl;
                 }
-                // clean up and get next events
-                evt1.clear();
-                evt2.clear();
-                ascii_in.read_event(evt1);
-                ascii_in2.read_event(evt2);
+                GenEvent evt4(evt1);
+                out2.write_event(evt4);
+                //AV if( !compareGenEvent(&evt1,&evt4) ) { return -1; }
+                evt4.clear();
             }
+            // clean up and get next events
+            evt1.clear();
+            evt2.clear();
+            ascii_in.read_event(evt1);
+            ascii_in2.read_event(evt2);
+        }
         // might have either evt1 or evt2 still in memory, cleanup here
         evt1.clear();
         evt2.clear();
@@ -104,7 +104,7 @@ int main()
     // test operator= and swap
     {
         // declare an input strategy
-        ReaderAsciiHepMC2 ascii_in("testIOGenEvent.input");
+        ReaderAsciiHepMC2 ascii_in("inputMultipleCopies1.hepmc");
         if (ascii_in.failed()) return 4;
         //
         GenEvent evt5;
@@ -160,13 +160,12 @@ int main()
         evt6.clear();
         evt7.clear();
         evt8.clear();
-        //ascii_in.close();
     }
     bool passed=(
-    (COMPARE_ASCII_FILES("testMultipleCopies1.out","testMultipleCopies2.out")==0)
-    &&
-    (COMPARE_ASCII_FILES("testMultipleCopies1.out","testMultipleOriginals.out")==0)
-    );
+                    (COMPARE_ASCII_FILES("testMultipleCopies1.out","testMultipleCopies2.out")==0)
+                    &&
+                    (COMPARE_ASCII_FILES("testMultipleCopies1.out","testMultipleOriginals.out")==0)
+                );
     if (!passed) return 1;
     return 0;
 }

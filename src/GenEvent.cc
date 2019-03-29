@@ -570,8 +570,10 @@ The  meaningfull combinations for (id1,id2) are:
 (+-)  --  particle has end vertex
 (-+)  --  particle  has production vertex
 */
-      if( id1 > 0 ) m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] );
-      else        m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );
+      if ( (id1<0&&id2<0)|| (id1>0&&id2>0) )   { WARNING( "GenEvent::read_data: wrong link: "<<id1<<" "<<id2 ); continue;} 
+      
+      if ( id1 > 0 ) { m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] ); continue; }
+      if ( id1 < 0 ) { m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );   continue; }
     }
      for (auto p:  m_particles) if (!p->production_vertex()) m_rootvertex->add_particle_out(p);
 

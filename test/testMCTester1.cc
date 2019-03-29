@@ -8,8 +8,8 @@
 #include <stdio.h>
 int main(int argc, char **argv)
 {
-FILE* Finput=fopen("testMCTester1.input","w");
-fprintf(Finput,"\
+    FILE* Finput=fopen("testMCTester1.input","w");
+    fprintf(Finput,"\
 #\n\
 # Process: ee -> Z -> tau+ tau- @ 92GeV\n\
 #\n\
@@ -36,16 +36,16 @@ PartonLevel:FSR = off\n\
 15:mayDecay  = off\n\
 -15:mayDecay = off\n\
 \n");
-fclose(Finput);
-	
-	
-FILE* Fconfig=fopen("testMCTester1.config","w");
-fprintf(Fconfig,"\
+    fclose(Finput);
+
+
+    FILE* Fconfig=fopen("testMCTester1.config","w");
+    fprintf(Fconfig,"\
 INPUT  pythia8      testMCTester1.input\n\
 TOOL   photos                   \n\
 OUTPUT ascii        testMCTester1.hepmc\n\
 \n");
-fclose(Fconfig);
+    fclose(Fconfig);
 
     ValidationControl control;
     control.read_file("testMCTester1.config");

@@ -13,13 +13,16 @@ int main()
     WriterRootTree       outputA("frominputIO2.root");
     if(outputA.failed())  return 2;
     while( !inputA.failed() )
-        {
-            GenEvent evt(Units::GEV,Units::MM);
-            inputA.read_event(evt);
-            if( inputA.failed() )  {printf("End of file reached. Exit.\n"); break;}
-            outputA.write_event(evt);
-            evt.clear();
+    {
+        GenEvent evt(Units::GEV,Units::MM);
+        inputA.read_event(evt);
+        if( inputA.failed() )  {
+            printf("End of file reached. Exit.\n");
+            break;
         }
+        outputA.write_event(evt);
+        evt.clear();
+    }
     inputA.close();
     outputA.close();
 
@@ -28,13 +31,16 @@ int main()
     WriterAsciiHepMC2       outputB("fromfrominputIO2.hepmc");
     if(outputB.failed()) return 4;
     while( !inputB.failed() )
-        {
-            GenEvent evt(Units::GEV,Units::MM);
-            inputB.read_event(evt);
-            if( inputB.failed() )  {printf("End of file reached. Exit.\n"); break;}
-            outputB.write_event(evt);
-            evt.clear();
+    {
+        GenEvent evt(Units::GEV,Units::MM);
+        inputB.read_event(evt);
+        if( inputB.failed() )  {
+            printf("End of file reached. Exit.\n");
+            break;
         }
+        outputB.write_event(evt);
+        evt.clear();
+    }
     inputB.close();
     outputB.close();
     return COMPARE_ASCII_FILES("fromfrominputIO2.hepmc","inputIO2.hepmc");
