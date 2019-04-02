@@ -1,3 +1,8 @@
+  --------------------------  HepMC3.1.1  --------------------------
+2019-03-02 Andrii Verbytskyi for HepMC
+        * Bugfix release. Fixed some typos and minor bugs.
+        * Improved treatment of events with cycles.
+        * Improved documentation and examples.
   --------------------------  HepMC3.1.0  --------------------------
 2019-02-08 Andrii Verbytskyi for HepMC
         * Multiple changes for3.1 release
