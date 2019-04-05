@@ -820,8 +820,8 @@ struct Cut : public TagBase {
     else if ( type == "HT" ) {
       double pt = 0.0;
       for ( int i = 0, N = id.size(); i < N; ++i )
-    if ( match(id[i]) && !match(0, id[i]) )
-      pt += std::sqrt(p[i][1]*p[i][1] + p[i][2]*p[i][2]);
+        if ( match(id[i]) && !match(0, id[i]) )
+          pt += std::sqrt(p[i][1]*p[i][1] + p[i][2]*p[i][2]);
       if ( outside(pt) ) return false;
     }
     return true;
@@ -2234,8 +2234,8 @@ public:
       getattr("nreal", subevents.nreal);
       getattr("ncounter", subevents.ncounter);
       for ( int i = 0, N = tags.size(); i < N; ++i )
-    if ( tags[i]->name == "event" )
-      subevents.push_back(new HEPEUP(*tags[i], heprupin));
+        if ( tags[i]->name == "event" )
+          subevents.push_back(new HEPEUP(*tags[i], heprupin));
       return;
     } else
       getattr("ntries", ntries);
@@ -2557,8 +2557,8 @@ public:
       reset();
       weights = subevents[0]->weights;
       for ( int ii = 1, N = subevents.size(); ii < N; ++ii )
-    for ( int j = 0, M = weights.size(); j < M; ++j )
-      weights[j].first += subevents[ii]->weights[j].first;
+        for ( int j = 0, M = weights.size(); j < M; ++j )
+          weights[j].first += subevents[ii]->weights[j].first;
       currentWeight = 0;
     } else {
       setEvent(*subevents[i - 1]);
