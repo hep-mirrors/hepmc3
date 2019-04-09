@@ -187,13 +187,15 @@ install(FILES  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-conf
 
 include(CMakePackageConfigHelpers)
 
-set(INCLUDE_INSTALL_DIR include )
+set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
-set(CONFIG_INSTALL_DIR share/HepMC3/cmake )
+set(INTERFACES_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/interfaces)
+set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/cmake)
 
 configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake
                                  INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
-                                 PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
+                                 PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR
+                                           INTERFACES_INSTALL_DIR)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake  DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
 
@@ -207,7 +209,7 @@ endif()
 
 #Interfaces for some MCEGs
 if (HEPMC3_INSTALL_INTERFACES)
-  install(DIRECTORY interfaces DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/../ COMPONENT devel)
+  install(DIRECTORY interfaces/ DESTINATION ${INTERFACES_INSTALL_DIR} COMPONENT devel)
 endif()
 
 # ROOT support
