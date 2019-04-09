@@ -76,7 +76,7 @@ endif()
 
 foreach ( test ${HepMC_tests} )
   hepmc_test( ${test} )
-  set_tests_properties(${test} PROPERTIES TIMEOUT 20)  #Relevant for testLoops
+  set_tests_properties(${test} PROPERTIES TIMEOUT 2000)  #Relevant for testLoops
 endforeach ( test ${HepMC_tests} )
 
 if(Threads_FOUND)
