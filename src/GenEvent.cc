@@ -396,6 +396,7 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
     if( new_momentum_unit != m_momentum_unit ) {
         for( GenParticlePtr p: m_particles ) {
             Units::convert( p->m_data.momentum, m_momentum_unit, new_momentum_unit );
+            Units::convert( p->m_data.mass, m_momentum_unit, new_momentum_unit );
         }
 
         m_momentum_unit = new_momentum_unit;

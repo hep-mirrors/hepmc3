@@ -73,7 +73,8 @@ public:
     }
 
     /** @brief Convert FourVector to different momentum unit */
-    static void convert( FourVector &m, MomentumUnit from, MomentumUnit to ) {
+    template <typename T>
+    static void convert( T &m, MomentumUnit from, MomentumUnit to ) {
         if( from == to ) return;
 
         if( from == GEV ) {
@@ -87,7 +88,8 @@ public:
     }
 
     /** @brief Convert FourVector to different length unit */
-    static void convert( FourVector &m, LengthUnit from, LengthUnit to ) {
+    template <typename T>
+    static void convert( T &m, LengthUnit from, LengthUnit to ) {
         if( from == to ) return;
 
         if( from == CM ) {
