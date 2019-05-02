@@ -197,7 +197,14 @@ configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in ${CMAKE_CURR
                                  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR
                                            INTERFACES_INSTALL_DIR)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake  DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake
+  COMPATIBILITY SameMajorVersion
+  )
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake
+        DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
 
 ########################################################################
 ## Optional packages
