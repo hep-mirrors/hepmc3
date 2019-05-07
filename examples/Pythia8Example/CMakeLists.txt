@@ -4,7 +4,7 @@ set(CMAKE_MODULE_PATH    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules    ${CMAKE_MO
 find_package(Pythia8 QUIET)
 if(PYTHIA8_FOUND)
 include_directories(${PROJECT_SOURCE_DIR}/include ${HEPMC3_INTERFACES_DIR}/pythia8/include ${PYTHIA8_INCLUDE_DIR})
-add_executable(pythia8_example.exe ${CMAKE_CURRENT_SOURCE_DIR}/pythia8_example.cc ${HEPMC3_INTERFACES_DIR}/pythia8/src/Pythia8ToHepMC3.cc)
+add_executable(pythia8_example.exe ${CMAKE_CURRENT_SOURCE_DIR}/pythia8_example.cc )
 endif()
 else()
 #This version is for compilation during installation. Should be consistent with Pythia used in tests
@@ -12,7 +12,7 @@ set(PYTHIA8_ROOT_DIR "" CACHE PATH "Location of Pythia8 installation.")
 find_package(Pythia8 QUIET)
 if(PYTHIA8_FOUND)
 include_directories(${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/interfaces/pythia8/include ${PYTHIA8_INCLUDE_DIR})
-add_executable(pythia8_example.exe ${CMAKE_CURRENT_SOURCE_DIR}/pythia8_example.cc ${PROJECT_SOURCE_DIR}/interfaces/pythia8/src/Pythia8ToHepMC3.cc)
+add_executable(pythia8_example.exe ${CMAKE_CURRENT_SOURCE_DIR}/pythia8_example.cc )
 endif()
 endif()
 

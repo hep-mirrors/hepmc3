@@ -89,8 +89,8 @@ C...Book histograms.
       CALL PYBOOK(2,'charged multiplicity PS',100,-0.5D0,99.5D0)
 C...Create output writers
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      OUTID(1)=new_writer(0,1,'ME.hepmc')
-      OUTID(2)=new_writer(0,1,'PS.hepmc')
+      OUTID(1)=new_writer(0,1,'ME.hepmc'//char(0))
+      OUTID(2)=new_writer(0,1,'PS.hepmc'//char(0))
       NEVHEP=-123456
       HEPMC3STATUS=set_hepevt_address(NEVHEPL)
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
@@ -144,7 +144,7 @@ C...Note: no XS uncertainty
      &    1.0E9*XSEC(0,3)/sqrt(1.0*NGEN(0,3)),
      &    NGEN(0,3),0)
           HEPMC3STATUS=set_attribute_int(OUTID(ICA),
-     &    MSEL,'signal_process_id')
+     &    MSEL,'signal_process_id'//char(0))
           HEPMC3STATUS=write_event(OUTID(ICA))
           HEPMC3STATUS=clear_event(OUTID(ICA))          
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 
