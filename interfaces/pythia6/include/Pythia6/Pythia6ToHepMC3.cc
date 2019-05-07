@@ -90,8 +90,8 @@ extern "C" {
         }
         GenPdfInfoPtr pdf=std::make_shared< GenPdfInfo>();
         pdf->set(parton_id1, parton_id2,x1,x2,
-                      scale_in,xf1,xf2,
-                      pdf_id1, pdf_id2);
+                 scale_in,xf1,xf2,
+                 pdf_id1, pdf_id2);
         gWriters[position].second->set_pdf_info(pdf);
         return 0;
     }
