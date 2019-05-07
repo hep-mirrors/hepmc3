@@ -167,7 +167,7 @@ public:
                     std::cerr << "gluon without end vertex " << i << std::endl;
                     if ( m_crash_on_problem ) exit(1);
                 }
-                if ( abs(hepevt_particles[i]->pid()) <= 6 && !hepevt_particles[i]->end_vertex() ) {
+                if ( std::abs(hepevt_particles[i]->pid()) <= 6 && !hepevt_particles[i]->end_vertex() ) {
                     std::cerr << "quark without end vertex " << i << std::endl;
                     if ( m_crash_on_problem ) exit(1);
                 }
