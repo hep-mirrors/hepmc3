@@ -7,13 +7,13 @@
 #define Pythia8_Pythia8ToHepMC3_H
 
 #include "Pythia8/Pythia.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenEvent.h"
 
 #include <vector>
 namespace HepMC3 {
 
-class GenEvent;
-class GenVertex;
-class GenParticle;
 
 class Pythia8ToHepMC3 {
 
