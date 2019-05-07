@@ -1,3 +1,10 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
+#ifndef Pythia6_Pythia6ToHepMC3_H
+#define Pythia6_Pythia6ToHepMC3_H
 #include "HepMC3/HEPEVT_Wrapper.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Writer.h"
@@ -170,3 +177,4 @@ extern "C" {
         return  r_position;
     }
 }
+#endif

@@ -6,12 +6,12 @@
 #ifndef Pythia8_Pythia8ToHepMC3_H
 #define Pythia8_Pythia8ToHepMC3_H
 
+#include <vector>
 #include "Pythia8/Pythia.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenEvent.h"
 
-#include <vector>
 namespace HepMC3 {
 
 
@@ -38,24 +38,17 @@ public:
         return fill_next_event( pythia.event, evt, ievnum, &pythia.info, &pythia.settings);
     }
 
-    /** What is not in current HepMC implementation:
-     *  - color flow (will probably be removed altogether)
-     *  - beam particles
-     *  - random seeds
-     *  - mpi
-     */
     // Alternative method to convert Pythia events into HepMC ones
     bool fill_next_event( Pythia8::Event& pyev, GenEvent* evt,
                           int ievnum = -1, Pythia8::Info* pyinfo = 0,
                           Pythia8::Settings* pyset = 0)
-//bool Pythia8ToHepMC3::fill_next_event( Pythia8::Event& pyev, GenEvent* evt, int ievnum, Pythia8::Info* pyinfo, Pythia8::Settings* pyset)
     {
 
         // 1. Error if no event passed.
         if (!evt) {
-            std::cerr << "Pythia8Tofill_next_event error - passed null event."
+            std::cerr << "Pythia8ToHepMC3::fill_next_event error - passed null event."
                       << std::endl;
-            return 0;
+            return false;
         }
 
         // Event number counter.
@@ -74,21 +67,18 @@ public:
         std::vector<GenParticlePtr> hepevt_particles;
         hepevt_particles.reserve( pyev.size() );
 
-        for(int i=0; i<pyev.size(); ++i) {
-            hepevt_particles.push_back( make_shared<GenParticle>( FourVector( pyev[i].px(), pyev[i].py(),
+        for(size_t i=0; i<pyev.size(); ++i) {
+            hepevt_particles.push_back( std::make_shared<GenParticle>( FourVector( pyev[i].px(), pyev[i].py(),
                                         pyev[i].pz(), pyev[i].e() ),
                                         pyev[i].id(), pyev[i].statusHepMC() )
                                       );
-            /*
-                    hepevt_particles[i]->suggest_barcode(i);
-            */
             hepevt_particles[i]->set_generated_mass( pyev[i].m() );
         }
 
         // 3. Fill vertex information
         std::vector<GenVertexPtr> vertex_cache;
 
-        for(int i=1; i<pyev.size(); ++i) {
+        for(size_t  i=1; i<pyev.size(); ++i) {
 
             std::vector<int> mothers = pyev[i].motherList();
 
@@ -103,8 +93,7 @@ public:
                         prod_vtx->add_particle_in( hepevt_particles[mothers[j]] );
                     }
                 }
-                FourVector prod_pos( pyev[i].xProd(), pyev[i].yProd(),
-                                     pyev[i].zProd(), pyev[i].tProd() );
+                FourVector prod_pos( pyev[i].xProd(), pyev[i].yProd(),pyev[i].zProd(), pyev[i].tProd() );
 
                 // Update vertex position if necessary
                 if(!prod_pos.is_zero() && prod_vtx->position().is_zero()) prod_vtx->set_position( prod_pos );
@@ -124,7 +113,7 @@ public:
         // Add particles and vertices in topological order
         evt->add_tree( beam_particles );
         //Attributes should be set after adding the particles to event
-        for(int i=0; i<pyev.size(); ++i) {
+        for(size_t  i=0; i<pyev.size(); ++i) {
             /* TODO: Set polarization */
             // Colour flow uses index 1 and 2.
             int colType = pyev[i].colType();
@@ -138,25 +127,19 @@ public:
             }
         }
 
-        /*
-            evt->set_beam_particles( hepevt_particles[1], hepevt_particles[2] );
-        */
-
         // If hadronization switched on then no final coloured particles.
         bool doHadr = (pyset == 0) ? m_free_parton_warnings : pyset->flag("HadronLevel:all") && pyset->flag("HadronLevel:Hadronize");
 
         // 4. Check for particles which come from nowhere, i.e. are without
         // mothers or daughters. These need to be attached to a vertex, or else
         // they will never become part of the event.
-        for (int i = 1; i < pyev.size(); ++i) {
+        for (size_t  i = 1; i < pyev.size(); ++i) {
 
             // Check for particles not added to the event
             // NOTE: We have to check if this step makes any sense in HepMC event standard
             if ( !hepevt_particles[i] ) {
                 std::cerr << "hanging particle " << i << std::endl;
-
                 GenVertexPtr prod_vtx;
-
                 prod_vtx->add_particle_out( hepevt_particles[i] );
                 evt->add_vertex(prod_vtx);
             }
@@ -186,18 +169,17 @@ public:
             }
 
             GenPdfInfoPtr pdfinfo = make_shared<GenPdfInfo>();
-            pdfinfo->set(id1pdf, id2pdf, pyinfo->x1pdf(),
-                         pyinfo->x2pdf(), pyinfo->QFac(), pyinfo->pdf1(), pyinfo->pdf2() );
+            pdfinfo->set(id1pdf, id2pdf, pyinfo->x1pdf(), pyinfo->x2pdf(), pyinfo->QFac(), pyinfo->pdf1(), pyinfo->pdf2() );
             // Store PDF information.
             evt->set_pdf_info( pdfinfo );
         }
 
         // Store process code, scale, alpha_em, alpha_s.
         if (m_store_proc && pyinfo != 0) {
-            evt->add_attribute("signal_process_id",make_shared<IntAttribute>( pyinfo->code()));
-            evt->add_attribute("event_scale",make_shared<DoubleAttribute>(pyinfo->QRen()));
-            evt->add_attribute("alphaQCD",make_shared<DoubleAttribute>(pyinfo->alphaS()));
-            evt->add_attribute("alphaQED",make_shared<DoubleAttribute>(pyinfo->alphaEM()));
+            evt->add_attribute("signal_process_id",std::make_shared<IntAttribute>( pyinfo->code()));
+            evt->add_attribute("event_scale",std::make_shared<DoubleAttribute>(pyinfo->QRen()));
+            evt->add_attribute("alphaQCD",std::make_shared<DoubleAttribute>(pyinfo->alphaS()));
+            evt->add_attribute("alphaQED",std::make_shared<DoubleAttribute>(pyinfo->alphaEM()));
         }
 
         // Store cross-section information in pb.
