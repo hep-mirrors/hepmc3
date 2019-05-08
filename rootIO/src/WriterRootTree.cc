@@ -58,7 +58,7 @@ void WriterRootTree::write_event(const GenEvent &evt)
 {
     if ( !m_file->IsOpen() ) return;
     bool refill=false;
-    if ( !run_info() || (run_info() != evt.run_info() ))  { set_run_info(evt.run_info()); refill=true;}
+    if ( evt.run_info()&&(!run_info() || (run_info() != evt.run_info())))  { set_run_info(evt.run_info()); refill=true;}
     if (refill)
     {
     m_run_info_data->weight_names.clear();
