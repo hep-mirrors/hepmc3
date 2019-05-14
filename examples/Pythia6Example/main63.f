@@ -32,6 +32,9 @@ C...Supersymmetry parameters.
       COMMON/PYMSSM/IMSS(0:99),RMSS(0:99)
 C...Generation and cross section statistics.
       COMMON/PYINT5/NGENPD,NGEN(0:500,3),XSEC(0:500,3)
+C...Random number generator information.
+      COMMON/PYDATR/MRPY(6),RRPY(100)
+
 C...HepMC3
       PARAMETER (NMXHEP=4000)
       COMMON /HEPEVT/  NEVHEP,NHEP,ISTHEP(NMXHEP),IDHEP(NMXHEP),
@@ -54,12 +57,17 @@ C...block directly.
       INTEGER OUTID(2), HEPMC3STATUS
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C...Glue functions
-      INTEGER new_writer,delete_writer,set_hepevt_address
-      INTEGER convert_event,write_event,clear_event
-      INTEGER set_attribute_int,set_attribute_double
-      EXTERNAL new_writer,delete_writer,set_hepevt_address
-      EXTERNAL convert_event,write_event,clear_event
-      EXTERNAL set_attribute_int,set_attribute_double
+      INTEGER HepMC3_new_writer,HepMC3_delete_writer
+      INTEGER HepMC3_set_hepevt_address
+      INTEGER HepMC3_convert_event,HepMC3_write_event,HepMC3_clear_event
+      INTEGER HepMC3_set_attribute_int,HepMC3_set_attribute_double
+      INTEGER HepMC3_set_pdf_info,HepMC3_set_cross_section
+      EXTERNAL HepMC3_new_writer,HepMC3_delete_writer
+      EXTERNAL HepMC3_set_hepevt_address
+      EXTERNAL HepMC3_convert_event,HepMC3_write_event
+      EXTERNAL HepMC3_clear_event
+      EXTERNAL HepMC3_set_attribute_int,HepMC3_set_attribute_double
+      EXTERNAL HepMC3_set_pdf_info,HepMC3_set_cross_section
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C-----------------------------------------------------------------
 
@@ -89,10 +97,10 @@ C...Book histograms.
       CALL PYBOOK(2,'charged multiplicity PS',100,-0.5D0,99.5D0)
 C...Create output writers
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      OUTID(1)=new_writer(0,1,'ME.hepmc')
-      OUTID(2)=new_writer(0,1,'PS.hepmc')
+      OUTID(1)=HepMC3_new_writer(0,1,'ME.hepmc'//char(0))
+      OUTID(2)=HepMC3_new_writer(0,1,'PS.hepmc'//char(0))
       NEVHEP=-123456
-      HEPMC3STATUS=set_hepevt_address(NEVHEPL)
+      HEPMC3STATUS=HepMC3_set_hepevt_address(NEVHEPL)
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
 C-----------------------------------------------------------------
 
@@ -137,16 +145,31 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
           VHEPL(3,J)=VHEP(3,J)
           VHEPL(4,J)=VHEP(4,J)
   500     CONTINUE          
-          HEPMC3STATUS=convert_event(OUTID(ICA))
-C...Note: no XS uncertainty
-          HEPMC3STATUS=set_cross_section(OUTID(ICA),
+          HEPMC3STATUS=HepMC3_convert_event(OUTID(ICA))
+C...Note: no explicit XS uncertainty
+          HEPMC3STATUS=HepMC3_set_cross_section(OUTID(ICA),
      &    1.0E9*XSEC(0,3),
      &    1.0E9*XSEC(0,3)/sqrt(1.0*NGEN(0,3)),
      &    NGEN(0,3),0)
-          HEPMC3STATUS=set_attribute_int(OUTID(ICA),
-     &    MSEL,'signal_process_id')
-          HEPMC3STATUS=write_event(OUTID(ICA))
-          HEPMC3STATUS=clear_event(OUTID(ICA))          
+          HEPMC3STATUS=HepMC3_set_pdf_info(OUTID(ICA),
+     &    MSTI(15),MSTI(16),PARI(33),PARI(34),PARI(23),
+     &    MSTP(51),MSTP(52))     
+C...The values below are not always meaningful     
+          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID,-1,
+     &   'mpi'//char(0))
+          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID(ICA),MSUB,
+     &   'signal_process_id'//char(0))
+          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID,MRPY(1),
+     &   'random_states1'//char(0))
+          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID,-1,
+     &   'alphaEM'//char(0))
+          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID,-1,
+     &   'alphaQCD'//char(0))
+          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID,q2pdfeval,
+     &   'event_scale'//char(0))     
+C Note there should be PDF ids
+          HEPMC3STATUS=HepMC3_write_event(OUTID(ICA))
+          HEPMC3STATUS=HepMC3_clear_event(OUTID(ICA))          
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 
 C...Extract and fill event properties.
           CALL PYEDIT(3)
@@ -158,8 +181,8 @@ C...End outer loop.
   300 CONTINUE
 C...Delete output writers
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 
-      HEPMC3STATUS=delete_writer(OUTID(1))
-      HEPMC3STATUS=delete_writer(OUTID(2))
+      HEPMC3STATUS=HepMC3_delete_writer(OUTID(1))
+      HEPMC3STATUS=HepMC3_delete_writer(OUTID(2))
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 
 C-----------------------------------------------------------------
 
