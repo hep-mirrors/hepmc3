@@ -118,28 +118,28 @@ public:
     /** @brief Get the cross section corresponding to the weight named
         \a wName.
      */
-    double xsec(const string& wName) {
+    double xsec(const string& wName) const {
         return xsec(windx(wName));
     }
     
     /** @brief Get the cross section corresponding to the weight with index
         \a indx.
      */
-    double xsec(const int& indx = 0) {
+    double xsec(const int& indx = 0) const {
         return cross_sections[indx];
     }
     
     /** @brief Get the cross section error corresponding to the weight
         named \a wName.
      */
-    double xsec_err(const string& wName) {
+    double xsec_err(const string& wName) const {
         return xsec_err(windx(wName));
     }
     
     /** @brief Get the cross section error corresponding to the weight
         with index \a indx.
      */
-    double xsec_err(const int& indx = 0) {
+    double xsec_err(const int& indx = 0) const {
         return cross_section_errors[indx];
     }
     
