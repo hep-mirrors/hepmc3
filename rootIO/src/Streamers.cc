@@ -1,28 +1,28 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
- *  @file GenEventStreamer.cc
+ *  @file Streamers.cc
  *  @brief Implementation of \b methods GenEvent::Streamer and GenRunInfo::Streamer
  *
  */
 
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 
-#include "HepMC/Data/GenEventData.h"
-#include "HepMC/Data/GenRunInfoData.h"
+#include "HepMC3/Data/GenEventData.h"
+#include "HepMC3/Data/GenRunInfoData.h"
 
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
 #include "TBuffer.h"
 #include "TClass.h"
 #endif
 
 
-namespace HepMC {
+namespace HepMC3 {
   
-#ifdef HEPMC_ROOTIO
+#ifdef HEPMC3_ROOTIO
   
   void GenEvent::Streamer(TBuffer &b){
     
@@ -30,7 +30,7 @@ namespace HepMC {
       
       GenEventData data;
       
-      b.ReadClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
+      b.ReadClassBuffer(TClass::GetClass("HepMC3::GenEventData"), &data);
       
       read_data(data);
       
@@ -40,7 +40,7 @@ namespace HepMC {
       GenEventData data;
       write_data(data);
       
-      b.WriteClassBuffer(TClass::GetClass("HepMC::GenEventData"), &data);
+      b.WriteClassBuffer(TClass::GetClass("HepMC3::GenEventData"), &data);
     }
   }
 
@@ -51,7 +51,7 @@ namespace HepMC {
 
       GenRunInfoData data;
       
-      b.ReadClassBuffer(TClass::GetClass("HepMC::GenRunInfoData"), &data);
+      b.ReadClassBuffer(TClass::GetClass("HepMC3::GenRunInfoData"), &data);
       
       read_data(data);
       
@@ -61,10 +61,10 @@ namespace HepMC {
       GenRunInfoData data;
       write_data(data);
       
-      b.WriteClassBuffer(TClass::GetClass("HepMC::GenRunInfoData"), &data);
+      b.WriteClassBuffer(TClass::GetClass("HepMC3::GenRunInfoData"), &data);
     }
   }
   
 #endif
   
-} // namespace HepMC
+} // namespace HepMC3

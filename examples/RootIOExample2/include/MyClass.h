@@ -1,8 +1,8 @@
 #ifndef MYCLASS_H
 #define MYCLASS_H
 
-#include "HepMC/GenEvent.h"
-
+#include "HepMC3/GenEvent.h"
+using namespace HepMC3;
 /** @class MyClass
  *  @brief Sample class for root I/O test
  */
@@ -13,10 +13,10 @@ public:
     MyClass();
 
     /// @brief Set HepMC event
-    void SetEvent(HepMC::GenEvent*);
+    void SetEvent(GenEvent*);
 
     /// @brief Get HepMC event
-    HepMC::GenEvent* GetEvent();
+    GenEvent* GetEvent();
 
     /// @brief Set someint
     void SetInt(int);
@@ -27,7 +27,7 @@ public:
 
 private:
     int someint;            ///< Test int
-    HepMC::GenEvent* event; ///< Test event
+    GenEvent* event; ///< Test event
 };
 
 #endif

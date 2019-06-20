@@ -1,25 +1,23 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenParticle.cc
  *  @brief Implementation of \b class GenParticle
  *
  */
-#include "HepMC/GenParticle.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/GenEvent.h"
-#include "HepMC/Search/FindParticles.h"
-#include "HepMC/Setup.h"
-#include "HepMC/Attribute.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/Setup.h"
+#include "HepMC3/Attribute.h"
 
-namespace HepMC {
-
+namespace HepMC3 {
 
 GenParticle::GenParticle( const FourVector &mom, int pidin, int stat):
-m_event(NULL),
+m_event(nullptr),
 m_id(0) {
     m_data.pid               = pidin;
     m_data.momentum          = mom;
@@ -29,7 +27,7 @@ m_id(0) {
 }
 
 GenParticle::GenParticle( const GenParticleData &dat ):
-m_event(NULL),
+m_event(nullptr),
 m_id(0),
 m_data(dat) {
 }
@@ -60,40 +58,40 @@ void GenParticle::unset_generated_mass() {
     m_data.mass        = 0.;
     m_data.is_mass_set = false;
 }
-
+  
 GenVertexPtr GenParticle::production_vertex() {
     return m_production_vertex.lock();
 }
 
-const GenVertexPtr GenParticle::production_vertex() const {
-    return m_production_vertex.lock();
+ConstGenVertexPtr GenParticle::production_vertex() const {
+    return std::const_pointer_cast<const GenVertex>(m_production_vertex.lock());
 }
 
 GenVertexPtr GenParticle::end_vertex() {
     return m_end_vertex.lock();
 }
 
-const GenVertexPtr GenParticle::end_vertex() const {
-    return m_end_vertex.lock();
+ConstGenVertexPtr GenParticle::end_vertex() const {
+    return std::const_pointer_cast<const GenVertex>(m_end_vertex.lock());
 }
 
-vector<GenParticlePtr> GenParticle::parents() const {
-    return production_vertex() ? production_vertex()->particles_in() : vector<GenParticlePtr>();
+vector<GenParticlePtr> GenParticle::parents(){
+    return (m_production_vertex.expired())? vector<GenParticlePtr>() : production_vertex()->particles_in();
 }
 
-vector<GenParticlePtr> GenParticle::children() const {
-    return end_vertex() ? end_vertex()->particles_out() : vector<GenParticlePtr>();
+vector<ConstGenParticlePtr> GenParticle::parents() const{
+    return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : production_vertex()->particles_in();
+}
+  
+vector<GenParticlePtr> GenParticle::children(){
+    return (m_end_vertex.expired())? vector<GenParticlePtr>() : end_vertex()->particles_out();
 }
 
-vector<GenParticlePtr> GenParticle::ancestors() const {
-  return production_vertex() ? findParticles(production_vertex(), ANCESTORS) : vector<GenParticlePtr>();
+vector<ConstGenParticlePtr> GenParticle::children() const{
+    return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : end_vertex()->particles_out();
 }
 
-vector<GenParticlePtr> GenParticle::descendants() const {
-  return end_vertex() ? findParticles(end_vertex(), DESCENDANTS) : vector<GenParticlePtr>();
-}
-
-bool GenParticle::add_attribute(std::string name, shared_ptr<Attribute> att) {
+bool GenParticle::add_attribute(const std::string& name, shared_ptr<Attribute> att) {
   if ( !parent_event() ) return false;
   parent_event()->add_attribute(name, att, id());
   return true;
@@ -105,12 +103,12 @@ vector<string> GenParticle::attribute_names() const {
   return vector<string>();
 }
 
-void GenParticle::remove_attribute(std::string name) {
+void GenParticle::remove_attribute(const std::string& name) {
   if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }
 
-string GenParticle::attribute_as_string(string name) const {
+string GenParticle::attribute_as_string(const std::string& name) const {
     return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
 }
-
-} // namespace HepMC
+  
+} // namespace HepMC3

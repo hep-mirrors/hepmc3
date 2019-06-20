@@ -1,16 +1,16 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderRoot.cc
  *  @brief Implementation of \b class ReaderRoot
  *
  */
-#include "HepMC/ReaderRoot.h"
+#include "HepMC3/ReaderRoot.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 ReaderRoot::ReaderRoot(const std::string &filename) {
 
@@ -24,7 +24,7 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
 
     shared_ptr<GenRunInfo> ri = make_shared<GenRunInfo>();
 
-    GenRunInfoData *run = (GenRunInfoData*)m_file->Get("GenRunInfoData");
+    GenRunInfoData *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
     
     if(run) {
         ri->read_data(*run);
@@ -37,7 +37,7 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
 bool ReaderRoot::read_event(GenEvent& evt) {
 
     // Skip object of different type than GenEventData
-    GenEventData *data = NULL;
+    GenEventData *data = nullptr;
 
     while(true) {
         TKey *key = (TKey*) (*m_next)();
@@ -50,9 +50,11 @@ bool ReaderRoot::read_event(GenEvent& evt) {
         const char *cl = key->GetClassName();
 
         if( !cl ) continue;
-        
-        if( strncmp(cl,"HepMC::GenEventData",19) == 0 ) {
-            data = (GenEventData*)key->ReadObj();
+        size_t geneventdata30=strncmp(cl,"HepMC::GenEventData",19);
+        size_t geneventdata31=strncmp(cl,"HepMC3::GenEventData",20);
+        if( geneventdata31==0 || geneventdata30==0 ) {
+            if (geneventdata30==0) WARNING( "ReaderRoot::read_event: The object was written with HepMC3 version 3.0" )
+            data = reinterpret_cast<GenEventData*>(key->ReadObj());
             break;
         }
     }
@@ -80,4 +82,4 @@ bool ReaderRoot::failed() {
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @example class_example_write.cc
@@ -10,17 +10,17 @@
  *  @author Witold Pokorski
  *  @date   16/10/14
  */
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenRunInfo.h"
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenRunInfo.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/Print.h"
 
 #include "TFile.h"
 
 #include <iostream>
 #include <sstream>
 
-using namespace HepMC;
+using namespace HepMC3;
 using std::cout;
 using std::endl;
 

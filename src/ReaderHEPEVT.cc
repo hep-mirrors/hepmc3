@@ -1,14 +1,18 @@
 // -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file ReaderHEPEVT.cc
  *  @brief Implementation of \b class ReaderHEPEVT
  *
  */
-#include "HepMC/ReaderHEPEVT.h"
-#include "HepMC/HEPEVT_Wrapper.h"
+#include "HepMC3/ReaderHEPEVT.h"
+#include "HepMC3/HEPEVT_Wrapper.h"
 
 #include <sstream>
-namespace HepMC
+namespace HepMC3
 {
 
 ReaderHEPEVT::ReaderHEPEVT(const std::string &filename):
@@ -27,7 +31,7 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename):
 
 }
 
-#define  READERHEPEVTBUFFERSIZE 255
+#define READERHEPEVTBUFFERSIZE 255
 bool ReaderHEPEVT::read_hepevt_event_header()
 {
     char buf_e[READERHEPEVTBUFFERSIZE];
@@ -35,7 +39,7 @@ bool ReaderHEPEVT::read_hepevt_event_header()
     int m_i=0, m_p=0;
     while(!eventline)
         {
-            if (fgets(buf_e,READERHEPEVTBUFFERSIZE,m_file)==NULL) break;
+            if (fgets(buf_e,READERHEPEVTBUFFERSIZE,m_file)==nullptr) break;
             std::stringstream st_e(buf_e);
             char attr=' ';
             eventline=false;
@@ -63,18 +67,18 @@ bool ReaderHEPEVT::read_hepevt_particle( int i, bool iflong )
     int   intcodes[6];
     double fltcodes1[5];
     double fltcodes2[4];
-    if (fgets(buf_p,READERHEPEVTBUFFERSIZE,m_file)==NULL) return false;
-    if (iflong) if (fgets(buf_v,READERHEPEVTBUFFERSIZE,m_file)==NULL) return false;
+    if (fgets(buf_p,READERHEPEVTBUFFERSIZE,m_file)==nullptr) return false;
+    if (iflong) if (fgets(buf_v,READERHEPEVTBUFFERSIZE,m_file)==nullptr) return false;
     std::stringstream st_p(buf_p);
     std::stringstream st_v(buf_v);
     if (iflong)
         {
-            if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[2]>>intcodes[3]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[3]>>fltcodes1[4])) { ERROR( "ReaderHEPEVT: Error reading particle momenta"); 	return false;}
+            if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[2]>>intcodes[3]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[3]>>fltcodes1[4])) { ERROR( "ReaderHEPEVT: Error reading particle momenta");     return false;}
             if (!static_cast<bool>(st_v>>fltcodes2[0]>>fltcodes2[1]>>fltcodes2[2]>>fltcodes2[3])) { ERROR( "ReaderHEPEVT: Error reading particle vertex");  return false;}
         }
     else
         {
-            if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[4])) {ERROR( "ReaderHEPEVT: Error reading particle momenta"); 	return false;}
+            if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[4])) {ERROR( "ReaderHEPEVT: Error reading particle momenta");     return false;}
             intcodes[2]=0;//FIXME!
             intcodes[3]=0;//FIXME!
             fltcodes1[3]=std::sqrt(fltcodes1[0]*fltcodes1[0]+fltcodes1[1]*fltcodes1[1]+fltcodes1[2]*fltcodes1[2]+fltcodes1[4]*fltcodes1[4]);
@@ -97,11 +101,8 @@ bool ReaderHEPEVT::read_hepevt_particle( int i, bool iflong )
 bool ReaderHEPEVT::read_event(GenEvent& evt, bool iflong)
 {
     evt.clear();
-
-
-    bool fileok=true;
     HEPEVT_Wrapper::zero_everything();
-    fileok=read_hepevt_event_header();
+    bool fileok=read_hepevt_event_header();
     for (int i=1; (i<=HEPEVT_Wrapper::number_entries())&&fileok; i++)
         fileok=read_hepevt_particle(i, iflong);
     bool result=false;
@@ -127,7 +128,8 @@ bool ReaderHEPEVT::read_event(GenEvent& evt)
 
 void ReaderHEPEVT::close()
 {
-    if (m_file) fclose(m_file);
+    if (m_file)  fclose(m_file); 
+    if (hepevtbuffer) delete hepevtbuffer;
 }
 
 bool ReaderHEPEVT::failed()
@@ -135,4 +137,4 @@ bool ReaderHEPEVT::failed()
     return m_failed;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

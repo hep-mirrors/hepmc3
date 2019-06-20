@@ -1,26 +1,26 @@
 #include "Tauola/TauolaHepMC3Event.h"
 #include "Tauola/Log.h"
 
-using namespace std;
+
 
 namespace Tauolapp
 {
-
-TauolaHepMC3Event::TauolaHepMC3Event(HepMC::GenEvent * event){
+using namespace std;
+TauolaHepMC3Event::TauolaHepMC3Event(GenEvent * event){
   m_event=event;
 /* NO UNITS YET
   // Default units
   m_momentum_unit = "GEV";
   m_length_unit   = "MM";
 
-  if(m_event->momentum_unit() != HepMC::Units::GEV) m_momentum_unit = "MEV";
-  if(m_event->length_unit()   != HepMC::Units::MM ) m_length_unit   = "CM";
+  if(m_event->momentum_unit() != Units::GEV) m_momentum_unit = "MEV";
+  if(m_event->length_unit()   != Units::MM ) m_length_unit   = "CM";
 
   // If needed - change units used by HepMC to GEV and MM
-  if( m_event->momentum_unit() != HepMC::Units::GEV ||
-      m_event->length_unit()   != HepMC::Units::MM     )
+  if( m_event->momentum_unit() != Units::GEV ||
+      m_event->length_unit()   != Units::MM     )
   {
-    m_event->use_units(HepMC::Units::GEV,HepMC::Units::MM);
+    m_event->use_units(Units::GEV,Units::MM);
   }
 */
 }
@@ -35,7 +35,7 @@ TauolaHepMC3Event::~TauolaHepMC3Event(){
 
 }
 
-HepMC::GenEvent * TauolaHepMC3Event::getEvent(){
+GenEvent * TauolaHepMC3Event::getEvent(){
   return m_event;
 }
 
@@ -54,7 +54,7 @@ std::vector<TauolaParticle*> TauolaHepMC3Event::findParticles(int pdg_id){
 
 std::vector<TauolaParticle*> TauolaHepMC3Event::findStableParticles(int pdg_id){
 
-  /**  HepMC::GenEvent::particle_const_iterator part_itr = m_event->particles_begin();
+  /**  GenEvent::particle_const_iterator part_itr = m_event->particles_begin();
   //loop over all particle in the event looking for taus (or other)
   for( ; part_itr!=m_event->particles_end(); part_itr++){
     if(fabs((*part_itr)->pdg_id())==pdg_id){

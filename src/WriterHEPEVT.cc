@@ -1,16 +1,19 @@
 // -*- C++ -*-
 //
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file WriterHEPEVT.cc
  *  @brief Implementation of \b class WriterHEPEVT
  *
  */
-#include "HepMC/WriterHEPEVT.h"
-#include "HepMC/HEPEVT_Wrapper.h"
-#include <cstdio>  // sprintf
-#include "HepMC/Print.h"
 #include <sstream>
-namespace HepMC
+#include <cstdio>  // sprintf
+#include "HepMC3/WriterHEPEVT.h"
+#include "HepMC3/HEPEVT_Wrapper.h"
+#include "HepMC3/Print.h"
+namespace HepMC3
 {
 
 WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_events_count(0)
@@ -61,4 +64,4 @@ bool WriterHEPEVT::failed()
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

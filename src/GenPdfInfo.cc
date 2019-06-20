@@ -1,19 +1,19 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenPdfInfo.cc
  *  @brief Implementation of \b class GenPdfInfo
  *
  */
-#include "HepMC/GenPdfInfo.h"
+#include "HepMC3/GenPdfInfo.h"
 #include <cstring> // memcmp
 #include <cstdlib> // atoi
 #include <cstdio> // sprintf
 
-namespace HepMC {
+namespace HepMC3 {
 
 bool GenPdfInfo::from_string(const string &att) {
     const char *cursor = att.data();
@@ -66,9 +66,9 @@ bool GenPdfInfo::to_string(string &att) const {
     return true;
 }
 
-void GenPdfInfo::set( int parton_id1, int parton_id2, double x1, double x2,
-                      double scale_in, double xf1, double xf2,
-                      int pdf_id1, int pdf_id2) {
+void GenPdfInfo::set(const int& parton_id1, const int& parton_id2, const double& x1, const double& x2,
+                      const double& scale_in, const double& xf1,const double& xf2,
+                      const int& pdf_id1, const int& pdf_id2) {
     parton_id[0] = parton_id1;
     parton_id[1] = parton_id2;
     x[0]         = x1;
@@ -103,4 +103,4 @@ bool GenPdfInfo::is_valid() const
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

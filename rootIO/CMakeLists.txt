@@ -1,23 +1,20 @@
 #--------
 #-root IO
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} ${ROOT_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} ${ROOT_INCLUDE_DIRS})
 
 #----------------------------------------------------------------------------
 # Generate dictionaries
 #
 ROOT_GENERATE_DICTIONARY(rootIO_Classes include/rootIO_Classes.hh LINKDEF include/LinkDef.hh OPTIONS -inlineInputHeader)
 
-add_library(HepMCrootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRootTree.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRootTree.cc ${PROJECT_SOURCE_DIR}/rootIO/src/Streamers.cc rootIO_Classes.cxx)
+add_library(HepMC3rootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRootTree.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRootTree.cc ${PROJECT_SOURCE_DIR}/rootIO/src/Streamers.cc rootIO_Classes.cxx)
+set_property(TARGET HepMC3rootIO PROPERTY POSITION_INDEPENDENT_CODE 1)
 
-target_link_libraries(HepMCrootIO ${ROOT_LIBRARIES} HepMC)
-set_target_properties(HepMCrootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-
-
+target_link_libraries(HepMC3rootIO ${ROOT_Tree_LIBRARY} ${ROOT_RIO_LIBRARY} ${ROOT_Core_LIBRARY} HepMC3)
+set_target_properties(HepMC3rootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+set_target_properties(HepMC3rootIO PROPERTIES SOVERSION 1)
 # installs 
-install(TARGETS HepMCrootIO DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT rootIO-libs)
-install(DIRECTORY ${PROJECT_BINARY_DIR}/rootIO/ DESTINATION  ${CMAKE_INSTALL_LIBDIR}  COMPONENT rootIO-libs  FILES_MATCHING PATTERN "*.pcm" PATTERN "CMakeFiles"  EXCLUDE  PATTERN "src"  EXCLUDE PATTERN "include"  EXCLUDE)
-install(DIRECTORY include/HepMC DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT rootIO-devel)
-add_custom_target(move_rootIO_headers ALL ${CMAKE_COMMAND} -DPREFIX=${CMAKE_BINARY_DIR}/outputs
-                                   -DCOMPONENTS="rootIO-devel"
-                                   -P ${CMAKE_SOURCE_DIR}/cmake/Modules/local_install.cmake )
+install(TARGETS HepMC3rootIO DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT rootIO-libs)
+install(DIRECTORY ${PROJECT_BINARY_DIR}/rootIO/ DESTINATION  ${CMAKE_INSTALL_LIBDIR}  COMPONENT rootIO-libs  FILES_MATCHING  PATTERN "*.pcm"  PATTERN "*.rootmap"  PATTERN "CMakeFiles" EXCLUDE  PATTERN "src" EXCLUDE  PATTERN "include" EXCLUDE)
+install(DIRECTORY include/HepMC3 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT rootIO-devel)

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @example HepMC3_fileIO_example.cc
@@ -11,15 +11,13 @@
  *  The resulting file should be an exact copy of the input file
  *
  */
-#include "HepMC/GenEvent.h"
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/Print.h"
 
 #include <iostream>
-using namespace HepMC;
-using std::cout;
-using std::endl;
+using namespace HepMC3;
 
 /** Main program */
 int main(int argc, char **argv) {

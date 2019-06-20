@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef _PhotosHepMC3Event_h_included_
 #define _PhotosHepMC3Event_h_included_
@@ -9,12 +9,12 @@
 /**
  * @class PhotosHepMC3Event
  *
- * @brief Interface to HepMC::GenEvent objects
+ * @brief Interface to GenEvent objects
  *
  * This class implements the virtual methods of
  * PhotosEvent. In this way it provides an
  * interface between the generic PhotosEvent class
- * and a HepMC::GenEvent object.
+ * and a GenEvent object.
  *
  * @author Nadia Davidson
  * @date 17 June 2008
@@ -24,23 +24,23 @@
  */
 
 #include <vector>
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 #include "Photos/PhotosEvent.h"
 #include "Photos/PhotosParticle.h"
 
 namespace Photospp
 {
-
+using namespace HepMC3;
 class PhotosHepMC3Event : public PhotosEvent
 {
 public:
         ~PhotosHepMC3Event();
 
-        /** Constructor which keeps a pointer to the HepMC::GenEvent*/
-        PhotosHepMC3Event(HepMC::GenEvent * event);
+        /** Constructor which keeps a pointer to the GenEvent*/
+        PhotosHepMC3Event(GenEvent * event);
 
-        /** Returns the HepMC::GenEvent */
-        HepMC::GenEvent * getEvent();
+        /** Returns the GenEvent */
+        GenEvent * getEvent();
 
         /** Returns the list of particles */
         std::vector<PhotosParticle*> getParticleList();
@@ -49,7 +49,7 @@ public:
         void print();
 private:
         /** The event */
-        HepMC::GenEvent * m_event;
+        GenEvent * m_event;
         /** Particle list */
         std::vector<PhotosParticle *> particles;
 };

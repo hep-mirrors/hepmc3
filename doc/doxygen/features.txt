@@ -57,31 +57,15 @@
     e.g. (c++11):
 
     @code{.cpp}
-        foreach( const GenParticlePtr &p : event.particles() ) { {
+        for( ConstGenParticlePtr p : event.particles() ) { {
             ...
         }
 
-        foreach( const GenParticlePtr &p : vertex.particles_in() ) { {
-            ...
-        }
-    @endcode
-
-    @note one can use macro FOREACH defined in HepMC/Common.h which uses
-          c++11 or tries to mimic it depending on the installation options
-
-    @code{.cpp}
-        #include "HepMC/Common.h"
-
-        ...
-
-        FOREACH( const GenParticlePtr &p, event.particles() ) { {
-            ...
-        }
-
-        FOREACH( const GenParticlePtr &p, vertex.particles_in() ) { {
+        for( ConstGenParticlePtr p : vertex.particles_in() ) { {
             ...
         }
     @endcode
+
 
 
 
@@ -144,5 +128,5 @@ while(found_next_vertex)                     // Looking for the electron end ver
     @endcode
 
     <hr>
-    Last update 6 Apr 2016
+    Last update 24 Jan 2019
 */

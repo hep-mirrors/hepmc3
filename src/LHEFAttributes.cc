@@ -1,17 +1,17 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2015 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file LHEFAttributes.cc
  *  @brief Implementation of \b class HEPRUPAttribute and HEPEUPAttribute
  */
 
-#include "HepMC/LHEFAttributes.h"
-#include "HepMC/GenEvent.h"
+#include "HepMC3/LHEFAttributes.h"
+#include "HepMC3/GenEvent.h"
 
-using namespace HepMC;
+using namespace HepMC3;
 using namespace LHEF;
 
 void HEPRUPAttribute::clear() {
@@ -51,8 +51,8 @@ bool HEPEUPAttribute::from_string(const string &att) {
     clear();
     tags = XMLTag::findXMLTags(att);
     for ( int i = 0, N = tags.size(); i < N; ++i )
-	if ( tags[i]->name == "event" || tags[i]->name == "eventgroup")
-	    return true;
+    if ( tags[i]->name == "event" || tags[i]->name == "eventgroup")
+        return true;
   return false;
 }
 
@@ -61,21 +61,21 @@ bool HEPEUPAttribute::to_string(string &att) const {
   if ( hepeup.heprup ) hepeup.print(os);
   for ( int i = 0, N = tags.size(); i < N; ++i )
     if ( !hepeup.heprup ||
-	 ( tags[i]->name != "event" && tags[i]->name != "eventgroup" ) )
+     ( tags[i]->name != "event" && tags[i]->name != "eventgroup" ) )
       tags[i]->print(os);
   att = os.str();
   return true;
 }
 
-bool HEPEUPAttribute::init(const GenEvent & geneve) {
+bool HEPEUPAttribute::init() {
     shared_ptr<HEPRUPAttribute> hepr =
-	geneve.attribute<HEPRUPAttribute>("HEPRUP");
+      event()->attribute<HEPRUPAttribute>("HEPRUP");
     bool found = false;
     for ( int i = 0, N = tags.size(); i < N; ++i )
-	if ( tags[i]->name == "event" || tags[i]->name == "eventgroup" ) {
-	    hepeup = HEPEUP(*tags[i], hepr->heprup);
-	    found = true;
-	}
+    if ( tags[i]->name == "event" || tags[i]->name == "eventgroup" ) {
+        hepeup = HEPEUP(*tags[i], hepr->heprup);
+        found = true;
+    }
     return found;
 }
 

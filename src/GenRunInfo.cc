@@ -1,41 +1,41 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenRunInfo.cc
  *  @brief Implementation of \b class GenRunInfo
  *
  */
-#include "HepMC/GenRunInfo.h"
-#include "HepMC/Data/GenRunInfoData.h"
+#include "HepMC3/GenRunInfo.h"
+#include "HepMC3/Data/GenRunInfoData.h"
 #include <sstream>
 
-namespace HepMC {
+namespace HepMC3 {
 
 
 void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
     m_weight_indices.clear();
     m_weight_names = names;
     for ( int i = 0, N = names.size(); i < N; ++i ) {
-	string name = names[i];
-	if ( name.empty() ) {
-	    std::ostringstream oss;
-	    oss << i;
-	    name = oss.str();
-	    m_weight_names[i] = name;
-	}
-	if ( has_weight(name) )
-	    throw std::logic_error("GenRunInfo::set_weight_names: "
-				   "Duplicate weight name '" + name +
-				   "' found.");
-	m_weight_indices[name] = i;
+    string name = names[i];
+    if ( name.empty() ) {
+        std::ostringstream oss;
+        oss << i;
+        name = oss.str();
+        m_weight_names[i] = name;
+    }
+    if ( has_weight(name) )
+        throw std::logic_error("GenRunInfo::set_weight_names: "
+                   "Duplicate weight name '" + name +
+                   "' found.");
+    m_weight_indices[name] = i;
     }
 }
 
 string GenRunInfo::attribute_as_string(const string &name) const {
-
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std::map< std::string, shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
     if( i == m_attributes.end() ) return string();
 
@@ -55,7 +55,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     // Attributes
     typedef std::map<std::string, shared_ptr<Attribute> >::value_type att_val_t;
 
-    FOREACH( const att_val_t& vt, this->attributes() ) {
+    for(const att_val_t& vt: m_attributes ) {
         std::string att;
         vt.second->to_string(att);
 
@@ -64,7 +64,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     }
 
     // Tools
-    FOREACH( const ToolInfo &tool, this->tools() ) {
+    for( const ToolInfo &tool: this->tools() ) {
         data.tool_name.       push_back(tool.name);
         data.tool_version.    push_back(tool.version);
         data.tool_description.push_back(tool.description);
@@ -94,4 +94,31 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
         this->tools().push_back(ti);
     }
 }
-} // namespace HepMC
+
+    GenRunInfo::GenRunInfo(const GenRunInfo& r)
+    {
+     if (this != &r)
+     {
+        std::lock(m_lock_attributes, r.m_lock_attributes);
+        std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
+        std::lock_guard<std::recursive_mutex> rhs_lk(r.m_lock_attributes, std::adopt_lock);     
+        GenRunInfoData tdata;
+        r.write_data(tdata);
+        read_data(tdata);
+     }
+    }
+    GenRunInfo& GenRunInfo::operator=(const GenRunInfo& r)
+    {
+     if (this != &r)
+     {
+        std::lock(m_lock_attributes, r.m_lock_attributes);
+        std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
+        std::lock_guard<std::recursive_mutex> rhs_lk(r.m_lock_attributes, std::adopt_lock);     
+        GenRunInfoData tdata;
+        r.write_data(tdata);
+        read_data(tdata);
+     }
+     return *this;
+    }
+
+} // namespace HepMC3

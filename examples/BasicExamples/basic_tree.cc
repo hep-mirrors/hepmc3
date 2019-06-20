@@ -1,21 +1,21 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /// @example basic_tree.cc
 /// @brief Basic example of building HepMC3 tree by hand
 ///
 ///  Based on HepMC2/examples/example_BuildEventFromScratch.cc
 
-#include "HepMC/GenEvent.h"
-#include "HepMC/GenVertex.h"
-#include "HepMC/GenParticle.h"
-#include "HepMC/Search/FindParticles.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/Print.h"
+#include "HepMC3/Selector.h"
+#include "HepMC3/Relatives.h"
 
-using namespace HepMC;
-using namespace std;
+using namespace HepMC3;
 
 
 /** Main program */
@@ -47,12 +47,12 @@ int main() {
     GenEvent evt(Units::GEV,Units::MM);
 
     //                                                               px      py        pz       e     pdgid status
-    GenParticlePtr p1 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr p2 = make_shared<HepMC::GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
-    GenParticlePtr p3 = make_shared<HepMC::GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr p4 = make_shared<HepMC::GenParticle>( FourVector(-3.047,-19.0,    -54.629,  57.920),  -2,  3 );
+    GenParticlePtr p1 = make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
+    GenParticlePtr p2 = make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
+    GenParticlePtr p3 = make_shared<GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
+    GenParticlePtr p4 = make_shared<GenParticle>( FourVector(-3.047,-19.0,    -54.629,  57.920),  -2,  3 );
 
-    GenVertexPtr v1 = make_shared<HepMC::GenVertex>();
+    GenVertexPtr v1 = make_shared<GenVertex>();
     v1->add_particle_in (p1);
     v1->add_particle_out(p2);
     evt.add_vertex(v1);
@@ -60,28 +60,28 @@ int main() {
     // Set vertex status if needed
     v1->set_status(4);
 
-    GenVertexPtr v2 = make_shared<HepMC::GenVertex>();
+    GenVertexPtr v2 = make_shared<GenVertex>();
     v2->add_particle_in (p3);
     v2->add_particle_out(p4);
     evt.add_vertex(v2);
 
-    GenVertexPtr v3 = make_shared<HepMC::GenVertex>();
+    GenVertexPtr v3 = make_shared<GenVertex>();
     v3->add_particle_in(p2);
     v3->add_particle_in(p4);
     evt.add_vertex(v3);
 
-    GenParticlePtr p5 = make_shared<HepMC::GenParticle>( FourVector(-3.813,  0.113, -1.833, 4.233),  22, 1 );
-    GenParticlePtr p6 = make_shared<HepMC::GenParticle>( FourVector( 1.517,-20.68, -20.605,85.925), -24, 3 );
+    GenParticlePtr p5 = make_shared<GenParticle>( FourVector(-3.813,  0.113, -1.833, 4.233),  22, 1 );
+    GenParticlePtr p6 = make_shared<GenParticle>( FourVector( 1.517,-20.68, -20.605,85.925), -24, 3 );
 
     v3->add_particle_out(p5);
     v3->add_particle_out(p6);
 
-    GenVertexPtr v4 = make_shared<HepMC::GenVertex>();
+    GenVertexPtr v4 = make_shared<GenVertex>();
     v4->add_particle_in (p6);
     evt.add_vertex(v4);
 
-    GenParticlePtr p7 = make_shared<HepMC::GenParticle>( FourVector(-2.445, 28.816,  6.082,29.552),  1, 1 );
-    GenParticlePtr p8 = make_shared<HepMC::GenParticle>( FourVector( 3.962,-49.498,-26.687,56.373), -2, 1 );
+    GenParticlePtr p7 = make_shared<GenParticle>( FourVector(-2.445, 28.816,  6.082,29.552),  1, 1 );
+    GenParticlePtr p8 = make_shared<GenParticle>( FourVector( 3.962,-49.498,-26.687,56.373), -2, 1 );
 
     v4->add_particle_out(p7);
     v4->add_particle_out(p8);
@@ -91,40 +91,36 @@ int main() {
     //
 
     // 1)
-    cout << endl << "Find all stable particles: " << endl;
+    std::cout << std::endl << "Find all stable particles: " << std::endl;
 
-    FindParticles search(evt, FIND_ALL, IS_STABLE);
-
-    FOREACH( const GenParticlePtr &p, search.results() ) {
-        Print::line(p);
+    for(ConstGenParticlePtr p: applyFilter(Selector::STATUS == 1, evt.particles())){
+      Print::line(p);
     }
 
     // 2)
-    cout << endl << "Find all ancestors of particle with id " << p5->id() << ": " << endl;
+    std::cout <<std::endl << "Find all ancestors of particle with id " << p5->id() << ": " << std::endl;
 
-    FindParticles search2(p5, FIND_ALL_ANCESTORS);
-
-    FOREACH( const GenParticlePtr &p, search2.results() ) {
-        Print::line(p);
+    for(ConstGenParticlePtr p: Relatives::ANCESTORS(p5)){
+      Print::line(p);
     }
-
+  
     // 3)
-    cout << endl << "Find stable descendants of particle with id " << p4->id() << ": " << endl;
-    cout<<"We check both for STATUS == 1 (equivalent of IS_STABLE) and no end vertex, just to be safe" << endl;
+    std::cout <<std::endl << "Find stable descendants of particle with id " << p4->id() << ": " << std::endl;
+    std::cout<<"We check both for STATUS == 1 (equivalent of IS_STABLE) and no end vertex, just to be safe" << std::endl;
 
-    FindParticles search3(p4, FIND_ALL_DESCENDANTS, STATUS == 1 && !HAS_END_VERTEX);
-
-    FOREACH( const GenParticlePtr &p, search3.results() ) {
-        Print::line(p);
+    Filter has_end_vtx = [](ConstGenParticlePtr input)->bool{return (bool)input->end_vertex();};
+  
+    vector<GenParticlePtr> results3 = applyFilter(Selector::STATUS==1 && has_end_vtx, Relatives::DESCENDANTS(p4));
+    for(ConstGenParticlePtr p: results3){
+      Print::line(p);
     }
-
+  
     // 3b)
-    cout << endl << "Narrow down results of previous search to quarks only: " << endl;
+    std::cout << std::endl << "Narrow down results of previous search to quarks only: " << std::endl;
 
-    search3.narrow_down( PDG_ID >= -6 && PDG_ID <= 6 );
-
-    FOREACH( const GenParticlePtr &p, search3.results() ) {
-        Print::line(p);
+    // note the use of abs to obtain the absolute value of pdg_id :)
+    for(ConstGenParticlePtr p: applyFilter( *abs(Selector::PDG_ID) <= 6, results3)){
+      Print::line(p);
     }
 
     //
@@ -149,7 +145,7 @@ int main() {
     // Example of manipulating the attributes
     //
 
-    cout << endl << " Manipulating attributes:" << endl;
+    std::cout << std::endl << " Manipulating attributes:" << std::endl;
 
     // get attribute
     shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
@@ -159,7 +155,7 @@ int main() {
         cs->set_cross_section(-1.0,0.0);
         Print::line(cs);
     }
-    else cout << "Problem accessing attribute!" << endl;
+    else std::cout << "Problem accessing attribute!" <<std::endl;
 
     // remove attribute
     evt.remove_attribute("GenCrossSection");
@@ -168,8 +164,8 @@ int main() {
     // now this should be null
     cs = evt.attribute<GenCrossSection>("GenCrossSection");
 
-    if(!cs) cout << "Successfully removed attribute" << endl;
-    else    cout << "Problem removing attribute!" << endl;
+    if(!cs)std::cout << "Successfully removed attribute" <<std::endl;
+    else   std::cout << "Problem removing attribute!" <<std::endl;
 
     //
     // Example of adding attributes and finding particles with attributes
@@ -191,51 +187,50 @@ int main() {
     v3->add_attribute( "vtx_att" , test_attribute );
     v4->add_attribute( "vtx_att" , test_attribute2 );
 
-    cout << endl << "Find all particles with attribute 'tool' "<< endl;
-    cout << "(should return particles 2,4,6):" << endl;
+    std::cout << std::endl << "Find all particles with attribute 'tool' "<< std::endl;
+    std::cout << "(should return particles 2,4,6):" << std::endl;
 
-    FindParticles search_attributes(evt, FIND_ALL, ATTRIBUTE("tool") );
-
-    FOREACH( const GenParticlePtr &p, search_attributes.results() ) {
-        Print::line(p);
+    /// @todo can we add some utility funcs to simplify creation of Features from Attributes and check they exist.
+    /// Features and Attributes are quite similar concepts anyway, can they be unified (but Features can also be
+    ///  non-attribute-like e.g. pT, rapidity or any quantity it is possible to obtain from a particle)
+  
+    for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("tool"), evt.particles())){
+      Print::line(p);
     }
-
-    cout << endl << "Find all particles with attribute 'tool' equal 1 "<< endl;
-    cout << "(should return particles 2,4):" << endl;
-
-    FindParticles search_attributes2(evt, FIND_ALL, ATTRIBUTE("tool") == tool1 );
-
-    FOREACH( const GenParticlePtr &p, search_attributes2.results() ) {
-        Print::line(p);
+  
+    std::cout <<std::endl << "Find all particles with attribute 'tool' equal 1 "<< std::endl;
+    std::cout << "(should return particles 2,4):" <<std::endl;
+  
+    for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("tool") && Selector::ATTRIBUTE("tool") == tool1, evt.particles())){
+      Print::line(p);
     }
-
-    cout << endl << "Find all particles with a string attribute 'other' equal 'test attribute' "<< endl;
-    cout << "(should return particle 2):" << endl;
-
-    FindParticles search_attributes3(evt, FIND_ALL, ATTRIBUTE("other") == "test attribute" );
-
-    FOREACH( const GenParticlePtr &p, search_attributes3.results() ) {
-        Print::line(p);
+  
+    std::cout << std::endl << "Find all particles with a string attribute 'other' equal 'test attribute' "<< std::endl;
+    std::cout << "(should return particle 2):" << std::endl;
+  
+  
+    for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("other") && Selector::ATTRIBUTE("other") == "test_attribute", evt.particles())){
+      Print::line(p);
     }
-
-    cout << endl << "Offsetting event position by 5,5,5,5" << endl;
+  
+    std::cout << std::endl << "Offsetting event position by 5,5,5,5" << std::endl;
 
     evt.shift_position_by( FourVector(5,5,5,5) );
 
     Print::listing(evt);
 
-    cout << endl << "Printing full content of the GenEvent object " << endl
-                 << "(including particles and vertices in one-line format):" << endl << endl;
+    std::cout << std::endl << "Printing full content of the GenEvent object " << std::endl
+                 << "(including particles and vertices in one-line format):" << std::endl << std::endl;
 
     Print::content(evt);
 
-    cout << endl << "Now: removing particle with id 6 and printing again:" << endl << endl;
+   std::cout <<std::endl << "Now: removing particle with id 6 and printing again:" <<std::endl <<std::endl;
     evt.remove_particle(p6);
 
     Print::listing(evt);
     Print::content(evt);
 
-    cout << endl << "Now: removing beam particles, leaving an empty event" << endl << endl;
+   std::cout <<std::endl << "Now: removing beam particles, leaving an empty event" <<std::endl <<std::endl;
     evt.remove_particles( evt.beams() );
 
     Print::listing(evt);

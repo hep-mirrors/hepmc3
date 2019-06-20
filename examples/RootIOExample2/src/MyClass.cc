@@ -2,12 +2,12 @@
 
 MyClass::MyClass():someint(0), event(0){};
 
-void MyClass::SetEvent(HepMC::GenEvent* myevt)
+void MyClass::SetEvent(GenEvent* myevt)
 {
   event = myevt;
 }
 
-HepMC::GenEvent* MyClass::GetEvent()
+GenEvent* MyClass::GetEvent()
 {
   return event;
 }

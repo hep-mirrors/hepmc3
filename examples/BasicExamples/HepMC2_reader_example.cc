@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @example HepMC2_reader_example.cc
@@ -10,17 +10,15 @@
  *  Converts selected HepMC2 file to HepMC3 file
  *
  */
-#include "HepMC/GenEvent.h"
+#include "HepMC3/GenEvent.h"
 
-#include "HepMC/ReaderAsciiHepMC2.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/Print.h"
+#include "HepMC3/ReaderAsciiHepMC2.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/Print.h"
 
 #include <iostream>
 #include <cstdlib> // atoi
-using namespace HepMC;
-using std::cout;
-using std::endl;
+using namespace HepMC3;
 
 /** Main program */
 int main(int argc, char **argv) {

@@ -1,25 +1,23 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
- *  @file rootIO_example_read.cc
+ *  @file rootIOTree_example_read.cc
  *  @brief Basic example of use of root I/O with tree: reading events from file
  *
  *  @author Witold Pokorski/Andrii Verbytskyi
  *  @date   29/10/15
  */
-#include "HepMC/GenEvent.h"
-#include "HepMC/WriterAscii.h"
-#include "HepMC/ReaderRootTree.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/WriterAscii.h"
+#include "HepMC3/ReaderRootTree.h"
+#include "HepMC3/Print.h"
 
 #include <iostream>
 
-using namespace HepMC;
-using std::cout;
-using std::endl;
+using namespace HepMC3;
 
 /** Main */
 int main(int argc, char **argv) {

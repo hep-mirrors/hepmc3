@@ -2,12 +2,12 @@
 
 MyRunClass::MyRunClass():someint(0), run(0){};
 
-void MyRunClass::SetRunInfo(HepMC::GenRunInfo* myrun)
+void MyRunClass::SetRunInfo(GenRunInfo* myrun)
 {
   run = myrun;
 }
 
-HepMC::GenRunInfo* MyRunClass::GetRunInfo()
+GenRunInfo* MyRunClass::GetRunInfo()
 {
   return run;
 }

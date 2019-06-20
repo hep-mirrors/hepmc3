@@ -1,5 +1,23 @@
+  --------------------------  HepMC3.1.1  --------------------------
+2019-03-02 Andrii Verbytskyi for HepMC
+        * Bugfix release. Fixed some typos and minor bugs.
+        * Improved treatment of events with cycles.
+        * Improved documentation and examples.
+  --------------------------  HepMC3.1.0  --------------------------
+2019-02-08 Andrii Verbytskyi for HepMC
+        * Multiple changes for3.1 release
+        * Renaming the namespace, header directory and library name to HepMC3
+        * SmartPointer is repaced with shared_ptr from C++11, so C++11 is always required now
+        * Split library into HepMC3(core) and HepMC3search (search engine)
+        * New Search engine with highly abstract search capabilities
+        * New readers and writers: WriterAsciiHepMC2, ReaderLHEF
+        * Ascii files now have own string in header: Asciiv3
+        * Deduction of input file format in ReaderFactory
+        * Improved consistency of interface
+        * Removal of most deprecated functions and  multiple bugfixes
+        * Implemented test suite
+        * Improved examples and documentation
   --------------------------  HepMC3.0.0  --------------------------
-
 2017-03-20 Witek Pokorski
 
 	* tagging HepMC3.0.0

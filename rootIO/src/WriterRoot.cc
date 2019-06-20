@@ -1,17 +1,20 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file WriterRoot.cc
  *  @brief Implementation of \b class WriterRoot
  *
  */
-#include "HepMC/WriterRoot.h"
+#include "HepMC3/WriterRoot.h"
 #include <cstdio>  // sprintf
+// ROOT header files
+#include "TFile.h"
+#include "TTree.h"
 
-namespace HepMC {
+namespace HepMC3 {
 
 WriterRoot::WriterRoot(const std::string &filename, shared_ptr<GenRunInfo> run):
 m_events_count(0) {
@@ -77,4 +80,4 @@ bool WriterRoot::failed() {
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

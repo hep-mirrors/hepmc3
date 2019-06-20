@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @example hepevt_wrapper_example_main.cc
@@ -10,7 +10,7 @@
  *  Fills HEPEVT twice - once using FORTRAN and second time using C++
  *  Tests that both times printouts from FORTRAN and C++ match
  *
- *  Note that HepMC/HEPEVT_Wrapper.h file is a standalone header file
+ *  Note that HEPEVT_Wrapper.h file is a standalone header file
  *  and can be copied over to user directory. No linking to HepMC library
  *  is needed to use this wrapper.
  */
@@ -23,14 +23,12 @@
 
    NOTE: default is NMXHEP=10000 and double precision */
 
-//#define HEPMC_HEPEVT_NMXHEP 4000
-//#define HEPMC_HEPEVT_PRECISION float
-#include "HepMC/HEPEVT_Wrapper.h"
+//#define HEPMC3_HEPEVT_NMXHEP 4000
+//#define HEPMC3_HEPEVT_PRECISION float
+#include "HepMC3/HEPEVT_Wrapper.h"
 
 #include <iostream>
-using HepMC::HEPEVT_Wrapper;
-using std::cout;
-using std::endl;
+using  namespace HepMC3;
 
 extern "C" void simple_tau_hepevt_event_(); //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
 extern "C" void phodmp_();                  //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
@@ -95,27 +93,27 @@ void simple_tau_hepevt_event_cpp() {
 
 /** Main program */
 int main() {
-    cout << endl << "HEPEVT wrapper example - FORTRAN EVENT" << endl;
-    cout <<         "--------------------------------------" << endl;
+    std::cout << std::endl << "HEPEVT wrapper example - FORTRAN EVENT" << std::endl;
+    std::cout <<         "--------------------------------------" << std::endl;
 
     HEPEVT_Wrapper::set_hepevt_address((char*)(&hepevt_));
 
     simple_tau_hepevt_event_();
 
-    cout << endl << "FORTRAN PRINTOUT" << endl << endl;
+    std::cout << std::endl << "FORTRAN PRINTOUT" << std::endl << std::endl;
     phodmp_();
 
-    cout << endl << "C++ PRINTOUT"     << endl << endl;
+    std::cout << std::endl << "C++ PRINTOUT"     << std::endl << std::endl;
     HEPEVT_Wrapper::print_hepevt();
 
-    cout << endl << "HEPEVT wrapper example - C++ EVENT" << endl;
-    cout <<         "----------------------------------" << endl;
+    std::cout << std::endl << "HEPEVT wrapper example - C++ EVENT" << std::endl;
+    std::cout <<         "----------------------------------" << std::endl;
 
     simple_tau_hepevt_event_cpp();
 
-    cout << endl << "FORTRAN PRINTOUT" << endl << endl;
+    std::cout << std::endl << "FORTRAN PRINTOUT" << std::endl << std::endl;
     phodmp_();
 
-    cout << endl << "C++ PRINTOUT" << endl << endl;
+    std::cout << std::endl << "C++ PRINTOUT" << std::endl << std::endl;
     HEPEVT_Wrapper::print_hepevt();
 }

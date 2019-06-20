@@ -1,17 +1,17 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderRootTree.cc
  *  @brief Implementation of \b class ReaderRootTree
  *
  */
-#include "HepMC/ReaderRootTree.h"
-#include "HepMC/Units.h"
+#include "HepMC3/ReaderRootTree.h"
+#include "HepMC3/Units.h"
 
-namespace HepMC
+namespace HepMC3
 {
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
@@ -36,20 +36,9 @@ bool ReaderRootTree::init()
             ERROR( "ReaderRootTree: problem opening file: " << m_file->GetName() )
             return false;
         }
-    shared_ptr<GenRunInfo> ri = make_shared<GenRunInfo>();
-
-    GenRunInfoData *run = (GenRunInfoData*)m_file->Get("GenRunInfoData");
-    
-    if(run) {
-        ri->read_data(*run);
-        delete run;
-    }
-
-    set_run_info(ri);        
+   
         
-        
-        
-    m_tree=(TTree*)m_file->Get(m_tree_name.c_str());
+    m_tree=reinterpret_cast<TTree*>(m_file->Get(m_tree_name.c_str()));
     if (!m_tree)
         {
             ERROR( "ReaderRootTree: problem opening tree:  " << m_tree_name)
@@ -62,7 +51,14 @@ bool ReaderRootTree::init()
             ERROR( "ReaderRootTree: problem reading branch tree:  " << m_tree_name)
             return false;
         }
-
+    m_run_info_data= new GenRunInfoData();
+    result=m_tree->SetBranchAddress("GenRunInfo",&m_run_info_data);
+    if (result<0)
+        {
+            ERROR( "ReaderRootTree2: problem reading branch tree:  " << "GenRunInfo")
+            return false;
+        }
+ set_run_info(make_shared<GenRunInfo>());
     return true;
 }
 
@@ -80,9 +76,19 @@ bool ReaderRootTree::read_event(GenEvent& evt)
     m_event_data->attribute_name.clear();
     m_event_data->attribute_string.clear();
 
+    
+    m_run_info_data->weight_names.clear();
+    m_run_info_data->tool_name.clear();
+    m_run_info_data->tool_version.clear();
+    m_run_info_data->tool_description.clear();
+    m_run_info_data->attribute_name.clear();
+    m_run_info_data->attribute_string.clear();
+
+
     m_tree->GetEntry(m_events_count);
     evt.read_data(*m_event_data);
-
+    run_info()->read_data(*m_run_info_data);
+    evt.set_run_info(run_info());
     m_events_count++;
     return true;
 }
@@ -99,4 +105,4 @@ bool ReaderRootTree::failed()
     return false;
 }
 
-} // namespace HepMC
+} // namespace HepMC3

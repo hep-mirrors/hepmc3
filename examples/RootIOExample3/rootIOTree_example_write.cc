@@ -1,25 +1,23 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 /**
- *  @file rootIO_example_write.cc
+ *  @file rootIOTree_example_write.cc
  *  @brief Basic example of use of root I/O: writing events to file
  *
  *  @author Witold Pokorski/Andrii Verbytskyi
  *  @date   29/10/15
  */
-#include "HepMC/GenEvent.h"
-#include "HepMC/ReaderAscii.h"
-#include "HepMC/WriterRootTree.h"
-#include "HepMC/Print.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/ReaderAscii.h"
+#include "HepMC3/WriterRootTree.h"
+#include "HepMC3/Print.h"
 
 #include <iostream>
 
-using namespace HepMC;
-using std::cout;
-using std::endl;
+using namespace HepMC3;
 
 /** Main */
 int main(int argc, char **argv) {
