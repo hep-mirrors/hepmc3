@@ -41,8 +41,12 @@ public:
     /// @param[out] evt Event to be filled
     bool read_event(GenEvent& evt);
 
+    /// @todo No-arg version returning GenEvent?
+
     /// @brief Return status of the stream
     bool failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+
+    /// @todo Implicit cast to bool = !failed()?
 
     /// @brief Close file stream
     void close();
