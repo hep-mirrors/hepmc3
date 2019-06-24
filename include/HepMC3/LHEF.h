@@ -998,7 +998,7 @@ struct MergeInfo : public TagBase {
   MergeInfo(): iproc(0), mergingscale(0.0), maxmult(false) {}
 
   /**
-   * Creat from XML tag.
+   * Create from XML tag.
    */
   MergeInfo(const XMLTag & tag)
     : TagBase(tag.attr, tag.contents),
