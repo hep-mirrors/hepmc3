@@ -1419,7 +1419,7 @@ struct Scales : public TagBase {
   /**
    * Empty constructor.
    */
-  Scales(double defscale = -1.0, int npart = 0)
+  Scales(double defscale = -1.0, int /* npart */ = 0)
     : muf(defscale), mur(defscale), mups(defscale), SCALUP(defscale) {
   }
 
