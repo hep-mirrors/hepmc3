@@ -48,7 +48,7 @@ const std::vector<ConstGenVertexPtr>& GenEvent::vertices() const {
   
 // void GenEvent::add_particle( const GenParticlePtr &p ) {
 void GenEvent::add_particle( GenParticlePtr p ) {
-    if( p->in_event() ) return;
+    if( !p|| p->in_event() ) return;
   
     m_particles.push_back(p);
 
@@ -96,7 +96,7 @@ GenEvent& GenEvent::operator=(const GenEvent& e){
 
 
 void GenEvent::add_vertex( GenVertexPtr v ) {
-    if( v->in_event() ) return;
+    if( !v|| v->in_event() ) return;
     m_vertices.push_back(v);
 
     v->m_event = this;
@@ -608,9 +608,14 @@ void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
 }
 
 void GenEvent::add_beam_particle(GenParticlePtr p1){
+      if (!p1) 
+      {
+       WARNING("Attempting to add an empty particle as beam particle. Ignored.")
+       return;
+      }
       if( p1->in_event()) if (p1->parent_event()!=this)
        {
-       WARNING("Attempting to add particle from anothe event. Ignored.")
+       WARNING("Attempting to add particle from another event. Ignored.")
        return;
        }
        if (p1->production_vertex())  p1->production_vertex()->remove_particle_out(p1);
