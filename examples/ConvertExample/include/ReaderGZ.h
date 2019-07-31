@@ -86,19 +86,16 @@ private:
         printf("Info in ReaderGZ::deduce_reader: Attempt ReaderAsciiHepMC2 for stream\n");
         if( strncmp(head.at(0).c_str(),"HepMC::Version",14) == 0 && strncmp(head.at(1).c_str(),"HepMC::IO_GenEvent",18)==0 )
             return std::shared_ptr<Reader>((Reader*) ( new ReaderAsciiHepMC2(stream)));
-        /*Commented out so far as there is no appropriate  implementation */
-        /*
-            printf("Info in deduce_reader: Attempt ReaderLHEF for stream\n");
-            if( strncmp(head.at(0).c_str(),"<LesHouchesEvents",17) == 0)
-                return std::shared_ptr<Reader>((Reader*) ( new ReaderLHEF(stream)));
-
-            printf("Info in deduce_reader: Attempt ReaderHEPEVT for stream\n");
-            std::stringstream st_e(head.at(0).c_str());
-            char attr=' ';
-            bool HEPEVT=true;
-            int m_i,m_p;
-            while (true)
-            {
+        printf("Info in deduce_reader: Attempt ReaderLHEF for stream\n");
+        if( strncmp(head.at(0).c_str(),"<LesHouchesEvents",17) == 0)
+            return std::shared_ptr<Reader>((Reader*) ( new ReaderLHEF(stream)));
+        printf("Info in deduce_reader: Attempt ReaderHEPEVT for stream\n");
+        std::stringstream st_e(head.at(0).c_str());
+        char attr=' ';
+        bool HEPEVT=true;
+        int m_i,m_p;
+        while (true)
+          {
                 if (!(st_e>>attr)) {
                     HEPEVT=false;
                     break;
@@ -110,9 +107,8 @@ private:
                 }
                 HEPEVT=static_cast<bool>(st_e>>m_i>>m_p);
                 break;
-            }
-            if (HEPEVT)     return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(stream)));
-        */
+          }
+        if (HEPEVT)     return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(stream)));
         printf("Info in deduce_reader: All attempts failed for stream\n");
         return shared_ptr<Reader>(nullptr);
     }
