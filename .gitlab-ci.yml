@@ -38,7 +38,7 @@ ubuntu18:
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/graphviz-env.sh
-    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/zlib/1.2.11/${LCGPLATFORM}/zlib-env.sh
+ #   - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/zlib/1.2.11/${LCGPLATFORM}/zlib-env.sh
   script:
     - mkdir build
     - cd build
