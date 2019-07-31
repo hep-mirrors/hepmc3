@@ -16,10 +16,8 @@ namespace HepMC3
 {
 
 ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
- : m_file(filename), m_stream(0), m_isstream(false),   m_events_count(0)
+ : m_file(filename), m_stream(0), m_isstream(false), m_vertices_positions_present(true)
 {
-   
-
     if( !m_file.is_open() ) {
         ERROR( "ReaderHEPEVT: could not open input file: "<<filename )
     }
@@ -32,10 +30,8 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
 }
 
 ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
- : m_stream(&stream), m_isstream(true),   m_events_count(0)
+ : m_stream(&stream), m_isstream(true), m_vertices_positions_present(true)
 {
-   
-
     if( !m_stream->good() ) {
         ERROR( "ReaderHEPEVT: could not open input stream  ")
     }
@@ -47,7 +43,6 @@ ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
         }
 }
 
-
 bool ReaderHEPEVT::read_hepevt_event_header()
 {
     const size_t       max_e_buffer_size=512;
@@ -57,7 +52,7 @@ bool ReaderHEPEVT::read_hepevt_event_header()
     while(!eventline)
         {
             m_isstream ? m_stream->getline(buf_e,max_e_buffer_size) : m_file.getline(buf_e,max_e_buffer_size);
-            if( strlen(buf_e) == 0 ) continue;
+            if( strlen(buf_e) == 0 ) return false;
             std::stringstream st_e(buf_e);
             char attr=' ';
             eventline=false;
@@ -132,7 +127,6 @@ bool ReaderHEPEVT::read_event(GenEvent& evt, bool iflong)
     bool result=false;
     if (fileok)
         {
-            m_events_count++;
             result=HEPEVT_Wrapper::HEPEVT_to_GenEvent(&evt);
             shared_ptr<GenRunInfo> g=make_shared<GenRunInfo>();
             std::vector<std::string> weightnames;
@@ -143,20 +137,24 @@ bool ReaderHEPEVT::read_event(GenEvent& evt, bool iflong)
             evt.set_run_info(g);
             evt.weights()=wts;
         }
-    else m_failed=true;
+    else 
+       {
+        m_isstream ? m_stream->clear(ios::badbit) : m_file.clear(ios::badbit);
+       }
     return result;
 }
 bool ReaderHEPEVT::read_event(GenEvent& evt)
 {
 if ( (!m_file.is_open()) && (!m_isstream) ) return false;
-return read_event(evt,true); 
+return read_event(evt,m_vertices_positions_present); 
 }
 
 
 void ReaderHEPEVT::close()
 { 
-    if (!m_isstream) close();    
-    if (hepevtbuffer) delete hepevtbuffer;
+   if (hepevtbuffer) delete hepevtbuffer;
+   if( !m_file.is_open()) return;
+   m_file.close();   
 }
 
 bool ReaderHEPEVT::failed()
