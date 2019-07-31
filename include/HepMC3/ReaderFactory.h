@@ -18,7 +18,6 @@
 
 namespace HepMC3 {
 
-
 std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 {
     bool remote=false;
