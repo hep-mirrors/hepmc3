@@ -15,6 +15,16 @@ namespace HepMC3
 ReaderLHEF::ReaderLHEF(const std::string& filename)
 {
     m_reader = new LHEF::Reader(filename);
+    init();
+}
+ReaderLHEF::ReaderLHEF(std::istream & stream)
+{
+    m_reader = new LHEF::Reader(stream);
+    init();
+}
+
+void ReaderLHEF::init()
+{
     m_neve=0;
     m_failed=false;
     // Create a HEPRUP attribute and initialize it from the reader.

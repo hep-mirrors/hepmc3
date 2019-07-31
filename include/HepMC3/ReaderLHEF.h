@@ -34,7 +34,10 @@ namespace HepMC3
 class ReaderLHEF : public Reader
 {
 public:
-    ReaderLHEF(const std::string& filename);
+    /// @brief Constructor
+    ReaderLHEF(const std::string& filename);  
+    /// The ctor to read from stream
+    ReaderLHEF(std::istream &);
     bool read_event(GenEvent& ev);
     void close();
     bool failed();
@@ -44,6 +47,7 @@ private:
     shared_ptr<HEPRUPAttribute> m_hepr;
     int m_neve;
     bool m_failed;
+    void init();
 };
 }
 #endif

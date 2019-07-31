@@ -14,12 +14,13 @@
 ///
 /// @ingroup IO
 ///
-#include "HepMC3/Reader.h"
-#include "HepMC3/GenEvent.h"
 #include <set>
 #include <string>
 #include <fstream>
 #include <istream>
+#include "HepMC3/Reader.h"
+#include "HepMC3/GenEvent.h"
+
 
 namespace HepMC3 {
 
@@ -28,7 +29,6 @@ class ReaderAscii : public Reader {
 public:
 
     /// @brief Constructor
-    /// @warning If file already exists, it will be cleared before writing
     ReaderAscii(const std::string& filename);
 
     /// The ctor to read from stdin
