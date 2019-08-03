@@ -38,16 +38,20 @@ public:
     ReaderLHEF(const std::string& filename);  
     /// The ctor to read from stream
     ReaderLHEF(std::istream &);
+    /** @brief Reading event */
     bool read_event(GenEvent& ev);
+    /** @brief Close */
     void close();
+    /** @brief State */
     bool failed();
+    /** @brief Destructor */
     ~ReaderLHEF() ;
 private:
-    LHEF::Reader* m_reader;
-    shared_ptr<HEPRUPAttribute> m_hepr;
-    int m_neve;
-    bool m_failed;
-    void init();
+    void init();                       ///< Init helper
+    LHEF::Reader* m_reader;            ///< The actual reader
+    shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
+    int m_neve;                         ///< Event counter
+    bool m_failed;                      ///< State of reader
 };
 }
 #endif
