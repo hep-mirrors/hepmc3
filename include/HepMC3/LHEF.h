@@ -357,8 +357,7 @@ struct TagBase {
   /**
    * Main constructor stores the attributes and contents of a tag.
    */
-  TagBase(const AttributeMap & attr, std::string conts = std::string())
-    : attributes(attr), contents(conts) {}
+  TagBase(const AttributeMap & attr, std::string conts = std::string()): attributes(attr), contents(conts) {}
  
   /**
    * Find an attribute named \a n and set the double variable \a v to
