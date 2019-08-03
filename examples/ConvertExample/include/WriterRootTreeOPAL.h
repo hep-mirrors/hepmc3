@@ -18,14 +18,18 @@ namespace HepMC3
 class WriterRootTreeOPAL : public WriterRootTree
 {
 public:
+    /** @brief Constructor */
     WriterRootTreeOPAL(const std::string &filename,shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+    /** @brief Init ROOT branches */
     void init_branches();
+    /** @brief Write event */
     void write_event(const GenEvent &evt);
+    /** @brief Set run number */
     void set_run_number(const int nr);
 private:
-    float  m_Ebeam;
-    int    m_Irun;
-    int    m_Ievnt;
+    float  m_Ebeam; ///< Beam energy in GEV
+    int    m_Irun;  ///< Run number
+    int    m_Ievnt; ///< Event number
 };
 }
 #endif

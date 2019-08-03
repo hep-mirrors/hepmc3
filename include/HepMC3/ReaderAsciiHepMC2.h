@@ -123,8 +123,8 @@ private:
 //
 private:
     std::ifstream m_file; //!< Input file
-    std::istream* m_stream; // For ctor when reading from stdin
-    bool m_isstream; // toggles usage of m_file or m_stream
+    std::istream* m_stream; ///< For ctor when reading from stdin
+    bool m_isstream; ///< toggles usage of m_file or m_stream
  
     vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache
     vector<int>            m_vertex_barcodes;     //!< Old vertex barcodes

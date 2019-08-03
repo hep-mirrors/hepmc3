@@ -51,7 +51,9 @@ public:
 
     /// @brief Default constructor
     GenRunInfo() {}
+    /// @brief Copy constructor
     GenRunInfo(const GenRunInfo& r);
+    /// @brief Assignmet
     GenRunInfo& operator=(const GenRunInfo& r);
     
     #if !defined(__CINT__)
