@@ -27,9 +27,10 @@ namespace HepMC3
 struct HEPEVT*  hepevtptr;
 
 
-
+/** @brief comparison of two particles */
 struct GenParticlePtr_greater_order
 {
+    /** @brief comparison of two particles */
     bool operator()(ConstGenParticlePtr lx, ConstGenParticlePtr rx ) const
     {
        /* Cannot use id as it could be different*/
@@ -40,10 +41,10 @@ struct GenParticlePtr_greater_order
 
     }
 };
-
+/** @brief  Order vertices with equal paths. */
 struct pair_GenVertexPtr_int_greater
 {
-    /*Order vertices with equal paths. If the paths are equal, order in other quantities.
+    /** @brief  Order vertices with equal paths. If the paths are equal, order in other quantities.
      * We cannot use id, as it can be assigned in different way*/
     bool operator()( const std::pair<ConstGenVertexPtr,int>& lx, const std::pair<ConstGenVertexPtr,int>& rx ) const
     {
@@ -87,7 +88,7 @@ struct pair_GenVertexPtr_int_greater
         return (lx.first<lx.first); /*This  is random. This should never happen*/
     }
 };
-
+/** @brief Calculates the path to the top (beam) particles */
 void calculate_longest_path_to_top(ConstGenVertexPtr v,std::map<ConstGenVertexPtr,int>& pathl)
 {
     int p=0;

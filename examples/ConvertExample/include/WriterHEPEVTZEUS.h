@@ -1,5 +1,14 @@
 #ifndef HEPMC3_WRITERHEPEVTZEUS_H
 #define HEPMC3_WRITERHEPEVTZEUS_H
+///
+/// @file  WriterHEPEVTZEUS.h
+/// @brief Definition of class \b WriterHEPEVTZEUS
+///
+/// @class HepMC3::WriterHEPEVTZEUS
+/// @brief GenEvent I/O output to files readable by ZEUS software
+///
+/// @ingroup Examples
+///
 #include "HepMC3/WriterHEPEVT.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"

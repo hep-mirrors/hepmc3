@@ -81,10 +81,10 @@ public:
     TTree* m_tree;//!< Tree handler. Public to allow simple access, e.g. custom branches.
 private:
     int   m_events_count; //!< Events count. Needed to read the tree
-    GenEventData* m_event_data;
-    GenRunInfoData* m_run_info_data;
-    std::string m_tree_name;
-    std::string m_branch_name;
+    GenEventData* m_event_data; //!< Pointer to structure that holds event data
+    GenRunInfoData* m_run_info_data; //!< Pointer to structure that holds run info data
+    std::string m_tree_name;//!< Name of TTree
+    std::string m_branch_name; //!< Name of TBranch in TTree
 };
 
 } // namespace HepMC3

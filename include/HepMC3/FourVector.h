@@ -11,6 +11,7 @@
  */
 #include <cmath>
 #ifndef M_PI
+/** @brief Definition of PI. Needed on some platforms */
 #define M_PI 3.14159265358979323846264338327950288
 #endif
 namespace HepMC3 {

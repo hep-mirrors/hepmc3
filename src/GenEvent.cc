@@ -175,8 +175,9 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     p->m_event = nullptr;
     p->m_id    = 0;
 }
-
+/** @brief Comparison of two particle by id */
     struct sort_by_id_asc {
+        /** @brief Comparison of two particle by id */
         inline bool operator()(const GenParticlePtr& p1, const GenParticlePtr& p2) {
             return (p1->id() > p2->id());
         }

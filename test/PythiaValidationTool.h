@@ -24,10 +24,11 @@
 #include "Timer.h"
 
 #include "Pythia8/Pythia.h"
-
+/// @class PythiaValidationTool
+/// @brief Interface for validatio to Pythia
 class PythiaValidationTool : public ValidationTool {
 public:
-    PythiaValidationTool( const std::string &filename );
+    PythiaValidationTool( const std::string &filename ); ///< Constructor
 
     const std::string name()      { return "pythia8"; }
     const std::string long_name() { return name() + " config file: " + m_filename; }
@@ -40,9 +41,9 @@ public:
     void finalize();
 
 private:
-    Pythia8::Pythia m_pythia;
-    std::string     m_filename;
-    Timer           m_timer;
+    Pythia8::Pythia m_pythia; ///< Pythia8 instance
+    std::string     m_filename; ///< Used file
+    Timer           m_timer;  ///< Timer
     HEPMC2CODE( Pythia8ToHepMC   m_tohepmc; )
     HEPMC3CODE( Pythia8ToHepMC3 m_tohepmc; )
 };

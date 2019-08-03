@@ -15,7 +15,8 @@
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"
-
+/// @class SimpleEventTool
+/// @brief Simple validation
 class SimpleEventTool : public ValidationTool {
 public:
     SimpleEventTool() {}
