@@ -29,6 +29,7 @@ void WriterDOT::close() {
     forced_flush();
     if (ofs) ofs->close();
 }
+/// @brief Detects if particle is parton. Might be used to draw partons different from hadrons
 bool is_parton(const int& pd )
 {
     bool parton=false;

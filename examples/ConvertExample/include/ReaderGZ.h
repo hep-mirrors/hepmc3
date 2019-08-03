@@ -25,6 +25,7 @@
 #include "HepMC3/GenEvent.h"
 #include "gzstream.h"
 namespace HepMC3 {
+/** @brief Union to hold first 4 byts of file, i.e. magic bytes */
 union magic_t {
     uint8_t bytes[4];
     uint32_t number;
@@ -53,7 +54,7 @@ public:
     };
     ~ReaderGZ() {};
     bool read_event(GenEvent& evt) {
-        m_reader->read_event(evt);
+       return m_reader->read_event(evt);
     };
     bool failed() {
         return m_gzstream.rdstate();

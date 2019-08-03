@@ -15,10 +15,10 @@
 
 namespace HepMC3{
 
-  // forward declare the Relatives interface in which _parents and _children are wrapped
+  /// forward declare the Relatives interface in which _parents and _children are wrapped
   template<typename T>
   class RelativesInterface;
-  // forward declare the recursion wrapper
+  /// forward declare the recursion wrapper
   template<typename T>
   class Recursive;
   
@@ -89,7 +89,7 @@ namespace HepMC3{
     Relative_type _internal;
     
   };
-  
+  /** @brief  Recursive */
   template<typename Relation_type>
   class Recursive{
     
@@ -136,13 +136,14 @@ namespace HepMC3{
      return _recursive(m_applyRelation.vertex(input));
     }
       
+    /** @brief  hasID */
     class hasId{
       
     public:
       virtual ~hasId(){}
       virtual int id() const = 0;
     };
-    
+    /** @brief  iDinterface */
     template<typename ID_type>
     class idInterface : public hasId{
       

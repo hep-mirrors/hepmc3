@@ -18,7 +18,8 @@
 
 #include "Setup.H"
 #include "Generate.h"
-
+/// @class McTesterValidationTool
+/// @brief Interface to MCTester
 class McTesterValidationTool : public ValidationTool {
 public:
     const std::string name()    { return "MC-TESTER"; }

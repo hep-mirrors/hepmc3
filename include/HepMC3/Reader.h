@@ -30,7 +30,9 @@ namespace HepMC3 {
 
     /// Fill next event from input into @a evt
     virtual bool read_event(GenEvent& evt) = 0;
+    /** @brief Get file and/or stream error state */
     virtual bool failed()=0;
+    /** @brief Close file and/or stream */
     virtual void close()=0;
 
     /// Get the global GenRunInfo object.

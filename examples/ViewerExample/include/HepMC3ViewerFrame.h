@@ -1,3 +1,12 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
+///
+/// @class HepMC3ViewerFrame
+/// @brief Definition of \b class HepMC3ViewerFrame used for simple GUI viewer 
+///
 #include <TGClient.h>
 #include <TBuffer.h>
 #include <TGButton.h>

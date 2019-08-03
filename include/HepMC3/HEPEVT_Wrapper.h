@@ -75,6 +75,7 @@ using std::endl;
 
 namespace HepMC3
 {
+/** @brief Pointer to external (e.g. in Pythia6) struct with HEPEVT */ 
 extern struct HEPEVT*  hepevtptr;
 
 class HEPEVT_Wrapper

@@ -18,7 +18,8 @@
 
 #include <vector>
 #include <string.h>
-
+/// @class ValidationControl
+/// @brief Runs multiple validation tools
 class ValidationControl {
 //
 // Constructors

@@ -15,7 +15,7 @@
 #include "HepMC3/AttributeFeature.h"
 
 namespace HepMC3{
-  
+  /** @brief  Forward declaration of SelectorWrapper */
   template<typename T>
   class SelectorWrapper;
   
@@ -90,7 +90,7 @@ namespace HepMC3{
     static AttributeFeature ATTRIBUTE(const std::string &name);
     
   };
-  
+  /** @brief  SelectorWrapper */
   template<typename Feature_type>
   class SelectorWrapper : public Selector{
     
