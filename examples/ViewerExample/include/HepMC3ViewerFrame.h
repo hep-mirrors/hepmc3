@@ -27,37 +27,43 @@
 
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Reader.h"
+///
+/// @class HepMC3ViewerFrame
+/// @brief Definition of \b class HepMC3ViewerFrame
+///
 class HepMC3ViewerFrame : public TGMainFrame
 {
 private:
-    TGCompositeFrame *fMainFrame;
-    TGCompositeFrame *fButtonFrame;
-    TGTextButton     *fNextEvent, *fPreviousEvent, *fExit, *fChooseInput,*fClearEventCache;
-    TRootEmbeddedCanvas *fEmbEventImageCanvas, *fEmbAnalysisCanvas;
-    //Reader
-    std::shared_ptr<HepMC3::Reader> fReader;
-    //Pointer to current event in cache
-    HepMC3::GenEvent *fCurrentEvent;
-    //Event cache
-    std::vector<HepMC3::GenEvent*> fEventsCache;
-    TCanvas* fEventImageCanvas, *fAnalysisCanvas;
-    //Image passed from graphviz
-    TImage *fGraphImage;
-    std::map<std::string, TH1*> fAnalysisH;
-    static const size_t m_char_buffer_size=100000;
+    TGCompositeFrame *fMainFrame; ///< Main frame
+    TGCompositeFrame *fButtonFrame;  ///< Button frame
+    TGTextButton     *fNextEvent; ///< Button
+    TGTextButton *fPreviousEvent; ///< Button
+    TGTextButton *fExit; ///< Button
+    TGTextButton *fChooseInput; ///< Button
+    TGTextButton *fClearEventCache; ///< Button
+    TRootEmbeddedCanvas *fEmbEventImageCanvas;   ///< Event canvas
+    TRootEmbeddedCanvas *fEmbAnalysisCanvas;     ///< Analysis canvas
+    std::shared_ptr<HepMC3::Reader> fReader;                  ///< Reader
+    HepMC3::GenEvent *fCurrentEvent;                          ///<Event 
+    std::vector<HepMC3::GenEvent*> fEventsCache;              ///<Cache of events
+    TCanvas* fEventImageCanvas;                               ///< Event canvas
+    TCanvas *fAnalysisCanvas;                                 ///<Analysis canvas  
+    TImage *fGraphImage;                                      ///<Image passed from graphviz
+    std::map<std::string, TH1*> fAnalysisH;                   ///< Analysis histograms
+    static const size_t m_char_buffer_size=100000;            ///<Size of writer buffer
 public:
-    void ReadFile(const char* a);
-    HepMC3ViewerFrame(const TGWindow *p, UInt_t w, UInt_t h);
-    virtual ~HepMC3ViewerFrame();
+    void ReadFile(const char* a);                             ///< Open file
+    HepMC3ViewerFrame(const TGWindow *p, UInt_t w, UInt_t h); ///< Constructor
+    virtual ~HepMC3ViewerFrame();                             ///< Destructor
 //Helper functions
 //To get image from graphviz
-    void DrawEvent();
+    void DrawEvent(); ///< Draw evemt
 //To do extra analysiz of the event
-    void DoAnalysis();
+    void DoAnalysis(); ///< Do analysis
     // slots
-    void NextEvent();
-    void PreviousEvent();
-    void ClearEventCache();
-    void ChooseInput();
+    void NextEvent();          ///< slot
+    void PreviousEvent();///< slot
+    void ClearEventCache();///< slot
+    void ChooseInput();///< slot
 //   ClassDef(HepMC3ViewerFrame, 0)
 };

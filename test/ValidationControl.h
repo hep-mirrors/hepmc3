@@ -25,47 +25,59 @@ class ValidationControl {
 // Constructors
 //
 public:
-    ValidationControl();
+    /** @brief Constructor */
+     ValidationControl();
+    /** @brief Destructor */
     ~ValidationControl();
 
 //
 // Functions
 //
 public:
+    /** @brief Read file */
     void read_file(const std::string &filename);
+    /** @brief New event */
     bool new_event();
+    /** @brief Init function */
     void initialize();
+    /** @brief Process event */
     void process(GenEvent &hepmc);
+    /** @brief Finalize */
     void finalize();
 
 //
 // Accessors
 //
 public:
+    /** @brief Toolchain */
     const std::vector<ValidationTool*>& toolchain() { return m_toolchain; }
+    /** @brief Event limit */
     int   event_limit()                             { return m_events;    }
+    /** @brief Set event limit */
     void  set_event_limit(int events)               { m_events = events;  }
-
+    /** @brief N events to print*/
     void  print_events(int events)              { m_print_events          = events; }
+    /** @brief N events to check momentum*/
     void  check_momentum_for_events(int events) { m_momentum_check_events = events; }
 
 //
 // Fields
 //
 private:
-    std::vector<ValidationTool*> m_toolchain;
+    std::vector<ValidationTool*> m_toolchain;  ///< Toolchain
 
-    int    m_events;
-    int    m_events_print_step;
-    int    m_momentum_check_events;
-    double m_momentum_check_threshold;
-    int    m_print_events;
-    int    m_event_counter;
-    int    m_status;
-    Timer  m_timer;
+    int    m_events;                     ///< events
+    int    m_events_print_step;          ///< events print step  
+    int    m_momentum_check_events;      ///< mom check events 
+    double m_momentum_check_threshold;   ///< mom check threshold
+    int    m_print_events;               ///< print events
+    int    m_event_counter;               ///< counter of events
+    int    m_status;                                     ///< status
+    Timer  m_timer;              ///< Times
 
-    bool m_has_input_source;
+    bool m_has_input_source;     ///< Input source flag
 
+     /** @brief parsing stutus */
     enum PARSING_STATUS {
         PARSING_OK,
         UNRECOGNIZED_COMMAND,
