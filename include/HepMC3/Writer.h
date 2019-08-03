@@ -30,7 +30,9 @@ namespace HepMC3 {
 
     /// Write event @a evt to output target
     virtual void write_event(const GenEvent &evt) = 0;
+    /** @brief Get file and/or stream error state */
     virtual bool failed() = 0;
+    /** @brief Close file and/or stream */
     virtual void close() = 0;
 
     /// Set the global GenRunInfo object.

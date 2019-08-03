@@ -18,8 +18,11 @@ namespace HepMC3
 class WriterHEPEVTZEUS : public  WriterHEPEVT
 {
 public:
+    /** @brief Constructor */
     WriterHEPEVTZEUS(const std::string &filename);
+    /** @brief Write the header */
     void write_hepevt_event_header();
+    /** @brief Write particles */
     void write_hepevt_particle( int index, bool iflong );
 };
 }

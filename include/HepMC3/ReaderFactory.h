@@ -17,7 +17,7 @@
 #include <string.h>
 
 namespace HepMC3 {
-
+/** @brief THis function will deduce the type of input file based on the name/URL and it's content and will return appropriate Reader*/
 std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 {
     bool remote=false;

@@ -20,7 +20,7 @@ namespace HepMC3{
   class SelectorWrapper;
   
   class Selector;
-  
+  /** @brief Declaration of ConstSelectorPtr */
   using ConstSelectorPtr = std::shared_ptr<const Selector>;
   
   /**
@@ -157,7 +157,7 @@ namespace HepMC3{
     Feature<Feature_type> m_internal;
     
   };
-  
+  /** @brief ConstSelectorPtr abs*/  
   ConstSelectorPtr abs(const Selector &input);
   
 }

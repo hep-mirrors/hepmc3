@@ -27,11 +27,12 @@
 namespace HepMC3 {
 /** @brief Union to hold first 4 byts of file, i.e. magic bytes */
 union magic_t {
-    uint8_t bytes[4];
-    uint32_t number;
+    uint8_t bytes[4]; ///< bytes
+    uint32_t number;  ///< int
 };
 class ReaderGZ : public Reader {
 public:
+/** @brief Construcor*/
     ReaderGZ(const std::string& filename) : m_gzstream(filename.c_str()), m_gzstream_test(filename.c_str())
     {
         std::ifstream file(filename);
@@ -53,19 +54,23 @@ public:
         }
     };
     ~ReaderGZ() {};
+    /** @brief Read event */
     bool read_event(GenEvent& evt) {
        return m_reader->read_event(evt);
     };
+    /** @brief State */
     bool failed() {
         return m_gzstream.rdstate();
     }
+    /** @brief Close  */
     void close()  {
         if (m_reader) m_reader->close();
     };
 private:
-    igzstream   m_gzstream;
-    igzstream   m_gzstream_test;
-    std::shared_ptr<Reader>      m_reader;
+    igzstream   m_gzstream;  ///< Stream to read
+    igzstream   m_gzstream_test; ///< Stream to test
+    std::shared_ptr<Reader>      m_reader; ///< Actual reader
+/** @brief THis function will deduce the type of input file based on the name/URL and it's content and will return appropriate Reader*/
     std::shared_ptr<Reader> deduce_reader(std::istream & stream_test,std::istream & stream) {
         std::vector<std::string> head;
         head.push_back(std::string(""));
