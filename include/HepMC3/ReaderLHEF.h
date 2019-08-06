@@ -33,6 +33,11 @@ namespace HepMC3
 {
 class ReaderLHEF : public Reader
 {
+public:  
+    /// The ctor to read from stream
+    ReaderLHEF(std::istream &);
+private:
+    void init();                       ///< Init helper    
 public:
     /** @brief Constructor */
     ReaderLHEF(const std::string& filename);

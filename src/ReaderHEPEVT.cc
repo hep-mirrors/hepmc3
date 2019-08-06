@@ -15,31 +15,44 @@
 namespace HepMC3
 {
 
-ReaderHEPEVT::ReaderHEPEVT(const std::string &filename):
-    m_events_count(0)
+ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
+ : m_file(filename), m_stream(0), m_isstream(false), m_vertices_positions_present(true)
 {
-    m_failed=false;
-    set_run_info(make_shared<GenRunInfo>());
-
-    m_file= fopen(filename.c_str(),"r");
-    if (!m_file) {m_failed=true;  ERROR( "ReaderHEPEVT: file opening failed" ); }
+    if( !m_file.is_open() ) {
+        ERROR( "ReaderHEPEVT: could not open input file: "<<filename )
+    }
     else
         {
+            set_run_info(make_shared<GenRunInfo>());
             hepevtbuffer=(char*)(new struct HEPEVT());
             HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
         }
-
 }
 
-#define READERHEPEVTBUFFERSIZE 255
+ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
+ : m_stream(&stream), m_isstream(true), m_vertices_positions_present(true)
+{
+    if( !m_stream->good() ) {
+        ERROR( "ReaderHEPEVT: could not open input stream  ")
+    }
+    else
+        {
+            set_run_info(make_shared<GenRunInfo>());
+            hepevtbuffer=(char*)(new struct HEPEVT());
+            HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
+        }
+}
+
 bool ReaderHEPEVT::read_hepevt_event_header()
 {
-    char buf_e[READERHEPEVTBUFFERSIZE];
+    const size_t       max_e_buffer_size=512;
+    char buf_e[max_e_buffer_size];
     bool eventline=false;
     int m_i=0, m_p=0;
     while(!eventline)
         {
-            if (fgets(buf_e,READERHEPEVTBUFFERSIZE,m_file)==nullptr) break;
+            m_isstream ? m_stream->getline(buf_e,max_e_buffer_size) : m_file.getline(buf_e,max_e_buffer_size);
+            if( strlen(buf_e) == 0 ) return false;
             std::stringstream st_e(buf_e);
             char attr=' ';
             eventline=false;
@@ -62,13 +75,19 @@ bool ReaderHEPEVT::read_hepevt_event_header()
 
 bool ReaderHEPEVT::read_hepevt_particle( int i, bool iflong )
 {
-    char buf_p[READERHEPEVTBUFFERSIZE];
-    char buf_v[READERHEPEVTBUFFERSIZE];
+	const size_t       max_p_buffer_size=512;
+	const size_t       max_v_buffer_size=512;
+    char buf_p[max_p_buffer_size];
+    char buf_v[max_v_buffer_size];
     int   intcodes[6];
     double fltcodes1[5];
     double fltcodes2[4];
-    if (fgets(buf_p,READERHEPEVTBUFFERSIZE,m_file)==nullptr) return false;
-    if (iflong) if (fgets(buf_v,READERHEPEVTBUFFERSIZE,m_file)==nullptr) return false;
+    m_isstream ? m_stream->getline(buf_p,max_p_buffer_size) : m_file.getline(buf_p,max_p_buffer_size);
+    if( strlen(buf_p) == 0 ) return false;    
+    if (iflong) {
+            m_isstream ? m_stream->getline(buf_v,max_v_buffer_size) : m_file.getline(buf_v,max_v_buffer_size);
+            if( strlen(buf_v) == 0 ) return false;        
+    }
     std::stringstream st_p(buf_p);
     std::stringstream st_v(buf_v);
     if (iflong)
@@ -108,7 +127,6 @@ bool ReaderHEPEVT::read_event(GenEvent& evt, bool iflong)
     bool result=false;
     if (fileok)
         {
-            m_events_count++;
             result=HEPEVT_Wrapper::HEPEVT_to_GenEvent(&evt);
             shared_ptr<GenRunInfo> g=make_shared<GenRunInfo>();
             std::vector<std::string> weightnames;
@@ -119,22 +137,29 @@ bool ReaderHEPEVT::read_event(GenEvent& evt, bool iflong)
             evt.set_run_info(g);
             evt.weights()=wts;
         }
-    else m_failed=true;
+    else 
+       {
+        m_isstream ? m_stream->clear(ios::badbit) : m_file.clear(ios::badbit);
+       }
     return result;
 }
 bool ReaderHEPEVT::read_event(GenEvent& evt)
-{return read_event(evt,true); }
+{
+if ( (!m_file.is_open()) && (!m_isstream) ) return false;
+return read_event(evt,m_vertices_positions_present); 
+}
 
 
 void ReaderHEPEVT::close()
-{
-    if (m_file)  fclose(m_file); 
-    if (hepevtbuffer) delete hepevtbuffer;
+{ 
+   if (hepevtbuffer) delete hepevtbuffer;
+   if( !m_file.is_open()) return;
+   m_file.close();   
 }
 
 bool ReaderHEPEVT::failed()
 {
-    return m_failed;
+   return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate();
 }
 
 } // namespace HepMC3

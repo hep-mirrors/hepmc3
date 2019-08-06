@@ -31,6 +31,9 @@ int main()
         p_event.add_vertex(vertex);
     }
     Print::listing(p_event);
+    //
+    Print::content(p_event);
+    std::cout<<p_event;
     // cleanup
     p_event.clear();
     return 0;
