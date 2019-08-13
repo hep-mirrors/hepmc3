@@ -18,6 +18,7 @@
 #include <string>
 #include <fstream>
 #include <istream>
+#include <iterator>
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
 
