@@ -162,4 +162,7 @@ bool ReaderHEPEVT::failed()
    return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate();
 }
 
+void ReaderHEPEVT::set_vertices_positions_present(bool iflong){m_vertices_positions_present=iflong;}
+bool ReaderHEPEVT::get_vertices_positions_present() const { return m_vertices_positions_present;}
+
 } // namespace HepMC3

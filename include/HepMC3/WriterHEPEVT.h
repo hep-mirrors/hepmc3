@@ -67,10 +67,10 @@ public:
     /** @brief Get stream error state flag */
     bool failed();
     /** @brief  set flag if vertex positions are available */
-    void set_vertices_positions_present(bool iflong){m_vertices_positions_present=iflong;}
+    void set_vertices_positions_present(bool iflong);
     
     /** @brief  get flag if vertex positions are available */
-    bool get_vertices_positions_present() const { return m_vertices_positions_present;}
+    bool get_vertices_positions_present() const;
 
 protected:
     std::ofstream m_file; //!< Output file

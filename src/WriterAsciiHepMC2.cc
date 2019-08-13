@@ -402,5 +402,20 @@ void WriterAsciiHepMC2::close()
     (*m_stream) << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
     if (ofs) ofs->close();
 }
+bool WriterAsciiHepMC2::failed() { return (bool)m_file.rdstate(); }
 
+void WriterAsciiHepMC2::set_precision(const int& prec ) {
+        if (prec < 2 || prec > 24) return;
+        m_precision = prec;
+    }
+
+int WriterAsciiHepMC2::precision() const {
+        return m_precision;
+    }
+
+void WriterAsciiHepMC2::set_buffer_size(const size_t& size ) {
+        if (m_buffer) return;
+        if (size < 256) return;
+        m_buffer_size = size;
+    }
 } // namespace HepMC3

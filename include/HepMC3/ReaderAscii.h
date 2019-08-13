@@ -43,7 +43,7 @@ public:
     bool read_event(GenEvent& evt);
 
     /// @brief Return status of the stream
-    bool failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+    bool failed();
 
     /// @brief Close file stream
     void close();

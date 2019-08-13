@@ -534,6 +534,7 @@ string ReaderAscii::unescape(const string& s) {
     return ret;
 }
 
+bool ReaderAscii::failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
 
 void ReaderAscii::close() {
     if( !m_file.is_open()) return;

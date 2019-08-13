@@ -353,6 +353,22 @@ void WriterAscii::close() {
   (*m_stream) << "HepMC::Asciiv3-END_EVENT_LISTING" << endl << endl;
   if (ofs) ofs->close();
 }
+bool WriterAscii::failed() { return (bool)m_file.rdstate(); }
+
+void WriterAscii::set_precision(const int& prec ) {
+        if (prec < 2 || prec > 24) return;
+        m_precision = prec;
+    }
+
+int WriterAscii::precision() const {
+        return m_precision;
+    }
+
+void WriterAscii::set_buffer_size(const size_t& size ) {
+        if (m_buffer) return;
+        if (size < 256) return;
+        m_buffer_size = size;
+    }
 
 
 } // namespace HepMC3

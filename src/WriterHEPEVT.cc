@@ -82,4 +82,8 @@ bool WriterHEPEVT::failed()
      return (bool)m_file.rdstate(); 
 }
 
+void WriterHEPEVT::set_vertices_positions_present(bool iflong){m_vertices_positions_present=iflong;}
+    
+bool WriterHEPEVT::get_vertices_positions_present() const { return m_vertices_positions_present;}
+
 } // namespace HepMC3
