@@ -65,6 +65,14 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
 
   ```
 where N denotes a number of desired parallel jobs.
+On Windows (in Unix-compatible shell) one can use 
+```
+cmake --build ./
+```
+instead
+
+
+
 
 
 #  Examples

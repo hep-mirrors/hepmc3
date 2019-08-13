@@ -13,6 +13,7 @@
  *  @brief Stores particle-related information
  *
  */
+#include <string>
 #include "HepMC3/Data/GenParticleData.h"
 #include "HepMC3/FourVector.h"
 
