@@ -1,6 +1,16 @@
 language: cpp
 matrix:
   include:
+    - os: linux
+      compiler: gcc
+      env:
+        - CXX_COMPILER='g++'
+        - C_COMPILER='gcc'
+        - Fortran_COMPILER='gfortran'
+      script:
+        - cmake  -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON CMakeLists.txt
+        - cmake --build .    
+        - ctest --output-on-failure  
     - os: osx
       compiler: gcc
       env:
@@ -28,5 +38,6 @@ matrix:
         - export PATH=$CMAKE_PATH:$PATH
         - cmake  -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON  -Thost=x64 -A x64  CMakeLists.txt
         - cmake --build .      
-        - ctest --output-on-failure
+ #       - ctest --output-on-failure
+ #       - cat Testing/Temporary/*
 

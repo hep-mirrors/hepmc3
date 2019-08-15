@@ -46,7 +46,7 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   ``` 
   
   Additional flags control the location installation of Photos, Tauola MC-TESTER, HepMC2 
-  and Pythia8  that are used for tests.
+  and Pythia8  that are used for tests. Please note that some examples are disabled  on Windows.
   
 6. In order to build and run tests put
   ```
