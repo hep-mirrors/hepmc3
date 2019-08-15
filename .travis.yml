@@ -10,6 +10,7 @@ matrix:
       script:
         - cmake  -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON CMakeLists.txt
         - cmake --build .    
+        - ctest --output-on-failure
     - os: osx
       compiler: clang
       env:
@@ -19,6 +20,7 @@ matrix:
       script:
         - cmake  -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON CMakeLists.txt
         - cmake --build .    
+        - ctest --output-on-failure
     - os: windows
       env:
         - CMAKE_PATH="/c/Program Files/CMake/bin"
@@ -26,3 +28,5 @@ matrix:
         - export PATH=$CMAKE_PATH:$PATH
         - cmake  -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON  -Thost=x64 -A x64  CMakeLists.txt
         - cmake --build .      
+        - ctest --output-on-failure
+
