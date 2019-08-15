@@ -59,8 +59,8 @@ namespace HepMC3{
     
     static const Parents PARENTS;
     static const Children CHILDREN;
-    static const Ancestors ANCESTORS;
-    static const Descendants DESCENDANTS;
+    static thread_local const Ancestors ANCESTORS;
+    static thread_local const Descendants DESCENDANTS;
   };
   
   /** @brief wrap a templated class that implements Relatives

@@ -12,7 +12,7 @@
 namespace HepMC3 {
   const Parents     Relatives::PARENTS;
   const Children    Relatives::CHILDREN;
-  const Ancestors   Relatives::ANCESTORS;
-  const Descendants Relatives::DESCENDANTS;
+  thread_local const Ancestors   Relatives::ANCESTORS;
+  thread_local const Descendants Relatives::DESCENDANTS;
 }
 
