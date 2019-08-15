@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 
 #---Add executables------------------------------------------------------------
 if(HEPMC3_ENABLE_SEARCH)
-if (DARWIN)
-message(STATUS "Search library does not work on Mac OS. Disabling basic example.")
+if (DARWIN OR WIN32)
+message(STATUS "Search library does not work on Mac OS and on Windows. Disabling basic example.")
 else()
 add_executable(basic_tree.exe ${CMAKE_CURRENT_SOURCE_DIR}/basic_tree.cc)
 target_link_libraries(basic_tree.exe HepMC3 HepMC3search ${ROOT_LIBRARIES})

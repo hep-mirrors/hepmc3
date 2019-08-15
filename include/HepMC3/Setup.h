@@ -33,19 +33,19 @@ namespace HepMC3 {
         //@{
 
         /// Get error messages printing flag
-        static bool print_errors()                { return m_is_printing_errors;    }
+        static bool print_errors();
         /// set error messages printing flag
-        static void set_print_errors(bool flag)   { m_is_printing_errors   = flag;  }
+        static void set_print_errors(const bool flag);
 
         /// Get warning messages printing flag
-        static bool print_warnings()              { return m_is_printing_warnings;  }
+        static bool print_warnings();
         /// Set warning messages printing flag
-        static void set_print_warnings(bool flag) { m_is_printing_warnings = flag;  }
+        static void set_print_warnings(const bool flag);
 
         /// Get debug level
-        static int  debug_level()                 { return m_debug_level;           }
+        static int  debug_level();
         /// Set debug level
-        static void set_debug_level(int level)    { m_debug_level          = level; }
+        static void set_debug_level(const int level);
         //@}
 
         /// @name Static constants
