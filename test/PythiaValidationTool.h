@@ -17,7 +17,7 @@
 #else
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Selector.h"
-#include "Pythia8/Pythia8ToHepMC3.h"
+#include "Pythia8ToHepMC3.h"
 #endif 
 
 #include "ValidationTool.h"

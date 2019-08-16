@@ -8,7 +8,7 @@
 #include "HepMC3/Print.h"
 
 #include "Pythia8/Pythia.h"
-#include "Pythia8/Pythia8ToHepMC3.h"
+#include "Pythia8ToHepMC3.h"
 
 #include <iostream>
 using namespace HepMC3;
