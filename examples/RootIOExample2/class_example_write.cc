@@ -85,7 +85,7 @@ int main(int argc, char **argv) {
 
         ++events_parsed;
 
-        if( events_parsed%1000 == 0 ) {
+        if( events_parsed%100 == 0 ) {
             cout << "Event: " << events_parsed << endl;
         }
     }
