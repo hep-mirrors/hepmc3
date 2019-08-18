@@ -476,8 +476,48 @@ tempY_=-sing*tempX+cosg*tempX;
 tempX=tempX_;
 tempY=tempY_;
 
-FourVector temp(tempX,tempY,tempZ,tempE);
+FourVector temp(tempX,tempY,tempZ,mom.e());
 p->set_momentum(temp);
+}
+for ( auto v: m_vertices)
+{
+FourVector pos=v->position();	
+long double tempX=pos.x();
+long double tempY=pos.y();
+long double tempZ=pos.z();
+
+long double tempX_;
+long double tempY_;
+long double tempZ_;
+
+
+long double cosa=cos(delta.x());
+long double sina=sin(delta.x());
+
+tempY_= cosa*tempY+sina*tempZ;
+tempZ_=-sina*tempY+cosa*tempZ;
+tempY=tempY_;
+tempZ=tempZ_;
+
+
+long double cosb=cos(delta.y());
+long double sinb=sin(delta.y());
+
+tempX_= cosb*tempX-sinb*tempZ;
+tempZ_= sinb*tempX+cosb*tempZ;
+tempX=tempX_;
+tempZ=tempZ_;
+
+long double cosg=cos(delta.z());
+long double sing=sin(delta.z());
+
+tempX_= cosg*tempX+sing*tempX;
+tempY_=-sing*tempX+cosg*tempX;
+tempX=tempX_;
+tempY=tempY_;
+
+FourVector temp(tempX,tempY,tempZ,pos.t());
+v->set_position(temp);
 }
 
 
