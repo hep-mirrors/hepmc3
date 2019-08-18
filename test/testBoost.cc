@@ -146,9 +146,43 @@ int main()
     xout2.set_precision(6);
     xout2.write_event(evt);
     xout2.close();
+    /// Test the boost * invboost give the same event.
+    if (COMPARE_ASCII_FILES("testBoost1.out","testBoost2.out")!=0) return 1;
+
+    
+    FourVector bwrong1(-1.1,-0.3,0.2,0);
+    ///Test that wrong boost will not work
+    if (evt.boost(bwrong1)) return 2;
+    
+    FourVector bwrong2(-1.0,-0.0,0.0,0);
+    ///Test that boost with v=c will not work
+    if (evt.boost(bwrong2)) return 3;
+
+    FourVector bwrong3(std::numeric_limits<double>::epsilon()*0.9,0.0,0.0,0);
+    ///Test that boost with v=0 will be OK
+    if (!evt.boost(bwrong3)) return 4;
+
+
+    FourVector rz(0.0,0.0,-0.9,0);
+    FourVector rzinv(0.0,0.0,0.9,0);
+    evt.rotate(b);
+    for ( GenParticlePtr ip: evt.particles()) {
+        Print::line(ip,true);
+    }
+    evt.rotate(bp);
+    for ( GenParticlePtr ip: evt.particles()) {
+        Print::line(ip,true);
+    }
+    WriterAscii xout3("testBoost3.out");
+    xout3.set_precision(6);
+    xout3.write_event(evt);
+    xout3.close();
+    /// Test the rotate * rotate give the same event.
+    if (COMPARE_ASCII_FILES("testBoost1.out","testBoost3.out")!=0) return 5;
+
+
 
     evt.clear();
-    bool passed=(COMPARE_ASCII_FILES("testBoost1.out","testBoost2.out")==0);
-    if (!passed) return 1;
+    
     return 0;
 }

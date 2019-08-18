@@ -523,6 +523,38 @@ v->set_position(temp);
 
 return true;
 }
+
+bool GenEvent::reflect(const int axis)
+{
+if (axis>3||axis<0)
+{
+ WARNING( "GenEvent::reflect: wrong axis" )
+ return false;
+}
+switch (axis)
+{
+case 0:
+for ( auto p: m_particles) { FourVector temp=p->momentum(); temp.setX(-p->momentum().x()); p->set_momentum(temp);}
+for ( auto v: m_vertices)  { FourVector temp=v->position(); temp.setX(-v->position().x()); v->set_position(temp);}
+break;
+case 1:
+for ( auto p: m_particles) { FourVector temp=p->momentum(); temp.setY(-p->momentum().y()); p->set_momentum(temp);}
+for ( auto v: m_vertices)  { FourVector temp=v->position(); temp.setY(-v->position().y()); v->set_position(temp);}
+break;
+case 2:
+for ( auto p: m_particles) { FourVector temp=p->momentum(); temp.setZ(-p->momentum().z()); p->set_momentum(temp);}
+for ( auto v: m_vertices)  { FourVector temp=v->position(); temp.setZ(-v->position().z()); v->set_position(temp);}
+break;
+case 3:
+for ( auto p: m_particles) { FourVector temp=p->momentum(); temp.setT(-p->momentum().e()); p->set_momentum(temp);}
+for ( auto v: m_vertices)  { FourVector temp=v->position(); temp.setT(-v->position().t()); v->set_position(temp);}
+break;
+default: 
+return false;
+}
+
+return true;
+}
 	
 bool GenEvent::boost( const FourVector  delta )
 {
