@@ -471,8 +471,8 @@ tempZ=tempZ_;
 long double cosg=cos(delta.z());
 long double sing=sin(delta.z());
 
-tempX_= cosg*tempX+sing*tempX;
-tempY_=-sing*tempX+cosg*tempX;
+tempX_= cosg*tempX+sing*tempY;
+tempY_=-sing*tempX+cosg*tempY;
 tempX=tempX_;
 tempY=tempY_;
 
@@ -511,8 +511,8 @@ tempZ=tempZ_;
 long double cosg=cos(delta.z());
 long double sing=sin(delta.z());
 
-tempX_= cosg*tempX+sing*tempX;
-tempY_=-sing*tempX+cosg*tempX;
+tempX_= cosg*tempX+sing*tempY;
+tempY_=-sing*tempX+cosg*tempY;
 tempX=tempX_;
 tempY=tempY_;
 
@@ -560,14 +560,19 @@ bool GenEvent::boost( const FourVector  delta )
 {
 
 double deltalength2d=delta.length2();
+if (deltalength2d>1.0)
+{
+ WARNING( "GenEvent::boost: wrong large boost vector. Will leave event as is." )
+ return false;
+}
 if (std::abs(deltalength2d-1.0)<std::numeric_limits<double>::epsilon())
 {
- WARNING( "GenEvent::bost: wrong large boost vector" )
+ WARNING( "GenEvent::boost: too large gamma. Will leave event as is." )
  return false;
 }
 if (std::abs(deltalength2d)<std::numeric_limits<double>::epsilon())
 {
- WARNING( "GenEvent::bost: wrong small boost vector. Will leave event as is." )
+ WARNING( "GenEvent::boost: wrong small boost vector. Will leave event as is." )
  return true;
 }
 long double deltaX=delta.x();
