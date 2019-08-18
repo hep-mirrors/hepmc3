@@ -190,6 +190,10 @@ public:
       shift_position_by(delta);
     }
 
+    /// @brief Boost event @a delta
+    bool boost( const FourVector  delta );
+
+
     //@}
 
 

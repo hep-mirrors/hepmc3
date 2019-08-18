@@ -436,6 +436,52 @@ void GenEvent::shift_position_by( const FourVector & delta ) {
     }
 }
 
+	
+bool GenEvent::boost( const FourVector  delta )
+{
+
+double deltalength2d=delta.length2();
+if (std::abs(deltalength2d-1.0)<std::numeric_limits<double>::epsilon())
+{
+ WARNING( "GenEvent::bost: wrong large boost vector" )
+ return false;
+}
+if (std::abs(deltalength2d)<std::numeric_limits<double>::epsilon())
+{
+ WARNING( "GenEvent::bost: wrong small boost vector. Will leave event as is." )
+ return true;
+}
+long double deltaX=delta.x();
+long double deltaY=delta.y();
+long double deltaZ=delta.z();
+long double deltaE=delta.e();
+long double deltalength2=deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ;
+long double deltalength=std::sqrt(deltalength2 );
+long double gamma=1.0/std::sqrt(1.0-deltalength2);	
+
+for ( auto p: m_particles)
+{
+FourVector mom=p->momentum();	
+
+long double tempX=mom.x();
+long double tempY=mom.y();
+long double tempZ=mom.z();
+long double tempE=mom.e();
+long double nr=(deltaX*tempX+deltaY*tempY+deltaZ*tempZ)/deltalength;
+
+tempX+=(deltaX*((gamma-1)*nr/deltalength)-deltaX*(tempE*gamma));
+tempY+=(deltaY*((gamma-1)*nr/deltalength)-deltaY*(tempE*gamma));
+tempZ+=(deltaZ*((gamma-1)*nr/deltalength)-deltaZ*(tempE*gamma));
+tempE=gamma*(tempE-deltalength*nr);
+FourVector temp(tempX,tempY,tempZ,tempE);
+p->set_momentum(temp);
+}
+	
+return true;	
+}	
+	
+
+
 
 void GenEvent::clear() {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
