@@ -436,6 +436,53 @@ void GenEvent::shift_position_by( const FourVector & delta ) {
     }
 }
 
+bool GenEvent::rotate( const FourVector  delta )
+{
+
+for ( auto p: m_particles)
+{
+FourVector mom=p->momentum();	
+long double tempX=mom.x();
+long double tempY=mom.y();
+long double tempZ=mom.z();
+
+long double tempX_;
+long double tempY_;
+long double tempZ_;
+
+
+long double cosa=cos(delta.x());
+long double sina=sin(delta.x());
+
+tempY_= cosa*tempY+sina*tempZ;
+tempZ_=-sina*tempY+cosa*tempZ;
+tempY=tempY_;
+tempZ=tempZ_;
+
+
+long double cosb=cos(delta.y());
+long double sinb=sin(delta.y());
+
+tempX_= cosb*tempX-sinb*tempZ;
+tempZ_= sinb*tempX+cosb*tempZ;
+tempX=tempX_;
+tempZ=tempZ_;
+
+long double cosg=cos(delta.z());
+long double sing=sin(delta.z());
+
+tempX_= cosg*tempX+sing*tempX;
+tempY_=-sing*tempX+cosg*tempX;
+tempX=tempX_;
+tempY=tempY_;
+
+FourVector temp(tempX,tempY,tempZ,tempE);
+p->set_momentum(temp);
+}
+
+
+return true;
+}
 	
 bool GenEvent::boost( const FourVector  delta )
 {

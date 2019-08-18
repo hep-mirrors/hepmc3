@@ -190,9 +190,10 @@ public:
       shift_position_by(delta);
     }
 
-    /// @brief Boost event @a delta
-    bool boost( const FourVector  delta );
-
+    /// @brief Boost event using x,y,z components of @a v as velocities
+    bool boost( const FourVector  v );
+    /// @brief Rotate event using x,y,z components of @a v as rotation angles
+    bool rotate( const FourVector  v );
 
     //@}
 
