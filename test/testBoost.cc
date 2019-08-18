@@ -128,7 +128,7 @@ int main()
         Print::line(ip,true);
     }
     WriterAscii xout1("testBoost1.out");
-    xout1.set_precision(8);
+    xout1.set_precision(6);
     xout1.write_event(evt);
     xout1.close();
     
@@ -143,7 +143,7 @@ int main()
         Print::line(ip,true);
     }
     WriterAscii xout2("testBoost2.out");
-    xout2.set_precision(8);
+    xout2.set_precision(6);
     xout2.write_event(evt);
     xout2.close();
 
