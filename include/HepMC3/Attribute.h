@@ -207,7 +207,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) {
-        m_val = atoi( att.c_str() );
+        m_val = atol( att.c_str() );
         return true;
     }
 
@@ -370,6 +370,310 @@ public:
     }
 
 };
+
+/**
+ *  @class HepMC3::CharAttribute
+ *  @brief Attribute that holds an Chareger implemented as an int
+ *
+ *  @ingroup attributes
+ */
+class CharAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    CharAttribute():Attribute(),m_val(0) {}
+
+    /** @brief Constructor initializing attribute value */
+    CharAttribute(char val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+        if (att.size())
+        {
+        m_val = att.at(0);
+        return true;
+	    }
+	    return false;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+        att = std::to_string(m_val);
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    char value() const {
+    return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const char& i) {
+    m_val = i;
+    }
+
+private:
+    char m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC3::LongLongAttribute
+ *  @brief Attribute that holds an Integer implemented as an int
+ *
+ *  @ingroup attributes
+ */
+class LongLongAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    LongLongAttribute(): Attribute(), m_val(0) {}
+
+    /** @brief Constructor initializing attribute value */
+    LongLongAttribute(long long val): Attribute(), m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+        m_val = atoll( att.c_str() );
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+        att = std::to_string(m_val);
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    long long value() const {
+    return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const long long& l) {
+    m_val = l;
+    }
+
+private:
+
+   long  long m_val; ///< Attribute value
+
+};
+
+/**
+ *  @class HepMC3::LongDoubleAttribute
+ *  @brief Attribute that holds a real number as a double.
+ *
+ *  @ingroup attributes
+ */
+class LongDoubleAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    LongDoubleAttribute(): Attribute(), m_val(0.0) {}
+
+    /** @brief Constructor initializing attribute value */
+    LongDoubleAttribute(long double val): Attribute(), m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+        m_val = strtold( att.c_str(),NULL);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+      std::ostringstream oss;
+      oss << std::setprecision(std::numeric_limits<long double>::digits10)
+      << m_val;
+      att = oss.str();
+      return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    long double value() const {
+    return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const long double& d) {
+    m_val = d;
+    }
+
+private:
+
+    long double m_val; ///< Attribute value
+};
+
+
+
+/**
+ *  @class HepMC3::UIntAttribute
+ *  @brief Attribute that holds an unsigned int
+ *
+ *  @ingroup attributes
+ */
+class UIntAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    UIntAttribute():Attribute(),m_val(0) {}
+
+    /** @brief Constructor initializing attribute value */
+    UIntAttribute(unsigned int val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+        m_val = strtoul(att.c_str(), NULL, 0);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+        att = std::to_string(m_val);
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    unsigned int value() const {
+    return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const unsigned int& i) {
+    m_val = i;
+    }
+
+private:
+    unsigned int m_val; ///< Attribute value
+};
+
+
+
+/**
+ *  @class HepMC3::ULongAttribute
+ *  @brief Attribute that holds an unsigned long
+ *
+ *  @ingroup attributes
+ */
+class ULongAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    ULongAttribute():Attribute(),m_val(0) {}
+
+    /** @brief Constructor initializing attribute value */
+    ULongAttribute(unsigned long val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+        m_val = strtoul(att.c_str(), NULL, 0);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+        att = std::to_string(m_val);
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    unsigned long value() const {
+    return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const unsigned long& i) {
+    m_val = i;
+    }
+
+private:
+    unsigned long m_val; ///< Attribute value
+};
+
+
+/**
+ *  @class HepMC3::ULongLongAttribute
+ *  @brief Attribute that holds an unsigned long long
+ *
+ *  @ingroup attributes
+ */
+class ULongLongAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    ULongLongAttribute():Attribute(),m_val(0) {}
+
+    /** @brief Constructor initializing attribute value */
+    ULongLongAttribute(unsigned long long val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+        m_val = strtoull(att.c_str(), NULL, 0);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+        att = std::to_string(m_val);
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    unsigned long long value() const {
+    return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const unsigned long long& i) {
+    m_val = i;
+    }
+
+private:
+    unsigned long long m_val; ///< Attribute value
+};
+/**
+ *  @class HepMC3::BoolAttribute
+ *  @brief Attribute that holds an Booleger implemented as an int
+ *
+ *  @ingroup attributes
+ */
+class BoolAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    BoolAttribute():Attribute(),m_val(false) {}
+
+    /** @brief Constructor initializing attribute value */
+    BoolAttribute(bool val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+        if (att.size()!=1) return false;
+        if(att==std::string("1")) {m_val = true;  return true;}
+        if(att==std::string("0")) {m_val = false; return true;}
+        return false;	    
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+        att = std::to_string(m_val);
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    bool value() const {
+    return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const bool& i) {
+    m_val = i;
+    }
+
+private:
+    bool m_val; ///< Attribute value
+};
+
 
 } // namespace HepMC3
 
