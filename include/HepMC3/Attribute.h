@@ -384,7 +384,7 @@ public:
     CharAttribute():Attribute(),m_val(0) {}
 
     /** @brief Constructor initializing attribute value */
-    CharAttribute(int val):Attribute(),m_val(val) {}
+    CharAttribute(char val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) {
@@ -630,6 +630,48 @@ public:
 
 private:
     unsigned long long m_val; ///< Attribute value
+};
+/**
+ *  @class HepMC3::BoolAttribute
+ *  @brief Attribute that holds an Booleger implemented as an int
+ *
+ *  @ingroup attributes
+ */
+class BoolAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    BoolAttribute():Attribute(),m_val(false) {}
+
+    /** @brief Constructor initializing attribute value */
+    BoolAttribute(bool val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) {
+        if (att.size()!=1) return false;
+        if(att==std::string("1")) {m_val = true;  return true;}
+        if(att==std::string("0")) {m_val = false; return true;}
+        return false;	    
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const {
+        att = std::to_string(m_val);
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    bool value() const {
+    return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const bool& i) {
+    m_val = i;
+    }
+
+private:
+    bool m_val; ///< Attribute value
 };
 
 
