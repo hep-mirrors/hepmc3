@@ -11,6 +11,7 @@
 ///
 
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/GenRunInfo.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
 
@@ -37,6 +38,13 @@ public:
       listing(std::cout, event, precision);
     }
 
+    /// @brief Print runinfo in listing 
+    static void listing(std::ostream& os, const GenRunInfo &ri, unsigned short precision = 2);
+    /// @brief Print runinfo in listing  to std::cout
+    inline static void listing(const GenRunInfo &ri, unsigned short precision = 2) {
+      listing(std::cout, ri, precision);
+    }
+
     /// @brief Print one-line info
     static void line(std::ostream& os, const GenEvent &event, bool attributes=false);
     /// @brief Print one-line info to std::cout
@@ -45,12 +53,35 @@ public:
     }
 
     /// @brief Print one-line info
+    static void line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes=false);
+    /// @brief Print one-line info to std::cout
+    inline static void line(const GenRunInfo &RunInfo, bool attributes=false) {
+      line(std::cout, RunInfo, attributes); std::cout<<std::endl;
+    }
+
+    /// @brief Print one-line info
+    static void line(std::ostream& os, const GenRunInfo::ToolInfo& t);
+    /// @brief Print one-line info to std::cout
+    inline static void line(const GenRunInfo::ToolInfo& t) {
+      line(std::cout, t); std::cout << std::endl;
+    }
+
+
+
+    /// @brief Print one-line info
     static void line(std::ostream& os, ConstGenVertexPtr v, bool attributes=false);
     /// @brief Print one-line info to std::cout
     inline static void line(ConstGenVertexPtr v, bool attributes=false) {
       line(std::cout, v, attributes); std::cout << std::endl;
     }
 
+    /// @brief Print one-line info
+    static void line(std::ostream& os, const FourVector& p);
+    /// @brief Print one-line info to std::cout
+    inline static void line(const FourVector& p) {
+      line(std::cout, p); std::cout << std::endl;
+    }
+    
     /// @brief Print one-line info
     static void line(std::ostream& os, ConstGenParticlePtr p, bool attributes=false);
     /// @brief Print one-line info to std::cout
@@ -89,31 +120,6 @@ private:
     /// @brief Destructor
     virtual ~Print() {}
 };
-    
-    /// @brief Print content of all GenEvent containers with idiomatic C++ printing. 
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, const GenEvent &event) { Print::content(os,event); return os; }
-
-    /// @brief Print one-line info with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os,  ConstGenVertexPtr v) { Print::line(os,v); return os; }
-
-    /// @brief Print one-line info with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os,  ConstGenParticlePtr p) { Print::line(os,p); return os; }
-
-    /// @brief Print one-line info with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenCrossSection> &cs) { Print::line(os,cs); return os; }
-
-    /// @brief Print one-line info with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenHeavyIon> &hi) { Print::line(os,hi); return os; }
-
-    /// @brief Print one-line info  with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenPdfInfo> &pi) { Print::line(os,pi); return os; }
-
 } // namespace HepMC3
 
 #endif

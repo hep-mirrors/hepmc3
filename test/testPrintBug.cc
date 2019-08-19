@@ -8,6 +8,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Print.h"
+#include "HepMC3/PrintStreams.h"
 using namespace HepMC3;
 int main()
 {
