@@ -86,6 +86,46 @@ void Print::listing( std::ostream& os, const GenEvent &event, unsigned short pre
     os << "________________________________________________________________________" << endl;
 }
 
+void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short precision) {
+
+    // Find the current stream state
+    ios_base::fmtflags orig = os.flags();
+    streamsize         prec = os.precision();
+
+    // Set precision
+    os.precision( precision );
+
+    os << "________________________________________________________________________" << endl;
+    os << "GenRunInfo:" << endl;
+
+    vector<string> names = ri.weight_names();
+    os << " Names: ( ";
+    for (auto n: names) os<<n;
+    os<<" )"<< endl;
+
+    os << " Tools: "<< endl;
+
+    for(auto t: ri.tools()) {
+        Print::line(os,t);
+    }
+    os<<"Attributes:"<<endl;
+    for ( auto att: ri.attributes() ) {
+    string st;
+    if ( ! att.second->to_string(st) ) {
+        WARNING ("Print::listing: problem serializing attribute: "<< att.first )
+        }
+    else { os<<att.first<<" "<<att.second->to_string(st);}
+    os<<endl;
+    }
+
+    // Restore the stream state
+    os.flags(orig);
+    os.precision(prec);
+    os << "________________________________________________________________________" << endl;
+}
+
+
+
 void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
     os << "Vtx: ";
     os.width(6);
@@ -168,6 +208,16 @@ void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
     os<<" "<<*s<<"="<<event.attribute_as_string(*s);
 }
 
+void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {
+    os <<"GenRunInfo: Number of tools:" << RunInfo.tools().size();
+    if(attributes) for (std::vector<std::string>::const_iterator s=RunInfo.attribute_names().begin();s!=RunInfo.attribute_names().end();++s) 
+    os<<" "<<*s<<"="<<RunInfo.attribute_as_string(*s);
+}
+
+void Print::line(std::ostream& os, const GenRunInfo::ToolInfo& t) {
+  os<<"GenRunInfo::ToolInfo "<<t.name<<" "<<t.version<<" "<<t.description;
+}
+
 void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
     os << "GenVertex:  " << v->id() << " stat: ";
     os.width(3);
@@ -186,6 +236,27 @@ void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
     os<<" "<<*s<<"="<<v->attribute_as_string(*s);
 
 }
+
+void Print::line(std::ostream& os, const FourVector& p) {
+
+    os << "FourVector: ";
+    // Find the current stream state
+    ios_base::fmtflags orig = os.flags();
+    os.setf(ios::scientific, ios::floatfield);
+    os.setf(ios_base::showpos);
+    streamsize prec = os.precision();
+    // Set precision
+    os.precision( 2 );
+    os << " (P,E)=" << p.x()
+               << "," << p.y()
+               << "," << p.z()
+               << "," << p.e();
+
+    // Restore the stream state
+    os.flags(orig);
+    os.precision(prec);
+}
+
 
 void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
 
@@ -268,5 +339,8 @@ void Print::line(std::ostream& os, shared_ptr<GenPdfInfo> &pi) {
          << " " << pi->pdf_id[0]
          << " " << pi->pdf_id[1];
 }
+
+
+
 
 } // namespace HepMC3
