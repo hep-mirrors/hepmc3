@@ -50,6 +50,7 @@ file(GLOB INPUTFILES  "${CMAKE_CURRENT_SOURCE_DIR}/*.input" )
 file(COPY ${INPUTFILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 set( HepMC_tests
+        testBoost
         testMass
         testPrintBug
         testPolarization 
