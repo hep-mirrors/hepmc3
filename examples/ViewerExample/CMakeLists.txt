@@ -7,7 +7,7 @@ include_directories(${PROJECT_SOURCE_DIR}/rootIO/include ${CMAKE_CURRENT_SOURCE_
 ROOT_GENERATE_DICTIONARY(HepMC3ViewerFrameDict include/HepMC3ViewerFrame.h LINKDEF include/LinkDef.h OPTIONS -inlineInputHeader)
 
 
-ADD_EXECUTABLE(HepMC3Viewer.exe  src/main.cxx  src/HepMC3ViewerFrame.cxx HepMC3ViewerFrameDict.cxx  )
+ADD_EXECUTABLE(HepMC3Viewer.exe  src/main.cc  src/HepMC3ViewerFrame.cc HepMC3ViewerFrameDict.cxx  )
 set_target_properties(HepMC3Viewer.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 include_directories( include  )
 if (GRAPHVIZ_GRAPH_LIBRARY)
