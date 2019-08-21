@@ -250,8 +250,14 @@ if(NOT TARGET uninstall)
         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 endif()
 
-
-
+find_program (ASTYLEFORMAT NAMES astyle)
+if (ASTYLEFORMAT)
+message(STATUS "astyle found!")
+ADD_CUSTOM_TARGET(beautyastyle
+  COMMAND astyle  --keep-one-line-blocks  src/*cc  rootIO/src/*cc search/src/*cc  examples/*/src/*cc test/*cc  test/*h
+  WORKING_DIRECTORY ${DOXYGEN_OUTPUT_DIR}
+  )
+endif()
 ########################################################################
 ## CPACK
 ########################################################################

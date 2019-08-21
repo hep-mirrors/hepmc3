@@ -131,7 +131,7 @@ int main()
     xout1.set_precision(6);
     xout1.write_event(evt);
     xout1.close();
-    
+
     FourVector b(0.1,0.3,-0.2,0);
     FourVector bp(-0.1,-0.3,0.2,0);
     evt.boost(b);
@@ -149,11 +149,10 @@ int main()
     /// Test the boost * invboost give the same event.
     if (COMPARE_ASCII_FILES("testBoost1.out","testBoost2.out")!=0) return 1;
 
-    
     FourVector bwrong1(-1.1,-0.3,0.2,0);
     ///Test that wrong boost will not work
     if (evt.boost(bwrong1)) return 2;
-    
+
     FourVector bwrong2(-1.0,-0.0,0.0,0);
     ///Test that boost with v=c will not work
     if (evt.boost(bwrong2)) return 3;
@@ -161,7 +160,6 @@ int main()
     FourVector bwrong3(std::numeric_limits<double>::epsilon()*0.9,0.0,0.0,0);
     ///Test that boost with v=0 will be OK
     if (!evt.boost(bwrong3)) return 4;
-
 
     FourVector rz(0.0,0.0,-0.9,0);
     FourVector rzinv(0.0,0.0,0.9,0);
@@ -179,10 +177,6 @@ int main()
     xout3.close();
     /// Test the rotate * rotate give the same event.
     if (COMPARE_ASCII_FILES("testBoost1.out","testBoost3.out")!=0) return 5;
-
-
-
     evt.clear();
-    
     return 0;
 }

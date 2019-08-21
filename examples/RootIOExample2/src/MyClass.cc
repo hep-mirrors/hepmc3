@@ -1,23 +1,23 @@
 #include "MyClass.h"
 
-MyClass::MyClass():someint(0), event(0){};
+MyClass::MyClass():someint(0), event(0) {};
 
 void MyClass::SetEvent(GenEvent* myevt)
 {
-  event = myevt;
+    event = myevt;
 }
 
 GenEvent* MyClass::GetEvent()
 {
-  return event;
+    return event;
 }
 
 void MyClass::SetInt(int theint)
 {
-  someint = theint;
+    someint = theint;
 }
 
 int MyClass::GetInt()
 {
-  return someint;
+    return someint;
 }

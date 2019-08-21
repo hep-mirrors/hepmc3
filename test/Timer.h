@@ -85,7 +85,7 @@ public:
         std::cout << "  system: " << m_stored.tms_stime*10 << " ms" << std::endl;
     }
 
-private:    
+private:
     const char *m_name; ///< Name of the object
     struct tms  m_start; ///< Start
     struct tms  m_stop; ///< Stop

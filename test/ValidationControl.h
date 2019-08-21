@@ -26,7 +26,7 @@ class ValidationControl {
 //
 public:
     /** @brief Constructor */
-     ValidationControl();
+    ValidationControl();
     /** @brief Destructor */
     ~ValidationControl();
 
@@ -77,7 +77,7 @@ private:
 
     bool m_has_input_source;     ///< Input source flag
 
-     /** @brief parsing stutus */
+    /** @brief parsing stutus */
     enum PARSING_STATUS {
         PARSING_OK,
         UNRECOGNIZED_COMMAND,
