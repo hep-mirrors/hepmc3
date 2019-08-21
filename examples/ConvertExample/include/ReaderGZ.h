@@ -32,7 +32,7 @@ union magic_t {
 };
 class ReaderGZ : public Reader {
 public:
-/** @brief Construcor*/
+    /** @brief Construcor*/
     ReaderGZ(const std::string& filename) : m_gzstream(filename.c_str()), m_gzstream_test(filename.c_str())
     {
         std::ifstream file(filename);
@@ -56,7 +56,7 @@ public:
     ~ReaderGZ() {};
     /** @brief Read event */
     bool read_event(GenEvent& evt) {
-       return m_reader->read_event(evt);
+        return m_reader->read_event(evt);
     };
     /** @brief State */
     bool failed() {
@@ -70,7 +70,7 @@ private:
     igzstream   m_gzstream;  ///< Stream to read
     igzstream   m_gzstream_test; ///< Stream to test
     std::shared_ptr<Reader>      m_reader; ///< Actual reader
-/** @brief THis function will deduce the type of input file based on the name/URL and it's content and will return appropriate Reader*/
+    /** @brief THis function will deduce the type of input file based on the name/URL and it's content and will return appropriate Reader*/
     std::shared_ptr<Reader> deduce_reader(std::istream & stream_test,std::istream & stream) {
         std::vector<std::string> head;
         head.push_back(std::string(""));
@@ -101,19 +101,19 @@ private:
         bool HEPEVT=true;
         int m_i,m_p;
         while (true)
-          {
-                if (!(st_e>>attr)) {
-                    HEPEVT=false;
-                    break;
-                }
-                if (attr==' ') continue;
-                if (attr!='E') {
-                    HEPEVT=false;
-                    break;
-                }
-                HEPEVT=static_cast<bool>(st_e>>m_i>>m_p);
+        {
+            if (!(st_e>>attr)) {
+                HEPEVT=false;
                 break;
-          }
+            }
+            if (attr==' ') continue;
+            if (attr!='E') {
+                HEPEVT=false;
+                break;
+            }
+            HEPEVT=static_cast<bool>(st_e>>m_i>>m_p);
+            break;
+        }
         if (HEPEVT)     return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(stream)));
         printf("Info in deduce_reader: All attempts failed for stream\n");
         return shared_ptr<Reader>(nullptr);

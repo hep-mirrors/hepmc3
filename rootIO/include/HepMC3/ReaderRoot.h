@@ -29,7 +29,7 @@
 
 namespace HepMC3 {
 
-  class ReaderRoot : public Reader {
+class ReaderRoot : public Reader {
 //
 // Constructors
 //

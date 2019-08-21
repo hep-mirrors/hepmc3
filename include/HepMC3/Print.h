@@ -35,35 +35,38 @@ public:
     static void listing(std::ostream& os, const GenEvent &event, unsigned short precision = 2);
     /// @brief Print event in listing (HepMC2) format  to std::cout
     inline static void listing(const GenEvent &event, unsigned short precision = 2) {
-      listing(std::cout, event, precision);
+        listing(std::cout, event, precision);
     }
 
-    /// @brief Print runinfo in listing 
+    /// @brief Print runinfo in listing
     static void listing(std::ostream& os, const GenRunInfo &ri, unsigned short precision = 2);
     /// @brief Print runinfo in listing  to std::cout
     inline static void listing(const GenRunInfo &ri, unsigned short precision = 2) {
-      listing(std::cout, ri, precision);
+        listing(std::cout, ri, precision);
     }
 
     /// @brief Print one-line info
     static void line(std::ostream& os, const GenEvent &event, bool attributes=false);
     /// @brief Print one-line info to std::cout
     inline static void line(const GenEvent &event, bool attributes=false) {
-      line(std::cout, event, attributes); std::cout<<std::endl;
+        line(std::cout, event, attributes);
+        std::cout<<std::endl;
     }
 
     /// @brief Print one-line info
     static void line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes=false);
     /// @brief Print one-line info to std::cout
     inline static void line(const GenRunInfo &RunInfo, bool attributes=false) {
-      line(std::cout, RunInfo, attributes); std::cout<<std::endl;
+        line(std::cout, RunInfo, attributes);
+        std::cout<<std::endl;
     }
 
     /// @brief Print one-line info
     static void line(std::ostream& os, const GenRunInfo::ToolInfo& t);
     /// @brief Print one-line info to std::cout
     inline static void line(const GenRunInfo::ToolInfo& t) {
-      line(std::cout, t); std::cout << std::endl;
+        line(std::cout, t);
+        std::cout << std::endl;
     }
 
 
@@ -72,42 +75,48 @@ public:
     static void line(std::ostream& os, ConstGenVertexPtr v, bool attributes=false);
     /// @brief Print one-line info to std::cout
     inline static void line(ConstGenVertexPtr v, bool attributes=false) {
-      line(std::cout, v, attributes); std::cout << std::endl;
+        line(std::cout, v, attributes);
+        std::cout << std::endl;
     }
 
     /// @brief Print one-line info
     static void line(std::ostream& os, const FourVector& p);
     /// @brief Print one-line info to std::cout
     inline static void line(const FourVector& p) {
-      line(std::cout, p); std::cout << std::endl;
+        line(std::cout, p);
+        std::cout << std::endl;
     }
-    
+
     /// @brief Print one-line info
     static void line(std::ostream& os, ConstGenParticlePtr p, bool attributes=false);
     /// @brief Print one-line info to std::cout
     inline static void line(ConstGenParticlePtr p, bool attributes=false) {
-      line(std::cout, p, attributes); std::cout << std::endl;
+        line(std::cout, p, attributes);
+        std::cout << std::endl;
     }
 
     /// @brief Print one-line info
     static void line(std::ostream& os, shared_ptr<GenCrossSection> &cs);
     /// @brief Print one-line info to std::cout
     inline static void line(shared_ptr<GenCrossSection> &cs) {
-      line(std::cout, cs); std::cout<<std::endl;
+        line(std::cout, cs);
+        std::cout<<std::endl;
     }
 
     /// @brief Print one-line info
     static void line(std::ostream& os, shared_ptr<GenHeavyIon> &hi);
     /// @brief Print one-line info to std::cout
     inline static void line(shared_ptr<GenHeavyIon> &hi) {
-      line(std::cout, hi); std::cout<<std::endl;
+        line(std::cout, hi);
+        std::cout<<std::endl;
     }
 
     /// @brief Print one-line info
     static void line(std::ostream& os, shared_ptr<GenPdfInfo> &pi);
     /// @brief Print one-line info to std::cout
     inline static void line(shared_ptr<GenPdfInfo> &pi) {
-      line(std::cout, pi); std::cout<<std::endl;
+        line(std::cout, pi);
+        std::cout<<std::endl;
     }
 
 private:

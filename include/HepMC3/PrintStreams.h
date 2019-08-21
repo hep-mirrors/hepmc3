@@ -16,41 +16,41 @@
 #include "HepMC3/Print.h"
 
 namespace HepMC3 {
-    /// @brief Print content of all GenEvent containers with idiomatic C++ printing. 
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, const GenEvent &event) { Print::content(os,event); return os; }
+/// @brief Print content of all GenEvent containers with idiomatic C++ printing.
+/// @note More generic printing methods from HepMC3::Print should be preffered
+inline std::ostream& operator<<(std::ostream& os, const GenEvent &event) { Print::content(os,event); return os; }
 
-    /// @brief Print one-line info with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os,  ConstGenVertexPtr v) { Print::line(os,v); return os; }
+/// @brief Print one-line info with idiomatic C++ printing
+/// @note More generic printing methods from HepMC3::Print should be preffered
+inline std::ostream& operator<<(std::ostream& os,  ConstGenVertexPtr v) { Print::line(os,v); return os; }
 
-    /// @brief Print one-line info with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os,  ConstGenParticlePtr p) { Print::line(os,p); return os; }
+/// @brief Print one-line info with idiomatic C++ printing
+/// @note More generic printing methods from HepMC3::Print should be preffered
+inline std::ostream& operator<<(std::ostream& os,  ConstGenParticlePtr p) { Print::line(os,p); return os; }
 
-    /// @brief Print one-line info with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenCrossSection> &cs) { Print::line(os,cs); return os; }
+/// @brief Print one-line info with idiomatic C++ printing
+/// @note More generic printing methods from HepMC3::Print should be preffered
+inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenCrossSection> &cs) { Print::line(os,cs); return os; }
 
-    /// @brief Print one-line info with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenHeavyIon> &hi) { Print::line(os,hi); return os; }
+/// @brief Print one-line info with idiomatic C++ printing
+/// @note More generic printing methods from HepMC3::Print should be preffered
+inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenHeavyIon> &hi) { Print::line(os,hi); return os; }
 
-    /// @brief Print one-line info  with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenPdfInfo> &pi) { Print::line(os,pi); return os; }
+/// @brief Print one-line info  with idiomatic C++ printing
+/// @note More generic printing methods from HepMC3::Print should be preffered
+inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenPdfInfo> &pi) { Print::line(os,pi); return os; }
 
-    /// @brief Print one-line info  with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, const FourVector& p) { Print::line(os,p); return os; }
+/// @brief Print one-line info  with idiomatic C++ printing
+/// @note More generic printing methods from HepMC3::Print should be preffered
+inline std::ostream& operator<<(std::ostream& os, const FourVector& p) { Print::line(os,p); return os; }
 
-    /// @brief Print one-line info  with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os, const GenRunInfo::ToolInfo& t) { Print::line(os,t); return os; }
+/// @brief Print one-line info  with idiomatic C++ printing
+/// @note More generic printing methods from HepMC3::Print should be preffered
+inline std::ostream& operator<<(std::ostream& os, const GenRunInfo::ToolInfo& t) { Print::line(os,t); return os; }
 
-    /// @brief Print one-line info  with idiomatic C++ printing
-    /// @note More generic printing methods from HepMC3::Print should be preffered
-    inline std::ostream& operator<<(std::ostream& os,const GenRunInfo &ri) { Print::line(os,ri); return os; }
+/// @brief Print one-line info  with idiomatic C++ printing
+/// @note More generic printing methods from HepMC3::Print should be preffered
+inline std::ostream& operator<<(std::ostream& os,const GenRunInfo &ri) { Print::line(os,ri); return os; }
 
 
 

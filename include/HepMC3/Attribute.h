@@ -68,7 +68,7 @@ protected:
 
     /** @brief GenEvent is a friend */
     friend class GenEvent;
-    
+
 //
 // Virtual Functions
 //
@@ -89,7 +89,7 @@ public:
      * Attribute belongs.
      */
     virtual bool init(const GenRunInfo & ) {
-    return true;
+        return true;
     }
 
     /** @brief Fill string from class content */
@@ -117,14 +117,14 @@ public:
 
     /** return the GenParticle to which this Attribute belongs, if at all. */
     ConstGenParticlePtr particle() const {
-      return std::const_pointer_cast<GenParticle>(m_particle);
+        return std::const_pointer_cast<GenParticle>(m_particle);
     }
 
-  /** return the GenVertex to which this Attribute belongs, if at all. */
-  GenVertexPtr vertex() {
-    return m_vertex;
-  }
-  
+    /** return the GenVertex to which this Attribute belongs, if at all. */
+    GenVertexPtr vertex() {
+        return m_vertex;
+    }
+
     /** return the GenVertex to which this Attribute belongs, if at all. */
     ConstGenVertexPtr vertex() const {
         return std::const_pointer_cast<GenVertex>(m_vertex);
@@ -144,7 +144,7 @@ private:
     bool   m_is_parsed;             //!< Is this attribute parsed?
     string m_string;                //!< Raw (unparsed) string
     const GenEvent * m_event;       //!< Possibility to be aware of the
-                                    //!  controlling GenEvent object.
+    //!  controlling GenEvent object.
     GenParticlePtr m_particle; //!< Particle to which assigned.
     GenVertexPtr m_vertex;      //!< Vertex to which assigned.
 };
@@ -178,12 +178,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     int value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const int& i) {
-    m_val = i;
+        m_val = i;
     }
 
 private:
@@ -219,12 +219,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     long value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const long& l) {
-    m_val = l;
+        m_val = l;
     }
 
 private:
@@ -256,21 +256,21 @@ public:
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(string &att) const {
-      std::ostringstream oss;
-      oss << std::setprecision(std::numeric_limits<double>::digits10)
-      << m_val;
-      att = oss.str();
-      return true;
+        std::ostringstream oss;
+        oss << std::setprecision(std::numeric_limits<double>::digits10)
+            << m_val;
+        att = oss.str();
+        return true;
     }
 
     /** @brief get the value associated to this Attribute. */
     double value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const double& d) {
-    m_val = d;
+        m_val = d;
     }
 
 private:
@@ -301,21 +301,21 @@ public:
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(string &att) const {
-      std::ostringstream oss;
-      oss << std::setprecision(std::numeric_limits<float>::digits10)
-      << m_val;
-      att = oss.str();
-      return true;
+        std::ostringstream oss;
+        oss << std::setprecision(std::numeric_limits<float>::digits10)
+            << m_val;
+        att = oss.str();
+        return true;
     }
 
     /** @brief get the value associated to this Attribute. */
     float value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const float& f) {
-    m_val = f;
+        m_val = f;
     }
 
 private:
@@ -361,12 +361,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     string value() const {
-    return unparsed_string();
+        return unparsed_string();
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const string& s) {
-    set_unparsed_string(s);
+        set_unparsed_string(s);
     }
 
 };
@@ -390,10 +390,10 @@ public:
     bool from_string(const string &att) {
         if (att.size())
         {
-        m_val = att.at(0);
-        return true;
-	    }
-	    return false;
+            m_val = att.at(0);
+            return true;
+        }
+        return false;
     }
 
     /** @brief Implementation of Attribute::to_string */
@@ -404,12 +404,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     char value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const char& i) {
-    m_val = i;
+        m_val = i;
     }
 
 private:
@@ -445,17 +445,17 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     long long value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const long long& l) {
-    m_val = l;
+        m_val = l;
     }
 
 private:
 
-   long  long m_val; ///< Attribute value
+    long  long m_val; ///< Attribute value
 
 };
 
@@ -482,21 +482,21 @@ public:
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(string &att) const {
-      std::ostringstream oss;
-      oss << std::setprecision(std::numeric_limits<long double>::digits10)
-      << m_val;
-      att = oss.str();
-      return true;
+        std::ostringstream oss;
+        oss << std::setprecision(std::numeric_limits<long double>::digits10)
+            << m_val;
+        att = oss.str();
+        return true;
     }
 
     /** @brief get the value associated to this Attribute. */
     long double value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const long double& d) {
-    m_val = d;
+        m_val = d;
     }
 
 private:
@@ -535,12 +535,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     unsigned int value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const unsigned int& i) {
-    m_val = i;
+        m_val = i;
     }
 
 private:
@@ -578,12 +578,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     unsigned long value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const unsigned long& i) {
-    m_val = i;
+        m_val = i;
     }
 
 private:
@@ -620,12 +620,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     unsigned long long value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const unsigned long long& i) {
-    m_val = i;
+        m_val = i;
     }
 
 private:
@@ -651,7 +651,7 @@ public:
         if (att.size()!=1) return false;
         if(att==std::string("1")) {m_val = true;  return true;}
         if(att==std::string("0")) {m_val = false; return true;}
-        return false;	    
+        return false;
     }
 
     /** @brief Implementation of Attribute::to_string */
@@ -662,12 +662,12 @@ public:
 
     /** @brief get the value associated to this Attribute. */
     bool value() const {
-    return m_val;
+        return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const bool& i) {
-    m_val = i;
+        m_val = i;
     }
 
 private:

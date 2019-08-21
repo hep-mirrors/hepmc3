@@ -22,8 +22,8 @@ void Print::content( std::ostream& os, const GenEvent &event ) {
     os<<endl;
 
     os<<"Weights (" << event.weights().size() <<"): "<<endl;
-    for (std::vector<double>::const_iterator w=event.weights().begin();w!=event.weights().end();++w )
-    os <<" "<<*w;
+    for (std::vector<double>::const_iterator w=event.weights().begin(); w!=event.weights().end(); ++w )
+        os <<" "<<*w;
 
 
     os<<"Attributes:"<<endl;
@@ -36,7 +36,7 @@ void Print::content( std::ostream& os, const GenEvent &event ) {
 
     os<<"GenParticlePtr ("<<event.particles().size()<<")"<<endl;
 
-    for( ConstGenParticlePtr p: event.particles()){
+    for( ConstGenParticlePtr p: event.particles()) {
         Print::line(p,true);
     }
 
@@ -60,10 +60,10 @@ void Print::listing( std::ostream& os, const GenEvent &event, unsigned short pre
     os << "________________________________________________________________________" << endl;
     os << "GenEvent: #" << event.event_number() << endl;
     os << " Momentum units: " << Units::name(event.momentum_unit())
-         << " Position units: " << Units::name(event.length_unit()) << endl;
+       << " Position units: " << Units::name(event.length_unit()) << endl;
     os << " Entries in this event: " << event.vertices().size() << " vertices, "
-         << event.particles().size() << " particles, "
-         << event.weights().size()   << " weights." << endl;
+       << event.particles().size() << " particles, "
+       << event.weights().size()   << " weights." << endl;
 
     const FourVector &pos = event.event_pos();
     os << " Position offset: " << pos.x() << ", " << pos.y() << ", " << pos.z() << ", " << pos.t() << endl;
@@ -71,8 +71,8 @@ void Print::listing( std::ostream& os, const GenEvent &event, unsigned short pre
     // Print a legend to describe the particle info
     os << "                                    GenParticle Legend" << endl;
     os << "         ID    PDG ID   "
-         << "( px,       py,       pz,     E )"
-         << "   Stat ProdVtx" << endl;
+       << "( px,       py,       pz,     E )"
+       << "   Stat ProdVtx" << endl;
     os << "________________________________________________________________________" << endl;
 
     // Print all vertices
@@ -110,12 +110,12 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
     }
     os<<"Attributes:"<<endl;
     for ( auto att: ri.attributes() ) {
-    string st;
-    if ( ! att.second->to_string(st) ) {
-        WARNING ("Print::listing: problem serializing attribute: "<< att.first )
+        string st;
+        if ( ! att.second->to_string(st) ) {
+            WARNING ("Print::listing: problem serializing attribute: "<< att.first )
         }
-    else { os<<att.first<<" "<<att.second->to_string(st);}
-    os<<endl;
+        else { os<<att.first<<" "<<att.second->to_string(st);}
+        os<<endl;
     }
 
     // Restore the stream state
@@ -204,18 +204,18 @@ void Print::listing( std::ostream& os, ConstGenParticlePtr p ) {
 }
 void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
     os <<"GenEvent: #" << event.event_number();
-    if(attributes) for (std::vector<std::string>::const_iterator s=event.attribute_names().begin();s!=event.attribute_names().end();++s) 
-    os<<" "<<*s<<"="<<event.attribute_as_string(*s);
+    if(attributes) for (std::vector<std::string>::const_iterator s=event.attribute_names().begin(); s!=event.attribute_names().end(); ++s)
+            os<<" "<<*s<<"="<<event.attribute_as_string(*s);
 }
 
 void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {
     os <<"GenRunInfo: Number of tools:" << RunInfo.tools().size();
-    if(attributes) for (std::vector<std::string>::const_iterator s=RunInfo.attribute_names().begin();s!=RunInfo.attribute_names().end();++s) 
-    os<<" "<<*s<<"="<<RunInfo.attribute_as_string(*s);
+    if(attributes) for (std::vector<std::string>::const_iterator s=RunInfo.attribute_names().begin(); s!=RunInfo.attribute_names().end(); ++s)
+            os<<" "<<*s<<"="<<RunInfo.attribute_as_string(*s);
 }
 
 void Print::line(std::ostream& os, const GenRunInfo::ToolInfo& t) {
-  os<<"GenRunInfo::ToolInfo "<<t.name<<" "<<t.version<<" "<<t.description;
+    os<<"GenRunInfo::ToolInfo "<<t.name<<" "<<t.version<<" "<<t.description;
 }
 
 void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
@@ -232,8 +232,8 @@ void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
     else                        os << "false";
 
     os << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t();
-    if(attributes)for (std::vector<std::string>::const_iterator s= v->attribute_names().begin();s!= v->attribute_names().end();++s)  
-    os<<" "<<*s<<"="<<v->attribute_as_string(*s);
+    if(attributes)for (std::vector<std::string>::const_iterator s= v->attribute_names().begin(); s!= v->attribute_names().end(); ++s)
+            os<<" "<<*s<<"="<<v->attribute_as_string(*s);
 
 }
 
@@ -248,9 +248,9 @@ void Print::line(std::ostream& os, const FourVector& p) {
     // Set precision
     os.precision( 2 );
     os << " (P,E)=" << p.x()
-               << "," << p.y()
-               << "," << p.z()
-               << "," << p.e();
+       << "," << p.y()
+       << "," << p.z()
+       << "," << p.e();
 
     // Restore the stream state
     os.flags(orig);
@@ -279,9 +279,9 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
     const FourVector &momentum = p->momentum();
 
     os << " (P,E)=" << momentum.px()
-               << "," << momentum.py()
-               << "," << momentum.pz()
-               << "," << momentum.e();
+       << "," << momentum.py()
+       << "," << momentum.pz()
+       << "," << momentum.e();
 
     // Restore the stream state
     os.flags(orig);
@@ -293,51 +293,51 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
     int end_vtx_id    = (end)  ? end->id()  : 0;
 
     os << " Stat: " << p->status()
-         << " PV: " << prod_vtx_id
-         << " EV: " << end_vtx_id
-         << " Attr: " << (*p).attribute_names().size();
+       << " PV: " << prod_vtx_id
+       << " EV: " << end_vtx_id
+       << " Attr: " << (*p).attribute_names().size();
 
-         if(attributes)
-         {
-         std::vector<std::string> names     =p->attribute_names();
-         for (auto ss: names)
-         os<<" "<<ss<<"="<<(*p).attribute_as_string(ss);
-         }
+    if(attributes)
+    {
+        std::vector<std::string> names     =p->attribute_names();
+        for (auto ss: names)
+            os<<" "<<ss<<"="<<(*p).attribute_as_string(ss);
+    }
 }
 
 void Print::line(std::ostream& os, shared_ptr<GenCrossSection> &cs) {
     os << " GenCrossSection: " << cs->xsec(0)
-         << " " << cs->xsec_err(0)
-         << " " << cs->get_accepted_events()
-         << " " << cs->get_attempted_events();
+       << " " << cs->xsec_err(0)
+       << " " << cs->get_accepted_events()
+       << " " << cs->get_attempted_events();
 }
 
 void Print::line(std::ostream& os, shared_ptr<GenHeavyIon> &hi) {
     os << " GenHeavyIon: " << hi->Ncoll_hard
-         << " " << hi->Npart_proj
-         << " " << hi->Npart_targ
-         << " " << hi->Ncoll
-         << " " << hi->spectator_neutrons
-         << " " << hi->spectator_protons
-         << " " << hi->N_Nwounded_collisions
-         << " " << hi->Nwounded_N_collisions
-         << " " << hi->Nwounded_Nwounded_collisions
-         << " " << hi->impact_parameter
-         << " " << hi->event_plane_angle
-         << " " << hi->eccentricity
-         << " " << hi->sigma_inel_NN;
+       << " " << hi->Npart_proj
+       << " " << hi->Npart_targ
+       << " " << hi->Ncoll
+       << " " << hi->spectator_neutrons
+       << " " << hi->spectator_protons
+       << " " << hi->N_Nwounded_collisions
+       << " " << hi->Nwounded_N_collisions
+       << " " << hi->Nwounded_Nwounded_collisions
+       << " " << hi->impact_parameter
+       << " " << hi->event_plane_angle
+       << " " << hi->eccentricity
+       << " " << hi->sigma_inel_NN;
 }
 
 void Print::line(std::ostream& os, shared_ptr<GenPdfInfo> &pi) {
     os << " GenPdfInfo: " << pi->parton_id[0]
-         << " " << pi->parton_id[1]
-         << " " << pi->x[0]
-         << " " << pi->x[1]
-         << " " << pi->scale
-         << " " << pi->xf[0]
-         << " " << pi->xf[1]
-         << " " << pi->pdf_id[0]
-         << " " << pi->pdf_id[1];
+       << " " << pi->parton_id[1]
+       << " " << pi->x[0]
+       << " " << pi->x[1]
+       << " " << pi->scale
+       << " " << pi->xf[0]
+       << " " << pi->xf[1]
+       << " " << pi->pdf_id[0]
+       << " " << pi->pdf_id[1];
 }
 
 
