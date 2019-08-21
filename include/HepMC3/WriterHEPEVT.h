@@ -34,10 +34,10 @@ public:
      *  @warning If file exists, it will be overwritten
      */
     WriterHEPEVT(const std::string &filename);
-    
-      /// @brief Constructor from ostream
+
+    /// @brief Constructor from ostream
     WriterHEPEVT(std::ostream& stream);
-    
+
 //
 // Functions
 //
@@ -68,7 +68,7 @@ public:
     bool failed();
     /** @brief  set flag if vertex positions are available */
     void set_vertices_positions_present(bool iflong);
-    
+
     /** @brief  get flag if vertex positions are available */
     bool get_vertices_positions_present() const;
 

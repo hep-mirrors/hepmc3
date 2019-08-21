@@ -20,12 +20,12 @@ namespace HepMC3 {
 
 
 WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run)
-  : m_file(filename),
-    m_stream(&m_file),
-    m_precision(16),
-    m_buffer(nullptr),
-    m_cursor(nullptr),
-    m_buffer_size( 256*1024 )
+    : m_file(filename),
+      m_stream(&m_file),
+      m_precision(16),
+      m_buffer(nullptr),
+      m_cursor(nullptr),
+      m_buffer_size( 256*1024 )
 {
     set_run_info(run);
     if ( !m_file.is_open() ) {
@@ -39,12 +39,12 @@ WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run
 
 
 WriterAscii::WriterAscii(std::ostream &stream, shared_ptr<GenRunInfo> run)
-  : m_file(),
-    m_stream(&stream),
-    m_precision(16),
-    m_buffer(nullptr),
-    m_cursor(nullptr),
-    m_buffer_size( 256*1024 )
+    : m_file(),
+      m_stream(&stream),
+      m_precision(16),
+      m_buffer(nullptr),
+      m_cursor(nullptr),
+      m_buffer_size( 256*1024 )
 
 {
     set_run_info(run);
@@ -70,17 +70,17 @@ void WriterAscii::write_event(const GenEvent &evt) {
     flush();
 
     if ( !run_info() ) {
-    set_run_info(evt.run_info());
-    write_run_info();
+        set_run_info(evt.run_info());
+        write_run_info();
     } else {
-    if ( evt.run_info() && (run_info() != evt.run_info()) ) {
-        WARNING( "WriterAscii::write_event: GenEvents contain "
-             "different GenRunInfo objects from - only the "
-             "first such object will be serialized." )
-    }
-    // else {
-    //write_run_info();
-    //    }
+        if ( evt.run_info() && (run_info() != evt.run_info()) ) {
+            WARNING( "WriterAscii::write_event: GenEvents contain "
+                     "different GenRunInfo objects from - only the "
+                     "first such object will be serialized." )
+        }
+        // else {
+        //write_run_info();
+        //    }
     }
 
     // Write event info
@@ -109,11 +109,11 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
     // Write weight values if present
     if ( evt.weights().size() ) {
-      m_cursor += sprintf(m_cursor, "W");
-      for (auto  w: evt.weights())
-        m_cursor += sprintf(m_cursor, " %.*e",std::min(3*m_precision,22), w);
-      m_cursor += sprintf(m_cursor, "\n");
-      flush();
+        m_cursor += sprintf(m_cursor, "W");
+        for (auto  w: evt.weights())
+            m_cursor += sprintf(m_cursor, " %.*e",std::min(3*m_precision,22), w);
+        m_cursor += sprintf(m_cursor, "\n");
+        flush();
     }
 
     // Write attributes
@@ -128,7 +128,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
             }
             else {
                 m_cursor +=
-                  sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
+                    sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
                 flush();
                 write_string(escape(st));
                 m_cursor += sprintf(m_cursor, "\n");
@@ -155,7 +155,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
             else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in()[0]->id();
             //Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
             if (alreadywritten.find(v)==alreadywritten.end()&&parent_object<0)
-             { write_vertex(v); alreadywritten[v]=true;}
+            { write_vertex(v); alreadywritten[v]=true;}
         }
 
         write_particle( p, parent_object );
@@ -170,12 +170,12 @@ void WriterAscii::write_event(const GenEvent &evt) {
 void WriterAscii::allocate_buffer() {
     if ( m_buffer ) return;
     while( m_buffer==nullptr && m_buffer_size >= 256 ) {
-    try {
-        m_buffer = new char[ m_buffer_size ]();
-    }     catch (const std::bad_alloc& e) {
-          delete[] m_buffer;
-          m_buffer_size /= 2;
-          WARNING( "WriterAscii::allocate_buffer: buffer size too large. Dividing by 2. New size: " << m_buffer_size )
+        try {
+            m_buffer = new char[ m_buffer_size ]();
+        }     catch (const std::bad_alloc& e) {
+            delete[] m_buffer;
+            m_buffer_size /= 2;
+            WARNING( "WriterAscii::allocate_buffer: buffer size too large. Dividing by 2. New size: " << m_buffer_size )
         }
     }
 
@@ -192,9 +192,14 @@ string WriterAscii::escape(const string& s)  const {
     ret.reserve( s.length()*2 );
     for ( string::const_iterator it = s.begin(); it != s.end(); ++it ) {
         switch ( *it ) {
-            case '\\': ret += "\\\\"; break;
-            case '\n': ret += "\\|"; break;
-            default: ret += *it;
+        case '\\':
+            ret += "\\\\";
+            break;
+        case '\n':
+            ret += "\\|";
+            break;
+        default:
+            ret += *it;
         }
     }
     return ret;
@@ -269,37 +274,37 @@ void WriterAscii::write_run_info() {
     vector<string> names = run_info()->weight_names();
 
     if ( !names.empty() ) {
-      string out = names[0];
-      for ( int i = 1, N = names.size(); i < N; ++i )
-    out += "\n" + names[i];
-      m_cursor += sprintf(m_cursor, "W ");
-      flush();
-      write_string(escape(out));
-      m_cursor += sprintf(m_cursor, "\n");
+        string out = names[0];
+        for ( int i = 1, N = names.size(); i < N; ++i )
+            out += "\n" + names[i];
+        m_cursor += sprintf(m_cursor, "W ");
+        flush();
+        write_string(escape(out));
+        m_cursor += sprintf(m_cursor, "\n");
     }
 
     for ( int i = 0, N = run_info()->tools().size(); i < N; ++i  ) {
-      string out = "T " + run_info()->tools()[i].name + "\n"
-    + run_info()->tools()[i].version + "\n"
-    + run_info()->tools()[i].description;
-      write_string(escape(out));
-      m_cursor += sprintf(m_cursor, "\n");
+        string out = "T " + run_info()->tools()[i].name + "\n"
+                     + run_info()->tools()[i].version + "\n"
+                     + run_info()->tools()[i].description;
+        write_string(escape(out));
+        m_cursor += sprintf(m_cursor, "\n");
     }
 
 
     for ( auto att: run_info()->attributes() ) {
-    string st;
-    if ( ! att.second->to_string(st) ) {
-        WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
+        string st;
+        if ( ! att.second->to_string(st) ) {
+            WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
         }
-    else {
-        m_cursor +=
-        sprintf(m_cursor, "A %s ", att.first.c_str());
-        flush();
-        write_string(escape(st));
-        m_cursor += sprintf(m_cursor, "\n");
-        flush();
-    }
+        else {
+            m_cursor +=
+                sprintf(m_cursor, "A %s ", att.first.c_str());
+            flush();
+            write_string(escape(st));
+            m_cursor += sprintf(m_cursor, "\n");
+            flush();
+        }
     }
 }
 
@@ -347,28 +352,28 @@ inline void WriterAscii::write_string( const string &str ) {
 
 
 void WriterAscii::close() {
-  std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
-  if (ofs && !ofs->is_open()) return;
-  forced_flush();
-  (*m_stream) << "HepMC::Asciiv3-END_EVENT_LISTING" << endl << endl;
-  if (ofs) ofs->close();
+    std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
+    if (ofs && !ofs->is_open()) return;
+    forced_flush();
+    (*m_stream) << "HepMC::Asciiv3-END_EVENT_LISTING" << endl << endl;
+    if (ofs) ofs->close();
 }
 bool WriterAscii::failed() { return (bool)m_file.rdstate(); }
 
 void WriterAscii::set_precision(const int& prec ) {
-        if (prec < 2 || prec > 24) return;
-        m_precision = prec;
-    }
+    if (prec < 2 || prec > 24) return;
+    m_precision = prec;
+}
 
 int WriterAscii::precision() const {
-        return m_precision;
-    }
+    return m_precision;
+}
 
 void WriterAscii::set_buffer_size(const size_t& size ) {
-        if (m_buffer) return;
-        if (size < 256) return;
-        m_buffer_size = size;
-    }
+    if (m_buffer) return;
+    if (size < 256) return;
+    m_buffer_size = size;
+}
 
 
 } // namespace HepMC3

@@ -58,13 +58,13 @@ void ReaderLHEF::init()
     // We also want to convey the information about which generators was
     // used.
     for ( int i = 0, N = m_hepr->heprup.generators.size(); i < N; ++i )
-        {
-            GenRunInfo::ToolInfo tool;
-            tool.name =  m_hepr->heprup.generators[i].name;
-            tool.version =  m_hepr->heprup.generators[i].version;
-            tool.description =  m_hepr->heprup.generators[i].contents;
-            run_info()->tools().push_back(tool);
-        }
+    {
+        GenRunInfo::ToolInfo tool;
+        tool.name =  m_hepr->heprup.generators[i].name;
+        tool.version =  m_hepr->heprup.generators[i].version;
+        tool.description =  m_hepr->heprup.generators[i].contents;
+        run_info()->tools().push_back(tool);
+    }
 }
 /// @brief Destructor
 ReaderLHEF::~ReaderLHEF() {close();};

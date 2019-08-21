@@ -19,11 +19,11 @@
 
 namespace HepMC3 {
 
-  // Forward declaration
-  class GenEvent;
+// Forward declaration
+class GenEvent;
 
-  class Writer {
-  public:
+class Writer {
+public:
 
     /// Virtual destructor
     virtual ~Writer() {}
@@ -37,20 +37,20 @@ namespace HepMC3 {
 
     /// Set the global GenRunInfo object.
     void set_run_info(shared_ptr<GenRunInfo> run) {
-      m_run_info = run;
+        m_run_info = run;
     }
 
     /// Get the global GenRunInfo object.
     shared_ptr<GenRunInfo> run_info() const {
-      return m_run_info;
+        return m_run_info;
     }
 
-  private:
+private:
 
     /// The global GenRunInfo object.
     shared_ptr<GenRunInfo> m_run_info;
 
-  };
+};
 
 
 } // namespace HepMC3

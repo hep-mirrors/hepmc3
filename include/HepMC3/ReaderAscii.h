@@ -49,7 +49,7 @@ public:
     /// @brief Close file stream
     void close();
 
-  private:
+private:
 
     /// @brief Unsecape '\' and '\n' characters in string
     std::string unescape(const std::string& s);
@@ -146,7 +146,7 @@ public:
     //@}
 
 
-  private:
+private:
 
     std::ifstream m_file; //!< Input file
     std::istream* m_stream; ///< For ctor when reading from stdin

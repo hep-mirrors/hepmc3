@@ -75,7 +75,7 @@ using std::endl;
 
 namespace HepMC3
 {
-/** @brief Pointer to external (e.g. in Pythia6) struct with HEPEVT */ 
+/** @brief Pointer to external (e.g. in Pythia6) struct with HEPEVT */
 extern struct HEPEVT*  hepevtptr;
 
 class HEPEVT_Wrapper
@@ -150,12 +150,12 @@ inline void HEPEVT_Wrapper::print_hepevt( std::ostream& ostr )
     ostr << " Event No.: " << hepevtptr->nevhep << endl;
     ostr<< "  Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M." << endl;
     for( int i=1; i<=hepevtptr->nhep; ++i )
-        {
-            HEPEVT_Wrapper::print_hepevt_particle( i, ostr );
-        }
+    {
+        HEPEVT_Wrapper::print_hepevt_particle( i, ostr );
+    }
 }
 
-inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr ) 
+inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr )
 {
     char buf[255];
 
@@ -188,12 +188,12 @@ inline int HEPEVT_Wrapper::number_parents( const int& index )
     return (hepevtptr->jmohep[index-1][0]) ? (hepevtptr->jmohep[index-1][1]) ? hepevtptr->jmohep[index-1][1]-hepevtptr->jmohep[index-1][0] : 1 : 0;
 }
 
-inline int HEPEVT_Wrapper::number_children( const int& index ) 
+inline int HEPEVT_Wrapper::number_children( const int& index )
 {
     return (hepevtptr->jdahep[index-1][0]) ? (hepevtptr->jdahep[index-1][1]) ? hepevtptr->jdahep[index-1][1]-hepevtptr->jdahep[index-1][0] : 1 : 0;
 }
 
-inline int HEPEVT_Wrapper::number_children_exact( const int& index ) 
+inline int HEPEVT_Wrapper::number_children_exact( const int& index )
 {
     int nc=0;
     for( int i=1; i<=hepevtptr->nhep; ++i )

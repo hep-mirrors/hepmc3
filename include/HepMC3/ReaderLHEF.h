@@ -29,15 +29,15 @@
 #include <iomanip>
 
 
-namespace HepMC3 
+namespace HepMC3
 {
 class ReaderLHEF : public Reader
 {
-public:  
+public:
     /// The ctor to read from stream
     ReaderLHEF(std::istream &);
 private:
-    void init();                       ///< Init helper    
+    void init();                       ///< Init helper
 public:
     /** @brief Constructor */
     ReaderLHEF(const std::string& filename);

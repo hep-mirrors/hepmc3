@@ -13,7 +13,7 @@
 
 #include <memory>
 
-namespace HepMC3{
+namespace HepMC3 {
 
 class GenVertex;
 
@@ -22,7 +22,7 @@ using ConstGenVertexPtr = std::shared_ptr<const GenVertex>;
 
 template<typename T>
 using GenVertex_type = typename std::conditional<std::is_const<typename T::element_type>::value, ConstGenVertexPtr, GenVertexPtr>::type;
-  
+
 }
 
 #endif

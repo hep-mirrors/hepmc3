@@ -29,17 +29,15 @@ void GenCrossSection::set_cross_section(const double& xs, const double& xs_err,c
     accepted_events     = n_acc;
     attempted_events    = n_att;
     size_t N=1;
-    if ( event() ) N=std::max(event()->weights().size(),N); 
+    if ( event() ) N=std::max(event()->weights().size(),N);
     cross_sections = vector<double>(N, cross_section);
     cross_section_errors = vector<double>(N, cross_section_error);
 }
 
-
 bool GenCrossSection::from_string(const string &att) {
     const char *cursor = att.data();
     cross_sections.clear();
-    cross_section_errors.clear();    
-    
+    cross_section_errors.clear();
 
     double cross_section = atof(cursor);
     cross_sections.push_back(cross_section);
@@ -51,12 +49,12 @@ bool GenCrossSection::from_string(const string &att) {
     if( !(cursor = strchr(cursor+1,' ')) ) {accepted_events = -1; attempted_events = -1;}
     else
     {
-    accepted_events = atof(cursor);
-    if( !(cursor = strchr(cursor+1,' ')) ) attempted_events = -1;
-    else attempted_events = atof(cursor);
+        accepted_events = atof(cursor);
+        if( !(cursor = strchr(cursor+1,' ')) ) attempted_events = -1;
+        else attempted_events = atof(cursor);
     }
     size_t N=1;
-    if ( event() ) N=std::max(event()->weights().size(),N);  
+    if ( event() ) N=std::max(event()->weights().size(),N);
     const size_t max_n_cross_sections=1000;
     while (cross_sections.size()<max_n_cross_sections) {
         if( !(cursor = strchr(cursor+1,' ')) ) break;
@@ -65,12 +63,12 @@ bool GenCrossSection::from_string(const string &att) {
         cross_section_errors.push_back(atof(cursor));
     }
     if (cross_sections.size()>=max_n_cross_sections)
-    WARNING( "GenCrossSection::from_string: too many optional cross-sections  N="<<cross_sections.size()<<" or ill-formed input:"<<att )
-    if (cross_sections.size()!=N)
+        WARNING( "GenCrossSection::from_string: too many optional cross-sections  N="<<cross_sections.size()<<" or ill-formed input:"<<att )
+        if (cross_sections.size()!=N)
 //  So far it is not clear if there should be a warning or not 
-    WARNING( "GenCrossSection::from_string: optional cross-sections are available not for all weights")
-    for (size_t i=cross_sections.size();i<N;i++) {cross_sections[i]=cross_section; cross_section_errors[i]=cross_section_error;}
-    
+            WARNING( "GenCrossSection::from_string: optional cross-sections are available not for all weights")
+            for (size_t i=cross_sections.size(); i<N; i++) {cross_sections[i]=cross_section; cross_section_errors[i]=cross_section_error;}
+
     return true;
 }
 
@@ -93,7 +91,7 @@ bool GenCrossSection::to_string(string &att) const {
 }
 
 bool GenCrossSection::operator==( const GenCrossSection& a ) const {
-  return ( memcmp( (void*)this, (void*) &a, sizeof(class GenCrossSection) ) == 0 );
+    return ( memcmp( (void*)this, (void*) &a, sizeof(class GenCrossSection) ) == 0 );
 }
 
 bool GenCrossSection::operator!=( const GenCrossSection& a ) const {

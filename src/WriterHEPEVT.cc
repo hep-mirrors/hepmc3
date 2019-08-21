@@ -37,19 +37,19 @@ void WriterHEPEVT::write_hepevt_particle( int index, bool iflong )
     char* cursor=&(buf[0]);
     cursor +=sprintf(cursor, "% 8i% 8i",HEPEVT_Wrapper::status(index), HEPEVT_Wrapper::id(index));
     if (iflong)
-        {
-         cursor +=sprintf(cursor,"% 8i% 8i",HEPEVT_Wrapper::first_parent(index),HEPEVT_Wrapper::last_parent(index));
-         cursor +=sprintf(cursor,"% 8i% 8i",HEPEVT_Wrapper::first_child(index),HEPEVT_Wrapper::last_child(index));
-         cursor +=sprintf(cursor,"% 19.8E% 19.8E% 19.8E% 19.8E% 19.8E\n",HEPEVT_Wrapper::px(index),HEPEVT_Wrapper::py(index),HEPEVT_Wrapper::pz(index),HEPEVT_Wrapper::e(index),HEPEVT_Wrapper::m(index));
-         cursor +=sprintf(cursor, "%-48s% 19.8E% 19.8E% 19.8E% 19.8E\n"," ",HEPEVT_Wrapper::x(index),HEPEVT_Wrapper::y(index),HEPEVT_Wrapper::z(index),HEPEVT_Wrapper::t(index));
-        }
+    {
+        cursor +=sprintf(cursor,"% 8i% 8i",HEPEVT_Wrapper::first_parent(index),HEPEVT_Wrapper::last_parent(index));
+        cursor +=sprintf(cursor,"% 8i% 8i",HEPEVT_Wrapper::first_child(index),HEPEVT_Wrapper::last_child(index));
+        cursor +=sprintf(cursor,"% 19.8E% 19.8E% 19.8E% 19.8E% 19.8E\n",HEPEVT_Wrapper::px(index),HEPEVT_Wrapper::py(index),HEPEVT_Wrapper::pz(index),HEPEVT_Wrapper::e(index),HEPEVT_Wrapper::m(index));
+        cursor +=sprintf(cursor, "%-48s% 19.8E% 19.8E% 19.8E% 19.8E\n"," ",HEPEVT_Wrapper::x(index),HEPEVT_Wrapper::y(index),HEPEVT_Wrapper::z(index),HEPEVT_Wrapper::t(index));
+    }
     else
-        {
-            cursor +=sprintf(cursor, "% 8i% 8i",HEPEVT_Wrapper::first_child(index),HEPEVT_Wrapper::last_child(index));
-            cursor +=sprintf(cursor, "% 19.8E% 19.8E% 19.8E% 19.8E\n",HEPEVT_Wrapper::px(index),HEPEVT_Wrapper::py(index),HEPEVT_Wrapper::pz(index),HEPEVT_Wrapper::m(index));
-        }
-     unsigned long length = cursor - &(buf[0]);   
-     m_stream->write( buf, length );
+    {
+        cursor +=sprintf(cursor, "% 8i% 8i",HEPEVT_Wrapper::first_child(index),HEPEVT_Wrapper::last_child(index));
+        cursor +=sprintf(cursor, "% 19.8E% 19.8E% 19.8E% 19.8E\n",HEPEVT_Wrapper::px(index),HEPEVT_Wrapper::py(index),HEPEVT_Wrapper::pz(index),HEPEVT_Wrapper::m(index));
+    }
+    unsigned long length = cursor - &(buf[0]);
+    m_stream->write( buf, length );
 }
 
 void WriterHEPEVT::write_hepevt_event_header()
@@ -57,7 +57,7 @@ void WriterHEPEVT::write_hepevt_event_header()
     char buf[512];//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor=buf;
     cursor +=sprintf(cursor,"E% 8i %8i\n",HEPEVT_Wrapper::event_number(),HEPEVT_Wrapper::number_entries());
-    unsigned long length = cursor - &(buf[0]);   
+    unsigned long length = cursor - &(buf[0]);
     m_stream->write( buf, length );
 }
 
@@ -72,18 +72,18 @@ void WriterHEPEVT::write_event(const GenEvent &evt)
 
 void WriterHEPEVT::close()
 {
-  std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
-  if (ofs && !ofs->is_open()) return;
-  if (ofs) ofs->close();
+    std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
+    if (ofs && !ofs->is_open()) return;
+    if (ofs) ofs->close();
 }
 
 bool WriterHEPEVT::failed()
 {
-     return (bool)m_file.rdstate(); 
+    return (bool)m_file.rdstate();
 }
 
-void WriterHEPEVT::set_vertices_positions_present(bool iflong){m_vertices_positions_present=iflong;}
-    
+void WriterHEPEVT::set_vertices_positions_present(bool iflong) {m_vertices_positions_present=iflong;}
+
 bool WriterHEPEVT::get_vertices_positions_present() const { return m_vertices_positions_present;}
 
 } // namespace HepMC3

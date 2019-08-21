@@ -33,7 +33,7 @@ public:
 
 public:
     /** @brief Get momentum unit based on its name*/
-  static MomentumUnit momentum_unit( const std::string& name ) {
+    static MomentumUnit momentum_unit( const std::string& name ) {
         if( name.compare(0,3,"GEV") == 0 ) return GEV;
         if( name.compare(0,3,"MEV") == 0 ) return MEV;
 
@@ -55,8 +55,10 @@ public:
     /** @brief Get name of momentum unit */
     static std::string name( MomentumUnit u ) {
         switch(u) {
-            case MEV: return "MEV";
-            case GEV: return "GEV";
+        case MEV:
+            return "MEV";
+        case GEV:
+            return "GEV";
         }
 
         return "<UNDEFINED>";
@@ -65,8 +67,10 @@ public:
     /** @brief Get name of length unit */
     static std::string name( LengthUnit u ) {
         switch(u) {
-            case MM: return "MM";
-            case CM: return "CM";
+        case MM:
+            return "MM";
+        case CM:
+            return "CM";
         }
 
         return "<UNDEFINED>";
