@@ -21,6 +21,7 @@
 #endif
 using namespace HepMC3;
 std::map<int,std::pair<Writer*,GenEvent*> > hepmc3_gWriters;
+std::map<int,std::shared_ptr<GenRunInfo> >  hepmc3_gGenRunInfos;
 GenEvent* hepmc3_gWriters_get_event(const int & position)
     {
         if (hepmc3_gWriters.find(position)==hepmc3_gWriters.end()) {
@@ -57,6 +58,8 @@ extern "C" {
         for( int i=1; i<=HEPEVT_Wrapper::number_entries(); i++ )
             if (hepevtptr->jmohep[i-1][1]<hepevtptr->jmohep[i-1][0])  hepevtptr->jmohep[i-1][1]=hepevtptr->jmohep[i-1][0];
         HEPEVT_Wrapper::HEPEVT_to_GenEvent(hepmc3_gWriters[position].second);
+        hepmc3_gWriters[position].second->set_run_info(hepmc3_gGenRunInfos[position]);
+        hepmc3_gWriters[position].second->weights()=std::vector<double>(hepmc3_gGenRunInfos[position]->weight_names().size(),1.0);
         return 0;
     }
     int hepmc3_write_event_(const int & position)
@@ -152,28 +155,31 @@ extern "C" {
             printf("Error in %s: Writer at position %i already exists\n",__FUNCTION__,r_position);
             exit(1);
         }
-        std::shared_ptr<GenRunInfo> run=std::make_shared<GenRunInfo>();
-        std::vector<std::string>  names;
-        names.push_back("Default");
-        run->set_weight_names(names);
+        if (hepmc3_gGenRunInfos.find(r_position)!=hepmc3_gGenRunInfos.end()) {
+            printf("Warning in %s: RunInfo at position %i already exists\n",__FUNCTION__,r_position);
+        }
+        else 
+        {
+        hepmc3_gGenRunInfos[r_position]=std::make_shared<GenRunInfo>();
+        }
 
         switch (mode)
         {
         case 1:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterAscii(filename.c_str()),new GenEvent(run,Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterAscii(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
         case 2:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterAsciiHepMC2(filename.c_str()),new GenEvent(run,Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterAsciiHepMC2(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
         case 3:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterHEPEVT(filename.c_str()),new GenEvent(run,Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterHEPEVT(filename.c_str()),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
 #ifdef HEPMC3_ROOTIO
         case 4:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterRoot(filename.c_str()),new GenEvent(run,Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterRoot(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
         case 5:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterRootTree(filename.c_str()),new GenEvent(run,Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterRootTree(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
 #endif
         default:
@@ -183,5 +189,40 @@ extern "C" {
         }
         return  r_position;
     }
+    int hepmc3_new_weight_(const int & position, const char* name)
+    {
+        if (hepmc3_gGenRunInfos.find(position)==hepmc3_gGenRunInfos.end()) {
+            printf("Warning in %s: RunInfo at position %i does not exist\n",__FUNCTION__,position);
+            return 1;
+        }        
+        std::vector<std::string> weight_names=hepmc3_gGenRunInfos[position]->weight_names();
+        weight_names.push_back(std::string(name));
+        hepmc3_gGenRunInfos[position]->set_weight_names(weight_names);
+        return 0;
+    }
+    int hepmc3_set_weight_by_index_(const int & position,const double& val, const int & pos)
+    {
+        if (hepmc3_gWriters.find(position)==hepmc3_gWriters.end()) {
+            printf("Warning in %s: Writer at position %i does not exist\n",__FUNCTION__,position);
+            return 1;
+        }
+        if (hepmc3_gWriters[position].second->weights().size()<pos) {
+            printf("Warning in %s: Event has no weight with index %i does not exist, %i\n",__FUNCTION__,pos);
+            return 2;
+        }
+        hepmc3_gWriters[position].second->weights()[pos]=val;
+        return 0;
+    }
+    int hepmc3_set_weight_by_name_(const int & position,const double& val, const char* name)
+    {
+        if (hepmc3_gWriters.find(position)==hepmc3_gWriters.end()) {
+            printf("Warning in %s: Writer at position %i does not exist\n",__FUNCTION__,position);
+            return 1;
+        }
+        hepmc3_gWriters[position].second->weight(std::string(name))=val;
+        return 0;
+    }
+    
+    
 }
 #endif
