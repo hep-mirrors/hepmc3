@@ -47,22 +47,22 @@ public:
     GenEvent(Units::MomentumUnit momentum_unit = Units::GEV,
              Units::LengthUnit length_unit = Units::MM);
 
-    #if !defined(__CINT__)
+#if !defined(__CINT__)
 
     /// @brief Constructor with associated run
     GenEvent(shared_ptr<GenRunInfo> run,
              Units::MomentumUnit momentum_unit = Units::GEV,
              Units::LengthUnit length_unit = Units::MM);
 
-    /// @brief Copy constructor 
-     GenEvent(const GenEvent&);
+    /// @brief Copy constructor
+    GenEvent(const GenEvent&);
 
-    /// @brief Destructor 
+    /// @brief Destructor
     ~GenEvent();
 
     /// @brief Assignment operator
-     GenEvent& operator=(const GenEvent&);
- 
+    GenEvent& operator=(const GenEvent&);
+
     /// @name Particle and vertex access
     //@{
 
@@ -94,25 +94,25 @@ public:
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
     double weight(const std::string& name) const {
-      if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
-      return weight(run_info()->weight_index(name));
+        if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
+        return weight(run_info()->weight_index(name));
     }
     /// Get event weight accessed by weight name
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
     double& weight(const std::string& name) {
-      if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
-      int pos=run_info()->weight_index(name);
-      if (pos<0) throw WeightError("GenEvent::weight(str): no weight with given name in this run");
-      return m_weights[pos];
+        if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
+        int pos=run_info()->weight_index(name);
+        if (pos<0) throw WeightError("GenEvent::weight(str): no weight with given name in this run");
+        return m_weights[pos];
     }
     /// Get event weight names, if there are some
     /// @note Requires there to be an attached GenRunInfo with registered weight names, otherwise will throw an exception
     const std::vector<std::string>& weight_names(const std::string& /*name*/) const {
-      if (!run_info()) throw WeightError("GenEvent::weight_names(): access to event weight names requires the event to have a GenRunInfo");
-      const std::vector<std::string>& weightnames = run_info()->weight_names();
-      if (weightnames.empty()) throw WeightError("GenEvent::weight_names(): no event weight names are registered for this run");
-      return weightnames;
+        if (!run_info()) throw WeightError("GenEvent::weight_names(): access to event weight names requires the event to have a GenRunInfo");
+        const std::vector<std::string>& weightnames = run_info()->weight_names();
+        if (weightnames.empty()) throw WeightError("GenEvent::weight_names(): no event weight names are registered for this run");
+        return weightnames;
     }
 
     //@}
@@ -123,13 +123,13 @@ public:
 
     /// @brief Get a pointer to the the GenRunInfo object.
     shared_ptr<GenRunInfo> run_info() const {
-      return m_run_info;
+        return m_run_info;
     }
     /// @brief Set the GenRunInfo object by smart pointer.
     void set_run_info(shared_ptr<GenRunInfo> run) {
-      m_run_info = run;
-      if ( run && !run->weight_names().empty() )
-        m_weights.resize(run->weight_names().size(), 1.0);
+        m_run_info = run;
+        if ( run && !run->weight_names().empty() )
+            m_weights.resize(run->weight_names().size(), 1.0);
     }
 
     /// @brief Get event number
@@ -180,14 +180,14 @@ public:
 
     /// @brief Vector of beam particles
     const std::vector<GenParticlePtr> & beams();
-  
+
     /// @brief Shift position of all vertices in the event by @a delta
     void shift_position_by( const FourVector & delta );
 
     /// @brief Shift position of all vertices in the event to @a op
     void shift_position_to( const FourVector & newpos ) {
-      const FourVector delta = newpos - event_pos();
-      shift_position_by(delta);
+        const FourVector delta = newpos - event_pos();
+        shift_position_by(delta);
     }
 
     /// @brief Boost event using x,y,z components of @a v as velocities
@@ -207,16 +207,16 @@ public:
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const string &name, const shared_ptr<Attribute> &att,  const int& id = 0) {
-      std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-      if ( att ) {
-        m_attributes[name][id] = att;
-        att->m_event = this;
-        if ( id > 0 && id <= int(particles().size()) )
-          att->m_particle = particles()[id - 1];
-        if ( id < 0 && -id <= int(vertices().size()) )
-          att->m_vertex = vertices()[-id - 1];
-      }
-   }
+        std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+        if ( att ) {
+            m_attributes[name][id] = att;
+            att->m_event = this;
+            if ( id > 0 && id <= int(particles().size()) )
+                att->m_particle = particles()[id - 1];
+            if ( id < 0 && -id <= int(vertices().size()) )
+                att->m_vertex = vertices()[-id - 1];
+        }
+    }
 
     /// @brief Remove attribute
     void remove_attribute(const string &name,  const int& id = 0);
@@ -233,9 +233,9 @@ public:
 
     /// @brief Get a copy of the list of attributes
     /// @note To avoid thread issues, this is returns a copy. Better solution may be needed.
-std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
-       std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-       return m_attributes;
+    std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
+        std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+        return m_attributes;
     }
 
     //@}
@@ -314,7 +314,7 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
 
     //@}
 
-    #endif // __CINT__
+#endif // __CINT__
 
 
     /// @name Methods to fill GenEventData and to read it back
@@ -326,18 +326,18 @@ std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
     /// @brief Fill GenEvent based on GenEventData
     void read_data(const GenEventData &data);
 
-    #ifdef HEPMC3_ROOTIO
+#ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
     //@}
-    #endif
+#endif
 
 private:
 
     /// @name Fields
     //@{
 
-    #if !defined(__CINT__)
+#if !defined(__CINT__)
 
     /// List of particles
     std::vector<GenParticlePtr> m_particles;
@@ -374,7 +374,7 @@ private:
 
     /// @brief Mutex lock for the m_attibutes map.
     mutable std::recursive_mutex m_lock_attributes;
-    #endif // __CINT__
+#endif // __CINT__
 
     //@}
 
@@ -388,7 +388,7 @@ template<class T>
 shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 =
-      m_attributes.find(name);
+        m_attributes.find(name);
     if( i1 == m_attributes.end() ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute<T>(name);
@@ -405,11 +405,11 @@ shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const
         att->m_event = this;
 
         if ( id > 0 && id <= int(particles().size()) )
-          att->m_particle = m_particles[id - 1];
+            att->m_particle = m_particles[id - 1];
         if ( id < 0 && -id <= int(vertices().size()) )
-          att->m_vertex = m_vertices[-id - 1];
+            att->m_vertex = m_vertices[-id - 1];
         if ( att->from_string(i2->second->unparsed_string()) &&
-             att->init() ) {
+                att->init() ) {
             // update map with new pointer
             i2->second = att;
             return att;

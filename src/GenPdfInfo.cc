@@ -51,15 +51,15 @@ bool GenPdfInfo::to_string(string &att) const {
     char buf[255];
 
     sprintf(buf,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
-                parton_id[0],
-                parton_id[1],
-                x[0],
-                x[1],
-                scale,
-                xf[0],
-                xf[1],
-                pdf_id[0],
-                pdf_id[1]);
+            parton_id[0],
+            parton_id[1],
+            x[0],
+            x[1],
+            scale,
+            xf[0],
+            xf[1],
+            pdf_id[0],
+            pdf_id[1]);
 
     att = buf;
 
@@ -67,8 +67,8 @@ bool GenPdfInfo::to_string(string &att) const {
 }
 
 void GenPdfInfo::set(const int& parton_id1, const int& parton_id2, const double& x1, const double& x2,
-                      const double& scale_in, const double& xf1,const double& xf2,
-                      const int& pdf_id1, const int& pdf_id2) {
+                     const double& scale_in, const double& xf1,const double& xf2,
+                     const int& pdf_id1, const int& pdf_id2) {
     parton_id[0] = parton_id1;
     parton_id[1] = parton_id2;
     x[0]         = x1;
@@ -81,7 +81,7 @@ void GenPdfInfo::set(const int& parton_id1, const int& parton_id2, const double&
 }
 
 bool GenPdfInfo::operator==( const GenPdfInfo& a ) const {
-  return ( memcmp( (void*)this, (void*)&a, sizeof(class GenPdfInfo) ) == 0 );
+    return ( memcmp( (void*)this, (void*)&a, sizeof(class GenPdfInfo) ) == 0 );
 }
 
 bool GenPdfInfo::operator!=( const GenPdfInfo& a ) const {

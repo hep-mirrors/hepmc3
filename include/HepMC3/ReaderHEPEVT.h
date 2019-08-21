@@ -19,7 +19,7 @@
 #include <set>
 #include <string>
 #include <fstream>
-#include <istream> 
+#include <istream>
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenRunInfo.h"
@@ -80,13 +80,13 @@ public:
     void set_vertices_positions_present(bool iflong);
     /** @brief  get flag if vertex positions are available */
     bool get_vertices_positions_present() const;
-    
+
 public:
     char* hepevtbuffer; //!< Pointer to HEPEVT Fortran common block/C struct
 private:
     std::ifstream m_file; //!< Input file
     std::istream* m_stream; //!< For ctor when reading from stdin
-    bool m_isstream; //!< toggles usage of m_file or m_stream    
+    bool m_isstream; //!< toggles usage of m_file or m_stream
     bool m_vertices_positions_present; //!< true if vertex positions are available
 };
 
