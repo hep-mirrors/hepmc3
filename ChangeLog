@@ -1,6 +1,13 @@
+
+	*
+
   --------------------------  HepMC3.1.2 pre  --------------------------
+2019-08-22  Andy Buckley  <andy.buckley@cern.ch>
+        * Add GenParticle::abs_pid() to match FourVector::abs_eta(), abs_rap().
+	Experience from Rivet and ATLAS is that these convenience wrappers are genuinely welcomed.
+	* Add FourVector component-setting functions in HepMC method naming convention; deprecate old camelCase ones.
 2019-08-17 Andrii Verbytskyi for HepMC
-        * Bugfix release. Fixed some typos and minor bugs. 
+        * Bugfix release. Fixed some typos and minor bugs.
         * Fixed name of ROOT dictionary
         * Added more standard attributes
         * Extended documentation for doxygen
@@ -8,8 +15,8 @@
         * Added procedures for boost, rotation and reflection to GenEvent
         * Added operators for printing events, particles, etc.
         * Added example with reading of compressed file and more tests
-        * Thanks to 
-        * Hans Dembinski, John Chapman, Mattias Ellert, Marian Heil, 
+        * Thanks to
+        * Hans Dembinski, John Chapman, Mattias Ellert, Marian Heil,
         *  Attila Krasznahorkay, Dominik Muller, Juergen Reuter
   --------------------------  HepMC3.1.1  --------------------------
 2019-03-02 Andrii Verbytskyi for HepMC
