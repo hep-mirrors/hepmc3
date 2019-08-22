@@ -9,7 +9,7 @@ ${PROJECT_SOURCE_DIR}/search/src/Selector.cc)
 
 add_library(objlibsearch OBJECT ${hepmc3search_sources})
 
-set_property(TARGET objlibsearch PROPERTY POSITION_INDEPENDENT_CODE 1)
+set_property(TARGET objlibsearch PROPERTY POSITION_INDEPENDENT_CODE 2)
 target_include_directories(objlibsearch PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 add_library(HepMC3search SHARED $<TARGET_OBJECTS:objlibsearch>)
