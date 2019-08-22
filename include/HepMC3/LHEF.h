@@ -1794,7 +1794,8 @@ public:
         eventfiles[i].print(file);
       file << "</eventfiles>\n";
     }
-    if ( !xsecinfos.empty() > 0 )
+    //AV if ( !xsecinfos.empty() > 0 )
+    if ( !xsecinfos.empty())
       for ( XSecInfos::const_iterator it = xsecinfos.begin();
             it != xsecinfos.end(); ++it )
         if ( it->second.neve > 0 ) it->second.print(file);

@@ -44,7 +44,7 @@ int main()
         for (size_t e=0; e<evts.size(); e++)
         {
             std::vector<std::thread> threads;
-            int j1=-thr_evts[i].at(e).vertices().size();
+            int j1=-((long)thr_evts[i].at(e).vertices().size());
             int j2=thr_evts[i].at(e).particles().size();
             int d=((long)(j2)-(long)(j1))/NmaxThreads;
             std::vector<int> ids;

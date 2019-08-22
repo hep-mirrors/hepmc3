@@ -174,7 +174,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     std::vector<int> filled_ids;
     std::vector<int> diff;
     for (auto v: evt.vertices()) if (v->id()!=0) filled_ids.push_back(v->id());
-    for (int i=-evt.vertices().size(); i<0; i++) all_ids.push_back(i);
+    for (int i=-((long)evt.vertices().size()); i<0; i++) all_ids.push_back(i);
     std::sort(all_ids.begin(),all_ids.end());
     std::sort(filled_ids.begin(),filled_ids.end());
     //The bank of available ids is created as a difference between all range of ids and the set of used ids
