@@ -51,9 +51,9 @@ bool GenCrossSection::from_string(const string &att) {
     if( !(cursor = strchr(cursor+1,' ')) ) {accepted_events = -1; attempted_events = -1;}
     else
     {
-        accepted_events = atof(cursor);
+        accepted_events = atoi(cursor);
         if( !(cursor = strchr(cursor+1,' ')) ) attempted_events = -1;
-        else attempted_events = atof(cursor);
+        else attempted_events = atoi(cursor);
     }
     size_t N=1;
     if ( event() ) N=std::max(event()->weights().size(),N);
