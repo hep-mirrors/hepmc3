@@ -9,6 +9,11 @@
 #include <iostream>
 
 #if defined(_MSC_VER)  
+/**
+ *  @class Timer
+ *  @brief Used to benchmark MC generators
+ *
+ */
 class Timer {
 public:
     /** Default constructor */
@@ -25,7 +30,11 @@ private:
 };
 #else
 #include <sys/times.h>
-
+/**
+ *  @class Timer
+ *  @brief Used to benchmark MC generators
+ *
+ */
 class Timer {
 public:
     /** Default constructor */
@@ -77,8 +86,10 @@ public:
     }
 
 private:
-    const char *m_name;
-    struct tms  m_start,m_stop,m_stored;
+    const char *m_name; ///< Name of the object
+    struct tms  m_start; ///< Start
+    struct tms  m_stop; ///< Stop
+    struct tms  m_stored; ///< Stored
 };
 #endif
 #endif

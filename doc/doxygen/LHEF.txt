@@ -534,7 +534,26 @@ block. Here is a list of additional tags that may be provided.
       </li>
     </ul>
     Also other attributes are allowed and will be stored in
-    LHEF::Scales::attributes.
+    LHEF::Scales::attributes.<br>
+  <li><b><tt><scale></tt></b> (optional inside a <tt><scales></tt>
+    tag)<br> It is also possible to specify an individual scale for
+    any particle in the event in a <tt><scale></tt> tag. This is
+    typically used to define a starting scale for a parton shower in
+    resonance decays. This tag can also be used to specify the scale
+    of a set of particle types. The following attributes can be given:
+    <ul>
+      <li>
+        <tt>pos</tt> (optional): the index of the particle for which this scale
+        applies, optionally followed by a space-separated list of
+        indices of recoilers involved when the particle was created.
+      </li>
+      <li>
+        <tt>etype</tt> (optional): a space-separated list of PDG codes
+        for which this scale applies. The short-hand notation "EW" can
+        be used to specify all leptons and electro-weak bosons, and
+        "QCD" can be used to specify the guon and all quarks.
+      </li>
+      The contents of the tag gives the scale in GeV.
   </li>
 </ul>
 
@@ -542,6 +561,6 @@ block. Here is a list of additional tags that may be provided.
 
 <hr>
 
-Last update 5 Feb 2019
+Last update 25 June 2019
 
 */

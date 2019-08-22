@@ -38,11 +38,15 @@
 #ifdef HEPMCCONVERT_EXTENSION_DOT
 #include "WriterDOT.h"
 #endif
+#ifdef HEPMCCONVERT_EXTENSION_GZ
+#include "ReaderGZ.h"
+#endif
+
 
 
 #include "cmdline.h"
 using namespace HepMC3;
-enum formats {hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, none};
+enum formats {hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, gz, none};
 int main(int argc, char** argv)
 {
     gengetopt_args_info ai;
@@ -65,6 +69,7 @@ int main(int argc, char** argv)
     format_map.insert(std::pair<std::string,formats> ( "lhef", lhef ));
     format_map.insert(std::pair<std::string,formats> ( "dump", dump ));
     format_map.insert(std::pair<std::string,formats> ( "dot", dot ));
+    format_map.insert(std::pair<std::string,formats> ( "gz", gz ));
     format_map.insert(std::pair<std::string,formats> ( "none", none ));
     std::map<std::string, std::string> options;
     for (size_t i=0; i<ai.extensions_given; i++)
@@ -95,6 +100,14 @@ int main(int argc, char** argv)
     case lhef:
         input_file=new ReaderLHEF(ai.inputs[0]);
         break;
+    case gz:
+#ifdef HEPMCCONVERT_EXTENSION_GZ
+        input_file=new ReaderGZ(ai.inputs[0]);
+        break;
+#else
+        printf("Input format %s  is not supported\n",ai.input_format_arg);
+        exit(2);
+#endif
     case treeroot:
 #ifdef HEPMC3_ROOTIO
         input_file=new ReaderRootTree(ai.inputs[0]);
@@ -199,13 +212,19 @@ int main(int argc, char** argv)
         evt.set_run_info(input_file->run_info());
         //Note the difference between ROOT and Ascii readers. The former read GenRunInfo before first event and the later at the same time as first event.
         if (!ignore_writer) 
-        if (output_file) output_file->write_event(evt);
-        else Print::content(evt);
+        if (output_file)
+        { 
+        output_file->write_event(evt); 
+        }
+        else 
+        { 
+         Print::content(evt);
+        }
         evt.clear();
         ++events_parsed;
-        if( events_parsed%print_each_events_parsed == 0 ) printf("Events parsed: %i\n",events_parsed);
+        if( events_parsed%print_each_events_parsed == 0 ) printf("Events parsed: %li\n",events_parsed);
         if( events_parsed >= events_limit ) {
-            printf("Event limit reached:->events_parsed(%i) >= events_limit(%i)<-. Exit.\n",events_parsed , events_limit);
+            printf("Event limit reached:->events_parsed(%li) >= events_limit(%li)<-. Exit.\n",events_parsed , events_limit);
             break;
         }
     }

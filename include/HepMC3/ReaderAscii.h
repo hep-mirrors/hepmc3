@@ -14,12 +14,14 @@
 ///
 /// @ingroup IO
 ///
-#include "HepMC3/Reader.h"
-#include "HepMC3/GenEvent.h"
 #include <set>
 #include <string>
 #include <fstream>
 #include <istream>
+#include <iterator>
+#include "HepMC3/Reader.h"
+#include "HepMC3/GenEvent.h"
+
 
 namespace HepMC3 {
 
@@ -44,14 +46,14 @@ public:
     /// @todo No-arg version returning GenEvent?
 
     /// @brief Return status of the stream
-    bool failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+    bool failed();
 
     /// @todo Implicit cast to bool = !failed()?
 
     /// @brief Close file stream
     void close();
 
-  private:
+private:
 
     /// @brief Unsecape '\' and '\n' characters in string
     std::string unescape(const std::string& s);
@@ -148,11 +150,11 @@ public:
     //@}
 
 
-  private:
+private:
 
     std::ifstream m_file; //!< Input file
-    std::istream* m_stream; // For ctor when reading from stdin
-    bool m_isstream; // toggles usage of m_file or m_stream
+    std::istream* m_stream; ///< For ctor when reading from stdin
+    bool m_isstream; ///< toggles usage of m_file or m_stream
 
 
     /** @brief Store attributes global to the run being written/read. */

@@ -50,6 +50,7 @@ file(GLOB INPUTFILES  "${CMAKE_CURRENT_SOURCE_DIR}/*.input" )
 file(COPY ${INPUTFILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 set( HepMC_tests
+        testBoost
         testMass
         testPrintBug
         testPolarization 
@@ -90,7 +91,7 @@ if(THREADS_HAVE_PTHREAD_ARG)
   target_compile_options(testThreads1 PUBLIC "-pthread")
 endif()
 if(CMAKE_THREAD_LIBS_INIT)
-  target_link_libraries(testThreads1  "${CMAKE_THREAD_LIBS_INIT}")
+  target_link_libraries(testThreads1 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
 endif()
 endif()
 
@@ -120,7 +121,17 @@ else()
   list( APPEND libMCEG_sources    "PythiaValidationTool.cc" )
   list( APPEND libMCEG_link_libraries_HEPMC2  "${PYTHIA8_LIBRARIES}")
   list( APPEND libMCEG_link_libraries_HEPMC3  "${PYTHIA8_LIBRARIES}")
-  list( APPEND libMCEG_include_directories  "${PROJECT_SOURCE_DIR}/interfaces/pythia8/include"   "${PYTHIA8_INCLUDE_DIRS}")
+  SET(interfacelocation ${PROJECT_SOURCE_DIR}/interfaces/pythia8/include/Pythia8)
+  if (USE_INTERFACE_FROM_PYTHIA)
+  find_file(interfacefrompythia8 ${PYTHIA8_INCLUDE_DIR}/Pythia8Plugins/Pythia8ToHepMC3.h)
+  if (interfacefrompythia8) 
+  message(STATUS " Found Pythia8Plugins/Pythia8ToHepMC3.h  in Pythia8 installation in ${PYTHIA8_INCLUDE_DIR}")
+  else()
+  message(FATAL " Pythia8Plugins/Pythia8ToHepMC3.h  is absent in Pythia8 installation in ${PYTHIA8_INCLUDE_DIR}")
+  endif()
+  SET(interfacelocation ${PYTHIA8_INCLUDE_DIR}/Pythia8Plugings)
+  endif()
+  list( APPEND libMCEG_include_directories  "${interfacelocation}"   "${PYTHIA8_INCLUDE_DIRS}")
   list( APPEND libMCEG_compile_definitions  "-DPYTHIA8")
 
   list( APPEND MCEG_tests "testPythia1" )   

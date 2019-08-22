@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3)
-set(PROJECT_VERSION 3.01.01)
+set(PROJECT_VERSION 3.01.02)
 
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -53,20 +53,20 @@ set(CMAKE_MODULE_PATH
 
 include(CheckCXXCompilerFlag)
 
+CHECK_CXX_COMPILER_FLAG("/D _CRT_SECURE_NO_WARNINGS" COMPILER_SUPPORTS__CRT_SECURE_NO_WARNINGS)
+if(COMPILER_SUPPORTS__CRT_SECURE_NO_WARNINGS)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D _CRT_SECURE_NO_WARNINGS /wd4267 /wd4244 /wd4477")
+endif()
 CHECK_CXX_COMPILER_FLAG("/Zc:__cplusplus" COMPILER_SUPPORTS_ZCPLUSPLUS)
 if(COMPILER_SUPPORTS_ZCPLUSPLUS)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:__cplusplus")
 endif()
 
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-if(COMPILER_SUPPORTS_CXX11)
+if(COMPILER_SUPPORTS_CXX11 AND NOT COMPILER_SUPPORTS_ZCPLUSPLUS)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-else()
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX0X)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
 endif()
-endif()
+
 
 if ( "${CMAKE_CXX_COMPILE_FEATURES}"  MATCHES "cxx_range_for" )
 message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has cxx_range_for support.")
@@ -166,7 +166,7 @@ add_library(HepMC3 SHARED $<TARGET_OBJECTS:objlibcore>)
 add_library(HepMC3_static STATIC  $<TARGET_OBJECTS:objlibcore>)
 
 set_target_properties(HepMC3 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-set_target_properties(HepMC3 PROPERTIES SOVERSION 1)
+set_target_properties(HepMC3 PROPERTIES SOVERSION 2)
 if (WIN32)
 set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 elseif()
@@ -224,6 +224,7 @@ if(ROOT_FOUND)
    add_subdirectory(rootIO)
 endif()
 
+option(USE_INTERFACE_FROM_PYTHIA8 "Use Pythia8ToHepMC3.h from Pythia8" OFF)
 # Add the examples subdirectories
 if(HEPMC3_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
@@ -238,6 +239,25 @@ if(HEPMC3_ENABLE_TEST)
 endif()
 
 
+# uninstall target
+if(NOT TARGET uninstall)
+    configure_file(
+        "cmake/Templates/cmake_uninstall.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+        IMMEDIATE @ONLY)
+
+    add_custom_target(uninstall
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif()
+#THis is for developers only
+find_program (ASTYLEFORMAT NAMES astyle)
+if (ASTYLEFORMAT)
+message(STATUS "astyle found!")
+ADD_CUSTOM_TARGET(beautyastyle
+  COMMAND astyle  --keep-one-line-blocks  src/*cc  rootIO/src/*cc search/src/*cc  examples/*/src/*cc test/*cc  test/*h
+  WORKING_DIRECTORY ${DOXYGEN_OUTPUT_DIR}
+  )
+endif()
 ########################################################################
 ## CPACK
 ########################################################################
@@ -250,7 +270,7 @@ set(CPACK_PACKAGE_VENDOR "HepMC3 Developers")
 set(CPACK_PACKAGE_VERSION 3)
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 1)
-set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(CPACK_PACKAGE_VERSION_PATCH 2)
 set(CPACK_PACKAGE_RELEASE 0)
 set(CPACK_PACKAGE_FILE_NAME "HepMC3")
 set(CPACK_PACKAGE_DESCRIPTION "Event record library for high energy physics Monte Carlo")

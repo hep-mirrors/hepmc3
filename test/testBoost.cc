@@ -13,12 +13,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/WriterAscii.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
-#include "HepMC3/ReaderAscii.h"
-#include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/Print.h"
-#ifndef M_PI
-#define M_PI 3.14159265358979323846264338327950288
-#endif
 #include "HepMC3TestUtils.h"
 using namespace HepMC3;
 int main()
@@ -27,8 +22,8 @@ int main()
     // In this example we will place the following event into HepMC "by hand"
     //
     //     name status pdg_id  parent Px       Py    Pz       Energy      Mass
-    //  1  !p+!    3   2212    0,0    0.000    0.000 7000.000 7000.000    0.938
-    //  2  !p+!    3   2212    0,0    0.000    0.000-7000.000 7000.000    0.938
+    //  1  !p+!    3   2212    0,0    1.000    1.000 7000.000 7000.000    0.938
+    //  2  !p+!    3   2212    0,0    1.000    1.000-7000.000 7000.000    0.938
     //=========================================================================
     //  3  !d!     3      1    1,1    0.750   -1.569   32.191   32.238    0.000
     //  4  !u~!    3     -2    2,2   -3.047  -19.000  -54.629   57.920    0.000
@@ -36,23 +31,18 @@ int main()
     //  6  !gamma! 1     22    1,2   -3.813    0.113   -1.833    4.233    0.000
     //  7  !d!     1      1    5,5   -2.445   28.816    6.082   29.552    0.010
     //  8  !u~!    1     -2    5,5    3.962  -49.498  -26.687   56.373    0.006
-    //  9  !gamma! 3     22    3,4    0.000    0.000    0.000    0.000    0.000
 
 
-    // declare several WriterAscii instances for comparison
-    WriterAscii xout1("testLoops1.out");
-    // output in old format
-    WriterAsciiHepMC2 xout2( "testLoops2.out" );
 
     // build the graph, which will look like
     //                       p7                   #
     // p1                   /                     #
     //   \v1__p3      p5---v4                     #
     //         \_v3_/       \                     #
-    //         /   |\        p8                   #
-    //    v2__p4   | \                            #
-    //   /  \     /  p6                           #
-    // p2    \p9_/                                #
+    //         /    \        p8                   #
+    //    v2__p4     \                            #
+    //   /            p6                          #
+    // p2                                         #
     //
     // define a flow pattern as  p1 -> p3 -> p6
     //                       and p2 -> p4 -> p5
@@ -66,7 +56,7 @@ int main()
     // create vertex 1
     GenVertexPtr v1=std::make_shared<GenVertex>();
     evt.add_vertex( v1 );
-    GenParticlePtr p1=std::make_shared<GenParticle>( FourVector(0,0,7000,7000),2212, 3 );
+    GenParticlePtr p1=std::make_shared<GenParticle>( FourVector(1.0,1.0,7000,7000),2212, 3 );
     evt.add_particle( p1 );
     p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
     p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
@@ -75,7 +65,7 @@ int main()
 
     GenVertexPtr v2=std::make_shared<GenVertex>();
     evt.add_vertex( v2 );
-    GenParticlePtr p2=std::make_shared<GenParticle>(  FourVector(0,0,-7000,7000),2212, 3 );
+    GenParticlePtr p2=std::make_shared<GenParticle>(  FourVector(1.0,1.0,-7000,7000),2212, 3 );
     evt.add_particle( p2 );
     p2->add_attribute("flow1", std::make_shared<IntAttribute>(243));
     p2->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
@@ -124,13 +114,6 @@ int main()
     GenParticlePtr p8(new GenParticle( FourVector(3.962,-49.498,-26.687,56.373), -2,1 ));
     evt.add_particle( p8 );
     v4->add_particle_out( p8 );
-
-
-    GenParticlePtr pl=std::make_shared<GenParticle>(  FourVector(0.0,0.0,0.0,0.0 ),21, 3 );
-    evt.add_particle( pl );
-    v3->add_particle_out( pl );
-    v2->add_particle_in( pl );
-
     //
     // tell the event which vertex is the signal process vertex
     //evt.set_signal_process_vertex( v3 );
@@ -140,53 +123,59 @@ int main()
     //we now print it out in old format
     Print::listing(evt,8);
     // print each particle so we can see the polarization
-    for ( ConstGenParticlePtr ip: evt.particles()) {
+    for ( GenParticlePtr ip: evt.particles()) {
         Print::line(ip,true);
     }
-
-    // write event
+    WriterAscii xout1("testBoost1.out");
+    xout1.set_precision(6);
     xout1.write_event(evt);
-    // write event in old format
-    xout2.write_event(evt);
-
-    // now clean-up by deleteing all objects from memory
-    //
-    // deleting the event deletes all contained vertices, and all particles
-    // contained in those vertices
-    evt.clear();
     xout1.close();
+
+    FourVector b(0.1,0.3,-0.2,0);
+    FourVector bp(-0.1,-0.3,0.2,0);
+    evt.boost(b);
+    for ( GenParticlePtr ip: evt.particles()) {
+        Print::line(ip,true);
+    }
+    evt.boost(bp);
+    for ( GenParticlePtr ip: evt.particles()) {
+        Print::line(ip,true);
+    }
+    WriterAscii xout2("testBoost2.out");
+    xout2.set_precision(6);
+    xout2.write_event(evt);
     xout2.close();
+    /// Test the boost * invboost give the same event.
+    if (COMPARE_ASCII_FILES("testBoost1.out","testBoost2.out")!=0) return 1;
 
-    ReaderAscii xin1("testLoops1.out");
-    if(xin1.failed()) {
-        xin1.close();
-        return 2;
-    }
-    while( !xin1.failed() )
-    {
-        xin1.read_event(evt);
-        if( xin1.failed() )  {
-            printf("End of file reached. Exit.\n");
-            break;
-        }
-        evt.clear();
-    }
-    xin1.close();
+    FourVector bwrong1(-1.1,-0.3,0.2,0);
+    ///Test that wrong boost will not work
+    if (evt.boost(bwrong1)) return 2;
 
-    ReaderAsciiHepMC2 xin2("testLoops2.out");
-    if(xin2.failed()) {
-        xin2.close();
-        return 3;
+    FourVector bwrong2(-1.0,-0.0,0.0,0);
+    ///Test that boost with v=c will not work
+    if (evt.boost(bwrong2)) return 3;
+
+    FourVector bwrong3(std::numeric_limits<double>::epsilon()*0.9,0.0,0.0,0);
+    ///Test that boost with v=0 will be OK
+    if (!evt.boost(bwrong3)) return 4;
+
+    FourVector rz(0.0,0.0,-0.9,0);
+    FourVector rzinv(0.0,0.0,0.9,0);
+    evt.rotate(rz);
+    for ( GenParticlePtr ip: evt.particles()) {
+        Print::line(ip,true);
     }
-    while( !xin2.failed() )
-    {
-        xin2.read_event(evt);
-        if( xin2.failed() )  {
-            printf("End of file reached. Exit.\n");
-            break;
-        }
-        evt.clear();
+    evt.rotate(rzinv);
+    for ( GenParticlePtr ip: evt.particles()) {
+        Print::line(ip,true);
     }
-    xin2.close();
+    WriterAscii xout3("testBoost3.out");
+    xout3.set_precision(6);
+    xout3.write_event(evt);
+    xout3.close();
+    /// Test the rotate * rotate give the same event.
+    if (COMPARE_ASCII_FILES("testBoost1.out","testBoost3.out")!=0) return 5;
+    evt.clear();
     return 0;
 }

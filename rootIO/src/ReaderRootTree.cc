@@ -32,33 +32,33 @@ ReaderRootTree::ReaderRootTree(const std::string &filename,const std::string &tr
 bool ReaderRootTree::init()
 {
     if ( !m_file->IsOpen() )
-        {
-            ERROR( "ReaderRootTree: problem opening file: " << m_file->GetName() )
-            return false;
-        }
-   
-        
+    {
+        ERROR( "ReaderRootTree: problem opening file: " << m_file->GetName() )
+        return false;
+    }
+
+
     m_tree=reinterpret_cast<TTree*>(m_file->Get(m_tree_name.c_str()));
     if (!m_tree)
-        {
-            ERROR( "ReaderRootTree: problem opening tree:  " << m_tree_name)
-            return false;
-        }
+    {
+        ERROR( "ReaderRootTree: problem opening tree:  " << m_tree_name)
+        return false;
+    }
     m_event_data=new GenEventData();
     int result=m_tree->SetBranchAddress(m_branch_name.c_str(),&m_event_data);
     if (result<0)
-        {
-            ERROR( "ReaderRootTree: problem reading branch tree:  " << m_tree_name)
-            return false;
-        }
+    {
+        ERROR( "ReaderRootTree: problem reading branch tree:  " << m_tree_name)
+        return false;
+    }
     m_run_info_data= new GenRunInfoData();
     result=m_tree->SetBranchAddress("GenRunInfo",&m_run_info_data);
     if (result<0)
-        {
-            ERROR( "ReaderRootTree2: problem reading branch tree:  " << "GenRunInfo")
-            return false;
-        }
- set_run_info(make_shared<GenRunInfo>());
+    {
+        ERROR( "ReaderRootTree2: problem reading branch tree:  " << "GenRunInfo")
+        return false;
+    }
+    set_run_info(make_shared<GenRunInfo>());
     return true;
 }
 
@@ -76,7 +76,7 @@ bool ReaderRootTree::read_event(GenEvent& evt)
     m_event_data->attribute_name.clear();
     m_event_data->attribute_string.clear();
 
-    
+
     m_run_info_data->weight_names.clear();
     m_run_info_data->tool_name.clear();
     m_run_info_data->tool_version.clear();

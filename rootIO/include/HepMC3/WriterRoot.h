@@ -32,7 +32,7 @@ class TFile;
 
 namespace HepMC3 {
 
-  class WriterRoot : public Writer {
+class WriterRoot : public Writer {
 //
 // Constructors
 //

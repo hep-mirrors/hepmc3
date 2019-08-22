@@ -98,7 +98,13 @@ C...Book histograms.
 C...Create output writers
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       OUTID(1)=HepMC3_new_writer(0,1,'ME.hepmc'//char(0))
+      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'Default'//char(0))      
+      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'weme1'//char(0))      
+      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'weme2'//char(0))
       OUTID(2)=HepMC3_new_writer(0,1,'PS.hepmc'//char(0))
+      HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'Default'//char(0))
+      HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'weps1'//char(0))      
+      HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'weps2'//char(0))
       NEVHEP=-123456
       HEPMC3STATUS=HepMC3_set_hepevt_address(NEVHEPL)
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
@@ -144,7 +150,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
           VHEPL(2,J)=VHEP(2,J)
           VHEPL(3,J)=VHEP(3,J)
           VHEPL(4,J)=VHEP(4,J)
-  500     CONTINUE          
+  500     CONTINUE                    
           HEPMC3STATUS=HepMC3_convert_event(OUTID(ICA))
 C...Note: no explicit XS uncertainty
           HEPMC3STATUS=HepMC3_set_cross_section(OUTID(ICA),
@@ -155,18 +161,32 @@ C...Note: no explicit XS uncertainty
      &    MSTI(15),MSTI(16),PARI(33),PARI(34),PARI(23),
      &    MSTP(51),MSTP(52))     
 C...The values below are not always meaningful     
-          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID,-1,
+          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID(ICA),-1,
      &   'mpi'//char(0))
           HEPMC3STATUS=HepMC3_set_attribute_int(OUTID(ICA),MSUB,
      &   'signal_process_id'//char(0))
-          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID,MRPY(1),
+          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID(ICA),MRPY(1),
      &   'random_states1'//char(0))
-          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID,-1,
+          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID(ICA),-1,
      &   'alphaEM'//char(0))
-          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID,-1,
+          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID(ICA),-1,
      &   'alphaQCD'//char(0))
-          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID,q2pdfeval,
-     &   'event_scale'//char(0))     
+          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID(ICA),q2pdfeval,
+     &   'event_scale'//char(0))      
+          HEPMC3STATUS=HepMC3_set_weight_by_index(OUTID(ICA),1.0D0,0) 
+          if (ICA.eq.1) then 
+          HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(1),
+     &    1.1111D0,'weme1'//char(0)) 
+          HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(1),
+     &    1.2222D0,'weme2'//char(0)) 
+          endif
+          if (ICA.eq.2) then 
+          HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(2),
+     &    1.5555D0,'weps1'//char(0)) 
+          HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(2),
+     &    1.6666D0,'weps2'//char(0)) 
+          endif
+
 C Note there should be PDF ids
           HEPMC3STATUS=HepMC3_write_event(OUTID(ICA))
           HEPMC3STATUS=HepMC3_clear_event(OUTID(ICA))          

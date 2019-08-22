@@ -16,48 +16,48 @@
 namespace HepMC3 {
 
 
-    /// @name Printing macros
-    //@{
+/// @name Printing macros
+//@{
 
-    /** @brief Macro for printing error messages */
-    #define ERROR(MESSAGE)   if ( Setup::print_errors() )   { std::cerr << "ERROR::" << MESSAGE << std::endl; }
+/** @brief Macro for printing error messages */
+#define ERROR(MESSAGE)   if ( Setup::print_errors() )   { std::cerr << "ERROR::" << MESSAGE << std::endl; }
 
-    /** @brief Macro for printing warning messages */
-    #define WARNING(MESSAGE) if ( Setup::print_warnings() ) { std::cout << "WARNING::" << MESSAGE << std::endl; }
+/** @brief Macro for printing warning messages */
+#define WARNING(MESSAGE) if ( Setup::print_warnings() ) { std::cout << "WARNING::" << MESSAGE << std::endl; }
 
-    // Debug messages and code that will not go to the release version
-    #ifndef HEPMC3_RELEASE_VERSION
+// Debug messages and code that will not go to the release version
+#ifndef HEPMC3_RELEASE_VERSION
 
-    /** @brief Macro for printing debug messages with appropriate debug level */
-    #define DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
-    /** @brief Macro for storing code useful for debugging */
-    #define DEBUG_CODE_BLOCK( x ) x
+/** @brief Macro for printing debug messages with appropriate debug level */
+#define DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
+/** @brief Macro for storing code useful for debugging */
+#define DEBUG_CODE_BLOCK( x ) x
 
-    #else
+#else
 
-    #define DEBUG( x,y )
-    #define DEBUG_CODE_BLOCK( x )
+#define DEBUG( x,y )
+#define DEBUG_CODE_BLOCK( x )
 
-    #endif
+#endif
 
-    //@}
+//@}
 
 
-    /// @name Exceptions
-    //@{
+/// @name Exceptions
+//@{
 
-    /// @class Exception
-    /// @brief Standard runtime error
-    struct Exception : public std::runtime_error {
-      Exception(const std::string& msg) : std::runtime_error(msg) {} ///< Default constructor
-    };
+/// @class Exception
+/// @brief Standard runtime error
+struct Exception : public std::runtime_error {
+    Exception(const std::string& msg) : std::runtime_error(msg) {} ///< Default constructor
+};
 
-    /// @brief Exception related to weight lookups, setting, and index consistency
-    struct WeightError : public Exception {
-      WeightError(const std::string& msg) : Exception(msg) {} ///< Default constructor
-    };
+/// @brief Exception related to weight lookups, setting, and index consistency
+struct WeightError : public Exception {
+    WeightError(const std::string& msg) : Exception(msg) {} ///< Default constructor
+};
 
-    //@}
+//@}
 
 
 } // namespace HepMC3

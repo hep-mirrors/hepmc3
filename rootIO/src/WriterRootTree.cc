@@ -18,7 +18,7 @@ namespace HepMC3
 {
 
 WriterRootTree::WriterRootTree(const std::string &filename, shared_ptr<GenRunInfo> run):
-    m_tree(0),    
+    m_tree(0),
     m_events_count(0),
     m_tree_name("hepmc3_tree"),
     m_branch_name("hepmc3_event")
@@ -28,7 +28,7 @@ WriterRootTree::WriterRootTree(const std::string &filename, shared_ptr<GenRunInf
 }
 
 WriterRootTree::WriterRootTree(const std::string &filename,const std::string &treename,const std::string &branchname, shared_ptr<GenRunInfo> run):
-    m_tree(0),    
+    m_tree(0),
     m_events_count(0),
     m_tree_name(treename.c_str()),
     m_branch_name(branchname.c_str())
@@ -40,10 +40,10 @@ WriterRootTree::WriterRootTree(const std::string &filename,const std::string &tr
 bool WriterRootTree::init(shared_ptr<GenRunInfo> run )
 {
     if ( !m_file->IsOpen() )
-        {
-            ERROR( "WriterRootTree: problem opening file: " <<m_file->GetName() )
-            return false;
-        }    
+    {
+        ERROR( "WriterRootTree: problem opening file: " <<m_file->GetName() )
+        return false;
+    }
     m_event_data= new GenEventData();
     m_run_info_data= new GenRunInfoData();
     set_run_info(run);
@@ -61,17 +61,17 @@ void WriterRootTree::write_event(const GenEvent &evt)
     if ( evt.run_info()&&(!run_info() || (run_info() != evt.run_info())))  { set_run_info(evt.run_info()); refill=true;}
     if (refill)
     {
-    m_run_info_data->weight_names.clear();
-    m_run_info_data->tool_name.clear();
-    m_run_info_data->tool_version.clear();
-    m_run_info_data->tool_description.clear();
-    m_run_info_data->attribute_name.clear();
-    m_run_info_data->attribute_string.clear();
-    run_info()->write_data(*m_run_info_data);
+        m_run_info_data->weight_names.clear();
+        m_run_info_data->tool_name.clear();
+        m_run_info_data->tool_version.clear();
+        m_run_info_data->tool_description.clear();
+        m_run_info_data->attribute_name.clear();
+        m_run_info_data->attribute_string.clear();
+        run_info()->write_data(*m_run_info_data);
     }
 
-    
-    
+
+
     m_event_data->particles.clear();
     m_event_data->vertices.clear();
     m_event_data->links1.clear();

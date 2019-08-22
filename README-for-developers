@@ -55,7 +55,7 @@ GENERAL RULES
 CODING STYLE
 ------------
 
-1) We use 4-spaces indentation. Do not use TABs to indent code.
+1) Do not use TABs to indent code.
 2) Keep your code clean of trailing spaces
 3) Keep in mind vertical code alignment. Especially in header files and
    in variable initialization. Makes these sections much easier to quickly
@@ -67,8 +67,6 @@ void function_name() {
     // ...
 }
 
-5) In terms of braces, spaces etc., we try to follow Python PEP8 style
-   http://legacy.python.org/dev/peps/pep-0008/
 
 --------------
 COMMENTS STYLE

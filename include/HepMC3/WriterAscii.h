@@ -28,11 +28,11 @@ public:
     /// @brief Constructor
     /// @warning If file already exists, it will be cleared before writing
     WriterAscii(const std::string& filename,
-        shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+                shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
     /// @brief Constructor from ostream
     WriterAscii(std::ostream& stream,
-        shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+                shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
     /// @brief Destructor
     ~WriterAscii();
@@ -46,7 +46,7 @@ public:
     void write_run_info();
 
     /// @brief Return status of the stream
-    bool failed() { return (bool)m_file.rdstate(); }
+    bool failed();
 
     /// @brief Close file stream
     void close();
@@ -54,14 +54,9 @@ public:
     /// @brief Set output precision
     ///
     /// So far available range is [2,24]. Default is 16.
-    void set_precision(const int& prec ) {
-        if (prec < 2 || prec > 24) return;
-        m_precision = prec;
-    }
+    void set_precision(const int& prec );
     /// @brief Return output precision
-    int precision() const {
-        return m_precision;
-    }
+    int precision() const;
 private:
 
     /// @name Buffer management
@@ -80,11 +75,7 @@ private:
     ///
     /// Default is 256kb. Minimum is 256b.
     /// Size can only be changed before first read/write operation.
-    void set_buffer_size(const size_t& size ) {
-        if (m_buffer) return;
-        if (size < 256) return;
-        m_buffer_size = size;
-    }
+    void set_buffer_size(const size_t& size );
 
     /// @brief Escape '\' and '\n' characters in string
     std::string escape(const std::string& s)  const;

@@ -27,37 +27,37 @@ class HEPRUPAttribute: public Attribute {
 
 public:
 
-  /** @brief Default constructor */
-  HEPRUPAttribute() {}
+    /** @brief Default constructor */
+    HEPRUPAttribute() {}
 
-  /** @brief Constructor from string*/
-  HEPRUPAttribute(std::string s): Attribute(s) {}
+    /** @brief Constructor from string*/
+    HEPRUPAttribute(std::string s): Attribute(s) {}
 
-  /** @brief Virtual destructor */
-  virtual ~HEPRUPAttribute() {
-    clear();
-  }
+    /** @brief Virtual destructor */
+    virtual ~HEPRUPAttribute() {
+        clear();
+    }
 
-  //
-  // Virtual Functions
-  //
+    //
+    // Virtual Functions
+    //
 public:
-  /** @brief Fill class content from string */
-  virtual bool from_string(const string &att);
-  
-  /** @brief Fill string from class content */
-  virtual bool to_string(string &att) const;
+    /** @brief Fill class content from string */
+    virtual bool from_string(const string &att);
+
+    /** @brief Fill string from class content */
+    virtual bool to_string(string &att) const;
 
 public:
 
-  /** @brief Clear this object. */
-  void clear();
+    /** @brief Clear this object. */
+    void clear();
 
-  /** @brief The actual HEPRUP object. */
-  LHEF::HEPRUP heprup;
+    /** @brief The actual HEPRUP object. */
+    LHEF::HEPRUP heprup;
 
-  /** @brief The parsed XML-tags. */
-  std::vector<LHEF::XMLTag*> tags;
+    /** @brief The parsed XML-tags. */
+    std::vector<LHEF::XMLTag*> tags;
 
 };
 
@@ -69,53 +69,53 @@ class HEPEUPAttribute: public Attribute {
 
 public:
 
-  /** @brief Default constructor */
-  HEPEUPAttribute() {}
+    /** @brief Default constructor */
+    HEPEUPAttribute() {}
 
-  /** @brief Constructor from string*/
-  HEPEUPAttribute(std::string s): Attribute(s) {}
+    /** @brief Constructor from string*/
+    HEPEUPAttribute(std::string s): Attribute(s) {}
 
-  /** @brief Virtual destructor */
-  virtual ~HEPEUPAttribute() {
-    clear();
-  }
+    /** @brief Virtual destructor */
+    virtual ~HEPEUPAttribute() {
+        clear();
+    }
 
-  //
-  // Virtual Functions
-  //
+    //
+    // Virtual Functions
+    //
 public:
-  /** @brief Fill class content from string */
-  virtual bool from_string(const string &att);
-  
-  /** @brief Parse the XML-tags. */
-  virtual bool init();
+    /** @brief Fill class content from string */
+    virtual bool from_string(const string &att);
 
-  /** @brief Dummy function. */
-  virtual bool init(const GenRunInfo & /*runinfo*/) {
-    return true;
-  }
+    /** @brief Parse the XML-tags. */
+    virtual bool init();
 
-  /** @brief Fill string from class content */
-  virtual bool to_string(string &att) const;
+    /** @brief Dummy function. */
+    virtual bool init(const GenRunInfo & /*runinfo*/) {
+        return true;
+    }
+
+    /** @brief Fill string from class content */
+    virtual bool to_string(string &att) const;
 
 public:
 
-  /** @brief Get momentum */
-  FourVector momentum(int i) const {
-    return FourVector(hepeup.PUP[i][0], hepeup.PUP[i][1],
-              hepeup.PUP[i][2], hepeup.PUP[i][3]);
-  }
+    /** @brief Get momentum */
+    FourVector momentum(int i) const {
+        return FourVector(hepeup.PUP[i][0], hepeup.PUP[i][1],
+                          hepeup.PUP[i][2], hepeup.PUP[i][3]);
+    }
 
-  /** @brief Clear this object. */
-  void clear();
+    /** @brief Clear this object. */
+    void clear();
 
-  /** @brief The actual HEPEUP object. */
-  LHEF::HEPEUP hepeup;
+    /** @brief The actual HEPEUP object. */
+    LHEF::HEPEUP hepeup;
 
-  /** @brief The parsed XML-tags. */
-  std::vector<LHEF::XMLTag*> tags;
+    /** @brief The parsed XML-tags. */
+    std::vector<LHEF::XMLTag*> tags;
 
-      
+
 };
 
 } // namespace HepMC3

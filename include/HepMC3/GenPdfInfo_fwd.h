@@ -13,7 +13,7 @@
 
 #include <memory>
 
-namespace HepMC3{
+namespace HepMC3 {
 
 class GenPdfInfo;
 

@@ -17,8 +17,7 @@
 #include <string.h>
 
 namespace HepMC3 {
-
-
+/** @brief THis function will deduce the type of input file based on the name/URL and it's content and will return appropriate Reader*/
 std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 {
     bool remote=false;
@@ -52,6 +51,9 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         }
         file.close();
     }
+    /* To assure there are at least two elements in the vector*/
+    head.push_back("");
+    head.push_back("");
 #ifdef HEPMC3_READERROOTTREE_H
     printf("Info in deduce_reader: Attempt ReaderRootTree for:  %s\n",filename.c_str());
     if( strncmp(head.at(0).c_str(),"root",4) == 0||remote)
@@ -96,6 +98,5 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
     printf("Info in deduce_reader: All attempts failed for:  %s\n",filename.c_str());
     return shared_ptr<Reader>(nullptr);
 }
-
 }
 #endif

@@ -78,7 +78,11 @@ add_subdirectory(BasicExamples)
 
 add_subdirectory(LHEFExample)
 
+if (WIN32)
+message(STATUS "ConvertExampledoes not work  Windows. DISABLED.")
+else()
 add_subdirectory(ConvertExample)
+endif()
 
 add_subdirectory(Pythia8Example)
 

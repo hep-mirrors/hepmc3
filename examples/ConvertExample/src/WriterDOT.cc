@@ -3,10 +3,10 @@ namespace HepMC3
 {
 WriterDOT::WriterDOT(const std::string &filename,shared_ptr<GenRunInfo> run): m_file(filename),
     m_stream(&m_file),
+    m_style(0),
     m_buffer(nullptr),
     m_cursor(nullptr),
-    m_buffer_size( 256*1024 ),
-    m_style(0)
+    m_buffer_size( 256*1024 )
 {
     if ( !m_file.is_open() ) {
         ERROR( "WriterDOT: could not open output file: "<<filename )
@@ -16,10 +16,10 @@ WriterDOT::WriterDOT(const std::string &filename,shared_ptr<GenRunInfo> run): m_
 WriterDOT::WriterDOT(std::ostream &stream, shared_ptr<GenRunInfo> run)
     : m_file(),
       m_stream(&stream),
+      m_style(0),
       m_buffer(nullptr),
       m_cursor(nullptr),
-      m_buffer_size( 256*1024 ),
-      m_style(0)
+      m_buffer_size( 256*1024 )
 {}
 
 
@@ -29,6 +29,7 @@ void WriterDOT::close() {
     forced_flush();
     if (ofs) ofs->close();
 }
+/// @brief Detects if particle is parton. Might be used to draw partons different from hadrons
 bool is_parton(const int& pd )
 {
     bool parton=false;

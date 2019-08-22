@@ -21,7 +21,7 @@ bool GenHeavyIon::from_string(const string &att) {
 #ifdef HEPMC3_NO_DEPRECATED
     double spectator_neutrons, spectator_protons, eccentricity;
 #endif
-    
+
     istringstream is(att);
     string version;
 
@@ -35,8 +35,8 @@ bool GenHeavyIon::from_string(const string &att) {
         return !is.fail();
     } else
         is >> version;
-    
-        
+
+
 
     is >> Ncoll_hard >> Npart_proj >> Npart_targ >> Ncoll;
     if ( version == "v0" ) is >> spectator_neutrons >> spectator_protons;
@@ -65,7 +65,7 @@ bool GenHeavyIon::from_string(const string &att) {
 
 bool GenHeavyIon::to_string(string &att) const {
     ostringstream os;
-    
+
 #ifndef HEPMC3_NO_DEPRECATED
     if ( !forceoldformat ) os << "v0 ";
 #else
@@ -90,12 +90,12 @@ bool GenHeavyIon::to_string(string &att) const {
 
     os << participant_plane_angles.size();
     for ( map<int,double>::const_iterator it = participant_plane_angles.begin();
-          it != participant_plane_angles.end(); ++it )
+            it != participant_plane_angles.end(); ++it )
         os << " " << it->first << " " << it->second;
 
     os << " " << eccentricities.size();
     for ( map<int,double>::const_iterator it = eccentricities.begin();
-          it != eccentricities.end(); ++it )
+            it != eccentricities.end(); ++it )
         os << " " << it->first << " " << it->second;
 
     att = os.str();
@@ -107,7 +107,7 @@ bool GenHeavyIon::to_string(string &att) const {
 #ifndef HEPMC3_NO_DEPRECATED
 
 bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
-  return ( memcmp( (void*) this, (void*) &a, sizeof(class GenHeavyIon) ) == 0 );
+    return ( memcmp( (void*) this, (void*) &a, sizeof(class GenHeavyIon) ) == 0 );
 }
 
 bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {
@@ -115,8 +115,8 @@ bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {
 }
 
 void GenHeavyIon::set( const int&nh, const int&np, const int&nt, const int&nc, const int&ns, const int&nsp,
-                    const int&nnw, const int&nwn, const int&nwnw,
-                    const double& im, const double& pl, const double& ec, const double& s, const double& cent, const double& usrcent ) {
+                       const int&nnw, const int&nwn, const int&nwnw,
+                       const double& im, const double& pl, const double& ec, const double& s, const double& cent, const double& usrcent ) {
     Ncoll_hard                   = nh;
     Npart_proj                   = np;
     Npart_targ                   = nt;

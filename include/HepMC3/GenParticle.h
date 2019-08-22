@@ -13,6 +13,7 @@
  *  @brief Stores particle-related information
  *
  */
+#include <string>
 #include "HepMC3/Data/GenParticleData.h"
 #include "HepMC3/FourVector.h"
 
@@ -27,11 +28,11 @@ using namespace std;
 class GenEvent;
 class Attribute;
 
-class GenParticle : public std::enable_shared_from_this<GenParticle>{
-  
-  friend class GenVertex;
-  friend class GenEvent;
-  
+class GenParticle : public std::enable_shared_from_this<GenParticle> {
+
+    friend class GenVertex;
+    friend class GenEvent;
+
 //
 // Constructors
 //
@@ -62,7 +63,7 @@ public:
 
     ConstGenVertexPtr production_vertex() const;        //!< Get production vertex (const version)
     ConstGenVertexPtr end_vertex() const;               //!< Get end vertex (const version)
-  
+
     GenVertexPtr production_vertex();        //!< Get production vertex
     GenVertexPtr end_vertex();               //!< Get end vertex
 
@@ -73,7 +74,7 @@ public:
     /// @brief Convenience access to immediate incoming particles via production vertex (const version)
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
     vector<ConstGenParticlePtr> parents() const;
-  
+
     /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
     vector<GenParticlePtr> children();
@@ -99,7 +100,7 @@ public:
     void set_momentum(const FourVector& momentum); //!< Set momentum
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
-  
+
     /** @brief Add an attribute to this particle
      *
      *  This will overwrite existing attribute if an attribute with
@@ -154,8 +155,8 @@ private:
 namespace HepMC3 {
 /// @brief Get attribute of type T
 template<class T> shared_ptr<T> GenParticle::attribute(const string& name) const {
-  return parent_event()?
-    parent_event()->attribute<T>(name, id()): shared_ptr<T>();
+    return parent_event()?
+           parent_event()->attribute<T>(name, id()): shared_ptr<T>();
 }
 }
 #endif

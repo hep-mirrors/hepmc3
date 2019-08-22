@@ -15,6 +15,16 @@ namespace HepMC3
 ReaderLHEF::ReaderLHEF(const std::string& filename)
 {
     m_reader = new LHEF::Reader(filename);
+    init();
+}
+ReaderLHEF::ReaderLHEF(std::istream & stream)
+{
+    m_reader = new LHEF::Reader(stream);
+    init();
+}
+
+void ReaderLHEF::init()
+{
     m_neve=0;
     m_failed=false;
     // Create a HEPRUP attribute and initialize it from the reader.
@@ -48,13 +58,13 @@ ReaderLHEF::ReaderLHEF(const std::string& filename)
     // We also want to convey the information about which generators was
     // used.
     for ( int i = 0, N = m_hepr->heprup.generators.size(); i < N; ++i )
-        {
-            GenRunInfo::ToolInfo tool;
-            tool.name =  m_hepr->heprup.generators[i].name;
-            tool.version =  m_hepr->heprup.generators[i].version;
-            tool.description =  m_hepr->heprup.generators[i].contents;
-            run_info()->tools().push_back(tool);
-        }
+    {
+        GenRunInfo::ToolInfo tool;
+        tool.name =  m_hepr->heprup.generators[i].name;
+        tool.version =  m_hepr->heprup.generators[i].version;
+        tool.description =  m_hepr->heprup.generators[i].contents;
+        run_info()->tools().push_back(tool);
+    }
 }
 /// @brief Destructor
 ReaderLHEF::~ReaderLHEF() {close();};

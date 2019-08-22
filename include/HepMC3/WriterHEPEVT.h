@@ -34,6 +34,10 @@ public:
      *  @warning If file exists, it will be overwritten
      */
     WriterHEPEVT(const std::string &filename);
+
+    /// @brief Constructor from ostream
+    WriterHEPEVT(std::ostream& stream);
+
 //
 // Functions
 //
@@ -62,13 +66,18 @@ public:
 
     /** @brief Get stream error state flag */
     bool failed();
+    /** @brief  set flag if vertex positions are available */
+    void set_vertices_positions_present(bool iflong);
 
-public:
-    FILE* m_file;         //!< File to write. Need to be public to be accessible by children.
+    /** @brief  get flag if vertex positions are available */
+    bool get_vertices_positions_present() const;
 
-private:
+protected:
+    std::ofstream m_file; //!< Output file
+    std::ostream* m_stream; //!< Output stream
     char* hepevtbuffer;   //!< Pointer to HEPEVT Fortran common block/C struct
     int   m_events_count; //!< Events count. Needed to generate unique object name
+    bool m_vertices_positions_present; //!< true if vertex positions are available
 };
 
 } // namespace HepMC3

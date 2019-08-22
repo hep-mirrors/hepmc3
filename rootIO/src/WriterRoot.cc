@@ -17,7 +17,7 @@
 namespace HepMC3 {
 
 WriterRoot::WriterRoot(const std::string &filename, shared_ptr<GenRunInfo> run):
-m_events_count(0) {
+    m_events_count(0) {
     set_run_info(run);
 
     m_file = TFile::Open(filename.c_str(),"RECREATE");
@@ -37,10 +37,10 @@ void WriterRoot::write_event(const GenEvent &evt) {
         write_run_info();
     } else {
         if ( evt.run_info() && run_info() != evt.run_info() )
-        WARNING( "WriterAscii::write_event: GenEvents contain "
-                 "different GenRunInfo objects from - only the "
-                 "first such object will be serialized." )
-    }
+            WARNING( "WriterAscii::write_event: GenEvents contain "
+                     "different GenRunInfo objects from - only the "
+                     "first such object will be serialized." )
+        }
 
     GenEventData data;
     evt.write_data(data);

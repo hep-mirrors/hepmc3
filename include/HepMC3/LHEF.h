@@ -357,8 +357,7 @@ struct TagBase {
   /**
    * Main constructor stores the attributes and contents of a tag.
    */
-  TagBase(const AttributeMap & attr, std::string conts = std::string())
-    : attributes(attr), contents(conts) {}
+  TagBase(const AttributeMap & attr, std::string conts = std::string()): attributes(attr), contents(conts) {}
  
   /**
    * Find an attribute named \a n and set the double variable \a v to
@@ -998,7 +997,7 @@ struct MergeInfo : public TagBase {
   MergeInfo(): iproc(0), mergingscale(0.0), maxmult(false) {}
 
   /**
-   * Creat from XML tag.
+   * Create from XML tag.
    */
   MergeInfo(const XMLTag & tag)
     : TagBase(tag.attr, tag.contents),
@@ -1316,7 +1315,7 @@ struct Scale : public TagBase {
   /**
    * Empty constructor
    */
-  Scale(string st = "veto", int emtr = 0, double sc = 0.0)
+  Scale(std::string st = "veto", int emtr = 0, double sc = 0.0)
     : stype(st), emitter(emtr), scale(sc) {}
 
   /**
@@ -1369,9 +1368,9 @@ struct Scale : public TagBase {
       eos << *it;
       while ( ++it != emitted.end() ) eos << " " << *it;
       if ( eos.str() == "-5 -4  -3 -2 -1 1 2 3 4 5 21" )
-        file << oattr("etype", string("QCD"));
+        file << oattr("etype", std::string("QCD"));
       else if ( eos.str() == "-13 -12 -11 11 12 13 22 23 24" )
-        file << oattr("etype", string("EW"));
+        file << oattr("etype", std::string("EW"));
       else
         file << oattr("etype", eos.str());
     }
@@ -1421,6 +1420,7 @@ struct Scales : public TagBase {
    */
   Scales(double defscale = -1.0, int npart = 0)
     : muf(defscale), mur(defscale), mups(defscale), SCALUP(defscale) {
+    (void) npart; // avoid "unused variable" compiler warning
   }
 
   /**
@@ -1638,35 +1638,14 @@ public:
       dprec(std::numeric_limits<double>::digits10) {}
 
   /**
+   * Copy constructor
+   */
+  HEPRUP(const HEPRUP &) = default;
+
+  /**
    * Assignment operator.
    */
-  HEPRUP & operator=(const HEPRUP & x) {
-    attributes = x.attributes;
-    contents = x.contents;
-    IDBMUP = x.IDBMUP;
-    EBMUP = x.EBMUP;
-    PDFGUP = x.PDFGUP;
-    PDFSUP = x.PDFSUP;
-    IDWTUP = x.IDWTUP;
-    NPRUP = x.NPRUP;
-    XSECUP = x.XSECUP;
-    XERRUP = x.XERRUP;
-    XMAXUP = x.XMAXUP;
-    LPRUP = x.LPRUP;
-    xsecinfos = x.xsecinfos;
-    eventfiles = x.eventfiles;
-    cuts = x.cuts;
-    ptypes = x.ptypes;
-    procinfo = x.procinfo;
-    mergeinfo = x.mergeinfo;
-    generators = x.generators;
-    weightgroup = x.weightgroup;
-    weightinfo = x.weightinfo;
-    junk = x.junk;
-    version = x.version;
-    weightmap = x.weightmap;
-    return *this;
-  }
+  HEPRUP & operator=(const HEPRUP & x) = default;
 
   /**
    * Construct from a given init tag.
@@ -1761,10 +1740,6 @@ public:
 
   }
 
-  /**
-   * Destructor.
-   */
-  ~HEPRUP() {}
   //@}
 
 public:
@@ -1819,7 +1794,8 @@ public:
         eventfiles[i].print(file);
       file << "</eventfiles>\n";
     }
-    if ( !xsecinfos.empty() > 0 )
+    //AV if ( !xsecinfos.empty() > 0 )
+    if ( !xsecinfos.empty())
       for ( XSecInfos::const_iterator it = xsecinfos.begin();
             it != xsecinfos.end(); ++it )
         if ( it->second.neve > 0 ) it->second.print(file);
@@ -2956,7 +2932,7 @@ public:
   void openeventfile(int ifile) {
     std::cerr << "opening file " << ifile << std::endl;
     efile.close();
-    string fname = heprup.eventfiles[ifile].filename;
+    std::string fname = heprup.eventfiles[ifile].filename;
     if ( fname[0] != '/' ) fname = dirpath + fname;
     efile.open(fname.c_str());
     if ( !efile ) throw std::runtime_error("Could not open event file " +
@@ -3194,7 +3170,7 @@ public:
       ef.neve = currfileevent;
     }
     efile.close();
-    string fname = heprup.eventfiles[ifile].filename;
+    std::string fname = heprup.eventfiles[ifile].filename;
     if ( fname[0] != '/' ) fname = dirpath + fname;
     efile.open(fname.c_str());
     if ( !efile ) throw std::runtime_error("Could not open event file " +

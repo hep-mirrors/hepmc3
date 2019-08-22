@@ -20,7 +20,8 @@
 
 #include "Tauola/Tauola.h"
 #include "Tauola/Log.h"
-
+/// @class TauolaValidationTool
+/// @brief Interface for validatio to Tauola
 class TauolaValidationTool : public ValidationTool {
 public:
     TauolaValidationTool():m_timer("Tauola++ processing time") {}
@@ -35,7 +36,7 @@ public:
     void finalize();
 
 private:
-    Timer m_timer;
+    Timer m_timer; ///< Timer
 };
 
 #endif

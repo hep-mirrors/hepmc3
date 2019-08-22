@@ -42,9 +42,9 @@ public:
     };
 
 private:
-    void allocate_buffer();
-    void flush();
-    void forced_flush();
+    void allocate_buffer(); //!< allocates buffer for output
+    void flush(); //!< flushes output buffer
+    void forced_flush(); //!< flushes output buffer
     std::ofstream m_file; //!< Output file
     std::ostream* m_stream; //!< Output stream
     int m_style; //!< style of dot file

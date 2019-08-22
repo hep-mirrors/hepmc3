@@ -11,6 +11,7 @@
  */
 #include <cmath>
 #ifndef M_PI
+/** @brief Definition of PI. Needed on some platforms */
 #define M_PI 3.14159265358979323846264338327950288
 #endif
 namespace HepMC3 {
@@ -36,13 +37,13 @@ public:
 
     /** @brief Default constructor */
     FourVector()
-      : m_v1(0.0),   m_v2(0.0), m_v3(0.0),    m_v4(0.0)  {}
+        : m_v1(0.0),   m_v2(0.0), m_v3(0.0),    m_v4(0.0)  {}
     /** @brief Sets all FourVector fields */
     FourVector(double xx, double yy, double zz, double ee)
-      : m_v1(xx),     m_v2(yy),   m_v3(zz),      m_v4(ee)    {}
+        : m_v1(xx),     m_v2(yy),   m_v3(zz),      m_v4(ee)    {}
     /** @brief Copy constructor */
     FourVector(const FourVector & v)
-      : m_v1(v.m_v1), m_v2(v.m_v2), m_v3(v.m_v3), m_v4(v.m_v4) {}
+        : m_v1(v.m_v1), m_v2(v.m_v2), m_v3(v.m_v3), m_v4(v.m_v4) {}
 
 
     /// @name Component accessors
@@ -155,11 +156,11 @@ public:
 
     /// Signed azimuthal angle separation in [-pi, pi]
     double delta_phi(const FourVector &v) const {
-      double dphi = phi() - v.phi();
-      if (dphi != dphi) return dphi;
-      while (dphi >=  M_PI) dphi -= 2.*M_PI;
-      while (dphi <  -M_PI) dphi += 2.*M_PI;
-      return dphi;
+        double dphi = phi() - v.phi();
+        if (dphi != dphi) return dphi;
+        while (dphi >=  M_PI) dphi -= 2.*M_PI;
+        while (dphi <  -M_PI) dphi += 2.*M_PI;
+        return dphi;
     }
 
     /// Pseudorapidity separation
@@ -170,22 +171,22 @@ public:
 
     /// R_eta^2-distance separation dR^2 = dphi^2 + deta^2
     double delta_r2_eta(const FourVector &v) const {
-      return delta_phi(v)*delta_phi(v) + delta_eta(v)*delta_eta(v);
+        return delta_phi(v)*delta_phi(v) + delta_eta(v)*delta_eta(v);
     }
 
     /// R_eta-distance separation dR = sqrt(dphi^2 + deta^2)
     double delta_r_eta(const FourVector &v) const {
-      return sqrt( delta_r2_eta(v) );
+        return sqrt( delta_r2_eta(v) );
     }
 
     /// R_rap^2-distance separation dR^2 = dphi^2 + drap^2
     double delta_r2_rap(const FourVector &v) const {
-      return delta_phi(v)*delta_phi(v) + delta_rap(v)*delta_rap(v);
+        return delta_phi(v)*delta_phi(v) + delta_rap(v)*delta_rap(v);
     }
 
     /// R-rap-distance separation dR = sqrt(dphi^2 + drap^2)
     double delta_r_rap(const FourVector &v) const {
-      return sqrt( delta_r2_rap(v) );
+        return sqrt( delta_r2_rap(v) );
     }
 
     //@}
@@ -196,55 +197,55 @@ public:
 
     /// Equality
     bool operator==(const FourVector& rhs) const {
-      return x() == rhs.x() && y() == rhs.y() && z() == rhs.z() && t() == rhs.t();
+        return x() == rhs.x() && y() == rhs.y() && z() == rhs.z() && t() == rhs.t();
     }
     /// Inequality
     bool operator!=(const FourVector& rhs) const { return !(*this == rhs); }
 
     /// Arithmetic operator +
     FourVector  operator+ (const FourVector& rhs) const {
-      return FourVector( x() + rhs.x(), y() + rhs.y(), z() + rhs.z(), t() + rhs.t() );
+        return FourVector( x() + rhs.x(), y() + rhs.y(), z() + rhs.z(), t() + rhs.t() );
     }
     /// Arithmetic operator -
     FourVector  operator- (const FourVector& rhs) const {
-      return FourVector( x() - rhs.x(), y() - rhs.y(), z() - rhs.z(), t() - rhs.t() );
+        return FourVector( x() - rhs.x(), y() - rhs.y(), z() - rhs.z(), t() - rhs.t() );
     }
     /// Arithmetic operator * by scalar
     FourVector  operator* (const double rhs) const {
-      return FourVector( x()*rhs, y()*rhs, z()*rhs, t()*rhs );
+        return FourVector( x()*rhs, y()*rhs, z()*rhs, t()*rhs );
     }
     /// Arithmetic operator / by scalar
     FourVector  operator/ (const double rhs) const {
-      return FourVector( x()/rhs, y()/rhs, z()/rhs, t()/rhs );
+        return FourVector( x()/rhs, y()/rhs, z()/rhs, t()/rhs );
     }
 
     /// Arithmetic operator +=
     void operator += (const FourVector& rhs) {
-      setX(x() + rhs.x());
-      setY(y() + rhs.y());
-      setZ(z() + rhs.z());
-      setT(t() + rhs.t());
+        setX(x() + rhs.x());
+        setY(y() + rhs.y());
+        setZ(z() + rhs.z());
+        setT(t() + rhs.t());
     }
     /// Arithmetic operator -=
     void operator -= (const FourVector& rhs) {
-      setX(x() - rhs.x());
-      setY(y() - rhs.y());
-      setZ(z() - rhs.z());
-      setT(t() - rhs.t());
+        setX(x() - rhs.x());
+        setY(y() - rhs.y());
+        setZ(z() - rhs.z());
+        setT(t() - rhs.t());
     }
     /// Arithmetic operator *= by scalar
     void operator *= (const double rhs) {
-      setX(x()*rhs);
-      setY(y()*rhs);
-      setZ(z()*rhs);
-      setT(t()*rhs);
+        setX(x()*rhs);
+        setY(y()*rhs);
+        setZ(z()*rhs);
+        setT(t()*rhs);
     }
     /// Arithmetic operator /= by scalar
-      void operator /= (const double rhs) {
-      setX(x()/rhs);
-      setY(y()/rhs);
-      setZ(z()/rhs);
-      setT(t()/rhs);
+    void operator /= (const double rhs) {
+        setX(x()/rhs);
+        setY(y()/rhs);
+        setZ(z()/rhs);
+        setT(t()/rhs);
     }
 
     //@}
@@ -252,8 +253,8 @@ public:
 
     /// Static null FourVector = (0,0,0,0)
     static const FourVector& ZERO_VECTOR() {
-      static const FourVector v;
-      return v;
+        static const FourVector v;
+        return v;
     }
 
 

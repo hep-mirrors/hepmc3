@@ -36,50 +36,52 @@ public:
     /// @brief Interrnal struct for keeping track of tools.
     struct ToolInfo {
 
-    /// @brief The name of the tool.
-    string name;
+        /// @brief The name of the tool.
+        string name;
 
-    /// @brief The version of the tool.
-    string version;
+        /// @brief The version of the tool.
+        string version;
 
-    /// @brief Other information about how the tool was used in
-    /// the run.
-    string description;
+        /// @brief Other information about how the tool was used in
+        /// the run.
+        string description;
     };
 
 public:
 
     /// @brief Default constructor
     GenRunInfo() {}
+    /// @brief Copy constructor
     GenRunInfo(const GenRunInfo& r);
+    /// @brief Assignmet
     GenRunInfo& operator=(const GenRunInfo& r);
-    
-    #if !defined(__CINT__)
+
+#if !defined(__CINT__)
 
     /// @brief The vector of tools used to produce this run.
     const std::vector<ToolInfo> & tools() const {
-      return m_tools;
+        return m_tools;
     }
     /// @brief The vector of tools used to produce this run.
     std::vector<ToolInfo> & tools() {
-      return m_tools;
+        return m_tools;
     }
 
     /// @brief Check if a weight name is present.
     bool has_weight(const string& name) const {
-      return m_weight_indices.find(name) !=  m_weight_indices.end();
+        return m_weight_indices.find(name) !=  m_weight_indices.end();
     }
 
     /// @brief Return the index corresponding to a weight name.
     /// @return -1 if name was not found
     int weight_index(const string& name) const {
-    std::map<std::string, int>::const_iterator it = m_weight_indices.find(name);
+        std::map<std::string, int>::const_iterator it = m_weight_indices.find(name);
         return it == m_weight_indices.end()? -1: it->second;
     }
 
     /// @brief Get the vector of weight names.
     const std::vector<std::string> & weight_names() const {
-      return m_weight_names;
+        return m_weight_names;
     }
 
     /// @brief Set the names of the weights in this run.
@@ -92,15 +94,15 @@ public:
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const string &name,
-               const shared_ptr<Attribute> &att) {
-      std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-      if ( att ) m_attributes[name] = att;
+                       const shared_ptr<Attribute> &att) {
+        std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+        if ( att ) m_attributes[name] = att;
     }
 
     /// @brief Remove attribute
     void remove_attribute(const string &name) {
-      std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-      m_attributes.erase(name);
+        std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+        m_attributes.erase(name);
     }
 
     /// @brief Get attribute of type T
@@ -116,11 +118,11 @@ public:
     /// @brief Get a copy of the list of attributes
     /// @note To avoid thread issues, this is returns a copy. Better solution may be needed.
     std::map< std::string, shared_ptr<Attribute> > attributes() const {
-      return m_attributes;
+        return m_attributes;
     }
 
 
-    #endif // __CINT__
+#endif // __CINT__
 
     /// @name Methods to fill GenRunInfoData and to read it back
     //@{
@@ -131,18 +133,18 @@ public:
     /// @brief Fill GenRunInfo based on GenRunInfoData
     void read_data(const GenRunInfoData &data);
 
-    #ifdef HEPMC3_ROOTIO
+#ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
     //@}
-    #endif
+#endif
 
 private:
 
     /// @name Fields
     //@{
 
-    #if !defined(__CINT__)
+#if !defined(__CINT__)
 
     /// @brief The vector of tools used to produce this run.
     std::vector<ToolInfo> m_tools;
@@ -160,7 +162,7 @@ private:
     mutable std::recursive_mutex m_lock_attributes;
     //@}
 
-    #endif // __CINT__
+#endif // __CINT__
 };
 
 #if !defined(__CINT__)
@@ -173,21 +175,21 @@ template<class T>
 shared_ptr<T> GenRunInfo::attribute(const string &name) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std::map< std::string, shared_ptr<Attribute> >::iterator i =
-      m_attributes.find(name);
+        m_attributes.find(name);
     if( i == m_attributes.end() ) return shared_ptr<T>();
 
     if( !i->second->is_parsed() ) {
 
-    shared_ptr<T> att = make_shared<T>();
+        shared_ptr<T> att = make_shared<T>();
         if ( att->from_string(i->second->unparsed_string()) &&
-         att->init(*this) ) {
-        // update map with new pointer
-        i->second = att;
+                att->init(*this) ) {
+            // update map with new pointer
+            i->second = att;
 
-        return att;
-    }
-    else
-        return shared_ptr<T>();
+            return att;
+        }
+        else
+            return shared_ptr<T>();
     }
     else return dynamic_pointer_cast<T>(i->second);
 }
