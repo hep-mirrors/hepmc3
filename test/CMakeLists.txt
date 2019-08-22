@@ -91,7 +91,7 @@ if(THREADS_HAVE_PTHREAD_ARG)
   target_compile_options(testThreads1 PUBLIC "-pthread")
 endif()
 if(CMAKE_THREAD_LIBS_INIT)
-  target_link_libraries(testThreads1  "${CMAKE_THREAD_LIBS_INIT}")
+  target_link_libraries(testThreads1 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
 endif()
 endif()
 

@@ -212,7 +212,10 @@ int main(int argc, char** argv)
         evt.set_run_info(input_file->run_info());
         //Note the difference between ROOT and Ascii readers. The former read GenRunInfo before first event and the later at the same time as first event.
         if (!ignore_writer) 
-        if (output_file)  output_file->write_event(evt); 
+        if (output_file)
+        { 
+        output_file->write_event(evt); 
+        }
         else 
         { 
          Print::content(evt);
