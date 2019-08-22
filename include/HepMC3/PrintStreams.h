@@ -6,7 +6,7 @@
 #ifndef HEPMC3_PRINTSTREAMS_H
 #define HEPMC3_PRINTSTREAMS_H
 ///
-/// @file PrintStream.h
+/// @file PrintStreams.h
 /// @brief Implementation of ostreams for the objects
 ///
 

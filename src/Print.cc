@@ -124,8 +124,6 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
     os << "________________________________________________________________________" << endl;
 }
 
-
-
 void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
     os << "Vtx: ";
     os.width(6);
@@ -257,7 +255,6 @@ void Print::line(std::ostream& os, const FourVector& p) {
     os.precision(prec);
 }
 
-
 void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
 
     os << "GenParticle: ";
@@ -339,8 +336,5 @@ void Print::line(std::ostream& os, shared_ptr<GenPdfInfo> &pi) {
        << " " << pi->pdf_id[0]
        << " " << pi->pdf_id[1];
 }
-
-
-
 
 } // namespace HepMC3

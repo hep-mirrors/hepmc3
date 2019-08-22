@@ -71,7 +71,6 @@ struct HEPEVT
 #ifndef HEPEVT_WRAPPER_HEADER_ONLY
 #include "HepMC3/GenEvent.h"
 #endif
-using std::endl;
 
 namespace HepMC3
 {
@@ -147,8 +146,8 @@ public:
 //
 inline void HEPEVT_Wrapper::print_hepevt( std::ostream& ostr )
 {
-    ostr << " Event No.: " << hepevtptr->nevhep << endl;
-    ostr<< "  Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M." << endl;
+    ostr << " Event No.: " << hepevtptr->nevhep << std::endl;
+    ostr<< "  Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M." << std::endl;
     for( int i=1; i<=hepevtptr->nhep; ++i )
     {
         HEPEVT_Wrapper::print_hepevt_particle( i, ostr );
@@ -167,7 +166,7 @@ inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr
     ostr << buf;
     // print the rest of particle info
     sprintf(buf,"%8.2f %8.2f %8.2f %8.2f %8.2f",hepevtptr->phep[index-1][0],hepevtptr->phep[index-1][1],hepevtptr->phep[index-1][2],hepevtptr->phep[index-1][3],hepevtptr->phep[index-1][4]);
-    ostr << buf << endl;
+    ostr << buf << std::endl;
 }
 
 

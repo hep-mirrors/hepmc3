@@ -25,9 +25,7 @@ Code standard
 The decision was made to base HepMC3 on the C++11 standard. This provides
 powerful smart pointers, improved iteration machinery (the range-based for
 loop), and constructs such as lambda functions which may be useful for compact
-testing of event constituent properties. A fallback to the Boost library is
-available, at the cost of incomplete syntactic integration and an external
-dependency on Boost.
+testing of event constituent properties.
 
 
 Memory management and ownership

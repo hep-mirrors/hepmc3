@@ -23,8 +23,6 @@ WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_events_count(0),m_ver
     HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
 }
 
-
-
 WriterHEPEVT::WriterHEPEVT(std::ostream& stream): m_events_count(0),m_vertices_positions_present(true), m_file(), m_stream(&stream)
 {
     hepevtbuffer=(char*)(new struct HEPEVT());
