@@ -28,7 +28,6 @@ class ReaderAscii : public Reader {
 public:
 
     /// @brief Constructor
-    /// @warning If file already exists, it will be cleared before writing
     ReaderAscii(const std::string& filename);
 
     /// The ctor to read from stdin
