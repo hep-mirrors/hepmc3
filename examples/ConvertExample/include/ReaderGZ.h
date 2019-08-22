@@ -17,6 +17,7 @@
 #include <string>
 #include <fstream>
 #include <istream>
+#include <string.h>
 #include "HepMC3/Reader.h"
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
