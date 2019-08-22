@@ -61,43 +61,59 @@ public:
     /// x-component of position/displacement
     double x()        const { return m_v1; }
     /// Set x-component of position/displacement
-    void   setX(double xx)   { m_v1 = xx;    }
+    void set_x(double xx)   { m_v1 = xx;    }
+    /// @deprecated Prefer the HepMC-style set_x() function
+    void setX(double xx)   { set_x(xx);    }
 
     /// y-component of position/displacement
     double y()        const { return m_v2; }
     /// Set y-component of position/displacement
-    void   setY(double yy)   { m_v2 = yy;    }
+    void   set_y(double yy)   { m_v2 = yy;    }
+    /// @deprecated Prefer the HepMC-style set_y() function
+    void setY(double yy)   { set_y(yy);    }
 
     /// z-component of position/displacement
     double z()        const { return m_v3; }
     /// Set z-component of position/displacement
-    void   setZ(double zz)   { m_v3 = zz;    }
+    void set_z(double zz)   { m_v3 = zz;    }
+    /// @deprecated Prefer the HepMC-style set_z() function
+    void setZ(double zz)   { set_z(zz);    }
 
     /// Time component of position/displacement
     double t()        const { return m_v4; }
     /// Set time component of position/displacement
-    void   setT(double tt)   { m_v4 = tt;    }
+    void set_t(double tt)   { m_v4 = tt;    }
+    /// @deprecated Prefer the HepMC-style set_t() function
+    void setT(double tt)   { set_t(tt);    }
 
 
     /// x-component of momentum
-    double px()       const { return x(); }
+    double px() const { return x(); }
     /// Set x-component of momentum
-    void   setPx(double pxx) { setX(pxx);   }
+    void set_px(double pxx) { set_x(pxx);   }
+    /// @deprecated Prefer the HepMC-style set_px() function
+    void setPx(double pxx) { set_px(pxx);    }
 
     /// y-component of momentum
-    double py()       const { return y(); }
+    double py() const { return y(); }
     /// Set y-component of momentum
-    void   setPy(double pyy) { setY(pyy);   }
+    void set_py(double pyy) { set_y(pyy);   }
+    /// @deprecated Prefer the HepMC-style set_py() function
+    void setPy(double pyy) { set_py(pyy);    }
 
     /// z-component of momentum
-    double pz()       const { return z(); }
+    double pz() const { return z(); }
     /// Set z-component of momentum
-    void   setPz(double pzz) { setZ(pzz);   }
+    void set_pz(double pzz) { set_z(pzz);   }
+    /// @deprecated Prefer the HepMC-style set_pz() function
+    void setPz(double pzz) { set_pz(pzz);    }
 
     /// Energy component of momentum
-    double e()        const { return t(); }
+    double e() const { return t(); }
     /// Set energy component of momentum
-    void   setE (double ee ) { setT(ee);    }
+    void set_e(double ee ) { this->set_t(ee);    }
+    /// @deprecated Prefer the HepMC-style set_y() function
+    void setE(double ee) { set_e(ee);    }
 
     //@}
 
@@ -130,19 +146,22 @@ public:
     double m() const { return (m2() > 0.0) ? std::sqrt(m2()) : -std::sqrt(-m2()); }
 
     /// Azimuthal angle
-    double phi()     const { return atan2( y(), x() ); }
+    double phi() const { return atan2( y(), x() ); }
     /// Polar angle w.r.t. z direction
-    double theta()   const {  return atan2( perp(), z() ); }
+    double theta() const {  return atan2( perp(), z() ); }
+    // /// Cosine of polar angle w.r.t. z direction
+    // double costheta() const {  return z() / p3mod(); }
     /// Pseudorapidity
-    double eta()     const  { return 0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) ); }
+    double eta() const  { return 0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) ); }
     /// Rapidity
-    double rap()     const {   return 0.5*std::log( (e() + pz()) / (e() - pz()) ); }
+    double rap() const {   return 0.5*std::log( (e() + pz()) / (e() - pz()) ); }
     /// Absolute pseudorapidity
     double abs_eta() const { return std::abs( eta() ); }
     /// Absolute rapidity
     double abs_rap() const { return std::abs( rap() ); }
 
-    /// Same as eta
+    /// Same as eta()
+    /// @deprecated Prefer 'only one way to do it', and we don't have equivalent long names for e.g. pid, phi or eta
     double pseudoRapidity() const { return eta(); }
 
     //@}
