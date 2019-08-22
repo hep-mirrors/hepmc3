@@ -84,6 +84,7 @@ public:
     vector<ConstGenParticlePtr> children() const;
 
     int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
+    int   abs_pid()               const { return abs(pid());            } //!< Get absolute value of PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
     const FourVector& momentum()  const { return m_data.momentum;       } //!< Get momentum
     bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
