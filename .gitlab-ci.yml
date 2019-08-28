@@ -66,6 +66,7 @@ debian-salsa:
     - apt-get install -y -qq devscripts build-essential lintian dh-make
   script:
     - export
+    - rm .gitlab-ci.yml
     - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.1.2/HepMC3-3.1.2.tar.gz
     - mv HepMC3-3.1.2.tar.gz  ../hepmc3_3.1.2.orig.tar.gz
     - debuild -us -uc
