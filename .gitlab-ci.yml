@@ -3,7 +3,7 @@ stages:
 
 cc7:
   only:
-    - /cern*/
+    - /*cern*/
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
   stage: test
   before_script:
@@ -25,7 +25,7 @@ cc7:
 
 ubuntu18:
   only:
-    - /cern*/
+    - /*cern*/
 
   image: gitlab-registry.cern.ch/sft/docker:lcg-ubuntu18
   stage: test
@@ -54,7 +54,7 @@ ubuntu18:
     
 debian-salsa:
   only:
-    - /salsa*/
+    - /*salsa*/
   image: debian:unstable
   stage: test
   before_script:
