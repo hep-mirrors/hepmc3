@@ -67,8 +67,8 @@ private:
     std::vector<ValidationTool*> m_toolchain;  ///< Toolchain
 
     int    m_events;                     ///< events
-    int    m_events_print_step;          ///< events print step  
-    int    m_momentum_check_events;      ///< mom check events 
+    int    m_events_print_step;          ///< events print step
+    int    m_momentum_check_events;      ///< mom check events
     double m_momentum_check_threshold;   ///< mom check threshold
     int    m_print_events;               ///< print events
     int    m_event_counter;               ///< counter of events

@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#if defined(_MSC_VER)  
+#if defined(_MSC_VER)
 /**
  *  @class Timer
  *  @brief Used to benchmark MC generators

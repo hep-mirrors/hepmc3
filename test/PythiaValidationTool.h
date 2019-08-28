@@ -18,7 +18,7 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Selector.h"
 #include "Pythia8ToHepMC3.h"
-#endif 
+#endif
 
 #include "ValidationTool.h"
 #include "Timer.h"
