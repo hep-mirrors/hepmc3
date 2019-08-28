@@ -51,3 +51,19 @@ ubuntu18:
     - cmake .. -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM} -DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/ -DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/ -DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ -DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/ -DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
     - make -j $(nproc)
     - ctest --output-on-failure 
+    
+debian-salsa:
+  only:
+    - /salsa*/
+  image: debian:unstable
+  stage: test
+  before_script:
+    - apt-get update 
+    - apt-get install -y -qq cmake g++ 
+    - apt-get install -y -qq gfortran  doxygen wget graphviz
+    - apt-get install -y -qq devscripts build-essential lintian dh-make
+  script:
+    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.1.2/HepMC3-3.1.2.tar.gz
+    - mv HepMC3-3.1.2.tar.gz  ../hepmc3_3.1.2.orig.tar.gz
+    - debuild -us -uc
+
