@@ -3,7 +3,8 @@ stages:
 
 cc7:
   only:
-    - /cern/
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
   stage: test
   before_script:
@@ -25,7 +26,8 @@ cc7:
 
 ubuntu18:
   only:
-    - /cern/
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-ubuntu18
   stage: test
   before_script:
@@ -53,7 +55,8 @@ ubuntu18:
     
 debian-salsa:
   only:
-    - /salsa/
+    variables:
+     - $CI_SERVER_HOST=="salsa.debian.org"
   image: debian:unstable
   stage: test
   before_script:
