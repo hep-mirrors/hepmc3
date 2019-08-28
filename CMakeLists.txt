@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3)
 set(PROJECT_VERSION 3.01.02)
-
+SET(HEPMC3_VERSION 3.01.02)
+SET(HEPMC3_VERSION_MAJOR  3)
+SET(HEPMC3_VERSION_MINOR  1)
+SET(HEPMC3_VERSION_PATCH  2)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
