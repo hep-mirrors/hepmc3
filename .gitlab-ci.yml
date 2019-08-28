@@ -2,6 +2,8 @@ stages:
   - test
 
 cc7:
+  only:
+    - /cern*/
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
   stage: test
   before_script:
@@ -22,6 +24,9 @@ cc7:
     - ctest --output-on-failure 
 
 ubuntu18:
+  only:
+    - /cern*/
+
   image: gitlab-registry.cern.ch/sft/docker:lcg-ubuntu18
   stage: test
   before_script:
