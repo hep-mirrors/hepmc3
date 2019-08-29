@@ -72,5 +72,5 @@ int main()
     }
     inputB.close();
     outputB.close();
-    return COMPARE_ASCII_FILES("fromfrominputDelete2.hepmc","inputDelete.hepmc");
+    return COMPARE_ASCII_FILES("fromfrominputDelete2.hepmc","inputDelete2.hepmc");
 }
