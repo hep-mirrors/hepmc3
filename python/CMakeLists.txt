@@ -63,12 +63,7 @@ set (HEPMC3_ROOTIO_LIBRARY HepMC3rootIO)
   endif()
 endif()
 
-
 set(BN src/pyHepMC3.cpp)
-
-
-configure_file("setup.py.in" "setup.py" IMMEDIATE @ONLY)
-
 if (RERUN_BINDER)
 find_program (BINDER binder HINTS $ENV{HOME}/binder/build/llvm-4.0.0/build_4.0.0.linux.mppui4.release/bin)
 if(BINDER)
