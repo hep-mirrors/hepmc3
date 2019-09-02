@@ -108,7 +108,7 @@ public:
     }
     /// Get event weight names, if there are some
     /// @note Requires there to be an attached GenRunInfo with registered weight names, otherwise will throw an exception
-    const std::vector<std::string>& weight_names(const std::string& /*name*/) const {
+    const std::vector<std::string>& weight_names() const {
         if (!run_info()) throw WeightError("GenEvent::weight_names(): access to event weight names requires the event to have a GenRunInfo");
         const std::vector<std::string>& weightnames = run_info()->weight_names();
         if (weightnames.empty()) throw WeightError("GenEvent::weight_names(): no event weight names are registered for this run");

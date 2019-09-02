@@ -3280,6 +3280,20 @@ protected:
   std::string dirpath;
   
 public:
+  /**
+   * The standard init information.
+   */
+  HEPRUP heprup;
+
+
+  /**
+   * The standard information about the event we will write next.
+   */
+  HEPEUP hepeup;
+
+
+
+private:
 
   /**
    * Stream to add all lines in the header block.
@@ -3287,26 +3301,17 @@ public:
   std::ostringstream headerStream;
 
   /**
-   * The standard init information.
-   */
-  HEPRUP heprup;
-
-  /**
    * Stream to add additional comments to be put in the init block.
    */
   std::ostringstream initStream;
-
-  /**
-   * The standard information about the event we will write next.
-   */
-  HEPEUP hepeup;
 
   /**
    * Stream to add additional comments to be written together the next event.
    */
   std::ostringstream eventStream;
 
-private:
+
+
 
   /**
    * The default constructor should never be used.
