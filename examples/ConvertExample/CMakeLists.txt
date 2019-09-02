@@ -30,6 +30,10 @@ endif()
 
 
 add_executable(convert_example.exe  ${basic_sources} )
+
+if (MSVC)
+set_target_properties(convert_example.exe PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib")
+endif()
 include_directories(${basic_includes})
 target_link_libraries(convert_example.exe ${basic_libraries} )
 target_compile_definitions(convert_example.exe PRIVATE ${basic_defines} )
@@ -39,7 +43,7 @@ endif()
 # create environment scripts
 set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(libdir ${basic_libdir})
-set_target_properties(convert_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
+set_target_properties(convert_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/$<0:>)
  
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/convert_example_env.sh.in
@@ -47,8 +51,8 @@ configure_file(
 
 # installs 
 install(TARGETS convert_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" EXCLUDE )
-install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}  FILES_MATCHING PATTERN "*env.sh*")
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" PATTERN  "*.ilk"  EXCLUDE)
+install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}  FILES_MATCHING PATTERN "*env.sh*" )
 
 
 
