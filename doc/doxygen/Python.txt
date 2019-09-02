@@ -52,6 +52,7 @@ GenRunInfo::tools()
     pybind11::class_<HepMC3::Print, std::unique_ptr<HepMC3::Print, pybind11::nodelete> > cl(M("HepMC3"), "Print","Implementation of bindings for HepMC3::Print.h");
     pybind11::handle cl_type = cl;
   @endcode
+- commented out some stl wrappers with  #ifdef HEPMC3_EXCLUDE_BINDING_CODE
 
 
 
