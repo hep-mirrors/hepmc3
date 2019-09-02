@@ -1,37 +1,26 @@
 /**
 
   @defgroup python Python Bindings
+
+@section pythonintro Introduction
+
   HepMC includes Python bindings codes suitable for compilation of python modules for Python2.6+ and Python3.
 
 The binding codes were  generated automatically using the binder utility version 0.1 created by Sergey Lyskov, Johns Hopkins University.
-See https://cppbinder.readthedocs.io/en/latest/ for details.
+See 
+- https://cppbinder.readthedocs.io/en/latest/ for details.
 
 The binding codes use the pybinder11 library by Wenzel Jakob, EPFL's School of Computer and Communication Sciences.
-See https://pybind11.readthedocs.io/en/master/ for details.
-This header-only library is included in the distribution.
+See 
+- https://pybind11.readthedocs.io/en/master/ 
+- Wenzel Jakob and Jason Rhinelander and Dean Moldovan, "pybind11 -- Seamless operability between C++11 and Python", 2017,  https://github.com/pybind/pybind11
 
-
-
-#@misc{pybind11,
-#   author = {Wenzel Jakob and Jason Rhinelander and Dean Moldovan},
-#   year = {2017},
-#   note = {https://github.com/pybind/pybind11},
-#   title = {pybind11 -- Seamless operability between C++11 and Python}
-#}
-
-The following modifications to the automatically generated codes were applied:
-
--  #ifdef directives were inserted for ROOT and WIN32
-- commented cl.def("attribute", [](
-- return policy for GenRunInfo::tools() changed to pybind11::reference_internal
-- Definition of Print class was made static
-    pybind11::class_<HepMC3::Print, std::unique_ptr<HepMC3::Print, pybind11::nodelete> > cl(M("HepMC3"), "Print","Implementation of bindings for HepMC3::Print.h");
-    pybind11::handle cl_type = cl;
 
 
 So far the bindings are available for all classes in HepMC3 and LHEF namespaces but these in Search engine.
 For usage examples please look into the tests.
 
+@section installationnotes Installation notes 
 
 To turn on the compilation of bindings use -DHEPMC3_ENABLE_PYTHON = ON. 
 By default the python modules will be generated for python2 and python3 if these are found in the system.
@@ -41,5 +30,29 @@ In case the test suite is enabled, tests of python bindings wiath all the enable
 Despite not recommended, it should be possible to compile the python bindings using the installed version of HepMC3.
 To do this, copy the python directory outside of source tree,  uncomment #project(pyHepMC3 CXX) in  python/CMakeLists.txt and 
 run cmake inside python directory with -DUSE_INSTALLED_HEPMC3=ON  option. 
+
+@section developernotes Developer notes 
+The following modifications to the automatically generated codes were applied:
+
+-  #ifdef directives were inserted for ROOT and WIN32
+- commented 
+  @code{.cpp}  
+cl.def("attribute", [](
+  @endcode
+- return policy for 
+  @code{.cpp}
+GenRunInfo::tools() 
+  @endcode  
+  changed to 
+  @code{.cpp}  
+  pybind11::reference_internal
+  @endcode  
+- Definition of Print class was made static
+  @code{.cpp}
+    pybind11::class_<HepMC3::Print, std::unique_ptr<HepMC3::Print, pybind11::nodelete> > cl(M("HepMC3"), "Print","Implementation of bindings for HepMC3::Print.h");
+    pybind11::handle cl_type = cl;
+  @endcode
+
+
 
 **/
