@@ -17,7 +17,7 @@ See
 
 
 
-So far the bindings are available for all classes in HepMC3 and LHEF namespaces but these in Search engine.
+So far the bindings are available for all classes in HepMC3 and LHEF namespaces but some in Search engine.
 For usage examples please look into the tests.
 
 @section installationnotes Installation notes 
@@ -53,7 +53,18 @@ GenRunInfo::tools()
     pybind11::handle cl_type = cl;
   @endcode
 - commented out some stl wrappers with  #ifdef HEPMC3_EXCLUDE_BINDING_CODE
+- Added into search:
+  @code{.cpp}
 
-
+		cl.def_static("STATUS", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::Selector::STATUS, "C++: HepMC3::Selector::STATUS()");
+		cl.def_static("PDG_ID", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::Selector::PDG_ID, "C++: HepMC3::Selector::PDG_ID()");
+		cl.def_static("PT", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::PT, "C++: HepMC3::Selector::PT()");
+		cl.def_static("ENERGY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ENERGY, "C++: HepMC3::Selector::ENERGY()");
+		cl.def_static("RAPIDITY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::RAPIDITY, "C++: HepMC3::Selector::RAPIDITY()");
+        cl.def_static("ETA", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ETA, "C++: HepMC3::Selector::ETA()");
+        cl.def_static("PHI", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::PHI, "C++: HepMC3::Selector::PHI()");
+        cl.def_static("ET", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ET, "C++: HepMC3::Selector::ET()");
+        cl.def_static("MASS", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::MASS, "C++: HepMC3::Selector::MASS()");
+  @code{.cpp}  
 
 **/
