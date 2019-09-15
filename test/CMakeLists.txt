@@ -104,12 +104,11 @@ endif()
 
 
 
-set( libMCEG_sources ValidationControl.cc   SimpleEventTool.cc )
+set( libMCEG_sources ValidationControl.cc   SimpleEventTool.cc OutputValidationTool.cc)
 set( libMCEG_sources_HEPMC3  )
 set( libMCEG_link_libraries_HEPMC2  )
 set( libMCEG_link_libraries_HEPMC3  )
 set( libMCEG_include_directories   ${CMAKE_CURRENT_SOURCE_DIR}/../search/include/  )
-set( libMCEG_compile_definitions  "-DSIMPLEEVENTTOOL")
 set( MCEG_tests )
 
 
@@ -136,6 +135,7 @@ else()
 
   list( APPEND MCEG_tests "testPythia1" )   
   list( APPEND MCEG_tests "testPythia2" )   
+  list( APPEND MCEG_tests "testPythia3" )   
 endif()
 
 

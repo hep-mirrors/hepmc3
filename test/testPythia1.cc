@@ -42,13 +42,13 @@ PartonLevel:FSR = off\n\
     fprintf(Fconfig,"\
 INPUT  pythia8 testPythia1.input\n\
 TOOL   photos                   \n\
-OUTPUT ascii    testPythia1.hepmc\n\
+EVENTS 1000\n\
 \n");
+
     fclose(Fconfig);
 
     ValidationControl control;
     control.read_file("testPythia1.config");
-    control.set_event_limit(1000);
     control.initialize();
     while( control.new_event() )
     {

@@ -20,7 +20,6 @@ int PythiaValidationTool::process(GenEvent &hepmc) {
     m_timer.start();
 
     m_tohepmc.fill_next_event(m_pythia.event, &hepmc, -1, &m_pythia.info);
-
     return 0;
 }
 
@@ -30,5 +29,4 @@ void PythiaValidationTool::finalize() {
 #else
     m_pythia.statistics();
 #endif
-
 }
