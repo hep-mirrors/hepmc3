@@ -10,6 +10,8 @@
 
 -class std::istream
 -class std::basic_ios
+-class std::locale
+
 -function std::vector<std::shared_ptr<HepMC3::GenVertex>, std::allocator<std::shared_ptr<HepMC3::GenVertex> > >::data()
 -function std::vector<std::shared_ptr<HepMC3::GenParticle>, std::allocator<std::shared_ptr<HepMC3::GenParticle> > >::data()
 
