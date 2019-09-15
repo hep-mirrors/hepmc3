@@ -28,23 +28,10 @@
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderHEPEVT.h>
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/HEPEVT_Wrapper.h>
 
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/WriterRootTree.h>
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderRootTree.h>
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/WriterRoot.h>
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderRoot.h>
-
 
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/LHEF.h>
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/LHEFAttributes.h>
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderLHEF.h>
-
-
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/AttributeFeature.h>
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/Feature.h>
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/Filter.h>
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/Relatives.h>
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/Selector.h>
-
 
 
 
