@@ -43,21 +43,6 @@ namespace HepMC3 {
 //@}
 
 
-/// @name Exceptions
-//@{
-
-/// @class Exception
-/// @brief Standard runtime error
-struct Exception : public std::runtime_error {
-    Exception(const std::string& msg) : std::runtime_error(msg) {} ///< Default constructor
-};
-
-/// @brief Exception related to weight lookups, setting, and index consistency
-struct WeightError : public Exception {
-    WeightError(const std::string& msg) : Exception(msg) {} ///< Default constructor
-};
-
-//@}
 
 
 } // namespace HepMC3

@@ -1,61 +1,3 @@
-// File: std/exception.cpp
-#include <exception>
-#include <sstream> // __str__
-
-#include <pybind11/pybind11.h>
-#include <functional>
-#include <string>
-#include <iterator>
-#include <map>
-#include <memory>
-#include <HepMC3/Version.h>
-#include <HepMC3/Reader.h>
-#include <HepMC3/Writer.h>
-#include <HepMC3/Print.h>
-#include <src/stl_binders.hpp>
-
-
-#ifndef BINDER_PYBIND11_TYPE_CASTER
-	#define BINDER_PYBIND11_TYPE_CASTER
-	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
-	PYBIND11_DECLARE_HOLDER_TYPE(T, T*);
-	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
-#endif
-
-// std::exception file:exception line:60
-struct PyCallBack_std_exception : public std::exception {
-	using std::exception::exception;
-
-	const char * what() const noexcept override { 
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const std::exception *>(this), "what");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<const char *>::value) {
-				static pybind11::detail::overload_caster_t<const char *> caster;
-				return pybind11::detail::cast_ref<const char *>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<const char *>(std::move(o));
-		}
-		return exception::what();
-	}
-};
-
-void bind_std_exception(std::function< pybind11::module &(std::string const &namespace_) > &M)
-{
-	{ // std::exception file:exception line:60
-		pybind11::class_<std::exception, std::shared_ptr<std::exception>, PyCallBack_std_exception> cl(M("std"), "exception", "");
-		pybind11::handle cl_type = cl;
-
-		cl.def( pybind11::init( [](){ return new std::exception(); }, [](){ return new PyCallBack_std_exception(); } ) );
-		cl.def( pybind11::init( [](PyCallBack_std_exception const &o){ return new PyCallBack_std_exception(o); } ) );
-		cl.def( pybind11::init( [](std::exception const &o){ return new std::exception(o); } ) );
-		cl.def("what", (const char * (std::exception::*)() const) &std::exception::what, "C++: std::exception::what() const --> const char *", pybind11::return_value_policy::automatic);
-		cl.def("assign", (class std::exception & (std::exception::*)(const class std::exception &)) &std::exception::operator=, "C++: std::exception::operator=(const class std::exception &) --> class std::exception &", pybind11::return_value_policy::automatic, pybind11::arg(""));
-	}
-}
-
-
 // File: std/locale_classes.cpp
 #include <ios>
 #include <iterator>
@@ -308,25 +250,6 @@ void bind_std_locale_classes(std::function< pybind11::module &(std::string const
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
 #endif
 
-// std::runtime_error file:stdexcept line:112
-struct PyCallBack_std_runtime_error : public std::runtime_error {
-	using std::runtime_error::runtime_error;
-
-	const char * what() const noexcept override { 
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const std::runtime_error *>(this), "what");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<const char *>::value) {
-				static pybind11::detail::overload_caster_t<const char *> caster;
-				return pybind11::detail::cast_ref<const char *>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<const char *>(std::move(o));
-		}
-		return runtime_error::what();
-	}
-};
-
 void bind_std_ostream_tcc(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
 #if (!defined(WIN32)) && (!defined(__MINGW32__)) && (!defined(__MINGW64__))
@@ -353,22 +276,10 @@ void bind_std_ostream_tcc(std::function< pybind11::module &(std::string const &n
 	}
 #endif
 
-	{ // std::runtime_error file:stdexcept line:112
-		pybind11::class_<std::runtime_error, std::shared_ptr<std::runtime_error>, PyCallBack_std_runtime_error, std::exception> cl(M("std"), "runtime_error", "");
-		pybind11::handle cl_type = cl;
-
-		cl.def( pybind11::init<const std::string &>(), pybind11::arg("__arg") );
-
-		cl.def( pybind11::init( [](PyCallBack_std_runtime_error const &o){ return new PyCallBack_std_runtime_error(o); } ) );
-		cl.def( pybind11::init( [](std::runtime_error const &o){ return new std::runtime_error(o); } ) );
-		cl.def("what", (const char * (std::runtime_error::*)() const) &std::runtime_error::what, "C++: std::runtime_error::what() const --> const char *", pybind11::return_value_policy::automatic);
-		cl.def("assign", (class std::runtime_error & (std::runtime_error::*)(const class std::runtime_error &)) &std::runtime_error::operator=, "C++: std::runtime_error::operator=(const class std::runtime_error &) --> class std::runtime_error &", pybind11::return_value_policy::automatic, pybind11::arg(""));
-	}
 }
 
 
-// File: HepMC3/Errors.cpp
-#include <HepMC3/Errors.h>
+// File: HepMC3/Setup.cpp
 #include <HepMC3/Setup.h>
 #include <iterator>
 #include <memory>
@@ -393,66 +304,8 @@ void bind_std_ostream_tcc(std::function< pybind11::module &(std::string const &n
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
 #endif
 
-// HepMC3::Exception file:HepMC3/Errors.h line:51
-struct PyCallBack_HepMC3_Exception : public HepMC3::Exception {
-	using HepMC3::Exception::Exception;
-
-	const char * what() const noexcept override { 
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Exception *>(this), "what");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<const char *>::value) {
-				static pybind11::detail::overload_caster_t<const char *> caster;
-				return pybind11::detail::cast_ref<const char *>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<const char *>(std::move(o));
-		}
-		return runtime_error::what();
-	}
-};
-
-// HepMC3::WeightError file:HepMC3/Errors.h line:56
-struct PyCallBack_HepMC3_WeightError : public HepMC3::WeightError {
-	using HepMC3::WeightError::WeightError;
-
-	const char * what() const noexcept override { 
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WeightError *>(this), "what");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<const char *>::value) {
-				static pybind11::detail::overload_caster_t<const char *> caster;
-				return pybind11::detail::cast_ref<const char *>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<const char *>(std::move(o));
-		}
-		return runtime_error::what();
-	}
-};
-
-void bind_HepMC3_Errors(std::function< pybind11::module &(std::string const &namespace_) > &M)
+void bind_HepMC3_Setup(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::Exception file:HepMC3/Errors.h line:51
-		pybind11::class_<HepMC3::Exception, std::shared_ptr<HepMC3::Exception>, PyCallBack_HepMC3_Exception, std::runtime_error> cl(M("HepMC3"), "Exception", "Standard runtime error");
-		pybind11::handle cl_type = cl;
-
-		cl.def( pybind11::init<const std::string &>(), pybind11::arg("msg") );
-
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_Exception const &o){ return new PyCallBack_HepMC3_Exception(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::Exception const &o){ return new HepMC3::Exception(o); } ) );
-		cl.def("assign", (struct HepMC3::Exception & (HepMC3::Exception::*)(const struct HepMC3::Exception &)) &HepMC3::Exception::operator=, "C++: HepMC3::Exception::operator=(const struct HepMC3::Exception &) --> struct HepMC3::Exception &", pybind11::return_value_policy::automatic, pybind11::arg(""));
-	}
-	{ // HepMC3::WeightError file:HepMC3/Errors.h line:56
-		pybind11::class_<HepMC3::WeightError, std::shared_ptr<HepMC3::WeightError>, PyCallBack_HepMC3_WeightError, HepMC3::Exception> cl(M("HepMC3"), "WeightError", "Exception related to weight lookups, setting, and index consistency");
-		pybind11::handle cl_type = cl;
-
-		cl.def( pybind11::init<const std::string &>(), pybind11::arg("msg") );
-
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_WeightError const &o){ return new PyCallBack_HepMC3_WeightError(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::WeightError const &o){ return new HepMC3::WeightError(o); } ) );
-		cl.def("assign", (struct HepMC3::WeightError & (HepMC3::WeightError::*)(const struct HepMC3::WeightError &)) &HepMC3::WeightError::operator=, "C++: HepMC3::WeightError::operator=(const struct HepMC3::WeightError &) --> struct HepMC3::WeightError &", pybind11::return_value_policy::automatic, pybind11::arg(""));
-	}
 	{ // HepMC3::Setup file:HepMC3/Setup.h line:22
 		pybind11::class_<HepMC3::Setup, HepMC3::Setup*> cl(M("HepMC3"), "Setup", "Configuration for HepMC\n\n Contains macro definitions for printing debug output, feature deprecation, etc.\n Static class - configuration is shared among all HepMC events\n and program threads");
 		pybind11::handle cl_type = cl;
@@ -2361,7 +2214,7 @@ void bind_HepMC3_GenRunInfo(std::function< pybind11::module &(std::string const 
 		cl.def("is_valid", (bool (HepMC3::GenPdfInfo::*)() const) &HepMC3::GenPdfInfo::is_valid, "C++: HepMC3::GenPdfInfo::is_valid() const --> bool");
 		cl.def("assign", (class HepMC3::GenPdfInfo & (HepMC3::GenPdfInfo::*)(const class HepMC3::GenPdfInfo &)) &HepMC3::GenPdfInfo::operator=, "C++: HepMC3::GenPdfInfo::operator=(const class HepMC3::GenPdfInfo &) --> class HepMC3::GenPdfInfo &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::GenEvent file:HepMC3/GenEvent.h line:42
+	{ // HepMC3::GenEvent file:HepMC3/GenEvent.h line:41
 		pybind11::class_<HepMC3::GenEvent, std::shared_ptr<HepMC3::GenEvent>> cl(M("HepMC3"), "GenEvent", "Stores event-related information\n\n Manages event-related information.\n Contains lists of GenParticle and GenVertex objects");
 		pybind11::handle cl_type = cl;
 
@@ -2528,7 +2381,7 @@ void bind_HepMC3_GenParticle(std::function< pybind11::module &(std::string const
 		cl.def("is_zero", (bool (HepMC3::GenVertexData::*)() const) &HepMC3::GenVertexData::is_zero, "Check if this struct fields are zero\n\nC++: HepMC3::GenVertexData::is_zero() const --> bool");
 		cl.def("assign", (struct HepMC3::GenVertexData & (HepMC3::GenVertexData::*)(const struct HepMC3::GenVertexData &)) &HepMC3::GenVertexData::operator=, "C++: HepMC3::GenVertexData::operator=(const struct HepMC3::GenVertexData &) --> struct HepMC3::GenVertexData &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::GenVertex file:HepMC3/GenVertex.h line:27
+	{ // HepMC3::GenVertex file:HepMC3/GenVertex.h line:26
 		pybind11::class_<HepMC3::GenVertex, std::shared_ptr<HepMC3::GenVertex>> cl(M("HepMC3"), "GenVertex", "Stores vertex-related information");
 		pybind11::handle cl_type = cl;
 
@@ -4314,10 +4167,9 @@ void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string co
 
 typedef std::function< pybind11::module & (std::string const &) > ModuleGetter;
 
-void bind_std_exception(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_std_locale_classes(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_std_ostream_tcc(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_HepMC3_Errors(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_HepMC3_Setup(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_HepMC3_FourVector(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_HepMC3_FourVector_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_std_stl_map(std::function< pybind11::module &(std::string const &namespace_) > &M);
@@ -4361,10 +4213,9 @@ PYBIND11_MODULE(pyHepMC3, root_module) {
 
 	//pybind11::class_<std::shared_ptr<void>>(M(""), "_encapsulated_data_");
 
-	bind_std_exception(M);
 	bind_std_locale_classes(M);
 	bind_std_ostream_tcc(M);
-	bind_HepMC3_Errors(M);
+	bind_HepMC3_Setup(M);
 	bind_HepMC3_FourVector(M);
 	bind_HepMC3_FourVector_1(M);
 	bind_std_stl_map(M);
@@ -4390,10 +4241,9 @@ PYBIND11_MODULE(pyHepMC3, root_module) {
 
 // Source list file: /ptmp/mpp/andriish/HOME/HepMC3/python/src/pyHepMC3.sources
 // pyHepMC3.cpp
-// std/exception.cpp
 // std/locale_classes.cpp
 // std/ostream_tcc.cpp
-// HepMC3/Errors.cpp
+// HepMC3/Setup.cpp
 // HepMC3/FourVector.cpp
 // HepMC3/FourVector_1.cpp
 // std/stl_map.cpp
