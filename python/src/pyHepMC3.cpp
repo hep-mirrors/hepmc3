@@ -1,4 +1,5 @@
 // File: std/ios_base.cpp
+#define HEPMC3_EXCLUDE_BINDING_CODE
 #include <ios>
 #include <iterator>
 #include <locale>
