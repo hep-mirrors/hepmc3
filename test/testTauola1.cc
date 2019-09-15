@@ -37,6 +37,13 @@ PartonLevel:FSR = off\n\
 -15:mayDecay = off\n\
 \n");
     fclose(F);
+    FILE* Fconfig=fopen("testTauola1.config","w");
+    fprintf(Fconfig,"\
+INPUT  pythia8      testTauola1.input\n\
+TOOL   tauola                   \n\
+EVENTS 1000\n\
+\n");
+    fclose(Fconfig);
 
     ValidationControl control;
     control.read_file("testTauola1.config");

@@ -17,6 +17,7 @@
 #else
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Selector.h"
+#include "HepMC3/WriterAsciiHepMC2.h"
 #include "Pythia8ToHepMC3.h"
 #endif
 
