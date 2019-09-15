@@ -118,6 +118,8 @@ public:
         line(std::cout, pi);
         std::cout<<std::endl;
     }
+///deleted copy assignment operator
+    Print& operator = (const Print &) = delete;            
 
 private:
     /// @brief Helper function for printing a vertex in listing format

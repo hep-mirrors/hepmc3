@@ -70,13 +70,10 @@ void bind_HepMC3_WriterRootTree(std::function< pybind11::module &(std::string co
 		cl.def( pybind11::init( [](const class std::basic_string<char> & a0, const class std::basic_string<char> & a1, const class std::basic_string<char> & a2){ return new HepMC3::WriterRootTree(a0, a1, a2); }, [](const class std::basic_string<char> & a0, const class std::basic_string<char> & a1, const class std::basic_string<char> & a2){ return new PyCallBack_HepMC3_WriterRootTree(a0, a1, a2); } ), "doc");
 		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("treename"), pybind11::arg("branchname"), pybind11::arg("run") );
 
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_WriterRootTree const &o){ return new PyCallBack_HepMC3_WriterRootTree(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::WriterRootTree const &o){ return new HepMC3::WriterRootTree(o); } ) );
 		cl.def("write_event", (void (HepMC3::WriterRootTree::*)(const class HepMC3::GenEvent &)) &HepMC3::WriterRootTree::write_event, "Write event to file\n\n  \n Event to be serialized\n\nC++: HepMC3::WriterRootTree::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("evt"));
 		cl.def("write_run_info", (void (HepMC3::WriterRootTree::*)()) &HepMC3::WriterRootTree::write_run_info, "Write the GenRunInfo object to file. \n\nC++: HepMC3::WriterRootTree::write_run_info() --> void");
 		cl.def("close", (void (HepMC3::WriterRootTree::*)()) &HepMC3::WriterRootTree::close, "Close file stream \n\nC++: HepMC3::WriterRootTree::close() --> void");
 		cl.def("failed", (bool (HepMC3::WriterRootTree::*)()) &HepMC3::WriterRootTree::failed, "Get stream error state flag \n\nC++: HepMC3::WriterRootTree::failed() --> bool");
-		cl.def("assign", (class HepMC3::WriterRootTree & (HepMC3::WriterRootTree::*)(const class HepMC3::WriterRootTree &)) &HepMC3::WriterRootTree::operator=, "C++: HepMC3::WriterRootTree::operator=(const class HepMC3::WriterRootTree &) --> class HepMC3::WriterRootTree &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 }
 
@@ -217,12 +214,9 @@ void bind_HepMC3_ReaderRootTree(std::function< pybind11::module &(std::string co
 
 		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &>(), pybind11::arg("filename"), pybind11::arg("treename"), pybind11::arg("branchname") );
 
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_ReaderRootTree const &o){ return new PyCallBack_HepMC3_ReaderRootTree(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::ReaderRootTree const &o){ return new HepMC3::ReaderRootTree(o); } ) );
 		cl.def("read_event", (bool (HepMC3::ReaderRootTree::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderRootTree::read_event, "Read event from file\n\n  \n Contains parsed event\n\nC++: HepMC3::ReaderRootTree::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("close", (void (HepMC3::ReaderRootTree::*)()) &HepMC3::ReaderRootTree::close, "Close file \n\nC++: HepMC3::ReaderRootTree::close() --> void");
 		cl.def("failed", (bool (HepMC3::ReaderRootTree::*)()) &HepMC3::ReaderRootTree::failed, "Get file  error state \n\nC++: HepMC3::ReaderRootTree::failed() --> bool");
-		cl.def("assign", (class HepMC3::ReaderRootTree & (HepMC3::ReaderRootTree::*)(const class HepMC3::ReaderRootTree &)) &HepMC3::ReaderRootTree::operator=, "C++: HepMC3::ReaderRootTree::operator=(const class HepMC3::ReaderRootTree &) --> class HepMC3::ReaderRootTree &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 	{ // HepMC3::WriterRoot file:HepMC3/WriterRoot.h line:35
 		pybind11::class_<HepMC3::WriterRoot, std::shared_ptr<HepMC3::WriterRoot>, PyCallBack_HepMC3_WriterRoot, HepMC3::Writer> cl(M("HepMC3"), "WriterRoot", "");
@@ -235,7 +229,6 @@ void bind_HepMC3_ReaderRootTree(std::function< pybind11::module &(std::string co
 		cl.def("write_run_info", (void (HepMC3::WriterRoot::*)()) &HepMC3::WriterRoot::write_run_info, "Write the GenRunInfo object to file. \n\nC++: HepMC3::WriterRoot::write_run_info() --> void");
 		cl.def("close", (void (HepMC3::WriterRoot::*)()) &HepMC3::WriterRoot::close, "Close file stream \n\nC++: HepMC3::WriterRoot::close() --> void");
 		cl.def("failed", (bool (HepMC3::WriterRoot::*)()) &HepMC3::WriterRoot::failed, "Get stream error state flag \n\nC++: HepMC3::WriterRoot::failed() --> bool");
-		cl.def("assign", (class HepMC3::WriterRoot & (HepMC3::WriterRoot::*)(const class HepMC3::WriterRoot &)) &HepMC3::WriterRoot::operator=, "C++: HepMC3::WriterRoot::operator=(const class HepMC3::WriterRoot &) --> class HepMC3::WriterRoot &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 	{ // HepMC3::ReaderRoot file:HepMC3/ReaderRoot.h line:32
 		pybind11::class_<HepMC3::ReaderRoot, std::shared_ptr<HepMC3::ReaderRoot>, PyCallBack_HepMC3_ReaderRoot, HepMC3::Reader> cl(M("HepMC3"), "ReaderRoot", "");
@@ -246,7 +239,6 @@ void bind_HepMC3_ReaderRootTree(std::function< pybind11::module &(std::string co
 		cl.def("read_event", (bool (HepMC3::ReaderRoot::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderRoot::read_event, "Read event from file\n\n  \n Contains parsed event\n\nC++: HepMC3::ReaderRoot::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("close", (void (HepMC3::ReaderRoot::*)()) &HepMC3::ReaderRoot::close, "Close file stream \n\nC++: HepMC3::ReaderRoot::close() --> void");
 		cl.def("failed", (bool (HepMC3::ReaderRoot::*)()) &HepMC3::ReaderRoot::failed, "Get stream error state \n\nC++: HepMC3::ReaderRoot::failed() --> bool");
-		cl.def("assign", (class HepMC3::ReaderRoot & (HepMC3::ReaderRoot::*)(const class HepMC3::ReaderRoot &)) &HepMC3::ReaderRoot::operator=, "C++: HepMC3::ReaderRoot::operator=(const class HepMC3::ReaderRoot &) --> class HepMC3::ReaderRoot &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 }
 

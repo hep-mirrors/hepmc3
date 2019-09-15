@@ -2727,20 +2727,17 @@ void bind_HepMC3_Data_GenEventData(std::function< pybind11::module &(std::string
 		cl.def_static("line", (void (*)(class std::shared_ptr<class HepMC3::GenHeavyIon> &)) &HepMC3::Print::line, "Print one-line info to std::cout\n\nC++: HepMC3::Print::line(class std::shared_ptr<class HepMC3::GenHeavyIon> &) --> void", pybind11::arg("hi"));
 		cl.def_static("line", (void (*)(std::ostream &, class std::shared_ptr<class HepMC3::GenPdfInfo> &)) &HepMC3::Print::line, "Print one-line info\n\nC++: HepMC3::Print::line(std::ostream &, class std::shared_ptr<class HepMC3::GenPdfInfo> &) --> void", pybind11::arg("os"), pybind11::arg("pi"));
 		cl.def_static("line", (void (*)(class std::shared_ptr<class HepMC3::GenPdfInfo> &)) &HepMC3::Print::line, "Print one-line info to std::cout\n\nC++: HepMC3::Print::line(class std::shared_ptr<class HepMC3::GenPdfInfo> &) --> void", pybind11::arg("pi"));
-		cl.def("assign", (class HepMC3::Print & (HepMC3::Print::*)(const class HepMC3::Print &)) &HepMC3::Print::operator=, "C++: HepMC3::Print::operator=(const class HepMC3::Print &) --> class HepMC3::Print &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 	{ // HepMC3::Writer file: line:25
 		pybind11::class_<HepMC3::Writer, std::shared_ptr<HepMC3::Writer>, PyCallBack_HepMC3_Writer> cl(M("HepMC3"), "Writer", "");
 		pybind11::handle cl_type = cl;
 
 		cl.def( pybind11::init( [](){ return new PyCallBack_HepMC3_Writer(); } ) );
-		cl.def(pybind11::init<PyCallBack_HepMC3_Writer const &>());
 		cl.def("write_event", (void (HepMC3::Writer::*)(const class HepMC3::GenEvent &)) &HepMC3::Writer::write_event, "Write event  to output target\n\nC++: HepMC3::Writer::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("evt"));
 		cl.def("failed", (bool (HepMC3::Writer::*)()) &HepMC3::Writer::failed, "Get file and/or stream error state \n\nC++: HepMC3::Writer::failed() --> bool");
 		cl.def("close", (void (HepMC3::Writer::*)()) &HepMC3::Writer::close, "Close file and/or stream \n\nC++: HepMC3::Writer::close() --> void");
 		cl.def("set_run_info", (void (HepMC3::Writer::*)(class std::shared_ptr<class HepMC3::GenRunInfo>)) &HepMC3::Writer::set_run_info, "Set the global GenRunInfo object.\n\nC++: HepMC3::Writer::set_run_info(class std::shared_ptr<class HepMC3::GenRunInfo>) --> void", pybind11::arg("run"));
 		cl.def("run_info", (class std::shared_ptr<class HepMC3::GenRunInfo> (HepMC3::Writer::*)() const) &HepMC3::Writer::run_info, "Get the global GenRunInfo object.\n\nC++: HepMC3::Writer::run_info() const --> class std::shared_ptr<class HepMC3::GenRunInfo>");
-		cl.def("assign", (class HepMC3::Writer & (HepMC3::Writer::*)(const class HepMC3::Writer &)) &HepMC3::Writer::operator=, "C++: HepMC3::Writer::operator=(const class HepMC3::Writer &) --> class HepMC3::Writer &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 }
 
@@ -3283,12 +3280,10 @@ void bind_unknown_unknown(std::function< pybind11::module &(std::string const &n
 		pybind11::handle cl_type = cl;
 
 		cl.def( pybind11::init( [](){ return new PyCallBack_HepMC3_Reader(); } ) );
-		cl.def(pybind11::init<PyCallBack_HepMC3_Reader const &>());
 		cl.def("read_event", (bool (HepMC3::Reader::*)(class HepMC3::GenEvent &)) &HepMC3::Reader::read_event, "Fill next event from input into \n\nC++: HepMC3::Reader::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("failed", (bool (HepMC3::Reader::*)()) &HepMC3::Reader::failed, "Get file and/or stream error state \n\nC++: HepMC3::Reader::failed() --> bool");
 		cl.def("close", (void (HepMC3::Reader::*)()) &HepMC3::Reader::close, "Close file and/or stream \n\nC++: HepMC3::Reader::close() --> void");
 		cl.def("run_info", (class std::shared_ptr<class HepMC3::GenRunInfo> (HepMC3::Reader::*)() const) &HepMC3::Reader::run_info, "Get the global GenRunInfo object.\n\nC++: HepMC3::Reader::run_info() const --> class std::shared_ptr<class HepMC3::GenRunInfo>");
-		cl.def("assign", (class HepMC3::Reader & (HepMC3::Reader::*)(const class HepMC3::Reader &)) &HepMC3::Reader::operator=, "C++: HepMC3::Reader::operator=(const class HepMC3::Reader &) --> class HepMC3::Reader &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 	{ // HepMC3::ReaderAscii file:HepMC3/ReaderAscii.h line:29
 		pybind11::class_<HepMC3::ReaderAscii, std::shared_ptr<HepMC3::ReaderAscii>, PyCallBack_HepMC3_ReaderAscii, HepMC3::Reader> cl(M("HepMC3"), "ReaderAscii", "");
@@ -4305,7 +4300,6 @@ void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string co
 		cl.def("read_event", (bool (HepMC3::ReaderLHEF::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderLHEF::read_event, "Reading event \n\nC++: HepMC3::ReaderLHEF::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("ev"));
 		cl.def("close", (void (HepMC3::ReaderLHEF::*)()) &HepMC3::ReaderLHEF::close, "Close \n\nC++: HepMC3::ReaderLHEF::close() --> void");
 		cl.def("failed", (bool (HepMC3::ReaderLHEF::*)()) &HepMC3::ReaderLHEF::failed, "State \n\nC++: HepMC3::ReaderLHEF::failed() --> bool");
-		cl.def("assign", (class HepMC3::ReaderLHEF & (HepMC3::ReaderLHEF::*)(const class HepMC3::ReaderLHEF &)) &HepMC3::ReaderLHEF::operator=, "C++: HepMC3::ReaderLHEF::operator=(const class HepMC3::ReaderLHEF &) --> class HepMC3::ReaderLHEF &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 }
 

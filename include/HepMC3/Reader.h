@@ -24,6 +24,8 @@ class GenEvent;
 
 class Reader {
 public:
+    ///Constructor
+    Reader() {}
 
     /// Virtual destructor
     virtual ~Reader() {}
@@ -39,6 +41,13 @@ public:
     shared_ptr<GenRunInfo> run_info() const {
         return m_run_info;
     }
+
+///deleted copy constructor
+    Reader(const Reader&) = delete; 
+///deleted copy assignment operator
+    Reader& operator = (const Reader &) = delete;            
+
+
 
 protected:
 
