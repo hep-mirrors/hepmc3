@@ -4,6 +4,7 @@ v=sys.version_info
 sys.path.append("../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/")
 
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
+import pyHepMC3.search.pyHepMC3search.HepMC3 as hmsearch
 import pyHepMC3.pyHepMC3.HepMC3 as hm
 import random,math
 
@@ -77,11 +78,11 @@ def test_Pythonization_Search():
     v4.add_particle_out( p8 )
     
     
-    print(dir (hm))
-    print(hm.applyFilter)
-    print(hm.Selector)
-    print(dir(hm.Selector))
-    print(hm.Selector.STATUS)
+    print(dir (hmsearch))
+    print(hmsearch.applyFilter)
+    print(hmsearch.Selector)
+    print(dir(hmsearch.Selector))
+    print(hmsearch.Selector.STATUS)
     #This is a bad code
     _MYSELECT1= lambda p: p.status() == 1
     _MYSELECT3= lambda p: p.status() == 3

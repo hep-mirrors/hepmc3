@@ -1,0 +1,33 @@
++include <HepMC3/Version.h>
++include <HepMC3/Reader.h>
++include <HepMC3/Writer.h>
++include <HepMC3/Print.h>
+
++include <src/stl_binders.hpp>
++namespace LHEF 
++binder std::vector binder::vector_binder
+
+-class std::istream
+-class std::basic_ios
+-class HepMC3::GenEventData
+-class HepMC3::GenRunInfoData
+-class HepMC3::GenEvent
+-class HepMC3::GenPdfInfo
+-class HepMC3::GenRunInfo
+-class HepMC3::GenHeavyIon
+-class HepMC3::GenCrossSection
+-class HepMC3::FourVector
+-class HepMC3::Units
+-class HepMC3::Attribute
+-class HepMC3::Reader
++class HepMC3::ReaderRoot
++class HepMC3::ReaderRootTree
+-class HepMC3::Writer
++class HepMC3::WriterRoot
++class HepMC3::WriterRootTree
+
+-function std::vector<std::shared_ptr<HepMC3::GenVertex>, std::allocator<std::shared_ptr<HepMC3::GenVertex> > >::data()
+-function std::vector<std::shared_ptr<HepMC3::GenParticle>, std::allocator<std::shared_ptr<HepMC3::GenParticle> > >::data()
+
+
+

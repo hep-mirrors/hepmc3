@@ -1,4 +1,7 @@
 #define HEPMC3_EXCLUDE_BINDING_CODE
+#undef HEPMC3_ROOTIO
+#undef HEPMC3_ENABLE_SEARCH
+
 // File: std/exception.cpp
 #include <exception>
 // File: std/exception.cpp

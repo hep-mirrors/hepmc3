@@ -4,11 +4,15 @@ v=sys.version_info
 sys.path.append("../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/")
  
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
+import pyHepMC3 as hm00
+import pyHepMC3.pyHepMC3 as hm0
+import pyHepMC3.rootIO.pyHepMC3rootIO.HepMC3 as hmrootIO
 import pyHepMC3.pyHepMC3.HepMC3 as hm
+print(dir(hmrootIO))
 def test_IO2():
  inputA=hm.ReaderAsciiHepMC2("inputIO2.hepmc")
  if inputA.failed(): sys.exit(1)
- outputA=hm.WriterRootTree  ("frominputIO2.root")
+ outputA=hmrootIO.WriterRootTree  ("frominputIO2.root")
  if outputA.failed(): sys.exit(2)
  while  not inputA.failed():
         evt=hm.GenEvent()
@@ -21,7 +25,7 @@ def test_IO2():
  inputA.close()
  outputA.close()
  
- inputB=hm.ReaderRootTree ("frominputIO2.root")
+ inputB=hmrootIO.ReaderRootTree ("frominputIO2.root")
  if inputB.failed(): sys.exit(3)
  outputB=hm.WriterAsciiHepMC2("fromfrominputIO2.hepmc")
  if outputB.failed(): sys.exit(4)

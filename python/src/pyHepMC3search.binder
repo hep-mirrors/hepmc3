@@ -1,0 +1,48 @@
++include <HepMC3/Version.h>
++include <HepMC3/Reader.h>
++include <HepMC3/Writer.h>
++include <HepMC3/Print.h>
+
++include <src/stl_binders.hpp>
++namespace HepMC3 
++binder std::vector binder::vector_binder
+
+-class std::istream
+-class std::basic_ios
+-class HepMC3::Exception
+-class HepMC3::Setup
+-class HepMC3::WeightError
+-class HepMC3::GenEventData
+-class HepMC3::GenVertexData
+-class HepMC3::GenParticleData
+-class HepMC3::GenVertex
+-class HepMC3::GenParticle
+-class HepMC3::GenRunInfoData
+-class HepMC3::GenEvent
+-class HepMC3::GenPdfInfo
+-class HepMC3::GenRunInfo
+-class HepMC3::GenHeavyIon
+-class HepMC3::GenCrossSection
+-class HepMC3::FourVector
+-class HepMC3::Units
+-class HepMC3::Attribute
+-class HepMC3::Reader
+-class HepMC3::IntAttribute
+-class HepMC3::LongAttribute
+-class HepMC3::DoubleAttribute
+-class HepMC3::FloatAttribute
+-class HepMC3::StringAttribute
+-class HepMC3::CharAttribute
+-class HepMC3::LongLongAttribute
+-class HepMC3::LongDoubleAttribute
+-class HepMC3::UIntAttribute
+-class HepMC3::ULongAttribute
+-class HepMC3::ULongLongAttribute
+-class HepMC3::BoolAttribute
+
+
+-function std::vector<std::shared_ptr<HepMC3::GenVertex>, std::allocator<std::shared_ptr<HepMC3::GenVertex> > >::data()
+-function std::vector<std::shared_ptr<HepMC3::GenParticle>, std::allocator<std::shared_ptr<HepMC3::GenParticle> > >::data()
+
+
+
