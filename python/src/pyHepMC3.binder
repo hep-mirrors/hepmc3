@@ -76,9 +76,3 @@
 -function LHEF::TagBase::closetag
 
 
--function LHEF::Writer::headerBlock
--function LHEF::Writer::initComments
--function LHEF::Writer::eventComments
-
-
-

@@ -88,9 +88,11 @@ def test_Print():
     xout1.set_precision(6)
     xout1.write_event(evt)
     xout1.close()
+#different outputs
     ff = io.StringIO()
     hm.Print.listing(ff,evt)
     print ( ff.getvalue() )
+#different outputs
     for ip in evt.particles():
       print ( hm.Print.line(ip,True))
     for ip in evt.particles():
@@ -99,7 +101,6 @@ def test_Print():
     xout2.set_precision(6)
     xout2.write_event(evt)
     xout2.close()
-# Test the boost * invboost give the same event.
     assert (COMPARE_ASCII_FILES("testBoost1.out","testBoost2.out")==0)
     evt.clear()
     return 0

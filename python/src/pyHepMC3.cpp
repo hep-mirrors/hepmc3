@@ -3562,6 +3562,9 @@ void bind_HepMC3_LHEF_2(std::function< pybind11::module &(std::string const &nam
 
 		cl.def_readwrite("heprup", &LHEF::Writer::heprup);
 		cl.def_readwrite("hepeup", &LHEF::Writer::hepeup);
+		cl.def("headerBlock", (void (LHEF::Writer::*)(const std::string &)) &LHEF::Writer::headerBlock, "Add header lines consisting of XML code with this stream.\n\nC++: LHEF::Writer::headerBlock(const std::string &) --> void", pybind11::arg("a"));
+		cl.def("initComments", (void (LHEF::Writer::*)(const std::string &)) &LHEF::Writer::initComments, "Add comment lines to the init block with this stream.\n\nC++: LHEF::Writer::initComments(const std::string &) --> void", pybind11::arg("a"));
+		cl.def("eventComments", (void (LHEF::Writer::*)(const std::string &)) &LHEF::Writer::eventComments, "Add comment lines to the next event to be written out with this stream.\n\nC++: LHEF::Writer::eventComments(const std::string &) --> void", pybind11::arg("a"));
 		cl.def("init", (void (LHEF::Writer::*)()) &LHEF::Writer::init, "Initialize the writer.\n\nC++: LHEF::Writer::init() --> void");
 		cl.def("openeventfile", (bool (LHEF::Writer::*)(int)) &LHEF::Writer::openeventfile, "Open a new event file, possibly closing a previous opened one.\n\nC++: LHEF::Writer::openeventfile(int) --> bool", pybind11::arg("ifile"));
 		cl.def("writeinit", (void (LHEF::Writer::*)()) &LHEF::Writer::writeinit, "Write out an optional header block followed by the standard init\n block information together with any comment lines.\n\nC++: LHEF::Writer::writeinit() --> void");
