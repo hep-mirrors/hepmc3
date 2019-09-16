@@ -35,8 +35,10 @@ public:
     /** @brief Default constructor */
     ReaderAsciiHepMC2(const std::string& filename);
 
+#ifndef BINDER
     /// The ctor to read from stdin
     ReaderAsciiHepMC2(std::istream &);
+#endif
 
     /// @brief Destructor
     ~ReaderAsciiHepMC2();

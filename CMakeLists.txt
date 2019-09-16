@@ -232,7 +232,7 @@ endif()
 #test suite
 if(HEPMC3_ENABLE_TEST)
   ENABLE_TESTING()
-  add_subdirectory(test)
+#  add_subdirectory(test)
 endif()
 
 #Python bindings

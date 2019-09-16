@@ -35,9 +35,10 @@ public:
      */
     WriterHEPEVT(const std::string &filename);
 
+#ifndef BINDER
     /// @brief Constructor from ostream
     WriterHEPEVT(std::ostream& stream);
-
+#endif
 //
 // Functions
 //

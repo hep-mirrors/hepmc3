@@ -31,10 +31,10 @@ public:
 
     /// @brief Constructor
     ReaderAscii(const std::string& filename);
-
+#ifndef BINDER
     /// The ctor to read from stdin
     ReaderAscii(std::istream &);
-
+#endif
     /// @brief Destructor
     ~ReaderAscii();
 

@@ -32,39 +32,8 @@ To do this, copy the python directory outside of source tree,  uncomment #projec
 run cmake inside python directory with -DUSE_INSTALLED_HEPMC3=ON  option. 
 
 @section developernotes Developer notes 
-The following modifications to the automatically generated codes were applied:
-
--  #ifdef directives were inserted for ROOT and WIN32
-- commented 
-  @code{.cpp}  
-cl.def("attribute", [](
-  @endcode
-- return policy for 
-  @code{.cpp}
-GenRunInfo::tools() 
-  @endcode  
-  changed to 
-  @code{.cpp}  
-  pybind11::reference_internal
-  @endcode  
-- Definition of Print class was made static
-  @code{.cpp}
-    pybind11::class_<HepMC3::Print, std::unique_ptr<HepMC3::Print, pybind11::nodelete> > cl(M("HepMC3"), "Print","Implementation of bindings for HepMC3::Print.h");
-    pybind11::handle cl_type = cl;
-  @endcode
-- commented out some stl wrappers with  #ifdef HEPMC3_EXCLUDE_BINDING_CODE
-- Added into search:
-  @code{.cpp}
-
-		cl.def_static("STATUS", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::Selector::STATUS, "C++: HepMC3::Selector::STATUS()");
-		cl.def_static("PDG_ID", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::Selector::PDG_ID, "C++: HepMC3::Selector::PDG_ID()");
-		cl.def_static("PT", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::PT, "C++: HepMC3::Selector::PT()");
-		cl.def_static("ENERGY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ENERGY, "C++: HepMC3::Selector::ENERGY()");
-		cl.def_static("RAPIDITY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::RAPIDITY, "C++: HepMC3::Selector::RAPIDITY()");
-        cl.def_static("ETA", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ETA, "C++: HepMC3::Selector::ETA()");
-        cl.def_static("PHI", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::PHI, "C++: HepMC3::Selector::PHI()");
-        cl.def_static("ET", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ET, "C++: HepMC3::Selector::ET()");
-        cl.def_static("MASS", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::MASS, "C++: HepMC3::Selector::MASS()");
-  @code{.cpp}  
+- In the automatically generated codes it was assumed that std::ostream 
+will be mapped onto io.stringIO() and simailar objests.
+- The constructors of Readers/Writers with ifstreams/ostreams were not binded.
 
 **/

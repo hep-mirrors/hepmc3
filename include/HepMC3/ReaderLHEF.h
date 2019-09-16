@@ -34,8 +34,10 @@ namespace HepMC3
 class ReaderLHEF : public Reader
 {
 public:
+#ifndef BINDER
     /// The ctor to read from stream
     ReaderLHEF(std::istream &);
+#endif
 private:
     void init();                       ///< Init helper
 public:

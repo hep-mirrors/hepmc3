@@ -3091,13 +3091,14 @@ class Writer {
 
 public:
 
+#ifndef BINDER
   /**
    * Create a Writer object giving a stream to write to.
    * @param os the stream where the event file is written.
    */
   Writer(std::ostream & os)
     : file(&os), initfile(&os), dirpath("") {  }
-
+#endif
   /**
    * Create a Writer object giving a filename to write to.
    * @param filename the name of the event file to be written.
@@ -3127,22 +3128,22 @@ public:
   /**
    * Add header lines consisting of XML code with this stream.
    */
-  std::ostream & headerBlock() {
-    return headerStream;
+  void  headerBlock(const std::string& a) {
+    headerStream<<a;;
   }
 
   /**
    * Add comment lines to the init block with this stream.
    */
-  std::ostream & initComments() {
-    return initStream;
+  void initComments(const std::string& a) {
+    initStream<<a;
   }
 
   /**
    * Add comment lines to the next event to be written out with this stream.
    */
-  std::ostream & eventComments() {
-    return eventStream;
+  void eventComments(const std::string& a) {
+    eventStream<<a;
   }
 
   /**

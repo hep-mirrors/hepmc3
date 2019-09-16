@@ -30,9 +30,11 @@ public:
     WriterAscii(const std::string& filename,
                 shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
+#ifndef BINDER
     /// @brief Constructor from ostream
     WriterAscii(std::ostream& stream,
                 shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+#endif
 
     /// @brief Destructor
     ~WriterAscii();
