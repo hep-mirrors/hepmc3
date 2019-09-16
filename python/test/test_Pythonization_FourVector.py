@@ -12,7 +12,6 @@ def test_Pythonization_FourVector():
     m=hm.FourVector( 0.5-random.random(), 0.5-random.random(), 0.5-random.random(), 0.5-random.random())
     print( m[0])
     m[1]=10
-    m.Y=5.0
     return 0
 
 

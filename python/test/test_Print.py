@@ -88,14 +88,9 @@ def test_Print():
     xout1.set_precision(6)
     xout1.write_event(evt)
     xout1.close()
-    print( 'zzzzzzzzzzzzzzzzzzzzzzzzz')
     ff = io.StringIO()
-    print( 'zzzzzzzzzzzzzzzzzzzzzzzzz')
-    print (dir(hm))
-#    print (dir(hm.Print))
     hm.Print.listing(ff,evt)
     print ( ff.getvalue() )
-    print( 'zzzzzzzzzzzzzzzzzzzzzzzzz')
     for ip in evt.particles():
       print ( hm.Print.line(ip,True))
     for ip in evt.particles():
@@ -109,10 +104,10 @@ def test_Print():
     evt.clear()
     return 0
 if __name__ == "__main__":
-#    result=1
-#    try:
+    result=1
+    try:
      result=test_Print()
-#    except:
-#     print ("FAILED")
-#     result=1
-#    sys.exit(result)
+    except:
+     print ("FAILED")
+     result=1
+    sys.exit(result)

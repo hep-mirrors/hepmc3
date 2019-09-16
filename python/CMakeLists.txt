@@ -199,12 +199,12 @@ set( HepMC_python_tests
         test_IO1
         test_Boost
         test_Print
-#        test_Polarization
+        test_Polarization
         test_Pythonization_docs
-#        test_Pythonization_FourVector
+        test_Pythonization_FourVector
         test_Pythonization_GenEvent
         test_Pythonization_GenRunInfo
-#BAD        test_Units
+        test_Units
         )
 if(ROOT_FOUND)        
 list( APPEND HepMC_python_tests test_IO2)

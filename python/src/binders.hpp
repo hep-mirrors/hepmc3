@@ -39,6 +39,30 @@ void custom_GenRunInfo_binder(pybind11::class_<HepMC3::GenRunInfo, std::shared_p
 }
 
 
+void custom_Units_binder(pybind11::class_<HepMC3::Units, std::shared_ptr<HepMC3::Units>> cl)
+{
+
+		//cl.def_static("convert",  []( auto & a1, enum HepMC3::Units::MomentumUnit a2, enum HepMC3::Units::MomentumUnit a3)-> void { HepMC3::Units::convert<decltype(a1)>(a1,a2,a3); }, "C++: HepMC3::Units::convert(class HepMC3::FourVector &, enum HepMC3::Units::MomentumUnit, enum HepMC3::Units::MomentumUnit) --> void", pybind11::arg("m"), pybind11::arg("from"), pybind11::arg("to"));
+		//cl.def_static("convert", []( auto & a1, enum HepMC3::Units::LengthUnit a2, enum HepMC3::Units::LengthUnit a3)-> void { HepMC3::Units::convert<decltype(a1)>(a1,a2,a3); }, "C++: HepMC3::Units::convert(class HepMC3::FourVector &, enum HepMC3::Units::MomentumUnit, enum HepMC3::Units::MomentumUnit) --> void", pybind11::arg("m"), pybind11::arg("from"), pybind11::arg("to"));
+
+		cl.def_static("convert",  [](HepMC3::FourVector & a1, enum HepMC3::Units::MomentumUnit a2, enum HepMC3::Units::MomentumUnit a3)-> void { HepMC3::Units::convert<HepMC3::FourVector>(a1,a2,a3); }, "C++: HepMC3::Units::convert(class HepMC3::FourVector &, enum HepMC3::Units::MomentumUnit, enum HepMC3::Units::MomentumUnit) --> void", pybind11::arg("m"), pybind11::arg("from"), pybind11::arg("to"));
+		cl.def_static("convert", []( HepMC3::FourVector & a1, enum HepMC3::Units::LengthUnit a2, enum HepMC3::Units::LengthUnit a3)-> void { HepMC3::Units::convert<HepMC3::FourVector>(a1,a2,a3); }, "C++: HepMC3::Units::convert(class HepMC3::FourVector &, enum HepMC3::Units::MomentumUnit, enum HepMC3::Units::MomentumUnit) --> void", pybind11::arg("m"), pybind11::arg("from"), pybind11::arg("to"));
+		
+		
+}
+
+
+void custom_FourVector_binder(pybind11::class_<HepMC3::FourVector, std::shared_ptr<HepMC3::FourVector>> cl)
+{
+
+		cl.def("__getitem__", [](const HepMC3::FourVector& v, size_t i) { if (i==0) return  v.x(); if (i==1) return  v.y(); if (i==2) return  v.z();  if (i==3) return  v.t(); return 0.0;});
+		cl.def("__setitem__", [](HepMC3::FourVector& v, size_t i, double  a ) { if (i==0)   { v.setX(a); return; }if (i==1)  { v.setY(a);return; } if (i==2)  { v.setZ(a);return; }  if (i==3) {v.setT(a);return; }});
+		cl.def("__len__", [](const HepMC3::FourVector& v) { return 4;});
+		
+}
+
+
+
  template <typename T>  void custom_T_binder (pybind11::class_<T, std::shared_ptr<T>> cl)
 {
 //cl.def("print", (void (T::*)(std::ostream &) const) &T::print, "Print the object", pybind11::arg("file"));

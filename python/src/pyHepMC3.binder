@@ -30,6 +30,11 @@
 +add_on_binder HepMC3::GenEvent  binder::custom_GenEvent_binder
 -function HepMC3::GenEvent::attribute
 
++add_on_binder HepMC3::Units  binder::custom_Units_binder
+
++add_on_binder HepMC3::FourVector  binder::custom_FourVector_binder
+
+
 +add_on_binder HepMC3::GenRunInfo  binder::custom_GenRunInfo_binder
 -function HepMC3::GenRunInfo::tools
 
