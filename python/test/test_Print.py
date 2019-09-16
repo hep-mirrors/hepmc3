@@ -1,11 +1,12 @@
 import sys
 
 v=sys.version_info
-sys.path.append("../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/")
+sys.path=["../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/"]+sys.path
 import math,random  
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
 import pyHepMC3
 import pyHepMC3.pyHepMC3.HepMC3 as hm
+import io
 def test_Print():
     evt=hm.GenEvent(hm.Units.MomentumUnit.GEV,hm.Units.LengthUnit.CM)
     evt.set_event_number(1)
@@ -75,6 +76,7 @@ def test_Print():
 #     tell the event which vertex is the signal process vertex
 
     evt.add_attribute("signal_process_vertex", hm.IntAttribute(v3.id()))
+    print (dir(hm))
     print (hm.Print.content(evt))
 #    we now print it out in old format
     print (hm.Print.listing(evt,8))
@@ -86,6 +88,14 @@ def test_Print():
     xout1.set_precision(6)
     xout1.write_event(evt)
     xout1.close()
+    print( 'zzzzzzzzzzzzzzzzzzzzzzzzz')
+    ff = io.StringIO()
+    print( 'zzzzzzzzzzzzzzzzzzzzzzzzz')
+    print (dir(hm))
+#    print (dir(hm.Print))
+    hm.Print.listing(ff,evt)
+    print ( ff.getvalue() )
+    print( 'zzzzzzzzzzzzzzzzzzzzzzzzz')
     for ip in evt.particles():
       print ( hm.Print.line(ip,True))
     for ip in evt.particles():
@@ -99,10 +109,10 @@ def test_Print():
     evt.clear()
     return 0
 if __name__ == "__main__":
-    result=1
-    try:
+#    result=1
+#    try:
      result=test_Print()
-    except:
-     print ("FAILED")
-     result=1
-    sys.exit(result)
+#    except:
+#     print ("FAILED")
+#     result=1
+#    sys.exit(result)

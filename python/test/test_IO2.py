@@ -4,8 +4,8 @@ v=sys.version_info
 sys.path.append("../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/")
  
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
-import pyHepMC3 as hm00
-import pyHepMC3.pyHepMC3 as hm0
+#import pyHepMC3 as hm00
+#import pyHepMC3.pyHepMC3 as hm0
 import pyHepMC3.rootIO.pyHepMC3rootIO.HepMC3 as hmrootIO
 import pyHepMC3.pyHepMC3.HepMC3 as hm
 print(dir(hmrootIO))

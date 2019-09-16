@@ -1,7 +1,7 @@
 import sys
 
 v=sys.version_info
-sys.path.append("../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/")
+sys.path=["../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/"]+sys.path
 
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
 import pyHepMC3.pyHepMC3.HepMC3 as hm
@@ -16,13 +16,13 @@ def test_Pythonization_GenRunInfo():
     c=hm.GenRunInfo.ToolInfo()
     b.name="foo"
     c= ("foo", "1.0", "bar")
-    ri.tools().append(a)
-    ri.tools().append(b)
-    print (ri.tools())
-    print (len(ri.tools()))  
-    print (a.name  )
-    print (ri.tools()[1].name )
-    ri.tools()[1]=a
+    #ri.tools().append(a)
+    #ri.tools().append(b)
+    #print (ri.tools())
+    #print (len(ri.tools()))  
+    #print (a.name  )
+    #print (ri.tools()[1].name )
+    #ri.tools()[1]=a
     #ri.tools()=[("foo", "1.0", "bar"),("foo2", "12.0", "bar2")]
     #ri.set_weight_names(["a", "b", "c"])
     #ri.Weight_names = ["a", "b", "c"]

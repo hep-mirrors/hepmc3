@@ -15,10 +15,9 @@
 #include <functional>
 #include <string>
 #include <HepMC3/Version.h>
-#include <HepMC3/Reader.h>
-#include <HepMC3/Writer.h>
-#include <HepMC3/Print.h>
-#include <src/stl_binders.hpp>
+#include <HepMC3/Relatives.h>
+#include <HepMC3/Selector.h>
+#include <src/search_binders.hpp>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -30,17 +29,8 @@
 
 void bind_HepMC3_AttributeFeature(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-		// HepMC3::applyFilter(const class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)> &, const class std::vector<class std::shared_ptr<class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<class HepMC3::GenParticle> > > &) file: line:21
-	M("HepMC3").def("applyFilter", (class std::vector<class std::shared_ptr<class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<class HepMC3::GenParticle> > > (*)(const class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)> &, const class std::vector<class std::shared_ptr<class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<class HepMC3::GenParticle> > > &)) &HepMC3::applyFilter, "Apply a Filter to a list of GenParticles\n Returns a vector of GenParticles that satisfy the Filter\n\nC++: HepMC3::applyFilter(const class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)> &, const class std::vector<class std::shared_ptr<class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<class HepMC3::GenParticle> > > &) --> class std::vector<class std::shared_ptr<class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<class HepMC3::GenParticle> > >", pybind11::arg("filter"), pybind11::arg("particles"));
 
-	// HepMC3::applyFilter(const class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)> &, const class std::vector<class std::shared_ptr<const class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<const class HepMC3::GenParticle> > > &) file: line:31
-	M("HepMC3").def("applyFilter", (class std::vector<class std::shared_ptr<const class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<const class HepMC3::GenParticle> > > (*)(const class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)> &, const class std::vector<class std::shared_ptr<const class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<const class HepMC3::GenParticle> > > &)) &HepMC3::applyFilter, "Apply a Filter to a list of ConstGenParticles\n Returns a vector of ConstGenParticles that satisfy the Filter\n\nC++: HepMC3::applyFilter(const class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)> &, const class std::vector<class std::shared_ptr<const class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<const class HepMC3::GenParticle> > > &) --> class std::vector<class std::shared_ptr<const class HepMC3::GenParticle>, class std::allocator<class std::shared_ptr<const class HepMC3::GenParticle> > >", pybind11::arg("filter"), pybind11::arg("particles"));
-
-	// HepMC3::ACCEPT_ALL(class std::shared_ptr<const class HepMC3::GenParticle>) file: line:41
-	M("HepMC3").def("ACCEPT_ALL", (bool (*)(class std::shared_ptr<const class HepMC3::GenParticle>)) &HepMC3::ACCEPT_ALL, "A Filter that will accept all particles\n This might be needed if a signature requires a default Filter\n\nC++: HepMC3::ACCEPT_ALL(class std::shared_ptr<const class HepMC3::GenParticle>) --> bool", pybind11::arg("dummy"));
-
-	
-	
+	 binder::search_binder(M("HepMC3"));
 	{ // HepMC3::AttributeFeature file:HepMC3/AttributeFeature.h line:20
 		pybind11::class_<HepMC3::AttributeFeature, std::shared_ptr<HepMC3::AttributeFeature>> cl(M("HepMC3"), "AttributeFeature", "");
 		pybind11::handle cl_type = cl;
@@ -80,16 +70,9 @@ void bind_HepMC3_AttributeFeature(std::function< pybind11::module &(std::string 
 		cl.def("__ne__", (class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)> (HepMC3::Selector::*)(double) const) &HepMC3::Selector::operator!=, "C++: HepMC3::Selector::operator!=(double) const --> class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)>", pybind11::arg("value"));
 		cl.def("abs", (class std::shared_ptr<const class HepMC3::Selector> (HepMC3::Selector::*)() const) &HepMC3::Selector::abs, "C++: HepMC3::Selector::abs() const --> class std::shared_ptr<const class HepMC3::Selector>");
 		cl.def_static("ATTRIBUTE", (class HepMC3::AttributeFeature (*)(const std::string &)) &HepMC3::Selector::ATTRIBUTE, "C++: HepMC3::Selector::ATTRIBUTE(const std::string &) --> class HepMC3::AttributeFeature", pybind11::arg("name"));
-		cl.def_static("STATUS", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::Selector::STATUS, "C++: HepMC3::Selector::STATUS()");
-		cl.def_static("PDG_ID", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::Selector::PDG_ID, "C++: HepMC3::Selector::PDG_ID()");
-		cl.def_static("PT", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::PT, "C++: HepMC3::Selector::PT()");
-		cl.def_static("ENERGY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ENERGY, "C++: HepMC3::Selector::ENERGY()");
-		cl.def_static("RAPIDITY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::RAPIDITY, "C++: HepMC3::Selector::RAPIDITY()");
-        cl.def_static("ETA", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ETA, "C++: HepMC3::Selector::ETA()");
-        cl.def_static("PHI", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::PHI, "C++: HepMC3::Selector::PHI()");
-        cl.def_static("ET", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ET, "C++: HepMC3::Selector::ET()");
-        cl.def_static("MASS", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::MASS, "C++: HepMC3::Selector::MASS()");
 		cl.def("assign", (class HepMC3::Selector & (HepMC3::Selector::*)(const class HepMC3::Selector &)) &HepMC3::Selector::operator=, "C++: HepMC3::Selector::operator=(const class HepMC3::Selector &) --> class HepMC3::Selector &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+
+		binder::custom_Selector_binder(cl);
 	}
 	// HepMC3::abs(const class HepMC3::Selector &) file:HepMC3/Selector.h line:161
 	M("HepMC3").def("abs", (class std::shared_ptr<const class HepMC3::Selector> (*)(const class HepMC3::Selector &)) &HepMC3::abs, "ConstSelectorPtr abs\n\nC++: HepMC3::abs(const class HepMC3::Selector &) --> class std::shared_ptr<const class HepMC3::Selector>", pybind11::arg("input"));

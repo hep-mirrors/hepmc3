@@ -1,11 +1,9 @@
 +include <HepMC3/Version.h>
-+include <HepMC3/Reader.h>
-+include <HepMC3/Writer.h>
-+include <HepMC3/Print.h>
++include <HepMC3/Relatives.h>
++include <HepMC3/Selector.h>
 
-+include <src/stl_binders.hpp>
++include <src/search_binders.hpp>
 +namespace HepMC3 
-+binder std::vector binder::vector_binder
 
 -class std::istream
 -class std::basic_ios
@@ -40,9 +38,8 @@
 -class HepMC3::ULongLongAttribute
 -class HepMC3::BoolAttribute
 
-
--function std::vector<std::shared_ptr<HepMC3::GenVertex>, std::allocator<std::shared_ptr<HepMC3::GenVertex> > >::data()
--function std::vector<std::shared_ptr<HepMC3::GenParticle>, std::allocator<std::shared_ptr<HepMC3::GenParticle> > >::data()
++add_on_binder HepMC3::Selector binder::custom_Selector_binder
 
 
++add_on_binder_for_namespace HepMC3  binder::search_binder
 

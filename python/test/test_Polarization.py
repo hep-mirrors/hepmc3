@@ -18,7 +18,7 @@
 import sys
 
 v=sys.version_info
-sys.path.append("../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/")
+sys.path=["../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/"]+sys.path
 
 import random ,math
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES

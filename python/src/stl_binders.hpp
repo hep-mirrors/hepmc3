@@ -1,6 +1,3 @@
-// -*- mode:c++;tab-width:2;indent-tabs-mode:t;show-trailing-whitespace:t;rm-trailing-spaces:t -*-
-// vi: set ts=2 noet:
-//
 // Copyright (c) 2016 Sergey Lyskov <sergey.lyskov@jhu.edu>
 //
 // All rights reserved. Use of this source code is governed by a
@@ -17,7 +14,12 @@
 #include <pybind11/stl_bind.h>
 #include <map>
 
+#include <HepMC3/HEPEVT_Wrapper.h>
+#include <HepMC3/GenEvent.h>
+#include <HepMC3/LHEF.h>
+
 namespace binder {
+
 
 template <typename T, class Allocator>
 class vector_binder
