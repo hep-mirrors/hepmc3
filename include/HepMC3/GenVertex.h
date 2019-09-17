@@ -8,7 +8,7 @@
 //
 #ifndef HEPMC3_GENVERTEX_H
 #define HEPMC3_GENVERTEX_H
-
+#include <string>
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"
 #include "HepMC3/Data/GenVertexData.h"

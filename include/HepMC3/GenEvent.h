@@ -88,7 +88,7 @@ public:
     std::vector<double>& weights() { return m_weights; }
     /// Get event weight accessed by index (or the canonical/first one if there is no argument)
     /// @note It's the user's responsibility to ensure that the given index exists!
-    double weight(const size_t& index=0) const { return weights().at(index); }
+    double weight(const unsigned long& index=0) const { return weights().at(index); }
     /// Get event weight accessed by weight name
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
