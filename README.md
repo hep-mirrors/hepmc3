@@ -47,6 +47,14 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   
   Additional flags control the location installation of Photos, Tauola MC-TESTER, HepMC2 
   and Pythia8  that are used for tests. Please note that some examples are disabled  on Windows.
+
+  For tests and for development purposes  HepMC3 uses extra packages, e.g. ZLIB, GrpahViz, binder.
+  On Windows, most extra packages (e.g. ZLIB) have no default location, therefore
+  one should specify their location manualy, e.g. 
+```
+cmake CMakeLists.txt -DZLIB_ROOT=C:\lib -DZLIB_INCLUDE_DIR=C:\include 
+```
+
   
 6. In order to build and run tests put
   ```
@@ -71,9 +79,14 @@ cmake --build ./
 ```
 instead
 
-
-
-
+8. To run the tests do
+```
+ctest . 
+```
+On Windows/MSVC the build type should be specified
+```
+ctest . -C Debug
+```
 
 #  Examples
 HepMC3 is shipped with multiple examples. These can be compiled during installation as descibed above  

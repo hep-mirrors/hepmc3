@@ -147,8 +147,7 @@ endif()
 if(HEPMC3_ENABLE_SEARCH)
 set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES OUTPUT_NAME pyHepMC3search LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:> MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:> ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:>)
 if (MSVC)
-set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib")
-set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3search-static.lib")
+set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib /WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3search-static.lib")
 endif()
 target_include_directories(pyHepMC3search${Python_VERSION} PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR} )
 target_link_libraries(pyHepMC3search${Python_VERSION} PUBLIC ${Python_LIBRARIES}  ${HEPMC3_LIB} ${HEPMC3_SEARCH_LIB} )
@@ -186,7 +185,7 @@ install(FILES src/rootIO/__init__.py  DESTINATION  ${CMAKE_INSTALL_LIBDIR}/${Pyt
 endif()
 if(HEPMC3_ENABLE_SEARCH)
 install(TARGETS pyHepMC3search${Python_VERSION} DESTINATION ${CMAKE_INSTALL_LIBDIR}/${Python_VERSION}/pyHepMC3/search  COMPONENT pythonsearch)
-install(FILES src/rootIO/__init__.py  DESTINATION  ${CMAKE_INSTALL_LIBDIR}/${Python_VERSION}/pyHepMC3/search COMPONENT pythonsearch)
+install(FILES src/search/__init__.py  DESTINATION  ${CMAKE_INSTALL_LIBDIR}/${Python_VERSION}/pyHepMC3/search COMPONENT pythonsearch)
 endif()
 else()
 install(TARGETS pyHepMC3${Python_VERSION} DESTINATION ${Python_SITEARCH}/pyHepMC3  COMPONENT python)
@@ -206,7 +205,7 @@ set( HepMC_python_tests
         test_IO1
         test_Boost
         test_Print
-        test_Polarization
+#        test_Polarization
         test_Pythonization_docs
         test_Pythonization_FourVector
         test_Pythonization_GenEvent
@@ -217,7 +216,8 @@ if(ROOT_FOUND)
 list( APPEND HepMC_python_tests test_IO2)
 endif()        
 if(HEPMC3_ENABLE_TEST)
-list( APPEND HepMC_python_tests test_Pythonization_Search)
+
+#list( APPEND HepMC_python_tests test_Pythonization_Search)
 endif()
 if(HEPMC3_ENABLE_TEST)
 if(USE_INSTALLED_HEPMC3)
