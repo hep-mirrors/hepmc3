@@ -9,6 +9,7 @@
 +namespace HepMC3
 +namespace LHEF 
 +binder std::vector binder::vector_binder
++binder std::map binder::map_binder
 
 -class std::istream
 -class std::basic_ios
