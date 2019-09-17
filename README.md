@@ -87,6 +87,12 @@ On Windows/MSVC the build type should be specified
 ```
 ctest . -C Debug
 ```
+9. HepMC3 packages are available from standard repositories of Debian, Redhat/Fedora, Arch and others. 
+To build Windows installer use NSIS and run
+```
+cpack.exe -G NSIS -C Debug
+```
+
 
 #  Examples
 HepMC3 is shipped with multiple examples. These can be compiled during installation as descibed above  
