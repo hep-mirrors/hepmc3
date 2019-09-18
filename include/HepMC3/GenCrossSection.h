@@ -55,10 +55,10 @@ private:
 //
 public:
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att);
+    bool from_string(const string &att)  override;
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const;
+    bool to_string(string &att) const override;
 
     /** @brief Set all fields */
     void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1);

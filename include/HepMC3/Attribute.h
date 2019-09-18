@@ -165,13 +165,13 @@ public:
     IntAttribute(int val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att) override {
         m_val = atoi( att.c_str() );
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -206,13 +206,13 @@ public:
     LongAttribute(long val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att)  override{
         m_val = atol( att.c_str() );
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -249,13 +249,13 @@ public:
     DoubleAttribute(double val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att)  override{
         m_val = atof( att.c_str() );
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         std::ostringstream oss;
         oss << std::setprecision(std::numeric_limits<double>::digits10)
             << m_val;
@@ -294,13 +294,13 @@ public:
     FloatAttribute(float val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att)  override{
         m_val = float(atof( att.c_str() ));
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         std::ostringstream oss;
         oss << std::setprecision(std::numeric_limits<float>::digits10)
             << m_val;
@@ -348,13 +348,13 @@ public:
     StringAttribute(const string &st):Attribute(st) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att)  override{
         set_unparsed_string(att);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         att = unparsed_string();
         return true;
     }
@@ -387,7 +387,7 @@ public:
     CharAttribute(char val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att) override {
         if (att.size())
         {
             m_val = att.at(0);
@@ -397,7 +397,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const override {
         att = std::to_string(m_val);
         return true;
     }
@@ -432,13 +432,13 @@ public:
     LongLongAttribute(long long val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att)  override{
         m_val = atoll( att.c_str() );
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -475,13 +475,13 @@ public:
     LongDoubleAttribute(long double val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att) override {
         m_val = strtold( att.c_str(),NULL);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         std::ostringstream oss;
         oss << std::setprecision(std::numeric_limits<long double>::digits10)
             << m_val;
@@ -522,13 +522,13 @@ public:
     UIntAttribute(unsigned int val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att)  override{
         m_val = strtoul(att.c_str(), NULL, 0);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -565,13 +565,13 @@ public:
     ULongAttribute(unsigned long val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att)  override{
         m_val = strtoul(att.c_str(), NULL, 0);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -607,13 +607,13 @@ public:
     ULongLongAttribute(unsigned long long val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att)  override{
         m_val = strtoull(att.c_str(), NULL, 0);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -647,7 +647,7 @@ public:
     BoolAttribute(bool val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const string &att)  override{
         if (att.size()!=1) return false;
         if(att==std::string("1")) {m_val = true;  return true;}
         if(att==std::string("0")) {m_val = false; return true;}
@@ -655,7 +655,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const {
+    bool to_string(string &att) const override{
         att = std::to_string(m_val);
         return true;
     }

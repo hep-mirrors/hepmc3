@@ -16,9 +16,6 @@
 -class std::locale
 
 
-###+include_for_class HepMC3::GenRunInfo <pybind11/stl.h>
-
-
 -function std::vector<std::shared_ptr<HepMC3::GenVertex>, std::allocator<std::shared_ptr<HepMC3::GenVertex> > >::data()
 -function std::vector<std::shared_ptr<HepMC3::GenParticle>, std::allocator<std::shared_ptr<HepMC3::GenParticle> > >::data()
 

@@ -41,17 +41,17 @@ public:
     /// @brief Load event from file
     ///
     /// @param[out] evt Event to be filled
-    bool read_event(GenEvent& evt);
+    bool read_event(GenEvent& evt)  override;
 
     /// @todo No-arg version returning GenEvent?
 
     /// @brief Return status of the stream
-    bool failed();
+    bool failed()  override;
 
     /// @todo Implicit cast to bool = !failed()?
 
     /// @brief Close file stream
-    void close();
+    void close()  override;
 
 private:
 

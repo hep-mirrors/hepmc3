@@ -205,10 +205,10 @@ public:
 public:
 
     /// @brief Implementation of Attribute::from_string.
-    bool from_string(const string &att);
+    bool from_string(const string &att) override;
 
     /// @brief Implementation of Attribute::to_string.
-    bool to_string(string &att) const;
+    bool to_string(string &att) const  override;
 
 #ifndef HEPMC3_NO_DEPRECATED
 

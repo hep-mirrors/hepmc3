@@ -190,9 +190,9 @@ public:
     }
 
     /// @brief Boost event using x,y,z components of @a v as velocities
-    bool boost( const FourVector  v );
+    bool boost( const FourVector&  v );
     /// @brief Rotate event using x,y,z components of @a v as rotation angles
-    bool rotate( const FourVector  v );
+    bool rotate( const FourVector&  v );
     /// @brief Change sign of @a axis
     bool reflect(const int axis);
 

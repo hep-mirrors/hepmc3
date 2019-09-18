@@ -60,13 +60,13 @@ public:
      *
      *  @param[in] evt Event to be serialized
      */
-    void write_event(const GenEvent &evt);
+    void write_event(const GenEvent &evt)  override;
 
     /** @brief Close file stream */
-    void close();
+    void close()  override;
 
     /** @brief Get stream error state flag */
-    bool failed();
+    bool failed()  override;
     /** @brief  set flag if vertex positions are available */
     void set_vertices_positions_present(bool iflong);
 

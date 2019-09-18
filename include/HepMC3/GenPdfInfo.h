@@ -46,10 +46,10 @@ public:
 //
 public:
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att);
+    bool from_string(const string &att)  override;
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const;
+    bool to_string(string &att) const  override;
 
     /** @brief Set all fields */
     void set( const int& parton_id1, const int& parton_id2, const double& x1, const double& x2,

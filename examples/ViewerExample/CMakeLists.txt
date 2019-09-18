@@ -1,12 +1,10 @@
 set(CMAKE_MODULE_PATH    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules    ${CMAKE_MODULE_PATH})
 find_package(Graphviz)
-if(GRAPHVIZ_FOUND)
 find_package(ROOT REQUIRED COMPONENTS Core RIO Tree Gui Graf Hist Gpad )
+if(GRAPHVIZ_FOUND AND ROOT_FOUND)
+message(STATUS "HepMC3 ViewerExample: GrpahViz and ROOT found. GUI Browser example enabled. ${ROOT_LIBRARIES}  ${GRAPHVIZ_GRAPH_LIBRARY}  ${GRAPHVIZ_CGRAPH_LIBRARY} ${GRAPHVIZ_GVC_LIBRARY}")
 include_directories(${PROJECT_SOURCE_DIR}/rootIO/include ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}  ${ROOT_INCLUDE_DIRS} ${GRAPHVIZ_INCLUDE_DIRS} ./)
-
 ROOT_GENERATE_DICTIONARY(HepMC3ViewerFrameDict include/HepMC3ViewerFrame.h LINKDEF include/LinkDef.h OPTIONS -inlineInputHeader)
-
-
 ADD_EXECUTABLE(HepMC3Viewer.exe  src/main.cc  src/HepMC3ViewerFrame.cc HepMC3ViewerFrameDict.cxx  )
 set_target_properties(HepMC3Viewer.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 include_directories( include  )
@@ -22,8 +20,7 @@ install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINA
         FILES_MATCHING PATTERN "*env.sh*")
         
 elseif()
-  message(STATUS "Examples: Graphviz package not found. ")
-  message(STATUS "ViewExample disabled")
+  message(STATUS "HepMC3 ViewerExample: GraphViz or ROOT package not found. GUI Browser example disabled.")
 endif()
 
 

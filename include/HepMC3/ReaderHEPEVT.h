@@ -68,14 +68,14 @@ public:
      *
      *  @param[out] evt Contains parsed even
      */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt)  override;
 
 
     /** @brief Close file stream */
-    void close();
+    void close()  override;
 
     /** @brief Get stream error state */
-    bool failed();
+    bool failed()  override;
 
     /** @brief  set flag if vertex positions are available */
     void set_vertices_positions_present(bool iflong);

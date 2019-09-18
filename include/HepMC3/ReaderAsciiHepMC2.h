@@ -47,13 +47,13 @@ public:
 //
 public:
     /** @brief Implementation of Reader::read_event */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt)  override;
 
     /// @brief Return status of the stream
-    bool failed();
+    bool failed()  override;
 
     /// @brief Close file stream
-    void close();
+    void close()  override;
 
 private:
     /** @brief Parse event

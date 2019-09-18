@@ -436,7 +436,7 @@ void GenEvent::shift_position_by( const FourVector & delta ) {
     }
 }
 
-bool GenEvent::rotate( const FourVector  delta )
+bool GenEvent::rotate( const FourVector&  delta )
 {
 
     for ( auto p: m_particles)
@@ -556,7 +556,7 @@ bool GenEvent::reflect(const int axis)
     return true;
 }
 
-bool GenEvent::boost( const FourVector  delta )
+bool GenEvent::boost( const FourVector&  delta )
 {
 
     double deltalength2d=delta.length2();
@@ -578,7 +578,6 @@ bool GenEvent::boost( const FourVector  delta )
     long double deltaX=delta.x();
     long double deltaY=delta.y();
     long double deltaZ=delta.z();
-    long double deltaE=delta.e();
     long double deltalength2=deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ;
     long double deltalength=std::sqrt(deltalength2 );
     long double gamma=1.0/std::sqrt(1.0-deltalength2);

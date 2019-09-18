@@ -44,11 +44,11 @@ public:
     /** @brief Constructor */
     ReaderLHEF(const std::string& filename);
     /** @brief Reading event */
-    bool read_event(GenEvent& ev);
+    bool read_event(GenEvent& ev)  override;
     /** @brief Close */
-    void close();
+    void close()  override;
     /** @brief State */
-    bool failed();
+    bool failed()  override;
     /** @brief Destructor */
     ~ReaderLHEF() ;
 private:
