@@ -84,8 +84,8 @@ bool GenCrossSection::to_string(string &att) const {
        << attempted_events;
 
     for (size_t i = 1; i < cross_sections.size(); ++i )
-        os << " " << cross_sections.at(0)
-           << " " << cross_section_errors.at(0);
+        os << " " << cross_sections.at(i)
+           << " " << cross_section_errors.at(i);
 
     att = os.str();
 

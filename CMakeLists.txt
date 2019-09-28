@@ -263,7 +263,6 @@ find_program (CPPCHECK NAMES cppcheck)
 if(CPPCHECK)
 message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Formating of code is possible.")
 ADD_CUSTOM_TARGET(staticcheck    COMMAND ${CPPCHECK} --force  --suppress=unusedFunction --std=c++11 --enable=all -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}  ./src/*.cc  ./search/src/*.cc ./rootIO/src/*.cc  )
-#ADD_CUSTOM_TARGET(staticcheck    COMMAND ${CPPCHECK} --force  --xml --std=c++11 --enable=all -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}  ./src/*.cc  ./src/search/*.cc ./src/rootIO/*.cc  )
 endif()
 ########################################################################
 ## CPACK
