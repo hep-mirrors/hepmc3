@@ -105,7 +105,7 @@ void WriterDOT::allocate_buffer() {
         }     catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
-            WARNING( "WriterDOT::allocate_buffer: buffer size too large. Dividing by 2. New size: " << m_buffer_size )
+            WARNING( "WriterDOT::allocate_buffer: buffer size too large. Dividing by 2. New size: " << m_buffer_size << e.what())
         }
     }
 

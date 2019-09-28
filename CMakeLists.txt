@@ -42,8 +42,8 @@ if(HEPMC3_ENABLE_ROOTIO)
   elseif(ROOT_DIR)
     message(STATUS "HepMC3: ROOT_DIR provided ${ROOT_DIR}")
   else() 
-    message(STATUS "HepMC3 warning: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
-    message(STATUS "HepMC3 warning: Build will use ROOTConfig.cmake or FindROOT.cmake")
+    message(STATUS "HepMC3: Warning: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
+    message(STATUS "HepMC3: Warning: Build will use ROOTConfig.cmake or FindROOT.cmake")
   endif()
 endif()
 
@@ -244,14 +244,19 @@ if(NOT TARGET uninstall)
 add_custom_target(uninstall
 COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 endif()
-#THis is for developers only
+#This is for developers only
 find_program (ASTYLE NAMES astyle)
 if (ASTYLE)
-message(STATUS "HepMC3: astyle found in ${ASTYLE}. Formating of code is possible.")
+message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of code is possible.")
 ADD_CUSTOM_TARGET(beauty
   COMMAND ${ASTYLE}  --keep-one-line-blocks  src/*cc  rootIO/src/*cc search/src/*cc  examples/*/src/*cc test/*cc  test/*h
   WORKING_DIRECTORY ${DOXYGEN_OUTPUT_DIR}
   )
+endif()
+find_program (CPPCHECK NAMES cppcheck)
+if(CPPCHECK)
+message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Formating of code is possible.")
+ADD_CUSTOM_TARGET(staticcheck    COMMAND ${CPPCHECK} --force  --suppress=unusedFunction --std=c++11 --enable=all -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}  ./src/*.cc  ./search/src/*.cc ./rootIO/src/*.cc  )
 endif()
 ########################################################################
 ## CPACK
@@ -274,48 +279,6 @@ set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
 SET(CPACK_INSTALL_PREFIX "/usr")
 SET(CPACK_OUTPUT_FILE_PREFIX binpackages)
 
-
-SET(CPACK_BINARY_RPM "ON")
-#RPM-specific settings
-set(CPACK_RPM_PACKAGE_DEBUG ON)
-set(CPACK_RPM_PACKAGE_NAME "HepMC3")
-set(CPACK_RPM_COMPONENT_INSTALL ON)
-set(CPACK_RPM_PACKAGE_LICENSE "GPL")
-set(CPACK_RPM_PACKAGE_GROUP "General")
-set(CPACK_RPM_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${CPACK_PACKAGE_RELEASE}")
-set(CPACK_RPM_libs_PACKAGE_SUMMARY  "HepMC3 libraries")
-set(CPACK_RPM_devel_PACKAGE_SUMMARY "Headers for HepMC3 libraries")
-set(CPACK_RPM_search_libs_PACKAGE_SUMMARY  "HepMC3 headers for event navigation")
-set(CPACK_RPM_search_devel_PACKAGE_SUMMARY  "HepMC3 libraries for event navigation")
-set(CPACK_RPM_examples_PACKAGE_SUMMARY "Examples for HepMC3 library")
-set(CPACK_RPM_libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_devel_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_search_libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_search_devel_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_examples_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_devel_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-libs")
-set(CPACK_RPM_search_devel_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-search-libs")
-set(CPACK_RPM_examples_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-libs, ${CPACK_RPM_PACKAGE_NAME}-rootIO-libs, ${CPACK_RPM_PACKAGE_NAME}-search-libs")
-#Everything that goes before  HepMC , i.e. top level directories,should be excluded
-#This feature is working fine only in the recent CPackRPM module -- see cmake/modules directory.
-set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${CPACK_PACKAGING_INSTALL_PREFIX} ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} )
-
-
-
-SET(CPACK_BINARY_DEB "ON")
-#DEB-specific settings
-set(CPACK_DEBIAN_PACKAGE_NAME "HepMC3")
-set(CPACK_DEB_COMPONENT_INSTALL ON)
-set(CPACK_DEBIAN_PACKAGE_LICENSE "GPL")
-set(CPACK_DEBIAN_PACKAGE_GROUP "General")
-set(CPACK_DEBIAN_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${CPACK_PACKAGE_RELEASE}")
-set(CPACK_DEBIAN_devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-libs")
-set(CPACK_DEBIAN_search_devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-search-libs")
-set(CPACK_DEBIAN_examples_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-libs, ${CPACK_DEBIAN_PACKAGE_NAME}-rootIO-libs")
-set(CPACK_DEBIAN_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${CPACK_PACKAGING_INSTALL_PREFIX} ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} )
-SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "HepMC3 Developers")
-
-
 #NSIS-specific settings
 SET(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SOURCE_DIR}/COPYING)
 
@@ -325,20 +288,10 @@ if (HEPMC3_ENABLE_SEARCH)
 list(APPEND CPACK_COMPONENTS_ALL   searchlibs   searchdevel)
 endif()
 
-
 if (HEPMC3_BUILD_DOCS)
 list(APPEND CPACK_COMPONENTS_ALL   doc)
 endif()
-
 if(ROOT_FOUND)
 list(APPEND CPACK_COMPONENTS_ALL   rootIOdevel rootIOlibs)
-set(CPACK_RPM_rootIO-libs_PACKAGE_SUMMARY  "HepMC3 libraries with ROOT I/O support")
-set(CPACK_RPM_rootIO-devel_PACKAGE_SUMMARY "Headers for HepMC3 libraries with ROOT I/O support")
-set(CPACK_RPM_rootIO-libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_rootIO-devel_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_rootIO-libs_PACKAGE_REQUIRES   "root, ${CPACK_RPM_PACKAGE_NAME}-libs")
-set(CPACK_RPM_rootIO-devel_PACKAGE_REQUIRES   "${CPACK_RPM_PACKAGE_NAME}-devel, ${CPACK_RPM_PACKAGE_NAME}-rootIO-libs")
-SET(CPACK_DEBIAN_rootIO-libs_PACKAGE_DEPENDS "libroot, ${CPACK_DEBIAN_PACKAGE_NAME}-libs")
-SET(CPACK_DEBIAN_rootIO-devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-devel, ${CPACK_DEBIAN_PACKAGE_NAME}-rootIO-libs")
 endif()
 INCLUDE(CPack)
