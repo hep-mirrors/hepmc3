@@ -23,7 +23,7 @@ ReaderAscii::ReaderAscii(const string &filename)
     : m_file(filename), m_stream(0), m_isstream(false)
 {
     if( !m_file.is_open() ) {
-        ERROR( "ReaderAscii: could not open input file: "<<filename )
+        HEPMC3_ERROR( "ReaderAscii: could not open input file: "<<filename )
     }
     set_run_info(make_shared<GenRunInfo>());
 }
@@ -34,7 +34,7 @@ ReaderAscii::ReaderAscii(std::istream & stream)
     : m_stream(&stream), m_isstream(true)
 {
     if( !m_stream->good() ) {
-        ERROR( "ReaderAscii: could not open input stream " )
+        HEPMC3_ERROR( "ReaderAscii: could not open input stream " )
     }
     set_run_info(make_shared<GenRunInfo>());
 }
@@ -71,7 +71,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         if( strncmp(buf,"HepMC",5) == 0 ) {
             if( strncmp(buf,"HepMC::Version",14) != 0 && strncmp(buf,"HepMC::Asciiv3",14)!=0 )
             {
-                WARNING( "ReaderAscii: found unsupported expression in header. Will close the input." )
+                HEPMC3_WARNING( "ReaderAscii: found unsupported expression in header. Will close the input." )
                 std::cout<<buf<<std::endl;
                 m_isstream ? m_stream->clear(ios::eofbit) : m_file.clear(ios::eofbit);
             }
@@ -117,7 +117,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 is_parsing_successful = parse_run_attribute(buf);
             break;
         default:
-            WARNING( "ReaderAscii: skipping unrecognised prefix: " << buf[0] )
+            HEPMC3_WARNING( "ReaderAscii: skipping unrecognised prefix: " << buf[0] )
             is_parsing_successful = true;
             break;
         }
@@ -132,31 +132,31 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
     // Check if all particles and vertices were parsed
     if ((int)evt.particles().size() > vertices_and_particles.second ) {
-        ERROR( "ReaderAscii: too many particles were parsed" )
+        HEPMC3_ERROR( "ReaderAscii: too many particles were parsed" )
         printf("%zu  vs  %i expected\n",evt.particles().size(),vertices_and_particles.second );
         is_parsing_successful = false;
     }
     if ((int)evt.particles().size() < vertices_and_particles.second ) {
-        ERROR( "ReaderAscii: too few  particles were parsed" )
+        HEPMC3_ERROR( "ReaderAscii: too few  particles were parsed" )
         printf("%zu  vs  %i expected\n",evt.particles().size(),vertices_and_particles.second );
         is_parsing_successful = false;
     }
 
     if ((int)evt.vertices().size()  > vertices_and_particles.first) {
-        ERROR( "ReaderAscii: too many vertices were parsed" )
+        HEPMC3_ERROR( "ReaderAscii: too many vertices were parsed" )
         printf("%zu  vs  %i expected\n",evt.vertices().size(),vertices_and_particles.first );
         is_parsing_successful =  false;
     }
 
     if ((int)evt.vertices().size()  < vertices_and_particles.first) {
-        ERROR( "ReaderAscii: too few vertices were parsed" )
+        HEPMC3_ERROR( "ReaderAscii: too few vertices were parsed" )
         printf("%zu  vs  %i expected\n",evt.vertices().size(),vertices_and_particles.first );
         is_parsing_successful =  false;
     }
-    // Check if there were errors during parsing
+    // Check if there were HEPMC3_ERRORs during parsing
     if( !is_parsing_successful ) {
-        ERROR( "ReaderAscii: event parsing failed. Returning empty event" )
-        DEBUG( 1, "Parsing failed at line:" << endl << buf )
+        HEPMC3_ERROR( "ReaderAscii: event parsing failed. Returning empty event" )
+        HEPMC3_DEBUG( 1, "Parsing failed at line:" << endl << buf )
 
         evt.clear();
         m_isstream ? m_stream->clear(ios::badbit) : m_file.clear(ios::badbit);
@@ -228,7 +228,7 @@ pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *bu
         evt.shift_position_to( position );
     }
 
-    DEBUG( 10, "ReaderAscii: E: "<<event_no<<" ("<<ret.first<<"V, "<<ret.second<<"P)" )
+    HEPMC3_DEBUG( 10, "ReaderAscii: E: "<<event_no<<" ("<<ret.first<<"V, "<<ret.second<<"P)" )
 
     return ret;
 }
@@ -266,7 +266,7 @@ bool ReaderAscii::parse_units(GenEvent &evt, const char *buf) {
 
     evt.set_units(momentum_unit,length_unit);
 
-    DEBUG( 10, "ReaderAscii: U: " << Units::name(evt.momentum_unit()) << " " << Units::name(evt.length_unit()) )
+    HEPMC3_DEBUG( 10, "ReaderAscii: U: " << Units::name(evt.momentum_unit()) << " " << Units::name(evt.length_unit()) )
 
     return true;
 }
@@ -334,7 +334,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
 
     }
 
-    DEBUG( 10, "ReaderAscii: V: "<<id<<" with "<<data->particles_in().size()<<" particles)" )
+    HEPMC3_DEBUG( 10, "ReaderAscii: V: "<<id<<" with "<<data->particles_in().size()<<" particles)" )
 
     evt.add_vertex(data);
 //Restore vertex id, as it is used to build connections inside event.
@@ -355,7 +355,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 
     if( atoi(cursor) != (int)evt.particles().size() + 1 ) {
         /// @todo Should be an exception
-        ERROR( "ReaderAscii: particle ID mismatch" )
+        HEPMC3_ERROR( "ReaderAscii: particle ID mismatch" )
         return false;
     }
 
@@ -426,7 +426,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 
     evt.add_particle(data);
 
-    DEBUG( 10, "ReaderAscii: P: "<<data->id()<<" ( mother: "<<mother_id<<", pid: "<<data->pid()<<")" )
+    HEPMC3_DEBUG( 10, "ReaderAscii: P: "<<data->id()<<" ( mother: "<<mother_id<<", pid: "<<data->pid()<<")" )
 
     return true;
 }

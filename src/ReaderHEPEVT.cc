@@ -19,7 +19,7 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
     : m_file(filename), m_stream(0), m_isstream(false), m_vertices_positions_present(true)
 {
     if( !m_file.is_open() ) {
-        ERROR( "ReaderHEPEVT: could not open input file: "<<filename )
+        HEPMC3_ERROR( "ReaderHEPEVT: could not open input file: "<<filename )
     }
     else
     {
@@ -33,7 +33,7 @@ ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
     : m_stream(&stream), m_isstream(true), m_vertices_positions_present(true)
 {
     if( !m_stream->good() ) {
-        ERROR( "ReaderHEPEVT: could not open input stream  ")
+        HEPMC3_ERROR( "ReaderHEPEVT: could not open input stream  ")
     }
     else
     {
@@ -92,12 +92,12 @@ bool ReaderHEPEVT::read_hepevt_particle( int i, bool iflong )
     std::stringstream st_v(buf_v);
     if (iflong)
     {
-        if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[2]>>intcodes[3]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[3]>>fltcodes1[4])) { ERROR( "ReaderHEPEVT: Error reading particle momenta");     return false;}
-        if (!static_cast<bool>(st_v>>fltcodes2[0]>>fltcodes2[1]>>fltcodes2[2]>>fltcodes2[3])) { ERROR( "ReaderHEPEVT: Error reading particle vertex");  return false;}
+        if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[2]>>intcodes[3]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[3]>>fltcodes1[4])) { HEPMC3_ERROR( "ReaderHEPEVT: HEPMC3_ERROR reading particle momenta");     return false;}
+        if (!static_cast<bool>(st_v>>fltcodes2[0]>>fltcodes2[1]>>fltcodes2[2]>>fltcodes2[3])) { HEPMC3_ERROR( "ReaderHEPEVT: HEPMC3_ERROR reading particle vertex");  return false;}
     }
     else
     {
-        if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[4])) {ERROR( "ReaderHEPEVT: Error reading particle momenta");     return false;}
+        if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[4])) {HEPMC3_ERROR( "ReaderHEPEVT: HEPMC3_ERROR reading particle momenta");     return false;}
         intcodes[2]=0;//FIXME!
         intcodes[3]=0;//FIXME!
         fltcodes1[3]=std::sqrt(fltcodes1[0]*fltcodes1[0]+fltcodes1[1]*fltcodes1[1]+fltcodes1[2]*fltcodes1[2]+fltcodes1[4]*fltcodes1[4]);

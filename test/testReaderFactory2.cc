@@ -18,7 +18,7 @@
 using namespace HepMC3;
 int main()
 {
-	printf("%s\n", getenv("LD_LIBRARY_PATH"));
+    printf("%s\n", getenv("LD_LIBRARY_PATH"));
     std::shared_ptr<Reader> input = deduce_reader("inputReaderFactory2.hepmc");
     if(input->failed()) return 1;
     WriterAscii             outputA("frominputReaderFactory2.hepmc3");

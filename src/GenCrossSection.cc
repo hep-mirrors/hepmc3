@@ -65,10 +65,10 @@ bool GenCrossSection::from_string(const string &att) {
         cross_section_errors.push_back(atof(cursor));
     }
     if (cross_sections.size()>=max_n_cross_sections)
-        WARNING( "GenCrossSection::from_string: too many optional cross-sections  N="<<cross_sections.size()<<" or ill-formed input:"<<att )
+        HEPMC3_WARNING( "GenCrossSection::from_string: too many optional cross-sections  N="<<cross_sections.size()<<" or ill-formed input:"<<att )
         if (cross_sections.size()!=N)
 //  So far it is not clear if there should be a warning or not
-            WARNING( "GenCrossSection::from_string: optional cross-sections are available not for all weights")
+            HEPMC3_WARNING( "GenCrossSection::from_string: optional cross-sections are available not for all weights")
             for (size_t i=cross_sections.size(); i<N; i++) {cross_sections[i]=cross_section; cross_section_errors[i]=cross_section_error;}
 
     return true;

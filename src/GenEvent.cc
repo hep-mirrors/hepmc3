@@ -118,7 +118,7 @@ void GenEvent::add_vertex( GenVertexPtr v ) {
 void GenEvent::remove_particle( GenParticlePtr p ) {
     if( !p || p->parent_event() != this ) return;
 
-    DEBUG( 30, "GenEvent::remove_particle - called with particle: "<<p->id() );
+    HEPMC3_DEBUG( 30, "GenEvent::remove_particle - called with particle: "<<p->id() );
     GenVertexPtr end_vtx = p->end_vertex();
     if( end_vtx ) {
         end_vtx->remove_particle_in(p);
@@ -135,7 +135,7 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
         if( prod_vtx->particles_out().size() == 0 ) remove_vertex(prod_vtx);
     }
 
-    DEBUG( 30, "GenEvent::remove_particle - erasing particle: " << p->id() )
+    HEPMC3_DEBUG( 30, "GenEvent::remove_particle - erasing particle: " << p->id() )
 
     int idx = p->id();
     vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
@@ -195,7 +195,7 @@ void GenEvent::remove_particles( vector<GenParticlePtr> v ) {
 void GenEvent::remove_vertex( GenVertexPtr v ) {
     if( !v || v->parent_event() != this ) return;
 
-    DEBUG( 30, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
+    HEPMC3_DEBUG( 30, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
     shared_ptr<GenVertex> null_vtx;
 
     for(auto p: v->particles_in() ) {
@@ -210,7 +210,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     }
 
     // Erase this vertex from vertices list
-    DEBUG( 30, "GenEvent::remove_vertex   - erasing vertex: " << v->id() )
+    HEPMC3_DEBUG( 30, "GenEvent::remove_vertex   - erasing vertex: " << v->id() )
 
     int idx = -v->id();
     vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
@@ -306,14 +306,14 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
         }
     }
 
-    DEBUG_CODE_BLOCK(
+    HEPMC3_DEBUG_CODE_BLOCK(
         unsigned int sorting_loop_count = 0;
         unsigned int max_deque_size     = 0;
     )
 
     // Add vertices to the event in topological order
     while( !sorting.empty() ) {
-        DEBUG_CODE_BLOCK(
+        HEPMC3_DEBUG_CODE_BLOCK(
             if( sorting.size() > max_deque_size ) max_deque_size = sorting.size();
             ++sorting_loop_count;
         )
@@ -374,12 +374,12 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
                 ++((*next++)->m_id);
             }
         } else {
-            WARNING( "ReaderAsciiHepMC2: Suspicious looking rootvertex found. Will try to cope." )
+            HEPMC3_WARNING( "ReaderAsciiHepMC2: Suspicious looking rootvertex found. Will try to cope." )
         }
     }
 
-    DEBUG_CODE_BLOCK(
-        DEBUG( 6, "GenEvent - particles sorted: "
+    HEPMC3_DEBUG_CODE_BLOCK(
+        HEPMC3_DEBUG( 6, "GenEvent - particles sorted: "
                <<this->particles().size()<<", max deque size: "
                <<max_deque_size<<", iterations: "<<sorting_loop_count )
     )
@@ -528,7 +528,7 @@ bool GenEvent::reflect(const int axis)
 {
     if (axis>3||axis<0)
     {
-        WARNING( "GenEvent::reflect: wrong axis" )
+        HEPMC3_WARNING( "GenEvent::reflect: wrong axis" )
         return false;
     }
     switch (axis)
@@ -562,17 +562,17 @@ bool GenEvent::boost( const FourVector&  delta )
     double deltalength2d=delta.length2();
     if (deltalength2d>1.0)
     {
-        WARNING( "GenEvent::boost: wrong large boost vector. Will leave event as is." )
+        HEPMC3_WARNING( "GenEvent::boost: wrong large boost vector. Will leave event as is." )
         return false;
     }
     if (std::abs(deltalength2d-1.0)<std::numeric_limits<double>::epsilon())
     {
-        WARNING( "GenEvent::boost: too large gamma. Will leave event as is." )
+        HEPMC3_WARNING( "GenEvent::boost: too large gamma. Will leave event as is." )
         return false;
     }
     if (std::abs(deltalength2d)<std::numeric_limits<double>::epsilon())
     {
-        WARNING( "GenEvent::boost: wrong small boost vector. Will leave event as is." )
+        HEPMC3_WARNING( "GenEvent::boost: wrong small boost vector. Will leave event as is." )
         return true;
     }
     long double deltaX=delta.x();
@@ -689,7 +689,7 @@ void GenEvent::write_data(GenEventData& data) const {
             bool status = vt2.second->to_string(st);
 
             if( !status ) {
-                WARNING( "GenEvent::write_data: problem serializing attribute: "<<vt1.first )
+                HEPMC3_WARNING( "GenEvent::write_data: problem serializing attribute: "<<vt1.first )
             }
             else {
                 data.attribute_id.push_back(vt2.first);
@@ -741,7 +741,7 @@ void GenEvent::read_data(const GenEventData &data) {
         (+-)  --  particle has end vertex
         (-+)  --  particle  has production vertex
         */
-        if ( (id1<0&&id2<0)|| (id1>0&&id2>0) )   { WARNING( "GenEvent::read_data: wrong link: "<<id1<<" "<<id2 ); continue;}
+        if ( (id1<0&&id2<0)|| (id1>0&&id2>0) )   { HEPMC3_WARNING( "GenEvent::read_data: wrong link: "<<id1<<" "<<id2 ); continue;}
 
         if ( id1 > 0 ) { m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] ); continue; }
         if ( id1 < 0 ) { m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );   continue; }
@@ -780,12 +780,12 @@ void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
 void GenEvent::add_beam_particle(GenParticlePtr p1) {
     if (!p1)
     {
-        WARNING("Attempting to add an empty particle as beam particle. Ignored.")
+        HEPMC3_WARNING("Attempting to add an empty particle as beam particle. Ignored.")
         return;
     }
     if( p1->in_event()) if (p1->parent_event()!=this)
         {
-            WARNING("Attempting to add particle from another event. Ignored.")
+            HEPMC3_WARNING("Attempting to add particle from another event. Ignored.")
             return;
         }
     if (p1->production_vertex())  p1->production_vertex()->remove_particle_out(p1);

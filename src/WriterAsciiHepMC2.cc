@@ -29,12 +29,12 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, shared_ptr<Gen
       m_buffer_size( 256*1024 ),
       m_particle_counter(0)
 {
-    WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
+    HEPMC3_WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
     set_run_info(run);
     if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
     if ( !m_file.is_open() )
     {
-        ERROR( "WriterAsciiHepMC2: could not open output file: "<<filename )
+        HEPMC3_ERROR( "WriterAsciiHepMC2: could not open output file: "<<filename )
     }
     else
     {
@@ -52,7 +52,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, shared_ptr<GenRunInfo
       m_buffer_size( 256*1024 ),
       m_particle_counter(0)
 {
-    WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
+    HEPMC3_WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
     set_run_info(run);
     if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
     (*m_stream) << "HepMC::Version " << version() << std::endl;
@@ -174,7 +174,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
 
             if( !status )
             {
-                WARNING( "WriterAsciiHepMC2::write_event: problem serializing attribute: "<<vt1.first )
+                HEPMC3_WARNING( "WriterAsciiHepMC2::write_event: problem serializing attribute: "<<vt1.first )
             }
             else
             {
@@ -222,13 +222,13 @@ void WriterAsciiHepMC2::allocate_buffer()
         }     catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
-            WARNING( "WriterAsciiHepMC2::allocate_buffer:"<<e.what()<<" buffer size too large. Dividing by 2. New size: " << m_buffer_size )
+            HEPMC3_WARNING( "WriterAsciiHepMC2::allocate_buffer:"<<e.what()<<" buffer size too large. Dividing by 2. New size: " << m_buffer_size )
         }
     }
 
     if ( !m_buffer )
     {
-        ERROR( "WriterAsciiHepMC2::allocate_buffer: could not allocate buffer!" )
+        HEPMC3_ERROR( "WriterAsciiHepMC2::allocate_buffer: could not allocate buffer!" )
         return;
     }
 
