@@ -27,7 +27,7 @@ ReaderPlugin::ReaderPlugin(std::istream & stream,const std::string &libname, con
 
 #if defined(__linux__) || defined(__darwin__)
     dll_handle=nullptr;
-    dll_handle = dlopen(libname.c_str(), RTLD_NOW | RTLD_GLOBAL);
+    dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n",libname.c_str(),dlerror()); m_reader=shared_ptr<Reader>(nullptr); return;  }
     Reader* (*newReader)(std::istream & stream);
     newReader=(Reader* (*)(std::istream & stream))dlsym(dll_handle, newreader.c_str());
@@ -50,7 +50,7 @@ ReaderPlugin::ReaderPlugin(const std::string& filename,const std::string &libnam
 
 #if defined(__linux__) || defined(__darwin__)
     dll_handle=nullptr;
-    dll_handle = dlopen(libname.c_str(), RTLD_NOW | RTLD_GLOBAL);
+    dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n",libname.c_str(),dlerror()); m_reader=shared_ptr<Reader>(nullptr); return;  }
     Reader* (*newReader)(const std::string&);
     newReader=(Reader* (*)(const std::string&))dlsym(dll_handle, newreader.c_str());
