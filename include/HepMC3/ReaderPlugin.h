@@ -20,6 +20,9 @@
 #include "HepMC3/GenEvent.h"
 
 #ifdef WIN32
+#define WIN32_LEAN_AND_MEAN
+#define NOWINBASEINTERLOCK
+#include <intrin.h>
 #include <windows.h>
 #define HEPMC3_HANDLETYPE HINSTANCE
 #endif

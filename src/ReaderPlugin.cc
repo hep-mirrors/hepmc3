@@ -21,7 +21,7 @@ ReaderPlugin::ReaderPlugin(std::istream & stream,const std::string &libname, con
     if (!dll_handle) { printf("Error  while loading library %s\n",libname.c_str()); m_reader=shared_ptr<Reader>(nullptr); return;  }
     typedef Reader* (__stdcall *f_funci)(std::istream & stream);
     f_funci newReader = (f_funci)GetProcAddress(dll_handle, newreader.c_str());
-    if (!newReader) { printf("Error  while loading function %s from  library %s: %s\n",newreader.c_str(),libname.c_str()); m_reader=shared_ptr<Reader>(nullptr); return;  }
+    if (!newReader) { printf("Error  while loading function %s from  library %s\n",newreader.c_str(),libname.c_str()); m_reader=shared_ptr<Reader>(nullptr); return;  }
     m_reader=std::shared_ptr<Reader>(newReader(stream));
 #endif
 
@@ -44,7 +44,7 @@ ReaderPlugin::ReaderPlugin(const std::string& filename,const std::string &libnam
     if (!dll_handle) { printf("Error  while loading library %s\n",libname.c_str()); m_reader=shared_ptr<Reader>(nullptr); return;  }
     typedef Reader* (__stdcall *f_funci)(const std::string&);
     f_funci newReader = (f_funci)GetProcAddress(dll_handle, newreader.c_str());
-    if (!newReader) { printf("Error  while loading function %s from  library %s: %s\n",newreader.c_str(),libname.c_str()); m_reader=shared_ptr<Reader>(nullptr); return;  }
+    if (!newReader) { printf("Error  while loading function %s from  library %s\n",newreader.c_str(),libname.c_str()); m_reader=shared_ptr<Reader>(nullptr); return;  }
     m_reader=std::shared_ptr<Reader>(newReader(filename.c_str()));
 #endif
 
