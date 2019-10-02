@@ -3598,6 +3598,105 @@ void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string co
 }
 
 
+// File: HepMC3/ReaderPlugin.cpp
+#include <HepMC3/Attribute.h>
+#include <HepMC3/Data/GenEventData.h>
+#include <HepMC3/Data/GenParticleData.h>
+#include <HepMC3/FourVector.h>
+#include <HepMC3/GenCrossSection.h>
+#include <HepMC3/GenEvent.h>
+#include <HepMC3/GenHeavyIon.h>
+#include <HepMC3/GenParticle.h>
+#include <HepMC3/GenRunInfo.h>
+#include <HepMC3/GenVertex.h>
+#include <HepMC3/ReaderPlugin.h>
+#include <functional>
+#include <iterator>
+#include <map>
+#include <memory>
+#include <sstream> // __str__
+#include <string>
+#include <utility>
+#include <vector>
+
+#include <pybind11/pybind11.h>
+#include <functional>
+#include <string>
+#include <HepMC3/Version.h>
+#include <HepMC3/Reader.h>
+#include <HepMC3/Writer.h>
+#include <HepMC3/Print.h>
+#include <src/stl_binders.hpp>
+#include <src/binders.hpp>
+
+
+#ifndef BINDER_PYBIND11_TYPE_CASTER
+	#define BINDER_PYBIND11_TYPE_CASTER
+	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
+	PYBIND11_DECLARE_HOLDER_TYPE(T, T*);
+	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
+#endif
+
+// HepMC3::ReaderPlugin file:HepMC3/ReaderPlugin.h line:33
+struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
+	using HepMC3::ReaderPlugin::ReaderPlugin;
+
+	bool read_event(class HepMC3::GenEvent & a0) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderPlugin *>(this), "read_event");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::overload_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return ReaderPlugin::read_event(a0);
+	}
+	void close() override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderPlugin *>(this), "close");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>();
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::overload_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return ReaderPlugin::close();
+	}
+	bool failed() override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderPlugin *>(this), "failed");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>();
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::overload_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return ReaderPlugin::failed();
+	}
+};
+
+void bind_HepMC3_ReaderPlugin(std::function< pybind11::module &(std::string const &namespace_) > &M)
+{
+	{ // HepMC3::ReaderPlugin file:HepMC3/ReaderPlugin.h line:33
+		pybind11::class_<HepMC3::ReaderPlugin, std::shared_ptr<HepMC3::ReaderPlugin>, PyCallBack_HepMC3_ReaderPlugin, HepMC3::Reader> cl(M("HepMC3"), "ReaderPlugin", "");
+		pybind11::handle cl_type = cl;
+
+		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &>(), pybind11::arg("filename"), pybind11::arg("libname"), pybind11::arg("newreader") );
+
+		cl.def("read_event", (bool (HepMC3::ReaderPlugin::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderPlugin::read_event, "Reading event \n\nC++: HepMC3::ReaderPlugin::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("ev"));
+		cl.def("close", (void (HepMC3::ReaderPlugin::*)()) &HepMC3::ReaderPlugin::close, "Close \n\nC++: HepMC3::ReaderPlugin::close() --> void");
+		cl.def("failed", (bool (HepMC3::ReaderPlugin::*)()) &HepMC3::ReaderPlugin::failed, "State \n\nC++: HepMC3::ReaderPlugin::failed() --> bool");
+	}
+}
+
+
 #include <map>
 #include <memory>
 #include <stdexcept>
@@ -3626,6 +3725,7 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_HepMC3_LHEF_2(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_HepMC3_ReaderPlugin(std::function< pybind11::module &(std::string const &namespace_) > &M);
 
 
 PYBIND11_MODULE(pyHepMC3, root_module) {
@@ -3667,6 +3767,7 @@ PYBIND11_MODULE(pyHepMC3, root_module) {
 	bind_HepMC3_LHEF_1(M);
 	bind_HepMC3_LHEF_2(M);
 	bind_HepMC3_LHEFAttributes(M);
+	bind_HepMC3_ReaderPlugin(M);
 
 }
 
@@ -3690,6 +3791,7 @@ PYBIND11_MODULE(pyHepMC3, root_module) {
 // HepMC3/LHEF_1.cpp
 // HepMC3/LHEF_2.cpp
 // HepMC3/LHEFAttributes.cpp
+// HepMC3/ReaderPlugin.cpp
 
 // Modules list file: /ptmp/mpp/andriish/HOME/HepMC3/python/src/pyHepMC3.modules
 // HepMC3 LHEF std 

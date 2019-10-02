@@ -39,6 +39,7 @@
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/LHEFAttributes.h>
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderLHEF.h>
 
+#include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderPlugin.h>
 
 
 #include <memory>
