@@ -8,6 +8,7 @@
 ///
 #include "HepMC3/Print.h"
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/Reader.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
 #include "HepMC3/ReaderAscii.h"
@@ -15,6 +16,8 @@
 #include "HepMC3/WriterHEPEVT.h"
 #include "HepMC3/ReaderHEPEVT.h"
 #include "HepMC3/ReaderLHEF.h"
+#include "HepMC3/ReaderFactory.h"
+
 
 #ifdef HEPMC3_ROOTIO
 #include "HepMC3/ReaderRoot.h"
@@ -46,7 +49,7 @@
 
 #include "cmdline.h"
 using namespace HepMC3;
-enum formats {hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, gz, none};
+enum formats {autodetect, hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, gz, none};
 int main(int argc, char** argv)
 {
     gengetopt_args_info ai;
@@ -59,6 +62,7 @@ int main(int argc, char** argv)
         exit(1);
     }
     std::map<std::string,formats> format_map;
+    format_map.insert(std::pair<std::string,formats> ( "auto", autodetect ));
     format_map.insert(std::pair<std::string,formats> ( "hepmc2", hepmc2 ));
     format_map.insert(std::pair<std::string,formats> ( "hepmc3", hepmc3 ));
     format_map.insert(std::pair<std::string,formats> ( "hpe", hpe  ));
@@ -84,25 +88,33 @@ int main(int argc, char** argv)
     long int  first_event_number = ai.first_event_number_arg;
     long int  last_event_number = ai.last_event_number_arg;
     long int  print_each_events_parsed = ai.print_every_events_parsed_arg;
-    Reader*      input_file=0;
+    std::shared_ptr<Reader>      input_file;
     bool ignore_writer=false;
     switch (format_map.at(std::string(ai.input_format_arg)))
     {
+    case autodetect:
+        input_file=deduce_reader(ai.inputs[0]);
+        if (!input_file) 
+        {
+        printf("Input format  detection for file %s has failed\n",ai.input_format_arg);
+        exit(2);
+        }
+        break;
     case hepmc2:
-        input_file=new ReaderAsciiHepMC2(ai.inputs[0]);
+        input_file=std::make_shared<ReaderAsciiHepMC2>(ai.inputs[0]);
         break;
     case hepmc3:
-        input_file=new ReaderAscii(ai.inputs[0]);
+        input_file=std::make_shared<ReaderAscii>(ai.inputs[0]);
         break;
     case hpe:
-        input_file=new ReaderHEPEVT(ai.inputs[0]);
+        input_file=std::make_shared<ReaderHEPEVT>(ai.inputs[0]);
         break;
     case lhef:
-        input_file=new ReaderLHEF(ai.inputs[0]);
+        input_file=std::make_shared<ReaderLHEF>(ai.inputs[0]);
         break;
     case gz:
 #ifdef HEPMCCONVERT_EXTENSION_GZ
-        input_file=new ReaderGZ(ai.inputs[0]);
+        input_file=std::make_shared<ReaderGZ>(ai.inputs[0]);
         break;
 #else
         printf("Input format %s  is not supported\n",ai.input_format_arg);
@@ -110,7 +122,7 @@ int main(int argc, char** argv)
 #endif
     case treeroot:
 #ifdef HEPMC3_ROOTIO
-        input_file=new ReaderRootTree(ai.inputs[0]);
+        input_file=std::make_shared<ReaderRootTree>(ai.inputs[0]);
         break;
 #else
         printf("Input format %s  is not supported\n",ai.input_format_arg);
@@ -118,7 +130,7 @@ int main(int argc, char** argv)
 #endif
     case root:
 #ifdef HEPMC3_ROOTIO
-        input_file=new ReaderRoot(ai.inputs[0]);
+        input_file=std::make_shared<ReaderRoot>(ai.inputs[0]);
         break;
 #else
         printf("Input format %s  is not supported\n",ai.input_format_arg);
@@ -129,21 +141,21 @@ int main(int argc, char** argv)
         exit(2);
         break;
     }
-    Writer*      output_file=0;
+    std::shared_ptr<Writer>      output_file;
     switch (format_map.at(std::string(ai.output_format_arg)))
     {
     case hepmc2:
-        output_file=new WriterAsciiHepMC2(ai.inputs[1]);
+        output_file=std::make_shared<WriterAsciiHepMC2>(ai.inputs[1]);
         break;
     case hepmc3:
-        output_file=new WriterAscii(ai.inputs[1]);
+        output_file=std::make_shared<WriterAscii>(ai.inputs[1]);
         break;
     case hpe:
-        output_file=new WriterHEPEVT(ai.inputs[1]);
+        output_file=std::make_shared<WriterHEPEVT>(ai.inputs[1]);
         break;
     case root:
 #ifdef HEPMC3_ROOTIO
-        output_file=new WriterRoot(ai.inputs[1]);
+        output_file=std::make_shared<WriterRoot>(ai.inputs[1]);
         break;
 #else
         printf("Output format %s  is not supported\n",ai.output_format_arg);
@@ -151,7 +163,7 @@ int main(int argc, char** argv)
 #endif
     case treeroot:
 #ifdef HEPMC3_ROOTIO
-        output_file=new WriterRootTree(ai.inputs[1]);
+        output_file=std::make_shared<WriterRootTree>(ai.inputs[1]);
         break;
 #else
         printf("Output format %s  is not supported\n",ai.output_format_arg);
@@ -160,9 +172,9 @@ int main(int argc, char** argv)
     /* Extension example*/
     case treerootopal:
 #ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
-        output_file=new WriterRootTreeOPAL(ai.inputs[1]);
-        ((WriterRootTreeOPAL*)(output_file))->init_branches();
-        if (options.find("Run")!=options.end()) ((WriterRootTreeOPAL*)(output_file))->set_run_number(std::atoi(options.at("Run").c_str()));
+        output_file=std::make_shared<WriterRootTreeOPAL>(ai.inputs[1]);
+        (std::dynamic_pointer_cast<WriterRootTreeOPAL>(output_file))->init_branches();
+        if (options.find("Run")!=options.end()) (std::dynamic_pointer_cast<WriterRootTreeOPAL>(output_file))->set_run_number(std::atoi(options.at("Run").c_str()));
         break;
 #else
         printf("Output format %s  is not supported\n",ai.output_format_arg);
@@ -171,7 +183,7 @@ int main(int argc, char** argv)
 #endif
     case hpezeus:
 #ifdef HEPMCCONVERT_EXTENSION_HEPEVTZEUS
-        output_file=new WriterHEPEVTZEUS(ai.inputs[1]);
+        output_file=std::make_shared<WriterHEPEVTZEUS>(ai.inputs[1]);
         break;
 #else
         printf("Output format %s  is not supported\n",ai.output_format_arg);
@@ -179,8 +191,8 @@ int main(int argc, char** argv)
 #endif
     case dot:
 #ifdef HEPMCCONVERT_EXTENSION_DOT 
-       output_file=new WriterDOT(ai.inputs[1]);
-       if (options.find("Style")!=options.end()) ((WriterDOT*)(output_file))->set_style(std::atoi(options.at("Style").c_str()));
+       output_file=std::make_shared<WriterDOT>(ai.inputs[1]);
+       if (options.find("Style")!=options.end()) (std::dynamic_pointer_cast<WriterDOT>(output_file))->set_style(std::atoi(options.at("Style").c_str()));
        break;
 #else
         printf("Output format %s  is not supported\n",ai.output_format_arg);

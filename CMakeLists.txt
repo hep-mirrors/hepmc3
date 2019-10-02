@@ -148,6 +148,7 @@ ${PROJECT_SOURCE_DIR}/src/LHEFAttributes.cc
 ${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc  
 ${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc     
 ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
+${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc   
 )
 
 #We need to export all symbols on WIn to build .lib files
@@ -167,6 +168,10 @@ set_target_properties(HepMC3 PROPERTIES SOVERSION 2)
 set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 if (MSVC)
 set_target_properties(HepMC3 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+endif()
+if (UNIX)
+target_link_libraries(HepMC3 PRIVATE dl)
+target_link_libraries(HepMC3_static PRIVATE dl)
 endif()
 configure_file(HepMC3-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-config )
 

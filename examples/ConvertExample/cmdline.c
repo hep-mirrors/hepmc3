@@ -34,7 +34,7 @@ const char *gengetopt_args_info_description = "";
 
 const char *gengetopt_args_info_help[] = {
   "  -h, --help                    Print help and exit",
-  "  -i, --input-format=STRING     Input format  (possible values=\"hepmc2\",\n                                  \"hepmc3\", \"hpe\", \"root\", \"treeroot\",\n                                  \"lhef\",\"gz\") (mandatory)",
+  "  -i, --input-format=STRING     Input format  (possible values=\"hepmc2\",\n                                 \"auto\", \"hepmc3\", \"hpe\", \"root\", \"treeroot\",\n                                  \"lhef\",\"gz\") (mandatory)",
   "  -o, --output-format=STRING    Output format  (possible values=\"hepmc2\",\n                                  \"hepmc3\", \"hpe\", \"root\", \"treeroot\",\n                                  \"treerootopal\", \"hpezeus\", \"dump\",\n                                  \"dot\",    \"none\") (mandatory)",
   "  -e, --extensions=STRING       Extensions, in a form extension=value, could be\n                                  passed to readers/writers",
   "      --events-limit=LONG       Limit of events to read from input\n                                  (default=`100000000')",
@@ -61,7 +61,7 @@ cmdline_parser_internal (int argc, char **argv, struct gengetopt_args_info *args
 static int
 cmdline_parser_required2 (struct gengetopt_args_info *args_info, const char *prog_name, const char *additional_error);
 
-const char *cmdline_parser_input_format_values[] = {"hepmc2", "hepmc3", "hpe", "root", "treeroot", "lhef" , "gz", 0}; /*< Possible values for input-format. */
+const char *cmdline_parser_input_format_values[] = {"auto", "hepmc2", "hepmc3", "hpe", "root", "treeroot", "lhef" , "gz", 0}; /*< Possible values for input-format. */
 const char *cmdline_parser_output_format_values[] = {"hepmc2", "hepmc3", "hpe", "root", "treeroot", "treerootopal", "hpezeus", "dump", "dot", 0}; /*< Possible values for output-format. */
 
 static char *

@@ -22,4 +22,6 @@ inline std::string version() {
 }
 }
 
+#define DECLARE_HEPMC3_READER_FILE(classname)  extern "C" { classname * new ## classname ## file (const std::string &filename ) { return new classname (filename);  } }
+#define DECLARE_HEPMC3_READER_STREAM(classname)  extern "C" { classname * new ## classname ## stream (std::istream & stream) { return new classname (filename);  } }
 #endif

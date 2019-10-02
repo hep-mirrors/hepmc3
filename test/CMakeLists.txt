@@ -10,6 +10,7 @@ macro( hepmc_test testname )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${CMAKE_CURRENT_BINARY_DIR}/${testname} )
   SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}")
+  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{LD_LIBRARY_PATH}")
   file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   string(REPLACE "test" "" ${testname} name)
@@ -24,12 +25,13 @@ macro( hepmc_root_test testname )
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../rootIO/include/)
-  target_link_libraries(${testname} HepMC3 HepMC3rootIO)
+  target_link_libraries(${testname} PRIVATE HepMC3 HepMC3rootIO)
    
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${testname} )
   SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}")
+  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{LD_LIBRARY_PATH}")
   file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   string(REPLACE "test" "" ${testname} name)
@@ -72,6 +74,9 @@ set( HepMC_root_tests
         testIO4
         testReaderFactory2
         )
+
+
+
 
 
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
@@ -261,7 +266,7 @@ macro( hepmc_mceghepmc2_test testname )
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/  ${CMAKE_CURRENT_SOURCE_DIR}/../search/include/ )  
-  target_link_libraries(hepmc2_${testname} ${HEPMC2_LIBRARIES}   MCEG2   )
+  target_link_libraries(hepmc2_${testname} PRIVATE ${HEPMC2_LIBRARIES}   MCEG2   )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( hepmc2_${testname} hepmc2_${testname} )
