@@ -380,8 +380,8 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
 
     HEPMC3_DEBUG_CODE_BLOCK(
         HEPMC3_DEBUG( 6, "GenEvent - particles sorted: "
-               <<this->particles().size()<<", max deque size: "
-               <<max_deque_size<<", iterations: "<<sorting_loop_count )
+                      <<this->particles().size()<<", max deque size: "
+                      <<max_deque_size<<", iterations: "<<sorting_loop_count )
     )
     return;
 }

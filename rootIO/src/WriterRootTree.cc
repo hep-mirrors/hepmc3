@@ -9,6 +9,7 @@
  *
  */
 #include "HepMC3/WriterRootTree.h"
+#include "HepMC3/Version.h"
 #include <cstdio>  // sprintf
 // ROOT header files
 #include "TFile.h"
@@ -16,6 +17,7 @@
 
 namespace HepMC3
 {
+DECLARE_HEPMC3_WRITER_FILE(WriterRootTree)
 
 WriterRootTree::WriterRootTree(const std::string &filename, shared_ptr<GenRunInfo> run):
     m_tree(0),

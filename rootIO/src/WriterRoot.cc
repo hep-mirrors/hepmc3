@@ -9,12 +9,14 @@
  *
  */
 #include "HepMC3/WriterRoot.h"
+#include "HepMC3/Version.h"
 #include <cstdio>  // sprintf
 // ROOT header files
 #include "TFile.h"
 #include "TTree.h"
 
 namespace HepMC3 {
+DECLARE_HEPMC3_WRITER_FILE(WriterRoot)
 
 WriterRoot::WriterRoot(const std::string &filename, shared_ptr<GenRunInfo> run):
     m_events_count(0) {

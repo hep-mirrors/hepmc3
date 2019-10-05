@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3)
-set(PROJECT_VERSION 3.01.02)
-SET(HEPMC3_VERSION 3.01.02)
+set(PROJECT_VERSION 3.02.00)
+SET(HEPMC3_VERSION 3.02.00)
 SET(HEPMC3_VERSION_MAJOR  3)
-SET(HEPMC3_VERSION_MINOR  1)
-SET(HEPMC3_VERSION_PATCH  2)
+SET(HEPMC3_VERSION_MINOR  2)
+SET(HEPMC3_VERSION_PATCH  0)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -149,6 +149,7 @@ ${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc
 ${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc     
 ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
 ${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc   
+${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc   
 )
 
 #We need to export all symbols on WIn to build .lib files

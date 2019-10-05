@@ -9,12 +9,12 @@
 #include <string>
 
 /// HepMC version string
-#define HEPMC3_VERSION "3.01.02"
+#define HEPMC3_VERSION "3.02.00"
 
 /// @brief HepMC version as an integer, HepMC X.Y.Z = 1000000*X + 1000*Y + Z
 ///
 /// Use like "#if HEPMC3_VERSION_CODE < 3001004" for < 3.01.04
-#define HEPMC3_VERSION_CODE 3001002
+#define HEPMC3_VERSION_CODE 3002000
 namespace HepMC3 {
 /// Get the HepMC library version string
 inline std::string version() {
@@ -22,6 +22,9 @@ inline std::string version() {
 }
 }
 
-#define DECLARE_HEPMC3_READER_FILE(classname)  extern "C" { classname * new ## classname ## file (const std::string &filename ) { return new classname (filename);  } }
-#define DECLARE_HEPMC3_READER_STREAM(classname)  extern "C" { classname * new ## classname ## stream (std::istream & stream) { return new classname (filename);  } }
+#define DECLARE_HEPMC3_READER_FILE(classname)    extern "C" { classname * new ## classname ## file (const std::string &filename ) { return new classname (filename);  } }
+#define DECLARE_HEPMC3_READER_STREAM(classname)  extern "C" { classname * new ## classname ## stream (std::istream & stream) { return new classname (stream);  } }
+#define DECLARE_HEPMC3_WRITER_FILE(classname)    extern "C" { classname * new ## classname ## file (const std::string &filename, shared_ptr<GenRunInfo> run ) { return new classname (filename,run);  } }
+#define DECLARE_HEPMC3_WRITER_STREAM(classname)  extern "C" { classname * new ## classname ## stream (std::ostream & stream, shared_ptr<GenRunInfo> run) { return new classname (stream,run);  } }
+
 #endif
