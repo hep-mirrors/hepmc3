@@ -114,7 +114,7 @@ endif()
 
 
 if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Python_VERSION_MAJOR} STREQUAL ${ver} AND ${verminor} STREQUAL "X")  OR "${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}" STREQUAL "${ver}.${verminor}" ))
-message(STATUS "HepMC3 python: Python found in ${Python_EXECUTABLE}. Python bindings generation is possible.")
+message(STATUS "HepMC3 python: Python verson ${ver}.${verminor} found in ${Python_EXECUTABLE}. Python bindings generation is possible.")
 if (${ver} STREQUAL 2)
 Python_add_library(pyHepMC3${Python_VERSION} MODULE  ${BN}   )
 if(ROOT_FOUND)
@@ -229,11 +229,20 @@ endforeach ( ptest ${HepMC_python_tests} )
 endif()
 
 else()
-  message(STATUS "HepMC3 python: Python version ${ver} not found. Python bindings for version ${ver} disabled.")
+  message(STATUS "HepMC3 python: Python version ${ver}.${verminor} not found. Python bindings for version ${ver}.${verminor} disabled.")
 endif()
 endmacro(bindings)
-
+if (HEPMC3_PYTHON_VERSIONS)
+string(REPLACE "," ";" TEMPVERSIONS ${HEPMC3_PYTHON_VERSIONS})
+foreach( tempver ${TEMPVERSIONS} )
+string(REPLACE "." ";" MAJMIN "${tempver}.X.Y")
+list(GET MAJMIN 0 MAJ)
+list(GET MAJMIN 1 MIN)
+bindings(${MAJ} ${MIN}) 
+endforeach ()
+else()
 bindings(2 X)
 bindings(3 X)
+endif()
 
 

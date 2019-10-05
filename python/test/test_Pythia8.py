@@ -7,13 +7,17 @@ import pyHepMC3.pyHepMC3.HepMC3 as hm
 import pythia8 as p8
 from Pythia8ToHepMC3 import Pythia8ToHepMC3 
 def test_Pythia8():
- pythia = p8.Pythia()
+ try:
+  pythia = p8.Pythia()
+ except ImportError:
+  return 0
  pythia.readString("WeakSingleBoson:ffbar2gmZ = on")
  pythia.readString("Beams:idA =  11")
  pythia.readString("Beams:idB = -11")
  pythia.readString("Beams:eCM =  91.2")
  pythia.init()
  p8tohm=Pythia8ToHepMC3 ()
+ p8tohm.m_store_pdf=True
  out=hm.WriterAscii("test_Pythia.hepmc")
  for iEvent in range(0, 100):
     if not pythia.next(): continue
