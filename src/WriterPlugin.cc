@@ -78,9 +78,9 @@ WriterPlugin::~WriterPlugin() {
     if (m_writer) m_writer->close();
     if (m_writer) delete m_writer;
 #ifdef WIN32
-if(dll_handle) {
-FreeLibrary((HINSTANCE)dll_handle);
-}
+    if(dll_handle) {
+        FreeLibrary((HINSTANCE)dll_handle);
+    }
 #endif
 #if defined(__linux__) || defined(__darwin__)
     if(dll_handle) {

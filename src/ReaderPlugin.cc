@@ -75,9 +75,9 @@ ReaderPlugin::~ReaderPlugin() {
     if (m_reader) m_reader->close();
     if (m_reader) delete m_reader;
 #ifdef WIN32
-if(dll_handle) {
-FreeLibrary((HINSTANCE)(dll_handle));
-}
+    if(dll_handle) {
+        FreeLibrary((HINSTANCE)(dll_handle));
+    }
 #endif
 #if defined(__linux__) || defined(__darwin__)
     if(dll_handle) {
