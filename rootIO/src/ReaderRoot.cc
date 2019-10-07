@@ -38,6 +38,12 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
 
 bool ReaderRoot::skip(const int n)
 {
+    GenEvent evt;
+    for (int nn=n; nn>0; --nn)
+    {
+        if (!read_event(evt)) return false;
+        evt.clear();
+    }
     return !failed();
 }
 
