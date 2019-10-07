@@ -23,7 +23,6 @@
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/Reader.h>
 
 
-
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/WriterAscii.h>
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderAscii.h>
 

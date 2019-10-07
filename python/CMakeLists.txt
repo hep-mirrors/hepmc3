@@ -83,9 +83,9 @@ configure_file("search_includes.hpp.in" "search_includes.hpp" IMMEDIATE @ONLY)
 add_custom_command(
 OUTPUT  src/pyHepMC3.cpp src/pyHepMC3search.cpp  src/pyHepMC3rootIO.cpp
 DEPENDS all_includes.hpp root_includes.hpp search_includes.hpp src/pyHepMC3.binder src/pyHepMC3rootIO.binder src/pyHepMC3search.binder
-COMMAND ${BINDER} --single-file  --root-module pyHepMC3 --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3.binder   all_includes.hpp -- -DBINDER -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
-COMMAND ${BINDER} --single-file  --root-module pyHepMC3rootIO --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3rootIO.binder   root_includes.hpp -- -DBINDER -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
-COMMAND ${BINDER} --single-file  --root-module pyHepMC3search --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3search.binder   search_includes.hpp -- -DBINDER -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} 
+COMMAND ${BINDER} --single-file  --root-module pyHepMC3 --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3.binder   all_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
+COMMAND ${BINDER} --single-file  --root-module pyHepMC3rootIO --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3rootIO.binder   root_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
+COMMAND ${BINDER} --single-file  --root-module pyHepMC3search --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3search.binder   search_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} 
 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 VERBATIM)
 else()

@@ -28,7 +28,7 @@ inline std::string version() {
 #define DECLARE_HEPMC3_WRITER_FILE(classname)    extern "C" {  __declspec(dllexport) classname *  __stdcall new ## classname ## file (const std::string &filename, shared_ptr<GenRunInfo> run ) { return new classname (filename,run);  } }
 #define DECLARE_HEPMC3_WRITER_STREAM(classname)  extern "C" {  __declspec(dllexport) classname * __stdcall new ## classname ## stream (std::ostream & stream, shared_ptr<GenRunInfo> run) { return new classname (stream,run);  } }
 #endif
-#ifdef  defined(__linux__) || defined(__darwin__)
+#if defined(__linux__) || defined(__darwin__)
 #define DECLARE_HEPMC3_READER_FILE(classname)    extern "C" { classname * new ## classname ## file (const std::string &filename ) { return new classname (filename);  } }
 #define DECLARE_HEPMC3_READER_STREAM(classname)  extern "C" { classname * new ## classname ## stream (std::istream & stream) { return new classname (stream);  } }
 #define DECLARE_HEPMC3_WRITER_FILE(classname)    extern "C" { classname * new ## classname ## file (const std::string &filename, shared_ptr<GenRunInfo> run ) { return new classname (filename,run);  } }

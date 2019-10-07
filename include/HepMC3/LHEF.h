@@ -3091,7 +3091,7 @@ class Writer {
 
 public:
 
-#ifndef BINDER
+#ifndef HEPMC3_PYTHON_BINDINGS
   /**
    * Create a Writer object giving a stream to write to.
    * @param os the stream where the event file is written.

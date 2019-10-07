@@ -35,7 +35,7 @@ public:
     /** @brief Default constructor */
     ReaderAsciiHepMC2(const std::string& filename);
 
-#ifndef BINDER
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderAsciiHepMC2(std::istream &);
 #endif

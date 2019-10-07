@@ -23,7 +23,7 @@ namespace HepMC3
 class ReaderPlugin : public Reader
 {
 public:
-#ifndef BINDER
+#ifndef HEPMC3_PYTHON_BINDINGS
 /** @brief Constructor  to read from stream*/
 ReaderPlugin(std::istream & stream,const std::string &libname, const std::string &newreader);
 /** @brief Constructor to read from file*/

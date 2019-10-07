@@ -35,7 +35,7 @@ public:
      */
     WriterHEPEVT(const std::string &filename);
 
-#ifndef BINDER
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// @brief Constructor from ostream
     WriterHEPEVT(std::ostream& stream);
 #endif

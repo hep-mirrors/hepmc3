@@ -34,7 +34,7 @@ namespace HepMC3
 class ReaderLHEF : public Reader
 {
 public:
-#ifndef BINDER
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stream
     ReaderLHEF(std::istream &);
 #endif

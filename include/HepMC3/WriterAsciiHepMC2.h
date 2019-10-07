@@ -32,7 +32,7 @@ public:
     WriterAsciiHepMC2(const std::string& filename,
                       shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
-#ifndef BINDER
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// @brief Constructor from ostream
     WriterAsciiHepMC2(std::ostream& stream,
                       shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());

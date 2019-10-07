@@ -31,7 +31,7 @@ public:
 
     /// @brief Constructor
     ReaderAscii(const std::string& filename);
-#ifndef BINDER
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderAscii(std::istream &);
 #endif
