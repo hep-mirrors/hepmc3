@@ -2063,6 +2063,19 @@ struct PyCallBack_HepMC3_Writer : public HepMC3::Writer {
 struct PyCallBack_HepMC3_Reader : public HepMC3::Reader {
 	using HepMC3::Reader::Reader;
 
+	bool skip(const int a0) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Reader *>(this), "skip");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::overload_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return Reader::skip(a0);
+	}
 	bool read_event(class HepMC3::GenEvent & a0) override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Reader *>(this), "read_event");
@@ -2146,6 +2159,7 @@ void bind_HepMC3_Data_GenEventData(std::function< pybind11::module &(std::string
 		pybind11::handle cl_type = cl;
 
 		cl.def( pybind11::init( [](){ return new PyCallBack_HepMC3_Reader(); } ) );
+		cl.def("skip", (bool (HepMC3::Reader::*)(const int)) &HepMC3::Reader::skip, "skip or fast forward reading of some events\n\nC++: HepMC3::Reader::skip(const int) --> bool", pybind11::arg(""));
 		cl.def("read_event", (bool (HepMC3::Reader::*)(class HepMC3::GenEvent &)) &HepMC3::Reader::read_event, "Fill next event from input into \n\nC++: HepMC3::Reader::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("failed", (bool (HepMC3::Reader::*)()) &HepMC3::Reader::failed, "Get file and/or stream error state \n\nC++: HepMC3::Reader::failed() --> bool");
 		cl.def("close", (void (HepMC3::Reader::*)()) &HepMC3::Reader::close, "Close file and/or stream \n\nC++: HepMC3::Reader::close() --> void");
@@ -2304,6 +2318,19 @@ void bind_HepMC3_WriterAscii(std::function< pybind11::module &(std::string const
 struct PyCallBack_HepMC3_ReaderAscii : public HepMC3::ReaderAscii {
 	using HepMC3::ReaderAscii::ReaderAscii;
 
+	bool skip(const int a0) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAscii *>(this), "skip");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::overload_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return ReaderAscii::skip(a0);
+	}
 	bool read_event(class HepMC3::GenEvent & a0) override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAscii *>(this), "read_event");
@@ -2394,6 +2421,19 @@ struct PyCallBack_HepMC3_WriterAsciiHepMC2 : public HepMC3::WriterAsciiHepMC2 {
 struct PyCallBack_HepMC3_ReaderAsciiHepMC2 : public HepMC3::ReaderAsciiHepMC2 {
 	using HepMC3::ReaderAsciiHepMC2::ReaderAsciiHepMC2;
 
+	bool skip(const int a0) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAsciiHepMC2 *>(this), "skip");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::overload_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return ReaderAsciiHepMC2::skip(a0);
+	}
 	bool read_event(class HepMC3::GenEvent & a0) override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAsciiHepMC2 *>(this), "read_event");
@@ -2536,6 +2576,19 @@ struct PyCallBack_HepMC3_ReaderHEPEVT : public HepMC3::ReaderHEPEVT {
 		}
 		return ReaderHEPEVT::read_hepevt_particle(a0, a1);
 	}
+	bool skip(const int a0) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "skip");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::overload_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return ReaderHEPEVT::skip(a0);
+	}
 	bool read_event(class HepMC3::GenEvent & a0) override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "read_event");
@@ -2585,6 +2638,7 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
+		cl.def("skip", (bool (HepMC3::ReaderAscii::*)(const int)) &HepMC3::ReaderAscii::skip, "skip events\n\nC++: HepMC3::ReaderAscii::skip(const int) --> bool", pybind11::arg(""));
 		cl.def("read_event", (bool (HepMC3::ReaderAscii::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderAscii::read_event, "Load event from file\n\n \n Event to be filled\n\nC++: HepMC3::ReaderAscii::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("failed", (bool (HepMC3::ReaderAscii::*)()) &HepMC3::ReaderAscii::failed, "Return status of the stream\n\nC++: HepMC3::ReaderAscii::failed() --> bool");
 		cl.def("close", (void (HepMC3::ReaderAscii::*)()) &HepMC3::ReaderAscii::close, "Close file stream\n\nC++: HepMC3::ReaderAscii::close() --> void");
@@ -2609,6 +2663,7 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
+		cl.def("skip", (bool (HepMC3::ReaderAsciiHepMC2::*)(const int)) &HepMC3::ReaderAsciiHepMC2::skip, "skip events\n\nC++: HepMC3::ReaderAsciiHepMC2::skip(const int) --> bool", pybind11::arg(""));
 		cl.def("read_event", (bool (HepMC3::ReaderAsciiHepMC2::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderAsciiHepMC2::read_event, "Implementation of Reader::read_event \n\nC++: HepMC3::ReaderAsciiHepMC2::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("failed", (bool (HepMC3::ReaderAsciiHepMC2::*)()) &HepMC3::ReaderAsciiHepMC2::failed, "Return status of the stream\n\nC++: HepMC3::ReaderAsciiHepMC2::failed() --> bool");
 		cl.def("close", (void (HepMC3::ReaderAsciiHepMC2::*)()) &HepMC3::ReaderAsciiHepMC2::close, "Close file stream\n\nC++: HepMC3::ReaderAsciiHepMC2::close() --> void");
@@ -2637,6 +2692,7 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 		cl.def("read_hepevt_event_header", (bool (HepMC3::ReaderHEPEVT::*)()) &HepMC3::ReaderHEPEVT::read_hepevt_event_header, "Find and read event header line  from file\n\n    \n\nC++: HepMC3::ReaderHEPEVT::read_hepevt_event_header() --> bool");
 		cl.def("read_hepevt_particle", [](HepMC3::ReaderHEPEVT &o, int const & a0) -> bool { return o.read_hepevt_particle(a0); }, "", pybind11::arg("i"));
 		cl.def("read_hepevt_particle", (bool (HepMC3::ReaderHEPEVT::*)(int, bool)) &HepMC3::ReaderHEPEVT::read_hepevt_particle, "read particle from file\n\n \n Particle id\n \n\n Event style\n\nC++: HepMC3::ReaderHEPEVT::read_hepevt_particle(int, bool) --> bool", pybind11::arg("i"), pybind11::arg("iflong"));
+		cl.def("skip", (bool (HepMC3::ReaderHEPEVT::*)(const int)) &HepMC3::ReaderHEPEVT::skip, "skip events\n\nC++: HepMC3::ReaderHEPEVT::skip(const int) --> bool", pybind11::arg(""));
 		cl.def("read_event", (bool (HepMC3::ReaderHEPEVT::*)(class HepMC3::GenEvent &, bool)) &HepMC3::ReaderHEPEVT::read_event, "Read event from file\n\n  \n Event style\n  \n\n Contains parsed even\n\nC++: HepMC3::ReaderHEPEVT::read_event(class HepMC3::GenEvent &, bool) --> bool", pybind11::arg("evt"), pybind11::arg("iflong"));
 		cl.def("read_event", (bool (HepMC3::ReaderHEPEVT::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderHEPEVT::read_event, "Read event from file\n\n  \n Contains parsed even\n\nC++: HepMC3::ReaderHEPEVT::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("close", (void (HepMC3::ReaderHEPEVT::*)()) &HepMC3::ReaderHEPEVT::close, "Close file stream \n\nC++: HepMC3::ReaderHEPEVT::close() --> void");
@@ -3359,6 +3415,7 @@ void bind_HepMC3_LHEF_2(std::function< pybind11::module &(std::string const &nam
 #include <HepMC3/GenRunInfo.h>
 #include <HepMC3/GenVertex.h>
 #include <HepMC3/LHEFAttributes.h>
+#include <HepMC3/Reader.h>
 #include <HepMC3/ReaderLHEF.h>
 #include <HepMC3/ReaderPlugin.h>
 #include <HepMC3/WriterPlugin.h>
@@ -3509,6 +3566,19 @@ struct PyCallBack_HepMC3_HEPEUPAttribute : public HepMC3::HEPEUPAttribute {
 struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 	using HepMC3::ReaderLHEF::ReaderLHEF;
 
+	bool skip(const int a0) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderLHEF *>(this), "skip");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::overload_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return ReaderLHEF::skip(a0);
+	}
 	bool read_event(class HepMC3::GenEvent & a0) override { 
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderLHEF *>(this), "read_event");
@@ -3592,6 +3662,19 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderPlugin::failed();
+	}
+	bool skip(const int a0) override { 
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderPlugin *>(this), "skip");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::overload_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return Reader::skip(a0);
 	}
 };
 
@@ -3683,6 +3766,7 @@ void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string co
 
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
+		cl.def("skip", (bool (HepMC3::ReaderLHEF::*)(const int)) &HepMC3::ReaderLHEF::skip, "skip events\n\nC++: HepMC3::ReaderLHEF::skip(const int) --> bool", pybind11::arg(""));
 		cl.def("read_event", (bool (HepMC3::ReaderLHEF::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderLHEF::read_event, "Reading event \n\nC++: HepMC3::ReaderLHEF::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("ev"));
 		cl.def("close", (void (HepMC3::ReaderLHEF::*)()) &HepMC3::ReaderLHEF::close, "Close \n\nC++: HepMC3::ReaderLHEF::close() --> void");
 		cl.def("failed", (bool (HepMC3::ReaderLHEF::*)()) &HepMC3::ReaderLHEF::failed, "State \n\nC++: HepMC3::ReaderLHEF::failed() --> bool");
