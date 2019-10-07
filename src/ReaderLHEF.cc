@@ -23,6 +23,12 @@ ReaderLHEF::ReaderLHEF(std::istream & stream)
     init();
 }
 
+bool ReaderLHEF::skip(const int n)
+{
+    return !failed();
+}
+
+
 void ReaderLHEF::init()
 {
     m_neve=0;

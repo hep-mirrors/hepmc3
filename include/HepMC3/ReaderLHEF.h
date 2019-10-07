@@ -43,6 +43,8 @@ private:
 public:
     /** @brief Constructor */
     ReaderLHEF(const std::string& filename);
+    /// @brief skip events
+    bool skip(const int)  override;
     /** @brief Reading event */
     bool read_event(GenEvent& ev)  override;
     /** @brief Close */

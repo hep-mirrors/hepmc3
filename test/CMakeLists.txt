@@ -61,6 +61,7 @@ set( HepMC_tests
         testWeights 
         testLoops
         testDelete
+        testSkip1
         testIO1
         testIO3
         testIO6

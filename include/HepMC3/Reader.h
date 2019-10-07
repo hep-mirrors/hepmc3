@@ -30,6 +30,9 @@ public:
     /// Virtual destructor
     virtual ~Reader() {}
 
+    /// skip or fast forward reading of some events
+    virtual bool skip(const int) {}
+
     /// Fill next event from input into @a evt
     virtual bool read_event(GenEvent& evt) = 0;
     /** @brief Get file and/or stream error state */

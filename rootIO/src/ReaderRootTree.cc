@@ -63,6 +63,12 @@ bool ReaderRootTree::init()
     return true;
 }
 
+bool ReaderRootTree::skip(const int n)
+{
+    m_events_count+=n;
+    if (m_events_count>m_tree->GetEntries()) return false;
+    return true;
+}
 
 
 

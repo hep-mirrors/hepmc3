@@ -43,6 +43,24 @@ ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
     }
 }
 
+bool ReaderHEPEVT::skip(const int n)
+{
+    const size_t       max_buffer_size=512*512;
+    char               buf[max_buffer_size];
+    int nn=n;
+    char               peek;
+    while(!failed()) {
+        if ( (!m_file.is_open()) && (!m_isstream) ) return false;
+        m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
+        if( peek=='E' ) nn--;
+        if (nn<0) return true;
+        m_isstream ? m_stream->getline(buf,max_buffer_size) : m_file.getline(buf,max_buffer_size);
+    }
+    return true;
+}
+
+
+
 bool ReaderHEPEVT::read_hepevt_event_header()
 {
     const size_t       max_e_buffer_size=512;

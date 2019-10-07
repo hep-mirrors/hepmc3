@@ -41,18 +41,20 @@ public:
 // Functions
 //
 public:
+    /// @brief skip events
+    bool skip(const int)  override;
 
     /** @brief Read event from file
      *
      *  @param[out] evt Contains parsed event
      */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt)  override;
 
     /** @brief Close file stream */
-    void close();
+    void close()  override;
 
     /** @brief Get stream error state */
-    bool failed();
+    bool failed()  override;
 //
 // Fields
 //

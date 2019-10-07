@@ -46,6 +46,9 @@ public:
 // Functions
 //
 public:
+    /// @brief skip events
+    bool skip(const int)  override;
+
     /** @brief Implementation of Reader::read_event */
     bool read_event(GenEvent &evt)  override;
 

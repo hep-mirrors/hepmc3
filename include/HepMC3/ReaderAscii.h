@@ -38,6 +38,9 @@ public:
     /// @brief Destructor
     ~ReaderAscii();
 
+    /// @brief skip events
+    bool skip(const int)  override;
+    
     /// @brief Load event from file
     ///
     /// @param[out] evt Event to be filled

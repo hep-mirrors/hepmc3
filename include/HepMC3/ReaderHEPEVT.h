@@ -56,6 +56,8 @@ public:
     */
     virtual bool read_hepevt_particle(int i, bool iflong=true);
 
+    /// @brief skip events
+    bool skip(const int)  override;
 
     /** @brief Read event from file
      *

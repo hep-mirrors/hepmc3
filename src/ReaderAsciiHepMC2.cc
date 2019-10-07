@@ -43,6 +43,21 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
 
 ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr; } if (!m_isstream) close(); }
 
+bool ReaderAsciiHepMC2::skip(const int n)
+{
+    const size_t       max_buffer_size=512*512;
+    char               buf[max_buffer_size];
+    int nn=n;
+    char               peek;
+    while(!failed()) {
+        if ( (!m_file.is_open()) && (!m_isstream) ) return false;
+        m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
+        if( peek=='E' ) nn--;
+        if (nn<0) return true;
+        m_isstream ? m_stream->getline(buf,max_buffer_size) : m_file.getline(buf,max_buffer_size);
+    }
+    return true;
+}
 
 bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
