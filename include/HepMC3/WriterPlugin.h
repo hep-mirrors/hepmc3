@@ -18,19 +18,17 @@
  */
 #include "HepMC3/Writer.h"
 #include "HepMC3/GenEvent.h"
-
+/*
 #ifdef WIN32
-#define WIN32_LEAN_AND_MEAN
-#define NOWINBASEINTERLOCK
-#include <intrin.h>
-#include <windows.h>
+#ifndef _WINDOWS_
+#warning WINDOWS.H should be included before WriterPlugin.h
+#endif
 #define HEPMC3_HANDLETYPE HINSTANCE
 #endif
 #if defined(__linux__) || defined(__darwin__)
-#include <dlfcn.h>
 #define HEPMC3_HANDLETYPE void*
 #endif
-
+*/
 namespace HepMC3
 {
 class WriterPlugin : public Writer
@@ -54,7 +52,8 @@ WriterPlugin(const std::string& filename,const std::string &libname, const std::
 ~WriterPlugin()  override;
 private:
   Writer* m_writer; ///< The actual writer
-  HEPMC3_HANDLETYPE  dll_handle; ///< library handler
+  //HEPMC3_HANDLETYPE  
+  void* dll_handle; ///< library handler
  };
 }
 #endif

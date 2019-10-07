@@ -18,19 +18,6 @@
  */
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
-
-#ifdef WIN32
-#define WIN32_LEAN_AND_MEAN
-#define NOWINBASEINTERLOCK
-#include <intrin.h>
-#include <windows.h>
-#define HEPMC3_HANDLETYPE HINSTANCE
-#endif
-#if defined(__linux__) || defined(__darwin__)
-#include <dlfcn.h>
-#define HEPMC3_HANDLETYPE void*
-#endif
-
 namespace HepMC3
 {
 class ReaderPlugin : public Reader
@@ -52,7 +39,7 @@ ReaderPlugin(const std::string& filename,const std::string &libname, const std::
 ~ReaderPlugin()  override;
 private:
   Reader* m_reader; ///< The actual reader
-  HEPMC3_HANDLETYPE  dll_handle; ///< library handler
+  void*  dll_handle; ///< library handler
  };
 }
 #endif

@@ -39,7 +39,8 @@ void AnalysisExample::write_event(const GenEvent &evt)
     {
         if (p->status()!=1) continue;
         double eta=p->momentum().eta();
-        size_t bin=lower_bound(m_bins["rapidity"].begin(),m_bins["rapidity"].end(),eta)-m_bins["rapidity"].begin()-1;
+        int bin=std::distance(m_bins["rapidity"].begin(), lower_bound(m_bins["rapidity"].begin(),m_bins["rapidity"].end(),eta))-1;
+        if (bin<0) bin=0;
         m_vals["rapidity"][bin]+=w;
         m_errs["rapidity"][bin]+=w*w;
     }
