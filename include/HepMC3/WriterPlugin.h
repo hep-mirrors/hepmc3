@@ -26,8 +26,8 @@ public:
 #ifndef HEPMC3_PYTHON_BINDINGS
 /** @brief Constructor  to read from stream*/
 WriterPlugin(std::ostream & stream,const std::string &libname, const std::string &newwriter, std::shared_ptr<HepMC3::GenRunInfo>run=shared_ptr<GenRunInfo>());
-/** @brief Constructor to read from file*/
 #endif
+/** @brief Constructor to read from file*/
 WriterPlugin(const std::string& filename,const std::string &libname, const std::string &newwriter, std::shared_ptr<HepMC3::GenRunInfo>run=shared_ptr<GenRunInfo>());
     /** @brief Reading event */
     void write_event(const GenEvent& ev)  override{if(!m_writer) return; return m_writer->write_event(ev);};

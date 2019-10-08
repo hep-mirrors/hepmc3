@@ -17,13 +17,13 @@ namespace HepMC3
 {
 
 
-WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_events_count(0),m_vertices_positions_present(true), m_file(filename), m_stream(&m_file)
+WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_file(filename), m_stream(&m_file), m_events_count(0),m_vertices_positions_present(true)
 {
     hepevtbuffer=(char*)(new struct HEPEVT());
     HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
 }
 
-WriterHEPEVT::WriterHEPEVT(std::ostream& stream): m_events_count(0),m_vertices_positions_present(true), m_file(), m_stream(&stream)
+WriterHEPEVT::WriterHEPEVT(std::ostream& stream): m_file(), m_stream(&stream), m_events_count(0),m_vertices_positions_present(true)
 {
     hepevtbuffer=(char*)(new struct HEPEVT());
     HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);

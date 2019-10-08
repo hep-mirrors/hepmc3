@@ -67,7 +67,7 @@ public:
         std::vector<GenParticlePtr> hepevt_particles;
         hepevt_particles.reserve( pyev.size() );
 
-        for(size_t i=0; i<pyev.size(); ++i) {
+        for(auto i=0; i<pyev.size(); ++i) {
             hepevt_particles.push_back( std::make_shared<GenParticle>( FourVector( pyev[i].px(), pyev[i].py(),
                                         pyev[i].pz(), pyev[i].e() ),
                                         pyev[i].id(), pyev[i].statusHepMC() )
@@ -78,7 +78,7 @@ public:
         // 3. Fill vertex information and find beam particles.
         std::vector<GenVertexPtr> vertex_cache;
         vector<GenParticlePtr> beam_particles;
-        for(size_t  i=0; i<pyev.size(); ++i) {
+        for(auto  i=0; i<pyev.size(); ++i) {
 
             std::vector<int> mothers = pyev[i].motherList();
 
