@@ -13,10 +13,10 @@
 /// @brief Filter for the attributes
 ///
 /// Used to construct filters that can check if an attribute exists
-/// or to compare against other attribute. See @ref search_engine for details
+/// or to compare against other attribute. See @ref searchengine for details
 /// and examples of its use.
 ///
-/// @ingroup search_engine
+/// @ingroup searchengine
 #include "HepMC3/Filter.h"
 #include "HepMC3/Attribute.h"
 #include <string>

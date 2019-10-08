@@ -24,17 +24,19 @@ class WriterPlugin : public Writer
 {
 public:
 #ifndef HEPMC3_PYTHON_BINDINGS
+
 /** @brief Constructor  to read from stream*/
 WriterPlugin(std::ostream & stream,const std::string &libname, const std::string &newwriter, std::shared_ptr<HepMC3::GenRunInfo>run=shared_ptr<GenRunInfo>());
+
 #endif
+
 /** @brief Constructor to read from file*/
 WriterPlugin(const std::string& filename,const std::string &libname, const std::string &newwriter, std::shared_ptr<HepMC3::GenRunInfo>run=shared_ptr<GenRunInfo>());
+
     /** @brief Reading event */
     void write_event(const GenEvent& ev)  override{if(!m_writer) return; return m_writer->write_event(ev);};
     /** @brief Close */
-    void close() override{ if(!m_writer) return; m_writer->close();
-		
-		 };
+    void close() override{ if(!m_writer) return; m_writer->close();};
     /** @brief State */
     bool failed() override{if(!m_writer) return true; return m_writer->failed();};
     /** @brief Destructor */

@@ -42,7 +42,9 @@ namespace binder {
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
 		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &>(), pybind11::arg("filename"), pybind11::arg("treename"), pybind11::arg("branchname") );
-
+		
+		cl.def("skip", (bool (HepMC3::ReaderRootTree::*)(const int)) &HepMC3::ReaderRootTree::skip, "skip events\n\nC++: HepMC3::ReaderRootTree::skip(const int) --> bool", pybind11::arg(""));
+		
 		cl.def("read_event", (bool (HepMC3::ReaderRootTree::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderRootTree::read_event, "Read event from file\n\n  \n Contains parsed event\n\nC++: HepMC3::ReaderRootTree::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("close", (void (HepMC3::ReaderRootTree::*)()) &HepMC3::ReaderRootTree::close, "Close file \n\nC++: HepMC3::ReaderRootTree::close() --> void");
 		cl.def("failed", (bool (HepMC3::ReaderRootTree::*)()) &HepMC3::ReaderRootTree::failed, "Get file  error state \n\nC++: HepMC3::ReaderRootTree::failed() --> bool");
@@ -56,7 +58,9 @@ namespace binder {
 		pybind11::handle cl_type = cl;
 
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
-
+		
+		cl.def("skip", (bool (HepMC3::ReaderRoot::*)(const int)) &HepMC3::ReaderRoot::skip, "skip events\n\nC++: HepMC3::ReaderRoot::skip(const int) --> bool", pybind11::arg(""));
+		
 		cl.def("read_event", (bool (HepMC3::ReaderRoot::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderRoot::read_event, "Read event from file\n\n  \n Contains parsed event\n\nC++: HepMC3::ReaderRoot::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("close", (void (HepMC3::ReaderRoot::*)()) &HepMC3::ReaderRoot::close, "Close file stream \n\nC++: HepMC3::ReaderRoot::close() --> void");
 		cl.def("failed", (bool (HepMC3::ReaderRoot::*)()) &HepMC3::ReaderRoot::failed, "Get stream error state \n\nC++: HepMC3::ReaderRoot::failed() --> bool");

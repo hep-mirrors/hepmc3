@@ -50,7 +50,6 @@ WriterPlugin::WriterPlugin(std::ostream & stream,const std::string &libname, con
 
 
 }
-/** @brief Constructor */
 WriterPlugin::WriterPlugin(const std::string& filename,const std::string &libname, const std::string &newwriter,shared_ptr<GenRunInfo> run) {
 
 #ifdef WIN32

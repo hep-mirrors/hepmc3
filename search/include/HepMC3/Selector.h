@@ -55,10 +55,10 @@ using ConstSelectorPtr = std::shared_ptr<const Selector>;
 class Selector {
 
 public:
-
+/** @brief  Destructor */
     virtual ~Selector() {};
 
-    virtual Filter operator > (int value) const = 0;
+    virtual Filter operator > (int value) const = 0;   
     virtual Filter operator > (double value) const = 0;
 
     virtual Filter operator >= (int value) const = 0;
@@ -70,23 +70,23 @@ public:
     virtual Filter operator <= (int value) const = 0;
     virtual Filter operator <= (double value) const = 0;
 
-    virtual Filter operator == (int value) const = 0;
-    virtual Filter operator == (double value) const = 0;
+    virtual Filter operator == (int value) const = 0;      ///< Equality
+    virtual Filter operator == (double value) const = 0;      ///< Equality
 
-    virtual Filter operator != (int value) const = 0;
-    virtual Filter operator != (double value) const = 0;
+    virtual Filter operator != (int value) const = 0;      ///< NonEquality
+    virtual Filter operator != (double value) const = 0;      ///< NonEquality
 
     virtual ConstSelectorPtr abs() const = 0;
 
-    static const SelectorWrapper<int>    STATUS;
-    static const SelectorWrapper<int>    PDG_ID;
-    static const SelectorWrapper<double> PT;
-    static const SelectorWrapper<double> ENERGY;
-    static const SelectorWrapper<double> RAPIDITY;
-    static const SelectorWrapper<double> ETA;
-    static const SelectorWrapper<double> PHI;
-    static const SelectorWrapper<double> ET;
-    static const SelectorWrapper<double> MASS;
+    static const SelectorWrapper<int>    STATUS;   ///< Status
+    static const SelectorWrapper<int>    PDG_ID;   ///< PDG ID
+    static const SelectorWrapper<double> PT;       ///< Transverse momentum
+    static const SelectorWrapper<double> ENERGY;   ///< Energy
+    static const SelectorWrapper<double> RAPIDITY; ///< Rapidity
+    static const SelectorWrapper<double> ETA;      ///< Pseudorapidity
+    static const SelectorWrapper<double> PHI;      ///< Azimuthal angle
+    static const SelectorWrapper<double> ET;       ///< Transverse energy
+    static const SelectorWrapper<double> MASS;     ///< Mass
     static AttributeFeature ATTRIBUTE(const std::string &name);
 
 };
@@ -154,7 +154,7 @@ public:
 
 private:
 
-    Feature<Feature_type> m_internal;
+    Feature<Feature_type> m_internal;  ///< Internal feauture holder
 
 };
 /** @brief ConstSelectorPtr abs*/
