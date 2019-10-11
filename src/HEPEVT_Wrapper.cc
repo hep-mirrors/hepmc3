@@ -106,7 +106,7 @@ void calculate_longest_path_to_top(ConstGenVertexPtr v,std::map<ConstGenVertexPt
 
 bool HEPEVT_Wrapper::HEPEVT_to_GenEvent( GenEvent* evt )
 {
-    if ( !evt ) { std::cerr << "IO_HEPEVT::fill_next_event HEPMC3_ERROR - passed null event." << std::endl; return false;}
+    if ( !evt ) { std::cerr << "IO_HEPEVT::fill_next_event error  - passed null event." << std::endl; return false;}
     evt->set_event_number( HEPEVT_Wrapper::event_number());
     std::map<GenParticlePtr,int > hepevt_particles;
     std::map<int,GenParticlePtr > particles_index;

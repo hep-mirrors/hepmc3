@@ -75,9 +75,6 @@ set( HepMC_root_tests
         )
 
 
-
-
-
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
 
 find_package(Threads)

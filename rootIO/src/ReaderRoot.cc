@@ -47,7 +47,6 @@ bool ReaderRoot::skip(const int n)
     return !failed();
 }
 
-
 bool ReaderRoot::read_event(GenEvent& evt) {
 
     // Skip object of different type than GenEventData

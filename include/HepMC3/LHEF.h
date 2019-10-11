@@ -3312,8 +3312,6 @@ private:
   std::ostringstream eventStream;
 
 
-
-
   /**
    * The default constructor should never be used.
    */

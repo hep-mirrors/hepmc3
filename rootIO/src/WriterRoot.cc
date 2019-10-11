@@ -53,7 +53,7 @@ void WriterRoot::write_event(const GenEvent &evt) {
     int nbytes = m_file->WriteObject(&data, buf);
 
     if( nbytes == 0 ) {
-        HEPMC3_ERROR( "WriterRoot: HEPMC3_ERROR writing event")
+        HEPMC3_ERROR( "WriterRoot: error writing event")
         m_file->Close();
     }
 }
@@ -67,7 +67,7 @@ void WriterRoot::write_run_info() {
     int nbytes = m_file->WriteObject(&data,"GenRunInfoData");
 
     if( nbytes == 0 ) {
-        HEPMC3_ERROR( "WriterRoot: HEPMC3_ERROR writing GenRunInfo")
+        HEPMC3_ERROR( "WriterRoot: error writing GenRunInfo")
         m_file->Close();
     }
 }

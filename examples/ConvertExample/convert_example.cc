@@ -20,7 +20,6 @@
 #include "HepMC3/ReaderPlugin.h"
 #include "HepMC3/ReaderFactory.h"
 
-
 #ifdef HEPMC3_ROOTIO
 #include "HepMC3/ReaderRoot.h"
 #include "HepMC3/WriterRoot.h"
