@@ -25,6 +25,9 @@ class GenEvent;
 class Writer {
 public:
 
+    ///Constructor
+    Writer() {}
+    
     /// Virtual destructor
     virtual ~Writer() {}
 
@@ -44,6 +47,13 @@ public:
     shared_ptr<GenRunInfo> run_info() const {
         return m_run_info;
     }
+
+///deleted copy constructor
+    Writer(const Writer&) = delete; 
+///deleted copy assignment operator
+    Writer& operator = (const Writer &) = delete;            
+
+
 
 private:
 

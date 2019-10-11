@@ -34,19 +34,23 @@ namespace HepMC3
 class ReaderLHEF : public Reader
 {
 public:
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stream
     ReaderLHEF(std::istream &);
+#endif
 private:
     void init();                       ///< Init helper
 public:
     /** @brief Constructor */
     ReaderLHEF(const std::string& filename);
+    /// @brief skip events
+    bool skip(const int)  override;
     /** @brief Reading event */
-    bool read_event(GenEvent& ev);
+    bool read_event(GenEvent& ev)  override;
     /** @brief Close */
-    void close();
+    void close()  override;
     /** @brief State */
-    bool failed();
+    bool failed()  override;
     /** @brief Destructor */
     ~ReaderLHEF() ;
 private:

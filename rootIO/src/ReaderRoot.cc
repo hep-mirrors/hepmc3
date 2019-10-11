@@ -9,8 +9,10 @@
  *
  */
 #include "HepMC3/ReaderRoot.h"
+#include "HepMC3/Version.h"
 
 namespace HepMC3 {
+HEPMC3_DECLARE_READER_FILE(ReaderRoot)
 
 ReaderRoot::ReaderRoot(const std::string &filename) {
 
@@ -18,7 +20,7 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
     m_next = new TIter(m_file->GetListOfKeys());
 
     if ( !m_file->IsOpen() ) {
-        ERROR( "ReaderRoot: problem opening file: " << filename )
+        HEPMC3_ERROR( "ReaderRoot: problem opening file: " << filename )
         return;
     }
 
@@ -32,6 +34,17 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
     }
 
     set_run_info(ri);
+}
+
+bool ReaderRoot::skip(const int n)
+{
+    GenEvent evt;
+    for (int nn=n; nn>0; --nn)
+    {
+        if (!read_event(evt)) return false;
+        evt.clear();
+    }
+    return !failed();
 }
 
 bool ReaderRoot::read_event(GenEvent& evt) {
@@ -53,14 +66,14 @@ bool ReaderRoot::read_event(GenEvent& evt) {
         size_t geneventdata30=strncmp(cl,"HepMC::GenEventData",19);
         size_t geneventdata31=strncmp(cl,"HepMC3::GenEventData",20);
         if( geneventdata31==0 || geneventdata30==0 ) {
-            if (geneventdata30==0) WARNING( "ReaderRoot::read_event: The object was written with HepMC3 version 3.0" )
+            if (geneventdata30==0) HEPMC3_WARNING( "ReaderRoot::read_event: The object was written with HepMC3 version 3.0" )
                 data = reinterpret_cast<GenEventData*>(key->ReadObj());
             break;
         }
     }
 
     if( !data ) {
-        ERROR("ReaderRoot: could not read event from root file")
+        HEPMC3_ERROR("ReaderRoot: could not read event from root file")
         m_file->Close();
         return false;
     }

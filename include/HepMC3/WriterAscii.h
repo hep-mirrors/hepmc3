@@ -30,9 +30,11 @@ public:
     WriterAscii(const std::string& filename,
                 shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// @brief Constructor from ostream
     WriterAscii(std::ostream& stream,
                 shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+#endif
 
     /// @brief Destructor
     ~WriterAscii();
@@ -40,16 +42,16 @@ public:
     /// @brief Write event to file
     ///
     /// @param[in] evt Event to be serialized
-    void write_event(const GenEvent& evt);
+    void write_event(const GenEvent& evt)  override;
 
     /// @brief Write the GenRunInfo object to file.
     void write_run_info();
 
     /// @brief Return status of the stream
-    bool failed();
+    bool failed()  override;
 
     /// @brief Close file stream
-    void close();
+    void close()  override;
 
     /// @brief Set output precision
     ///

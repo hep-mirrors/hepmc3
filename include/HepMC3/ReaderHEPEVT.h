@@ -37,9 +37,10 @@ class ReaderHEPEVT : public Reader
 public:
     /** @brief Default constructor */
     ReaderHEPEVT(const std::string &filename);
-
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderHEPEVT(std::istream &);
+#endif
 //
 // Functions
 //
@@ -55,6 +56,8 @@ public:
     */
     virtual bool read_hepevt_particle(int i, bool iflong=true);
 
+    /// @brief skip events
+    bool skip(const int)  override;
 
     /** @brief Read event from file
      *
@@ -67,14 +70,14 @@ public:
      *
      *  @param[out] evt Contains parsed even
      */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt)  override;
 
 
     /** @brief Close file stream */
-    void close();
+    void close()  override;
 
     /** @brief Get stream error state */
-    bool failed();
+    bool failed()  override;
 
     /** @brief  set flag if vertex positions are available */
     void set_vertices_positions_present(bool iflong);

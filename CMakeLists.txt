@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3)
-set(PROJECT_VERSION 3.01.02)
-SET(HEPMC3_VERSION 3.01.02)
+set(PROJECT_VERSION 3.02.00)
+SET(HEPMC3_VERSION 3.02.00)
 SET(HEPMC3_VERSION_MAJOR  3)
-SET(HEPMC3_VERSION_MINOR  1)
-SET(HEPMC3_VERSION_PATCH  2)
+SET(HEPMC3_VERSION_MINOR  2)
+SET(HEPMC3_VERSION_PATCH  0)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -23,14 +23,21 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 option(HEPMC3_ENABLE_SEARCH      "Enables building of search library" ON)
 option(HEPMC3_ENABLE_ROOTIO      "Enables building with ROOT O/I." ON)
+option(HEPMC3_ENABLE_PYTHON      "Enables building of Python  bindings, master switch" ON)
 option(HEPMC3_BUILD_DOCS         "Enables building of documentation" OFF)
 option(HEPMC3_BUILD_EXAMPLES     "Enables building of examples." OFF)
 option(HEPMC3_ENABLE_TEST        "Enables building of tests." OFF)
 option(HEPMC3_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces." OFF)
 
+if (NOT HEPMC3_PYTHON_VERSIONS)
+set(HEPMC3_PYTHON_VERSIONS "2.X,3.X")
+endif()
+
 
 message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}") 
 message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}") 
+message(STATUS "HepMC3: HEPMC3_ENABLE_PYTHON         ${HEPMC3_ENABLE_PYTHON}") 
+message(STATUS "HepMC3: HEPMC3_PYTHON_VERSIONS       ${HEPMC3_PYTHON_VERSIONS}") 
 message(STATUS "HepMC3: HEPMC3_ENABLE_TEST           ${HEPMC3_ENABLE_TEST}") 
 message(STATUS "HepMC3: HEPMC3_BUILD_DOCS            ${HEPMC3_BUILD_DOCS}") 
 message(STATUS "HepMC3: HEPMC3_BUILD_EXAMPLES        ${HEPMC3_BUILD_EXAMPLES}") 
@@ -146,6 +153,8 @@ ${PROJECT_SOURCE_DIR}/src/LHEFAttributes.cc
 ${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc  
 ${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc     
 ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
+${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc   
+${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc   
 )
 
 #We need to export all symbols on WIn to build .lib files
@@ -160,11 +169,15 @@ add_library(HepMC3 SHARED $<TARGET_OBJECTS:objlibcore>)
 add_library(HepMC3_static STATIC  $<TARGET_OBJECTS:objlibcore>)
 
 set_target_properties(HepMC3 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-set_target_properties(HepMC3 PROPERTIES SOVERSION 2)
+set_target_properties(HepMC3 PROPERTIES SOVERSION 3)
 
 set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 if (MSVC)
 set_target_properties(HepMC3 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+endif()
+if (UNIX)
+target_link_libraries(HepMC3 PRIVATE dl)
+target_link_libraries(HepMC3_static PRIVATE dl)
 endif()
 configure_file(HepMC3-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-config )
 
@@ -233,6 +246,10 @@ if(HEPMC3_ENABLE_TEST)
   add_subdirectory(test)
 endif()
 
+#Python bindings
+if(HEPMC3_ENABLE_PYTHON)
+  add_subdirectory(python)
+endif()
 
 # uninstall target
 if(NOT TARGET uninstall)
@@ -288,10 +305,19 @@ if (HEPMC3_ENABLE_SEARCH)
 list(APPEND CPACK_COMPONENTS_ALL   searchlibs   searchdevel)
 endif()
 
+if (HEPMC3_ENABLE_PYTHON)
+list(APPEND CPACK_COMPONENTS_ALL   python)
+if (HEPMC3_ENABLE_SEARCH)
+list(APPEND CPACK_COMPONENTS_ALL   pythonsearch)
+endif()
+endif()
 if (HEPMC3_BUILD_DOCS)
 list(APPEND CPACK_COMPONENTS_ALL   doc)
 endif()
 if(ROOT_FOUND)
 list(APPEND CPACK_COMPONENTS_ALL   rootIOdevel rootIOlibs)
+if (HEPMC3_ENABLE_PYTHON)
+list(APPEND CPACK_COMPONENTS_ALL   pythonrootIO)
+endif()
 endif()
 INCLUDE(CPack)

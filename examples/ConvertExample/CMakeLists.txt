@@ -33,6 +33,8 @@ endif()
 
 
 add_executable(convert_example.exe  ${basic_sources} )
+add_library(Analysis SHARED src/AnalysisExample.cc)
+target_link_libraries(Analysis HepMC3 )
 
 if (MSVC)
 set(  MSVCLINKFLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib")
@@ -51,6 +53,7 @@ endif()
 set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(libdir ${basic_libdir})
 set_target_properties(convert_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/$<0:>)
+set_target_properties(Analysis PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/$<0:>)
  
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/convert_example_env.sh.in
@@ -58,6 +61,7 @@ configure_file(
 
 # installs 
 install(TARGETS convert_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS Analysis DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" PATTERN  "*.ilk"  EXCLUDE)
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}  FILES_MATCHING PATTERN "*env.sh*" )
 
@@ -74,8 +78,8 @@ install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINA
 #Example:
 #         hepmcconvert -i hepmc2 -o treeroot input.hepmc output.root
 #"
-#option "input-format" i "Input format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot","lhef","gz"
-#option "output-format" o "Output format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot" ,"treerootopal","hpezeus", "dump", "dot"
+#option "input-format" i "Input format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot","lhef","gz","plugin"
+#option "output-format" o "Output format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot" ,"treerootopal","hpezeus", "dump", "dot","plugin"
 #option "extensions" e "Extensions, in a form extension=value, could be passed to readers/writers" multiple optional string
 #option "events-limit" - "Limit of events to read from input" optional long default="100000000"
 #option "first-event-number" -       "Lowest allowed event number" optional long default="-100000000"

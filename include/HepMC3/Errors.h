@@ -4,7 +4,7 @@
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 /**
  *  @file Errors.h
- *  @brief Implementation of  error and warning macros
+ *  @brief Implementation of  error and HEPMC3_HEPMC3_WARNING macros
  *
  */
 #ifndef HEPMC3_ERRORS_H
@@ -20,44 +20,29 @@ namespace HepMC3 {
 //@{
 
 /** @brief Macro for printing error messages */
-#define ERROR(MESSAGE)   if ( Setup::print_errors() )   { std::cerr << "ERROR::" << MESSAGE << std::endl; }
+#define HEPMC3_ERROR(MESSAGE)   if ( Setup::print_errors() )   { std::cerr << "ERROR::" << MESSAGE << std::endl; }
 
-/** @brief Macro for printing warning messages */
-#define WARNING(MESSAGE) if ( Setup::print_warnings() ) { std::cout << "WARNING::" << MESSAGE << std::endl; }
+/** @brief Macro for printing HEPMC3_HEPMC3_WARNING messages */
+#define HEPMC3_WARNING(MESSAGE) if ( Setup::print_warnings() ) { std::cout << "WARNING::" << MESSAGE << std::endl; }
 
 // Debug messages and code that will not go to the release version
 #ifndef HEPMC3_RELEASE_VERSION
 
 /** @brief Macro for printing debug messages with appropriate debug level */
-#define DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
+#define HEPMC3_DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
 /** @brief Macro for storing code useful for debugging */
-#define DEBUG_CODE_BLOCK( x ) x
+#define HEPMC3_DEBUG_CODE_BLOCK( x ) x
 
 #else
 
-#define DEBUG( x,y )
-#define DEBUG_CODE_BLOCK( x )
+#define HEPMC3_DEBUG( x,y )
+#define HEPMC3_DEBUG_CODE_BLOCK( x )
 
 #endif
 
 //@}
 
 
-/// @name Exceptions
-//@{
-
-/// @class Exception
-/// @brief Standard runtime error
-struct Exception : public std::runtime_error {
-    Exception(const std::string& msg) : std::runtime_error(msg) {} ///< Default constructor
-};
-
-/// @brief Exception related to weight lookups, setting, and index consistency
-struct WeightError : public Exception {
-    WeightError(const std::string& msg) : Exception(msg) {} ///< Default constructor
-};
-
-//@}
 
 
 } // namespace HepMC3

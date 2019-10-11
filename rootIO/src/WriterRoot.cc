@@ -9,12 +9,14 @@
  *
  */
 #include "HepMC3/WriterRoot.h"
+#include "HepMC3/Version.h"
 #include <cstdio>  // sprintf
 // ROOT header files
 #include "TFile.h"
 #include "TTree.h"
 
 namespace HepMC3 {
+HEPMC3_DECLARE_WRITER_FILE(WriterRoot)
 
 WriterRoot::WriterRoot(const std::string &filename, shared_ptr<GenRunInfo> run):
     m_events_count(0) {
@@ -22,7 +24,7 @@ WriterRoot::WriterRoot(const std::string &filename, shared_ptr<GenRunInfo> run):
 
     m_file = TFile::Open(filename.c_str(),"RECREATE");
     if ( !m_file->IsOpen() ) {
-        ERROR( "WriterRoot: problem opening file: " << filename )
+        HEPMC3_ERROR( "WriterRoot: problem opening file: " << filename )
         return;
     }
 
@@ -37,9 +39,9 @@ void WriterRoot::write_event(const GenEvent &evt) {
         write_run_info();
     } else {
         if ( evt.run_info() && run_info() != evt.run_info() )
-            WARNING( "WriterAscii::write_event: GenEvents contain "
-                     "different GenRunInfo objects from - only the "
-                     "first such object will be serialized." )
+            HEPMC3_WARNING( "WriterAscii::write_event: GenEvents contain "
+                            "different GenRunInfo objects from - only the "
+                            "first such object will be serialized." )
         }
 
     GenEventData data;
@@ -51,7 +53,7 @@ void WriterRoot::write_event(const GenEvent &evt) {
     int nbytes = m_file->WriteObject(&data, buf);
 
     if( nbytes == 0 ) {
-        ERROR( "WriterRoot: error writing event")
+        HEPMC3_ERROR( "WriterRoot: error writing event")
         m_file->Close();
     }
 }
@@ -65,7 +67,7 @@ void WriterRoot::write_run_info() {
     int nbytes = m_file->WriteObject(&data,"GenRunInfoData");
 
     if( nbytes == 0 ) {
-        ERROR( "WriterRoot: error writing GenRunInfo")
+        HEPMC3_ERROR( "WriterRoot: error writing GenRunInfo")
         m_file->Close();
     }
 }

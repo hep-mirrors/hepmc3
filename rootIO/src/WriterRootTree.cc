@@ -9,6 +9,7 @@
  *
  */
 #include "HepMC3/WriterRootTree.h"
+#include "HepMC3/Version.h"
 #include <cstdio>  // sprintf
 // ROOT header files
 #include "TFile.h"
@@ -16,6 +17,7 @@
 
 namespace HepMC3
 {
+HEPMC3_DECLARE_WRITER_FILE(WriterRootTree)
 
 WriterRootTree::WriterRootTree(const std::string &filename, shared_ptr<GenRunInfo> run):
     m_tree(0),
@@ -41,7 +43,7 @@ bool WriterRootTree::init(shared_ptr<GenRunInfo> run )
 {
     if ( !m_file->IsOpen() )
     {
-        ERROR( "WriterRootTree: problem opening file: " <<m_file->GetName() )
+        HEPMC3_ERROR( "WriterRootTree: problem opening file: " <<m_file->GetName() )
         return false;
     }
     m_event_data= new GenEventData();

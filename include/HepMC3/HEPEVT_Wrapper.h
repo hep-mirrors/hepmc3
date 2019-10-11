@@ -91,7 +91,8 @@ public:
     static void print_hepevt_particle( int index, std::ostream& ostr = std::cout );
 
     /** @brief Check for problems with HEPEVT common block */
-    static bool check_hepevt_consistency( std::ostream& ostr = std::cout );
+//!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
+/*    static bool check_hepevt_consistency( std::ostream& ostr = std::cout ); */
 
     /** @brief Set all entries in HEPEVT to zero */
     static void zero_everything();
@@ -169,13 +170,15 @@ inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr
     ostr << buf << std::endl;
 }
 
-
-inline bool HEPEVT_Wrapper::check_hepevt_consistency( std::ostream& /*ostr*/ )
+//!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
+/*
+inline bool HEPEVT_Wrapper::check_hepevt_consistency()
 {
-    //!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
+    
     printf("HEPEVT_Wrapper::check_hepevt_consistency is not implemented!\n");
     return true;
 }
+*/
 
 inline void HEPEVT_Wrapper::zero_everything()
 {

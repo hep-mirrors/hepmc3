@@ -24,9 +24,14 @@ class GenEvent;
 
 class Reader {
 public:
+    ///Constructor
+    Reader() {}
 
     /// Virtual destructor
     virtual ~Reader() {}
+
+    /// skip or fast forward reading of some events
+    virtual bool skip(const int) { return !failed();}
 
     /// Fill next event from input into @a evt
     virtual bool read_event(GenEvent& evt) = 0;
@@ -39,6 +44,13 @@ public:
     shared_ptr<GenRunInfo> run_info() const {
         return m_run_info;
     }
+
+///deleted copy constructor
+    Reader(const Reader&) = delete; 
+///deleted copy assignment operator
+    Reader& operator = (const Reader &) = delete;            
+
+
 
 protected:
 

@@ -18,7 +18,6 @@
 #include "HepMC3/GenCrossSection_fwd.h"
 
 #if !defined(__CINT__)
-#include "HepMC3/Errors.h"
 #include "HepMC3/GenHeavyIon.h"
 #include "HepMC3/GenPdfInfo.h"
 #include "HepMC3/GenCrossSection.h"
@@ -89,29 +88,29 @@ public:
     std::vector<double>& weights() { return m_weights; }
     /// Get event weight accessed by index (or the canonical/first one if there is no argument)
     /// @note It's the user's responsibility to ensure that the given index exists!
-    double weight(const size_t& index=0) const { return weights().at(index); }
+    double weight(const unsigned long& index=0) const { return weights().at(index); }
     /// Get event weight accessed by weight name
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
     double weight(const std::string& name) const {
-        if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
+        if (!run_info()) throw std::runtime_error("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
         return weight(run_info()->weight_index(name));
     }
     /// Get event weight accessed by weight name
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
     double& weight(const std::string& name) {
-        if (!run_info()) throw WeightError("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
+        if (!run_info()) throw std::runtime_error("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
         int pos=run_info()->weight_index(name);
-        if (pos<0) throw WeightError("GenEvent::weight(str): no weight with given name in this run");
+        if (pos<0) throw std::runtime_error("GenEvent::weight(str): no weight with given name in this run");
         return m_weights[pos];
     }
     /// Get event weight names, if there are some
     /// @note Requires there to be an attached GenRunInfo with registered weight names, otherwise will throw an exception
-    const std::vector<std::string>& weight_names(const std::string& /*name*/) const {
-        if (!run_info()) throw WeightError("GenEvent::weight_names(): access to event weight names requires the event to have a GenRunInfo");
+    const std::vector<std::string>& weight_names() const {
+        if (!run_info()) throw std::runtime_error("GenEvent::weight_names(): access to event weight names requires the event to have a GenRunInfo");
         const std::vector<std::string>& weightnames = run_info()->weight_names();
-        if (weightnames.empty()) throw WeightError("GenEvent::weight_names(): no event weight names are registered for this run");
+        if (weightnames.empty()) throw std::runtime_error("GenEvent::weight_names(): no event weight names are registered for this run");
         return weightnames;
     }
 
@@ -191,9 +190,9 @@ public:
     }
 
     /// @brief Boost event using x,y,z components of @a v as velocities
-    bool boost( const FourVector  v );
+    bool boost( const FourVector&  v );
     /// @brief Rotate event using x,y,z components of @a v as rotation angles
-    bool rotate( const FourVector  v );
+    bool rotate( const FourVector&  v );
     /// @brief Change sign of @a axis
     bool reflect(const int axis);
 

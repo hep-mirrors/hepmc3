@@ -29,7 +29,7 @@ WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run
 {
     set_run_info(run);
     if ( !m_file.is_open() ) {
-        ERROR( "WriterAscii: could not open output file: "<<filename )
+        HEPMC3_ERROR( "WriterAscii: could not open output file: "<<filename )
     } else {
         m_file << "HepMC::Version " << version() << std::endl;
         m_file << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
@@ -74,9 +74,9 @@ void WriterAscii::write_event(const GenEvent &evt) {
         write_run_info();
     } else {
         if ( evt.run_info() && (run_info() != evt.run_info()) ) {
-            WARNING( "WriterAscii::write_event: GenEvents contain "
-                     "different GenRunInfo objects from - only the "
-                     "first such object will be serialized." )
+            HEPMC3_WARNING( "WriterAscii::write_event: GenEvents contain "
+                            "different GenRunInfo objects from - only the "
+                            "first such object will be serialized." )
         }
         // else {
         //write_run_info();
@@ -124,7 +124,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
             bool status = vt2.second->to_string(st);
 
             if( !status ) {
-                WARNING( "WriterAscii::write_event: problem serializing attribute: "<<vt1.first )
+                HEPMC3_WARNING( "WriterAscii::write_event: problem serializing attribute: "<<vt1.first )
             }
             else {
                 m_cursor +=
@@ -175,12 +175,12 @@ void WriterAscii::allocate_buffer() {
         }     catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
-            WARNING( "WriterAscii::allocate_buffer:"<<e.what()<<" buffer size too large. Dividing by 2. New size: " << m_buffer_size )
+            HEPMC3_WARNING( "WriterAscii::allocate_buffer:"<<e.what()<<" buffer size too large. Dividing by 2. New size: " << m_buffer_size )
         }
     }
 
     if ( !m_buffer ) {
-        ERROR( "WriterAscii::allocate_buffer: could not allocate buffer!" )
+        HEPMC3_ERROR( "WriterAscii::allocate_buffer: could not allocate buffer!" )
         return;
     }
     m_cursor = m_buffer;
@@ -295,7 +295,7 @@ void WriterAscii::write_run_info() {
     for ( auto att: run_info()->attributes() ) {
         string st;
         if ( ! att.second->to_string(st) ) {
-            WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
+            HEPMC3_WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
         }
         else {
             m_cursor +=

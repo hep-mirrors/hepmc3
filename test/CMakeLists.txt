@@ -24,7 +24,7 @@ macro( hepmc_root_test testname )
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../rootIO/include/)
-  target_link_libraries(${testname} HepMC3 HepMC3rootIO)
+  target_link_libraries(${testname} PRIVATE HepMC3 HepMC3rootIO)
    
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
@@ -61,6 +61,7 @@ set( HepMC_tests
         testWeights 
         testLoops
         testDelete
+        testSkip1
         testIO1
         testIO3
         testIO6
@@ -102,7 +103,7 @@ if(HEPMC3_ENABLE_ROOTIO)
 foreach ( test ${HepMC_root_tests} )
   hepmc_root_test( ${test} )
 endforeach ( test ${HepMC_root_tests} )
-target_link_libraries(testIO4 ${ROOT_Hist_LIBRARY})
+target_link_libraries(testIO4 PRIVATE ${ROOT_Hist_LIBRARY})
 endif()
 
 
@@ -261,7 +262,7 @@ macro( hepmc_mceghepmc2_test testname )
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/  ${CMAKE_CURRENT_SOURCE_DIR}/../search/include/ )  
-  target_link_libraries(hepmc2_${testname} ${HEPMC2_LIBRARIES}   MCEG2   )
+  target_link_libraries(hepmc2_${testname} PRIVATE ${HEPMC2_LIBRARIES}   MCEG2   )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( hepmc2_${testname} hepmc2_${testname} )

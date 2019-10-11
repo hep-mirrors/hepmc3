@@ -43,10 +43,10 @@ public:
     //
 public:
     /** @brief Fill class content from string */
-    virtual bool from_string(const string &att);
+    virtual bool from_string(const string &att) override;
 
     /** @brief Fill string from class content */
-    virtual bool to_string(string &att) const;
+    virtual bool to_string(string &att) const override;
 
 public:
 
@@ -85,18 +85,18 @@ public:
     //
 public:
     /** @brief Fill class content from string */
-    virtual bool from_string(const string &att);
+    virtual bool from_string(const string &att)  override;
 
     /** @brief Parse the XML-tags. */
-    virtual bool init();
+    virtual bool init() override;
 
     /** @brief Dummy function. */
-    virtual bool init(const GenRunInfo & /*runinfo*/) {
+    virtual bool init(const GenRunInfo & /*runinfo*/) override{
         return true;
     }
 
     /** @brief Fill string from class content */
-    virtual bool to_string(string &att) const;
+    virtual bool to_string(string &att) const  override;
 
 public:
 

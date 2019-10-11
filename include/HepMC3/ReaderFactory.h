@@ -10,6 +10,7 @@
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/ReaderHEPEVT.h"
 #include "HepMC3/ReaderLHEF.h"
+#include "HepMC3/ReaderPlugin.h"
 
 #include <memory>
 #include <string>
@@ -20,6 +21,13 @@ namespace HepMC3 {
 /** @brief THis function will deduce the type of input file based on the name/URL and it's content and will return appropriate Reader*/
 std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 {
+     std::string libHepMC3rootIO="libHepMC3rootIO.so.3";
+#ifdef __darwin__
+    libHepMC3rootIO="libHepMC3rootIO.dydl";
+#endif    
+#ifdef WIN32
+    libHepMC3rootIO="HepMC3rootIO.dll";
+#endif
     bool remote=false;
     if (filename.find("http://")!=std::string::npos) 	 remote=true;
     if (filename.find("https://")!=std::string::npos) 	 remote=true;
@@ -54,18 +62,11 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
     /* To assure there are at least two elements in the vector*/
     head.push_back("");
     head.push_back("");
-#ifdef HEPMC3_READERROOTTREE_H
     printf("Info in deduce_reader: Attempt ReaderRootTree for:  %s\n",filename.c_str());
     if( strncmp(head.at(0).c_str(),"root",4) == 0||remote)
-        return std::shared_ptr<Reader>((Reader*) ( new ReaderRootTree(filename)));
-#else
-    printf("Info in deduce_reader: Will not attempt ReaderRootTree. include ReaderRootTree.h to enable ROOT support");
-    if (remote)
+     return   std::make_shared<ReaderPlugin>(filename,libHepMC3rootIO,std::string("newReaderRootTreefile"));
+    if (!remote)
     {
-        printf("Info in deduce_reader: file is on remote filesystem, but no root support is enabled:  %s\n",filename.c_str());
-        return shared_ptr<Reader>(nullptr);
-    }
-#endif
     printf("Info in deduce_reader: Attempt ReaderAscii for:  %s\n",filename.c_str());
     if( strncmp(head.at(0).c_str(),"HepMC::Version",14) == 0 && strncmp(head.at(1).c_str(),"HepMC::Asciiv3",14)==0 )
         return std::shared_ptr<Reader>((Reader*) ( new ReaderAscii(filename)));
@@ -95,6 +96,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         break;
     }
     if (HEPEVT) return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(filename)));
+    }
     printf("Info in deduce_reader: All attempts failed for:  %s\n",filename.c_str());
     return shared_ptr<Reader>(nullptr);
 }

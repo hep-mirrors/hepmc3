@@ -35,8 +35,10 @@ public:
     /** @brief Default constructor */
     ReaderAsciiHepMC2(const std::string& filename);
 
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderAsciiHepMC2(std::istream &);
+#endif
 
     /// @brief Destructor
     ~ReaderAsciiHepMC2();
@@ -44,14 +46,17 @@ public:
 // Functions
 //
 public:
+    /// @brief skip events
+    bool skip(const int)  override;
+
     /** @brief Implementation of Reader::read_event */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt)  override;
 
     /// @brief Return status of the stream
-    bool failed();
+    bool failed()  override;
 
     /// @brief Close file stream
-    void close();
+    void close()  override;
 
 private:
     /** @brief Parse event

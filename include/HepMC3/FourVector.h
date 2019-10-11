@@ -57,6 +57,24 @@ public:
         m_v4 = x4;
     }
 
+    /// set component of position/displacement
+    void set_component(const int i, const double x)   
+    {
+    if (i==0) {m_v1=x; return; }
+    if (i==1) {m_v2=x; return; }
+    if (i==2) {m_v3=x; return; }
+    if (i==3) {m_v4=x; return; }
+    }
+    /// get component of position/displacement
+    double get_component(const int i)   const
+    {
+    if (i==0) return m_v1;
+    if (i==1) return m_v2;
+    if (i==2) return m_v3;
+    if (i==3) return m_v4;
+    return 0.0;
+    }
+
 
     /// x-component of position/displacement
     double x()        const { return m_v1; }

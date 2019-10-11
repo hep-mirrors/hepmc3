@@ -14,8 +14,10 @@
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/WriterAscii.h"
 #include "HepMC3/WriterHEPEVT.h"
+#include "HepMC3/WriterPlugin.h"
 #include "HepMC3/ReaderHEPEVT.h"
 #include "HepMC3/ReaderLHEF.h"
+#include "HepMC3/ReaderPlugin.h"
 #include "HepMC3/ReaderFactory.h"
 
 #ifdef HEPMC3_ROOTIO
@@ -48,7 +50,7 @@
 
 #include "cmdline.h"
 using namespace HepMC3;
-enum formats {autodetect, hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, gz, none};
+enum formats {autodetect, hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, gz, plugin, none};
 int main(int argc, char** argv)
 {
     gengetopt_args_info ai;
@@ -73,6 +75,7 @@ int main(int argc, char** argv)
     format_map.insert(std::pair<std::string,formats> ( "dump", dump ));
     format_map.insert(std::pair<std::string,formats> ( "dot", dot ));
     format_map.insert(std::pair<std::string,formats> ( "gz", gz ));
+    format_map.insert(std::pair<std::string,formats> ( "plugin", plugin ));
     format_map.insert(std::pair<std::string,formats> ( "none", none ));
     std::map<std::string, std::string> options;
     for (size_t i=0; i<ai.extensions_given; i++)
@@ -87,6 +90,12 @@ int main(int argc, char** argv)
     long int  first_event_number = ai.first_event_number_arg;
     long int  last_event_number = ai.last_event_number_arg;
     long int  print_each_events_parsed = ai.print_every_events_parsed_arg;
+        std::string InputPluginLibrary;
+        std::string InputPluginName;
+
+        std::string OutputPluginLibrary;
+        std::string OutputPluginName;
+
     std::shared_ptr<Reader>      input_file;
     bool ignore_writer=false;
     switch (format_map.at(std::string(ai.input_format_arg)))
@@ -135,6 +144,12 @@ int main(int argc, char** argv)
         printf("Input format %s  is not supported\n",ai.input_format_arg);
         exit(2);
 #endif
+    case plugin:
+        if (options.find("InputPluginLibrary")==options.end())         { printf("InputPluginLibrary option required\n"); exit(2);} else InputPluginLibrary=options.at("InputPluginLibrary");
+        if (options.find("InputPluginName")==options.end())            { printf("InputPluginName option required\n"); exit(2);} else InputPluginName=options.at("InputPluginName");        
+        input_file=std::make_shared<ReaderPlugin>(std::string(ai.inputs[0]),InputPluginLibrary,InputPluginName);
+        if (input_file->failed()) { printf("Plugin initialization failed\n"); exit(2);}
+        break;
     default:
         printf("Input format %s  is not known\n",ai.input_format_arg);
         exit(2);
@@ -198,6 +213,12 @@ int main(int argc, char** argv)
         exit(2);
         break;
 #endif
+    case plugin:
+        if (options.find("OutputPluginLibrary")==options.end())         { printf("OutputPluginLibrary option required, e.g. OutputPluginLibrary=libAnalysis.so\n"); exit(2);} else OutputPluginLibrary=options.at("OutputPluginLibrary");
+        if (options.find("OutputPluginName")==options.end())            { printf("OutputPluginName option required, e.g. OutputPluginName=newAnalysisExamplefile\n"); exit(2);} else OutputPluginName=options.at("OutputPluginName");        
+        output_file=std::make_shared<WriterPlugin>(std::string(ai.inputs[1]),OutputPluginLibrary,OutputPluginName);
+        if (output_file->failed()) { printf("Plugin initialization failed\n"); exit(2);}
+        break;
     case dump:
         output_file=NULL;
         break;
@@ -242,5 +263,6 @@ int main(int argc, char** argv)
 
     if (input_file)   input_file->close();
     if (output_file)  output_file->close();
+    cmdline_parser_free(&ai);
     return EXIT_SUCCESS;
 }
