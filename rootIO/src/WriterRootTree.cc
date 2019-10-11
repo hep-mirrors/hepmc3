@@ -17,7 +17,7 @@
 
 namespace HepMC3
 {
-DECLARE_HEPMC3_WRITER_FILE(WriterRootTree)
+HEPMC3_DECLARE_WRITER_FILE(WriterRootTree)
 
 WriterRootTree::WriterRootTree(const std::string &filename, shared_ptr<GenRunInfo> run):
     m_tree(0),

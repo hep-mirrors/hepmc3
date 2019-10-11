@@ -16,7 +16,7 @@
 #include "TTree.h"
 
 namespace HepMC3 {
-DECLARE_HEPMC3_WRITER_FILE(WriterRoot)
+HEPMC3_DECLARE_WRITER_FILE(WriterRoot)
 
 WriterRoot::WriterRoot(const std::string &filename, shared_ptr<GenRunInfo> run):
     m_events_count(0) {

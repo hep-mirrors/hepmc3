@@ -13,7 +13,7 @@
 #include "HepMC3/Version.h"
 namespace HepMC3
 {
-DECLARE_HEPMC3_READER_FILE(ReaderRootTree)
+HEPMC3_DECLARE_READER_FILE(ReaderRootTree)
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
     m_tree(0),m_events_count(0),m_tree_name("hepmc3_tree"),m_branch_name("hepmc3_event")

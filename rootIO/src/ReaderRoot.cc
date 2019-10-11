@@ -12,7 +12,7 @@
 #include "HepMC3/Version.h"
 
 namespace HepMC3 {
-DECLARE_HEPMC3_READER_FILE(ReaderRoot)
+HEPMC3_DECLARE_READER_FILE(ReaderRoot)
 
 ReaderRoot::ReaderRoot(const std::string &filename) {
 

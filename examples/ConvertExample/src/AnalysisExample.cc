@@ -2,8 +2,8 @@
 #include <limits>
 namespace HepMC3
 {
-DECLARE_HEPMC3_WRITER_FILE(AnalysisExample)
-DECLARE_HEPMC3_WRITER_STREAM(AnalysisExample)
+HEPMC3_DECLARE_WRITER_FILE(AnalysisExample)
+HEPMC3_DECLARE_WRITER_STREAM(AnalysisExample)
 
 AnalysisExample::AnalysisExample(const std::string &filename,shared_ptr<GenRunInfo> run): m_file(filename),
     m_stream(&m_file)
