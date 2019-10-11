@@ -3124,7 +3124,28 @@ public:
     }
     *file << "</LesHouchesEvents>" << std::endl;
   }
+#ifndef HEPMC3_PYTHON_BINDINGS
+  /**
+   * Add header lines consisting of XML code with this stream.
+   */
+  std::ostream & headerBlock() {
+    return headerStream;
+  }
 
+  /**
+   * Add comment lines to the init block with this stream.
+   */
+  std::ostream & initComments() {
+    return initStream;
+  }
+
+  /**
+   * Add comment lines to the next event to be written out with this stream.
+   */
+  std::ostream & eventComments() {
+    return eventStream;
+  }
+#endif
   /**
    * Add header lines consisting of XML code with this stream.
    */
