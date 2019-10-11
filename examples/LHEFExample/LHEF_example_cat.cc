@@ -155,11 +155,8 @@ int main(int /*argc*/, char ** /*argv*/) {
             // we found in the original LHE file.
             for ( int i = 0, N = hepr->tags.size(); i < N; ++i )
                 if ( hepr->tags[i]->name != "init" )
-                {
-                    std::stringstream a;
-                    hepr->tags[i]->print(a);
-                    writer.headerBlock(a.str());
-                }
+                    hepr->tags[i]->print(writer.headerBlock());
+
             // This is just a test that we can access other attributes
             // included in the GenRunInfo.
             hepr->heprup.NPRUP =
@@ -185,11 +182,8 @@ int main(int /*argc*/, char ** /*argv*/) {
         for ( int i = 0, N = hepe->tags.size(); i < N; ++i )
             if ( hepe->tags[i]->name != "event" &&
                  hepe->tags[i]->name != "eventgroup" )
-            { 
-                std::stringstream b;
-                hepe->tags[i]->print(b);
-                writer.eventComments(b.str());
-            }    
+                hepe->tags[i]->print(writer.eventComments());
+
         // This is just a test that we can access other attributes
         // included in the GenRunInfo.
         hepe->hepeup.AQCDUP =
