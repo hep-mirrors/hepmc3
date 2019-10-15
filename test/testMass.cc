@@ -16,7 +16,9 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenPdfInfo.h"
 #include "HepMC3/GenHeavyIon.h"
-#include "HepMC3/Version.h"
+
+
+//#include "HepMC3/Version.h"
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/WriterAscii.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
