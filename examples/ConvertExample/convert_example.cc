@@ -97,28 +97,30 @@ int main(int argc, char** argv)
         std::string OutputPluginName;
 
     std::shared_ptr<Reader>      input_file;
+    bool input_is_stdin=(std::string(ai.inputs[0])==std::string("-"));
+    if (input_is_stdin) std::ios_base::sync_with_stdio(false);
     bool ignore_writer=false;
     switch (format_map.at(std::string(ai.input_format_arg)))
     {
-    case autodetect:
-        input_file=deduce_reader(ai.inputs[0]);
+    case autodetect:        
+        input_file=(input_is_stdin?deduce_reader(std::cin):deduce_reader(ai.inputs[0]));
         if (!input_file) 
         {
-        printf("Input format  detection for file %s has failed\n",ai.input_format_arg);
+        input_is_stdin?printf("Input format  detection for std input has failed\n"):printf("Input format  detection for file %s has failed\n",ai.inputs[0]);
         exit(2);
         }
         break;
     case hepmc2:
-        input_file=std::make_shared<ReaderAsciiHepMC2>(ai.inputs[0]);
+        input_file=(input_is_stdin?std::make_shared<ReaderAsciiHepMC2>(std::cin):std::make_shared<ReaderAsciiHepMC2>(ai.inputs[0]));
         break;
     case hepmc3:
-        input_file=std::make_shared<ReaderAscii>(ai.inputs[0]);
+        input_file=(input_is_stdin?std::make_shared<ReaderAscii>(std::cin):std::make_shared<ReaderAscii>(ai.inputs[0]));
         break;
     case hpe:
-        input_file=std::make_shared<ReaderHEPEVT>(ai.inputs[0]);
+        input_file=(input_is_stdin?std::make_shared<ReaderHEPEVT>(std::cin):std::make_shared<ReaderHEPEVT>(ai.inputs[0]));
         break;
     case lhef:
-        input_file=std::make_shared<ReaderLHEF>(ai.inputs[0]);
+        input_file=(input_is_stdin?std::make_shared<ReaderLHEF>(std::cin):std::make_shared<ReaderLHEF>(ai.inputs[0]));
         break;
     case gz:
 #ifdef HEPMCCONVERT_EXTENSION_GZ
