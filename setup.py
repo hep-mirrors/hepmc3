@@ -22,6 +22,12 @@ def get_hepmc3_version():
 
 def get_hepmc3_libraries():
  ps=platform.system()
+ if  ps == 'FreeBSD':
+  return [
+  'outputs/lib/libHepMC3.so',
+  'outputs/lib/libHepMC3.so.3',
+  'outputs/lib/libHepMC3search.so', 
+  'outputs/lib/libHepMC3search.so.3']
  if  ps == 'Linux':
   return [
   'outputs/lib64/libHepMC3.so',
@@ -101,6 +107,11 @@ class build_ext(build_ext_orig):
             if not os.path.isdir('outputs/lib64/'): 
              os.mkdir('outputs/lib64/')
              if os.path.isdir('outputs/lib/'):
+              if  ps == 'FreeBSD':
+               copyfile('outputs/lib/libHepMC3.so.3','outputs/lib64/libHepMC3.so.3')
+               copyfile('outputs/lib/libHepMC3.so','outputs/lib64/libHepMC3.so')
+               copyfile('outputs/lib/libHepMC3search.so.3','outputs/lib64/libHepMC3search.so.3')
+               copyfile('outputs/lib/libHepMC3search.so','outputs/lib64/libHepMC3search.so')
               if  ps == 'Linux':
                copyfile('outputs/lib/libHepMC3.so.3','outputs/lib64/libHepMC3.so.3')
                copyfile('outputs/lib/libHepMC3.so','outputs/lib64/libHepMC3.so')
