@@ -94,6 +94,10 @@
 
     Implementation of custom Reader and Writer objects is possible as well.
     
+    Please, note the difference in the behaviour of default Readers with respect to HepMC2. 
+    when reading files with multiple headers. The ASCII files with multiple headers ( e.g. obtained with 
+    cat 1.hepmc 2.hepmc > 12.hepmc) will be processed by the readers only till the 
+    first occurance of END_EVENT_LISTING. 
     ###########################################################################
     @subsection memory Memory managed by shared pointers
     ###########################################################################

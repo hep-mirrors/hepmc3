@@ -19,18 +19,18 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
     m_weight_indices.clear();
     m_weight_names = names;
     for ( int i = 0, N = names.size(); i < N; ++i ) {
-    string name = names[i];
-    if ( name.empty() ) {
-        std::ostringstream oss;
-        oss << i;
-        name = oss.str();
-        m_weight_names[i] = name;
-    }
-    if ( has_weight(name) )
-        throw std::logic_error("GenRunInfo::set_weight_names: "
-                   "Duplicate weight name '" + name +
-                   "' found.");
-    m_weight_indices[name] = i;
+        string name = names[i];
+        if ( name.empty() ) {
+            std::ostringstream oss;
+            oss << i;
+            name = oss.str();
+            m_weight_names[i] = name;
+        }
+        if ( has_weight(name) )
+            throw std::logic_error("GenRunInfo::set_weight_names: "
+                                   "Duplicate weight name '" + name +
+                                   "' found.");
+        m_weight_indices[name] = i;
     }
 }
 
@@ -71,6 +71,15 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     }
 }
 
+
+std::vector<std::string> GenRunInfo::attribute_names( ) const {
+    std::vector<std::string> results;
+    for(auto vt1: m_attributes ) {
+        results.push_back( vt1.first );
+    }
+    return results;
+}
+
 void GenRunInfo::read_data(const GenRunInfoData& data) {
 
     //this->clear();
@@ -95,30 +104,30 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
     }
 }
 
-    GenRunInfo::GenRunInfo(const GenRunInfo& r)
+GenRunInfo::GenRunInfo(const GenRunInfo& r)
+{
+    if (this != &r)
     {
-     if (this != &r)
-     {
         std::lock(m_lock_attributes, r.m_lock_attributes);
         std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
-        std::lock_guard<std::recursive_mutex> rhs_lk(r.m_lock_attributes, std::adopt_lock);     
+        std::lock_guard<std::recursive_mutex> rhs_lk(r.m_lock_attributes, std::adopt_lock);
         GenRunInfoData tdata;
         r.write_data(tdata);
         read_data(tdata);
-     }
     }
-    GenRunInfo& GenRunInfo::operator=(const GenRunInfo& r)
+}
+GenRunInfo& GenRunInfo::operator=(const GenRunInfo& r)
+{
+    if (this != &r)
     {
-     if (this != &r)
-     {
         std::lock(m_lock_attributes, r.m_lock_attributes);
         std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
-        std::lock_guard<std::recursive_mutex> rhs_lk(r.m_lock_attributes, std::adopt_lock);     
+        std::lock_guard<std::recursive_mutex> rhs_lk(r.m_lock_attributes, std::adopt_lock);
         GenRunInfoData tdata;
         r.write_data(tdata);
         read_data(tdata);
-     }
-     return *this;
     }
+    return *this;
+}
 
 } // namespace HepMC3

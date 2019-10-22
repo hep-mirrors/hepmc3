@@ -21,7 +21,8 @@ using namespace HepMC;
 using namespace HepMC3;
 
 #endif // ifdef HEPMC2
-
+/// @class ValidationTool
+/// @brief  Virtual Interface to validation tools
 class ValidationTool {
 //
 // Constructors

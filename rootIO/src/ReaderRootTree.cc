@@ -10,9 +10,10 @@
  */
 #include "HepMC3/ReaderRootTree.h"
 #include "HepMC3/Units.h"
-
+#include "HepMC3/Version.h"
 namespace HepMC3
 {
+HEPMC3_DECLARE_READER_FILE(ReaderRootTree)
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
     m_tree(0),m_events_count(0),m_tree_name("hepmc3_tree"),m_branch_name("hepmc3_event")
@@ -32,36 +33,42 @@ ReaderRootTree::ReaderRootTree(const std::string &filename,const std::string &tr
 bool ReaderRootTree::init()
 {
     if ( !m_file->IsOpen() )
-        {
-            ERROR( "ReaderRootTree: problem opening file: " << m_file->GetName() )
-            return false;
-        }
-   
-        
+    {
+        HEPMC3_ERROR( "ReaderRootTree: problem opening file: " << m_file->GetName() )
+        return false;
+    }
+
+
     m_tree=reinterpret_cast<TTree*>(m_file->Get(m_tree_name.c_str()));
     if (!m_tree)
-        {
-            ERROR( "ReaderRootTree: problem opening tree:  " << m_tree_name)
-            return false;
-        }
+    {
+        HEPMC3_ERROR( "ReaderRootTree: problem opening tree:  " << m_tree_name)
+        return false;
+    }
     m_event_data=new GenEventData();
     int result=m_tree->SetBranchAddress(m_branch_name.c_str(),&m_event_data);
     if (result<0)
-        {
-            ERROR( "ReaderRootTree: problem reading branch tree:  " << m_tree_name)
-            return false;
-        }
+    {
+        HEPMC3_ERROR( "ReaderRootTree: problem reading branch tree:  " << m_tree_name)
+        return false;
+    }
     m_run_info_data= new GenRunInfoData();
     result=m_tree->SetBranchAddress("GenRunInfo",&m_run_info_data);
     if (result<0)
-        {
-            ERROR( "ReaderRootTree2: problem reading branch tree:  " << "GenRunInfo")
-            return false;
-        }
- set_run_info(make_shared<GenRunInfo>());
+    {
+        HEPMC3_ERROR( "ReaderRootTree2: problem reading branch tree:  " << "GenRunInfo")
+        return false;
+    }
+    set_run_info(make_shared<GenRunInfo>());
     return true;
 }
 
+bool ReaderRootTree::skip(const int n)
+{
+    m_events_count+=n;
+    if (m_events_count>m_tree->GetEntries()) return false;
+    return true;
+}
 
 
 
@@ -76,7 +83,7 @@ bool ReaderRootTree::read_event(GenEvent& evt)
     m_event_data->attribute_name.clear();
     m_event_data->attribute_string.clear();
 
-    
+
     m_run_info_data->weight_names.clear();
     m_run_info_data->tool_name.clear();
     m_run_info_data->tool_version.clear();

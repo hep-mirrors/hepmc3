@@ -1,4 +1,8 @@
 // -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+//
 #include "HepMC3/Attribute.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
@@ -40,9 +44,9 @@ int main()
         for (size_t e=0; e<evts.size(); e++)
         {
             std::vector<std::thread> threads;
-            int j1=-thr_evts[i].at(e).vertices().size();
+            int j1=-((long)thr_evts[i].at(e).vertices().size());
             int j2=thr_evts[i].at(e).particles().size();
-            int d=(j2-j1)/NmaxThreads;
+            int d=((long)(j2)-(long)(j1))/NmaxThreads;
             std::vector<int> ids;
             ids.push_back(0);
             for (int j=j1; j<j2; j+=d)

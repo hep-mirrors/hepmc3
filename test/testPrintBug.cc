@@ -8,6 +8,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Print.h"
+#include "HepMC3/PrintStreams.h"
 using namespace HepMC3;
 int main()
 {
@@ -31,6 +32,9 @@ int main()
         p_event.add_vertex(vertex);
     }
     Print::listing(p_event);
+    //
+    Print::content(p_event);
+    std::cout<<p_event;
     // cleanup
     p_event.clear();
     return 0;

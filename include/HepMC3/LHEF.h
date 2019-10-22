@@ -357,8 +357,7 @@ struct TagBase {
   /**
    * Main constructor stores the attributes and contents of a tag.
    */
-  TagBase(const AttributeMap & attr, std::string conts = std::string())
-    : attributes(attr), contents(conts) {}
+  TagBase(const AttributeMap & attr, std::string conts = std::string()): attributes(attr), contents(conts) {}
  
   /**
    * Find an attribute named \a n and set the double variable \a v to
@@ -1795,7 +1794,8 @@ public:
         eventfiles[i].print(file);
       file << "</eventfiles>\n";
     }
-    if ( !xsecinfos.empty() > 0 )
+    //AV if ( !xsecinfos.empty() > 0 )
+    if ( !xsecinfos.empty())
       for ( XSecInfos::const_iterator it = xsecinfos.begin();
             it != xsecinfos.end(); ++it )
         if ( it->second.neve > 0 ) it->second.print(file);
@@ -3093,13 +3093,14 @@ class Writer {
 
 public:
 
+#ifndef HEPMC3_PYTHON_BINDINGS
   /**
    * Create a Writer object giving a stream to write to.
    * @param os the stream where the event file is written.
    */
   Writer(std::ostream & os)
     : file(&os), initfile(&os), dirpath("") {  }
-
+#endif
   /**
    * Create a Writer object giving a filename to write to.
    * @param filename the name of the event file to be written.
@@ -3125,7 +3126,7 @@ public:
     }
     *file << "</LesHouchesEvents>" << std::endl;
   }
-
+#ifndef HEPMC3_PYTHON_BINDINGS
   /**
    * Add header lines consisting of XML code with this stream.
    */
@@ -3145,6 +3146,27 @@ public:
    */
   std::ostream & eventComments() {
     return eventStream;
+  }
+#endif
+  /**
+   * Add header lines consisting of XML code with this stream.
+   */
+  void  headerBlock(const std::string& a) {
+    headerStream<<a;;
+  }
+
+  /**
+   * Add comment lines to the init block with this stream.
+   */
+  void initComments(const std::string& a) {
+    initStream<<a;
+  }
+
+  /**
+   * Add comment lines to the next event to be written out with this stream.
+   */
+  void eventComments(const std::string& a) {
+    eventStream<<a;
   }
 
   /**
@@ -3282,6 +3304,20 @@ protected:
   std::string dirpath;
   
 public:
+  /**
+   * The standard init information.
+   */
+  HEPRUP heprup;
+
+
+  /**
+   * The standard information about the event we will write next.
+   */
+  HEPEUP hepeup;
+
+
+
+private:
 
   /**
    * Stream to add all lines in the header block.
@@ -3289,26 +3325,15 @@ public:
   std::ostringstream headerStream;
 
   /**
-   * The standard init information.
-   */
-  HEPRUP heprup;
-
-  /**
    * Stream to add additional comments to be put in the init block.
    */
   std::ostringstream initStream;
-
-  /**
-   * The standard information about the event we will write next.
-   */
-  HEPEUP hepeup;
 
   /**
    * Stream to add additional comments to be written together the next event.
    */
   std::ostringstream eventStream;
 
-private:
 
   /**
    * The default constructor should never be used.

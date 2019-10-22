@@ -1,5 +1,7 @@
+// -*- C++ -*-
 //
-// Test Units
+// This file is part of HepMC
+// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #include <iostream>
 
@@ -20,6 +22,11 @@ double conversion_factor( Units::LengthUnit from, Units::LengthUnit  to )
     Units::convert(m,from,to );
     return m.e()/msave.e();//NAN?
 }
+bool neq(const double a,const double b)
+{
+    if (std::abs(a-b)<0.001*(std::abs(a)+std::abs(b)))  return false;
+    return true;
+}
 int main()
 {
 
@@ -31,28 +38,28 @@ int main()
 
     // check momentum conversion factors
     cf = conversion_factor( Units::GEV, Units::GEV );
-    if( cf != 1 )
+    if( neq(cf,1) )
     {
         ++err;
         std::cerr << "wrong conversion factor " << cf
                   << " for GEV to GEV - should be 1 \n";
     }
     cf =  conversion_factor( Units::MEV, Units::MEV );
-    if( cf != 1 )
+    if( neq(cf,1)  )
     {
         ++err;
         std::cerr << "wrong conversion factor " << cf
                   << " for MEV to MEV - should be 1 \n";
     }
     cf =  conversion_factor( Units::MEV, Units::GEV );
-    if( cf != 0.001 )
+    if( neq(cf,0.001)  )
     {
         ++err;
         std::cerr << "wrong conversion factor " << cf
                   << " for MEV to GEV - should be 0.001 \n";
     }
     cf =  conversion_factor( Units::GEV, Units::MEV );
-    if( cf != 1000.0 )
+    if( neq(cf,1000.0)  )
     {
         ++err;
         std::cerr << "wrong conversion factor " << cf
@@ -61,28 +68,28 @@ int main()
 
     // check length conversion factors
     cf =  conversion_factor( Units::MM, Units::MM );
-    if( cf != 1 )
+    if( neq(cf,1)  )
     {
         ++err;
         std::cerr << "wrong conversion factor " << cf
                   << " for MM to MM - should be 1 \n";
     }
     cf =  conversion_factor( Units::CM, Units::CM );
-    if( cf != 1 )
+    if( neq(cf,1)  )
     {
         ++err;
         std::cerr << "wrong conversion factor " << cf
                   << " for CM to CM - should be 1 \n";
     }
     cf =  conversion_factor( Units::CM, Units::MM );
-    if( cf != 10.0 )
+    if( neq(cf,10.0)  )
     {
         ++err;
         std::cerr << "wrong conversion factor " << cf
                   << " for CM to MM - should be 10 \n";
     }
     cf =  conversion_factor( Units::MM, Units::CM );
-    if( cf != 0.1 )
+    if( neq(cf,0.1)  )
     {
         ++err;
         std::cerr << "wrong conversion factor " << cf

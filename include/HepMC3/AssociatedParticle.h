@@ -10,7 +10,7 @@
  *  @file AssociatedParticle.h
  *  @brief Definition of \b class AssociatedParticle,
  *
- *  @class HepMC3::AssociatedParticle 
+ *  @class HepMC3::AssociatedParticle
  *  @brief Attribute class allowing
  *  eg. a GenParticle to refer to another GenParticle.
 
@@ -43,14 +43,14 @@ public:
     bool from_string(const string &att) {
         IntAttribute::from_string(att);
         if ( associatedId() > int(event()->particles().size()) ||
-             associatedId() <= 0  ) return false;
+                associatedId() <= 0  ) return false;
         m_associated = event()->particles()[associatedId() -1];
         return true;
     }
 
     /** @brief get id of the associated particle. */
     int associatedId() const {
-    return value();
+        return value();
     }
 
     /** @brief get a pointer to the associated particle. */
@@ -65,7 +65,7 @@ public:
     }
 
 private:
-    
+
     ConstGenParticlePtr m_associated; ///< The associated particle.
 
 };

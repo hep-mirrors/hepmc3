@@ -20,7 +20,8 @@
 
 #include "Photos/Photos.h"
 #include "Photos/Log.h"
-
+/// @class PhotosValidationTool
+/// @brief Interface for validatio to Photos
 class PhotosValidationTool : public ValidationTool {
 public:
     PhotosValidationTool();
@@ -35,10 +36,10 @@ public:
     void finalize();
 
 private:
-    static const int MAX_PHOTONS_TO_KEEP_TRACK_OF = 4;
-    int    m_photons_added[MAX_PHOTONS_TO_KEEP_TRACK_OF];
-    int    m_more_photons_added;
-    Timer  m_timer;
+    static const int MAX_PHOTONS_TO_KEEP_TRACK_OF = 4;  ///< Number of tracked photons
+    int    m_photons_added[MAX_PHOTONS_TO_KEEP_TRACK_OF]; ///< Added photons
+    int    m_more_photons_added;                          ///< More added photons
+    Timer  m_timer; ///< Timer
 };
 
 #endif

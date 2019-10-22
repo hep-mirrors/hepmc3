@@ -13,58 +13,58 @@
 
 namespace HepMC3 {
 
-    /// @brief Configuration for HepMC
-    ///
-    /// Contains macro definitions for printing debug output, feature deprecation, etc.
-    /// Static class - configuration is shared among all HepMC events
-    /// and program threads
-    ///
-    class Setup {
+/// @brief Configuration for HepMC
+///
+/// Contains macro definitions for printing debug output, feature deprecation, etc.
+/// Static class - configuration is shared among all HepMC events
+/// and program threads
+///
+class Setup {
 
-        /// Private constructor
-        Setup() {}
-        /// Private destructor
-        ~Setup() {}
-
-
-    public:
-
-        /// @name Accessors
-        //@{
-
-        /// Get error messages printing flag
-        static bool print_errors()                { return m_is_printing_errors;    }
-        /// set error messages printing flag
-        static void set_print_errors(bool flag)   { m_is_printing_errors   = flag;  }
-
-        /// Get warning messages printing flag
-        static bool print_warnings()              { return m_is_printing_warnings;  }
-        /// Set warning messages printing flag
-        static void set_print_warnings(bool flag) { m_is_printing_warnings = flag;  }
-
-        /// Get debug level
-        static int  debug_level()                 { return m_debug_level;           }
-        /// Set debug level
-        static void set_debug_level(int level)    { m_debug_level          = level; }
-        //@}
-
-        /// @name Static constants
-        //@{
-        /// Default maxUlps for AlmostEqual2sComplement function (double precision)
-        static const unsigned int DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS;
-
-        /// Default threshold for comparing double variables
-        static const double DOUBLE_EPSILON;
-
-        //@}
+    /// Private constructor
+    Setup() {}
+    /// Private destructor
+    ~Setup() {}
 
 
-    private:
+public:
 
-        static bool m_is_printing_errors;   //!< Flag for printing error messages
-        static bool m_is_printing_warnings; //!< Flag for printing warning messages
-        static int  m_debug_level;          //!< Level of debug messages printed out
-    };
+    /// @name Accessors
+    //@{
+
+    /// Get error messages printing flag
+    static bool print_errors();
+    /// set error messages printing flag
+    static void set_print_errors(const bool flag);
+
+    /// Get warning messages printing flag
+    static bool print_warnings();
+    /// Set warning messages printing flag
+    static void set_print_warnings(const bool flag);
+
+    /// Get debug level
+    static int  debug_level();
+    /// Set debug level
+    static void set_debug_level(const int level);
+    //@}
+
+    /// @name Static constants
+    //@{
+    /// Default maxUlps for AlmostEqual2sComplement function (double precision)
+    static const unsigned int DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS;
+
+    /// Default threshold for comparing double variables
+    static const double DOUBLE_EPSILON;
+
+    //@}
+
+
+private:
+
+    static bool m_is_printing_errors;   //!< Flag for printing error messages
+    static bool m_is_printing_warnings; //!< Flag for printing warning messages
+    static int  m_debug_level;          //!< Level of debug messages printed out
+};
 
 
 } // namespace HepMC3

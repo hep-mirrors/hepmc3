@@ -1,0 +1,53 @@
+language: cpp
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      language: python
+      env:
+        - CXX_COMPILER='g++'
+        - C_COMPILER='gcc'
+        - Fortran_COMPILER='gfortran'
+      script:
+        - cmake  -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON CMakeLists.txt
+        - cmake --build .    
+        - ctest --output-on-failure  
+    - os: osx
+      compiler: gcc
+      language: sh
+      python: "3.7"
+      env:
+        - CXX_COMPILER='g++'
+        - C_COMPILER='gcc'
+        - Fortran_COMPILER='gfortran'
+      script:
+        - cmake  -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON CMakeLists.txt
+        - cmake --build .    
+        - ctest --output-on-failure
+    - os: osx
+      language: sh
+      compiler: clang
+      python: "3.7"
+      env:
+        - CXX_COMPILER='clang++'
+        - C_COMPILER='clang'
+        - Fortran_COMPILER='gfortran'
+      script:
+        - cmake  -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON CMakeLists.txt
+        - cmake --build .    
+        - ctest --output-on-failure
+    - os: windows
+      before_install:
+              - choco install python
+              - python -m pip install --upgrade pip
+      env: 
+       - PATH=/c/Python37:/c/Python37/Scripts:$PATH
+       - CMAKE_PATH="/c/Program Files/CMake/bin"
+      script:
+        - export PATH=$CMAKE_PATH:$PATH
+        - cmake  -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON  -Thost=x64 -A x64  CMakeLists.txt
+        - cmake --build .
+        - cp outputs/lib/*dll        python/test
+        - cp outputs/lib/*dll        test
+        - ctest --output-on-failure -C Debug
+

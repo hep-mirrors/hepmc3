@@ -4,10 +4,8 @@
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #include "ValidationControl.h"
-
-#ifdef SIMPLEEVENTTOOL
+#include "OutputValidationTool.h"
 #include "SimpleEventTool.h"
-#endif
 
 #ifdef PHOTOSPP
 #include "PhotosValidationTool.h"
@@ -82,13 +80,9 @@ void ValidationControl::read_file(const std::string &filename) {
             if( m_has_input_source ) status = ADDITIONAL_INPUT;
             else {
                 ValidationTool *input = NULL;
-                // Use tool as input source - currently only one supported tool
-                if( strncmp(buf,"tool",4)==0 ) {
-#ifdef SIMPLEEVENTTOOL
+                // Use tool as input source
+                if( strncmp(buf,"SimpleEvent",11)==0 ) {
                     input = new SimpleEventTool();
-#else
-                    status = UNAVAILABLE_TOOL;
-#endif
                 }
                 else if( strncmp(buf,"pythia8",7)==0) {
 #ifdef PYTHIA8
@@ -109,8 +103,10 @@ void ValidationControl::read_file(const std::string &filename) {
         // Parse tools used
         else if( strncmp(buf,"TOOL",3)==0 ) {
             in >> buf;
-
-            if     ( strncmp(buf,"tauola",6)==0 ) {
+            if     ( strncmp(buf,"output",6)==0 ) {
+                m_toolchain.push_back( new OutputValidationTool(filename)   );
+            }
+            else if     ( strncmp(buf,"tauola",6)==0 ) {
 #ifdef TAUOLAPP
                 m_toolchain.push_back( new TauolaValidationTool()   );
 #else
@@ -278,7 +274,6 @@ void ValidationControl::process(GenEvent &hepmc) {
                 for ( GenEvent::particle_const_iterator p = hepmc.particles_begin();
             p != hepmc.particles_end();  ++p ) {
             if( (*p)->status() != 1 ) continue;
-                //(*p)->print();
                 FourVector m = (*p)->momentum();
                 sum.setPx( sum.px() + m.px() );
                 sum.setPy( sum.py() + m.py() );
@@ -297,7 +292,6 @@ void ValidationControl::process(GenEvent &hepmc) {
             )
 
             HEPMC3CODE(
-                //vector<GenParticlePtr> results = applyFilter(Selector::STATUS==1,hepmc.particles());
                 for (auto p: hepmc.particles()) if( p->status() != 1 ) continue; else  sum += p->momentum();
                         if(!input_momentum.is_zero()) delta = (input_momentum - sum).length();
                         )

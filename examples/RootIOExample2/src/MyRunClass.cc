@@ -1,24 +1,24 @@
 #include "MyRunClass.h"
 
-MyRunClass::MyRunClass():someint(0), run(0){};
+MyRunClass::MyRunClass():someint(0), run(0) {};
 
 void MyRunClass::SetRunInfo(GenRunInfo* myrun)
 {
-  run = myrun;
+    run = myrun;
 }
 
 GenRunInfo* MyRunClass::GetRunInfo()
 {
-  return run;
+    return run;
 }
 
 void MyRunClass::SetInt(int theint)
 {
-  someint = theint;
+    someint = theint;
 }
 
 int MyRunClass::GetInt()
 {
-  return someint;
+    return someint;
 }
 

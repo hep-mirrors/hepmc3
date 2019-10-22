@@ -32,39 +32,35 @@ public:
     WriterAsciiHepMC2(const std::string& filename,
                       shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// @brief Constructor from ostream
     WriterAsciiHepMC2(std::ostream& stream,
                       shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
-
+#endif
     /// @brief Destructor
     ~WriterAsciiHepMC2();
 
     /// @brief Write event to file
     ///
     /// @param[in] evt Event to be serialized
-    void write_event(const GenEvent& evt);
+    void write_event(const GenEvent& evt)  override;
 
     /// @brief Write the GenRunInfo object to file.
     void write_run_info();
 
     /// @brief Return status of the stream
-    bool failed() { return (bool)m_file.rdstate(); }
+    bool failed()  override;
 
     /// @brief Close file stream
-    void close();
+    void close()  override;
 
     /// @brief Set output precision
     ///
     /// Available range is [2,24]. Default is 16.
-    void set_precision( const int& prec )
-    {
-        if (prec < 2 || prec > 24) return;
-        m_precision = prec;
-    }
+    void set_precision( const int& prec );
+
     /// @brief Return output precision
-    int precision() const {
-        return m_precision;
-    }
+    int precision() const;
 private:
 
     /// @name Buffer management
@@ -83,12 +79,7 @@ private:
     ///
     /// Default is 256kb. Minimum is 256b.
     /// Size can only be changed before first read/write operation.
-    void set_buffer_size(const size_t& size )
-    {
-        if (m_buffer) return;
-        if (size < 256) return;
-        m_buffer_size = size;
-    }
+    void set_buffer_size(const size_t& size );
 
     /// @brief Escape '\' and '\n' characters in string
     std::string escape(const std::string& s)  const;

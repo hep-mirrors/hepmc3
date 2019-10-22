@@ -71,10 +71,10 @@ struct HEPEVT
 #ifndef HEPEVT_WRAPPER_HEADER_ONLY
 #include "HepMC3/GenEvent.h"
 #endif
-using std::endl;
 
 namespace HepMC3
 {
+/** @brief Pointer to external (e.g. in Pythia6) struct with HEPEVT */
 extern struct HEPEVT*  hepevtptr;
 
 class HEPEVT_Wrapper
@@ -91,7 +91,8 @@ public:
     static void print_hepevt_particle( int index, std::ostream& ostr = std::cout );
 
     /** @brief Check for problems with HEPEVT common block */
-    static bool check_hepevt_consistency( std::ostream& ostr = std::cout );
+//!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
+/*    static bool check_hepevt_consistency( std::ostream& ostr = std::cout ); */
 
     /** @brief Set all entries in HEPEVT to zero */
     static void zero_everything();
@@ -146,15 +147,15 @@ public:
 //
 inline void HEPEVT_Wrapper::print_hepevt( std::ostream& ostr )
 {
-    ostr << " Event No.: " << hepevtptr->nevhep << endl;
-    ostr<< "  Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M." << endl;
+    ostr << " Event No.: " << hepevtptr->nevhep << std::endl;
+    ostr<< "  Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M." << std::endl;
     for( int i=1; i<=hepevtptr->nhep; ++i )
-        {
-            HEPEVT_Wrapper::print_hepevt_particle( i, ostr );
-        }
+    {
+        HEPEVT_Wrapper::print_hepevt_particle( i, ostr );
+    }
 }
 
-inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr ) 
+inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr )
 {
     char buf[255];
 
@@ -166,16 +167,18 @@ inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr
     ostr << buf;
     // print the rest of particle info
     sprintf(buf,"%8.2f %8.2f %8.2f %8.2f %8.2f",hepevtptr->phep[index-1][0],hepevtptr->phep[index-1][1],hepevtptr->phep[index-1][2],hepevtptr->phep[index-1][3],hepevtptr->phep[index-1][4]);
-    ostr << buf << endl;
+    ostr << buf << std::endl;
 }
 
-
-inline bool HEPEVT_Wrapper::check_hepevt_consistency( std::ostream& /*ostr*/ )
+//!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
+/*
+inline bool HEPEVT_Wrapper::check_hepevt_consistency()
 {
-    //!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
+    
     printf("HEPEVT_Wrapper::check_hepevt_consistency is not implemented!\n");
     return true;
 }
+*/
 
 inline void HEPEVT_Wrapper::zero_everything()
 {
@@ -187,12 +190,12 @@ inline int HEPEVT_Wrapper::number_parents( const int& index )
     return (hepevtptr->jmohep[index-1][0]) ? (hepevtptr->jmohep[index-1][1]) ? hepevtptr->jmohep[index-1][1]-hepevtptr->jmohep[index-1][0] : 1 : 0;
 }
 
-inline int HEPEVT_Wrapper::number_children( const int& index ) 
+inline int HEPEVT_Wrapper::number_children( const int& index )
 {
     return (hepevtptr->jdahep[index-1][0]) ? (hepevtptr->jdahep[index-1][1]) ? hepevtptr->jdahep[index-1][1]-hepevtptr->jdahep[index-1][0] : 1 : 0;
 }
 
-inline int HEPEVT_Wrapper::number_children_exact( const int& index ) 
+inline int HEPEVT_Wrapper::number_children_exact( const int& index )
 {
     int nc=0;
     for( int i=1; i<=hepevtptr->nhep; ++i )

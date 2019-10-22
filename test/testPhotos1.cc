@@ -43,7 +43,7 @@ PartonLevel:FSR = off\n\
     fprintf(Fconfig,"\
 INPUT  pythia8      testPhotos1.input\n\
 TOOL   photos                   \n\
-OUTPUT ascii        testPhotos1.hepmc\n\
+EVENTS 1000\n\
 \n");
     fclose(Fconfig);
 

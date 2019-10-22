@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3)
-set(PROJECT_VERSION 3.01.01)
-
+set(PROJECT_VERSION 3.02.00)
+SET(HEPMC3_VERSION 3.02.00)
+SET(HEPMC3_VERSION_MAJOR  3)
+SET(HEPMC3_VERSION_MINOR  2)
+SET(HEPMC3_VERSION_PATCH  0)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -18,17 +21,26 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 #-------------Options-------------------------------------------------------
 
-option(HEPMC3_ENABLE_SEARCH "Enables building of search library" ON)
-option(HEPMC3_ENABLE_ROOTIO "Enables building with ROOT O/I." ON)
-option(HEPMC3_BUILD_EXAMPLES "Enables building of examples." OFF)
-option(HEPMC3_ENABLE_TEST "Enables building of tests." OFF)
+option(HEPMC3_ENABLE_SEARCH      "Enables building of search library" ON)
+option(HEPMC3_ENABLE_ROOTIO      "Enables building with ROOT O/I." ON)
+option(HEPMC3_ENABLE_PYTHON      "Enables building of Python  bindings, master switch" ON)
+option(HEPMC3_BUILD_DOCS         "Enables building of documentation" OFF)
+option(HEPMC3_BUILD_EXAMPLES     "Enables building of examples." OFF)
+option(HEPMC3_ENABLE_TEST        "Enables building of tests." OFF)
 option(HEPMC3_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces." OFF)
+
+if (NOT HEPMC3_PYTHON_VERSIONS)
+set(HEPMC3_PYTHON_VERSIONS "2.X,3.X")
+endif()
 
 
 message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}") 
 message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}") 
-message(STATUS "HepMC3: HEPMC3_BUILD_EXAMPLES        ${HEPMC3_BUILD_EXAMPLES}") 
+message(STATUS "HepMC3: HEPMC3_ENABLE_PYTHON         ${HEPMC3_ENABLE_PYTHON}") 
+message(STATUS "HepMC3: HEPMC3_PYTHON_VERSIONS       ${HEPMC3_PYTHON_VERSIONS}") 
 message(STATUS "HepMC3: HEPMC3_ENABLE_TEST           ${HEPMC3_ENABLE_TEST}") 
+message(STATUS "HepMC3: HEPMC3_BUILD_DOCS            ${HEPMC3_BUILD_DOCS}") 
+message(STATUS "HepMC3: HEPMC3_BUILD_EXAMPLES        ${HEPMC3_BUILD_EXAMPLES}") 
 message(STATUS "HepMC3: HEPMC3_INSTALL_INTERFACES    ${HEPMC3_INSTALL_INTERFACES}")
 
 if(HEPMC3_ENABLE_ROOTIO)
@@ -37,8 +49,8 @@ if(HEPMC3_ENABLE_ROOTIO)
   elseif(ROOT_DIR)
     message(STATUS "HepMC3: ROOT_DIR provided ${ROOT_DIR}")
   else() 
-    message(STATUS "HepMC3 warning: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
-    message(STATUS "HepMC3 warning: Build will use ROOTConfig.cmake or FindROOT.cmake")
+    message(STATUS "HepMC3: Warning: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
+    message(STATUS "HepMC3: Warning: Build will use ROOTConfig.cmake or FindROOT.cmake")
   endif()
 endif()
 
@@ -47,35 +59,25 @@ endif()
 # NB: if our custom modules include others that we don't supply, those in the
 # base path will be used, so watch for incompatibilities!!
 #
-set(CMAKE_MODULE_PATH
-    ${PROJECT_SOURCE_DIR}/cmake/Modules
-    ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 
 include(CheckCXXCompilerFlag)
 
+CHECK_CXX_COMPILER_FLAG("/D _CRT_SECURE_NO_WARNINGS" COMPILER_SUPPORTS__CRT_SECURE_NO_WARNINGS)
+if(COMPILER_SUPPORTS__CRT_SECURE_NO_WARNINGS)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D _CRT_SECURE_NO_WARNINGS /wd4267 /wd4244 /wd4477")
+endif()
 CHECK_CXX_COMPILER_FLAG("/Zc:__cplusplus" COMPILER_SUPPORTS_ZCPLUSPLUS)
 if(COMPILER_SUPPORTS_ZCPLUSPLUS)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:__cplusplus")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:__cplusplus /bigobj")
 endif()
-
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
-if(COMPILER_SUPPORTS_CXX11)
+if(COMPILER_SUPPORTS_CXX11 AND NOT COMPILER_SUPPORTS_ZCPLUSPLUS)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-else()
-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-if(COMPILER_SUPPORTS_CXX0X)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-endif()
 endif()
 
-if ( "${CMAKE_CXX_COMPILE_FEATURES}"  MATCHES "cxx_range_for" )
-message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has cxx_range_for support.")
-endif()
-
-
-
-message(STATUS "HepMC3: CXX FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
-
+message(STATUS "HepMC3: CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
+message(STATUS "HepMC3: CMAKE_CXX_COMPILER_ID ${CMAKE_CXX_COMPILER_ID} " )
 
 #This module respects HFS, e.g. defines lib or lib64 when it is needed. 
 include("GNUInstallDirs")
@@ -104,7 +106,6 @@ ENDIF("${isSystemDir}" STREQUAL "-1")
 
 
 #---Optional build of rootIO-------------------------------------------------
-
 if(HEPMC3_ENABLE_ROOTIO)
   set (ROOT_FIND_COMPONENTS Core RIO Tree)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
@@ -152,6 +153,8 @@ ${PROJECT_SOURCE_DIR}/src/LHEFAttributes.cc
 ${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc  
 ${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc     
 ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
+${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc   
+${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc   
 )
 
 #We need to export all symbols on WIn to build .lib files
@@ -165,12 +168,16 @@ target_include_directories(objlibcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
 add_library(HepMC3 SHARED $<TARGET_OBJECTS:objlibcore>)
 add_library(HepMC3_static STATIC  $<TARGET_OBJECTS:objlibcore>)
 
-set_target_properties(HepMC3 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-set_target_properties(HepMC3 PROPERTIES SOVERSION 1)
-if (WIN32)
-set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
-elseif()
-set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3 ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
+set_target_properties(HepMC3 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+set_target_properties(HepMC3 PROPERTIES SOVERSION 3)
+
+set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+if (MSVC)
+set_target_properties(HepMC3 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+endif()
+if (UNIX)
+target_link_libraries(HepMC3 PRIVATE dl)
+target_link_libraries(HepMC3_static PRIVATE dl)
 endif()
 configure_file(HepMC3-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-config )
 
@@ -197,10 +204,7 @@ configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in ${CMAKE_CURR
                                  PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR
                                            INTERFACES_INSTALL_DIR)
 
-write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake
-  COMPATIBILITY SameMajorVersion
-  )
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake COMPATIBILITY SameMajorVersion)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake
@@ -224,11 +228,16 @@ if(ROOT_FOUND)
    add_subdirectory(rootIO)
 endif()
 
+option(USE_INTERFACE_FROM_PYTHIA8 "Use Pythia8ToHepMC3.h from Pythia8" OFF)
 # Add the examples subdirectories
 if(HEPMC3_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
   add_subdirectory(examples)
-  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT examples  PATTERN  "*config"  EXCLUDE)
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT doc  PATTERN  "*config"  EXCLUDE)
+endif()
+
+if(HEPMC3_BUILD_DOCS)
+  add_subdirectory(doc)
 endif()
 
 #test suite
@@ -237,7 +246,35 @@ if(HEPMC3_ENABLE_TEST)
   add_subdirectory(test)
 endif()
 
+#Python bindings
+if(HEPMC3_ENABLE_PYTHON)
+  add_subdirectory(python)
+endif()
 
+# uninstall target
+if(NOT TARGET uninstall)
+    configure_file(
+        "cmake/Templates/cmake_uninstall.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+        IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+endif()
+#This is for developers only
+find_program (ASTYLE NAMES astyle)
+if (ASTYLE)
+message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of code is possible.")
+ADD_CUSTOM_TARGET(beauty
+  COMMAND ${ASTYLE}  --keep-one-line-blocks  src/*cc  rootIO/src/*cc search/src/*cc  examples/*/src/*cc test/*cc  test/*h
+  WORKING_DIRECTORY ${DOXYGEN_OUTPUT_DIR}
+  )
+endif()
+find_program (CPPCHECK NAMES cppcheck)
+if(CPPCHECK)
+message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Formating of code is possible.")
+ADD_CUSTOM_TARGET(staticcheck    COMMAND ${CPPCHECK} --force  --suppress=unusedFunction --std=c++11 --enable=all -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}  ./src/*.cc  ./search/src/*.cc ./rootIO/src/*.cc  )
+endif()
 ########################################################################
 ## CPACK
 ########################################################################
@@ -250,7 +287,7 @@ set(CPACK_PACKAGE_VENDOR "HepMC3 Developers")
 set(CPACK_PACKAGE_VERSION 3)
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 1)
-set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(CPACK_PACKAGE_VERSION_PATCH 2)
 set(CPACK_PACKAGE_RELEASE 0)
 set(CPACK_PACKAGE_FILE_NAME "HepMC3")
 set(CPACK_PACKAGE_DESCRIPTION "Event record library for high energy physics Monte Carlo")
@@ -259,62 +296,28 @@ set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
 SET(CPACK_INSTALL_PREFIX "/usr")
 SET(CPACK_OUTPUT_FILE_PREFIX binpackages)
 
-
-SET(CPACK_BINARY_RPM "ON")
-#RPM-specific settings
-set(CPACK_RPM_PACKAGE_DEBUG ON)
-set(CPACK_RPM_PACKAGE_NAME "HepMC3")
-set(CPACK_RPM_COMPONENT_INSTALL ON)
-set(CPACK_RPM_PACKAGE_LICENSE "GPL")
-set(CPACK_RPM_PACKAGE_GROUP "General")
-set(CPACK_RPM_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${CPACK_PACKAGE_RELEASE}")
-set(CPACK_RPM_libs_PACKAGE_SUMMARY  "HepMC3 libraries")
-set(CPACK_RPM_devel_PACKAGE_SUMMARY "Headers for HepMC3 libraries")
-set(CPACK_RPM_search_libs_PACKAGE_SUMMARY  "HepMC3 headers for event navigation")
-set(CPACK_RPM_search_devel_PACKAGE_SUMMARY  "HepMC3 libraries for event navigation")
-set(CPACK_RPM_examples_PACKAGE_SUMMARY "Examples for HepMC3 library")
-set(CPACK_RPM_libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_devel_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_search_libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_search_devel_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_examples_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_devel_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-libs")
-set(CPACK_RPM_search_devel_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-search-libs")
-set(CPACK_RPM_examples_PACKAGE_REQUIRES "${CPACK_RPM_PACKAGE_NAME}-libs, ${CPACK_RPM_PACKAGE_NAME}-rootIO-libs, ${CPACK_RPM_PACKAGE_NAME}-search-libs")
-#Everything that goes before  HepMC , i.e. top level directories,should be excluded
-#This feature is working fine only in the recent CPackRPM module -- see cmake/modules directory.
-set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${CPACK_PACKAGING_INSTALL_PREFIX} ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} )
-
-
-
-SET(CPACK_BINARY_DEB "ON")
-#DEB-specific settings
-set(CPACK_DEBIAN_PACKAGE_NAME "HepMC3")
-set(CPACK_DEB_COMPONENT_INSTALL ON)
-set(CPACK_DEBIAN_PACKAGE_LICENSE "GPL")
-set(CPACK_DEBIAN_PACKAGE_GROUP "General")
-set(CPACK_DEBIAN_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}-${CPACK_PACKAGE_RELEASE}")
-set(CPACK_DEBIAN_devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-libs")
-set(CPACK_DEBIAN_search_devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-search-libs")
-set(CPACK_DEBIAN_examples_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-libs, ${CPACK_DEBIAN_PACKAGE_NAME}-rootIO-libs")
-set(CPACK_DEBIAN_EXCLUDE_FROM_AUTO_FILELIST_ADDITION ${CPACK_PACKAGING_INSTALL_PREFIX} ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}  ${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR} )
-SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "HepMC3 Developers")
-
-
 #NSIS-specific settings
 SET(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SOURCE_DIR}/COPYING)
 
+set(CPACK_COMPONENTS_ALL   devel libs   )
+
+if (HEPMC3_ENABLE_SEARCH)
+list(APPEND CPACK_COMPONENTS_ALL   searchlibs   searchdevel)
+endif()
+
+if (HEPMC3_ENABLE_PYTHON)
+list(APPEND CPACK_COMPONENTS_ALL   python)
+if (HEPMC3_ENABLE_SEARCH)
+list(APPEND CPACK_COMPONENTS_ALL   pythonsearch)
+endif()
+endif()
+if (HEPMC3_BUILD_DOCS)
+list(APPEND CPACK_COMPONENTS_ALL   doc)
+endif()
 if(ROOT_FOUND)
-set(CPACK_COMPONENTS_ALL   devel libs rootIO-devel rootIO-libs   search-libs   search-devel  examples)
-set(CPACK_RPM_rootIO-libs_PACKAGE_SUMMARY  "HepMC3 libraries with ROOT I/O support")
-set(CPACK_RPM_rootIO-devel_PACKAGE_SUMMARY "Headers for HepMC3 libraries with ROOT I/O support")
-set(CPACK_RPM_rootIO-libs_PACKAGE_DESCRIPTION  ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_rootIO-devel_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION})
-set(CPACK_RPM_rootIO-libs_PACKAGE_REQUIRES   "root, ${CPACK_RPM_PACKAGE_NAME}-libs")
-set(CPACK_RPM_rootIO-devel_PACKAGE_REQUIRES   "${CPACK_RPM_PACKAGE_NAME}-devel, ${CPACK_RPM_PACKAGE_NAME}-rootIO-libs")
-SET(CPACK_DEBIAN_rootIO-libs_PACKAGE_DEPENDS "libroot, ${CPACK_DEBIAN_PACKAGE_NAME}-libs")
-SET(CPACK_DEBIAN_rootIO-devel_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_NAME}-devel, ${CPACK_DEBIAN_PACKAGE_NAME}-rootIO-libs")
-else()
-set(CPACK_COMPONENTS_ALL   devel libs  search-libs   search-devel )
+list(APPEND CPACK_COMPONENTS_ALL   rootIOdevel rootIOlibs)
+if (HEPMC3_ENABLE_PYTHON)
+list(APPEND CPACK_COMPONENTS_ALL   pythonrootIO)
+endif()
 endif()
 INCLUDE(CPack)

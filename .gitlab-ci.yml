@@ -2,6 +2,9 @@ stages:
   - test
 
 cc7:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
   stage: test
   before_script:
@@ -12,19 +15,27 @@ cc7:
     - export ROOTSYS=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/graphviz-env.sh
-  script:    
+    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/zlib/1.2.11/${LCGPLATFORM}/zlib-env.sh
+    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/Python/2.7.15/${LCGPLATFORM}/Python-env.sh
+  script:
+    - export
     - mkdir build
     - cd build
-    - cmake .. -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM} -DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/ -DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/ -DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ -DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/ -DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
+    - cmake .. -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM} -DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/ -DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/ -DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ -DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/ -DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/ 
+    #sourcing python is enough -DPython_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/Python/2.7.15/${LCGPLATFORM}/
     - make -j $(nproc)
     - ctest --output-on-failure 
 
 ubuntu18:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-ubuntu18
   stage: test
   before_script:
     - export LCGPLATFORM=x86_64-ubuntu1804-gcc8-opt
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/ROOT-env.sh
+    - export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/3.13.4/Linux-x86_64/bin/:${PATH}
     - export ROOTSYS=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/
     - export CXX=/usr/bin/g++-8
     - export CC=/usr/bin/gcc-8
@@ -37,9 +48,35 @@ ubuntu18:
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/graphviz-env.sh
+    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/Python/2.7.15/${LCGPLATFORM}/Python-env.sh
   script:
+    - export
     - mkdir build
     - cd build
-    - cmake .. -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM} -DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/ -DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/ -DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ -DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/ -DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
+    - cmake .. -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM} -DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/ -DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/ -DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ -DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/ -DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/   
+#sourcing python is enough -DPython_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/Python/2.7.15/${LCGPLATFORM}/
     - make -j $(nproc)
     - ctest --output-on-failure 
+    
+debian-salsa:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="salsa.debian.org"
+  image: debian:unstable
+  stage: test
+  before_script:
+    - apt-get update 
+    - apt-get install -y -qq cmake g++ 
+    - apt-get install -y -qq gfortran  doxygen wget graphviz libz-dev
+    - apt-get install -y -qq devscripts build-essential lintian dh-make
+    - apt-get install -y -qq libpython-dev python
+    - apt-get install -y -qq libpython3-dev python3
+  script:
+    - export
+    - rm .gitlab-ci.yml
+    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.2.0/HepMC3-3.2.0.tar.gz
+    - mv HepMC3-master.tar.gz  ../hepmc3_3.2.0.orig.tar.gz
+#    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.2.0/HepMC3-3.2.0.tar.gz
+#    - mv HepMC3-3.2.0.tar.gz  ../hepmc3_3.2.0.orig.tar.gz
+    - debuild -us -uc
+

@@ -16,6 +16,10 @@
  *  @ingroup IO
  *
  */
+#include <set>
+#include <string>
+#include <fstream>
+#include <istream>
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenRunInfo.h"
@@ -33,7 +37,10 @@ class ReaderHEPEVT : public Reader
 public:
     /** @brief Default constructor */
     ReaderHEPEVT(const std::string &filename);
-
+#ifndef HEPMC3_PYTHON_BINDINGS
+    /// The ctor to read from stdin
+    ReaderHEPEVT(std::istream &);
+#endif
 //
 // Functions
 //
@@ -49,6 +56,8 @@ public:
     */
     virtual bool read_hepevt_particle(int i, bool iflong=true);
 
+    /// @brief skip events
+    bool skip(const int)  override;
 
     /** @brief Read event from file
      *
@@ -61,21 +70,27 @@ public:
      *
      *  @param[out] evt Contains parsed even
      */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt)  override;
 
 
     /** @brief Close file stream */
-    void close();
+    void close()  override;
 
     /** @brief Get stream error state */
-    bool failed();
+    bool failed()  override;
 
+    /** @brief  set flag if vertex positions are available */
+    void set_vertices_positions_present(bool iflong);
+    /** @brief  get flag if vertex positions are available */
+    bool get_vertices_positions_present() const;
 
 public:
     char* hepevtbuffer; //!< Pointer to HEPEVT Fortran common block/C struct
-    FILE* m_file;       //!< File to read
-    bool m_failed;      //!< File state
-    int m_events_count; //!< Event count
+private:
+    std::ifstream m_file; //!< Input file
+    std::istream* m_stream; //!< For ctor when reading from stdin
+    bool m_isstream; //!< toggles usage of m_file or m_stream
+    bool m_vertices_positions_present; //!< true if vertex positions are available
 };
 
 } // namespace HepMC3

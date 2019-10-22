@@ -29,21 +29,35 @@
 #include <iomanip>
 
 
-namespace HepMC3 
+namespace HepMC3
 {
 class ReaderLHEF : public Reader
 {
 public:
+#ifndef HEPMC3_PYTHON_BINDINGS
+    /// The ctor to read from stream
+    ReaderLHEF(std::istream &);
+#endif
+private:
+    void init();                       ///< Init helper
+public:
+    /** @brief Constructor */
     ReaderLHEF(const std::string& filename);
-    bool read_event(GenEvent& ev);
-    void close();
-    bool failed();
+    /// @brief skip events
+    bool skip(const int)  override;
+    /** @brief Reading event */
+    bool read_event(GenEvent& ev)  override;
+    /** @brief Close */
+    void close()  override;
+    /** @brief State */
+    bool failed()  override;
+    /** @brief Destructor */
     ~ReaderLHEF() ;
 private:
-    LHEF::Reader* m_reader;
-    shared_ptr<HEPRUPAttribute> m_hepr;
-    int m_neve;
-    bool m_failed;
+    LHEF::Reader* m_reader;            ///< The actual reader
+    shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
+    int m_neve;                         ///< Event counter
+    bool m_failed;                      ///< State of reader
 };
 }
 #endif

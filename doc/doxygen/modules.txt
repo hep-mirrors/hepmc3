@@ -18,6 +18,11 @@
     including an adapter for older version of \b HepMC files.
     To link rootIO engine in your code use libHepMC3rootIO.so (libHepMC3rootIO.dylib) library.
     <hr>
+    
+    Optionally the I/O capabilities can be implemented as plugin Reader/Write classes compiled 
+    separately into dynamically loadable libraires and used via  RearedPlugin and WriterPlugin classes.
+    Please note that all required libraries/dlls should be loadable.
+    See examples for details.
     Last update 24 Jan 2019
 */
 

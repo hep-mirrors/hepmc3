@@ -2,7 +2,7 @@
 //
 // This file is part of HepMC
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
-//
+// Part of code was adopted from Pythia8-HepMC interface by Mikhail Kirsanov.
 #ifndef Pythia8_Pythia8ToHepMC3_H
 #define Pythia8_Pythia8ToHepMC3_H
 
@@ -75,10 +75,10 @@ public:
             hepevt_particles[i]->set_generated_mass( pyev[i].m() );
         }
 
-        // 3. Fill vertex information
+        // 3. Fill vertex information and find beam particles.
         std::vector<GenVertexPtr> vertex_cache;
-
-        for(size_t  i=1; i<pyev.size(); ++i) {
+        vector<GenParticlePtr> beam_particles;
+        for(size_t  i=0; i<pyev.size(); ++i) {
 
             std::vector<int> mothers = pyev[i].motherList();
 
@@ -100,17 +100,17 @@ public:
 
                 prod_vtx->add_particle_out( hepevt_particles[i] );
             }
+            else beam_particles.push_back(hepevt_particles[i]);
         }
 
         // Reserve memory for the event
         evt->reserve( hepevt_particles.size(), vertex_cache.size() );
 
-        // Here we assume that the first two particles are the beam particles
-        vector<GenParticlePtr> beam_particles;
-        beam_particles.push_back(hepevt_particles[0]);
-        beam_particles.push_back(hepevt_particles[1]);
-
         // Add particles and vertices in topological order
+        if (beam_particles.size()!=2) {
+		 std::cerr << "There are  " << beam_particles.size() <<"!=2 particles without mothers"<< std::endl;
+         if ( m_crash_on_problem ) exit(1);
+        }
         evt->add_tree( beam_particles );
         //Attributes should be set after adding the particles to event
         for(size_t  i=0; i<pyev.size(); ++i) {
@@ -176,6 +176,7 @@ public:
 
         // Store process code, scale, alpha_em, alpha_s.
         if (m_store_proc && pyinfo != 0) {
+            evt->add_attribute("mpi",std::make_shared<IntAttribute>(pyinfo->nMPI()));
             evt->add_attribute("signal_process_id",std::make_shared<IntAttribute>( pyinfo->code()));
             evt->add_attribute("event_scale",std::make_shared<DoubleAttribute>(pyinfo->QRen()));
             evt->add_attribute("alphaQCD",std::make_shared<DoubleAttribute>(pyinfo->alphaS()));

@@ -55,10 +55,10 @@ private:
 //
 public:
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att);
+    bool from_string(const string &att)  override;
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const;
+    bool to_string(string &att) const override;
 
     /** @brief Set all fields */
     void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1);
@@ -100,14 +100,14 @@ public:
     void set_xsec(const int& indx, const double& xs) {
         cross_sections[indx] = xs;
     }
-    
+
     /** @brief Set the cross section error corresponding to the weight
         named \a wName.
      */
     void set_xsec_err(const string& wName, const double& xs_err) {
         set_xsec_err(windx(wName), xs_err);
     }
-    
+
     /** @brief Set the cross section error corresponding to the weight
         with index \a indx.
      */
@@ -121,28 +121,28 @@ public:
     double xsec(const string& wName) const {
         return xsec(windx(wName));
     }
-    
+
     /** @brief Get the cross section corresponding to the weight with index
         \a indx.
      */
     double xsec(const int& indx = 0) const {
         return cross_sections[indx];
     }
-    
+
     /** @brief Get the cross section error corresponding to the weight
         named \a wName.
      */
     double xsec_err(const string& wName) const {
         return xsec_err(windx(wName));
     }
-    
+
     /** @brief Get the cross section error corresponding to the weight
         with index \a indx.
      */
     double xsec_err(const int& indx = 0) const {
         return cross_section_errors[indx];
     }
-    
+
     bool operator==( const GenCrossSection& ) const; ///< Operator ==
     bool operator!=( const GenCrossSection& ) const; ///< Operator !=
     bool is_valid()                           const; ///< Verify that the instance contains non-zero information

@@ -14,12 +14,14 @@
 ///
 /// @ingroup IO
 ///
-#include "HepMC3/Reader.h"
-#include "HepMC3/GenEvent.h"
 #include <set>
 #include <string>
 #include <fstream>
 #include <istream>
+#include <iterator>
+#include "HepMC3/Reader.h"
+#include "HepMC3/GenEvent.h"
+
 
 namespace HepMC3 {
 
@@ -28,27 +30,33 @@ class ReaderAscii : public Reader {
 public:
 
     /// @brief Constructor
-    /// @warning If file already exists, it will be cleared before writing
     ReaderAscii(const std::string& filename);
-
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderAscii(std::istream &);
-
+#endif
     /// @brief Destructor
     ~ReaderAscii();
 
+    /// @brief skip events
+    bool skip(const int)  override;
+    
     /// @brief Load event from file
     ///
     /// @param[out] evt Event to be filled
-    bool read_event(GenEvent& evt);
+    bool read_event(GenEvent& evt)  override;
+
+    /// @todo No-arg version returning GenEvent?
 
     /// @brief Return status of the stream
-    bool failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+    bool failed()  override;
+
+    /// @todo Implicit cast to bool = !failed()?
 
     /// @brief Close file stream
-    void close();
+    void close()  override;
 
-  private:
+private:
 
     /// @brief Unsecape '\' and '\n' characters in string
     std::string unescape(const std::string& s);
@@ -145,11 +153,11 @@ public:
     //@}
 
 
-  private:
+private:
 
     std::ifstream m_file; //!< Input file
-    std::istream* m_stream; // For ctor when reading from stdin
-    bool m_isstream; // toggles usage of m_file or m_stream
+    std::istream* m_stream; ///< For ctor when reading from stdin
+    bool m_isstream; ///< toggles usage of m_file or m_stream
 
 
     /** @brief Store attributes global to the run being written/read. */

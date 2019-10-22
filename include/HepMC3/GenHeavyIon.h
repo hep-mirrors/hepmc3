@@ -48,7 +48,7 @@ public:
 // Fields
 //
 public:
-    
+
     ///
     /// @brief the number of hard nucleon-nucleon collisions.
     ///
@@ -56,14 +56,14 @@ public:
     /// collisions containing a special signal process. A negative
     /// value means that the information is not available.
     int    Ncoll_hard;
-    
+
     /// @brief the number of participating nucleons in the projectile.
     ///
     /// The number of nucleons in the projectile participating in an
     /// inelastic collision (see Ncoll). A negative value means that
     /// the information is not available.
     int    Npart_proj;
-    
+
     /// @brief the number of participating nucleons in the target.
     ///
     /// The number of nucleons in the target participating in an
@@ -77,7 +77,7 @@ public:
     /// inelastic collisions, and that inelastic also includes
     /// diffractive excitation. A negative value means that the
     /// information is not available.
-    /// 
+    ///
     int    Ncoll;
 
 #ifndef HEPMC3_NO_DEPRECATED
@@ -98,7 +98,7 @@ public:
     /// where the target nucleon is excited. A negative value means
     /// that the information is not available.
     int    N_Nwounded_collisions;
-    
+
     /// @brief Collisions with a diffractively excited projectile nucleon.
     ///
     /// The number of single diffractive nucleon-nucleon collisions
@@ -129,7 +129,7 @@ public:
 
 #ifndef HEPMC3_NO_DEPRECATED
     /// @brief The eccentricity.
-    /// 
+    ///
     /// HEPMC3_DEPRECATED("Use eccentricities insted.")
     double eccentricity;
 #endif
@@ -156,7 +156,7 @@ public:
     /// centrality. A negative value indicatess that the information
     /// is not available.
     double user_cent_estimate;
-  
+
 
     /// @brief The number of spectator neutrons in the projectile
     ///
@@ -203,12 +203,12 @@ public:
 // Functions
 //
 public:
-    
+
     /// @brief Implementation of Attribute::from_string.
-    bool from_string(const string &att);
+    bool from_string(const string &att) override;
 
     /// @brief Implementation of Attribute::to_string.
-    bool to_string(string &att) const;
+    bool to_string(string &att) const  override;
 
 #ifndef HEPMC3_NO_DEPRECATED
 
@@ -237,9 +237,9 @@ public:
     ///
     /// HEPMC3_DEPRECATED("This should really not be needed");
     bool forceoldformat;
-    
+
 #endif
-    
+
 };
 
 

@@ -9,7 +9,7 @@ WriterDOT::WriterDOT(const std::string &filename,shared_ptr<GenRunInfo> run): m_
     m_buffer_size( 256*1024 )
 {
     if ( !m_file.is_open() ) {
-        ERROR( "WriterDOT: could not open output file: "<<filename )
+        HEPMC3_ERROR( "WriterDOT: could not open output file: "<<filename )
     }
 }
 
@@ -29,6 +29,7 @@ void WriterDOT::close() {
     forced_flush();
     if (ofs) ofs->close();
 }
+/// @brief Detects if particle is parton. Might be used to draw partons different from hadrons
 bool is_parton(const int& pd )
 {
     bool parton=false;
@@ -104,12 +105,12 @@ void WriterDOT::allocate_buffer() {
         }     catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
-            WARNING( "WriterDOT::allocate_buffer: buffer size too large. Dividing by 2. New size: " << m_buffer_size )
+            HEPMC3_WARNING( "WriterDOT::allocate_buffer: buffer size too large. Dividing by 2. New size: " << m_buffer_size << e.what())
         }
     }
 
     if ( !m_buffer ) {
-        ERROR( "WriterDOT::allocate_buffer: could not allocate buffer!" )
+        HEPMC3_ERROR( "WriterDOT::allocate_buffer: could not allocate buffer!" )
         return;
     }
     m_cursor = m_buffer;

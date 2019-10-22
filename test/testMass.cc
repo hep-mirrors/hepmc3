@@ -16,6 +16,8 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenPdfInfo.h"
 #include "HepMC3/GenHeavyIon.h"
+
+
 #include "HepMC3/Version.h"
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/WriterAscii.h"
@@ -37,7 +39,7 @@ int main()
     // declare an instance of the event selection predicate
     IsGoodEventDIS is_good_event;
     // send version to output
-    version();
+    HepMC3::version();
     //........................................EVENT LOOP
     int icount=0;
     int num_good_events=0;

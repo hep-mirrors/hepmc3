@@ -45,10 +45,10 @@ public:
      *  @warning If file exists, it will be overwritten
      */
     WriterRootTree(const std::string &filename,
-               shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+                   shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
     /** @brief Constructor with tree name*/
     WriterRootTree(const std::string &filename,const std::string &treename,const std::string &branchname,
-               shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+                   shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
 //
 // Functions
 //
@@ -81,10 +81,10 @@ public:
     TTree* m_tree;//!< Tree handler. Public to allow simple access, e.g. custom branches.
 private:
     int   m_events_count; //!< Events count. Needed to read the tree
-    GenEventData* m_event_data;
-    GenRunInfoData* m_run_info_data;
-    std::string m_tree_name;
-    std::string m_branch_name;
+    GenEventData* m_event_data; //!< Pointer to structure that holds event data
+    GenRunInfoData* m_run_info_data; //!< Pointer to structure that holds run info data
+    std::string m_tree_name;//!< Name of TTree
+    std::string m_branch_name; //!< Name of TBranch in TTree
 };
 
 } // namespace HepMC3

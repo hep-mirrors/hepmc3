@@ -22,9 +22,9 @@
  * @brief HepMC3 main namespace.
  *
  * HepMC3 main namespace
- * 
+ *
  * @ingroup HepMC3
  */
- namespace HepMC3 {
-}	 
+namespace HepMC3 {
+}
 #endif

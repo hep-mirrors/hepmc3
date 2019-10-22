@@ -35,8 +35,10 @@ public:
     /** @brief Default constructor */
     ReaderAsciiHepMC2(const std::string& filename);
 
+#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderAsciiHepMC2(std::istream &);
+#endif
 
     /// @brief Destructor
     ~ReaderAsciiHepMC2();
@@ -44,14 +46,17 @@ public:
 // Functions
 //
 public:
+    /// @brief skip events
+    bool skip(const int)  override;
+
     /** @brief Implementation of Reader::read_event */
-    bool read_event(GenEvent &evt);
+    bool read_event(GenEvent &evt)  override;
 
     /// @brief Return status of the stream
-    bool failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+    bool failed()  override;
 
     /// @brief Close file stream
-    void close();
+    void close()  override;
 
 private:
     /** @brief Parse event
@@ -123,9 +128,9 @@ private:
 //
 private:
     std::ifstream m_file; //!< Input file
-    std::istream* m_stream; // For ctor when reading from stdin
-    bool m_isstream; // toggles usage of m_file or m_stream
- 
+    std::istream* m_stream; ///< For ctor when reading from stdin
+    bool m_isstream; ///< toggles usage of m_file or m_stream
+
     vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache
     vector<int>            m_vertex_barcodes;     //!< Old vertex barcodes
 
