@@ -2174,6 +2174,8 @@ public:
    * Assignment operator.
    */
   HEPEUP & operator=(const HEPEUP & x) {
+    if ( &x == this ) return *this;
+    TagBase::operator=(x);
     clear();
     setEvent(x);
     subevents = x.subevents;
