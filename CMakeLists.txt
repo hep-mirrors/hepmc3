@@ -267,7 +267,7 @@ if (ASTYLE)
 message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of code is possible.")
 ADD_CUSTOM_TARGET(beauty
   COMMAND ${ASTYLE}  --keep-one-line-blocks  src/*cc  rootIO/src/*cc search/src/*cc  examples/*/src/*cc test/*cc  test/*h
-  WORKING_DIRECTORY ${DOXYGEN_OUTPUT_DIR}
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()
 find_program (CPPCHECK NAMES cppcheck)
