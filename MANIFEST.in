@@ -1,0 +1,15 @@
+recursive-include cmake *
+recursive-include src *
+recursive-include doc *
+recursive-include examples *
+recursive-include include  *
+recursive-include python  *
+recursive-include search  *
+recursive-include rootIO  *
+include CMakeLists.txt
+include README-for-developers
+include README.md
+include COPYING
+include HepMC3-config.in
+include *.cmake
+prune CMakeFiles
