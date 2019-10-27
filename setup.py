@@ -20,9 +20,8 @@ def get_hepmc3_version():
 
 class build_ext(build_ext_orig):
     def get_ctest_exe(self):
-		return "ctest"
+      return "ctest"
     def get_cmake_exe(self):
-
         vg='0'
         cmakeg_exe=""
         outg = check_output(["cmake", "--version"])
@@ -67,8 +66,7 @@ class build_ext(build_ext_orig):
             self.spawn([cmake_exe, '--build', '.'] + build_args)
             self.spawn([ctest_exe,  '.'])
         os.chdir(str(cwd))
-	
-	
+
 setuptools.setup(
      name='HepMC3',  
      version=get_hepmc3_version(),
