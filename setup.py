@@ -4,6 +4,7 @@ import sys
 from setuptools import find_packages, setup, Extension
 from setuptools.command.build_ext import build_ext as build_ext_orig
 from subprocess import check_output
+from shutil import copyfile
 #https://stackoverflow.com/questions/42585210/extending-setuptools-extension-to-use-cmake-in-setup-py
 class CMakeExtension(Extension):
     def __init__(self, name, sources=[]):
@@ -64,6 +65,13 @@ class build_ext(build_ext_orig):
         if not self.dry_run:
             build_args = [  ]
             self.spawn([cmake_exe, '--build', '.'] + build_args)
+            if not os.path.isdir('outputs/lib64/'): 
+             os.mkdir('outputs/lib64/')
+             if os.path.isdir('outputs/lib/'):
+              copyfile('outputs/lib/libHepMC3.so.3','outputs/lib64/libHepMC3.so.3')
+              copyfile('outputs/lib/libHepMC3.so','outputs/lib64/libHepMC3.so')
+              copyfile('outputs/lib/libHepMC3search.so.3','outputs/lib64/libHepMC3search.so.3')
+              copyfile('outputs/lib/libHepMC3search.so','outputs/lib64/libHepMC3search.so')
             self.spawn([ctest_exe,  '.'])
         os.chdir(str(cwd))
 
