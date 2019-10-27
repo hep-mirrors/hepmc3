@@ -28,7 +28,7 @@ def get_hepmc3_libraries():
   return ['outputs/lib64/libHepMC3.dylib',  'outputs/lib64/libHepMC3search.dylib']
  if  ps == 'Windows':
   return ['outputs/lib64/libHepMC3.dll',  'outputs/lib64/libHepMC3search.dll']
-return ['outputs/lib64/libHepMC3.so.3', 'outputs/lib64/libHepMC3.so.3','outputs/lib64/libHepMC3search.so.3', 'outputs/lib64/libHepMC3search.so.3']
+ return ['outputs/lib64/libHepMC3.so.3', 'outputs/lib64/libHepMC3.so.3','outputs/lib64/libHepMC3search.so.3', 'outputs/lib64/libHepMC3search.so.3']
 
 class build_ext(build_ext_orig):
     def get_ctest_exe(self):
