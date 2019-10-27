@@ -1,18 +1,10 @@
 import sys
 
 v=sys.version_info
-sys.path.append("../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/")
+sys.path=["../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/"]+sys.path
  
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
-if sys.platform != 'win32':
- import pyHepMC3.pyHepMC3.HepMC3 as hm
-else:
- import pyHepMC3.pyHepMC3.HepMC3 as hm
-# print(dir(pyHepMC3))  
-# print(dir(pyHepMC3.__all__))  
-# print((pyHepMC3.__all__))  
-# import pyHepMC3 as hm_
-# print(dir(hm))
+import pyHepMC3.pyHepMC3.HepMC3 as hm
 
 def test_IO1():
  inputA=hm.ReaderAsciiHepMC2("inputIO1.hepmc")
