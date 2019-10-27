@@ -1,6 +1,7 @@
 import os
 import setuptools
 import sys
+import platform
 from setuptools import find_packages, setup, Extension
 from setuptools.command.build_ext import build_ext as build_ext_orig
 from subprocess import check_output
@@ -18,6 +19,16 @@ def get_hepmc3_version():
   number=int(line.split(' ')[2]) 
   return str(int(number/1000000))+'.'+str(int((number%1000000)/1000))+'.'+str((number%1000))
 
+
+def get_hepmc3_libraries():
+ ps=platform.system()
+ if  ps == 'Linux':
+  return ['outputs/lib64/libHepMC3.so.3', 'outputs/lib64/libHepMC3.so.3','outputs/lib64/libHepMC3search.so.3', 'outputs/lib64/libHepMC3search.so.3']
+ if  ps == 'Darwin':
+  return ['outputs/lib64/libHepMC3.dylib',  'outputs/lib64/libHepMC3search.dylib']
+ if  ps == 'Windows':
+  return ['outputs/lib64/libHepMC3.dll',  'outputs/lib64/libHepMC3search.dll']
+return ['outputs/lib64/libHepMC3.so.3', 'outputs/lib64/libHepMC3.so.3','outputs/lib64/libHepMC3search.so.3', 'outputs/lib64/libHepMC3search.so.3']
 
 class build_ext(build_ext_orig):
     def get_ctest_exe(self):
@@ -68,10 +79,19 @@ class build_ext(build_ext_orig):
             if not os.path.isdir('outputs/lib64/'): 
              os.mkdir('outputs/lib64/')
              if os.path.isdir('outputs/lib/'):
-              copyfile('outputs/lib/libHepMC3.so.3','outputs/lib64/libHepMC3.so.3')
-              copyfile('outputs/lib/libHepMC3.so','outputs/lib64/libHepMC3.so')
-              copyfile('outputs/lib/libHepMC3search.so.3','outputs/lib64/libHepMC3search.so.3')
-              copyfile('outputs/lib/libHepMC3search.so','outputs/lib64/libHepMC3search.so')
+              ps=platform.system()
+              if  ps == 'Linux':
+               copyfile('outputs/lib/libHepMC3.so.3','outputs/lib64/libHepMC3.so.3')
+               copyfile('outputs/lib/libHepMC3.so','outputs/lib64/libHepMC3.so')
+               copyfile('outputs/lib/libHepMC3search.so.3','outputs/lib64/libHepMC3search.so.3')
+               copyfile('outputs/lib/libHepMC3search.so','outputs/lib64/libHepMC3search.so')
+              if  ps == 'Darwin':
+               copyfile('outputs/lib/libHepMC3.dylib','outputs/lib64/libHepMC3.dylib')
+               copyfile('outputs/lib/libHepMC3search.dylib','outputs/lib64/libHepMC3search.dylib')
+              if  ps == 'Windows':
+               copyfile('outputs/lib/libHepMC3.dll','outputs/lib64/libHepMC3.dll')
+               copyfile('outputs/lib/libHepMC3search.dll','outputs/lib64/libHepMC3search.dll')
+            
             self.spawn([ctest_exe,  '.'])
         os.chdir(str(cwd))
 
@@ -90,7 +110,7 @@ setuptools.setup(
      packages=setuptools.find_packages(),
      
      data_files=[
-     ('lib64',              ['outputs/lib64/libHepMC3.so.3', 'outputs/lib64/libHepMC3.so.3','outputs/lib64/libHepMC3search.so.3', 'outputs/lib64/libHepMC3search.so.3']),      
+     ('lib64',              get_hepmc3_libraries()),      
      ('bin',                ['outputs/bin/HepMC3-config']),       
      ('share/HepMC3/cmake', ['outputs/share/HepMC3/cmake/HepMC3Config-version.cmake', 'outputs/share/HepMC3/cmake/HepMC3Config.cmake']),       
      ('include/HepMC3',[
