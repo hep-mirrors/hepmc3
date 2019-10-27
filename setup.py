@@ -16,7 +16,7 @@ def get_hepmc3_version():
   with open(current+'/include/HepMC3/Version.h') as f:
     line = next((l for l in f if 'HEPMC3_VERSION_CODE' in l and '#define ' in l), None)
   number=int(line.split(' ')[2]) 
-  return str(number/1000000)+'.'+str((number%1000000)/1000)+'.'+str((number%1000))
+  return str(int(number/1000000))+'.'+str(int((number%1000000)/1000))+'.'+str((number%1000))
 
 
 class build_ext(build_ext_orig):
