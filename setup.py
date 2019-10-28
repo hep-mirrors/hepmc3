@@ -93,7 +93,7 @@ class build_ext(build_ext_orig):
           #FIXME: detect arch
           cmake_args.append ('-Thost=x64')
           cmake_args.append ('-A')
-          cmake_args.append ('x64')    
+          cmake_args.append ('x64')
         self.spawn([cmake_exe, str(cwd)] + cmake_args)
         if not self.dry_run:
             build_args = [  ]
@@ -120,7 +120,8 @@ class build_ext(build_ext_orig):
             if  ps == 'Windows':
              ctest_args.append('-C')
              ctest_args.append('Debug')
-            self.spawn([ctest_exe,  '.','--output-on-failure']+ctest_args)
+            if ps != 'Darwin':
+             self.spawn([ctest_exe,  '.','--output-on-failure']+ctest_args)
         os.chdir(str(cwd))
 
 setuptools.setup(
