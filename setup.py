@@ -23,12 +23,20 @@ def get_hepmc3_version():
 def get_hepmc3_libraries():
  ps=platform.system()
  if  ps == 'Linux':
-  return ['outputs/lib64/libHepMC3.so.3', 'outputs/lib64/libHepMC3.so.3','outputs/lib64/libHepMC3search.so.3', 'outputs/lib64/libHepMC3search.so.3']
+  return [
+  'outputs/lib64/libHepMC3.so',
+  'outputs/lib64/libHepMC3.so.3',
+  'outputs/lib64/libHepMC3search.so', 
+  'outputs/lib64/libHepMC3search.so.3']
  if  ps == 'Darwin':
   return ['outputs/lib64/libHepMC3.dylib',  'outputs/lib64/libHepMC3search.dylib']
  if  ps == 'Windows':
-  return ['outputs/lib64/libHepMC3.dll',  'outputs/lib64/libHepMC3search.dll']
- return ['outputs/lib64/libHepMC3.so.3', 'outputs/lib64/libHepMC3.so.3','outputs/lib64/libHepMC3search.so.3', 'outputs/lib64/libHepMC3search.so.3']
+  return ['outputs/lib/HepMC3.dll', 'outputs/lib/HepMC3search-static.lib', 'outputs/lib/HepMC3-static.lib']
+ return [
+ 'outputs/lib64/libHepMC3.so', 
+ 'outputs/lib64/libHepMC3.so.3',
+ 'outputs/lib64/libHepMC3search.so',
+ 'outputs/lib64/libHepMC3search.so.3']
 
 class build_ext(build_ext_orig):
     def get_ctest_exe(self):
@@ -65,13 +73,27 @@ class build_ext(build_ext_orig):
         build_ext_orig.run(self)
 
     def build_cmake(self, ext):
+        build_temp=os.getcwd()
         cwd=os.getcwd()
         cmake_exe=self.get_cmake_exe()
         ctest_exe=self.get_ctest_exe()
         cmake_args = [
-         'CMakeLists.txt','-DHEPMC3_BUILD_EXAMPLES:BOOL=OFF','-DHEPMC3_INSTALL_INTERFACES:BOOL=OFF','-DHEPMC3_ENABLE_SEARCH:BOOL=ON',
-         '-DHEPMC3_BUILD_DOCS:BOOL=OFF','-DHEPMC3_ENABLE_TEST:BOOL=ON', 
-         '-DHEPMC3_ENABLE_PYTHON:BOOL=ON', '-DHEPMC3_ENABLE_ROOTIO:BOOL=OFF' , self.get_cmake_python_flags()]
+         'CMakeLists.txt',
+         '-DHEPMC3_BUILD_EXAMPLES:BOOL=OFF',
+         '-DHEPMC3_INSTALL_INTERFACES:BOOL=OFF',
+         '-DHEPMC3_ENABLE_SEARCH:BOOL=ON',
+         '-DHEPMC3_BUILD_DOCS:BOOL=OFF',
+         '-DHEPMC3_ENABLE_PYTHON:BOOL=ON',
+         '-DHEPMC3_ENABLE_ROOTIO:BOOL=OFF',
+         '-DCMAKE_BUILD_TYPE=Release', 
+         '-DHEPMC3_ENABLE_TEST:BOOL=ON',
+         self.get_cmake_python_flags()]
+        ps=platform.system()
+        if ps == 'Windows':
+          #FIXME: detect arch
+          cmake_args.append ('-Thost=x64')
+          cmake_args.append ('-A')
+          cmake_args.append ('x64')    
         self.spawn([cmake_exe, str(cwd)] + cmake_args)
         if not self.dry_run:
             build_args = [  ]
@@ -79,7 +101,6 @@ class build_ext(build_ext_orig):
             if not os.path.isdir('outputs/lib64/'): 
              os.mkdir('outputs/lib64/')
              if os.path.isdir('outputs/lib/'):
-              ps=platform.system()
               if  ps == 'Linux':
                copyfile('outputs/lib/libHepMC3.so.3','outputs/lib64/libHepMC3.so.3')
                copyfile('outputs/lib/libHepMC3.so','outputs/lib64/libHepMC3.so')
@@ -89,10 +110,17 @@ class build_ext(build_ext_orig):
                copyfile('outputs/lib/libHepMC3.dylib','outputs/lib64/libHepMC3.dylib')
                copyfile('outputs/lib/libHepMC3search.dylib','outputs/lib64/libHepMC3search.dylib')
               if  ps == 'Windows':
-               copyfile('outputs/lib/libHepMC3.dll','outputs/lib64/libHepMC3.dll')
-               copyfile('outputs/lib/libHepMC3search.dll','outputs/lib64/libHepMC3search.dll')
-            
-            self.spawn([ctest_exe,  '.'])
+               copyfile('outputs/lib/HepMC3-static.lib','outputs/lib64/HepMC3-static.lib')
+               copyfile('outputs/lib/HepMC3search-static.lib','outputs/lib64/HepMC3search-static.lib')
+               copyfile('outputs/lib/HepMC3.dll','outputs/lib64/HepMC3.dll')
+               copyfile('outputs/lib/HepMC3.dll','test/HepMC3.dll')
+               copyfile('outputs/lib/HepMC3.dll','python/test/HepMC3.dll')
+               
+            ctest_args = []
+            if  ps == 'Windows':
+             ctest_args.append('-C')
+             ctest_args.append('Debug')
+            self.spawn([ctest_exe,  '.','--output-on-failure']+ctest_args)
         os.chdir(str(cwd))
 
 setuptools.setup(
@@ -108,20 +136,37 @@ setuptools.setup(
      platforms=['any'],
      include_package_data = True,
      packages=setuptools.find_packages(),
-     
      data_files=[
      ('lib64',              get_hepmc3_libraries()),      
      ('bin',                ['outputs/bin/HepMC3-config']),       
-     ('share/HepMC3/cmake', ['outputs/share/HepMC3/cmake/HepMC3Config-version.cmake', 'outputs/share/HepMC3/cmake/HepMC3Config.cmake']),       
+     ('share/HepMC3/cmake', [
+     'outputs/share/HepMC3/cmake/HepMC3Config-version.cmake',
+     'outputs/share/HepMC3/cmake/HepMC3Config.cmake']),       
      ('include/HepMC3',[
-     'include/HepMC3/WriterAsciiHepMC2.h','include/HepMC3/WriterHEPEVT.h','include/HepMC3/Units.h','include/HepMC3/HEPEVT_Wrapper.h','include/HepMC3/GenCrossSection.h','include/HepMC3/GenRunInfo.h','include/HepMC3/WriterAscii.h','include/HepMC3/WriterPlugin.h','include/HepMC3/Setup.h','include/HepMC3/GenVertex.h','include/HepMC3/FourVector.h','include/HepMC3/PrintStreams.h','include/HepMC3/GenEvent.h','include/HepMC3/ReaderHEPEVT.h','include/HepMC3/Print.h','include/HepMC3/LHEF.h','include/HepMC3/GenParticle_fwd.h',
-     'include/HepMC3/Reader.h','include/HepMC3/GenPdfInfo_fwd.h','include/HepMC3/GenParticle.h','include/HepMC3/GenCrossSection_fwd.h','include/HepMC3/LHEFAttributes.h',
-     'include/HepMC3/AssociatedParticle.h','include/HepMC3/ReaderLHEF.h','include/HepMC3/GenPdfInfo.h','include/HepMC3/HepMC3.h','include/HepMC3/Errors.h',
-     'include/HepMC3/GenHeavyIon.h','include/HepMC3/Writer.h','include/HepMC3/ReaderFactory.h','include/HepMC3/ReaderAsciiHepMC2.h',
-     'include/HepMC3/Version.h','include/HepMC3/Attribute.h','include/HepMC3/GenHeavyIon_fwd.h','include/HepMC3/ReaderAscii.h',
-     'include/HepMC3/GenVertex_fwd.h','include/HepMC3/ReaderPlugin.h','search/include/HepMC3/Filter.h', 'search/include/HepMC3/Relatives.h', 'search/include/HepMC3/AttributeFeature.h', 'search/include/HepMC3/FilterAttribute.h', 'search/include/HepMC3/Feature.h', 'search/include/HepMC3/Selector.h'
+     'include/HepMC3/WriterAsciiHepMC2.h','include/HepMC3/WriterHEPEVT.h','include/HepMC3/Units.h',
+     'include/HepMC3/HEPEVT_Wrapper.h','include/HepMC3/GenCrossSection.h','include/HepMC3/GenRunInfo.h',
+     'include/HepMC3/WriterAscii.h','include/HepMC3/WriterPlugin.h','include/HepMC3/Setup.h',
+     'include/HepMC3/GenVertex.h','include/HepMC3/FourVector.h','include/HepMC3/PrintStreams.h',
+     'include/HepMC3/GenEvent.h','include/HepMC3/ReaderHEPEVT.h','include/HepMC3/Print.h',
+     'include/HepMC3/LHEF.h','include/HepMC3/GenParticle_fwd.h',
+     'include/HepMC3/Reader.h','include/HepMC3/GenPdfInfo_fwd.h','include/HepMC3/GenParticle.h',
+     'include/HepMC3/GenCrossSection_fwd.h','include/HepMC3/LHEFAttributes.h',
+     'include/HepMC3/AssociatedParticle.h','include/HepMC3/ReaderLHEF.h','include/HepMC3/GenPdfInfo.h',
+     'include/HepMC3/HepMC3.h','include/HepMC3/Errors.h',
+     'include/HepMC3/GenHeavyIon.h','include/HepMC3/Writer.h','include/HepMC3/ReaderFactory.h',
+     'include/HepMC3/ReaderAsciiHepMC2.h',
+     'include/HepMC3/Version.h','include/HepMC3/Attribute.h','include/HepMC3/GenHeavyIon_fwd.h',
+     'include/HepMC3/ReaderAscii.h',
+     'include/HepMC3/GenVertex_fwd.h','include/HepMC3/ReaderPlugin.h','search/include/HepMC3/Filter.h',
+     'search/include/HepMC3/Relatives.h', 'search/include/HepMC3/AttributeFeature.h',
+     'search/include/HepMC3/FilterAttribute.h', 'search/include/HepMC3/Feature.h',
+     'search/include/HepMC3/Selector.h'
       ]),
-     ('include/HepMC3/Data',['include/HepMC3/Data/GenEventData.h','include/HepMC3/Data/GenParticleData.h','include/HepMC3/Data/GenVertexData.h','include/HepMC3/Data/GenRunInfoData.h'])
+     ('include/HepMC3/Data',[
+     'include/HepMC3/Data/GenEventData.h',
+     'include/HepMC3/Data/GenParticleData.h',
+     'include/HepMC3/Data/GenVertexData.h',
+     'include/HepMC3/Data/GenRunInfoData.h'])
                   ],
      
      classifiers=[

@@ -13,3 +13,23 @@ include COPYING
 include HepMC3-config.in
 include *.cmake
 prune CMakeFiles
+prune */CMakeFiles
+prune */*/CMakeFiles
+prune */*/*/CMakeFiles
+prune Debug
+prune */*Debug
+prune */*/*Debug
+prune */*/*/*Debug
+prune *.dir
+prune */*.dir
+prune */*/*.dir
+prune */*/*/*.dir
+prune outputs
+global-exclude *vcxproj*
+global-exclude *stamp*
+prune doc/doxygen/html
+prune python/2.*/pyHepMC3
+prune python/3.*/pyHepMC3
+prune python/*/Debug
+recursive-exclude test  from*
+recursive-exclude python/test  from*
