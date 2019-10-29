@@ -256,16 +256,6 @@ inline bool HEPEVT_Wrapper::fix_daughters()
     for( int i=1; i<=HEPEVT_Wrapper::number_entries(); i++ )
         is_fixed=(is_fixed&&(HEPEVT_Wrapper::number_children_exact(i)==HEPEVT_Wrapper::number_children(i)));
     return is_fixed;
-
-    return true;
 }
-
-
-
-
-
-
-
 } // namespace HepMC3
-
 #endif
