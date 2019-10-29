@@ -143,7 +143,7 @@ setuptools.setup(
      author="HepMC3 Developers",
      author_email="hepmc-dev@cern.ch",
      description="HepMC3 library and Python bindings for HepMC3",
-     long_description="#HepMC3\nOfficial python bindings for the HepMC3 library",
+     long_description="#HepMC3\nOfficial python bindings for the HepMC3 library.\nPlease visit https://hepmc.web.cern.ch/hepmc/\nand\nhttps://gitlab.cern.ch/hepmc/HepMC3\n for more documentation",
      long_description_content_type="text/markdown",
      url="https://gitlab.cern.ch/hepmc/HepMC3",
      license = "GPLv3",
