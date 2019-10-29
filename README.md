@@ -33,6 +33,8 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   ```
   -DHEPMC3_ENABLE_SEARCH=OFF
   ```
+  Please note, in case of using the search engine, the easiest way to link against 
+  HepMC3search could be to use static version of the library.
   
 4. In order to build with ROOTIO put the following flags and define LD_LIBRARY_PATH: 
   ```
@@ -87,11 +89,28 @@ On Windows/MSVC the build type should be specified
 ```
 ctest . -C Debug
 ```
-9. HepMC3 packages are available from standard repositories of Debian, Redhat/Fedora, Arch and others. 
+9. HepMC3 packages are available from standard repositories of Debian, 
+Redhat/Fedora, Arch, hep-homebrew and others. 
 To build Windows installer use NSIS and run
 ```
 cpack.exe -G NSIS -C Debug
 ```
+The primary supported development chains are 
+gcc@Linux, clang@Linux, gcc@OSX, clang@OSX and  MSVC@Windows10, however
+the code has been tested on other compilers and systems, e.g. clang@FreeBSD,
+Sun@Solaris11, gcc@Solaris11, Sun@Linux, PGC@Linux etc.
+Only a limiter support can be offered for these systems.
+
+
+
+10. HepMC3 is supplied with Python bindings codes that can be build on multiple systems.
+The number of potential combinations of compiler suites, Python versions and operationg systems is quite large,
+therefore it is recommended to install the HepMC3 form the default repositories of the used operating system.
+If not possible, the following options are available 
+- compile the python package from sources
+- use the precompiled binaries from pypi: https://pypi.org/project/HepMC3/
+- use the https://anaconda.org/conda-forge/hepmc3
+In addition to that part of the bindings are implemented in the pyhepmc project https://github.com/HDembinski/pyhepmc.
 
 
 #  Examples
@@ -108,3 +127,6 @@ cd examples
 cmake -DUSE_INSTALLED_HEPMC3=ON CMakeLists.txt
 make
 ```
+
+
+

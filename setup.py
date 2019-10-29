@@ -35,7 +35,7 @@ def get_hepmc3_libraries():
   'outputs/lib64/libHepMC3search.so', 
   'outputs/lib64/libHepMC3search.so.3']
  if  ps == 'Darwin':
-  return ['outputs/lib64/libHepMC3.dylib',  'outputs/lib64/libHepMC3search.dylib']
+  return ['outputs/lib64/libHepMC3.dylib',  'outputs/lib64/libHepMC3search.dylib','libHepMC3-static.a','libHepMC3search-static.a']
  if  ps == 'Windows':
   return ['outputs/lib/HepMC3.dll', 'outputs/lib/HepMC3search-static.lib', 'outputs/lib/HepMC3-static.lib']
  return [
@@ -120,6 +120,8 @@ class build_ext(build_ext_orig):
               if  ps == 'Darwin':
                copyfile('outputs/lib/libHepMC3.dylib','outputs/lib64/libHepMC3.dylib')
                copyfile('outputs/lib/libHepMC3search.dylib','outputs/lib64/libHepMC3search.dylib')
+               copyfile('outputs/lib/libHepMC3-static.a','outputs/lib64/libHepMC3-static.a')
+               copyfile('outputs/lib/libHepMC3search-static.a','outputs/lib64/libHepMC3search-static.a')
               if  ps == 'Windows':
                copyfile('outputs/lib/HepMC3-static.lib','outputs/lib64/HepMC3-static.lib')
                copyfile('outputs/lib/HepMC3search-static.lib','outputs/lib64/HepMC3search-static.lib')
