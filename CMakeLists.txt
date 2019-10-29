@@ -70,6 +70,7 @@ else()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+#This is a workaround for wrong flag.
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "PGI")
 set(CMAKE_CXX_EXTENSIONS ON)
 endif()
@@ -83,23 +84,7 @@ if(COMPILER_SUPPORTS_${fl})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
 endif()
 endforeach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
-else()
-#This is a workaround for ROOT flags that are not accepted by some compilers
-set(UNIX_CXX_FLAGS_TO_CHECK "-noswitcherror")
-foreach(fl ${UNIX_CXX_FLAGS_TO_CHECK})
-CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
-if(COMPILER_SUPPORTS_${fl})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
 endif()
-endforeach(fl ${UNIX_CXX_FLAGS_TO_CHECK})
-endif()
-
-
-
-
-message(STATUS "HepMC3: CMAKE_CXX_COMPILER_ID ${CMAKE_CXX_COMPILER_ID} " )
-message(STATUS "HepMC3: CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
-message(STATUS "HepMC3: CMAKE_C_COMPILER_ID ${CMAKE_C_COMPILER_ID} " )
 
 #This module respects HFS, e.g. defines lib or lib64 when it is needed. 
 include("GNUInstallDirs")
@@ -128,20 +113,21 @@ ENDIF("${isSystemDir}" STREQUAL "-1")
 
 
 #---Optional build of rootIO-------------------------------------------------
+
 if(HEPMC3_ENABLE_ROOTIO)
   set (ROOT_FIND_COMPONENTS Core RIO Tree)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
   list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
   find_package(ROOT REQUIRED COMPONENTS Core RIO Tree)
-  message(STATUS "ROOT_USE_FILE ${ROOT_USE_FILE}")
-  include(${ROOT_USE_FILE})
-
-  message(STATUS "ROOT includes: ${ROOT_INCLUDE_DIRS}")
+  message(STATUS "ROOT_FOUND:     ${ROOT_FOUND}")
+  message(STATUS "ROOT includes:  ${ROOT_INCLUDE_DIRS}")
   message(STATUS "ROOT libraries: ${ROOT_LIBRARIES}")
-  message(STATUS "ROOT_FOUND: ${ROOT_FOUND}")
-
+  message(STATUS "ROOT definitions: ${ROOT_DEFINITIONS}")
   if(ROOT_FOUND)
+    include(${ROOT_DIR}/modules/RootNewMacros.cmake)
     include_directories(${ROOT_INCLUDE_DIRS})
+    link_directories(${ROOT_LIBRARY_DIR})
+    add_definitions(${ROOT_DEFINITIONS})
     add_definitions(-DHEPMC3_ROOTIO)
     set(HEPMC3_ROOTIO_LIBRARY "-lHepMC3rootIO" )
   else()
@@ -152,6 +138,10 @@ if(HEPMC3_ENABLE_ROOTIO)
 endif()
 
 
+
+message(STATUS "HepMC3: CMAKE_CXX_COMPILER_ID ${CMAKE_CXX_COMPILER_ID} " )
+message(STATUS "HepMC3: CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
+message(STATUS "HepMC3: CMAKE_C_COMPILER_ID ${CMAKE_C_COMPILER_ID} " )
 
 ########################################################################
 ## Core
