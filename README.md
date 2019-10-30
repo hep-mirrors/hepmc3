@@ -110,7 +110,9 @@ If not possible, the following options are available
 - compile the python package from sources
 - use the precompiled binaries from pypi: https://pypi.org/project/HepMC3/
 - use the https://anaconda.org/conda-forge/hepmc3
-In addition to that part of the bindings are implemented in the pyhepmc project https://github.com/HDembinski/pyhepmc.
+In addition to that part of the bindings are implemented in the pyhepmc project 
+
+https://github.com/HDembinski/pyhepmc.
 
 
 #  Examples
