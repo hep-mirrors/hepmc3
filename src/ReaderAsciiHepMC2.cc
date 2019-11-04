@@ -325,10 +325,12 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         if( !(cursor = strchr(cursor+1,' ')) ) return -1;
         random_states[i] = atoi(cursor);
     }
-
+#ifndef HEPMC3_HAVE_VECTOR_ATTRIBUTES
     for ( int i = 0; i < random_states_size; ++i )
-        evt.add_attribute("random_states"+to_string((long long unsigned int)i),make_shared<IntAttribute>(random_states[i])); //gcc-4.4.7 workaround
-
+        evt.add_attribute("random_states"+to_string((long long unsigned int)i),make_shared<IntAttribute>(random_states[i]));
+#else
+    evt.add_attribute("random_states",make_shared<VectorLongIntAttribute>(random_states));
+#endif
     // weights
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     weights_size = atoi(cursor);
@@ -425,8 +427,12 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     m_vertex_barcodes.push_back( barcode );
 
     m_event_ghost->add_vertex(data_ghost);
+#ifndef HEPMC3_HAVE_VECTOR_ATTRIBUTES
     for ( int i = 0; i < weights_size; ++i )
-        data_ghost->add_attribute("weight"+to_string((long long unsigned int)i),make_shared<DoubleAttribute>(weights[i])); //gcc-4.4.7 workaround
+        data_ghost->add_attribute("weight"+to_string((long long unsigned int)i),make_shared<DoubleAttribute>(weights[i]));
+#else    
+    data_ghost->add_attribute("weights",make_shared<VectorDoubleAttribute>(weights));    
+#endif
     m_vertex_cache_ghost.push_back( data_ghost );
 
     HEPMC3_DEBUG( 10, "ReaderAsciiHepMC2: V: "<<-(int)m_vertex_cache.size()<<" (old barcode"<<barcode<<") "<<num_particles_out<<" particles)" )

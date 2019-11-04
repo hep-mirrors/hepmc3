@@ -674,6 +674,147 @@ private:
     bool m_val; ///< Attribute value
 };
 
+#define HEPMC3_HAVE_VECTOR_ATTRIBUTES
+#ifdef HEPMC3_HAVE_VECTOR_ATTRIBUTES
+/**
+ *  @class HepMC3::VectorIntAttribute
+ *  @brief Attribute that holds a vector of integers of type  int
+ *
+ *  @ingroup attributes
+ */
+class VectorIntAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorIntAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorIntAttribute(std::vector<int> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        int  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<int> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<int>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<int> m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC3::VectorIntAttribute
+ *  @brief Attribute that holds a vector of integers of type  int
+ *
+ *  @ingroup attributes
+ */
+class VectorLongIntAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorLongIntAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorLongIntAttribute(std::vector<long int> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        long int  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<long int> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<long int>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<long int> m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC3::VectorIntAttribute
+ *  @brief Attribute that holds a vector of FPs of type  double
+ *
+ *  @ingroup attributes
+ */
+class VectorDoubleAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorDoubleAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorDoubleAttribute(std::vector<double> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        int  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<double> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<double>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<double> m_val; ///< Attribute value
+};
+
+
+
+
+#endif
 
 } // namespace HepMC3
 
