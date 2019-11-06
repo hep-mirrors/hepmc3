@@ -73,7 +73,9 @@ extern "C" {
 #include "HepMC3/WriterHEPEVT.h"
 #include "HepMC3/WriterAscii.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
+#if HEPMC3_VERSION_CODE >= 3002000
 #include "HepMC3/WriterPlugin.h"
+#endif
 #include "HepMC3/Print.h"
 #include "HepMC3/Attribute.h"
 #include "HepMC3/GenEvent.h"
@@ -242,12 +244,14 @@ extern "C" {
         case 3:
             hepmc3_gWriters[r_position]=std::pair<std::shared_ptr<Writer>,GenEvent*>(std::make_shared<WriterHEPEVT>(filename.c_str()),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
+#if HEPMC3_VERSION_CODE >= 3002000
         case 4:
             hepmc3_gWriters[r_position]=std::pair<std::shared_ptr<Writer>,GenEvent*>(std::make_shared<WriterPlugin>(filename.c_str(),libHepMC3rootIO,std::string("newWriterRootfile"),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
         case 5:
             hepmc3_gWriters[r_position]=std::pair<std::shared_ptr<Writer>,GenEvent*>(std::make_shared<WriterPlugin>(filename.c_str(),libHepMC3rootIO,std::string("newWriterRootTreefile"),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
+#endif
         default:
             printf("Error in %s:Output format %d is unknown or not supported.\n",__FUNCTION__,mode);
             exit(2);
