@@ -38,6 +38,20 @@
 -class HepMC3::ULongLongAttribute
 -class HepMC3::BoolAttribute
 
+-class HepMC3::VectorIntAttribute
+-class HepMC3::VectorLongAttribute
+-class HepMC3::VectorDoubleAttribute
+-class HepMC3::VectorFloatAttribute
+-class HepMC3::VectorStringAttribute
+-class HepMC3::VectorCharAttribute
+-class HepMC3::VectorLongLongAttribute
+-class HepMC3::VectorLongDoubleAttribute
+-class HepMC3::VectorUIntAttribute
+-class HepMC3::VectorULongAttribute
+-class HepMC3::VectorULongLongAttribute
+-class HepMC3::VectorBoolAttribute
+
+
 +add_on_binder HepMC3::Selector binder::custom_Selector_binder
 
 
