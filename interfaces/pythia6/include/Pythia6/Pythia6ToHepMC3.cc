@@ -11,16 +11,13 @@
 #include "HepMC3/WriterHEPEVT.h"
 #include "HepMC3/WriterAscii.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
+#include "HepMC3/WriterPlugin.h"
 #include "HepMC3/Print.h"
 #include "HepMC3/Attribute.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenRunInfo.h"
-#ifdef HEPMC3_ROOTIO
-#include "HepMC3/WriterRoot.h"
-#include "HepMC3/WriterRootTree.h"
-#endif
 using namespace HepMC3;
-std::map<int,std::pair<Writer*,GenEvent*> > hepmc3_gWriters;
+std::map<int,std::pair<std::shared_ptr<Writer>,GenEvent*> > hepmc3_gWriters;
 std::map<int,std::shared_ptr<GenRunInfo> >  hepmc3_gGenRunInfos;
 GenEvent* hepmc3_gWriters_get_event(const int & position)
     {
@@ -101,9 +98,7 @@ extern "C" {
             return 1;
         }
         GenPdfInfoPtr pdf=std::make_shared< GenPdfInfo>();
-        pdf->set(parton_id1, parton_id2,x1,x2,
-                 scale_in,xf1,xf2,
-                 pdf_id1, pdf_id2);
+        pdf->set(parton_id1, parton_id2,x1,x2,scale_in,xf1,xf2,pdf_id1, pdf_id2);
         hepmc3_gWriters[position].second->set_pdf_info(pdf);
         return 0;
     }
@@ -144,6 +139,13 @@ extern "C" {
 
     int hepmc3_new_writer_(const int & position,const int & mode,const char* ffilename)
     {
+    std::string libHepMC3rootIO="libHepMC3rootIO.so";
+#ifdef __darwin__
+    libHepMC3rootIO="libHepMC3rootIO.dydl";
+#endif
+#ifdef WIN32
+    libHepMC3rootIO="HepMC3rootIO.dll";
+#endif
         std::string filename=std::string(ffilename);
         int r_position=position;
         if (r_position==0)
@@ -166,22 +168,20 @@ extern "C" {
         switch (mode)
         {
         case 1:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterAscii(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<std::shared_ptr<Writer>,GenEvent*>(std::make_shared<WriterAscii>(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
         case 2:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterAsciiHepMC2(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<std::shared_ptr<Writer>,GenEvent*>(std::make_shared<WriterAsciiHepMC2>(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
         case 3:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterHEPEVT(filename.c_str()),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<std::shared_ptr<Writer>,GenEvent*>(std::make_shared<WriterHEPEVT>(filename.c_str()),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
-#ifdef HEPMC3_ROOTIO
         case 4:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterRoot(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<std::shared_ptr<Writer>,GenEvent*>(std::make_shared<WriterPlugin>(filename.c_str(),libHepMC3rootIO,std::string("newWriterRootfile"),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
         case 5:
-            hepmc3_gWriters[r_position]=std::pair<Writer*,GenEvent*>(new WriterRootTree(filename.c_str(),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
+            hepmc3_gWriters[r_position]=std::pair<std::shared_ptr<Writer>,GenEvent*>(std::make_shared<WriterPlugin>(filename.c_str(),libHepMC3rootIO,std::string("newWriterRootTreefile"),hepmc3_gGenRunInfos[position]),new GenEvent(hepmc3_gGenRunInfos[position],Units::GEV,Units::MM));
             break;
-#endif
         default:
             printf("Error in %s:Output format %d is unknown or not supported.\n",__FUNCTION__,mode);
             exit(2);
@@ -221,8 +221,6 @@ extern "C" {
         }
         hepmc3_gWriters[position].second->weight(std::string(name))=val;
         return 0;
-    }
-    
-    
+    }  
 }
 #endif
