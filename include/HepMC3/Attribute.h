@@ -674,8 +674,6 @@ private:
     bool m_val; ///< Attribute value
 };
 
-#define HEPMC3_HAVE_VECTOR_ATTRIBUTES
-#ifdef HEPMC3_HAVE_VECTOR_ATTRIBUTES
 /**
  *  @class HepMC3::VectorCharAttribute
  *  @brief Attribute that holds a vector of charegers of type  char
@@ -1177,7 +1175,6 @@ private:
     std::vector<string> m_val; ///< Attribute value
 };
 
-#endif
 
 } // namespace HepMC3
 

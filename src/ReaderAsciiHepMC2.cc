@@ -430,8 +430,8 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
 #ifndef HEPMC3_HAVE_VECTOR_ATTRIBUTES
     for ( int i = 0; i < weights_size; ++i )
         data_ghost->add_attribute("weight"+to_string((long long unsigned int)i),make_shared<DoubleAttribute>(weights[i]));
-#else    
-    data_ghost->add_attribute("weights",make_shared<VectorDoubleAttribute>(weights));    
+#else
+    data_ghost->add_attribute("weights",make_shared<VectorDoubleAttribute>(weights));
 #endif
     m_vertex_cache_ghost.push_back( data_ghost );
 

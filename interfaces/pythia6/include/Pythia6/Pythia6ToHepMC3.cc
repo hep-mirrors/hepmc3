@@ -1,10 +1,72 @@
 // -*- C++ -*-
 //
-// This file is part of HepMC
+// This file is part of HepMC3
 // Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef Pythia6_Pythia6ToHepMC3_H
 #define Pythia6_Pythia6ToHepMC3_H
+#ifdef  DUMMYPYTHIA6TOHEPMC3
+extern "C" {
+
+    int hepmc3_delete_writer_(const int & position)
+    {
+        return 0;
+    }
+    int hepmc3_convert_event_(const int & position)
+    {
+        return 0;
+    }
+    int hepmc3_write_event_(const int & position)
+    {
+        return 0;
+    }
+    int hepmc3_clear_event_(const int & position)
+    {
+        return 0;
+    }
+    int hepmc3_set_cross_section_(const int & position, const double& x,const double& xe, const int& n1,const int& n2)
+    {
+        return 0;
+    }
+
+    int hepmc3_set_pdf_info_(const int & position,const int& parton_id1, const int& parton_id2, const double& x1, const double& x2,
+                             const double& scale_in, const double& xf1,const double& xf2,
+                             const int& pdf_id1, const int& pdf_id2)
+    {
+        return 0;
+    }
+    int hepmc3_set_hepevt_address_(int* a)
+    {
+        return 0;
+    }
+    int hepmc3_set_attribute_int_(const int & position,const int & attval,const char* attname)
+    {
+        return 0;
+    }
+    int hepmc3_set_attribute_double_(const int & position,const double & attval,const char* attname)
+    {
+        return 0;
+    }
+    int hepmc3_new_writer_(const int & position,const int & mode,const char* ffilename)
+    {
+        return  0;
+    }
+    int hepmc3_new_weight_(const int & position, const char* name)
+    {
+        return 0;
+    }
+    int hepmc3_set_weight_by_index_(const int & position,const double& val, const int & pos)
+    {
+        return 0;
+    }
+    int hepmc3_set_weight_by_name_(const int & position,const double& val, const char* name)
+    {
+        return 0;
+    }
+}
+
+
+#else
 #include "HepMC3/HEPEVT_Wrapper.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Writer.h"
@@ -17,16 +79,20 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenRunInfo.h"
 using namespace HepMC3;
+/** Storage for the output objects (Writers)*/
 std::map<int,std::pair<std::shared_ptr<Writer>,GenEvent*> > hepmc3_gWriters;
+/** Storage for the GenRunInfo objects associated with the outputs */
 std::map<int,std::shared_ptr<GenRunInfo> >  hepmc3_gGenRunInfos;
+/** Interface to acces the enets from C++, e.g. Rivet */
 GenEvent* hepmc3_gWriters_get_event(const int & position)
-    {
-        if (hepmc3_gWriters.find(position)==hepmc3_gWriters.end()) {
-            printf("Warning in %s: Writer at position %i does not exist\n",__FUNCTION__,position);
-            return NULL;
-        }
-     return    hepmc3_gWriters[position].second;
-     }
+{
+    if (hepmc3_gWriters.find(position)==hepmc3_gWriters.end()) {
+        printf("Warning in %s: Writer at position %i does not exist\n",__FUNCTION__,position);
+        return NULL;
+    }
+    return    hepmc3_gWriters[position].second;
+}
+/** Interfaces for C/Fortran */
 extern "C" {
 
     int hepmc3_delete_writer_(const int & position)
@@ -90,8 +156,8 @@ extern "C" {
     }
 
     int hepmc3_set_pdf_info_(const int & position,const int& parton_id1, const int& parton_id2, const double& x1, const double& x2,
-                      const double& scale_in, const double& xf1,const double& xf2,
-                      const int& pdf_id1, const int& pdf_id2)
+                             const double& scale_in, const double& xf1,const double& xf2,
+                             const int& pdf_id1, const int& pdf_id2)
     {
         if (hepmc3_gWriters.find(position)==hepmc3_gWriters.end()) {
             printf("Warning in %s: Writer at position %i does not exist\n",__FUNCTION__,position);
@@ -139,12 +205,12 @@ extern "C" {
 
     int hepmc3_new_writer_(const int & position,const int & mode,const char* ffilename)
     {
-    std::string libHepMC3rootIO="libHepMC3rootIO.so";
+        std::string libHepMC3rootIO="libHepMC3rootIO.so";
 #ifdef __darwin__
-    libHepMC3rootIO="libHepMC3rootIO.dydl";
+        libHepMC3rootIO="libHepMC3rootIO.dydl";
 #endif
 #ifdef WIN32
-    libHepMC3rootIO="HepMC3rootIO.dll";
+        libHepMC3rootIO="HepMC3rootIO.dll";
 #endif
         std::string filename=std::string(ffilename);
         int r_position=position;
@@ -160,9 +226,9 @@ extern "C" {
         if (hepmc3_gGenRunInfos.find(r_position)!=hepmc3_gGenRunInfos.end()) {
             printf("Warning in %s: RunInfo at position %i already exists\n",__FUNCTION__,r_position);
         }
-        else 
+        else
         {
-        hepmc3_gGenRunInfos[r_position]=std::make_shared<GenRunInfo>();
+            hepmc3_gGenRunInfos[r_position]=std::make_shared<GenRunInfo>();
         }
 
         switch (mode)
@@ -194,7 +260,7 @@ extern "C" {
         if (hepmc3_gGenRunInfos.find(position)==hepmc3_gGenRunInfos.end()) {
             printf("Warning in %s: RunInfo at position %i does not exist\n",__FUNCTION__,position);
             return 1;
-        }        
+        }
         std::vector<std::string> weight_names=hepmc3_gGenRunInfos[position]->weight_names();
         weight_names.push_back(std::string(name));
         hepmc3_gGenRunInfos[position]->set_weight_names(weight_names);
@@ -221,6 +287,7 @@ extern "C" {
         }
         hepmc3_gWriters[position].second->weight(std::string(name))=val;
         return 0;
-    }  
+    }
 }
+#endif
 #endif

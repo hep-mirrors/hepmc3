@@ -56,9 +56,9 @@ int main()
     // create vertex 1
     GenVertexPtr v1=std::make_shared<GenVertex>();
     evt.add_vertex( v1 );
-#ifdef HEPMC3_HAVE_VECTOR_ATTRIBUTES    
-    v1->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(std::vector<double>{1.0,2.0,5.0}));
-#endif    
+#ifdef HEPMC3_HAVE_VECTOR_ATTRIBUTES
+    v1->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(std::vector<double> {1.0,2.0,5.0}));
+#endif
     GenParticlePtr p1=std::make_shared<GenParticle>( FourVector(1.0,1.0,7000,7000),2212, 3 );
     evt.add_particle( p1 );
     p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
