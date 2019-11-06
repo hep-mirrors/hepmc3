@@ -19,7 +19,7 @@
 
 #include <cstring>
 #include <cstdlib>
-
+#define USE_VECTOR_ATTRIBUTES
 namespace HepMC3 {
 
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
@@ -325,7 +325,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         if( !(cursor = strchr(cursor+1,' ')) ) return -1;
         random_states[i] = atoi(cursor);
     }
-#ifndef HEPMC3_HAVE_VECTOR_ATTRIBUTES
+#ifndef USE_VECTOR_ATTRIBUTES
     for ( int i = 0; i < random_states_size; ++i )
         evt.add_attribute("random_states"+to_string((long long unsigned int)i),make_shared<IntAttribute>(random_states[i]));
 #else
@@ -427,7 +427,7 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     m_vertex_barcodes.push_back( barcode );
 
     m_event_ghost->add_vertex(data_ghost);
-#ifndef HEPMC3_HAVE_VECTOR_ATTRIBUTES
+#ifndef USE_VECTOR_ATTRIBUTES
     for ( int i = 0; i < weights_size; ++i )
         data_ghost->add_attribute("weight"+to_string((long long unsigned int)i),make_shared<DoubleAttribute>(weights[i]));
 #else

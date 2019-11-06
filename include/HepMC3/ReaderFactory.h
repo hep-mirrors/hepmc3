@@ -21,7 +21,7 @@ namespace HepMC3 {
 /** @brief THis function will deduce the type of input file based on the name/URL and it's content and will return appropriate Reader*/
 std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 {
-    std::string libHepMC3rootIO="libHepMC3rootIO.so";
+    std::string libHepMC3rootIO="libHepMC3rootIO.so.3";
 #ifdef __darwin__
     libHepMC3rootIO="libHepMC3rootIO.dydl";
 #endif
