@@ -7,6 +7,7 @@
 
 -class std::istream
 -class std::basic_ios
+-class std::vector
 -class HepMC3::Exception
 -class HepMC3::Setup
 -class HepMC3::WeightError
@@ -25,18 +26,33 @@
 -class HepMC3::Units
 -class HepMC3::Attribute
 -class HepMC3::Reader
--class HepMC3::IntAttribute
--class HepMC3::LongAttribute
--class HepMC3::DoubleAttribute
--class HepMC3::FloatAttribute
--class HepMC3::StringAttribute
--class HepMC3::CharAttribute
--class HepMC3::LongLongAttribute
--class HepMC3::LongDoubleAttribute
--class HepMC3::UIntAttribute
--class HepMC3::ULongAttribute
--class HepMC3::ULongLongAttribute
--class HepMC3::BoolAttribute
+#-class HepMC3::IntAttribute
+#-class HepMC3::LongAttribute
+#-class HepMC3::DoubleAttribute
+#-class HepMC3::FloatAttribute
+#-class HepMC3::StringAttribute
+#-class HepMC3::CharAttribute
+#-class HepMC3::LongLongAttribute
+#-class HepMC3::LongDoubleAttribute
+#-class HepMC3::UIntAttribute
+#-class HepMC3::ULongAttribute
+#-class HepMC3::ULongLongAttribute
+#-class HepMC3::BoolAttribute
+
+#-class HepMC3::VectorIntAttribute
+#-class HepMC3::VectorLongAttribute
+#-class HepMC3::VectorLongIntAttribute
+#-class HepMC3::VectorDoubleAttribute
+#-class HepMC3::VectorFloatAttribute
+#-class HepMC3::VectorStringAttribute
+#-class HepMC3::VectorCharAttribute
+#-class HepMC3::VectorLongLongAttribute
+#-class HepMC3::VectorLongDoubleAttribute
+#-class HepMC3::VectorUIntAttribute
+#-class HepMC3::VectorULongAttribute
+#-class HepMC3::VectorULongLongAttribute
+#-class HepMC3::VectorBoolAttribute
+
 
 +add_on_binder HepMC3::Selector binder::custom_Selector_binder
 

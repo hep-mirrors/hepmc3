@@ -674,6 +674,507 @@ private:
     bool m_val; ///< Attribute value
 };
 
+/**
+ *  @class HepMC3::VectorCharAttribute
+ *  @brief Attribute that holds a vector of charegers of type  char
+ *
+ *  @ingroup attributes
+ */
+class VectorCharAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorCharAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorCharAttribute(std::vector<char> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        char  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<char> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<char>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<char> m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC3::VectorFloatAttribute
+ *  @brief Attribute that holds a vector of floategers of type  float
+ *
+ *  @ingroup attributes
+ */
+class VectorFloatAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorFloatAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorFloatAttribute(std::vector<float> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        float  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<float> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<float>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<float> m_val; ///< Attribute value
+};
+
+
+/**
+ *  @class HepMC3::VectorLongDoubleAttribute
+ *  @brief Attribute that holds a vector of long doubleegers of type  long double
+ *
+ *  @ingroup attributes
+ */
+class VectorLongDoubleAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorLongDoubleAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorLongDoubleAttribute(std::vector<long double> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        long double  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<long double> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<long double>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<long double> m_val; ///< Attribute value
+};
+
+
+
+/**
+ *  @class HepMC3::VectorLongLongAttribute
+ *  @brief Attribute that holds a vector of long longegers of type  long long
+ *
+ *  @ingroup attributes
+ */
+class VectorLongLongAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorLongLongAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorLongLongAttribute(std::vector<long long> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        long long  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<long long> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<long long>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<long long> m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC3::VectorUIntAttribute
+ *  @brief Attribute that holds a vector of unsigned integers of type  unsigned int
+ *
+ *  @ingroup attributes
+ */
+class VectorUIntAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorUIntAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorUIntAttribute(std::vector<unsigned int> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        unsigned int  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<unsigned int> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<unsigned int>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<unsigned int> m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC3::VectorULongAttribute
+ *  @brief Attribute that holds a vector of unsigned longegers of type  unsigned long
+ *
+ *  @ingroup attributes
+ */
+class VectorULongAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorULongAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorULongAttribute(std::vector<unsigned long> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        unsigned long  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<unsigned long> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<unsigned long>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<unsigned long> m_val; ///< Attribute value
+};
+
+
+/**
+ *  @class HepMC3::VectorULongLongAttribute
+ *  @brief Attribute that holds a vector of unsigned long longegers of type  unsigned long long
+ *
+ *  @ingroup attributes
+ */
+class VectorULongLongAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorULongLongAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorULongLongAttribute(std::vector<unsigned long long> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        unsigned long long  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<unsigned long long> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<unsigned long long>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<unsigned long long> m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC3::VectorIntAttribute
+ *  @brief Attribute that holds a vector of integers of type  int
+ *
+ *  @ingroup attributes
+ */
+class VectorIntAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorIntAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorIntAttribute(std::vector<int> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        int  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<int> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<int>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<int> m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC3::VectorIntAttribute
+ *  @brief Attribute that holds a vector of integers of type  int
+ *
+ *  @ingroup attributes
+ */
+class VectorLongIntAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorLongIntAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorLongIntAttribute(std::vector<long int> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        long int  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<long int> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<long int>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<long int> m_val; ///< Attribute value
+};
+
+/**
+ *  @class HepMC3::VectorIntAttribute
+ *  @brief Attribute that holds a vector of FPs of type  double
+ *
+ *  @ingroup attributes
+ */
+class VectorDoubleAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorDoubleAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorDoubleAttribute(std::vector<double> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        double  datafoo;
+        m_val.clear();
+        std::stringstream datastream(att);
+        while (datastream >> datafoo) m_val.push_back(datafoo);
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<double> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<double>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<double> m_val; ///< Attribute value
+};
+
+
+/**
+ *  @class HepMC3::VectorIntAttribute
+ *  @brief Attribute that holds a vector of FPs of type  string
+ *
+ *  @ingroup attributes
+ */
+class VectorStringAttribute : public Attribute {
+public:
+
+    /** @brief Default constructor */
+    VectorStringAttribute():Attribute(),m_val() {}
+
+    /** @brief Constructor initializing attribute value */
+    VectorStringAttribute(std::vector<string> val):Attribute(),m_val(val) {}
+
+    /** @brief Implementation of Attribute::from_string */
+    bool from_string(const string &att) override {
+        std::string  datafoo;
+        m_val.clear();
+        size_t posb=att.find_first_not_of(' ');
+        size_t pose=posb;
+        while (posb!=std::string::npos) { pose=att.find_first_not_of(' ',posb+1); m_val.push_back(att.substr(posb,pose)); posb=att.find_first_not_of(' ',pose+1);}
+        return true;
+    }
+
+    /** @brief Implementation of Attribute::to_string */
+    bool to_string(string &att) const  override{
+        att.clear();
+        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=a;}
+        return true;
+    }
+
+    /** @brief get the value associated to this Attribute. */
+    std::vector<string> value() const {
+        return m_val;
+    }
+
+    /** @brief set the value associated to this Attribute. */
+    void set_value(const std::vector<string>& i) {
+        m_val = i;
+    }
+
+private:
+    std::vector<string> m_val; ///< Attribute value
+};
+
 
 } // namespace HepMC3
 
