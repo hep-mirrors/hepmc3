@@ -18,6 +18,7 @@
 #include <string.h>
 
 namespace HepMC3 {
+std::shared_ptr<Reader> deduce_reader(std::istream &stream);	
 /** @brief THis function will deduce the type of input file based on the name/URL and it's content and will return appropriate Reader*/
 std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 {
@@ -29,6 +30,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
     libHepMC3rootIO="HepMC3rootIO.dll";
 #endif
     bool remote=false;
+    bool pipe=false;
     if (filename.find("http://")!=std::string::npos) 	 remote=true;
     if (filename.find("https://")!=std::string::npos) 	 remote=true;
     if (filename.find("root://")!=std::string::npos) 	 remote=true;
@@ -38,18 +40,20 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
     if (!remote)
     {
         struct stat   buffer;
-        if (stat (filename.c_str(), &buffer)!=0)
+        if (!(stat (filename.c_str(), &buffer)==0 && (S_ISFIFO(buffer.st_mode)|| S_ISREG(buffer.st_mode) || S_ISLNK(buffer.st_mode))))
         {
-            printf("Error  in deduce_reader: file does not exist: %s\n",filename.c_str());
+            printf("Error  in deduce_reader: file %s does not exist or is not a regular file/FIFO/link\n",filename.c_str());
             return std::shared_ptr<Reader> (nullptr);
         }
-
+        
         std::ifstream file(filename);
+         
         if(!file.is_open()) {
             printf("Error in deduce_reader: could not open file for testing HepMC version: %s\n",filename.c_str());
             return shared_ptr<Reader>(nullptr);
         }
-
+        pipe=S_ISFIFO(buffer.st_mode);
+        if (pipe) { printf("Info in deduce_reader: the file %s is a pipe\n",filename.c_str()); std::shared_ptr<Reader> r=deduce_reader(file); file.close(); return r;}
         std::string line;
         size_t nonempty=0;
         while (std::getline(file, line)&&nonempty<3) {
