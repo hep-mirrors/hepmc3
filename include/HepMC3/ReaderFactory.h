@@ -40,7 +40,11 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
     if (!remote)
     {
         struct stat   buffer;
+#ifdef WIN32
+        if (!(stat (filename.c_str(), &buffer)==0))
+#else
         if (!(stat (filename.c_str(), &buffer)==0 && (S_ISFIFO(buffer.st_mode)|| S_ISREG(buffer.st_mode) || S_ISLNK(buffer.st_mode))))
+#endif
         {
             printf("Error  in deduce_reader: file %s does not exist or is not a regular file/FIFO/link\n",filename.c_str());
             return std::shared_ptr<Reader> (nullptr);
@@ -53,8 +57,10 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
             file->close();
             return shared_ptr<Reader>(nullptr);
         }
+#ifndef WIN32
         pipe=S_ISFIFO(buffer.st_mode);
         if (pipe) { printf("Info in deduce_reader: the file %s is a pipe\n",filename.c_str()); return deduce_reader(*file); }
+#endif
         std::string line;
         size_t nonempty=0;
         while (std::getline(*file, line)&&nonempty<3) {
