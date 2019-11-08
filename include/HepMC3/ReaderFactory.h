@@ -63,6 +63,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
             head.push_back(line);
         }
         file->close();
+        if (file) delete file;
     }
     /* To assure there are at least two elements in the vector*/
     head.push_back("");
