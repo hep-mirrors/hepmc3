@@ -46,22 +46,23 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
             return std::shared_ptr<Reader> (nullptr);
         }
         
-        std::ifstream file(filename);
+        std::ifstream* file= new std::ifstream(filename);
          
-        if(!file.is_open()) {
+        if(!file->is_open()) {
             printf("Error in deduce_reader: could not open file for testing HepMC version: %s\n",filename.c_str());
+            file->close();
             return shared_ptr<Reader>(nullptr);
         }
         pipe=S_ISFIFO(buffer.st_mode);
-        if (pipe) { printf("Info in deduce_reader: the file %s is a pipe\n",filename.c_str()); std::shared_ptr<Reader> r=deduce_reader(file); file.close(); return r;}
+        if (pipe) { printf("Info in deduce_reader: the file %s is a pipe\n",filename.c_str()); return deduce_reader(*file); }
         std::string line;
         size_t nonempty=0;
-        while (std::getline(file, line)&&nonempty<3) {
+        while (std::getline(*file, line)&&nonempty<3) {
             if (line.empty()) continue;
             nonempty++;
             head.push_back(line);
         }
-        file.close();
+        file->close();
     }
     /* To assure there are at least two elements in the vector*/
     head.push_back("");
