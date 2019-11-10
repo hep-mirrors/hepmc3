@@ -93,7 +93,7 @@
     @code{.cpp}
 
     vector<const Relatives*> relos{&Relatives::PARENTS, &Relatives::ANCESTORS, &Relatives::CHILDREN, &Relatives::DESCENDANTS};
-    ConstGenVertexPtr v startPosition;
+    ConstGenVertexPtr startPosition;
     // loop over different relationships.
     for(const Relatives* r: relos){
       for(auto p: r(startPosition)){
@@ -214,7 +214,7 @@
     So, for example, a filter can be defined as follows
 
     @code{.cpp}
-    Filter f = (Selector::STATUS == 1 && Selector::PT > 60.) || (Selector::Mass > 70. && Selector::Mass < 110.);
+    Filter f = (Selector::STATUS == 1 && Selector::PT > 60.) || (Selector::MASS > 70. && Selector::MASS < 110.);
     GenParticlePtr p;
     bool passesCuts = f(p);
     @endcode
