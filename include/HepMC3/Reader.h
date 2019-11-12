@@ -49,21 +49,26 @@ public:
     Reader(const Reader&) = delete; 
 ///deleted copy assignment operator
     Reader& operator = (const Reader &) = delete;            
-
-
-
+    /// Set options
+    void set_options(const std::map<std::string, std::string>& options)
+    {
+    m_options=options;
+    }
+    /// Set options
+    std::map<std::string, std::string> get_options() const
+    {
+    return m_options;
+    }
 protected:
-
     /// Set the global GenRunInfo object.
     void set_run_info(shared_ptr<GenRunInfo> run) {
         m_run_info = run;
     }
-
+        /// options
+    std::map<std::string, std::string> m_options;
 private:
-
     /// The global GenRunInfo object.
     shared_ptr<GenRunInfo> m_run_info;
-
 };
 
 

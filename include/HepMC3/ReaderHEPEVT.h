@@ -54,17 +54,11 @@ public:
     * @param[in] i Particle id
     * @param[in] iflong Event style
     */
-    virtual bool read_hepevt_particle(int i, bool iflong=true);
+    virtual bool read_hepevt_particle(int i);
 
     /// @brief skip events
     bool skip(const int)  override;
 
-    /** @brief Read event from file
-     *
-     *  @param[in] iflong Event style
-     *  @param[out] evt Contains parsed even
-     */
-    bool read_event(GenEvent &evt, bool iflong);
 
     /** @brief Read event from file
      *
@@ -78,12 +72,7 @@ public:
 
     /** @brief Get stream error state */
     bool failed()  override;
-
-    /** @brief  set flag if vertex positions are available */
-    void set_vertices_positions_present(bool iflong);
-    /** @brief  get flag if vertex positions are available */
-    bool get_vertices_positions_present() const;
-
+    
 public:
     char* hepevtbuffer; //!< Pointer to HEPEVT Fortran common block/C struct
 private:

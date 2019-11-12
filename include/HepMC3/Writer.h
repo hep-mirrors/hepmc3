@@ -52,14 +52,26 @@ public:
     Writer(const Writer&) = delete; 
 ///deleted copy assignment operator
     Writer& operator = (const Writer &) = delete;            
+    /// Set options
+    void set_options(const std::map<std::string, std::string>& options)
+    {
+    m_options=options;
+    }
+    /// Set options
+    std::map<std::string, std::string> get_options() const
+    {
+    return m_options;
+    }
+protected:
 
-
-
+    /// options
+    std::map<std::string, std::string> m_options;
+   
 private:
 
     /// The global GenRunInfo object.
     shared_ptr<GenRunInfo> m_run_info;
-
+ 
 };
 
 
