@@ -102,14 +102,14 @@ bool ReaderHEPEVT::read_hepevt_particle( int i)
     double fltcodes2[4];
     m_isstream ? m_stream->getline(buf_p,max_p_buffer_size) : m_file.getline(buf_p,max_p_buffer_size);
     if( strlen(buf_p) == 0 ) return false;
-    if (m_options.find("vertices_positions_absent")==m_options.end())
+    if (m_options.find("vertices_positions_are_absent")==m_options.end())
     {
         m_isstream ? m_stream->getline(buf_v,max_v_buffer_size) : m_file.getline(buf_v,max_v_buffer_size);
         if( strlen(buf_v) == 0 ) return false;
     }
     std::stringstream st_p(buf_p);
     std::stringstream st_v(buf_v);
-    if (m_options.find("vertices_positions_absent")==m_options.end())
+    if (m_options.find("vertices_positions_are_absent")==m_options.end())
     {
         if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[2]>>intcodes[3]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[3]>>fltcodes1[4])) { HEPMC3_ERROR( "ReaderHEPEVT: HEPMC3_ERROR reading particle momenta");     return false;}
         if (!static_cast<bool>(st_v>>fltcodes2[0]>>fltcodes2[1]>>fltcodes2[2]>>fltcodes2[3])) { HEPMC3_ERROR( "ReaderHEPEVT: HEPMC3_ERROR reading particle vertex");  return false;}
