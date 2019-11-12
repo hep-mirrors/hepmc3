@@ -16,10 +16,8 @@
 #include "HepMC3/GenHeavyIon.h"
 #include "HepMC3/GenPdfInfo.h"
 #include "HepMC3/Setup.h"
-
 #include <cstring>
 #include <cstdlib>
-#define USE_VECTOR_ATTRIBUTES
 namespace HepMC3 {
 
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
@@ -240,9 +238,19 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             shared_ptr<DoubleAttribute> theta = m_particle_cache_ghost[i]->attribute<DoubleAttribute>("theta");
             if (theta) m_particle_cache[i]->add_attribute("theta",theta);
             shared_ptr<IntAttribute> flow1 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow1");
-            if (flow1) m_particle_cache[i]->add_attribute("flow1",flow1);
-            shared_ptr<IntAttribute> flow2 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow2");
-            if (flow2) m_particle_cache[i]->add_attribute("flow2",flow2);
+            if (m_options.find("particle_flows_are_separated")!=m_options.end())
+            {
+                if (flow1) m_particle_cache[i]->add_attribute("flow1",flow1);
+                shared_ptr<IntAttribute> flow2 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow2");
+                if (flow2) m_particle_cache[i]->add_attribute("flow2",flow2);
+                shared_ptr<IntAttribute> flow3 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow3");
+                if (flow3) m_particle_cache[i]->add_attribute("flow3",flow3);
+            }
+            else
+            {
+                shared_ptr<VectorIntAttribute> flows = m_particle_cache_ghost[i]->attribute<VectorIntAttribute>("flows");
+                if (flows)  m_particle_cache[i]->add_attribute("flows",flows);
+            }
         }
     }
 
@@ -325,12 +333,15 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         if( !(cursor = strchr(cursor+1,' ')) ) return -1;
         random_states[i] = atoi(cursor);
     }
-#ifndef USE_VECTOR_ATTRIBUTES
-    for ( int i = 0; i < random_states_size; ++i )
-        evt.add_attribute("random_states"+to_string((long long unsigned int)i),make_shared<IntAttribute>(random_states[i]));
-#else
-    evt.add_attribute("random_states",make_shared<VectorLongIntAttribute>(random_states));
-#endif
+    if (m_options.find("event_random_states_are_separated")!=m_options.end())
+    {
+        evt.add_attribute("random_states",make_shared<VectorLongIntAttribute>(random_states));
+    }
+    else
+    {
+        for ( int i = 0; i < random_states_size; ++i )
+            evt.add_attribute("random_states"+to_string((long long unsigned int)i),make_shared<IntAttribute>(random_states[i]));
+    }
     // weights
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     weights_size = atoi(cursor);
@@ -427,12 +438,15 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     m_vertex_barcodes.push_back( barcode );
 
     m_event_ghost->add_vertex(data_ghost);
-#ifndef USE_VECTOR_ATTRIBUTES
-    for ( int i = 0; i < weights_size; ++i )
-        data_ghost->add_attribute("weight"+to_string((long long unsigned int)i),make_shared<DoubleAttribute>(weights[i]));
-#else
-    data_ghost->add_attribute("weights",make_shared<VectorDoubleAttribute>(weights));
-#endif
+    if (m_options.find("vertex_weights_are_separated")!=m_options.end())
+    {
+        for ( int i = 0; i < weights_size; ++i )
+            data_ghost->add_attribute("weight"+to_string((long long unsigned int)i),make_shared<DoubleAttribute>(weights[i]));
+    }
+    else
+    {
+        data_ghost->add_attribute("weights",make_shared<VectorDoubleAttribute>(weights));
+    }
     m_vertex_cache_ghost.push_back( data_ghost );
 
     HEPMC3_DEBUG( 10, "ReaderAsciiHepMC2: V: "<<-(int)m_vertex_cache.size()<<" (old barcode"<<barcode<<") "<<num_particles_out<<" particles)" )
@@ -498,16 +512,26 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return -1;
     int flowsize=atoi(cursor);
 
+    std::map<int,int> flows;
     for (int i=0; i<flowsize; i++)
     {
         if( !(cursor = strchr(cursor+1,' ')) ) return -1;
         int  flowindex=atoi(cursor);
         if( !(cursor = strchr(cursor+1,' ')) ) return -1;
         int flowvalue=atoi(cursor);
-        data_ghost->add_attribute("flow"+to_string((long long int)flowindex),make_shared<IntAttribute>(flowvalue));//gcc-4.4.7 workaround
+        flows[flowindex]=flowvalue;
     }
-
-    // Set prod_vtx link
+    if (m_options.find("particle_flows_are_separated")!=m_options.end())
+    {
+        std::vector<int> vectorflows;
+        for (auto f: flows) vectorflows.push_back(f.second);
+        data_ghost->add_attribute("flows",make_shared<VectorIntAttribute>(vectorflows));
+    }
+    else
+    {
+        for (auto f: flows)   data_ghost->add_attribute("flow"+to_string((long long int)f.first),make_shared<IntAttribute>(f.second));
+    }
+// Set prod_vtx link
     if( end_vtx == m_vertex_barcodes.back() ) {
         m_vertex_cache.back()->add_particle_in(data);
         end_vtx = 0;

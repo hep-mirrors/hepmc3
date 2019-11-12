@@ -23,7 +23,7 @@ public:
     /** @brief Write the header */
     void write_hepevt_event_header();
     /** @brief Write particles */
-    void write_hepevt_particle( int index, bool iflong );
+    void write_hepevt_particle( int index);
 };
 }
 #endif

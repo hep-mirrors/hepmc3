@@ -11,7 +11,7 @@ void WriterHEPEVTZEUS::write_hepevt_event_header()
     unsigned long length = cursor - &(buf[0]);
     m_stream->write( buf, length );
 }
-void WriterHEPEVTZEUS::write_hepevt_particle( int index, bool /*iflong*/ )
+void WriterHEPEVTZEUS::write_hepevt_particle( int index)
 {
     char buf[512];//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor=&(buf[0]);
