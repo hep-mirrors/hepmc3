@@ -3,12 +3,18 @@
         * First release with Python bindings
         * Added ReaderPlugin and WriterPlugin and macros to declare plugins
         * Fixed GenCrossSection for the case of multiple cross-sections.
-        * Removed Error class
-        * Fixed GenEvent::weight_names()
-        * Added HEPMC3_ prefix to DEBUG, ERROR, WARNING  mactos
+        ** Removed Error class
+        ** Removed ReaderHEPEVT::read_hepevt_particle(int i, bool iflong=true), ReaderHEPEVT::read_event(GenEvent &evt, bool iflong)
+        ** Removed ReaderHEPEVT::get_vertices_positions_present and ReaderHEPEVT::set_vertices_positions_present
+        * The functionality above is implemented now Reader::set_options, Reader::get_options
+        ** Fixed GenEvent::weight_names(). Now it should be called w/o arguments.
+        * Added set_options, get_options to I/O classes for fine control of I/O
+        ** Added HEPMC3_ prefix to DEBUG, ERROR, WARNING  macros
         * Added Reader::skip(int &) for fast worwarding of input
         * Added to LHEF::Writer wrapper functions that can be used in Python 
         * use delete/override for class members
+        * The ** marked changes should be taken into account during the migration to 3.2
+        * Thanks to Dominik Muller
   --------------------------  HepMC3.1.2 pre  --------------------------
 2019-08-22  Andy Buckley  <andy.buckley@cern.ch>
         * Add GenParticle::abs_pid() to match FourVector::abs_eta(), abs_rap().

@@ -60,10 +60,7 @@ public:
     bool skip(const int)  override;
 
 
-    /** @brief Read event from file
-     *
-     *  @param[out] evt Contains parsed even
-     */
+    /** @brief Read event from file*/
     bool read_event(GenEvent &evt)  override;
 
 
