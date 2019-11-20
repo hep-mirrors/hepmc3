@@ -107,16 +107,27 @@ class build_ext(build_ext_orig):
             if not os.path.isdir('outputs/lib64/'): 
              os.mkdir('outputs/lib64/')
              if os.path.isdir('outputs/lib/'):
+              if  ps == 'Solaris':
+               copyfile('outputs/lib/libHepMC3.so.3','outputs/lib64/libHepMC3.so.3')
+               copyfile('outputs/lib/libHepMC3.so','outputs/lib64/libHepMC3.so')
+               copyfile('outputs/lib/libHepMC3search.so.3','outputs/lib64/libHepMC3search.so.3')
+               copyfile('outputs/lib/libHepMC3search.so','outputs/lib64/libHepMC3search.so')
+               copyfile('outputs/lib/libHepMC3-static.a','outputs/lib64/libHepMC3-static.a')
+               copyfile('outputs/lib/libHepMC3search-static.a','outputs/lib64/libHepMC3search-static.a')
               if  ps == 'FreeBSD':
                copyfile('outputs/lib/libHepMC3.so.3','outputs/lib64/libHepMC3.so.3')
                copyfile('outputs/lib/libHepMC3.so','outputs/lib64/libHepMC3.so')
                copyfile('outputs/lib/libHepMC3search.so.3','outputs/lib64/libHepMC3search.so.3')
                copyfile('outputs/lib/libHepMC3search.so','outputs/lib64/libHepMC3search.so')
+               copyfile('outputs/lib/libHepMC3-static.a','outputs/lib64/libHepMC3-static.a')
+               copyfile('outputs/lib/libHepMC3search-static.a','outputs/lib64/libHepMC3search-static.a')
               if  ps == 'Linux':
                copyfile('outputs/lib/libHepMC3.so.3','outputs/lib64/libHepMC3.so.3')
                copyfile('outputs/lib/libHepMC3.so','outputs/lib64/libHepMC3.so')
                copyfile('outputs/lib/libHepMC3search.so.3','outputs/lib64/libHepMC3search.so.3')
                copyfile('outputs/lib/libHepMC3search.so','outputs/lib64/libHepMC3search.so')
+               copyfile('outputs/lib/libHepMC3-static.a','outputs/lib64/libHepMC3-static.a')
+               copyfile('outputs/lib/libHepMC3search-static.a','outputs/lib64/libHepMC3search-static.a')
               if  ps == 'Darwin':
                copyfile('outputs/lib/libHepMC3.dylib','outputs/lib64/libHepMC3.dylib')
                copyfile('outputs/lib/libHepMC3search.dylib','outputs/lib64/libHepMC3search.dylib')
@@ -128,6 +139,9 @@ class build_ext(build_ext_orig):
                copyfile('outputs/lib/HepMC3.dll','outputs/lib64/HepMC3.dll')
                copyfile('outputs/lib/HepMC3.dll','test/HepMC3.dll')
                copyfile('outputs/lib/HepMC3.dll','python/test/HepMC3.dll')
+               copyfile('outputs/lib/HepMC3search.dll','outputs/lib64/HepMC3search.dll')
+               copyfile('outputs/lib/HepMC3search.dll','test/HepMC3search.dll')
+               copyfile('outputs/lib/HepMC3search.dll','python/test/HepMC3search.dll')
                
             ctest_args = []
             if  ps == 'Windows':
