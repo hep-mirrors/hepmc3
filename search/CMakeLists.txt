@@ -20,7 +20,7 @@ set_target_properties(HepMC3search PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT
 set_target_properties(HepMC3search PROPERTIES SOVERSION 3)
 set_target_properties(HepMC3search_static PROPERTIES OUTPUT_NAME HepMC3search-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 if (MSVC)
-set_target_properties(HepMC3 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+set_target_properties(HepMC3search PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 endif()
 
 
