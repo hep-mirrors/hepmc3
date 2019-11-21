@@ -76,7 +76,7 @@ class build_ext(build_ext_orig):
     def run(self):
         for ext in self.extensions:
             self.build_cmake(ext)
-        build_ext_orig.run(self)
+#        build_ext_orig.run(self)
 
     def build_cmake(self, ext):
         build_temp=os.getcwd()
