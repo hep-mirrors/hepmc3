@@ -187,6 +187,7 @@ int main() {
 
     v3->add_attribute( "vtx_att" , test_attribute );
     v4->add_attribute( "vtx_att" , test_attribute2 );
+/* TODO: Make this code portable  
 
     std::cout << std::endl << "Find all particles with attribute 'tool' "<< std::endl;
     std::cout << "(should return particles 2,4,6):" << std::endl;
@@ -213,6 +214,7 @@ int main() {
     for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("other") && Selector::ATTRIBUTE("other") == "test_attribute", evt.particles())){
       Print::line(p);
     }
+*/  
   
     std::cout << std::endl << "Offsetting event position by 5,5,5,5" << std::endl;
 
