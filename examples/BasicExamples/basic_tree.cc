@@ -94,7 +94,7 @@ int main() {
     // 1)
     std::cout << std::endl << "Find all stable particles: " << std::endl;
 
-    for(ConstGenParticlePtr p: applyFilter(Selector::STATUS == 1, evt.particles())){
+    for(ConstGenParticlePtr p: applyFilter(StandardSelector::STATUS == 1, evt.particles())){
       Print::line(p);
     }
 
@@ -111,7 +111,7 @@ int main() {
 
     Filter has_end_vtx = [](ConstGenParticlePtr input)->bool{return (bool)input->end_vertex();};
   
-    vector<GenParticlePtr> results3 = applyFilter(Selector::STATUS==1 && has_end_vtx, Relatives::DESCENDANTS(p4));
+    vector<GenParticlePtr> results3 = applyFilter(StandardSelector::STATUS==1 && has_end_vtx, Relatives::DESCENDANTS(p4));
     for(ConstGenParticlePtr p: results3){
       Print::line(p);
     }
@@ -120,7 +120,7 @@ int main() {
     std::cout << std::endl << "Narrow down results of previous search to quarks only: " << std::endl;
 
     // note the use of abs to obtain the absolute value of pdg_id :)
-    for(ConstGenParticlePtr p: applyFilter( *abs(Selector::PDG_ID) <= 6, results3)){
+    for(ConstGenParticlePtr p: applyFilter( *abs(StandardSelector::PDG_ID) <= 6, results3)){
       Print::line(p);
     }
 */

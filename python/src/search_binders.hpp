@@ -1,17 +1,17 @@
 #ifndef _INCLUDED_search_binders_hpp_
 #define _INCLUDED_search_binders_hpp_
 namespace binder {
-		void custom_Selector_binder( pybind11::class_<HepMC3::Selector, std::shared_ptr<HepMC3::Selector>> cl)
+		void custom_Selector_binder( pybind11::class_<HepMC3::StandardSelector, std::shared_ptr<HepMC3::StandardSelector>> cl)
 		{
-		cl.def_static("STATUS", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::Selector::STATUS, "C++: HepMC3::Selector::STATUS()");
-		cl.def_static("PDG_ID", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::Selector::PDG_ID, "C++: HepMC3::Selector::PDG_ID()");
-		cl.def_static("PT", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::PT, "C++: HepMC3::Selector::PT()");
-		cl.def_static("ENERGY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ENERGY, "C++: HepMC3::Selector::ENERGY()");
-		cl.def_static("RAPIDITY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::RAPIDITY, "C++: HepMC3::Selector::RAPIDITY()");
-        cl.def_static("ETA", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ETA, "C++: HepMC3::Selector::ETA()");
-        cl.def_static("PHI", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::PHI, "C++: HepMC3::Selector::PHI()");
-        cl.def_static("ET", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::ET, "C++: HepMC3::Selector::ET()");
-        cl.def_static("MASS", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::Selector::MASS, "C++: HepMC3::Selector::MASS()");
+		cl.def_static("STATUS", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::StandardSelector::STATUS, "C++: HepMC3::StandardSelector::STATUS()");
+		cl.def_static("PDG_ID", (class HepMC3::SelectorWrapper<int> (*)( )) &HepMC3::StandardSelector::PDG_ID, "C++: HepMC3::StandardSelector::PDG_ID()");
+		cl.def_static("PT", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::StandardSelector::PT, "C++: HepMC3::StandardSelector::PT()");
+		cl.def_static("ENERGY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::StandardSelector::ENERGY, "C++: HepMC3::StandardSelector::ENERGY()");
+		cl.def_static("RAPIDITY", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::StandardSelector::RAPIDITY, "C++: HepMC3::StandardSelector::RAPIDITY()");
+        cl.def_static("ETA", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::StandardSelector::ETA, "C++: HepMC3::StandardSelector::ETA()");
+        cl.def_static("PHI", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::StandardSelector::PHI, "C++: HepMC3::StandardSelector::PHI()");
+        cl.def_static("ET", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::StandardSelector::ET, "C++: HepMC3::StandardSelector::ET()");
+        cl.def_static("MASS", (class HepMC3::SelectorWrapper<double> (*)( )) &HepMC3::StandardSelector::MASS, "C++: HepMC3::StandardSelector::MASS()");
 	}
 
 	void	search_binder(pybind11::module &M)

@@ -3648,7 +3648,7 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 
 void bind_HepMC3_HEPEVT_Wrapper(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::HEPEVT_Wrapper file:HepMC3/HEPEVT_Wrapper.h line:96
+	{ // HepMC3::HEPEVT_Wrapper file:HepMC3/HEPEVT_Wrapper.h line:97
 		pybind11::class_<HepMC3::HEPEVT_Wrapper, std::shared_ptr<HepMC3::HEPEVT_Wrapper>> cl(M("HepMC3"), "HEPEVT_Wrapper", "");
 		pybind11::handle cl_type = cl;
 
