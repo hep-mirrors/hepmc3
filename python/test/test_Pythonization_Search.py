@@ -1,8 +1,8 @@
-import sys
+import sys,os
 
 v=sys.version_info
-sys.path=["../"+str(v[0])+"."+str(v[1])+"."+str(v[2])+"/"]+sys.path
-
+sys.path=[os.path.abspath(os.path.join(os.pardir,str(v[0])+"."+str(v[1])+"."+str(v[2])))]+[os.getcwd()]+sys.path
+ 
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
 import pyHepMC3.search.pyHepMC3search.HepMC3 as hmsearch
 import pyHepMC3.pyHepMC3.HepMC3 as hm

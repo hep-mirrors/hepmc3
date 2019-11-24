@@ -75,7 +75,15 @@ struct HEPEVT
 namespace HepMC3
 {
 /** @brief Pointer to external (e.g. in Pythia6) struct with HEPEVT */
+#ifdef WIN32
+#ifdef HepMC3_EXPORTS
+__declspec(dllexport) extern struct HEPEVT*  hepevtptr;
+#else
+__declspec(dllimport) extern struct HEPEVT*  hepevtptr;
+#endif
+#else
 extern struct HEPEVT*  hepevtptr;
+#endif
 
 class HEPEVT_Wrapper
 {

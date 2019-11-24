@@ -2,7 +2,7 @@
 #-search
 #--------
 include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} )
-
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 set( hepmc3search_sources 
 ${PROJECT_SOURCE_DIR}/search/src/Relatives.cc 
 ${PROJECT_SOURCE_DIR}/search/src/Selector.cc)
@@ -16,13 +16,14 @@ add_library(HepMC3search SHARED $<TARGET_OBJECTS:objlibsearch>)
 add_library(HepMC3search_static STATIC  $<TARGET_OBJECTS:objlibsearch>)
 
 target_link_libraries(HepMC3search  HepMC3)
-set_target_properties(HepMC3search PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-set_target_properties(HepMC3search PROPERTIES SOVERSION 3)
-set_target_properties(HepMC3search_static PROPERTIES OUTPUT_NAME HepMC3search-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-if (MSVC)
-set_target_properties(HepMC3search PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-endif()
-
+set_target_properties(HepMC3search PROPERTIES OUTPUT_NAME HepMC3search   SOVERSION 3                                               
+                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
+                                               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+set_target_properties(HepMC3search_static PROPERTIES OUTPUT_NAME HepMC3search-static                                                
+                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
+                                               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 
 # installs 
 install(TARGETS HepMC3search DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT searchlibs)

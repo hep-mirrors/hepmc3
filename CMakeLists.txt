@@ -71,7 +71,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 #This is a workaround for wrong flag.
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "PGI")
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
 set(CMAKE_CXX_EXTENSIONS ON)
 endif()
 endif()
@@ -191,13 +191,15 @@ target_include_directories(objlibcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
 add_library(HepMC3 SHARED $<TARGET_OBJECTS:objlibcore>)
 add_library(HepMC3_static STATIC  $<TARGET_OBJECTS:objlibcore>)
 
-set_target_properties(HepMC3 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-set_target_properties(HepMC3 PROPERTIES SOVERSION 3)
 
-set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-if (MSVC)
-set_target_properties(HepMC3 PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-endif()
+set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
+                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
+                                               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
+                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
+                                               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 if (UNIX)
 target_link_libraries(HepMC3 PRIVATE dl)
 target_link_libraries(HepMC3_static PRIVATE dl)
