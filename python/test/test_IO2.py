@@ -1,8 +1,7 @@
+from  pyHepMC3TestUtils import update_path
 import sys,os
+sys.path=update_path()
 
-v=sys.version_info
-sys.path=[os.path.abspath(os.path.join(os.pardir,str(v[0])+"."+str(v[1])+"."+str(v[2])))]+[os.getcwd()]+sys.path
- 
  
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
 import pyHepMC3.rootIO.pyHepMC3rootIO.HepMC3 as hmrootIO

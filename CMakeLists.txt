@@ -183,13 +183,20 @@ ${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
 #We need to export all symbols on WIn to build .lib files
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-add_library(objlibcore OBJECT ${hepmc3core_sources})
-# shared libraries need PIC
-set_property(TARGET objlibcore PROPERTY POSITION_INDEPENDENT_CODE 1)
-target_include_directories(objlibcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
+#add_library(objlibcore OBJECT ${hepmc3core_sources})
+#set_property(TARGET objlibcore PROPERTY POSITION_INDEPENDENT_CODE 1)
+#target_include_directories(objlibcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
+#add_library(HepMC3 SHARED $<TARGET_OBJECTS:objlibcore>)
+#add_library(HepMC3_static STATIC  $<TARGET_OBJECTS:objlibcore>)
 
-add_library(HepMC3 SHARED $<TARGET_OBJECTS:objlibcore>)
-add_library(HepMC3_static STATIC  $<TARGET_OBJECTS:objlibcore>)
+add_library(HepMC3 SHARED ${hepmc3core_sources})
+target_include_directories(HepMC3 PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+add_library(HepMC3_static STATIC  ${hepmc3core_sources})
+target_include_directories(HepMC3_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_compile_definitions(HepMC3_static PRIVATE NO_DECLSPEC_hepevtptr)
+
+
 
 
 set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              

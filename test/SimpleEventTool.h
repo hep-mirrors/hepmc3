@@ -11,7 +11,6 @@
 #else
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
-#include "HepMC3/Selector.h"
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"

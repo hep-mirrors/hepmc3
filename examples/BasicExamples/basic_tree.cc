@@ -86,6 +86,7 @@ int main() {
     v4->add_particle_out(p7);
     v4->add_particle_out(p8);
 
+/* Unfortunatelly this code is not portable. TODO: make it portable.
     //
     // Example of use of the search engine
     //
@@ -122,7 +123,7 @@ int main() {
     for(ConstGenParticlePtr p: applyFilter( *abs(Selector::PDG_ID) <= 6, results3)){
       Print::line(p);
     }
-
+*/
     //
     // Example of adding event attributes
     //

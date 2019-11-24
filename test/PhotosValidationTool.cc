@@ -24,8 +24,7 @@ int PhotosValidationTool::process(GenEvent &hepmc) {
 
     HEPMC2CODE( int buf = -hepmc.particles_size(); )
     HEPMC3CODE(
-        vector<GenParticlePtr> results = applyFilter(Selector::STATUS==1 && Selector::PDG_ID==22,hepmc.particles());
-        int buf = -results.size();
+        int buf=-hepmc.particles().size();
     )
     // Time only processing
     m_timer.start();
@@ -43,8 +42,7 @@ int PhotosValidationTool::process(GenEvent &hepmc) {
     HEPMC2CODE( buf += hepmc.particles_size(); )
 
     HEPMC3CODE(
-        vector<GenParticlePtr> results2 = applyFilter(Selector::STATUS==1 && Selector::PDG_ID==22,hepmc.particles());
-        buf += results2.size();
+        buf +=hepmc.particles().size();
     )
 
     if(buf<MAX_PHOTONS_TO_KEEP_TRACK_OF) ++m_photons_added[buf];

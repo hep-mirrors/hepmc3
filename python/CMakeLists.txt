@@ -67,10 +67,12 @@ endif()
 
 set ( HEPMC3_INCLUDE_DIRECTORIES ${HEPMC3_INCLUDE_DIR})
 set (HEPMC3_INCLUDE_FLAGS -I${HEPMC3_INCLUDE_DIR})
+set (HEPMC3_LOADABLE_LIBRARIES_DIR ${HEPMC3_LIB_DIR})
 message(STATUS "pyHepMC3 v${THIS_PROJECT_NAME_VERSION}")
 else()
 set(THIS_PROJECT_NAME pyHepMC3)
 set(THIS_PROJECT_NAME_VERSION ${HEPMC3_VERSION_MAJOR}.${HEPMC3_VERSION_MINOR}.${HEPMC3_VERSION_PATCH})
+set (HEPMC3_LOADABLE_LIBRARIES_DIR ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 set (HEPMC3_INCLUDE_FLAGS -I${PROJECT_SOURCE_DIR}/include   -I${PROJECT_SOURCE_DIR}/rootIO/include  -I${PROJECT_SOURCE_DIR}/search/include)
 set (HEPMC3_INCLUDE_DIRECTORIES  ${PROJECT_SOURCE_DIR}/include   ${PROJECT_SOURCE_DIR}/rootIO/include  ${PROJECT_SOURCE_DIR}/search/include)
 set ( HEPMC3_LIB HepMC3)
@@ -156,12 +158,7 @@ set_target_properties(pyHepMC3${Python_VERSION} PROPERTIES OUTPUT_NAME pyHepMC3
                                                            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:> 
                                                            MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:> 
                                                            ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:>)
-#if (WIN32)
-#set_target_properties(pyHepMC3${Python_VERSION} PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib")
-#else()
-target_link_libraries(pyHepMC3${Python_VERSION} PUBLIC ${HEPMC3_LIB}  )
-#endif()
-target_link_libraries(pyHepMC3${Python_VERSION} PUBLIC ${Python_LIBRARIES} )
+target_link_libraries(pyHepMC3${Python_VERSION} PUBLIC ${Python_LIBRARIES} ${HEPMC3_LIB} )
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     target_compile_options(pyHepMC3${Python_VERSION} PRIVATE "-fsized-deallocation")
 endif()
@@ -169,14 +166,9 @@ target_include_directories(pyHepMC3${Python_VERSION} PUBLIC ${Python_INCLUDE_DIR
 if(ROOT_FOUND)
 set_target_properties(pyHepMC3rootIO${Python_VERSION} PROPERTIES OUTPUT_NAME pyHepMC3rootIO 
                                                                  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:> 
-                                                                 MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:> 
+                                                                 MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:> 
                                                                  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:>)
-#if (WIN32)
-#set_target_properties(pyHepMC3rootIO${Python_VERSION} PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib")
-#else()
-target_link_libraries(pyHepMC3rootIO${Python_VERSION} PUBLIC  ${HEPMC3_LIB} )
-#endif()
-target_link_libraries(pyHepMC3rootIO${Python_VERSION} PUBLIC ${Python_LIBRARIES} ${HEPMC3_ROOTIO_LIBRARY} )
+target_link_libraries(pyHepMC3rootIO${Python_VERSION} PUBLIC ${Python_LIBRARIES}  ${HEPMC3_LIB} ${HEPMC3_ROOTIO_LIBRARY} )
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     target_compile_options(pyHepMC3rootIO${Python_VERSION} PRIVATE "-fsized-deallocation")
 endif()
@@ -186,15 +178,9 @@ endif()
 if(HEPMC3_ENABLE_SEARCH)
 set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES OUTPUT_NAME pyHepMC3search 
                                                                  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:> 
-                                                                 MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:> 
+                                                                 MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:> 
                                                                  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:>)
-#if (WIN32)
-#set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES LINK_FLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib /WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3search-static.lib")
-#else()
-target_link_libraries(pyHepMC3search${Python_VERSION} PUBLIC ${HEPMC3_LIB} ${HEPMC3_SEARCH_LIB} )
-#endif()
-target_link_libraries(pyHepMC3search${Python_VERSION} PUBLIC ${Python_LIBRARIES})
-
+target_link_libraries(pyHepMC3search${Python_VERSION} PUBLIC ${Python_LIBRARIES} ${HEPMC3_LIB} ${HEPMC3_SEARCH_LIB} )
 if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     target_compile_options(pyHepMC3search${Python_VERSION} PRIVATE "-fsized-deallocation")
 endif()
@@ -224,6 +210,23 @@ add_custom_target(
                 )
 endif()
 
+if (WIN32)
+#Python is insane
+if(HEPMC3_ENABLE_TEST)
+add_custom_target(
+        copy${Python_VERSION} ALL
+        COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3.dll ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/HepMC3.dll
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                )
+if(HEPMC3_ENABLE_SEARCH)
+add_custom_target(
+        copysearch${Python_VERSION} ALL
+        COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3search.dll ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/HepMC3search.dll
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                )
+endif()
+endif()
+endif()
 message(STATUS "HepMC3 python: Tweek HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings.") 
 if (WIN32)
 if (NOT HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
@@ -275,16 +278,15 @@ set( HepMC_python_tests
 if(ROOT_FOUND)        
 list( APPEND HepMC_python_tests test_IO2)
 endif()        
-if(HEPMC3_ENABLE_TEST)
-
-#list( APPEND HepMC_python_tests test_Pythonization_Search)
+if(HEPMC3_ENABLE_SEARCH)
+list( APPEND HepMC_python_tests test_Pythonization_Search)
 endif()
 if(HEPMC3_ENABLE_TEST)
 if(USE_INSTALLED_HEPMC3)
 ENABLE_TESTING()
 endif()
 foreach ( ptest ${HepMC_python_tests} )
-  add_test(NAME python${Python_VERSION}_${ptest} COMMAND ${Python_EXECUTABLE} ${ptest}.py   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test")
+  add_test(NAME python${Python_VERSION}_${ptest} COMMAND ${Python_EXECUTABLE} ${ptest}.py WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test")
 endforeach ( ptest ${HepMC_python_tests} )
 endif()
 

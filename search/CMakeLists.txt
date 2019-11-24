@@ -7,13 +7,23 @@ set( hepmc3search_sources
 ${PROJECT_SOURCE_DIR}/search/src/Relatives.cc 
 ${PROJECT_SOURCE_DIR}/search/src/Selector.cc)
 
-add_library(objlibsearch OBJECT ${hepmc3search_sources})
+#add_library(objlibsearch OBJECT ${hepmc3search_sources})
 
-set_property(TARGET objlibsearch PROPERTY POSITION_INDEPENDENT_CODE 1)
-target_include_directories(objlibsearch PUBLIC ${PROJECT_SOURCE_DIR}/include)
+#set_property(TARGET objlibsearch PROPERTY POSITION_INDEPENDENT_CODE 1)
+#target_include_directories(objlibsearch PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
-add_library(HepMC3search SHARED $<TARGET_OBJECTS:objlibsearch>)
-add_library(HepMC3search_static STATIC  $<TARGET_OBJECTS:objlibsearch>)
+#add_library(HepMC3search SHARED $<TARGET_OBJECTS:objlibsearch>)
+#add_library(HepMC3search_static STATIC  $<TARGET_OBJECTS:objlibsearch>)
+
+add_library(HepMC3search SHARED ${hepmc3search_sources})
+target_link_libraries(HepMC3search  HepMC3)
+target_include_directories(HepMC3search PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+add_library(HepMC3search_static STATIC  ${hepmc3search_sources})
+target_include_directories(HepMC3search_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_compile_definitions(HepMC3search_static PRIVATE NO_DECLSPEC_StandardSelector)
+
+
 
 target_link_libraries(HepMC3search  HepMC3)
 set_target_properties(HepMC3search PROPERTIES OUTPUT_NAME HepMC3search   SOVERSION 3                                               

@@ -12,7 +12,6 @@
 #else
 #include "Tauola/TauolaHepMC3Event.h"
 #include "HepMC3/GenEvent.h"
-#include "HepMC3/Selector.h"
 #endif // ifdef HEPMC2
 
 #include "ValidationTool.h"

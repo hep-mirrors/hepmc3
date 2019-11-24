@@ -15,11 +15,10 @@
 #  7  !d!     1      1    5,5   -2.445   28.816    6.082   29.552    0.010
 #  8  !u~!    1     -2    5,5    3.962  -49.498  -26.687   56.373    0.006
 
+from  pyHepMC3TestUtils import update_path
 import sys,os
+sys.path=update_path()
 
-v=sys.version_info
-sys.path=[os.path.abspath(os.path.join(os.pardir,str(v[0])+"."+str(v[1])+"."+str(v[2])))]+[os.getcwd()]+sys.path
- 
 import random ,math
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
 import pyHepMC3.pyHepMC3.HepMC3 as hm

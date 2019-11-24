@@ -112,7 +112,7 @@ set( libMCEG_sources ValidationControl.cc   SimpleEventTool.cc OutputValidationT
 set( libMCEG_sources_HEPMC3  )
 set( libMCEG_link_libraries_HEPMC2  )
 set( libMCEG_link_libraries_HEPMC3  )
-set( libMCEG_include_directories   ${CMAKE_CURRENT_SOURCE_DIR}/../search/include/  )
+set( libMCEG_include_directories   ${CMAKE_CURRENT_SOURCE_DIR}/../include/  )
 set( MCEG_tests )
 
 
@@ -194,7 +194,7 @@ endif()
 
 
 add_library(MCEG3 SHARED ${libMCEG_sources} ${libMCEG_sources_HEPMC3})
-target_link_libraries(MCEG3  PRIVATE HepMC3 HepMC3search PUBLIC ${libMCEG_link_libraries_HEPMC3} )
+target_link_libraries(MCEG3  PRIVATE HepMC3 PUBLIC ${libMCEG_link_libraries_HEPMC3} )
 target_compile_definitions(MCEG3  PRIVATE ${libMCEG_compile_definitions})
 target_include_directories(MCEG3   BEFORE
 PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
@@ -209,7 +209,7 @@ macro( hepmc_mceghepmc3_test testname )
   ADD_EXECUTABLE(${testname} ${${testname}_source}  ${ARGN} )
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/  ${CMAKE_CURRENT_SOURCE_DIR}/../search/include/ )
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/   )
   #The flag is needed for Taoula that conflates generic C++ interface with the HepMC2 interface
   #FIXME put here Visual studio flags when needed
   #For Darwin target_link_libraries(${testname}  "-undefined dynamic_lookup"  HepMC3  MCEG3)   
@@ -261,7 +261,7 @@ macro( hepmc_mceghepmc2_test testname )
   target_compile_definitions(hepmc2_${testname}  PRIVATE  -DHEPMC2)
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/  ${CMAKE_CURRENT_SOURCE_DIR}/../search/include/ )  
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/   )  
   target_link_libraries(hepmc2_${testname} PRIVATE ${HEPMC2_LIBRARIES}   MCEG2   )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
