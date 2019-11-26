@@ -10,15 +10,15 @@
 #include "HepMC3/Selector.h"
 
 namespace HepMC3 {
-const SelectorWrapper<int> Selector::STATUS      = SelectorWrapper<int>([](ConstGenParticlePtr p)->int{return p->status();});
-const SelectorWrapper<int> Selector::PDG_ID      = SelectorWrapper<int>([](ConstGenParticlePtr p)->int{return p->pdg_id();});
-const SelectorWrapper<double> Selector::PT       = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().pt();});
-const SelectorWrapper<double> Selector::ENERGY   = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().e();});
-const SelectorWrapper<double> Selector::RAPIDITY = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().rap();});
-const SelectorWrapper<double> Selector::ETA      = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().eta();});
-const SelectorWrapper<double> Selector::PHI      = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().phi();});
-const SelectorWrapper<double> Selector::ET       = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().e() * (p->momentum().pt() / p->momentum().p3mod());});
-const SelectorWrapper<double> Selector::MASS     = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().m();});
+const SelectorWrapper<int> StandardSelector::STATUS      = SelectorWrapper<int>([](ConstGenParticlePtr p)->int{return p->status();});
+const SelectorWrapper<int> StandardSelector::PDG_ID      = SelectorWrapper<int>([](ConstGenParticlePtr p)->int{return p->pdg_id();});
+const SelectorWrapper<double> StandardSelector::PT       = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().pt();});
+const SelectorWrapper<double> StandardSelector::ENERGY   = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().e();});
+const SelectorWrapper<double> StandardSelector::RAPIDITY = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().rap();});
+const SelectorWrapper<double> StandardSelector::ETA      = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().eta();});
+const SelectorWrapper<double> StandardSelector::PHI      = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().phi();});
+const SelectorWrapper<double> StandardSelector::ET       = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().e() * (p->momentum().pt() / p->momentum().p3mod());});
+const SelectorWrapper<double> StandardSelector::MASS     = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().m();});
 
 
 

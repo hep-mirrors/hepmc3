@@ -40,16 +40,16 @@ using ConstSelectorPtr = std::shared_ptr<const Selector>;
  *  bool stable = is_stable(p);
  *  bool beam = (*status == 4)(p);
  *
- *  Selector contains a few standard Selectors already defined, e.g.
+ *  StandardSelector contains a few standard Selectors already defined, e.g.
  *
  *  ConstGenParticlePtr p;
- *  (Selector::STATUS == 1)(p);
- *  (Selector::PT > 15.)(p);
- *  (abs(Selector::RAPIDITY) < 2.5)(p);
+ *  (StandardSelector::STATUS == 1)(p);
+ *  (StandardSelector::PT > 15.)(p);
+ *  (abs(StandardSelector::RAPIDITY) < 2.5)(p);
  *
  *  you can also combined them e.g.
  *
- *  Filter myCuts = (Selector::PT > 15.) && (*abs(Selector::RAPIDITY) < 2.5) || (Selector::PT > 100.);
+ *  Filter myCuts = (StandardSelector::PT > 15.) && (*abs(StandardSelector::RAPIDITY) < 2.5) || (StandardSelector::PT > 100.);
  *  bool passCuts = myCuts(p);
  */
 class Selector {
@@ -77,16 +77,6 @@ public:
     virtual Filter operator != (double value) const = 0;      ///< NonEquality
 
     virtual ConstSelectorPtr abs() const = 0;
-
-    static const SelectorWrapper<int>    STATUS;   ///< Status
-    static const SelectorWrapper<int>    PDG_ID;   ///< PDG ID
-    static const SelectorWrapper<double> PT;       ///< Transverse momentum
-    static const SelectorWrapper<double> ENERGY;   ///< Energy
-    static const SelectorWrapper<double> RAPIDITY; ///< Rapidity
-    static const SelectorWrapper<double> ETA;      ///< Pseudorapidity
-    static const SelectorWrapper<double> PHI;      ///< Azimuthal angle
-    static const SelectorWrapper<double> ET;       ///< Transverse energy
-    static const SelectorWrapper<double> MASS;     ///< Mass
     static AttributeFeature ATTRIBUTE(const std::string &name);
 
 };
@@ -159,6 +149,45 @@ private:
 };
 /** @brief ConstSelectorPtr abs*/
 ConstSelectorPtr abs(const Selector &input);
+
+#ifndef NO_DECLSPEC_StandardSelector
+#ifdef WIN32
+#ifdef HepMC3search_EXPORTS
+#define DECLSPEC_StandardSelector __declspec(dllexport) 
+#else
+#define DECLSPEC_StandardSelector  __declspec(dllimport) 
+#endif 
+#else
+#define NO_DECLSPEC_StandardSelector
+#endif 
+#endif 
+
+/** @brief  StandardSelector */
+class StandardSelector: public Selector {
+
+public:
+#ifdef NO_DECLSPEC_StandardSelector
+    static const SelectorWrapper<int>    STATUS;   ///< Status
+    static const SelectorWrapper<int>    PDG_ID;   ///< PDG ID
+    static const SelectorWrapper<double>  PT;       ///< Transverse momentum
+    static const SelectorWrapper<double>  ENERGY;   ///< Energy
+    static const SelectorWrapper<double>  RAPIDITY; ///< Rapidity
+    static const SelectorWrapper<double>  ETA;      ///< Pseudorapidity
+    static const SelectorWrapper<double>  PHI;      ///< Azimuthal angle
+    static const SelectorWrapper<double>  ET;       ///< Transverse energy
+    static const SelectorWrapper<double>  MASS;     ///< Mass
+#else
+    static const SelectorWrapper<int>   DECLSPEC_StandardSelector STATUS;   ///< Status
+    static const SelectorWrapper<int>   DECLSPEC_StandardSelector PDG_ID;   ///< PDG ID
+    static const SelectorWrapper<double> DECLSPEC_StandardSelector PT;       ///< Transverse momentum
+    static const SelectorWrapper<double> DECLSPEC_StandardSelector ENERGY;   ///< Energy
+    static const SelectorWrapper<double> DECLSPEC_StandardSelector RAPIDITY; ///< Rapidity
+    static const SelectorWrapper<double> DECLSPEC_StandardSelector ETA;      ///< Pseudorapidity
+    static const SelectorWrapper<double> DECLSPEC_StandardSelector PHI;      ///< Azimuthal angle
+    static const SelectorWrapper<double> DECLSPEC_StandardSelector ET;       ///< Transverse energy
+    static const SelectorWrapper<double> DECLSPEC_StandardSelector MASS;     ///< Mass
+#endif
+};
 
 }
 #endif
