@@ -42,6 +42,10 @@ endif()
 
 include(CheckCXXCompilerFlag)
 #This is a workaround for ROOT+Cmake problem.
+CHECK_CXX_COMPILER_FLAG("-Wno-unused-but-set-variable" COMPILER_SUPPORTS_WNO_UNUSED_BUT_SET_VARIABLE)
+if (COMPILER_SUPPORTS_WNO_UNUSED_BUT_SET_VARIABLE)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-but-set-variable")
+endif()
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 if(COMPILER_SUPPORTS_CXX11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
