@@ -220,12 +220,14 @@ if(HEPMC3_ENABLE_TEST)
 add_custom_target(
         copy${Python_VERSION} ALL
         COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3.dll ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/HepMC3.dll
+        COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3.dll ${CMAKE_CURRENT_SOURCE_DIR}/test/HepMC3.dll
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                 )
 if(HEPMC3_ENABLE_SEARCH)
 add_custom_target(
         copysearch${Python_VERSION} ALL
-        COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3search.dll ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/HepMC3search.dll
+        COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3search.dll ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/HepMC3search.dll
+        COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3search.dll ${CMAKE_CURRENT_SOURCE_DIR}/test/HepMC3search.dll
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
                 )
 endif()
