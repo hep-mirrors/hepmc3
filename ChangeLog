@@ -1,5 +1,5 @@
-  --------------------------  HepMC3.2.0 pre  --------------------------
-2019-10-11 Andrii Verbytskyi for HepMC
+  --------------------------  HepMC3.2.0 --------------------------
+2019-11-27 Andrii Verbytskyi for HepMC
         * First release with Python bindings
         * Added ReaderPlugin and WriterPlugin and macros to declare plugins
         * Fixed GenCrossSection for the case of multiple cross-sections.
@@ -9,9 +9,9 @@
         * The functionality above is implemented now Reader::set_options, Reader::get_options
         ** Fixed GenEvent::weight_names(). Now it should be called w/o arguments.
         * Added set_options, get_options to I/O classes for fine control of I/O
-        ** The standard seletor members from Selector (e.g. Selector::MASS) are moved into a new class StandardSelector.
+        ** The standard Selector members from Selector (e.g. Selector::MASS) were moved into a new class StandardSelector.
         ** Added HEPMC3_ prefix to DEBUG, ERROR, WARNING  macros
-        * Added Reader::skip(int &) for fast worwarding of input
+        * Added Reader::skip(int &) for fast forwarding of input
         * Added to LHEF::Writer wrapper functions that can be used in Python 
         * use delete/override for class members
         * The ** marked changes should be taken into account during the migration to 3.2
