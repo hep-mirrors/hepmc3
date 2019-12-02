@@ -4,8 +4,8 @@ sys.path=update_path()
 
  
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
-import pyHepMC3.rootIO.pyHepMC3rootIO.HepMC3 as hmrootIO
 import pyHepMC3.pyHepMC3.HepMC3 as hm
+import pyHepMC3.rootIO.pyHepMC3rootIO.HepMC3 as hmrootIO
 print(dir(hmrootIO))
 def test_IO2():
  inputA=hm.ReaderAsciiHepMC2("inputIO2.hepmc")
