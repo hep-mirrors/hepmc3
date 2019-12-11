@@ -67,7 +67,7 @@ test -n "$tmp" && OUT="$OUT -L$prefix/${CMAKE_INSTALL_LIBDIR} -lHepMC3search"
 fi
 
 tmp=$( echo "$*" | egrep -- '--\<rootIO\>')
-test -n "$tmp" && OUT="$OUT -L$prefix/${CMAKE_INSTALL_LIBDIR}  ${HEPMC3_ROOTIO_LIBRARY}"
+test -n "$tmp" && OUT="$OUT -L$prefix/${HEPMC3_ROOTIO_INSTALL_LIBDIR}  ${HEPMC3_ROOTIO_LIBRARY}"
 
 tmp=$( echo "$*" | egrep -- '--\<version\>')
 test -n "$tmp" && echo ${PROJECT_VERSION}&& exit 0

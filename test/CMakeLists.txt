@@ -282,13 +282,17 @@ endforeach ( test ${MCEG_tests} )
 
 endif()
 
-#One should use something else for Windows or use build-in Linux sybsystem
+#One should use something else for Windows/BSD/MAC
+if(CMAKE_SYSTEM_NAME MATCHES Linux)
 find_program( MEMORYCHECK_COMMAND valgrind )
 if(MEMORYCHECK_COMMAND)
 message(STATUS "HepMC3 test: valgrind package found in ${MEMORYCHECK_COMMAND}.  memory check tests enabled.") 
 set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --error-exitcode=1" )
 elseif()
 message(STATUS "HepMC3 test: valgrind package not found.  memory check tests disabled.") 
+endif()
+else()
+message(STATUS "HepMC3 test: memory tests will be disabled on your system.") 
 endif()
 
 macro(add_memcheck_test binaryname )

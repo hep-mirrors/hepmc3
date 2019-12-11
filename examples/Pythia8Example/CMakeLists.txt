@@ -56,12 +56,12 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/pythia8_example_env.sh.in
      	       @ONLY
       	       )
 # installs 
-
+if (USE_INSTALLED_HEPMC3)
 install(TARGETS pythia8_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES pythia8_ee_to_Z_to_tautau.conf DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*env.sh*")
-
+endif()
 else()
   message(STATUS "HepMC3 examples: Pythia8 package not found. Please check if PYTHIA8_ROOT_DIR is set properly. pythia8_example disabled")
 endif()

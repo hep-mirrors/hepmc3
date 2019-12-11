@@ -14,17 +14,12 @@ if (GRAPHVIZ_GRAPH_LIBRARY)
 list(APPEND linklibraties  ${GRAPHVIZ_GRAPH_LIBRARY}  )
 endif()
 TARGET_LINK_LIBRARIES(HepMC3Viewer.exe   ${linklibraties})
+if (USE_INSTALLED_HEPMC3)
 install(TARGETS HepMC3Viewer.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" EXCLUDE )
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*env.sh*")
-        
+endif()        
 elseif()
   message(STATUS "HepMC3 ViewerExample: GraphViz or ROOT package not found. GUI Browser example disabled.")
 endif()
-
-
-#  GRAPHVIZ_INCLUDE_DIRS - Graphviz include directories
-#  GRAPHVIZ_CDT_LIBRARY - Graphviz CDT library
-#  GRAPHVIZ_GVC_LIBRARY - Graphviz GVC library
-#  GRAPHVIZ_CGRAPH_LIBRARY -

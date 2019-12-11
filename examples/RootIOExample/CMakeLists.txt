@@ -21,7 +21,9 @@ ${CMAKE_CURRENT_SOURCE_DIR}/rootIO_example_env.sh.in
       	     )
 
 # installs 
+if (USE_INSTALLED_HEPMC3)
 install(TARGETS rootIO_example_write.exe rootIO_example_read.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES example.hepmc3 DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*env.sh*")
+endif()

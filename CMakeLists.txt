@@ -28,11 +28,15 @@ option(HEPMC3_BUILD_DOCS         "Enables building of documentation" OFF)
 option(HEPMC3_BUILD_EXAMPLES     "Enables building of examples." OFF)
 option(HEPMC3_ENABLE_TEST        "Enables building of tests." OFF)
 option(HEPMC3_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces." OFF)
+option(HEPMC3_BUILD_STATIC_LIBS  "Enables building of static libraties." ON)
 
 if (NOT HEPMC3_PYTHON_VERSIONS)
 set(HEPMC3_PYTHON_VERSIONS "2.X,3.X")
 endif()
 
+if (NOT HEPMC3_ROOTIO_INSTALL_LIBDIR) 
+set(HEPMC3_ROOTIO_INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
+endif()
 
 message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}") 
 message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}") 
@@ -42,6 +46,7 @@ message(STATUS "HepMC3: HEPMC3_ENABLE_TEST           ${HEPMC3_ENABLE_TEST}")
 message(STATUS "HepMC3: HEPMC3_BUILD_DOCS            ${HEPMC3_BUILD_DOCS}") 
 message(STATUS "HepMC3: HEPMC3_BUILD_EXAMPLES        ${HEPMC3_BUILD_EXAMPLES}") 
 message(STATUS "HepMC3: HEPMC3_INSTALL_INTERFACES    ${HEPMC3_INSTALL_INTERFACES}")
+message(STATUS "HepMC3: HEPMC3_ROOTIO_INSTALL_LIBDIR ${HEPMC3_ROOTIO_INSTALL_LIBDIR}")
 
 if(HEPMC3_ENABLE_ROOTIO)
   if( EXISTS "$ENV{ROOTSYS}" )
@@ -183,39 +188,37 @@ ${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
 #We need to export all symbols on WIn to build .lib files
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-#add_library(objlibcore OBJECT ${hepmc3core_sources})
-#set_property(TARGET objlibcore PROPERTY POSITION_INDEPENDENT_CODE 1)
-#target_include_directories(objlibcore PUBLIC ${PROJECT_SOURCE_DIR}/include)
-#add_library(HepMC3 SHARED $<TARGET_OBJECTS:objlibcore>)
-#add_library(HepMC3_static STATIC  $<TARGET_OBJECTS:objlibcore>)
-
 add_library(HepMC3 SHARED ${hepmc3core_sources})
 target_include_directories(HepMC3 PUBLIC ${PROJECT_SOURCE_DIR}/include)
-
-add_library(HepMC3_static STATIC  ${hepmc3core_sources})
-target_include_directories(HepMC3_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_compile_definitions(HepMC3_static PRIVATE NO_DECLSPEC_hepevtptr)
-
-
-
 
 set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+if (UNIX)
+target_link_libraries(HepMC3 PRIVATE dl)
+endif()
+#---Install build products---------------------------------------------------
+install(TARGETS HepMC3 DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+
+if (HEPMC3_BUILD_STATIC_LIBS)
+add_library(HepMC3_static STATIC  ${hepmc3core_sources})
+target_include_directories(HepMC3_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_compile_definitions(HepMC3_static PRIVATE NO_DECLSPEC_hepevtptr)
+
 set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 if (UNIX)
-target_link_libraries(HepMC3 PRIVATE dl)
 target_link_libraries(HepMC3_static PRIVATE dl)
 endif()
+#---Install build products---------------------------------------------------
+install(TARGETS HepMC3_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+endif()
+
 configure_file(HepMC3-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-config )
 
-#---Install build products---------------------------------------------------
-install(TARGETS HepMC3 DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
-install(TARGETS HepMC3_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
 
@@ -265,7 +268,7 @@ option(USE_INTERFACE_FROM_PYTHIA8 "Use Pythia8ToHepMC3.h from Pythia8" OFF)
 if(HEPMC3_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
   add_subdirectory(examples)
-  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT doc  PATTERN  "*config"  EXCLUDE)
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  FILES_MATCHING  PATTERN "include" PATTERN "*CMakeFiles*" PATTERN "Makefile" PATTERN "*cmake_install.cmake*"  PATTERN "*libAnalysis*" EXCLUDE )
 endif()
 
 if(HEPMC3_BUILD_DOCS)
