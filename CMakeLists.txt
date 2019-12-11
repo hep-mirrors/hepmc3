@@ -8,7 +8,8 @@ SET(HEPMC3_VERSION_MINOR  2)
 SET(HEPMC3_VERSION_PATCH  0)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-
+#This module respects HFS, e.g. defines lib or lib64 when it is needed. 
+include("GNUInstallDirs")
 #---Setting HepMC3 Build type-----------------------------------------------
 if(CMAKE_BUILD_TYPE)
   message(STATUS "HepMC3 Build type: ${CMAKE_BUILD_TYPE}")
@@ -91,8 +92,7 @@ endif()
 endforeach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
 endif()
 
-#This module respects HFS, e.g. defines lib or lib64 when it is needed. 
-include("GNUInstallDirs")
+
 #### RPATH handling #####
 
 set(CMAKE_MACOSX_RPATH 1)
