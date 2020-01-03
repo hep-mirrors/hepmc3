@@ -127,7 +127,7 @@ if(HEPMC3_ENABLE_SEARCH)
 configure_file("search_includes.hpp.in" "search_includes.hpp" IMMEDIATE @ONLY)
 add_custom_command(
 OUTPUT  src/pyHepMC3search.cpp
-DEPENDS search_includes.hppsrc/pyHepMC3search.binder
+DEPENDS search_includes.hpp src/pyHepMC3search.binder
 COMMAND ${BINDER} --single-file  --root-module pyHepMC3search --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3search.binder   search_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} 
 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 VERBATIM)
