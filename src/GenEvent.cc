@@ -635,9 +635,9 @@ vector<string> GenEvent::attribute_names( const int& id) const {
     vector<string> results;
 
     for(const att_key_t& vt1: m_attributes ) {
-      if( vt1.second.count( id ) == 1 ) {
-	results.push_back( vt1.first );
-      }
+        if( vt1.second.count( id ) == 1 ) {
+            results.push_back( vt1.first );
+        }
     }
 
     return results;
