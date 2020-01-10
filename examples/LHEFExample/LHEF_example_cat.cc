@@ -12,7 +12,6 @@
 #include <iomanip>
 
 using namespace HepMC3;
-using namespace LHEF;
 
 int main(int /*argc*/, char ** /*argv*/) {
 
@@ -20,22 +19,22 @@ int main(int /*argc*/, char ** /*argv*/) {
     LHEF::Reader reader("LHEF_example.lhe");
 
     // Create a HEPRUP attribute and initialize it from the reader.
-    shared_ptr<HEPRUPAttribute> hepr = make_shared<HEPRUPAttribute>();
+    std::shared_ptr<HEPRUPAttribute> hepr = std::make_shared<HEPRUPAttribute>();
     hepr->heprup = reader.heprup;
 
     // There may be some XML tags in the LHE file which are
     // non-standard, but we can save them as well.
-    hepr->tags = XMLTag::findXMLTags(reader.headerBlock + reader.initComments);
+    hepr->tags = LHEF::XMLTag::findXMLTags(reader.headerBlock + reader.initComments);
 
     // Nowwe want to create a GenRunInfo object for the HepMC file, and
     // we add the LHEF attribute to that.
-    shared_ptr<GenRunInfo> runinfo = make_shared<GenRunInfo>();
+    std::shared_ptr<GenRunInfo> runinfo = std::make_shared<GenRunInfo>();
     runinfo->add_attribute("HEPRUP", hepr);
 
     // This is just a test to make sure we can add other attributes as
     // well.
     runinfo->add_attribute("NPRUP",
-                           make_shared<FloatAttribute>(hepr->heprup.NPRUP));
+                           std::make_shared<FloatAttribute>(hepr->heprup.NPRUP));
 
     // We want to be able to convey the different event weights to
     // HepMC. In particular we need to add the names of the weights to
@@ -68,9 +67,9 @@ int main(int /*argc*/, char ** /*argv*/) {
         // the HEPEUP. Also here there may be additional non-standard
         // information outside the LHEF <event> tags, which we may want to
         // add.
-        shared_ptr<HEPEUPAttribute> hepe = make_shared<HEPEUPAttribute>();
+        std::shared_ptr<HEPEUPAttribute> hepe = std::make_shared<HEPEUPAttribute>();
         if ( reader.outsideBlock.length() )
-            hepe->tags =  XMLTag::findXMLTags(reader.outsideBlock);
+            hepe->tags = LHEF:: XMLTag::findXMLTags(reader.outsideBlock);
         hepe->hepeup = reader.hepeup;
         GenEvent ev(runinfo, Units::GEV, Units::MM);
         ev.set_event_number(neve);
@@ -79,27 +78,27 @@ int main(int /*argc*/, char ** /*argv*/) {
         // attributes to each event.
         ev.add_attribute("HEPEUP", hepe);
         ev.add_attribute("AlphaQCD",
-                         make_shared<DoubleAttribute>(hepe->hepeup.AQCDUP));
+                        std:: make_shared<DoubleAttribute>(hepe->hepeup.AQCDUP));
         ev.add_attribute("AlphaEM",
-                         make_shared<DoubleAttribute>(hepe->hepeup.AQEDUP)); 
+                         std::make_shared<DoubleAttribute>(hepe->hepeup.AQEDUP)); 
         ev.add_attribute("NUP",
-                         make_shared<IntAttribute>(hepe->hepeup.NUP)); 
+                         std::make_shared<IntAttribute>(hepe->hepeup.NUP)); 
         ev.add_attribute("IDPRUP",
-                         make_shared<LongAttribute>(hepe->hepeup.IDPRUP)); 
+                         std::make_shared<LongAttribute>(hepe->hepeup.IDPRUP)); 
 
         // Now add the Particles from the LHE event to HepMC
-        GenParticlePtr p1 = make_shared<GenParticle>(hepe->momentum(0),
+        GenParticlePtr p1 = std::make_shared<GenParticle>(hepe->momentum(0),
                                                      hepe->hepeup.IDUP[0],
                                                      hepe->hepeup.ISTUP[0]);
-        GenParticlePtr p2 = make_shared<GenParticle>(hepe->momentum(1),
+        GenParticlePtr p2 = std::make_shared<GenParticle>(hepe->momentum(1),
                                                      hepe->hepeup.IDUP[1],
                                                      hepe->hepeup.ISTUP[1]);
-        GenVertexPtr vx = make_shared<GenVertex>();
+        GenVertexPtr vx = std::make_shared<GenVertex>();
         vx->add_particle_in(p1);
         vx->add_particle_in(p2);
 
         for ( int i = 2; i < hepe->hepeup.NUP; ++i )
-            vx->add_particle_out(make_shared<GenParticle>
+            vx->add_particle_out(std::make_shared<GenParticle>
                                  (hepe->momentum(i),
                                   hepe->hepeup.IDUP[i],
                                   hepe->hepeup.ISTUP[i]));
@@ -113,7 +112,7 @@ int main(int /*argc*/, char ** /*argv*/) {
 
         // Let's see if we can associate p1 and p2.
         ev.add_attribute("OtherIncoming",
-                         make_shared<AssociatedParticle>(p2), p1->id()); 
+                         std::make_shared<AssociatedParticle>(p2), p1->id()); 
         
 
         // And then we are done and can write out the GenEvent.
@@ -128,7 +127,7 @@ int main(int /*argc*/, char ** /*argv*/) {
     // LHC file we read in above.
     ReaderAscii input("LHEF_example.hepmc3");
     LHEF::Writer writer("LHEF_example_out.lhe");
-    hepr = shared_ptr<HEPRUPAttribute>();
+    hepr = std::shared_ptr<HEPRUPAttribute>();
 
     // The loop over all events in the HepMC file.
     while ( true ) {
@@ -138,7 +137,7 @@ int main(int /*argc*/, char ** /*argv*/) {
         if ( !input.read_event(ev) || ev.event_number() == 0 ) break;
 
         // Check that the first incoming particle still refers to the second.
-        shared_ptr<AssociatedParticle> assoc =
+        std::shared_ptr<AssociatedParticle> assoc =
           ev.attribute<AssociatedParticle>("OtherIncoming", 1);
         if ( !assoc || !assoc->associated() ||
              assoc->associated() != ev.particles()[1] ) return 3;
@@ -174,7 +173,7 @@ int main(int /*argc*/, char ** /*argv*/) {
         }
 
         // Now we can access the HEPEUP attribute of the current event.
-        shared_ptr<HEPEUPAttribute> hepe =
+        std::shared_ptr<HEPEUPAttribute> hepe =
             ev.attribute<HEPEUPAttribute>("HEPEUP");
 
         // Again, there may be addisional non-standard information we want

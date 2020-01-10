@@ -19,7 +19,7 @@ class WriterRootTreeOPAL : public WriterRootTree
 {
 public:
     /** @brief Constructor */
-    WriterRootTreeOPAL(const std::string &filename,shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+    WriterRootTreeOPAL(const std::string &filename,std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
     /** @brief Init ROOT branches */
     void init_branches();
     /** @brief Write event */

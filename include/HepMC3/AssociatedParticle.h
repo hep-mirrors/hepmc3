@@ -40,7 +40,7 @@ public:
         : IntAttribute(p->id()), m_associated(p) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) {
+    bool from_string(const std::string &att) {
         IntAttribute::from_string(att);
         if ( associatedId() > int(event()->particles().size()) ||
                 associatedId() <= 0  ) return false;

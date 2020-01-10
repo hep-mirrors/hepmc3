@@ -47,12 +47,12 @@ int main() {
     GenEvent evt(Units::GEV,Units::MM);
 
     //                                                               px      py        pz       e     pdgid status
-    GenParticlePtr p1 = make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr p2 = make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
-    GenParticlePtr p3 = make_shared<GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr p4 = make_shared<GenParticle>( FourVector(-3.047,-19.0,    -54.629,  57.920),  -2,  3 );
+    GenParticlePtr p1 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
+    GenParticlePtr p2 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
+    GenParticlePtr p3 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,  -7000.0,  7000.0  ),2212,  3 );
+    GenParticlePtr p4 = std::make_shared<GenParticle>( FourVector(-3.047,-19.0,    -54.629,  57.920),  -2,  3 );
 
-    GenVertexPtr v1 = make_shared<GenVertex>();
+    GenVertexPtr v1 = std::make_shared<GenVertex>();
     v1->add_particle_in (p1);
     v1->add_particle_out(p2);
     evt.add_vertex(v1);
@@ -60,28 +60,28 @@ int main() {
     // Set vertex status if needed
     v1->set_status(4);
 
-    GenVertexPtr v2 = make_shared<GenVertex>();
+    GenVertexPtr v2 = std::make_shared<GenVertex>();
     v2->add_particle_in (p3);
     v2->add_particle_out(p4);
     evt.add_vertex(v2);
 
-    GenVertexPtr v3 = make_shared<GenVertex>();
+    GenVertexPtr v3 = std::make_shared<GenVertex>();
     v3->add_particle_in(p2);
     v3->add_particle_in(p4);
     evt.add_vertex(v3);
 
-    GenParticlePtr p5 = make_shared<GenParticle>( FourVector(-3.813,  0.113, -1.833, 4.233),  22, 1 );
-    GenParticlePtr p6 = make_shared<GenParticle>( FourVector( 1.517,-20.68, -20.605,85.925), -24, 3 );
+    GenParticlePtr p5 = std::make_shared<GenParticle>( FourVector(-3.813,  0.113, -1.833, 4.233),  22, 1 );
+    GenParticlePtr p6 = std::make_shared<GenParticle>( FourVector( 1.517,-20.68, -20.605,85.925), -24, 3 );
 
     v3->add_particle_out(p5);
     v3->add_particle_out(p6);
 
-    GenVertexPtr v4 = make_shared<GenVertex>();
+    GenVertexPtr v4 =std:: make_shared<GenVertex>();
     v4->add_particle_in (p6);
     evt.add_vertex(v4);
 
-    GenParticlePtr p7 = make_shared<GenParticle>( FourVector(-2.445, 28.816,  6.082,29.552),  1, 1 );
-    GenParticlePtr p8 = make_shared<GenParticle>( FourVector( 3.962,-49.498,-26.687,56.373), -2, 1 );
+    GenParticlePtr p7 = std::make_shared<GenParticle>( FourVector(-2.445, 28.816,  6.082,29.552),  1, 1 );
+    GenParticlePtr p8 = std::make_shared<GenParticle>( FourVector( 3.962,-49.498,-26.687,56.373), -2, 1 );
 
     v4->add_particle_out(p7);
     v4->add_particle_out(p8);
@@ -127,17 +127,17 @@ int main() {
     //
     // Example of adding event attributes
     //
-    shared_ptr<GenPdfInfo> pdf_info = make_shared<GenPdfInfo>();
+    std::shared_ptr<GenPdfInfo> pdf_info = std::make_shared<GenPdfInfo>();
     evt.add_attribute("GenPdfInfo",pdf_info);
 
     pdf_info->set(1,2,3.4,5.6,7.8,9.0,1.2,3,4);
 
-    shared_ptr<GenHeavyIon> heavy_ion = make_shared<GenHeavyIon>();
+    std::shared_ptr<GenHeavyIon> heavy_ion = std::make_shared<GenHeavyIon>();
     evt.add_attribute("GenHeavyIon",heavy_ion);
 
     heavy_ion->set( 1,2,3,4,5,6,7,8,9,0.1,2.3,4.5,6.7);
 
-    shared_ptr<GenCrossSection> cross_section = make_shared<GenCrossSection>();
+    std::shared_ptr<GenCrossSection> cross_section = std::make_shared<GenCrossSection>();
     evt.add_attribute("GenCrossSection",cross_section);
 
     cross_section->set_cross_section(1.2,3.4);
@@ -149,7 +149,7 @@ int main() {
     std::cout << std::endl << " Manipulating attributes:" << std::endl;
 
     // get attribute
-    shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
+    std::shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
 
     // if attribute exists - do something with it
     if(cs) {
@@ -172,10 +172,10 @@ int main() {
     // Example of adding attributes and finding particles with attributes
     //
 
-    shared_ptr<Attribute> tool1           = make_shared<IntAttribute>(1);
-    shared_ptr<Attribute> tool999         = make_shared<IntAttribute>(999);
-    shared_ptr<Attribute> test_attribute  = make_shared<StringAttribute>("test attribute");
-    shared_ptr<Attribute> test_attribute2 = make_shared<StringAttribute>("test attribute2");
+    std::shared_ptr<Attribute> tool1           = std::make_shared<IntAttribute>(1);
+    std::shared_ptr<Attribute> tool999         = std::make_shared<IntAttribute>(999);
+    std::shared_ptr<Attribute> test_attribute  = std::make_shared<StringAttribute>("test attribute");
+    std::shared_ptr<Attribute> test_attribute2 = std::make_shared<StringAttribute>("test attribute2");
 
     p2->add_attribute( "tool" ,  tool1           );
     p2->add_attribute( "other" , test_attribute  );

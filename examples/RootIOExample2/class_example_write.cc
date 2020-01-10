@@ -21,8 +21,6 @@
 #include <sstream>
 
 using namespace HepMC3;
-using std::cout;
-using std::endl;
 
 #include "MyClass.h"
 #include "MyRunClass.h"
@@ -31,7 +29,7 @@ using std::endl;
 int main(int argc, char **argv) {
 
     if( argc<3 ) {
-        cout << "Usage: " << argv[0] << " <input_hepmc3_file> <output_root_file>" << endl;
+        std::cout << "Usage: " << argv[0] << " <input_hepmc3_file> <output_root_file>" <<std:: endl;
         exit(-1);
     }
 
@@ -52,7 +50,7 @@ int main(int argc, char **argv) {
         if( text_input.failed() ) break;
 
         if( events_parsed == 0 ) {
-            cout << "First event: " << endl;
+            std::cout << "First event: " << std::endl;
             Print::listing(evt);
         }
 
@@ -79,14 +77,14 @@ int main(int argc, char **argv) {
         std::string stevt = "Event_" + os.str();
         const char* chevt = stevt.c_str();
 
-        cout << "writing " << stevt << endl;
+        std::cout << "writing " << stevt << std::endl;
 
         fFile->WriteObject(myclass, chevt);
 
         ++events_parsed;
 
         if( events_parsed%100 == 0 ) {
-            cout << "Event: " << events_parsed << endl;
+            std::cout << "Event: " << events_parsed << std::endl;
         }
     }
 

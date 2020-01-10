@@ -22,9 +22,9 @@ class AnalysisExample : public Writer
 public:
     /// @brief Constructor
     /// @warning If file already exists, it will be cleared before writing
-    AnalysisExample(const std::string &filename,shared_ptr<GenRunInfo> run);
+    AnalysisExample(const std::string &filename,std::shared_ptr<GenRunInfo> run);
     /// @brief Constructor from ostream
-    AnalysisExample(std::ostream& stream,shared_ptr<GenRunInfo> run);
+    AnalysisExample(std::ostream& stream,std::shared_ptr<GenRunInfo> run);
     /// @brief Write event to file
     ///
     /// @param[in] evt Event to be serialized

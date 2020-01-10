@@ -23,7 +23,7 @@ using namespace HepMC3;
 int main(int argc, char **argv) {
 
     if( argc<3 ) {
-        cout << "Usage: " << argv[0] << " <HepMC3_input_file> <output_file>" << endl;
+        std::cout << "Usage: " << argv[0] << " <HepMC3_input_file> <output_file>" << std::endl;
         exit(-1);
     }
 
@@ -45,37 +45,37 @@ int main(int argc, char **argv) {
         output_file.write_event(evt);
 
         if(events_parsed==0) {
-            cout << " First event: " << endl;
+            std::cout << " First event: " << std::endl;
             Print::listing(evt);
             Print::content(evt);
 
-            cout << " Testing attribute reading for the first event: " << endl;
+            std::cout << " Testing attribute reading for the first event: " << std::endl;
 
-            shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
-            shared_ptr<GenHeavyIon>     hi = evt.attribute<GenHeavyIon>("GenHeavyIon");
-            shared_ptr<GenPdfInfo>      pi = evt.attribute<GenPdfInfo>("GenPdfInfo");
+            std::shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
+            std::shared_ptr<GenHeavyIon>     hi = evt.attribute<GenHeavyIon>("GenHeavyIon");
+            std::shared_ptr<GenPdfInfo>      pi = evt.attribute<GenPdfInfo>("GenPdfInfo");
 
             if(cs) {
-                cout << " Has GenCrossSection:   ";
+                std::cout << " Has GenCrossSection:   ";
                 Print::line(cs);
             }
-            else cout << " No GenCrossSection " << endl;
+            else std::cout << " No GenCrossSection " << std::endl;
 
             if(pi) {
-                cout << " Has GenPdfInfo:        ";
+                std::cout << " Has GenPdfInfo:        ";
                 Print::line(pi);
             }
-            else cout << " No GenPdfInfo " << endl;
+            else std::cout << " No GenPdfInfo " << std::endl;
 
             if(hi) {
-                cout << " Has GenHeavyIon:       ";
+                std::cout << " Has GenHeavyIon:       ";
                 Print::line(hi);
             }
-            else cout << " No GenHeavyIon " << endl;
+            else std::cout << " No GenHeavyIon " << std::endl;
         }
 
         ++events_parsed;
-        if( events_parsed%100 == 0 ) cout<<"Events parsed: "<<events_parsed<<endl;
+        if( events_parsed%100 == 0 ) std::cout<<"Events parsed: "<<events_parsed<<std::endl;
     }
 
     input_file.close();

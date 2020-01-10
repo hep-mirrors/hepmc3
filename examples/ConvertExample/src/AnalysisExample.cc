@@ -5,7 +5,7 @@ namespace HepMC3
 HEPMC3_DECLARE_WRITER_FILE(AnalysisExample)
 HEPMC3_DECLARE_WRITER_STREAM(AnalysisExample)
 
-AnalysisExample::AnalysisExample(const std::string &filename,shared_ptr<GenRunInfo> run): m_file(filename),
+AnalysisExample::AnalysisExample(const std::string &filename,std::shared_ptr<GenRunInfo> run): m_file(filename),
     m_stream(&m_file)
 {
     if ( !m_file.is_open() ) {
@@ -18,7 +18,7 @@ AnalysisExample::AnalysisExample(const std::string &filename,shared_ptr<GenRunIn
     m_errs["rapidity"]=std::vector<double>(m_bins.at("rapidity").size()-1,0.0);
 }
 
-AnalysisExample::AnalysisExample(std::ostream &stream, shared_ptr<GenRunInfo> run)
+AnalysisExample::AnalysisExample(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
     : m_file(),
       m_stream(&stream)
 {

@@ -55,7 +55,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         if(!file->is_open()) {
             printf("Error in deduce_reader: could not open file for testing HepMC version: %s\n",filename.c_str());
             file->close();
-            return shared_ptr<Reader>(nullptr);
+            return std::shared_ptr<Reader>(nullptr);
         }
 #ifndef WIN32
         pipe=S_ISFIFO(buffer.st_mode);
@@ -110,7 +110,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         if (HEPEVT) return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(filename)));
     }
     printf("Info in deduce_reader: All attempts failed for:  %s\n",filename.c_str());
-    return shared_ptr<Reader>(nullptr);
+    return std::shared_ptr<Reader>(nullptr);
 }
 
 
@@ -125,7 +125,7 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
     if (!stream)
     {
         printf("Info in deduce_reader: input stream is too short or invalid.\n");
-        return shared_ptr<Reader>(nullptr);
+        return std::shared_ptr<Reader>(nullptr);
     }
 
     for (size_t i=0; i<back; i++)  stream.unget();
@@ -168,7 +168,7 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
     }
     if (HEPEVT) return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(stream)));
     printf("Info in deduce_reader: All attempts failed\n");
-    return shared_ptr<Reader>(nullptr);
+    return std::shared_ptr<Reader>(nullptr);
 }
 }
 #endif
