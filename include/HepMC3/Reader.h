@@ -41,7 +41,7 @@ public:
     virtual void close()=0;
 
     /// Get the global GenRunInfo object.
-    shared_ptr<GenRunInfo> run_info() const {
+    std::shared_ptr<GenRunInfo> run_info() const {
         return m_run_info;
     }
 
@@ -61,14 +61,14 @@ public:
     }
 protected:
     /// Set the global GenRunInfo object.
-    void set_run_info(shared_ptr<GenRunInfo> run) {
+    void set_run_info(std::shared_ptr<GenRunInfo> run) {
         m_run_info = run;
     }
         /// options
     std::map<std::string, std::string> m_options;
 private:
     /// The global GenRunInfo object.
-    shared_ptr<GenRunInfo> m_run_info;
+    std::shared_ptr<GenRunInfo> m_run_info;
 };
 
 

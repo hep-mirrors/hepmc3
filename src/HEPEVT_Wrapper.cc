@@ -114,14 +114,14 @@ bool HEPEVT_Wrapper::HEPEVT_to_GenEvent( GenEvent* evt )
     std::map<int,GenVertexPtr > vertex_index;
     for ( int i = 1; i <= HEPEVT_Wrapper::number_entries(); i++ )
     {
-        GenParticlePtr p=make_shared<GenParticle>();
+        GenParticlePtr p=std::make_shared<GenParticle>();
         p->set_momentum(FourVector( HEPEVT_Wrapper::px(i), HEPEVT_Wrapper::py(i), HEPEVT_Wrapper::pz(i), HEPEVT_Wrapper::e(i) ));
         p->set_status(HEPEVT_Wrapper::status(i));
         p->set_pid(HEPEVT_Wrapper::id(i)); //Confusing!
         p->set_generated_mass( HEPEVT_Wrapper::m(i));
         hepevt_particles[p]=i;
         particles_index[i]=p;
-        GenVertexPtr v=make_shared<GenVertex>();
+        GenVertexPtr v=std::make_shared<GenVertex>();
         v->set_position(FourVector( HEPEVT_Wrapper::x(i), HEPEVT_Wrapper::y(i), HEPEVT_Wrapper::z(i), HEPEVT_Wrapper::t(i)));
         v->add_particle_out(p);
         std::set<int> in;

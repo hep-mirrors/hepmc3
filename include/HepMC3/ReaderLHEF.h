@@ -55,7 +55,7 @@ public:
     ~ReaderLHEF() ;
 private:
     LHEF::Reader* m_reader;            ///< The actual reader
-    shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
+    std::shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
     int m_neve;                         ///< Event counter
     bool m_failed;                      ///< State of reader
 };

@@ -24,7 +24,7 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
         return;
     }
 
-    shared_ptr<GenRunInfo> ri = make_shared<GenRunInfo>();
+    std::shared_ptr<GenRunInfo> ri = std::make_shared<GenRunInfo>();
 
     GenRunInfoData *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
 

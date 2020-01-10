@@ -15,7 +15,7 @@
 
 namespace HepMC3 {
 
-bool GenPdfInfo::from_string(const string &att) {
+bool GenPdfInfo::from_string(const std::string &att) {
     const char *cursor = att.data();
 
     parton_id[0] = atoi(cursor);
@@ -47,7 +47,7 @@ bool GenPdfInfo::from_string(const string &att) {
     return true;
 }
 
-bool GenPdfInfo::to_string(string &att) const {
+bool GenPdfInfo::to_string(std::string &att) const {
     char buf[255];
 
     sprintf(buf,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",

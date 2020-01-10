@@ -41,7 +41,7 @@ public:
      *  @warning If file exists, it will be overwritten
      */
     WriterRoot(const std::string& filename,
-               shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+               std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
 
 //
 // Functions

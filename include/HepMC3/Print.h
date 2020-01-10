@@ -96,25 +96,25 @@ public:
     }
 
     /// @brief Print one-line info
-    static void line(std::ostream& os, shared_ptr<GenCrossSection> &cs);
+    static void line(std::ostream& os, std::shared_ptr<GenCrossSection> &cs);
     /// @brief Print one-line info to std::cout
-    inline static void line(shared_ptr<GenCrossSection> &cs) {
+    inline static void line(std::shared_ptr<GenCrossSection> &cs) {
         line(std::cout, cs);
         std::cout<<std::endl;
     }
 
     /// @brief Print one-line info
-    static void line(std::ostream& os, shared_ptr<GenHeavyIon> &hi);
+    static void line(std::ostream& os, std::shared_ptr<GenHeavyIon> &hi);
     /// @brief Print one-line info to std::cout
-    inline static void line(shared_ptr<GenHeavyIon> &hi) {
+    inline static void line(std::shared_ptr<GenHeavyIon> &hi) {
         line(std::cout, hi);
         std::cout<<std::endl;
     }
 
     /// @brief Print one-line info
-    static void line(std::ostream& os, shared_ptr<GenPdfInfo> &pi);
+    static void line(std::ostream& os, std::shared_ptr<GenPdfInfo> &pi);
     /// @brief Print one-line info to std::cout
-    inline static void line(shared_ptr<GenPdfInfo> &pi) {
+    inline static void line(std::shared_ptr<GenPdfInfo> &pi) {
         line(std::cout, pi);
         std::cout<<std::endl;
     }

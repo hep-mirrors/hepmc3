@@ -49,7 +49,7 @@ public:
 #if !defined(__CINT__)
 
     /// @brief Constructor with associated run
-    GenEvent(shared_ptr<GenRunInfo> run,
+    GenEvent(std::shared_ptr<GenRunInfo> run,
              Units::MomentumUnit momentum_unit = Units::GEV,
              Units::LengthUnit length_unit = Units::MM);
 
@@ -121,11 +121,11 @@ public:
     //@{
 
     /// @brief Get a pointer to the the GenRunInfo object.
-    shared_ptr<GenRunInfo> run_info() const {
+    std::shared_ptr<GenRunInfo> run_info() const {
         return m_run_info;
     }
     /// @brief Set the GenRunInfo object by smart pointer.
-    void set_run_info(shared_ptr<GenRunInfo> run) {
+    void set_run_info(std::shared_ptr<GenRunInfo> run) {
         m_run_info = run;
         if ( run && !run->weight_names().empty() )
             m_weights.resize(run->weight_names().size(), 1.0);
@@ -205,7 +205,7 @@ public:
     ///
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
-    void add_attribute(const string &name, const shared_ptr<Attribute> &att,  const int& id = 0) {
+    void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0) {
         std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
         if ( att ) {
             m_attributes[name][id] = att;
@@ -218,21 +218,21 @@ public:
     }
 
     /// @brief Remove attribute
-    void remove_attribute(const string &name,  const int& id = 0);
+    void remove_attribute(const std::string &name,  const int& id = 0);
 
     /// @brief Get attribute of type T
     template<class T>
-    shared_ptr<T> attribute(const string &name,  const int& id = 0) const;
+    std::shared_ptr<T> attribute(const std::string &name,  const int& id = 0) const;
 
     /// @brief Get attribute of any type as string
-    string attribute_as_string(const string &name,  const int& id = 0) const;
+    std::string attribute_as_string(const std::string &name,  const int& id = 0) const;
 
     /// @brief Get list of attribute names
-    std::vector<string> attribute_names( const int& id = 0) const;
+    std::vector<std::string> attribute_names( const int& id = 0) const;
 
     /// @brief Get a copy of the list of attributes
     /// @note To avoid thread issues, this is returns a copy. Better solution may be needed.
-    std::map< string, std::map<int, shared_ptr<Attribute> > > attributes() const {
+    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > > attributes() const {
         std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
         return m_attributes;
     }
@@ -358,18 +358,18 @@ private:
     GenVertexPtr m_rootvertex;
 
     /// Global run information.
-    shared_ptr<GenRunInfo> m_run_info;
+    std::shared_ptr<GenRunInfo> m_run_info;
 
     /// @brief Map of event, particle and vertex attributes
     ///
     /// Keys are name and ID (0 = event, <0 = vertex, >0 = particle)
-    mutable std::map< string, std::map<int, shared_ptr<Attribute> > > m_attributes;
+    mutable std::map< std::string, std::map<int, std::shared_ptr<Attribute> > > m_attributes;
 
     /// @brief Attribute map key type
-    typedef std::map< string, std::map<int, shared_ptr<Attribute> > >::value_type att_key_t;
+    typedef std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::value_type att_key_t;
 
     /// @brief Attribute map value type
-    typedef std::map<int, shared_ptr<Attribute> >::value_type att_val_t;
+    typedef std::map<int, std::shared_ptr<Attribute> >::value_type att_val_t;
 
     /// @brief Mutex lock for the m_attibutes map.
     mutable std::recursive_mutex m_lock_attributes;
@@ -384,23 +384,23 @@ private:
 // Template methods
 //
 template<class T>
-shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const {
+std::shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 =
+    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 =
         m_attributes.find(name);
     if( i1 == m_attributes.end() ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute<T>(name);
         }
-        return shared_ptr<T>();
+        return std::shared_ptr<T>();
     }
 
-    std::map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
-    if (i2 == i1->second.end() ) return shared_ptr<T>();
+    std::map<int, std::shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
+    if (i2 == i1->second.end() ) return std::shared_ptr<T>();
 
     if (!i2->second->is_parsed() ) {
 
-        shared_ptr<T> att = make_shared<T>();
+        std::shared_ptr<T> att = std::make_shared<T>();
         att->m_event = this;
 
         if ( id > 0 && id <= int(particles().size()) )
@@ -413,10 +413,10 @@ shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const
             i2->second = att;
             return att;
         } else {
-            return shared_ptr<T>();
+            return std::shared_ptr<T>();
         }
     }
-    else return dynamic_pointer_cast<T>(i2->second);
+    else return std::dynamic_pointer_cast<T>(i2->second);
 }
 #endif // __CINT__
 

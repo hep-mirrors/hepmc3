@@ -75,40 +75,40 @@ ConstGenVertexPtr GenParticle::end_vertex() const {
     return std::const_pointer_cast<const GenVertex>(m_end_vertex.lock());
 }
 
-vector<GenParticlePtr> GenParticle::parents() {
-    return (m_production_vertex.expired())? vector<GenParticlePtr>() : production_vertex()->particles_in();
+std::vector<GenParticlePtr> GenParticle::parents() {
+    return (m_production_vertex.expired())? std::vector<GenParticlePtr>() : production_vertex()->particles_in();
 }
 
-vector<ConstGenParticlePtr> GenParticle::parents() const {
-    return (m_production_vertex.expired()) ? vector<ConstGenParticlePtr>() : production_vertex()->particles_in();
+std::vector<ConstGenParticlePtr> GenParticle::parents() const {
+    return (m_production_vertex.expired()) ? std::vector<ConstGenParticlePtr>() : production_vertex()->particles_in();
 }
 
-vector<GenParticlePtr> GenParticle::children() {
-    return (m_end_vertex.expired())? vector<GenParticlePtr>() : end_vertex()->particles_out();
+std::vector<GenParticlePtr> GenParticle::children() {
+    return (m_end_vertex.expired())? std::vector<GenParticlePtr>() : end_vertex()->particles_out();
 }
 
-vector<ConstGenParticlePtr> GenParticle::children() const {
-    return (m_end_vertex.expired()) ? vector<ConstGenParticlePtr>() : end_vertex()->particles_out();
+std::vector<ConstGenParticlePtr> GenParticle::children() const {
+    return (m_end_vertex.expired()) ? std::vector<ConstGenParticlePtr>() : end_vertex()->particles_out();
 }
 
-bool GenParticle::add_attribute(const std::string& name, shared_ptr<Attribute> att) {
+bool GenParticle::add_attribute(const std::string& name, std::shared_ptr<Attribute> att) {
     if ( !parent_event() ) return false;
     parent_event()->add_attribute(name, att, id());
     return true;
 }
 
-vector<string> GenParticle::attribute_names() const {
+std::vector<std::string> GenParticle::attribute_names() const {
     if ( parent_event() ) return parent_event()->attribute_names(id());
 
-    return vector<string>();
+    return std::vector<std::string>();
 }
 
 void GenParticle::remove_attribute(const std::string& name) {
     if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }
 
-string GenParticle::attribute_as_string(const std::string& name) const {
-    return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
+std::string GenParticle::attribute_as_string(const std::string& name) const {
+    return parent_event() ? parent_event()->attribute_as_string(name, id()) : std::string();
 }
 
 } // namespace HepMC3

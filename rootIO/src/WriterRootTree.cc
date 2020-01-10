@@ -19,7 +19,7 @@ namespace HepMC3
 {
 HEPMC3_DECLARE_WRITER_FILE(WriterRootTree)
 
-WriterRootTree::WriterRootTree(const std::string &filename, shared_ptr<GenRunInfo> run):
+WriterRootTree::WriterRootTree(const std::string &filename, std::shared_ptr<GenRunInfo> run):
     m_tree(0),
     m_events_count(0),
     m_tree_name("hepmc3_tree"),
@@ -29,7 +29,7 @@ WriterRootTree::WriterRootTree(const std::string &filename, shared_ptr<GenRunInf
     if (!init(run)) return;
 }
 
-WriterRootTree::WriterRootTree(const std::string &filename,const std::string &treename,const std::string &branchname, shared_ptr<GenRunInfo> run):
+WriterRootTree::WriterRootTree(const std::string &filename,const std::string &treename,const std::string &branchname, std::shared_ptr<GenRunInfo> run):
     m_tree(0),
     m_events_count(0),
     m_tree_name(treename.c_str()),
@@ -39,7 +39,7 @@ WriterRootTree::WriterRootTree(const std::string &filename,const std::string &tr
     if (!init(run)) return;
 }
 
-bool WriterRootTree::init(shared_ptr<GenRunInfo> run )
+bool WriterRootTree::init(std::shared_ptr<GenRunInfo> run )
 {
     if ( !m_file->IsOpen() )
     {

@@ -19,7 +19,7 @@
 namespace HepMC3 {
 
 
-WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run)
+WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo> run)
     : m_file(filename),
       m_stream(&m_file),
       m_precision(16),
@@ -38,7 +38,7 @@ WriterAscii::WriterAscii(const std::string &filename, shared_ptr<GenRunInfo> run
 }
 
 
-WriterAscii::WriterAscii(std::ostream &stream, shared_ptr<GenRunInfo> run)
+WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
     : m_file(),
       m_stream(&stream),
       m_precision(16),
@@ -120,7 +120,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     for ( auto vt1: evt.attributes() ) {
         for ( auto vt2: vt1.second ) {
 
-            string st;
+            std::string st;
             bool status = vt2.second->to_string(st);
 
             if( !status ) {
@@ -187,10 +187,10 @@ void WriterAscii::allocate_buffer() {
 }
 
 
-string WriterAscii::escape(const string& s)  const {
-    string ret;
+std::string WriterAscii::escape(const std::string& s)  const {
+    std::string ret;
     ret.reserve( s.length()*2 );
-    for ( string::const_iterator it = s.begin(); it != s.end(); ++it ) {
+    for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
         switch ( *it ) {
         case '\\':
             ret += "\\\\";
@@ -269,12 +269,12 @@ void WriterAscii::write_run_info() {
     allocate_buffer();
 
     // If no run info object set, create a dummy one.
-    if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
+    if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
 
-    vector<string> names = run_info()->weight_names();
+    std::vector<std::string> names = run_info()->weight_names();
 
     if ( !names.empty() ) {
-        string out = names[0];
+        std::string out = names[0];
         for ( int i = 1, N = names.size(); i < N; ++i )
             out += "\n" + names[i];
         m_cursor += sprintf(m_cursor, "W ");
@@ -284,16 +284,16 @@ void WriterAscii::write_run_info() {
     }
 
     for ( int i = 0, N = run_info()->tools().size(); i < N; ++i  ) {
-        string out = "T " + run_info()->tools()[i].name + "\n"
-                     + run_info()->tools()[i].version + "\n"
-                     + run_info()->tools()[i].description;
+        std::string out = "T " + run_info()->tools()[i].name + "\n"
+                          + run_info()->tools()[i].version + "\n"
+                          + run_info()->tools()[i].description;
         write_string(escape(out));
         m_cursor += sprintf(m_cursor, "\n");
     }
 
 
     for ( auto att: run_info()->attributes() ) {
-        string st;
+        std::string st;
         if ( ! att.second->to_string(st) ) {
             HEPMC3_WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
         }
@@ -332,7 +332,7 @@ void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
 }
 
 
-inline void WriterAscii::write_string( const string &str ) {
+inline void WriterAscii::write_string( const std::string &str ) {
 
     // First let's check if string will fit into the buffer
     unsigned long length = m_cursor-m_buffer;
@@ -355,7 +355,7 @@ void WriterAscii::close() {
     std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     forced_flush();
-    (*m_stream) << "HepMC::Asciiv3-END_EVENT_LISTING" << endl << endl;
+    (*m_stream) << "HepMC::Asciiv3-END_EVENT_LISTING" << std::endl << std::endl;
     if (ofs) ofs->close();
 }
 bool WriterAscii::failed() { return (bool)m_file.rdstate(); }

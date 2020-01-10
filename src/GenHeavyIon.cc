@@ -16,14 +16,14 @@
 
 namespace HepMC3 {
 
-bool GenHeavyIon::from_string(const string &att) {
+bool GenHeavyIon::from_string(const std::string &att) {
 
 #ifdef HEPMC3_NO_DEPRECATED
     double spectator_neutrons, spectator_protons, eccentricity;
 #endif
 
-    istringstream is(att);
-    string version;
+    std::istringstream is(att);
+    std::string version;
 
     if ( att[0]  != 'v' ) {
         is >> Ncoll_hard >> Npart_proj >> Npart_targ >> Ncoll
@@ -63,8 +63,8 @@ bool GenHeavyIon::from_string(const string &att) {
     return !is.fail();
 }
 
-bool GenHeavyIon::to_string(string &att) const {
-    ostringstream os;
+bool GenHeavyIon::to_string(std::string &att) const {
+    std::ostringstream os;
 
 #ifndef HEPMC3_NO_DEPRECATED
     if ( !forceoldformat ) os << "v0 ";
@@ -72,7 +72,7 @@ bool GenHeavyIon::to_string(string &att) const {
     os << "v1 ";
 #endif
 
-    os << setprecision(8)
+    os << std::setprecision(8)
        << Ncoll_hard << " " << Npart_proj << " "
        << Npart_targ << " " << Ncoll << " "
 #ifndef HEPMC3_NO_DEPRECATED
@@ -89,12 +89,12 @@ bool GenHeavyIon::to_string(string &att) const {
        << Nspec_proj_p << " " << Nspec_targ_p << " ";
 
     os << participant_plane_angles.size();
-    for ( map<int,double>::const_iterator it = participant_plane_angles.begin();
+    for ( std::map<int,double>::const_iterator it = participant_plane_angles.begin();
             it != participant_plane_angles.end(); ++it )
         os << " " << it->first << " " << it->second;
 
     os << " " << eccentricities.size();
-    for ( map<int,double>::const_iterator it = eccentricities.begin();
+    for ( std::map<int,double>::const_iterator it = eccentricities.begin();
             it != eccentricities.end(); ++it )
         os << " " << it->first << " " << it->second;
 

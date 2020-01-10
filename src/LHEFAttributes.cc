@@ -11,8 +11,8 @@
 #include "HepMC3/LHEFAttributes.h"
 #include "HepMC3/GenEvent.h"
 
-using namespace HepMC3;
-using namespace LHEF;
+namespace HepMC3 {
+
 
 void HEPRUPAttribute::clear() {
     for ( int i = 0, N = tags.size(); i < N; ++i ) delete tags[i];
@@ -20,19 +20,19 @@ void HEPRUPAttribute::clear() {
     heprup.clear();
 }
 
-bool HEPRUPAttribute::from_string(const string &att) {
+bool HEPRUPAttribute::from_string(const std::string &att) {
     bool found = false;
     clear();
-    tags = XMLTag::findXMLTags(att);
+    tags = LHEF::XMLTag::findXMLTags(att);
     for ( int i = 0, N = tags.size(); i < N; ++i )
         if ( tags[i]->name == "init" ) {
-            heprup = HEPRUP(*tags[i], 3);
+            heprup = LHEF::HEPRUP(*tags[i], 3);
             found = true;
         }
     return found;
 }
 
-bool HEPRUPAttribute::to_string(string &att) const {
+bool HEPRUPAttribute::to_string(std::string &att) const {
     std::ostringstream os;
     if ( heprup.NPRUP ) heprup.print(os);
     for ( int i = 0, N = tags.size(); i < N; ++i )
@@ -47,16 +47,16 @@ void HEPEUPAttribute::clear() {
     hepeup.clear();
 }
 
-bool HEPEUPAttribute::from_string(const string &att) {
+bool HEPEUPAttribute::from_string(const std::string &att) {
     clear();
-    tags = XMLTag::findXMLTags(att);
+    tags = LHEF::XMLTag::findXMLTags(att);
     for ( int i = 0, N = tags.size(); i < N; ++i )
         if ( tags[i]->name == "event" || tags[i]->name == "eventgroup")
             return true;
     return false;
 }
 
-bool HEPEUPAttribute::to_string(string &att) const {
+bool HEPEUPAttribute::to_string(std::string &att) const {
     std::ostringstream os;
     if ( hepeup.heprup ) hepeup.print(os);
     for ( int i = 0, N = tags.size(); i < N; ++i )
@@ -68,15 +68,16 @@ bool HEPEUPAttribute::to_string(string &att) const {
 }
 
 bool HEPEUPAttribute::init() {
-    shared_ptr<HEPRUPAttribute> hepr =
+    std::shared_ptr<HEPRUPAttribute> hepr =
         event()->attribute<HEPRUPAttribute>("HEPRUP");
     bool found = false;
     for ( int i = 0, N = tags.size(); i < N; ++i )
         if ( tags[i]->name == "event" || tags[i]->name == "eventgroup" ) {
-            hepeup = HEPEUP(*tags[i], hepr->heprup);
+            hepeup = LHEF::HEPEUP(*tags[i], hepr->heprup);
             found = true;
         }
     return found;
 }
 
+} // namespace HepMC3
 

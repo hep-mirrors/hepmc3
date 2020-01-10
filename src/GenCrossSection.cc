@@ -18,24 +18,24 @@
 namespace HepMC3 {
 
 
-int GenCrossSection::windx(string wName) const {
+int GenCrossSection::windx(std::string wName) const {
     if ( !event() || !event()->run_info() ) return 0;
     return event()->run_info()->weight_index(wName);
 }
 
-void GenCrossSection::set_cross_section(const double& xs, const double& xs_err,const long& n_acc , const long& n_att ) {
+void GenCrossSection::set_cross_section(const double& xs, const double& xs_err,const long& n_acc, const long& n_att ) {
     double cross_section       = xs;
     double cross_section_error = xs_err;
     accepted_events     = n_acc;
     attempted_events    = n_att;
     size_t N=1;
     if ( event() ) N=std::max(event()->weights().size(),N);
-    cross_sections = vector<double>(N, cross_section);
-    cross_section_errors = vector<double>(N, cross_section_error);
+    cross_sections = std::vector<double>(N, cross_section);
+    cross_section_errors = std::vector<double>(N, cross_section_error);
 }
 
 
-bool GenCrossSection::from_string(const string &att) {
+bool GenCrossSection::from_string(const std::string &att) {
     const char *cursor = att.data();
     cross_sections.clear();
     cross_section_errors.clear();
@@ -74,7 +74,7 @@ bool GenCrossSection::from_string(const string &att) {
     return true;
 }
 
-bool GenCrossSection::to_string(string &att) const {
+bool GenCrossSection::to_string(std::string &att) const {
     std::ostringstream os;
 
     os << std::setprecision(8) << std::scientific

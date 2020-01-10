@@ -1764,26 +1764,25 @@ public:
    */
   void print(std::ostream & file) const {
 
-    using std::setw;
     file << std::setprecision(dprec);
 
     file << "<init>\n"
-     << " " << setw(8) << IDBMUP.first
-     << " " << setw(8) << IDBMUP.second
-     << " " << setw(14) << EBMUP.first
-     << " " << setw(14) << EBMUP.second
-     << " " << setw(4) << PDFGUP.first
-     << " " << setw(4) << PDFGUP.second
-     << " " << setw(4) << PDFSUP.first
-     << " " << setw(4) << PDFSUP.second
-     << " " << setw(4) << IDWTUP
-     << " " << setw(4) << NPRUP << std::endl;
+     << " " << std::setw(8) << IDBMUP.first
+     << " " << std::setw(8) << IDBMUP.second
+     << " " << std::setw(14) << EBMUP.first
+     << " " << std::setw(14) << EBMUP.second
+     << " " << std::setw(4) << PDFGUP.first
+     << " " << std::setw(4) << PDFGUP.second
+     << " " << std::setw(4) << PDFSUP.first
+     << " " << std::setw(4) << PDFSUP.second
+     << " " << std::setw(4) << IDWTUP
+     << " " << std::setw(4) << NPRUP << std::endl;
 
     for ( int i = 0; i < NPRUP; ++i )
-      file << " " << setw(14) << XSECUP[i]
-       << " " << setw(14) << XERRUP[i]
-       << " " << setw(14) << XMAXUP[i]
-       << " " << setw(6) << LPRUP[i] << std::endl;
+      file << " " << std::setw(14) << XSECUP[i]
+       << " " << std::setw(14) << XERRUP[i]
+       << " " << std::setw(14) << XMAXUP[i]
+       << " " << std::setw(6) << LPRUP[i] << std::endl;
 
     for ( int i = 0, N = generators.size(); i < N; ++i )
       generators[i].print(file);
@@ -2322,7 +2321,6 @@ public:
 
     file << std::setprecision(heprup->dprec);
 
-    using std::setw;
 
     if ( isGroup ) {
       file << "<eventgroup";
@@ -2342,27 +2340,27 @@ public:
     if ( ntries > 1 ) file << oattr("ntries", ntries);
     printattrs(file);
     file << ">\n";
-    file << " " << setw(4) << NUP
-     << " " << setw(6) << IDPRUP
-     << " " << setw(14) << XWGTUP
-     << " " << setw(14) << SCALUP
-     << " " << setw(14) << AQEDUP
-     << " " << setw(14) << AQCDUP << "\n";
+    file << " " << std::setw(4) << NUP
+     << " " << std::setw(6) << IDPRUP
+     << " " << std::setw(14) << XWGTUP
+     << " " << std::setw(14) << SCALUP
+     << " " << std::setw(14) << AQEDUP
+     << " " << std::setw(14) << AQCDUP << "\n";
 
     for ( int i = 0; i < NUP; ++i )
-      file << " " << setw(8) << IDUP[i]
-       << " " << setw(2) << ISTUP[i]
-       << " " << setw(4) << MOTHUP[i].first
-       << " " << setw(4) << MOTHUP[i].second
-       << " " << setw(4) << ICOLUP[i].first
-       << " " << setw(4) << ICOLUP[i].second
-       << " " << setw(14) << PUP[i][0]
-       << " " << setw(14) << PUP[i][1]
-       << " " << setw(14) << PUP[i][2]
-       << " " << setw(14) << PUP[i][3]
-       << " " << setw(14) << PUP[i][4]
-       << " " << setw(1) << VTIMUP[i]
-       << " " << setw(1) << SPINUP[i] << std::endl;
+      file << " " << std::setw(8) << IDUP[i]
+       << " " << std::setw(2) << ISTUP[i]
+       << " " << std::setw(4) << MOTHUP[i].first
+       << " " << std::setw(4) << MOTHUP[i].second
+       << " " << std::setw(4) << ICOLUP[i].first
+       << " " << std::setw(4) << ICOLUP[i].second
+       << " " << std::setw(14) << PUP[i][0]
+       << " " << std::setw(14) << PUP[i][1]
+       << " " << std::setw(14) << PUP[i][2]
+       << " " << std::setw(14) << PUP[i][3]
+       << " " << std::setw(14) << PUP[i][4]
+       << " " << std::setw(1) << VTIMUP[i]
+       << " " << std::setw(1) << SPINUP[i] << std::endl;
 
     if ( weights.size() > 0 ) {
       file << "<weights>";
@@ -3223,8 +3221,6 @@ public:
 
 
     *file << std::setprecision(10);
-
-    using std::setw;
 
     std::string headBlock = headerStream.str();
     if ( headBlock.length() ) {

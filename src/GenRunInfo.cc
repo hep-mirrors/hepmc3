@@ -19,7 +19,7 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
     m_weight_indices.clear();
     m_weight_names = names;
     for ( int i = 0, N = names.size(); i < N; ++i ) {
-        string name = names[i];
+        std::string name = names[i];
         if ( name.empty() ) {
             std::ostringstream oss;
             oss << i;
@@ -34,14 +34,14 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
     }
 }
 
-string GenRunInfo::attribute_as_string(const string &name) const {
+std::string GenRunInfo::attribute_as_string(const std::string &name) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::map< std::string, shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
-    if( i == m_attributes.end() ) return string();
+    std::map< std::string, std::shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
+    if( i == m_attributes.end() ) return std::string();
 
-    if( !i->second ) return string();
+    if( !i->second ) return std::string();
 
-    string ret;
+    std::string ret;
     i->second->to_string(ret);
 
     return ret;
@@ -53,7 +53,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     data.weight_names = this->weight_names();
 
     // Attributes
-    typedef std::map<std::string, shared_ptr<Attribute> >::value_type att_val_t;
+    typedef std::map<std::string, std::shared_ptr<Attribute> >::value_type att_val_t;
 
     for(const att_val_t& vt: m_attributes ) {
         std::string att;
@@ -90,7 +90,7 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
     // Attributes
     for(unsigned int i=0; i<data.attribute_name.size(); ++i) {
         add_attribute( data.attribute_name[i],
-                       make_shared<StringAttribute>(data.attribute_string[i]) );
+                       std::make_shared<StringAttribute>(data.attribute_string[i]) );
     }
 
     // Tools

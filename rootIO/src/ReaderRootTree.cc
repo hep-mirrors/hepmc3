@@ -59,7 +59,7 @@ bool ReaderRootTree::init()
         HEPMC3_ERROR( "ReaderRootTree2: problem reading branch tree:  " << "GenRunInfo")
         return false;
     }
-    set_run_info(make_shared<GenRunInfo>());
+    set_run_info(std::make_shared<GenRunInfo>());
     return true;
 }
 

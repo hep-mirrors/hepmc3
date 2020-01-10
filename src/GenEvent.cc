@@ -15,7 +15,6 @@
 
 #include <deque>
 #include <algorithm> // sort
-using namespace std;
 
 namespace HepMC3 {
 
@@ -23,15 +22,15 @@ GenEvent::GenEvent(Units::MomentumUnit mu,
                    Units::LengthUnit lu)
     : m_event_number(0), m_weights(std::vector<double>()), //m_weights(std::vector<double>(1, 1.0)),//Prevent from  different number of weights and names
       m_momentum_unit(mu), m_length_unit(lu),
-      m_rootvertex(make_shared<GenVertex>()) {}
+      m_rootvertex(std::make_shared<GenVertex>()) {}
 
 
-GenEvent::GenEvent(shared_ptr<GenRunInfo> run,
+GenEvent::GenEvent(std::shared_ptr<GenRunInfo> run,
                    Units::MomentumUnit mu,
                    Units::LengthUnit lu)
     : m_event_number(0), m_weights(std::vector<double>()), //m_weights(std::vector<double>(1, 1.0)),//Prevent from  different number of weights and names
       m_momentum_unit(mu), m_length_unit(lu),
-      m_rootvertex(make_shared<GenVertex>()),
+      m_rootvertex(std::make_shared<GenVertex>()),
       m_run_info(run) {
     if ( run && !run->weight_names().empty() )
         m_weights = std::vector<double>(run->weight_names().size(), 1.0);
@@ -74,8 +73,8 @@ GenEvent::GenEvent(const GenEvent&e) {
 }
 
 GenEvent::~GenEvent() {
-    for ( std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator attm=m_attributes.begin(); attm!=m_attributes.end(); ++attm)
-        for ( std::map<int, shared_ptr<Attribute> >::iterator att=attm->second.begin(); att!=attm->second.end(); ++att) att->second->m_event = nullptr;
+    for ( std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator attm=m_attributes.begin(); attm!=m_attributes.end(); ++attm)
+        for ( std::map<int, std::shared_ptr<Attribute> >::iterator att=attm->second.begin(); att!=attm->second.end(); ++att) att->second->m_event = nullptr;
 
     for  ( std::vector<GenVertexPtr>::iterator v=m_vertices.begin(); v!=m_vertices.end(); ++v ) if ((*v)->m_event==this) (*v)->m_event=nullptr;
     for  ( std::vector<GenParticlePtr>::iterator p=m_particles.begin(); p!=m_particles.end(); ++p ) if ((*p)->m_event==this)  (*p)->m_event=nullptr;
@@ -138,24 +137,24 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
     HEPMC3_DEBUG( 30, "GenEvent::remove_particle - erasing particle: " << p->id() )
 
     int idx = p->id();
-    vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
+    std::vector<GenParticlePtr>::iterator it = m_particles.erase(m_particles.begin() + idx-1 );
 
     // Remove attributes of this particle
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    vector<string> atts = p->attribute_names();
-    for(const string &s: atts) {
+    std::vector<std::string> atts = p->attribute_names();
+    for(const std::string &s: atts) {
         p->remove_attribute(s);
     }
 
     //
     // Reassign id of attributes with id above this one
     //
-    vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
+    std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
 
     for(att_key_t& vt1: m_attributes ) {
         changed_attributes.clear();
 
-        for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin(); vt2!=vt1.second.end(); ++vt2) {
+        for ( std::map<int, std::shared_ptr<Attribute> >::iterator vt2=vt1.second.begin(); vt2!=vt1.second.end(); ++vt2) {
             if( (*vt2).first > p->id() ) {
                 changed_attributes.push_back(*vt2);
             }
@@ -183,9 +182,9 @@ struct sort_by_id_asc {
     }
 };
 
-void GenEvent::remove_particles( vector<GenParticlePtr> v ) {
+void GenEvent::remove_particles( std::vector<GenParticlePtr> v ) {
 
-    sort( v.begin(), v.end(), sort_by_id_asc() );
+    std::sort( v.begin(), v.end(), sort_by_id_asc() );
 
     for (std::vector<GenParticlePtr>::iterator p=v.begin(); p!=v.end(); ++p) {
         remove_particle(*p);
@@ -196,7 +195,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     if( !v || v->parent_event() != this ) return;
 
     HEPMC3_DEBUG( 30, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
-    shared_ptr<GenVertex> null_vtx;
+    std::shared_ptr<GenVertex> null_vtx;
 
     for(auto p: v->particles_in() ) {
         p->m_end_vertex = std::weak_ptr<GenVertex>();
@@ -213,11 +212,11 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     HEPMC3_DEBUG( 30, "GenEvent::remove_vertex   - erasing vertex: " << v->id() )
 
     int idx = -v->id();
-    vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
+    std::vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1 );
     // Remove attributes of this vertex
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    vector<string> atts = v->attribute_names();
-    for(string s: atts) {
+    std::vector<std::string> atts = v->attribute_names();
+    for(std::string s: atts) {
         v->remove_attribute(s);
     }
 
@@ -225,12 +224,12 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
     // Reassign id of attributes with id below this one
     //
 
-    vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
+    std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
 
     for( att_key_t& vt1: m_attributes ) {
         changed_attributes.clear();
 
-        for ( std::map<int, shared_ptr<Attribute> >::iterator vt2=vt1.second.begin(); vt2!=vt1.second.end(); ++vt2) {
+        for ( std::map<int, std::shared_ptr<Attribute> >::iterator vt2=vt1.second.begin(); vt2!=vt1.second.end(); ++vt2) {
             if( (*vt2).first < v->id() ) {
                 changed_attributes.push_back(*vt2);
             }
@@ -265,9 +264,9 @@ static bool visit_children(std::map<ConstGenVertexPtr,int>  &a, ConstGenVertexPt
     return false;
 }
 
-void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
+void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
 
-    shared_ptr<IntAttribute> existing_hc=attribute<IntAttribute>("cycles");
+    std::shared_ptr<IntAttribute> existing_hc=attribute<IntAttribute>("cycles");
     bool has_cycles=false;
     std::map<GenVertexPtr,int>  sortingv;
     std::vector<GenVertexPtr> noinv;
@@ -295,7 +294,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
          */
     }
 
-    deque<GenVertexPtr> sorting;
+    std::deque<GenVertexPtr> sorting;
 
     // Find all starting vertices (end vertex of particles that have no production vertex)
     for(auto p: parts ) {
@@ -360,7 +359,7 @@ void GenEvent::add_tree( const vector<GenParticlePtr> &parts ) {
             auto next = m_vertices.erase(m_vertices.begin() + vx);
             std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
             for(auto & vt1: m_attributes ) {
-                vector< pair< int, shared_ptr<Attribute> > > changed_attributes;
+                std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
                 for ( auto vt2 : vt1.second )
                     if( vt2.first <= rootid )
                         changed_attributes.push_back(vt2);
@@ -418,11 +417,11 @@ const FourVector& GenEvent::event_pos() const {
     return m_rootvertex->data().position;
 }
 
-vector<ConstGenParticlePtr> GenEvent::beams() const {
+std::vector<ConstGenParticlePtr> GenEvent::beams() const {
     return std::const_pointer_cast<const GenVertex>(m_rootvertex)->particles_out();
 }
 
-const vector<GenParticlePtr> & GenEvent::beams() {
+const std::vector<GenParticlePtr> & GenEvent::beams() {
     return m_rootvertex->particles_out();
 }
 
@@ -609,7 +608,7 @@ bool GenEvent::boost( const FourVector&  delta )
 void GenEvent::clear() {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     m_event_number = 0;
-    m_rootvertex = make_shared<GenVertex>();
+    m_rootvertex = std::make_shared<GenVertex>();
     m_weights.clear();
     m_attributes.clear();
     m_particles.clear();
@@ -619,20 +618,20 @@ void GenEvent::clear() {
 
 
 
-void GenEvent::remove_attribute(const string &name,  const int& id) {
+void GenEvent::remove_attribute(const std::string &name,  const int& id) {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    map< string, map<int, shared_ptr<Attribute> > >::iterator i1 =
+    std:: map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 =
         m_attributes.find(name);
     if( i1 == m_attributes.end() ) return;
 
-    map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
+    std::map<int, std::shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
     if( i2 == i1->second.end() ) return;
 
     i1->second.erase(i2);
 }
 
-vector<string> GenEvent::attribute_names( const int& id) const {
-    vector<string> results;
+std::vector<std::string> GenEvent::attribute_names( const int& id) const {
+    std::vector<std::string> results;
 
     for(const att_key_t& vt1: m_attributes ) {
         if( vt1.second.count( id ) == 1 ) {
@@ -684,7 +683,7 @@ void GenEvent::write_data(GenEventData& data) const {
     for( const att_key_t& vt1: this->attributes() ) {
         for( const att_val_t& vt2: vt1.second ) {
 
-            string st;
+            std::string st;
 
             bool status = vt2.second->to_string(st);
 
@@ -714,7 +713,7 @@ void GenEvent::read_data(const GenEventData &data) {
 
     // Fill particle information
     for( const GenParticleData &pd: data.particles ) {
-        GenParticlePtr p = make_shared<GenParticle>(pd);
+        GenParticlePtr p = std::make_shared<GenParticle>(pd);
 
         m_particles.push_back(p);
 
@@ -724,7 +723,7 @@ void GenEvent::read_data(const GenEventData &data) {
 
     // Fill vertex information
     for( const GenVertexData &vd: data.vertices ) {
-        GenVertexPtr v = make_shared<GenVertex>(vd);
+        GenVertexPtr v = std::make_shared<GenVertex>(vd);
 
         m_vertices.push_back(v);
 
@@ -751,7 +750,7 @@ void GenEvent::read_data(const GenEventData &data) {
     // Read attributes
     for( unsigned int i=0; i<data.attribute_id.size(); ++i) {
         add_attribute( data.attribute_name[i],
-                       make_shared<StringAttribute>(data.attribute_string[i]),
+                       std::make_shared<StringAttribute>(data.attribute_string[i]),
                        data.attribute_id[i] );
     }
 }
@@ -796,23 +795,23 @@ void GenEvent::add_beam_particle(GenParticlePtr p1) {
 }
 
 
-string GenEvent::attribute_as_string(const string &name, const int& id) const {
+std::string GenEvent::attribute_as_string(const std::string &name, const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::map< string, std::map<int, shared_ptr<Attribute> > >::iterator i1 =
+    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 =
         m_attributes.find(name);
     if( i1 == m_attributes.end() ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute_as_string(name);
         }
-        return string();
+        return std::string();
     }
 
-    std::map<int, shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
-    if (i2 == i1->second.end() ) return string();
+    std::map<int, std::shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
+    if (i2 == i1->second.end() ) return std::string();
 
-    if( !i2->second ) return string();
+    if( !i2->second ) return std::string();
 
-    string ret;
+    std::string ret;
     i2->second->to_string(ret);
 
     return ret;

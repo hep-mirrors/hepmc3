@@ -36,7 +36,6 @@
 #include "HepMC3/Attribute.h"
 
 namespace HepMC3 {
-using namespace std;
 
 class GenCrossSection : public Attribute {
 
@@ -48,17 +47,17 @@ private:
     long accepted_events;       ///< The number of events generated so far.
     long attempted_events;      ///< The number of events attempted so far.
 
-    vector<double> cross_sections;       ///< Per-weight cross-section.
-    vector<double> cross_section_errors; ///< Per-weight errors.
+    std::vector<double> cross_sections;       ///< Per-weight cross-section.
+    std::vector<double> cross_section_errors; ///< Per-weight errors.
 //
 // Functions
 //
 public:
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override;
+    bool from_string(const std::string &att)  override;
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const override;
+    bool to_string(std::string &att) const override;
 
     /** @brief Set all fields */
     void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1);
@@ -90,7 +89,7 @@ public:
     /** @brief Set the cross section  corresponding to the weight
         named \a wName.
      */
-    void set_xsec(const string& wName,const double& xs) {
+    void set_xsec(const std::string& wName,const double& xs) {
         set_xsec(windx(wName), xs);
     }
 
@@ -104,7 +103,7 @@ public:
     /** @brief Set the cross section error corresponding to the weight
         named \a wName.
      */
-    void set_xsec_err(const string& wName, const double& xs_err) {
+    void set_xsec_err(const std::string& wName, const double& xs_err) {
         set_xsec_err(windx(wName), xs_err);
     }
 
@@ -118,7 +117,7 @@ public:
     /** @brief Get the cross section corresponding to the weight named
         \a wName.
      */
-    double xsec(const string& wName) const {
+    double xsec(const std::string& wName) const {
         return xsec(windx(wName));
     }
 
@@ -132,7 +131,7 @@ public:
     /** @brief Get the cross section error corresponding to the weight
         named \a wName.
      */
-    double xsec_err(const string& wName) const {
+    double xsec_err(const std::string& wName) const {
         return xsec_err(windx(wName));
     }
 
@@ -150,7 +149,7 @@ public:
 private:
 
     /** @brief get the weight index given a weight name. */
-    int windx(string wName) const;
+    int windx(std::string wName) const;
 
 };
 
