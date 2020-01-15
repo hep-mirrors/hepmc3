@@ -1146,11 +1146,13 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) override {
-        std::string  datafoo;
-        m_val.clear();
-        size_t posb=att.find_first_not_of(' ');
-        size_t pose=posb;
-        while (posb!=std::string::npos) { pose=att.find_first_not_of(' ',posb+1); m_val.push_back(att.substr(posb,pose)); posb=att.find_first_not_of(' ',pose+1);}
+        size_t posb = att.find_first_not_of(' ');
+        size_t pose;
+        do {
+           pose = att.find_first_of(' ', posb);
+           m_val.push_back(att.substr(posb, pose - posb));
+           posb = att.find_first_not_of(' ', pose);
+        } while (posb != std::string::npos);
         return true;
     }
 
