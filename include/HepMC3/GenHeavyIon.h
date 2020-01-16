@@ -22,7 +22,6 @@
 #include "HepMC3/Attribute.h"
 
 namespace HepMC3 {
-using namespace std;
 
 class GenHeavyIon : public Attribute {
 
@@ -191,13 +190,13 @@ public:
     /// calculated to different orders. The key of the map specifies
     /// the order, and the value gives to the angle wrt. the
     /// event plane.
-    map<int,double> participant_plane_angles;
+    std::map<int,double> participant_plane_angles;
 
     /// @brief Eccentricities
     ///
     /// Calculated to different orders. The key of the map specifies
     /// the order, and the value gives the corresponding eccentricity.
-    map<int,double> eccentricities;
+    std::map<int,double> eccentricities;
 
 //
 // Functions
@@ -205,10 +204,10 @@ public:
 public:
 
     /// @brief Implementation of Attribute::from_string.
-    bool from_string(const string &att) override;
+    bool from_string(const std::string &att) override;
 
     /// @brief Implementation of Attribute::to_string.
-    bool to_string(string &att) const  override;
+    bool to_string(std::string &att) const  override;
 
 #ifndef HEPMC3_NO_DEPRECATED
 

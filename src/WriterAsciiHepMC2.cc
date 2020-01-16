@@ -20,7 +20,7 @@ namespace HepMC3
 {
 
 
-WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, shared_ptr<GenRunInfo> run)
+WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, std::shared_ptr<GenRunInfo> run)
     : m_file(filename),
       m_stream(&m_file),
       m_precision(16),
@@ -31,7 +31,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, shared_ptr<Gen
 {
     HEPMC3_WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
     set_run_info(run);
-    if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
+    if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
     if ( !m_file.is_open() )
     {
         HEPMC3_ERROR( "WriterAsciiHepMC2: could not open output file: "<<filename )
@@ -43,7 +43,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, shared_ptr<Gen
     }
 }
 
-WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, shared_ptr<GenRunInfo> run)
+WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
     : m_file(),
       m_stream(&stream),
       m_precision(16),
@@ -54,7 +54,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, shared_ptr<GenRunInfo
 {
     HEPMC3_WARNING( "WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead." )
     set_run_info(run);
-    if ( !run_info() ) set_run_info(make_shared<GenRunInfo>());
+    if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
     (*m_stream) << "HepMC::Version " << version() << std::endl;
     (*m_stream) << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
 }
@@ -79,12 +79,12 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     if ( evt.run_info() && run_info() != evt.run_info() ) set_run_info(evt.run_info());
 
 
-    shared_ptr<DoubleAttribute> A_event_scale=evt.attribute<DoubleAttribute>("event_scale");
-    shared_ptr<DoubleAttribute> A_alphaQED=evt.attribute<DoubleAttribute>("alphaQED");
-    shared_ptr<DoubleAttribute> A_alphaQCD=evt.attribute<DoubleAttribute>("alphaQCD");
-    shared_ptr<IntAttribute> A_signal_process_id=evt.attribute<IntAttribute>("signal_process_id");
-    shared_ptr<IntAttribute> A_mpi=evt.attribute<IntAttribute>("mpi");
-    shared_ptr<IntAttribute> A_signal_process_vertex=evt.attribute<IntAttribute>("signal_process_vertex");
+    std::shared_ptr<DoubleAttribute> A_event_scale=evt.attribute<DoubleAttribute>("event_scale");
+    std::shared_ptr<DoubleAttribute> A_alphaQED=evt.attribute<DoubleAttribute>("alphaQED");
+    std::shared_ptr<DoubleAttribute> A_alphaQCD=evt.attribute<DoubleAttribute>("alphaQCD");
+    std::shared_ptr<IntAttribute> A_signal_process_id=evt.attribute<IntAttribute>("signal_process_id");
+    std::shared_ptr<IntAttribute> A_mpi=evt.attribute<IntAttribute>("mpi");
+    std::shared_ptr<IntAttribute> A_signal_process_vertex=evt.attribute<IntAttribute>("signal_process_vertex");
 
     double event_scale=A_event_scale?(A_event_scale->value()):0.0;
     double alphaQED=A_alphaQED?(A_alphaQED->value()):0.0;
@@ -96,7 +96,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     std::vector<long> m_random_states;
     for (int i=0; i<100; i++)
     {
-        shared_ptr<IntAttribute> rs=evt.attribute<IntAttribute>("random_states"+to_string((long long unsigned int)i));
+        std::shared_ptr<IntAttribute> rs=evt.attribute<IntAttribute>("random_states"+std::to_string((long long unsigned int)i));
         if (!rs) break;
         m_random_states.push_back(rs->value());
     }
@@ -146,7 +146,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         flush();
     }
     m_cursor += sprintf(m_cursor, "N %lu",evt.weights().size());
-    vector<string> names = run_info()->weight_names();
+    std::vector<std::string> names = run_info()->weight_names();
     for (size_t q=0; q<evt.weights().size(); q++)
     {
         if (q<names.size())
@@ -159,7 +159,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     // Write units
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
-    shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
+    std::shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
     if(cs) {m_cursor += sprintf(m_cursor, "C %.*e %.*e\n",m_precision, cs->xsec(),m_precision,cs->xsec_err());  flush(); }
 
 
@@ -169,7 +169,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         for ( auto vt2: vt1.second )
         {
 
-            string st;
+            std::string st;
             bool status = vt2.second->to_string(st);
 
             if( !status )
@@ -236,11 +236,11 @@ void WriterAsciiHepMC2::allocate_buffer()
 }
 
 
-string WriterAsciiHepMC2::escape(const string& s) const
+std::string WriterAsciiHepMC2::escape(const std::string& s) const
 {
-    string ret;
+    std:: string ret;
     ret.reserve( s.length()*2 );
-    for ( string::const_iterator it = s.begin(); it != s.end(); ++it )
+    for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it )
     {
         switch ( *it )
         {
@@ -262,7 +262,7 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
     std::vector<double> weights;
     for (int i=0; i<100; i++)
     {
-        shared_ptr<DoubleAttribute> rs=v->attribute<DoubleAttribute>("weight"+to_string((long long unsigned int)i));
+        std::shared_ptr<DoubleAttribute> rs=v->attribute<DoubleAttribute>("weight"+std::to_string((long long unsigned int)i));
         if (!rs) break;
         weights.push_back(rs->value());
     }
@@ -351,8 +351,8 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int second_field)
         if (p->end_vertex()->id()!=0)
             ev=p->end_vertex()->id();
 
-    shared_ptr<DoubleAttribute> A_theta=p->attribute<DoubleAttribute>("theta");
-    shared_ptr<DoubleAttribute> A_phi=p->attribute<DoubleAttribute>("phi");
+    std::shared_ptr<DoubleAttribute> A_theta=p->attribute<DoubleAttribute>("theta");
+    std:: shared_ptr<DoubleAttribute> A_phi=p->attribute<DoubleAttribute>("phi");
     if (A_theta) m_cursor += sprintf(m_cursor," %.*e", m_precision, A_theta->value());
     else m_cursor += sprintf(m_cursor," 0");
     flush();
@@ -362,8 +362,8 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int second_field)
     m_cursor += sprintf(m_cursor," %i", ev );
     flush();
 
-    shared_ptr<IntAttribute> A_flow1=p->attribute<IntAttribute>("flow1");
-    shared_ptr<IntAttribute> A_flow2=p->attribute<IntAttribute>("flow2");
+    std::shared_ptr<IntAttribute> A_flow1=p->attribute<IntAttribute>("flow1");
+    std::shared_ptr<IntAttribute> A_flow2=p->attribute<IntAttribute>("flow2");
     int flowsize=0;
     if (A_flow1) flowsize++;
     if (A_flow2) flowsize++;
@@ -375,7 +375,7 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int second_field)
 }
 
 
-inline void WriterAsciiHepMC2::write_string( const string &str )
+inline void WriterAsciiHepMC2::write_string( const std::string &str )
 {
 
     // First let's check if string will fit into the buffer
@@ -401,7 +401,7 @@ void WriterAsciiHepMC2::close()
     std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     forced_flush();
-    (*m_stream) << "HepMC::IO_GenEvent-END_EVENT_LISTING" << endl << endl;
+    (*m_stream) << "HepMC::IO_GenEvent-END_EVENT_LISTING" << std::endl << std::endl;
     if (ofs) ofs->close();
 }
 bool WriterAsciiHepMC2::failed() { return (bool)m_file.rdstate(); }

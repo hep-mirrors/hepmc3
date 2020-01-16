@@ -23,7 +23,8 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
     }
     else
     {
-        set_run_info(make_shared<GenRunInfo>());
+        set_run_info(std::make_shared<GenRunInfo>());
+        set_run_info(std::make_shared<GenRunInfo>());
         hepevtbuffer=(char*)(new struct HEPEVT());
         HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
     }
@@ -37,7 +38,7 @@ ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
     }
     else
     {
-        set_run_info(make_shared<GenRunInfo>());
+        set_run_info(std::make_shared<GenRunInfo>());
         hepevtbuffer=(char*)(new struct HEPEVT());
         HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
     }
@@ -147,7 +148,7 @@ bool ReaderHEPEVT::read_event(GenEvent& evt)
     if (fileok)
     {
         result=HEPEVT_Wrapper::HEPEVT_to_GenEvent(&evt);
-        shared_ptr<GenRunInfo> g=make_shared<GenRunInfo>();
+        std::shared_ptr<GenRunInfo> g=std::make_shared<GenRunInfo>();
         std::vector<std::string> weightnames;
         weightnames.push_back("0");
         std::vector<double> wts;
@@ -158,7 +159,7 @@ bool ReaderHEPEVT::read_event(GenEvent& evt)
     }
     else
     {
-        m_isstream ? m_stream->clear(ios::badbit) : m_file.clear(ios::badbit);
+        m_isstream ? m_stream->clear(std::ios::badbit) : m_file.clear(std::ios::badbit);
     }
     return result;
 }

@@ -19,13 +19,13 @@
 namespace HepMC3 {
 
 
-ReaderAscii::ReaderAscii(const string &filename)
+ReaderAscii::ReaderAscii(const std::string &filename)
     : m_file(filename), m_stream(0), m_isstream(false)
 {
     if( !m_file.is_open() ) {
         HEPMC3_ERROR( "ReaderAscii: could not open input file: "<<filename )
     }
-    set_run_info(make_shared<GenRunInfo>());
+    set_run_info(std::make_shared<GenRunInfo>());
 }
 
 
@@ -36,7 +36,7 @@ ReaderAscii::ReaderAscii(std::istream & stream)
     if( !m_stream->good() ) {
         HEPMC3_ERROR( "ReaderAscii: could not open input stream " )
     }
-    set_run_info(make_shared<GenRunInfo>());
+    set_run_info(std::make_shared<GenRunInfo>());
 }
 
 
@@ -68,7 +68,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     char               buf[max_buffer_size];
     bool               parsed_event_header    = false;
     bool               is_parsing_successful  = true;
-    pair<int,int> vertices_and_particles(0,0);
+    std::pair<int,int> vertices_and_particles(0,0);
 
     evt.clear();
     evt.set_run_info(run_info());
@@ -89,7 +89,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
             {
                 HEPMC3_WARNING( "ReaderAscii: found unsupported expression in header. Will close the input." )
                 std::cout<<buf<<std::endl;
-                m_isstream ? m_stream->clear(ios::eofbit) : m_file.clear(ios::eofbit);
+                m_isstream ? m_stream->clear(std::ios::eofbit) : m_file.clear(std::ios::eofbit);
             }
             if(parsed_event_header) {
                 is_parsing_successful = true;
@@ -172,10 +172,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     // Check if there were HEPMC3_ERRORs during parsing
     if( !is_parsing_successful ) {
         HEPMC3_ERROR( "ReaderAscii: event parsing failed. Returning empty event" )
-        HEPMC3_DEBUG( 1, "Parsing failed at line:" << endl << buf )
+        HEPMC3_DEBUG( 1, "Parsing failed at line:" << std::endl << buf )
 
         evt.clear();
-        m_isstream ? m_stream->clear(ios::badbit) : m_file.clear(ios::badbit);
+        m_isstream ? m_stream->clear(std::ios::badbit) : m_file.clear(std::ios::badbit);
 
         return false;
     }
@@ -203,9 +203,9 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 }
 
 
-pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *buf) {
-    static const pair<int,int>  err(-1,-1);
-    pair<int,int>               ret(-1,-1);
+std::pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *buf) {
+    static const std::pair<int,int>  err(-1,-1);
+    std::pair<int,int>               ret(-1,-1);
     const char                 *cursor   = buf;
     int                         event_no = 0;
     FourVector                  position;
@@ -253,7 +253,7 @@ pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const char *bu
 bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
 
     std::istringstream iss(buf + 1);
-    vector<double> wts;
+    std::vector<double> wts;
     double w;
     while ( iss >> w ) wts.push_back(w);
     if ( run_info() && run_info()->weight_names().size()
@@ -289,7 +289,7 @@ bool ReaderAscii::parse_units(GenEvent &evt, const char *buf) {
 
 
 bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
-    GenVertexPtr  data = make_shared<GenVertex>();
+    GenVertexPtr  data = std::make_shared<GenVertex>();
     FourVector    position;
     const char   *cursor          = buf;
     const char   *cursor2         = nullptr;
@@ -361,7 +361,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
 
 
 bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
-    GenParticlePtr  data = make_shared<GenParticle>();
+    GenParticlePtr  data = std::make_shared<GenParticle>();
     FourVector      momentum;
     const char     *cursor  = buf;
     int             mother_id = 0;
@@ -387,7 +387,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 
         // create new vertex if needed
         if( !vertex ) {
-            vertex = make_shared<GenVertex>();
+            vertex = std::make_shared<GenVertex>();
             vertex->add_particle_in(mother);
         }
 
@@ -465,10 +465,10 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
 
     cursor = cursor2+1;
 
-    shared_ptr<Attribute> att =
-        make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
+    std::shared_ptr<Attribute> att =
+        std::make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
 
-    evt.add_attribute(string(name), att, id);
+    evt.add_attribute(std::string(name), att, id);
 
     return true;
 }
@@ -486,10 +486,10 @@ bool ReaderAscii::parse_run_attribute(const char *buf) {
 
     cursor = cursor2+1;
 
-    shared_ptr<StringAttribute> att =
-        make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
+    std::shared_ptr<StringAttribute> att =
+        std::make_shared<StringAttribute>( StringAttribute(unescape(cursor)) );
 
-    run_info()->add_attribute(string(name), att);
+    run_info()->add_attribute(std::string(name), att);
 
     return true;
 
@@ -502,9 +502,9 @@ bool ReaderAscii::parse_weight_names(const char *buf) {
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     ++cursor;
 
-    istringstream iss(unescape(cursor));
-    vector<string> names;
-    string name;
+    std::istringstream iss(unescape(cursor));
+    std::vector<std::string> names;
+    std::string name;
     while ( iss >> name ) names.push_back(name);
 
     run_info()->set_weight_names(names);
@@ -518,9 +518,9 @@ bool ReaderAscii::parse_tool(const char *buf) {
 
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     ++cursor;
-    string line = unescape(cursor);
+    std::string line = unescape(cursor);
     GenRunInfo::ToolInfo tool;
-    string::size_type pos = line.find("\n");
+    std::string::size_type pos = line.find("\n");
     tool.name = line.substr(0, pos);
     line = line.substr(pos + 1);
     pos = line.find("\n");
@@ -533,10 +533,10 @@ bool ReaderAscii::parse_tool(const char *buf) {
 }
 
 
-string ReaderAscii::unescape(const string& s) {
-    string ret;
+std::string ReaderAscii::unescape(const std::string& s) {
+    std::string ret;
     ret.reserve(s.length());
-    for ( string::const_iterator it = s.begin(); it != s.end(); ++it ) {
+    for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
         if ( *it == '\\' ) {
             ++it;
             if ( *it == '|' )

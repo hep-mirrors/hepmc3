@@ -77,7 +77,7 @@ public:
 
         // 3. Fill vertex information and find beam particles.
         std::vector<GenVertexPtr> vertex_cache;
-        vector<GenParticlePtr> beam_particles;
+        std::vector<GenParticlePtr> beam_particles;
         for(size_t  i=0; i<pyev.size(); ++i) {
 
             std::vector<int> mothers = pyev[i].motherList();
@@ -86,7 +86,7 @@ public:
                 GenVertexPtr prod_vtx = hepevt_particles[mothers[0]]->end_vertex();
 
                 if(!prod_vtx) {
-                    prod_vtx = make_shared<GenVertex>();
+                    prod_vtx = std::make_shared<GenVertex>();
                     vertex_cache.push_back(prod_vtx);
 
                     for(unsigned int j=0; j<mothers.size(); ++j) {
@@ -122,8 +122,8 @@ public:
                 int flow1=0, flow2=0;
                 if (colType ==  1 || colType == 2) flow1=pyev[i].col();
                 if (colType == -1 || colType == 2) flow2=pyev[i].acol();
-                hepevt_particles[i]->add_attribute("flow1",make_shared<IntAttribute>(flow1));
-                hepevt_particles[i]->add_attribute("flow2",make_shared<IntAttribute>(flow2));
+                hepevt_particles[i]->add_attribute("flow1",std::make_shared<IntAttribute>(flow1));
+                hepevt_particles[i]->add_attribute("flow2",std::make_shared<IntAttribute>(flow2));
             }
         }
 
@@ -168,7 +168,7 @@ public:
                 if (id2pdf == 21) id2pdf = 0;
             }
 
-            GenPdfInfoPtr pdfinfo = make_shared<GenPdfInfo>();
+            GenPdfInfoPtr pdfinfo = std::make_shared<GenPdfInfo>();
             pdfinfo->set(id1pdf, id2pdf, pyinfo->x1pdf(), pyinfo->x2pdf(), pyinfo->QFac(), pyinfo->pdf1(), pyinfo->pdf2() );
             // Store PDF information.
             evt->set_pdf_info( pdfinfo );
@@ -185,7 +185,7 @@ public:
 
         // Store cross-section information in pb.
         if (m_store_xsec && pyinfo != 0) {
-            GenCrossSectionPtr xsec = make_shared<GenCrossSection>();
+            GenCrossSectionPtr xsec = std::make_shared<GenCrossSection>();
             xsec->set_cross_section( pyinfo->sigmaGen() * 1e9, pyinfo->sigmaErr() * 1e9);
             evt->set_cross_section(xsec);
         }

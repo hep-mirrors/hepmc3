@@ -31,11 +31,11 @@ int SimpleEventTool::process(GenEvent &hepmc) {
     HEPMC3CODE(
         // Although the code for HepMC2 would work (thanks to backward compatibility)
         // we don't want to use deprecated functions
-        GenParticlePtr e1     = make_shared<GenParticle>( momentum_e1,   -11, 2 );
-        GenParticlePtr e2     = make_shared<GenParticle>( momentum_e2,    11, 2 );
-        GenParticlePtr tau1   = make_shared<GenParticle>( momentum_tau1, -15, 1 );
-        GenParticlePtr tau2   = make_shared<GenParticle>( momentum_tau2,  15, 1 );
-        GenVertexPtr   vertex = make_shared<GenVertex>();
+        GenParticlePtr e1     = std::make_shared<GenParticle>( momentum_e1,   -11, 2 );
+        GenParticlePtr e2     = std::make_shared<GenParticle>( momentum_e2,    11, 2 );
+        GenParticlePtr tau1   = std::make_shared<GenParticle>( momentum_tau1, -15, 1 );
+        GenParticlePtr tau2   = std::make_shared<GenParticle>( momentum_tau2,  15, 1 );
+        GenVertexPtr   vertex = std::make_shared<GenVertex>();
     )
 
     // Set masses

@@ -84,12 +84,12 @@ void GenVertex::set_id(int id) {
 }
 
 
-const vector<ConstGenParticlePtr>& GenVertex::particles_in()const {
-    return *(reinterpret_cast<const vector<ConstGenParticlePtr>*>(&m_particles_in));
+const std::vector<ConstGenParticlePtr>& GenVertex::particles_in()const {
+    return *(reinterpret_cast<const std::vector<ConstGenParticlePtr>*>(&m_particles_in));
 }
 
-const vector<ConstGenParticlePtr>& GenVertex::particles_out()const {
-    return *(reinterpret_cast<const vector<ConstGenParticlePtr>*>(&m_particles_out));
+const std::vector<ConstGenParticlePtr>& GenVertex::particles_out()const {
+    return *(reinterpret_cast<const std::vector<ConstGenParticlePtr>*>(&m_particles_out));
 }
 
 const FourVector& GenVertex::position() const {
@@ -99,7 +99,7 @@ const FourVector& GenVertex::position() const {
     // No position information - look at event and/or search ancestors
     if( parent_event() )
     {
-        shared_ptr<IntAttribute> cycles=parent_event()->attribute<IntAttribute>("cycles");
+        std::shared_ptr<IntAttribute> cycles=parent_event()->attribute<IntAttribute>("cycles");
         //This could be a recussive call.  Try to prevent it.
         if (!cycles||cycles->value()==0)
         {
@@ -118,7 +118,7 @@ void GenVertex::set_position(const FourVector& new_pos) {
     m_data.position = new_pos;
 }
 
-bool GenVertex::add_attribute(const std::string& name, shared_ptr<Attribute> att) {
+bool GenVertex::add_attribute(const std::string& name, std::shared_ptr<Attribute> att) {
     if ( !parent_event() ) return false;
     parent_event()->add_attribute(name, att, id());
     return true;
@@ -128,14 +128,14 @@ void GenVertex::remove_attribute(const std::string& name) {
     if ( parent_event() ) parent_event()->remove_attribute(name, id());
 }
 
-string GenVertex::attribute_as_string(const std::string& name) const {
-    return parent_event() ? parent_event()->attribute_as_string(name, id()) : string();
+std::string GenVertex::attribute_as_string(const std::string& name) const {
+    return parent_event() ? parent_event()->attribute_as_string(name, id()) : std::string();
 }
 
-vector<string> GenVertex::attribute_names() const {
+std::vector<std::string> GenVertex::attribute_names() const {
     if ( parent_event() ) return parent_event()->attribute_names(id());
 
-    return vector<string>();
+    return std::vector<std::string>();
 }
 
 } // namespace HepMC3

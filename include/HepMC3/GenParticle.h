@@ -22,9 +22,6 @@
 
 namespace HepMC3 {
 
-
-using namespace std;
-
 class GenEvent;
 class Attribute;
 
@@ -69,19 +66,19 @@ public:
 
     /// @brief Convenience access to immediate incoming particles via production vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> parents();
+    std::vector<GenParticlePtr> parents();
 
     /// @brief Convenience access to immediate incoming particles via production vertex (const version)
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<ConstGenParticlePtr> parents() const;
+    std::vector<ConstGenParticlePtr> parents() const;
 
     /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<GenParticlePtr> children();
+    std::vector<GenParticlePtr> children();
 
     /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    vector<ConstGenParticlePtr> children() const;
+    std::vector<ConstGenParticlePtr> children() const;
 
     int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
     int   abs_pid()               const { return abs(pid());            } //!< Get absolute value of PDG ID
@@ -108,20 +105,20 @@ public:
      *  the same name is present. The attribute will be stored in the
      *  parent_event(). @return false if there is no parent_event();
      */
-    bool add_attribute(const string& name, shared_ptr<Attribute> att);
+    bool add_attribute(const std::string& name, std::shared_ptr<Attribute> att);
 
     /// @brief Get list of names of attributes assigned to this particle
-    vector<string> attribute_names() const;
+    std::vector<std::string> attribute_names() const;
 
     /// @brief Remove attribute
-    void remove_attribute(const string& name);
+    void remove_attribute(const std::string& name);
 
     /// @brief Get attribute of type T
     template<class T>
-    shared_ptr<T> attribute(const string& name) const;
+    std::shared_ptr<T> attribute(const std::string& name) const;
 
     /// @brief Get attribute of any type as string
-    string attribute_as_string(const string& name) const;
+    std::string attribute_as_string(const std::string& name) const;
 
 
     /// @name Deprecated functionality
@@ -145,8 +142,8 @@ private:
     int              m_id;    //!< Index
     GenParticleData  m_data;  //!< Particle data
 
-    weak_ptr<GenVertex>    m_production_vertex; //!< Production vertex
-    weak_ptr<GenVertex>    m_end_vertex;        //!< End vertex
+    std::weak_ptr<GenVertex>    m_production_vertex; //!< Production vertex
+    std::weak_ptr<GenVertex>    m_end_vertex;        //!< End vertex
 //    weak_ptr<GenParticle>  m_this;              //!< Pointer to shared pointer managing this particle
 };
 
@@ -155,9 +152,9 @@ private:
 #include "HepMC3/GenEvent.h"
 namespace HepMC3 {
 /// @brief Get attribute of type T
-template<class T> shared_ptr<T> GenParticle::attribute(const string& name) const {
+template<class T> std::shared_ptr<T> GenParticle::attribute(const std::string& name) const {
     return parent_event()?
-           parent_event()->attribute<T>(name, id()): shared_ptr<T>();
+           parent_event()->attribute<T>(name, id()): std::shared_ptr<T>();
 }
 }
 #endif

@@ -131,15 +131,15 @@ private:
     std::istream* m_stream; ///< For ctor when reading from stdin
     bool m_isstream; ///< toggles usage of m_file or m_stream
 
-    vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache
-    vector<int>            m_vertex_barcodes;     //!< Old vertex barcodes
+    std::vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache
+    std::vector<int>            m_vertex_barcodes;     //!< Old vertex barcodes
 
-    vector<GenParticlePtr> m_particle_cache;      //!< Particle cache
-    vector<int>            m_end_vertex_barcodes; //!< Old end vertex barcodes
+    std::vector<GenParticlePtr> m_particle_cache;      //!< Particle cache
+    std::vector<int>            m_end_vertex_barcodes; //!< Old end vertex barcodes
 
     GenEvent*              m_event_ghost;                      //!< To save particle and verstex attributes.
-    vector<GenParticlePtr> m_particle_cache_ghost;//!< Particle cache for attributes
-    vector<GenVertexPtr>   m_vertex_cache_ghost;        //!< Vertex cache for attributes
+    std::vector<GenParticlePtr> m_particle_cache_ghost;//!< Particle cache for attributes
+    std::vector<GenVertexPtr>   m_vertex_cache_ghost;        //!< Vertex cache for attributes
 };
 
 } // namespace HepMC3

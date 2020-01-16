@@ -18,7 +18,7 @@
 namespace HepMC3 {
 HEPMC3_DECLARE_WRITER_FILE(WriterRoot)
 
-WriterRoot::WriterRoot(const std::string &filename, shared_ptr<GenRunInfo> run):
+WriterRoot::WriterRoot(const std::string &filename, std::shared_ptr<GenRunInfo> run):
     m_events_count(0) {
     set_run_info(run);
 

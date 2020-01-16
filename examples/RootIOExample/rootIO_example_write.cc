@@ -23,7 +23,7 @@ using namespace HepMC3;
 int main(int argc, char **argv) {
 
     if( argc<3 ) {
-        cout << "Usage: " << argv[0] << " <input_hepmc3_file> <output_root_file>" << endl;
+        std::cout << "Usage: " << argv[0] << " <input_hepmc3_file> <output_root_file>" << std::endl;
         exit(-1);
     }
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
         if( text_input.failed() ) break;
 
         if( events_parsed == 0 ) {
-            cout << "First event: " << endl;
+            std::cout << "First event: " << std::endl;
             Print::listing(evt);
         }
 
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
         ++events_parsed;
 
         if( events_parsed%100 == 0 ) {
-            cout << "Event: " << events_parsed << endl;
+            std::cout << "Event: " << events_parsed << std::endl;
         }
     }
 

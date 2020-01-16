@@ -30,15 +30,15 @@ inline std::ostream& operator<<(std::ostream& os,  ConstGenParticlePtr p) { Prin
 
 /// @brief Print one-line info with idiomatic C++ printing
 /// @note More generic printing methods from HepMC3::Print should be preffered
-inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenCrossSection> &cs) { Print::line(os,cs); return os; }
+inline std::ostream& operator<<(std::ostream& os, std::shared_ptr<GenCrossSection> &cs) { Print::line(os,cs); return os; }
 
 /// @brief Print one-line info with idiomatic C++ printing
 /// @note More generic printing methods from HepMC3::Print should be preffered
-inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenHeavyIon> &hi) { Print::line(os,hi); return os; }
+inline std::ostream& operator<<(std::ostream& os, std::shared_ptr<GenHeavyIon> &hi) { Print::line(os,hi); return os; }
 
 /// @brief Print one-line info  with idiomatic C++ printing
 /// @note More generic printing methods from HepMC3::Print should be preffered
-inline std::ostream& operator<<(std::ostream& os, shared_ptr<GenPdfInfo> &pi) { Print::line(os,pi); return os; }
+inline std::ostream& operator<<(std::ostream& os, std::shared_ptr<GenPdfInfo> &pi) { Print::line(os,pi); return os; }
 
 /// @brief Print one-line info  with idiomatic C++ printing
 /// @note More generic printing methods from HepMC3::Print should be preffered

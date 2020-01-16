@@ -23,9 +23,9 @@ class WriterDOT : public Writer
 public:
     /// @brief Constructor
     /// @warning If file already exists, it will be cleared before writing
-    WriterDOT(const std::string &filename,shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+    WriterDOT(const std::string &filename,std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
     /// @brief Constructor from ostream
-    WriterDOT(std::ostream& stream,shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+    WriterDOT(std::ostream& stream,std::shared_ptr<GenRunInfo> run =std:: shared_ptr<GenRunInfo>());
     /// @brief Write event to file
     ///
     /// @param[in] evt Event to be serialized

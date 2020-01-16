@@ -25,14 +25,13 @@
 #include <iostream>
 
 using namespace HepMC3;
-using std::cout;
-using std::endl;
+
 
 /** Main */
 int main(int argc, char **argv) {
 
     if( argc<3 ) {
-        cout << "Usage: " << argv[0] << " <input_root_file> <output_hepmc3_file>" << endl;
+        std::cout << "Usage: " << argv[0] << " <input_root_file> <output_hepmc3_file>" << std::endl;
         exit(-1);
     }
 
@@ -45,7 +44,7 @@ int main(int argc, char **argv) {
 
     // Get GenRunInfo, if available
     MyRunClass *my_run = (MyRunClass*)fo.Get("MyRunClass");
-    shared_ptr<GenRunInfo> run_info;
+    std::shared_ptr<GenRunInfo> run_info;
 
     if( my_run ) run_info.reset(my_run->GetRunInfo());
 
@@ -63,15 +62,15 @@ int main(int argc, char **argv) {
 
         fo.GetObject(key->GetName(), myevent);
 
-        cout << "Event: " << key->GetName() << endl;
+        std::cout << "Event: " << key->GetName() << std::endl;
 
         if( events_parsed == 0 ) {
-            cout << "First event: " << endl;
+            std::cout << "First event: " << std::endl;
 	    Print::listing(*(myevent->GetEvent()));
         }
 
         if( run_info ) {
-            cout << "Setting run info" << endl;
+            std::cout << "Setting run info" << std::endl;
             myevent->GetEvent()->set_run_info(run_info);
             run_info.reset();
         }
@@ -80,7 +79,7 @@ int main(int argc, char **argv) {
         ++events_parsed;
 
         if( events_parsed%100 == 0 ) {
-            cout << "Event: " << events_parsed << endl;
+            std::cout << "Event: " << events_parsed << std::endl;
         }
 
         delete myevent->GetEvent();

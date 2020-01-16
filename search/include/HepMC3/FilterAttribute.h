@@ -23,8 +23,6 @@
 
 namespace HepMC3 {
 
-using std::string;
-
 class ATTRIBUTE : public Filter {
 //
 // Constructors
@@ -33,7 +31,7 @@ public:
     /// @brief Default constructor
     ///
     /// Provides the name of the attribute used in by the filter
-    ATTRIBUTE(const string &name):Filter(ATTRIBUTE_EXISTS,name) {}
+    ATTRIBUTE(const std::string &name):Filter(ATTRIBUTE_EXISTS,name) {}
 
 //
 // Operators
@@ -41,14 +39,14 @@ public:
 public:
 
     /// @brief Compare if this attribute is equal to other attribute
-    Filter& operator==( shared_ptr<Attribute> &at ) {
+    Filter& operator==( std::shared_ptr<Attribute> &at ) {
         m_attribute = ATTRIBUTE_IS_EQUAL;
         at->to_string(m_attribute_str);
         return *this;
     }
 
     /// @brief Compare if this attribute is not equal to other attribute
-    Filter& operator!=( shared_ptr<Attribute> &at ) {
+    Filter& operator!=( std::shared_ptr<Attribute> &at ) {
         m_bool_value = !m_bool_value;
         m_attribute  = ATTRIBUTE_IS_EQUAL;
         at->to_string(m_attribute_str);

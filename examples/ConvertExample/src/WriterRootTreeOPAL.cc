@@ -4,7 +4,7 @@
 #include "TTree.h"
 namespace HepMC3
 {
-WriterRootTreeOPAL::WriterRootTreeOPAL(const std::string &filename,shared_ptr<GenRunInfo> run):WriterRootTree::WriterRootTree(filename,"h10","h10",run) {}
+WriterRootTreeOPAL::WriterRootTreeOPAL(const std::string &filename,std::shared_ptr<GenRunInfo> run):WriterRootTree::WriterRootTree(filename,"h10","h10",run) {}
 void WriterRootTreeOPAL::init_branches()
 {
     m_tree->Branch("Irun", &m_Irun);

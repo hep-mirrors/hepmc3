@@ -29,8 +29,6 @@
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"
 
-using std::string;
-
 namespace HepMC3 {
 
 /** @brief Forward declaration of GenEvent. */
@@ -64,7 +62,7 @@ protected:
      *  @note There should be no need for user class to ever use this constructor
      */
     //Note: m_event should be set to nullptr n case event is deleted!
-    explicit Attribute(const string &st):m_is_parsed(false),m_string(st) { m_event=nullptr; }
+    explicit Attribute(const std::string &st):m_is_parsed(false),m_string(st) { m_event=nullptr; }
 
     /** @brief GenEvent is a friend */
     friend class GenEvent;
@@ -75,7 +73,7 @@ protected:
 public:
     /** @brief Fill class content from string.
      */
-    virtual bool from_string(const string & att) = 0;
+    virtual bool from_string(const std::string & att) = 0;
 
     /** @brief Optionally initialize the attribute after from_string.
      */
@@ -93,7 +91,7 @@ public:
     }
 
     /** @brief Fill string from class content */
-    virtual bool to_string(string &att) const = 0;
+    virtual bool to_string(std::string &att) const = 0;
 
 //
 // Accessors
@@ -103,7 +101,7 @@ public:
     bool is_parsed() const { return m_is_parsed; }
 
     /** @brief Get unparsed string */
-    const string& unparsed_string() const { return m_string; }
+    const std::string& unparsed_string() const { return m_string; }
 
     /** return the GenEvent to which this Attribute belongs, if at all. */
     const GenEvent * event() const {
@@ -135,14 +133,14 @@ protected:
     void set_is_parsed(bool flag) { m_is_parsed = flag; }
 
     /** @brief Set unparsed string */
-    void set_unparsed_string(const string &st) { m_string = st; }
+    void set_unparsed_string(const std::string &st) { m_string = st; }
 
 //
 // Fields
 //
 private:
     bool   m_is_parsed;             //!< Is this attribute parsed?
-    string m_string;                //!< Raw (unparsed) string
+    std::string m_string;                //!< Raw (unparsed) string
     const GenEvent * m_event;       //!< Possibility to be aware of the
     //!  controlling GenEvent object.
     GenParticlePtr m_particle; //!< Particle to which assigned.
@@ -165,13 +163,13 @@ public:
     IntAttribute(int val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         m_val = atoi( att.c_str() );
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -206,13 +204,13 @@ public:
     LongAttribute(long val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override{
+    bool from_string(const std::string &att)  override{
         m_val = atol( att.c_str() );
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -249,13 +247,13 @@ public:
     DoubleAttribute(double val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override{
+    bool from_string(const std::string &att)  override{
         m_val = atof( att.c_str() );
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         std::ostringstream oss;
         oss << std::setprecision(std::numeric_limits<double>::digits10)
             << m_val;
@@ -294,13 +292,13 @@ public:
     FloatAttribute(float val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override{
+    bool from_string(const std::string &att)  override{
         m_val = float(atof( att.c_str() ));
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         std::ostringstream oss;
         oss << std::setprecision(std::numeric_limits<float>::digits10)
             << m_val;
@@ -345,27 +343,27 @@ public:
      *  string that can be (but does not have to be) parsed
      *
      */
-    StringAttribute(const string &st):Attribute(st) {}
+    StringAttribute(const std::string &st):Attribute(st) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override{
+    bool from_string(const std::string &att)  override{
         set_unparsed_string(att);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att = unparsed_string();
         return true;
     }
 
     /** @brief get the value associated to this Attribute. */
-    string value() const {
+    std::string value() const {
         return unparsed_string();
     }
 
     /** @brief set the value associated to this Attribute. */
-    void set_value(const string& s) {
+    void set_value(const std::string& s) {
         set_unparsed_string(s);
     }
 
@@ -387,7 +385,7 @@ public:
     CharAttribute(char val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         if (att.size())
         {
             m_val = att.at(0);
@@ -397,7 +395,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const override {
+    bool to_string(std::string &att) const override {
         att = std::to_string(m_val);
         return true;
     }
@@ -432,13 +430,13 @@ public:
     LongLongAttribute(long long val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override{
+    bool from_string(const std::string &att)  override{
         m_val = atoll( att.c_str() );
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -475,13 +473,13 @@ public:
     LongDoubleAttribute(long double val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         m_val = strtold( att.c_str(),NULL);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         std::ostringstream oss;
         oss << std::setprecision(std::numeric_limits<long double>::digits10)
             << m_val;
@@ -522,13 +520,13 @@ public:
     UIntAttribute(unsigned int val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override{
+    bool from_string(const std::string &att)  override{
         m_val = strtoul(att.c_str(), NULL, 0);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -565,13 +563,13 @@ public:
     ULongAttribute(unsigned long val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override{
+    bool from_string(const std::string &att)  override{
         m_val = strtoul(att.c_str(), NULL, 0);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -607,13 +605,13 @@ public:
     ULongLongAttribute(unsigned long long val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override{
+    bool from_string(const std::string &att)  override{
         m_val = strtoull(att.c_str(), NULL, 0);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att = std::to_string(m_val);
         return true;
     }
@@ -647,7 +645,7 @@ public:
     BoolAttribute(bool val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att)  override{
+    bool from_string(const std::string &att)  override{
         if (att.size()!=1) return false;
         if(att==std::string("1")) {m_val = true;  return true;}
         if(att==std::string("0")) {m_val = false; return true;}
@@ -655,7 +653,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const override{
+    bool to_string(std::string &att) const override{
         att = std::to_string(m_val);
         return true;
     }
@@ -690,7 +688,7 @@ public:
     VectorCharAttribute(std::vector<char> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         char  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -699,7 +697,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -735,7 +733,7 @@ public:
     VectorFloatAttribute(std::vector<float> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         float  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -744,7 +742,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -781,7 +779,7 @@ public:
     VectorLongDoubleAttribute(std::vector<long double> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         long double  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -790,7 +788,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -828,7 +826,7 @@ public:
     VectorLongLongAttribute(std::vector<long long> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         long long  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -837,7 +835,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -873,7 +871,7 @@ public:
     VectorUIntAttribute(std::vector<unsigned int> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         unsigned int  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -882,7 +880,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -918,7 +916,7 @@ public:
     VectorULongAttribute(std::vector<unsigned long> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         unsigned long  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -927,7 +925,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -964,7 +962,7 @@ public:
     VectorULongLongAttribute(std::vector<unsigned long long> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         unsigned long long  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -973,7 +971,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -1009,7 +1007,7 @@ public:
     VectorIntAttribute(std::vector<int> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         int  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -1018,7 +1016,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -1054,7 +1052,7 @@ public:
     VectorLongIntAttribute(std::vector<long int> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         long int  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -1063,7 +1061,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -1099,7 +1097,7 @@ public:
     VectorDoubleAttribute(std::vector<double> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const string &att) override {
+    bool from_string(const std::string &att) override {
         double  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
@@ -1108,7 +1106,7 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
@@ -1142,7 +1140,7 @@ public:
     VectorStringAttribute():Attribute(),m_val() {}
 
     /** @brief Constructor initializing attribute value */
-    VectorStringAttribute(std::vector<string> val):Attribute(),m_val(val) {}
+    VectorStringAttribute(std::vector<std::string> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) override {
@@ -1157,24 +1155,24 @@ public:
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(string &att) const  override{
+    bool to_string(std::string &att) const  override{
         att.clear();
         for (auto a:  m_val) {if (att.length()) att+=" ";  att+=a;}
         return true;
     }
 
     /** @brief get the value associated to this Attribute. */
-    std::vector<string> value() const {
+    std::vector<std::string> value() const {
         return m_val;
     }
 
     /** @brief set the value associated to this Attribute. */
-    void set_value(const std::vector<string>& i) {
+    void set_value(const std::vector<std::string>& i) {
         m_val = i;
     }
 
 private:
-    std::vector<string> m_val; ///< Attribute value
+    std::vector<std::string> m_val; ///< Attribute value
 };
 
 

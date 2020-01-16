@@ -16,7 +16,7 @@ using namespace HepMC3;
 /** Main program */
 int main(int argc, char **argv) {
     if (argc < 3) {
-        cout << "Usage: " << argv[0] << " <pythia_config_file> <output_hepmc3_file>" << endl;
+        std::cout << "Usage: " << argv[0] << " <pythia_config_file> <output_hepmc3_file>" << std::endl;
         exit(-1);
     }
 
@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
     Pythia8ToHepMC3 pythiaToHepMC;
     pythia.readFile(argv[1]);
     pythia.init();
-    shared_ptr<GenRunInfo> run = make_shared<GenRunInfo>();
+    std::shared_ptr<GenRunInfo> run = std::make_shared<GenRunInfo>();
     struct GenRunInfo::ToolInfo generator={std::string("Pythia8"),std::to_string(PYTHIA_VERSION).substr(0,5),std::string("Used generator")};
     run->tools().push_back(generator);
     struct GenRunInfo::ToolInfo config={std::string(argv[1]),"1.0",std::string("Control cards")};

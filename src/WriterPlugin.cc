@@ -26,7 +26,7 @@
 
 namespace HepMC3 {
 
-WriterPlugin::WriterPlugin(std::ostream & stream,const std::string &libname, const std::string &newwriter,shared_ptr<GenRunInfo> run) {
+WriterPlugin::WriterPlugin(std::ostream & stream,const std::string &libname, const std::string &newwriter,std::shared_ptr<GenRunInfo> run) {
 
 #ifdef WIN32
     dll_handle=nullptr;
@@ -42,15 +42,15 @@ WriterPlugin::WriterPlugin(std::ostream & stream,const std::string &libname, con
     dll_handle=nullptr;
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n",libname.c_str(),dlerror()); m_writer=nullptr; return;  }
-    Writer* (*newWriter)(std::ostream & stream,shared_ptr<GenRunInfo>);
-    newWriter=(Writer* (*)(std::ostream & stream,shared_ptr<GenRunInfo>))dlsym(dll_handle, newwriter.c_str());
+    Writer* (*newWriter)(std::ostream & stream,std::shared_ptr<GenRunInfo>);
+    newWriter=(Writer* (*)(std::ostream & stream,std::shared_ptr<GenRunInfo>))dlsym(dll_handle, newwriter.c_str());
     if (!newWriter) { printf("Error  while loading function %s from  library %s: %s\n",newwriter.c_str(),libname.c_str(),dlerror()); m_writer=nullptr; return;   }
     m_writer=(Writer*)(newWriter(stream,run));
 #endif
 
 
 }
-WriterPlugin::WriterPlugin(const std::string& filename,const std::string &libname, const std::string &newwriter,shared_ptr<GenRunInfo> run) {
+WriterPlugin::WriterPlugin(const std::string& filename,const std::string &libname, const std::string &newwriter,std::shared_ptr<GenRunInfo> run) {
 
 #ifdef WIN32
     dll_handle=nullptr;
@@ -66,8 +66,8 @@ WriterPlugin::WriterPlugin(const std::string& filename,const std::string &libnam
     dll_handle=nullptr;
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n",libname.c_str(),dlerror()); m_writer=nullptr; return;  }
-    Writer* (*newWriter)(const std::string&,shared_ptr<GenRunInfo>);
-    newWriter=(Writer* (*)(const std::string&,shared_ptr<GenRunInfo>))dlsym(dll_handle, newwriter.c_str());
+    Writer* (*newWriter)(const std::string&,std::shared_ptr<GenRunInfo>);
+    newWriter=(Writer* (*)(const std::string&,std::shared_ptr<GenRunInfo>))dlsym(dll_handle, newwriter.c_str());
     if (!newWriter) { printf("Error  while loading function %s from  library %s: %s\n",newwriter.c_str(),libname.c_str(),dlerror()); m_writer=nullptr; return;   }
     m_writer=(Writer*)(newWriter(filename,run));
 #endif

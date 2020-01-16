@@ -28,12 +28,12 @@ public:
     /// @brief Constructor
     /// @warning If file already exists, it will be cleared before writing
     WriterAscii(const std::string& filename,
-                shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+                std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
 
 #ifndef HEPMC3_PYTHON_BINDINGS
     /// @brief Constructor from ostream
     WriterAscii(std::ostream& stream,
-                shared_ptr<GenRunInfo> run = shared_ptr<GenRunInfo>());
+                std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
 #endif
 
     /// @brief Destructor

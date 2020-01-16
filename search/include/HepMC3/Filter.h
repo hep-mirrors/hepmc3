@@ -18,8 +18,8 @@ using Filter = std::function<bool(ConstGenParticlePtr)>;
 
 /// @brief Apply a Filter to a list of GenParticles
 /// Returns a vector of GenParticles that satisfy the Filter
-inline vector<GenParticlePtr> applyFilter(const Filter &filter, const vector<GenParticlePtr> &particles) {
-    vector<GenParticlePtr> result;
+inline std::vector<GenParticlePtr> applyFilter(const Filter &filter, const std::vector<GenParticlePtr> &particles) {
+    std::vector<GenParticlePtr> result;
     for(GenParticlePtr p: particles) {
         if(filter(p)) result.push_back(p);
     }
@@ -28,8 +28,8 @@ inline vector<GenParticlePtr> applyFilter(const Filter &filter, const vector<Gen
 
 /// @brief Apply a Filter to a list of ConstGenParticles
 /// Returns a vector of ConstGenParticles that satisfy the Filter
-inline vector<ConstGenParticlePtr> applyFilter(const Filter &filter, const vector<ConstGenParticlePtr> &particles) {
-    vector<ConstGenParticlePtr> result;
+inline std::vector<ConstGenParticlePtr> applyFilter(const Filter &filter, const std::vector<ConstGenParticlePtr> &particles) {
+    std::vector<ConstGenParticlePtr> result;
     for(ConstGenParticlePtr p: particles) {
         if(filter(p)) result.push_back(p);
     }

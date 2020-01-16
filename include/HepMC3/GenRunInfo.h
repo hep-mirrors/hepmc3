@@ -21,7 +21,6 @@ class TBuffer;
 #endif
 
 namespace HepMC3 {
-using namespace std;
 
 struct GenRunInfoData;
 
@@ -37,14 +36,14 @@ public:
     struct ToolInfo {
 
         /// @brief The name of the tool.
-        string name;
+        std::string name;
 
         /// @brief The version of the tool.
-        string version;
+        std::string version;
 
         /// @brief Other information about how the tool was used in
         /// the run.
-        string description;
+        std::string description;
     };
 
 public:
@@ -68,13 +67,13 @@ public:
     }
 
     /// @brief Check if a weight name is present.
-    bool has_weight(const string& name) const {
+    bool has_weight(const std::string& name) const {
         return m_weight_indices.find(name) !=  m_weight_indices.end();
     }
 
     /// @brief Return the index corresponding to a weight name.
     /// @return -1 if name was not found
-    int weight_index(const string& name) const {
+    int weight_index(const std::string& name) const {
         std::map<std::string, int>::const_iterator it = m_weight_indices.find(name);
         return it == m_weight_indices.end()? -1: it->second;
     }
@@ -93,31 +92,31 @@ public:
     /// @brief add an attribute
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
-    void add_attribute(const string &name,
-                       const shared_ptr<Attribute> &att) {
+    void add_attribute(const std::string &name,
+                       const std::shared_ptr<Attribute> &att) {
         std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
         if ( att ) m_attributes[name] = att;
     }
 
     /// @brief Remove attribute
-    void remove_attribute(const string &name) {
+    void remove_attribute(const std::string &name) {
         std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
         m_attributes.erase(name);
     }
 
     /// @brief Get attribute of type T
     template<class T>
-    shared_ptr<T> attribute(const string &name) const;
+    std::shared_ptr<T> attribute(const std::string &name) const;
 
     /// @brief Get attribute of any type as string
-    string attribute_as_string(const string &name) const;
+    std::string attribute_as_string(const std::string &name) const;
 
     /// @brief Get list of attribute names
-    std::vector<string> attribute_names() const;
+    std::vector<std::string> attribute_names() const;
 
     /// @brief Get a copy of the list of attributes
     /// @note To avoid thread issues, this is returns a copy. Better solution may be needed.
-    std::map< std::string, shared_ptr<Attribute> > attributes() const {
+    std::map< std::string, std::shared_ptr<Attribute> > attributes() const {
         return m_attributes;
     }
 
@@ -156,7 +155,7 @@ private:
     std::vector<std::string> m_weight_names;
 
     /// @brief Map of attributes
-    mutable std::map< std::string, shared_ptr<Attribute> > m_attributes;
+    mutable std::map< std::string, std::shared_ptr<Attribute> > m_attributes;
 
     /// @brief Mutex lock for the m_attibutes map.
     mutable std::recursive_mutex m_lock_attributes;
@@ -172,15 +171,15 @@ private:
 //
 
 template<class T>
-shared_ptr<T> GenRunInfo::attribute(const string &name) const {
+std::shared_ptr<T> GenRunInfo::attribute(const std::string &name) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::map< std::string, shared_ptr<Attribute> >::iterator i =
+    std::map< std::string, std::shared_ptr<Attribute> >::iterator i =
         m_attributes.find(name);
-    if( i == m_attributes.end() ) return shared_ptr<T>();
+    if( i == m_attributes.end() ) return std::shared_ptr<T>();
 
     if( !i->second->is_parsed() ) {
 
-        shared_ptr<T> att = make_shared<T>();
+        std::shared_ptr<T> att = std::make_shared<T>();
         if ( att->from_string(i->second->unparsed_string()) &&
                 att->init(*this) ) {
             // update map with new pointer
@@ -189,9 +188,9 @@ shared_ptr<T> GenRunInfo::attribute(const string &name) const {
             return att;
         }
         else
-            return shared_ptr<T>();
+            return std::shared_ptr<T>();
     }
-    else return dynamic_pointer_cast<T>(i->second);
+    else return std::dynamic_pointer_cast<T>(i->second);
 }
 
 #endif // __CINT__

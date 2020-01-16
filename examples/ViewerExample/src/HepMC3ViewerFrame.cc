@@ -285,13 +285,13 @@ HepMC3ViewerFrame::HepMC3ViewerFrame(const TGWindow *p, UInt_t w, UInt_t h) :
 
     fMainFrame->AddFrame(fEmbEventImageCanvas,new TGLayoutHints(kLHintsTop | kLHintsExpandX| kLHintsExpandY, 1, 1, 2, 2));
     fMainFrame->AddFrame(fEmbAnalysisCanvas,new TGLayoutHints(kLHintsTop | kFixedWidth| kLHintsExpandY, 1, 1, 2, 2));
-    fMainFrame->AddFrame(fButtonFrame,new TGLayoutHints(kLHintsTop , 1, 1, 2, 2));
+    fMainFrame->AddFrame(fButtonFrame,new TGLayoutHints(kLHintsTop, 1, 1, 2, 2));
 
 
     fChooseInput = new TGTextButton(fButtonFrame, "&Choose input");
     fChooseInput->Connect("Clicked()", "HepMC3ViewerFrame", this, "ChooseInput()");
     fChooseInput->SetToolTipText("Click to choose file");
-    fButtonFrame->AddFrame(fChooseInput , new TGLayoutHints(kLHintsTop | kLHintsExpandX, 1, 1, 2, 2));
+    fButtonFrame->AddFrame(fChooseInput, new TGLayoutHints(kLHintsTop | kLHintsExpandX, 1, 1, 2, 2));
 
 
 
@@ -310,7 +310,7 @@ HepMC3ViewerFrame::HepMC3ViewerFrame(const TGWindow *p, UInt_t w, UInt_t h) :
     fClearEventCache = new TGTextButton(fButtonFrame, "&Clear event cache");
     fClearEventCache->Connect("Clicked()", "HepMC3ViewerFrame", this, "ClearEventCache()");
     fClearEventCache->SetToolTipText("Click to clear event cache ");
-    fButtonFrame->AddFrame(fClearEventCache , new TGLayoutHints( kLHintsExpandX|kLHintsLeft, 1, 1, 2, 2));
+    fButtonFrame->AddFrame(fClearEventCache, new TGLayoutHints( kLHintsExpandX|kLHintsLeft, 1, 1, 2, 2));
 
     fExit = new TGTextButton(fButtonFrame, "&Exit ","gApplication->Terminate(0)");
     fExit->SetToolTipText("Click to exit");
