@@ -29,6 +29,9 @@
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"
 
+/** Deprecated */
+using std::string;
+
 namespace HepMC3 {
 
 /** @brief Forward declaration of GenEvent. */
@@ -1143,12 +1146,14 @@ public:
     VectorStringAttribute(std::vector<std::string> val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att) override {
-        std::string  datafoo;
-        m_val.clear();
-        size_t posb=att.find_first_not_of(' ');
-        size_t pose=posb;
-        while (posb!=std::string::npos) { pose=att.find_first_not_of(' ',posb+1); m_val.push_back(att.substr(posb,pose)); posb=att.find_first_not_of(' ',pose+1);}
+    bool from_string(const string &att) override {
+        size_t posb = att.find_first_not_of(' ');
+        size_t pose;
+        do {
+           pose = att.find_first_of(' ', posb);
+           m_val.push_back(att.substr(posb, pose - posb));
+           posb = att.find_first_not_of(' ', pose);
+        } while (posb != std::string::npos);
         return true;
     }
 

@@ -36,6 +36,8 @@
 #include "HepMC3/Attribute.h"
 
 namespace HepMC3 {
+/** Deprecated */
+using namespace std;
 
 class GenCrossSection : public Attribute {
 
