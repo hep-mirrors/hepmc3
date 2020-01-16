@@ -22,6 +22,8 @@
 #include <string>
 
 namespace HepMC3 {
+/** Deprecated */
+using std::string;
 
 class ATTRIBUTE : public Filter {
 //

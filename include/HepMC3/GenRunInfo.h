@@ -21,6 +21,8 @@ class TBuffer;
 #endif
 
 namespace HepMC3 {
+/** Deprecated */
+using namespace std;
 
 struct GenRunInfoData;
 

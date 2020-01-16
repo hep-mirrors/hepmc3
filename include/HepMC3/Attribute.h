@@ -29,6 +29,9 @@
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"
 
+/** Deprecated */
+using std::string;
+
 namespace HepMC3 {
 
 /** @brief Forward declaration of GenEvent. */
