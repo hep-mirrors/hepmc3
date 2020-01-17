@@ -21,6 +21,7 @@
 #include "HepMC3/GenVertex_fwd.h"
 
 namespace HepMC3 {
+
 /** Deprecated */
 using namespace std;
 
