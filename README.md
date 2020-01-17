@@ -52,7 +52,7 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
 
   For tests and for development purposes  HepMC3 uses extra packages, e.g. ZLIB, GrpahViz, binder.
   On Windows, most extra packages (e.g. ZLIB) have no default location, therefore
-  one should specify their location manualy, e.g. 
+  one should specify their location manually, e.g. 
 ```
 cmake CMakeLists.txt -DZLIB_ROOT=C:\lib -DZLIB_INCLUDE_DIR=C:\include 
 ```
@@ -104,7 +104,7 @@ Only a limiter support can be offered for these systems.
 
 
 10. HepMC3 is supplied with Python bindings codes that can be build on multiple systems.
-The number of potential combinations of compiler suites, Python versions and operationg systems is quite large,
+The number of potential combinations of compiler suites, Python versions and operation systems is quite large,
 therefore it is recommended to install the HepMC3 form the default repositories of the used operating system.
 If not possible, the following options are available 
 - compile the python package from sources
@@ -116,9 +116,9 @@ https://github.com/HDembinski/pyhepmc.
 
 
 #  Examples
-HepMC3 is shipped with multiple examples. These can be compiled during installation as descibed above  
+HepMC3 is shipped with multiple examples. These can be compiled during installation as described above  
 or after the installation (for HepMC3>3.1.0). 
-To compile the examples after the installation  copy the installed derectory with examples to desired directory 
+To compile the examples after the installation  copy the installed directory with examples to desired directory 
 and run cmake, e.g. 
 
 ```
@@ -131,7 +131,7 @@ make
 ```
 
 
-# Source package stucture
+# Source package structure
 
 The package sources are organized as follows:
 
@@ -160,7 +160,7 @@ the search/include/HepMC3 directory. The search/CMakeLists.txt file is used by c
 to build  the search sublibrary.
 
 3. The subdirectory rootIO/src contains a set of source files of the rootIO 
-sublibrary while the corresponding sheaders are located in 
+sublibrary while the corresponding headers are located in 
 the search/include/HepMC3 and search/include/ directories. The 
 rootIO/CMakeLists.txt file is used by cmake to build  the search sublibrary. 
 
@@ -198,7 +198,7 @@ python/all_includes.hpp.in
 python/root_includes.hpp.in
 python/search_includes.hpp.in
 ```
-The direcrory contain the files that are used to build a python package and installation:
+The directory contain the files that are used to build a python package and installation:
 ```
 python/src/__init__.py
 python/src/search/__init__.py
@@ -282,7 +282,7 @@ The files
 ./examples/ConvertExample/src/WriterRootTreeOPAL.cc
 ./examples/ConvertExample/include/WriterRootTreeOPAL.h
 ```
-contain an implementation of output format that can be used togather with data from OPAL experiment.
+contain an implementation of output format that can be used together with data from OPAL experiment.
 
 
 The files 
@@ -291,7 +291,7 @@ The files
 ./examples/ConvertExample/src/gzstream.C
 ./examples/ConvertExample/include/gzstream.h
 ```
-implement an example of compressed input handeling.
+implement an example of compressed input handling.
 
 The files 
 ```
@@ -301,7 +301,7 @@ The files
 illustrate an implementation of simple physics analysis using the HePMC3 library.
 
 - The ./examples/RootIOExample/ subdirectory contains source code of
-an utility that issustrates manipulations with LHEF event record.
+an utility that illustrates manipulations with LHEF event record.
 
 - The ./examples/RootIOExample/ subdirectory contains source code of
 an utility that reads HepMC3 events in ROOT format.
@@ -324,13 +324,13 @@ an utility that generates HePMC events with the Pythia8  Monte Carlo event
 generator. 
 
 - The ./examples/LHEFExample/ subdirectory contains source code of
-an utility that issustrates manipulations with LHEF event record.
+an utility that illustrates manipulations with LHEF event record.
 
 - The ./examples/ViewerExample/ subdirectory contains source code of ROOT 
 based GUI program that allows to visualize the HepMC3 events.
 
 
 9. The doc/ directory contains files used for generation of library source code documentation with
-the Doxygen system. The dco/CMakeLists.txt file is used by cmake
-to build  the documantion.
+the Doxygen system. The doc/CMakeLists.txt file is used by cmake
+to build  the domination.
 
