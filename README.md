@@ -217,6 +217,41 @@ mc-tester,  Photospp,  pythia6,  pythia8 and  Tauolapp.
 
 6. The subdirectories test/ and python/test contain sets of files (source files, scripts, inputs)
 that are used in the unit tests of the library and the python bindings respectively.
+The files in  test/ can be split in two groups:
+- The tests of the HepMC3 on itself with its inputs, e.g.
+```
+./test/testIO4.cc
+./test/inputIO4.root
+```
+and 
+these that are involved in testing of HePMC3 with the Monte Carlo generators/tools
+
+```
+./test/McTesterValidationTool.cc
+./test/PhotosValidationTool.h
+./test/SimpleEventTool.cc
+./test/McTesterValidationTool.h
+./test/HepMC3TestUtils.h
+./test/ValidationControl.cc
+./test/OutputValidationTool.cc
+./test/ValidationTool.h
+./test/PythiaValidationTool.h
+./test/TauolaValidationTool.cc
+./test/SimpleEventTool.h
+./test/PythiaValidationTool.cc
+./test/OutputValidationTool.h
+./test/IsGoodEvent.h
+./test/ValidationControl.h
+./test/Timer.h
+./test/TauolaValidationTool.h
+./test/PhotosValidationTool.cc
+./test/testMCTester1.cc
+./test/testPhotos1.cc
+./test/testPythia3.cc
+./test/testPythia2.cc
+./test/testPythia1.cc
+./test/testTauola1.cc
+```
 
 7. The subdirectory cmake/Modules contains files needed for the cmake configuration
 The subdirectory cmake/Templates contains templates needed for generation 
@@ -224,164 +259,78 @@ of the library cmake configuration files.
 
 8. The subdirectory examples contains several examples of usage of HepMC3 library 
 in standalone applications.
+Each example is located in its own directory and can be build using the CMakeLists.txt
+in the same directory. 
+
+- The ./examples/ConvertExample/ subdirectory contains source code of
+utility that converts different types of event records, including cusm event records, into each other.
+Namely, the files
+```
+./examples/ConvertExample/src/WriterDOT.cc
+./examples/ConvertExample/include/WriterDOT.h
+```
+are the source files for an event format that can be visualized with graphviz.
+The files
+```
+./examples/ConvertExample/src/WriterHEPEVTZEUS.cc
+./examples/ConvertExample/include/WriterHEPEVTZEUS.h
+```
+contain an implementation of output format that can be used in ZEUS experiment.
+
+The files
+```
+./examples/ConvertExample/src/WriterRootTreeOPAL.cc
+./examples/ConvertExample/include/WriterRootTreeOPAL.h
+```
+contain an implementation of output format that can be used togather with data from OPAL experiment.
+
+
+The files 
+```
+./examples/ConvertExample/include/ReaderGZ.h
+./examples/ConvertExample/src/gzstream.C
+./examples/ConvertExample/include/gzstream.h
+```
+implement an example of compressed input handeling.
+
+The files 
+```
+./examples/ConvertExample/src/AnalysisExample.cc
+./examples/ConvertExample/include/AnalysisExample.h
+```
+illustrate an implementation of simple physics analysis using the HePMC3 library.
+
+- The ./examples/RootIOExample/ subdirectory contains source code of
+an utility that issustrates manipulations with LHEF event record.
+
+- The ./examples/RootIOExample/ subdirectory contains source code of
+an utility that reads HepMC3 events in ROOT format.
+
+- The ./examples/RootIOExample2/ subdirectory contains source code of
+an utility that reads HepMC3 events in ROOT TTree format.
+
+- The ./examples/RootIOExample2/ subdirectory contains source code of
+an utility that reads HepMC3 events and saves them using a custom ROOT-based class.
+
+- The ./examples/BasicExamples/ subdirectory contains source code of basic examples of HePMC3 usage, 
+e.g. building of event from scratch, reading and writing files, usage of fortran, etc.
+
+- The ./examples/Pythia6Example/ subdirectory contains source code of
+an utility that generates HePMC events with the Pythia6  Monte Carlo event
+generator. 
+
+- The ./examples/Pythia8Example/ subdirectory contains source code of
+an utility that generates HePMC events with the Pythia8  Monte Carlo event
+generator. 
+
+- The ./examples/LHEFExample/ subdirectory contains source code of
+an utility that issustrates manipulations with LHEF event record.
+
+- The ./examples/ViewerExample/ subdirectory contains source code of ROOT 
+based GUI program that allows to visualize the HepMC3 events.
+
 
 9. The doc/ directory contains files used for generation of library source code documentation with
 the Doxygen system. The dco/CMakeLists.txt file is used by cmake
 to build  the documantion.
 
-
-```
-./examples
-./examples/ConvertExample
-./examples/ConvertExample/cmdline.h
-./examples/ConvertExample/src
-./examples/ConvertExample/src/WriterDOT.cc
-./examples/ConvertExample/src/AnalysisExample.cc
-./examples/ConvertExample/src/WriterHEPEVTZEUS.cc
-./examples/ConvertExample/src/gzstream.C
-./examples/ConvertExample/src/WriterRootTreeOPAL.cc
-./examples/ConvertExample/convert_example_env.sh.in
-./examples/ConvertExample/CMakeLists.txt
-./examples/ConvertExample/include
-./examples/ConvertExample/include/AnalysisExample.h
-./examples/ConvertExample/include/WriterDOT.h
-./examples/ConvertExample/include/gzstream.h
-./examples/ConvertExample/include/WriterRootTreeOPAL.h
-./examples/ConvertExample/include/ReaderGZ.h
-./examples/ConvertExample/include/WriterHEPEVTZEUS.h
-./examples/ConvertExample/cmdline.c
-./examples/ConvertExample/convert_example.cc
-./examples/CMakeLists.txt
-./examples/RootIOExample
-./examples/RootIOExample/rootIO_example_write.cc
-./examples/RootIOExample/rootIO_example_env.sh.in
-./examples/RootIOExample/CMakeLists.txt
-./examples/RootIOExample/rootIO_example_read.cc
-./examples/RootIOExample/example.hepmc3
-./examples/RootIOExample3
-./examples/RootIOExample3/rootIOTree_example_write.cc
-./examples/RootIOExample3/CMakeLists.txt
-./examples/RootIOExample3/rootIOTree_example_read.cc
-./examples/RootIOExample3/rootIOTree_example_env.sh.in
-./examples/BasicExamples
-./examples/BasicExamples/basic_tree.cc
-./examples/BasicExamples/CMakeLists.txt
-./examples/BasicExamples/HepMC3_fileIO_example.cc
-./examples/BasicExamples/hepevt_wrapper_example_fortran.f
-./examples/BasicExamples/HepMC2_reader_example.cc
-./examples/BasicExamples/hepevt_wrapper_example_main.cc
-./examples/Pythia6Example
-./examples/Pythia6Example/main63.f
-./examples/Pythia6Example/CMakeLists.txt
-./examples/Pythia6Example/pythia-6.4.28.f
-./examples/Pythia8Example
-./examples/Pythia8Example/CMakeLists.txt
-./examples/Pythia8Example/cmake
-./examples/Pythia8Example/cmake/Modules
-./examples/Pythia8Example/cmake/Modules/FindPythia8.cmake
-./examples/Pythia8Example/pythia8_example.cc
-./examples/Pythia8Example/pythia8_example_env.sh.in
-./examples/Pythia8Example/pythia8_pp_minbias.conf
-./examples/Pythia8Example/pythia8_ee_to_Z_to_tautau.conf
-./examples/LHEFExample
-./examples/LHEFExample/LHEF_example_1.plhe
-./examples/LHEFExample/LHEF_example_2_cmp.plhe
-./examples/LHEFExample/CMakeLists.txt
-./examples/LHEFExample/LHEF_example_cat.cc
-./examples/LHEFExample/LHEF_example_cmp.lhe
-./examples/LHEFExample/LHEF_example_2_out.plhe
-./examples/LHEFExample/LHEF_example_1_cmp.plhe
-./examples/LHEFExample/LHEF_example.lhe
-./examples/LHEFExample/LHEF_example_1_out.plhe
-./examples/LHEFExample/LHEF_example_env.sh.in
-./examples/LHEFExample/LHEF_example_2.plhe
-./examples/RootIOExample2
-./examples/RootIOExample2/class_example_read.cc
-./examples/RootIOExample2/src
-./examples/RootIOExample2/src/MyClass.cc
-./examples/RootIOExample2/src/MyRunClass.cc
-./examples/RootIOExample2/CMakeLists.txt
-./examples/RootIOExample2/class_example_env.sh.in
-./examples/RootIOExample2/include
-./examples/RootIOExample2/include/MyClass.h
-./examples/RootIOExample2/include/LinkDef.h
-./examples/RootIOExample2/include/myclass_Classes.h
-./examples/RootIOExample2/include/MyRunClass.h
-./examples/RootIOExample2/example.hepmc3
-./examples/RootIOExample2/class_example_write.cc
-./examples/ViewerExample
-./examples/ViewerExample/src
-./examples/ViewerExample/src/HepMC3ViewerFrame.cc
-./examples/ViewerExample/src/main.cc
-./examples/ViewerExample/CMakeLists.txt
-./examples/ViewerExample/include
-./examples/ViewerExample/include/LinkDef.h
-./examples/ViewerExample/include/HepMC3ViewerFrame.h
-./examples/ViewerExample/cmake
-./examples/ViewerExample/cmake/Modules
-./examples/ViewerExample/cmake/Modules/FindGraphviz.cmake
-```
-
-```
-./test
-./test/McTesterValidationTool.cc
-./test/testBoost.cc
-./test/inputIO5.hepmc
-./test/PhotosValidationTool.h
-./test/testMCTester1.cc
-./test/inputReaderFactory1.hepmc
-./test/inputIO1.hepmc
-./test/McTesterValidationTool.h
-./test/testWeights.cc
-./test/inputThreads1.hepmc
-./test/inputDelete.hepmc
-./test/HepMC3TestUtils.h
-./test/inputMultipleCopies1.hepmc
-./test/testDelete2.cc
-./test/CMakeLists.txt
-./test/testIO4.cc
-./test/inputIO4.root
-./test/inputReaderFactory2.hepmc
-./test/testThreads1.cc
-./test/ValidationControl.cc
-./test/OutputValidationTool.cc
-./test/ValidationTool.h
-./test/PythiaValidationTool.h
-./test/TauolaValidationTool.cc
-./test/testSkip1.cc
-./test/testIO3.cc
-./test/inputMass.hepmc
-./test/SimpleEventTool.h
-./test/PythiaValidationTool.cc
-./test/inputIO2.hepmc
-./test/OutputValidationTool.h
-./test/inputSkip1.hepmc
-./test/inputIO3.hepevt
-./test/testUnits.cc
-./test/testIO6.cc
-./test/testIO5.cc
-./test/testLoops.cc
-./test/IsGoodEvent.h
-./test/testPolarization.cc
-./test/ValidationControl.h
-./test/testIO2.cc
-./test/Timer.h
-./test/testReaderFactory1.cc
-./test/testMass.cc
-./test/inputMultipleCopies2.hepmc
-./test/inputDelete2.hepmc
-./test/testDelete.cc
-./test/testReaderFactory2.cc
-./test/testIO1.cc
-./test/TauolaValidationTool.h
-./test/testPythia2.cc
-./test/PhotosValidationTool.cc
-./test/inputIO6.hepmc
-./test/testPrintBug.cc
-./test/testPhotos1.cc
-./test/testPythia3.cc
-./test/testPythia1.cc
-./test/SimpleEventTool.cc
-./test/testMultipleCopies.cc
-./test/testTauola1.cc
-```
