@@ -47,6 +47,19 @@ endmacro( hepmc_root_test )
 
 
 set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
+cmake_policy(SET CMP0057 NEW)
+if (NOT HEPMC3_TEST_PACKAGES)
+if(CMAKE_SYSTEM_NAME MATCHES Linux)
+set(HEPMC3_TEST_PACKAGES "Threads,HepMC2,Pythia8,Photospp,Tauolapp,MCTester,valgrind")
+else()
+set(HEPMC3_TEST_PACKAGES "Threads,HepMC2,Pythia8,Photospp,Tauolapp,MCTester")
+endif()
+endif()
+message(STATUS "HepMC3 test: The following packages are enabled for tests HEPMC3_TEST_PACKAGES=${HEPMC3_TEST_PACKAGES}" )
+string(REPLACE "," ";" HEPMC3_TEST_PACKAGES_LIST ${HEPMC3_TEST_PACKAGES})
+
+
+
 
 file(GLOB INPUTFILES  "${CMAKE_CURRENT_SOURCE_DIR}/*.input" )
 file(COPY ${INPUTFILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
@@ -76,13 +89,14 @@ set( HepMC_root_tests
 
 
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
-
+if ("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
 find_package(Threads)
+endif()
 if(Threads_FOUND)
   message(STATUS "HepMC3 test: Threads library found.  Thread safety tests enabled")
   list( APPEND HepMC_tests "testThreads1" )   
 else()
-  message(STATUS "HepMC3 test: No threads library found, Thread safety tests disabled")
+  message(STATUS "HepMC3 test: No threads library found or disabled, Thread safety tests disabled")
 endif()
 
 foreach ( test ${HepMC_tests} )
@@ -115,10 +129,11 @@ set( libMCEG_link_libraries_HEPMC3  )
 set( libMCEG_include_directories   ${CMAKE_CURRENT_SOURCE_DIR}/../include/  )
 set( MCEG_tests )
 
-
+if ("Pythia8" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
 find_package(Pythia8 )
+endif()
 if(NOT PYTHIA8_FOUND)
-  message(STATUS "HepMC3 test: Pythia8 package not found. Please check if PYTHIA8_ROOT_DIR is set properly.") 
+  message(STATUS "HepMC3 test: Pythia8 package not found or disabled. Please check if PYTHIA8_ROOT_DIR is set properly.") 
 else()
   message(STATUS "HepMC3 test: Pythia8 package found. ${PYTHIA8_LIBRARIES}") 
   list( APPEND libMCEG_sources    "PythiaValidationTool.cc" )
@@ -142,12 +157,13 @@ else()
   list( APPEND MCEG_tests "testPythia3" )   
 endif()
 
-
+if ("Photospp" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
 find_package(Photospp )
+endif()
 if(NOT PHOTOSPP_FOUND)
-  message(STATUS "HepMC3 test:  Photospp package not found. Please check if PHOTOSPP_ROOT_DIR is set properly.") 
+  message(STATUS "HepMC3 test: Photospp package not found or disabled. Please check if PHOTOSPP_ROOT_DIR is set properly.") 
 else()
-  message(STATUS "HepMC3 test:  Photospp package found. Building Photospp tests. PHOTOSPP_LIBRARIES ${PHOTOSPP_LIBRARIES} PHOTOSPP_HEPMC2_LIBRARIES ${PHOTOSPP_HEPMC2_LIBRARIES} PHOTOSPP_INCLUDE_DIRS ${PHOTOSPP_INCLUDE_DIRS}")
+  message(STATUS "HepMC3 test: Photospp package found. Building Photospp tests. PHOTOSPP_LIBRARIES ${PHOTOSPP_LIBRARIES} PHOTOSPP_HEPMC2_LIBRARIES ${PHOTOSPP_HEPMC2_LIBRARIES} PHOTOSPP_INCLUDE_DIRS ${PHOTOSPP_INCLUDE_DIRS}")
   list( APPEND  libMCEG_sources   "PhotosValidationTool.cc" )
   list( APPEND  libMCEG_sources_HEPMC3 "${PROJECT_SOURCE_DIR}/interfaces/Photospp/src/PhotosHepMC3Event.cc" "${PROJECT_SOURCE_DIR}/interfaces/Photospp/src/PhotosHepMC3Particle.cc"   )
   list( APPEND  libMCEG_link_libraries_HEPMC2  "${PHOTOSPP_LIBRARIES}"  "${PHOTOSPP_HEPMC2_LIBRARIES}")
@@ -158,17 +174,22 @@ else()
   list( APPEND  MCEG_tests "testPhotos1" )   
 endif()
 
-
+if ("Tauolapp" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
 find_package(Tauolapp )
+endif()
 if(NOT TAUOLAPP_FOUND)
-  message(STATUS "HepMC3 test:  Tauolapp package not found. Please check if TAUOLA_ROOT_DIR is set properly.") 
+  message(STATUS "HepMC3 test: Tauolapp package not found or disabled. Please check if TAUOLA_ROOT_DIR is set properly.") 
 else()
-  message(STATUS "HepMC3 test:  Tauolapp package found. Building Tauolapp tests. TAUOLAPP_LIBRARIES ${TAUOLAPP_LIBRARIES} TAUOLAPP_INCLUDE_DIRS ${TAUOLAPP_INCLUDE_DIRS}")
+ message(STATUS "HepMC3 test: Tauolapp package found. Building Tauolapp tests. TAUOLAPP_LIBRARIES ${TAUOLAPP_LIBRARIES} TAUOLAPP_INCLUDE_DIRS ${TAUOLAPP_INCLUDE_DIRS}")
  list( APPEND  libMCEG_sources "TauolaValidationTool.cc" )
  list( APPEND  libMCEG_sources_HEPMC3 "${PROJECT_SOURCE_DIR}/interfaces/Tauolapp/src/TauolaHepMC3Event.cxx" "${PROJECT_SOURCE_DIR}/interfaces/Tauolapp/src/TauolaHepMC3Particle.cxx"  )
- list( APPEND  libMCEG_link_libraries_HEPMC2  "${TAUOLAPP_LIBRARIES}" )
- list( APPEND  libMCEG_link_libraries_HEPMC3  "${TAUOLAPP_LIBRARIES}" )
- list( APPEND  libMCEG_include_directories  "${PROJECT_SOURCE_DIR}/interfaces/Tauolapp/include"  "${TAUOLAPP_INCLUDE_DIRS}") 
+if ( TAUOLAPP_HepMC_LIBRARY )
+ list( APPEND  libMCEG_link_libraries_HEPMC2  "${TAUOLAPP_CxxInterface_LIBRARY}" "${TAUOLAPP_Fortran_LIBRARY}"  "${TAUOLAPP_HepMC_LIBRARY}" )
+else()
+ list( APPEND  libMCEG_link_libraries_HEPMC2  "${TAUOLAPP_CxxInterface_LIBRARY}" "${TAUOLAPP_Fortran_LIBRARY}" )
+endif()
+ list( APPEND  libMCEG_link_libraries_HEPMC3  "${TAUOLAPP_CxxInterface_LIBRARY}" "${TAUOLAPP_Fortran_LIBRARY}" )
+ list( APPEND  libMCEG_include_directories    "${TAUOLAPP_INCLUDE_DIRS}" "${PROJECT_SOURCE_DIR}/interfaces/Tauolapp/include") 
  list( APPEND  libMCEG_compile_definitions  "-DTAUOLAPP")
  list( APPEND  MCEG_tests "testTauola1" )   
 endif()
@@ -176,9 +197,11 @@ endif()
 
 
 if(HEPMC3_ENABLE_ROOTIO)
+if ("MCTester" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
 find_package(MCTester )
+endif()
 if(NOT MCTESTER_FOUND)
-  message(STATUS "HepMC3 test: MCTester package not found. Please check if MCTESTER_ROOT_DIR is set properly.") 
+  message(STATUS "HepMC3 test: MCTester package not found or disabled. Please check if MCTESTER_ROOT_DIR is set properly.") 
 else()
   message(STATUS "HepMC3 test: MCTester package found. Building MCTester tests. MCTESTER_LIBRARIES ${MCTESTER_LIBRARIES} MCTESTER_INCLUDE_DIRS ${MCTESTER_INCLUDE_DIRS}")
   list( APPEND  libMCEG_sources "McTesterValidationTool.cc" )
@@ -237,11 +260,12 @@ endforeach ( test ${MCEG_tests} )
 
 
 
-
+if ("HepMC2" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
 find_package(HepMC2 QUIET)
+endif()
 
 if(NOT HEPMC2_FOUND)
-  message(STATUS "HepMC3 test: HEPMC2 package not found. Please check if HEPMC2_ROOT_DIR is set properly.") 
+  message(STATUS "HepMC3 test: HEPMC2 package not found or disabled. Please check if HEPMC2_ROOT_DIR is set properly.") 
 else()
   message(STATUS "HepMC3 test: HEPMC2 package found. ${HEPMC2_LIBRARIES}") 
 add_library(MCEG2 SHARED ${libMCEG_sources})
@@ -283,17 +307,18 @@ endforeach ( test ${MCEG_tests} )
 endif()
 
 #One should use something else for Windows/BSD/MAC
-if(CMAKE_SYSTEM_NAME MATCHES Linux)
+
+
+if ("valgrind" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
 find_program( MEMORYCHECK_COMMAND valgrind )
+endif()
 if(MEMORYCHECK_COMMAND)
 message(STATUS "HepMC3 test: valgrind package found in ${MEMORYCHECK_COMMAND}.  memory check tests enabled.") 
 set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --error-exitcode=1" )
 elseif()
-message(STATUS "HepMC3 test: valgrind package not found.  memory check tests disabled.") 
+message(STATUS "HepMC3 test: valgrind package not found or disabled.  memory check tests disabled.") 
 endif()
-else()
-message(STATUS "HepMC3 test: memory tests will be disabled on your system.") 
-endif()
+
 
 macro(add_memcheck_test binaryname )
   set(memcheck_command "${MEMORYCHECK_COMMAND} ${MEMORYCHECK_COMMAND_OPTIONS}")

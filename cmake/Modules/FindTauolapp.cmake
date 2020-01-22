@@ -20,6 +20,20 @@ find_library(TAUOLAPP_Fortran_LIBRARY NAMES TauolaFortran
              )
 
 
+find_library(TAUOLAPP_HepMC_LIBRARY NAMES TauolaHepMC
+             HINTS $ENV{TAUOLAPP_ROOT_DIR}/lib ${TAUOLAPP_ROOT_DIR}/lib
+             HINTS $ENV{TAUOLAPP_ROOT_DIR}/lib64 ${TAUOLAPP_ROOT_DIR}/lib64
+             )
+
+find_library(TAUOLAPP_HepMC3_LIBRARY NAMES TauolaHepMC3
+             HINTS $ENV{TAUOLAPP_ROOT_DIR}/lib ${TAUOLAPP_ROOT_DIR}/lib
+             HINTS $ENV{TAUOLAPP_ROOT_DIR}/lib64 ${TAUOLAPP_ROOT_DIR}/lib64
+             )
+
+find_library(TAUOLAPP_HEPEVT_LIBRARY NAMES TauolaHEPEVT
+             HINTS $ENV{TAUOLAPP_ROOT_DIR}/lib ${TAUOLAPP_ROOT_DIR}/lib
+             HINTS $ENV{TAUOLAPP_ROOT_DIR}/lib64 ${TAUOLAPP_ROOT_DIR}/lib64
+             )
 
 set(TAUOLAPP_INCLUDE_DIRS ${TAUOLAPP_INCLUDE_DIR})
 if (TAUOLAPP_LIBRARY)
