@@ -26,11 +26,10 @@
 #include <vector>
 
 #include "HepMC3/GenParticle.h"
-#include "Photos/PhotosParticle.h"
+#include "PhotosParticle.h"
 
 namespace Photospp
 {
-using namespace std;
 using namespace HepMC3;
 class PhotosHepMC3Particle: public PhotosParticle{
 

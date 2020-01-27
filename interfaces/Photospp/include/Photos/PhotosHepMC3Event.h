@@ -25,8 +25,8 @@
 
 #include <vector>
 #include "HepMC3/GenEvent.h"
-#include "Photos/PhotosEvent.h"
-#include "Photos/PhotosParticle.h"
+#include "PhotosEvent.h"
+#include "PhotosParticle.h"
 
 namespace Photospp
 {

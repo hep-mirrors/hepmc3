@@ -12,7 +12,6 @@
 
 namespace Photospp
 {
-using namespace std;
 PhotosHepMC3Event::PhotosHepMC3Event(GenEvent * event)
 {
         m_event=event;
