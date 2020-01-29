@@ -1,9 +1,3 @@
-// -*- C++ -*-
-//
-// This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
-//
-
 /**
  * @class HepMC3Event
  * @brief HEPEvent Interface to HepMC classes
@@ -21,17 +15,18 @@
 #ifndef _HepMC3Event_H
 #define _HepMC3Event_H
 
+#ifdef _USE_ROOT_
+#include <TObject.h>
+#include <TBuffer.h>
+#include <TClass.h>
+#endif
+
 #include "HepMC3/GenEvent.h"
 #include "HepMC3Particle.h"
 #include "HEPEvent.H"
 
-#ifdef _USE_ROOT_
-#include <TObject.h>
-#endif
 
-namespace MCTester
-{
-using namespace HepMC3;
+
 class HepMC3Event: public HEPEvent
 {
 private:
@@ -45,7 +40,7 @@ public:
   /** Constructor for HepMC3Event. Creates a new event using the
       event info from GenEvent e. Also copies each particle
       into a HepMC3Particle and stores them as a list. */
-  HepMC3Event(GenEvent &e, bool include_self_decay=true);
+  HepMC3Event(HepMC3::GenEvent &e, bool include_self_decay=true);
   /** Destructor for HepMC3Event */
   ~HepMC3Event();
 
@@ -98,11 +93,10 @@ public:
   HEPParticleList* FindParticle(int pdg, HEPParticleList *list);
 
 private:
-  GenEvent *evt;
+  HepMC3::GenEvent *evt;
   int m_particle_count;
 #ifdef _USE_ROOT_
   ClassDef(HepMC3Event,1)  //Interface to HepMC event record
 #endif
 };
-}
 #endif
