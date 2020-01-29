@@ -1,8 +1,3 @@
-// -*- C++ -*-
-//
-// This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
-//
 /**
  * @class HepMC3Particle
  * @brief HEPParticle interface to HepMC classes
@@ -22,12 +17,11 @@
 
 #ifdef _USE_ROOT_
 #include <TObject.h>
+#include <TBuffer.h>
+#include <TClass.h>
 #endif
-namespace MCTester
-{
-using namespace HepMC3;
-class HepMC3Event;
 
+class HepMC3Event;
 class HepMC3Particle : public HEPParticle
 {
 
@@ -42,7 +36,7 @@ public:
   /** Plain constructor.*/
   HepMC3Particle();
   /** Constructor which makes a HepMC3Particle from GenParticle. */
-  HepMC3Particle(GenParticle& particle, HEPEvent * e, int Id);
+  HepMC3Particle(HepMC3::GenParticle& particle, HEPEvent * e, int Id);
   /** Destructor*/
   ~HepMC3Particle();
 
@@ -146,11 +140,11 @@ public:
   /** Returns a list of daughter particles of this particle.*/
   HEPParticleList*  GetMotherList(HEPParticleList *list);
 public:
-  GenParticle *part;
+  HepMC3::GenParticle *part;
 
 #ifdef _USE_ROOT_
   ClassDef(HepMC3Particle,0)
 #endif
 };
-}
+
 #endif // _HepMC3Particle_H

@@ -1,15 +1,11 @@
 #include "HepMC3Event.h"
 #include <iostream>
-namespace MCTester
-{
-using namespace std;
-using namespace HepMC3;
 
 #ifdef _USE_ROOT_
-ClassImp(HepMCEvent)
+ClassImp(HepMC3Event)
 #endif
 
-HepMC3Event::HepMC3Event( GenEvent &e, bool include_self_decay){
+HepMC3Event::HepMC3Event( HepMC3::GenEvent &e, bool include_self_decay){
 
   evt = &e;
   // Make a list of the particles in the event.
@@ -33,7 +29,7 @@ int HepMC3Event::GetNumOfParticles(){
 
 void  HepMC3Event::SetNumOfParticles(int num){
   // Should throw some error as this can not be set
-  cout << "Warning, should not be doing this for HepMCEvent" << endl;
+  std::cout << "Warning, should not be doing this for HepMCEvent" << std::endl;
 }
 
 int HepMC3Event::GetEventNumber(){
@@ -47,8 +43,8 @@ void HepMC3Event::SetEventNumber(int num){
 
 HEPParticle* HepMC3Event::GetParticle(int idx){
   if(idx < 1 || idx > GetNumOfParticles()){
-    cout << "Warning can not get particle "<< idx;
-    cout <<", particle ID not valid" << endl;
+    std::cout << "Warning can not get particle "<< idx;
+    std::cout <<", particle ID not valid" << std::endl;
     return 0;
   }
   return particles[idx-1]; //Particle ID starts at 1
@@ -60,7 +56,7 @@ HepMC3Particle* HepMC3Event::GetParticleWithId( int id ){
     if(particles[i]->part->id()==id)
       return particles[i];
   }
-  cout << "Could not find particle with id "<<id<<endl;
+  std::cout << "Could not find particle with id "<<id<<std::endl;
   return 0; //and have some error about not finding the
             //particle
 }
@@ -75,7 +71,7 @@ HEPParticleList* HepMC3Event::FindParticle(int pdg, HEPParticleList *list)
     HEPParticle * p = GetParticle(i);
     if(p->GetPDGId()==pdg){
       list->push_back(p);
-      GenVertexPtr end = ((HepMC3Particle *) p)->part->end_vertex();
+      HepMC3::GenVertexPtr end = ((HepMC3Particle *) p)->part->end_vertex();
       //if we want to ignore cases like tau->tau+gamma:
       if(!CountSelfDecays()&&end){
         //Check for daughters that are the same particle type
@@ -113,8 +109,8 @@ void  HepMC3Event::AddParticle( int id,
                                          double vz,
                                double tau){}
 
-vector<double> * HepMC3Event::Sum4Momentum(){
-  vector<double> * sum = new vector<double>(4,0.0);
+std::vector<double> * HepMC3Event::Sum4Momentum(){
+  std::vector<double> * sum = new std::vector<double>(4,0.0);
 
   for(int i=0; i < GetNumOfParticles(); i++){
     if(particles[i]->IsStable()){
@@ -142,4 +138,4 @@ void HepMC3Event::Streamer(TBuffer &)
 #endif
 
 
-}
+

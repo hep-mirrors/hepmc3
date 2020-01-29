@@ -1,8 +1,6 @@
 #include "HepMC3Particle.h"
 #include "HepMC3Event.h"
 #include <iostream>
-namespace MCTester {
-using namespace std;
 
 #ifdef _USE_ROOT_
 ClassImp(HepMC3Particle)
@@ -10,11 +8,11 @@ ClassImp(HepMC3Particle)
 
 HepMC3Particle::HepMC3Particle(){}
 
-HepMC3Particle::HepMC3Particle(GenParticle & particle, HEPEvent * e, int Id){
+HepMC3Particle::HepMC3Particle(HepMC3::GenParticle & particle, HEPEvent * e, int Id){
 
   part = &particle;
   SetEvent(e);
-  SetId(Id);
+  SetId(Id); 
 }
 
 HepMC3Particle::~HepMC3Particle(){
@@ -158,32 +156,32 @@ void HepMC3Particle::SetFirstDaughter( int daughter ){}
 void HepMC3Particle::SetLastDaughter ( int daughter ){}
 
 void HepMC3Particle::SetE( double E ){
-  FourVector temp_mom(part->momentum());
+  HepMC3::FourVector temp_mom(part->momentum());
   temp_mom.setE(E);
   part->set_momentum(temp_mom);
 }
 
 void HepMC3Particle::SetPx( double px ){
-  FourVector temp_mom(part->momentum());
+  HepMC3::FourVector temp_mom(part->momentum());
   temp_mom.setPx(px);
   part->set_momentum(temp_mom);
 }
 
 void HepMC3Particle::SetPy( double py ){
-  FourVector temp_mom(part->momentum());
+  HepMC3::FourVector temp_mom(part->momentum());
   temp_mom.setPy(py);
   part->set_momentum(temp_mom);
 }
 
 void HepMC3Particle::SetPz( double pz ){
-  FourVector temp_mom(part->momentum());
+  HepMC3::FourVector temp_mom(part->momentum());
   temp_mom.setPz(pz);
   part->set_momentum(temp_mom);
 }
 
 void HepMC3Particle::SetM( double m ){
   //Can not set in GenEvent
-  cout << "Can not set mass in HepMC3Particle. Set e, px, py, pz instead" <<endl;
+  std::cout << "Can not set mass in HepMC3Particle. Set e, px, py, pz instead" <<std::endl;
 }
 
 void HepMC3Particle::SetPDGId ( int pdg ){
@@ -219,7 +217,7 @@ HEPParticleList* HepMC3Particle::GetDaughterList(HEPParticleList *list)
   if(!part->end_vertex()) //no daughters
     return list;
 
-  GenVertexPtr end = part->end_vertex();
+  HepMC3::GenVertexPtr end = part->end_vertex();
 
   //iterate over daughters
   for(unsigned int i=0; i<end->particles_out().size(); ++i) {
@@ -240,7 +238,7 @@ HEPParticleList* HepMC3Particle::GetMotherList(HEPParticleList *list)
    if(!part->production_vertex()) //no mothers
      return list;
 
-   GenVertexPtr prod = part->production_vertex();
+   HepMC3::GenVertexPtr prod = part->production_vertex();
 
    //iterate over daughters
    for(unsigned int i=0; i<prod->particles_in().size(); ++i) {
@@ -256,5 +254,6 @@ void HepMC3Particle::Streamer(TBuffer &)
 {
   // streamer class for ROOT compatibility
 }
+
+
 #endif
-}
