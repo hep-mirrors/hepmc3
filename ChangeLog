@@ -1,3 +1,14 @@
+  --------------------------  HepMC3.2.1 pre  --------------------------
+2020-01-30 Andrii Verbytskyi for HepMC
+        * Bugfix release.
+        * Explicit usage of namespaces.
+        * Added an option for explicit selection of packages for testing.
+        * Adjustments in the interfaces of Tauola/Photos/mc-tester
+        *   as a part of preparation to the new releases of these libraries
+        * Bugfix in VectorString attribute, thanks to Luke Pickering 
+        * and collaborators
+        * Improvement in the attribute parsing. Thanks to Peter Onyisi.
+        * Added an option to handle Python 3.9. Thanks to Mattias Ellert.
   --------------------------  HepMC3.2.0 --------------------------
 2019-11-27 Andrii Verbytskyi for HepMC
         * First release with Python bindings
