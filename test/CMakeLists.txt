@@ -79,6 +79,7 @@ set( HepMC_tests
         testIO3
         testIO6
         testReaderFactory1
+        testSingleVertexHepMC2
          )
 
 set( HepMC_root_tests 
