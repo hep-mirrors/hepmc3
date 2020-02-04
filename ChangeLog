@@ -9,6 +9,7 @@
         * and collaborators
         * Improvement in the attribute parsing. Thanks to Peter Onyisi.
         * Added an option to handle Python 3.9. Thanks to Mattias Ellert.
+        * Implemented special treatment of some broken HePMC2 events. Thanks to Christian Holm Christensen.
   --------------------------  HepMC3.2.0 --------------------------
 2019-11-27 Andrii Verbytskyi for HepMC
         * First release with Python bindings
