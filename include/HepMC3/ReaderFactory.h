@@ -18,15 +18,15 @@
 #include <string.h>
 
 namespace HepMC3 {
-std::shared_ptr<Reader> deduce_reader(std::istream &stream);	
+std::shared_ptr<Reader> deduce_reader(std::istream &stream);
 /** @brief THis function will deduce the type of input file based on the name/URL and it's content and will return appropriate Reader*/
 std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 {
     std::string libHepMC3rootIO="libHepMC3rootIO.so.3";
-#ifdef __darwin__
+#if defined(__darwin__) || defined(__APPLE__)
     libHepMC3rootIO="libHepMC3rootIO.dydl";
 #endif
-#ifdef WIN32
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
     libHepMC3rootIO="HepMC3rootIO.dll";
 #endif
     bool remote=false;
@@ -40,7 +40,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
     if (!remote)
     {
         struct stat   buffer;
-#ifdef WIN32
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
         if (!(stat (filename.c_str(), &buffer)==0))
 #else
         if (!(stat (filename.c_str(), &buffer)==0 && (S_ISFIFO(buffer.st_mode)|| S_ISREG(buffer.st_mode) || S_ISLNK(buffer.st_mode))))
@@ -57,7 +57,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
             file->close();
             return std::shared_ptr<Reader>(nullptr);
         }
-#ifndef WIN32
+#if defined(__linux__) || defined(__darwin__)|| defined(__APPLE__) || defined(__FreeBSD__) || defined(__sun)
         pipe=S_ISFIFO(buffer.st_mode);
         if (pipe) { printf("Info in deduce_reader: the file %s is a pipe\n",filename.c_str()); return deduce_reader(*file); }
 #endif

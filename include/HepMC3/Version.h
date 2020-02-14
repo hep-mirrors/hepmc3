@@ -22,7 +22,7 @@ inline std::string version() {
 }
 }
 
-#ifdef WIN32
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
 #define HEPMC3_DECLARE_READER_FILE(classname)    extern "C" {  __declspec(dllexport) classname *  __stdcall new ## classname ## file (const std::string &filename ) { return new classname (filename);  } }
 #define HEPMC3_DECLARE_READER_STREAM(classname)  extern "C" {  __declspec(dllexport) classname *  __stdcall new ## classname ## stream (std::istream & stream) { return new classname (stream);  } }
 #define HEPMC3_DECLARE_WRITER_FILE(classname)    extern "C" {  __declspec(dllexport) classname *  __stdcall new ## classname ## file (const std::string &filename, std::shared_ptr<GenRunInfo> run ) { return new classname (filename,run);  } }
