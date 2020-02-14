@@ -1,4 +1,9 @@
-find_program(DOXYGEN NAMES doxygen)
+find_package(Doxygen)
+if (DOXYGEN_FOUND)
+find_program(DOXYGEN NAMES doxygen doxygen.exe HINTS ${DOXYGEN_EXECUTABLE})
+else()
+find_program(DOXYGEN NAMES doxygen doxygen.exe )
+endif()
 if (DOXYGEN)
 message(STATUS "HepMC3 doc: doxygen found in ${DOXYGEN}. Generation of documentation is enabled.")
 add_custom_target( doxydoc ALL
