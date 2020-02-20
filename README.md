@@ -1,17 +1,21 @@
 # Introduction
 HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-memory navigation and the POD concept for the persistency. 
 
-# A Quick Start:
+# A Quick Start (applicable to recent versions):
 
+0. The minimal requirements for the  installation from sources are 
+ - C++ compiller with c++11 standard support
+ - cmake version 3.X (the version 2.8 can be partially functional)
+ 
 1. a)Checkout the HepMC from GIT repository:
  
   ```
   git clone https://gitlab.cern.ch/hepmc/HepMC3.git
   ```
-  or b) download a tarball 
+  or b) download the tarball with wget or any other tool
   ```
-  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.1.0.tar.gz
-  tar -xzf HepMC3-3.1.0.tar.gz  
+  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.0.tar.gz
+  tar -xzf HepMC3-3.2.0.tar.gz  
   ```
 2. Create a workspace area on which to perform the builds 
   ```
@@ -26,7 +30,7 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   ```
   or b)
   ```
-  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3-3.1.0 
+  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3-3.2.0 
   ```
   to disable compilation of search engine (enabled by default) add
   
@@ -124,7 +128,7 @@ and run cmake, e.g.
 ```
 mkdir -p myexamples
 cd myexamples
-cp -r /usr/share/doc/HepMC3-3.1.1/examples ./
+cp -r /usr/share/doc/HepMC3-3.2.0/examples ./
 cd examples
 cmake -DUSE_INSTALLED_HEPMC3=ON CMakeLists.txt
 make
