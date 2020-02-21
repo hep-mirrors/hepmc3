@@ -10,7 +10,7 @@ several years.
 GENERAL RULES
 -------------
 
-1) We follow HepMC 2 naming conventions:
+1) We follow HepMC2 naming conventions:
    - "snake_case" style of function and variable naming
    - "CamelCase" style of class naming
    - class/struct variables start from m_

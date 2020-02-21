@@ -113,8 +113,8 @@ if(CMAKE_THREAD_LIBS_INIT)
   target_link_libraries(testThreads1 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
 endif()
 endif()
-
-if(HEPMC3_ENABLE_ROOTIO)
+#So far the test with ROOT have issues on WIN32
+if(HEPMC3_ENABLE_ROOTIO and NOT WIN32)
 foreach ( test ${HepMC_root_tests} )
   hepmc_root_test( ${test} )
 endforeach ( test ${HepMC_root_tests} )
