@@ -114,7 +114,7 @@ if(CMAKE_THREAD_LIBS_INIT)
 endif()
 endif()
 #So far the test with ROOT have issues on WIN32
-if(HEPMC3_ENABLE_ROOTIO and NOT WIN32)
+if(HEPMC3_ENABLE_ROOTIO AND (NOT WIN32) )
 foreach ( test ${HepMC_root_tests} )
   hepmc_root_test( ${test} )
 endforeach ( test ${HepMC_root_tests} )
