@@ -3,7 +3,7 @@ import sys,os
 sys.path=update_path()
 
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
-import pyHepMC3.pyHepMC3.HepMC3 as hm
+from pyHepMC3 import HepMC3 as hm
 import random
 
 def test_Pythonization_docs():

@@ -1,4 +1,4 @@
-import pyHepMC3.pyHepMC3.HepMC3 as hm
+from pyHepMC3 import HepMC3 as hm
 import sys
 
 class Pythia8ToHepMC3:

@@ -4,8 +4,7 @@ sys.path=update_path()
 
 import math,random  
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
-import pyHepMC3
-import pyHepMC3.pyHepMC3.HepMC3 as hm
+from pyHepMC3 import HepMC3 as hm
 import io
 def test_Print():
     evt=hm.GenEvent(hm.Units.MomentumUnit.GEV,hm.Units.LengthUnit.CM)
