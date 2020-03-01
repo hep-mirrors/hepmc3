@@ -1,1 +1,1 @@
-from pyHepMC3 import *
+from .pyHepMC3 import *
