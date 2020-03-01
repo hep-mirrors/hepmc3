@@ -2,7 +2,7 @@ from  pyHepMC3TestUtils import update_path
 import sys,os
 sys.path=update_path()
 
-import pyHepMC3.pyHepMC3.HepMC3 as hm
+from pyHepMC3 import HepMC3 as hm
 import pythia8 as p8
 from Pythia8ToHepMC3 import Pythia8ToHepMC3 
 def test_Pythia8():

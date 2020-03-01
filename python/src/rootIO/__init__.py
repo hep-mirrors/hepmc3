@@ -1,1 +1,1 @@
-#from pyHepMC3rootIO import *
+from .pyHepMC3rootIO import *

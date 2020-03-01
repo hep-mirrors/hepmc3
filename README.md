@@ -208,8 +208,8 @@ python/src/__init__.py
 python/src/search/__init__.py
 python/src/rootIO/__init__.py
 pyHepMC3.egg-info.in
-pyHepMC3-rootIO.egg-info.in
-pyHepMC3-search.egg-info.in
+pyHepMC3.rootIO.egg-info.in
+pyHepMC3.search.egg-info.in
 ```
 The python/CMakeLists.txt file is used by cmake
 to build  the binding.
