@@ -85,6 +85,9 @@ cmake --build ./
 ```
 instead
 
+Please note that you have to have permissions to intall HepMC3 into the selected directory.
+
+
 8. To run the tests do
 ```
 ctest . 
@@ -118,6 +121,16 @@ In addition to that part of the bindings are implemented in the pyhepmc project
 
 https://github.com/HDembinski/pyhepmc.
 
+# Instalation troubleshooting
+
+The possible problems during the HepMC3 instllation can be caused by
+
+ - The used C++ compiller that does not support C++11.
+   The only solution is to use compiller with C++11 support
+ - The used cmake is too old. While the core library can be built with cmake 2.8, the python and ROOT extensions require cmake of higher versions.
+   A possible solution is to use a newer cmake or disable the python/ROOT if these are not needed.
+ 
+
 
 #  Examples
 HepMC3 is shipped with multiple examples. These can be compiled during installation as described above  
@@ -133,6 +146,8 @@ cd examples
 cmake -DUSE_INSTALLED_HEPMC3=ON CMakeLists.txt
 make
 ```
+Please note that in case the HepMC3 installation is not system-wide, the
+cmake will require an additional flag  -DHepMC3_DIR=/where/you/have/it to point to the HepMC3 installation directory.
 
 
 # Source package structure

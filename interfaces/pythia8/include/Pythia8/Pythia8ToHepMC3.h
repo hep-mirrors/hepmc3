@@ -39,9 +39,15 @@ public:
     }
 
     // Alternative method to convert Pythia events into HepMC ones
+#if defined(PYTHIA_VERSION_INTEGER) && (PYTHIA_VERSION_INTEGER>8299) 
+    bool fill_next_event( Pythia8::Event& pyev, GenEvent* evt,
+                          int ievnum = -1, const Pythia8::Info* pyinfo = 0,
+                         Pythia8::Settings* pyset = 0)
+#else
     bool fill_next_event( Pythia8::Event& pyev, GenEvent* evt,
                           int ievnum = -1, Pythia8::Info* pyinfo = 0,
                           Pythia8::Settings* pyset = 0)
+#endif
     {
 
         // 1. Error if no event passed.
