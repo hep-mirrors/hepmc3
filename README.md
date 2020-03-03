@@ -121,7 +121,16 @@ In addition to that part of the bindings are implemented in the pyhepmc project
 
 https://github.com/HDembinski/pyhepmc.
 
-# Instalation troubleshooting
+Please note that the installation path for the Python mudules can be tweaked with 
+the cmake variables
+```
+HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}
+```
+By default these variables are set to the path of the used installation of python.
+
+
+
+# Installation troubleshooting
 
 The possible problems during the HepMC3 instllation can be caused by
 
