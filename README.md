@@ -32,13 +32,20 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   ```
   cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3-3.2.0 
   ```
-  to disable compilation of search engine (enabled by default) add
+  To disable compilation of search engine (enabled by default) add
   
   ```
   -DHEPMC3_ENABLE_SEARCH=OFF
   ```
   Please note, in case of using the search engine, the easiest way to link against 
   HepMC3search could be to use static version of the library.
+
+  To disable compilation of python bindings (enabled by default) add
+  
+  ```
+  -HEPMC3_ENABLE_PYTHON=OFF
+  ```
+
   
 4. In order to build with ROOTIO put the following flags and define LD_LIBRARY_PATH: 
   ```
