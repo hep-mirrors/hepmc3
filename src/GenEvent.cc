@@ -74,7 +74,7 @@ GenEvent::GenEvent(const GenEvent&e) {
 
 GenEvent::~GenEvent() {
     for ( std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator attm=m_attributes.begin(); attm!=m_attributes.end(); ++attm)
-        for ( std::map<int, std::shared_ptr<Attribute> >::iterator att=attm->second.begin(); att!=attm->second.end(); ++att) att->second->m_event = nullptr;
+        if (attm) for ( std::map<int, std::shared_ptr<Attribute> >::iterator att=attm->second.begin(); att!=attm->second.end(); ++att) att->second->m_event = nullptr;
 
     for  ( std::vector<GenVertexPtr>::iterator v=m_vertices.begin(); v!=m_vertices.end(); ++v ) if (*v)  if ((*v)->m_event==this) (*v)->m_event=nullptr;
     for  ( std::vector<GenParticlePtr>::iterator p=m_particles.begin(); p!=m_particles.end(); ++p ) if (*p)  if ((*p)->m_event==this)  (*p)->m_event=nullptr;
