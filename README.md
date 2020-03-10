@@ -43,7 +43,7 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   To disable compilation of python bindings (enabled by default) add
   
   ```
-  -HEPMC3_ENABLE_PYTHON=OFF
+  -DHEPMC3_ENABLE_PYTHON=OFF
   ```
 
   
