@@ -128,13 +128,21 @@ In addition to that part of the bindings are implemented in the pyhepmc project
 
 https://github.com/HDembinski/pyhepmc.
 
-Please note that the installation path for the Python mudules can be tweaked with 
+Please note that 
+10a
+The installation path for the Python mudules can be tweaked with 
 the cmake variables
 ```
 HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}
 ```
 By default these variables are set to the path of the used installation of python.
+10b
 
+The PyPy support is experimental. To build the bindings against pypy-c library use 'pypy<version>' 
+for the HEPMC3_PYTHON_VERSIONS option, e.g.
+```
+-DHEPMC3_PYTHON_VERSIONS=pypy2
+```
 
 
 # Installation troubleshooting

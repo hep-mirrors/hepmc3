@@ -137,8 +137,29 @@ endif()
 endif()
 
 macro(bindings ver verminor)
-SET( Python_VERSION_MAJOR 0)
-SET( Python_VERSION_MINOR 0)
+SET( Python_VERSION_MAJOR "0")
+SET( Python_VERSION_MINOR "0")
+
+if (${ver} MATCHES pypy* )
+unset(Python_FOUND CACHE)
+unset(Python_VERSION CACHE)
+unset(Python_Interpreter_FOUND CACHE)
+unset(Python_EXECUTABLE CACHE)
+unset(Python_INCLUDE_DIR CACHE)
+unset(Python_INCLUDE_DIRS CACHE)
+unset(Python_LIBRARIES CACHE)
+string(REPLACE "pypy" "" forpypy "${ver}")
+find_package(PyPy  ${forpypy})
+set(Python_EXECUTABLE ${PyPy_EXE})
+set(Python_Interpreter ${PyPy_EXE})
+set(Python_VERSION pypy${PyPy_Python_VERSION})
+set(Python_VERSION_MAJOR pypy${PyPy_Python_VERSION_MAJOR})
+set(Python_VERSION_MINOR     ${PyPy_Python_VERSION_MINOR})
+set(Python_LIBRARIES         ${PyPy_LIBRARIES})
+set(Python_INCLUDE_DIRS      ${PyPy_INCLUDE_DIRS})
+set(Python_SITEARCH          ${PyPy_SITEARCH})
+endif()
+
 if (${ver} STREQUAL 2)
 unset(Python_FOUND CACHE)
 unset(Python_VERSION CACHE)
@@ -153,6 +174,7 @@ else()
 find_package (Python ${ver}.${verminor} EXACT COMPONENTS  Development Interpreter)
 endif()
 endif()
+
 if (${ver} STREQUAL 3)
 unset(Python3_FOUND CACHE)
 unset(Python3_VERSION CACHE)
@@ -177,28 +199,47 @@ SET( Python_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
 endif()
 endif()
 
-
 if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Python_VERSION_MAJOR} STREQUAL ${ver} AND ${verminor} STREQUAL "X")  OR "${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}" STREQUAL "${ver}.${verminor}" ))
 message(STATUS "HepMC3 python: Python verson ${ver}.${verminor} found in ${Python_EXECUTABLE}. Python bindings generation is possible.")
+
+if (${ver} MATCHES pypy* )
+add_library(pyHepMC3${Python_VERSION} MODULE  ${BN}   )
+set_target_properties(pyHepMC3${Python_VERSION} PROPERTIES PREFIX ""  OUTPUT_NAME pyHepMC3.pypy-${PyPy_PyPy_VERSION_MAJOR}${PyPy_PyPy_VERSION_MINOR})
+if(ROOT_FOUND)
+add_library(pyHepMC3rootIO${Python_VERSION} MODULE  ${BNrootIO} )
+set_target_properties(pyHepMC3rootIO${Python_VERSION} PROPERTIES PREFIX "" OUTPUT_NAME pyHepMC3rootIO.pypy-${PyPy_PyPy_VERSION_MAJOR}${PyPy_PyPy_VERSION_MINOR})
+endif()
+if(HEPMC3_ENABLE_SEARCH)
+add_library(pyHepMC3search${Python_VERSION} MODULE  ${BNsearch} )
+set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES PREFIX "" OUTPUT_NAME pyHepMC3search.pypy-${PyPy_PyPy_VERSION_MAJOR}${PyPy_PyPy_VERSION_MINOR})
+endif()
+endif()
+
 if (${ver} STREQUAL 2)
 Python_add_library(pyHepMC3${Python_VERSION} MODULE  ${BN}   )
+set_target_properties(pyHepMC3${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3  )
 if(ROOT_FOUND)
 Python_add_library(pyHepMC3rootIO${Python_VERSION} MODULE  ${BNrootIO}   )
+set_target_properties(pyHepMC3rootIO${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3rootIO  )
 endif()
 if(HEPMC3_ENABLE_SEARCH)
 Python_add_library(pyHepMC3search${Python_VERSION} MODULE  ${BNsearch}   )
+set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3search  )
 endif()
 endif()
 if (${ver} STREQUAL 3)
-Python3_add_library(pyHepMC3${Python_VERSION} MODULE  ${BN}   )
+Python3_add_library(pyHepMC3${Python_VERSION} MODULE  ${BN} )
+set_target_properties(pyHepMC3${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3  )
 if(ROOT_FOUND)
-Python3_add_library(pyHepMC3rootIO${Python_VERSION} MODULE  ${BNrootIO}   )
+Python3_add_library(pyHepMC3rootIO${Python_VERSION} MODULE  ${BNrootIO} )
+set_target_properties(pyHepMC3rootIO${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3rootIO  )
 endif()
 if(HEPMC3_ENABLE_SEARCH)
-Python3_add_library(pyHepMC3search${Python_VERSION} MODULE  ${BNsearch}   )
+Python3_add_library(pyHepMC3search${Python_VERSION} MODULE  ${BNsearch})
+set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3search  )
 endif()
 endif()
-set_target_properties(pyHepMC3${Python_VERSION} PROPERTIES OUTPUT_NAME pyHepMC3 
+set_target_properties(pyHepMC3${Python_VERSION} PROPERTIES 
                                                            LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:> 
                                                            MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:> 
                                                            ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:>)
@@ -208,7 +249,7 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
 endif()
 target_include_directories(pyHepMC3${Python_VERSION} PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR} )
 if(ROOT_FOUND)
-set_target_properties(pyHepMC3rootIO${Python_VERSION} PROPERTIES OUTPUT_NAME pyHepMC3rootIO 
+set_target_properties(pyHepMC3rootIO${Python_VERSION} PROPERTIES
                                                                  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:> 
                                                                  MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:> 
                                                                  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:>)
@@ -220,7 +261,7 @@ target_include_directories(pyHepMC3rootIO${Python_VERSION} PUBLIC ${Python_INCLU
 
 endif()
 if(HEPMC3_ENABLE_SEARCH)
-set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES OUTPUT_NAME pyHepMC3search 
+set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES 
                                                                  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:> 
                                                                  MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:> 
                                                                  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:>)
