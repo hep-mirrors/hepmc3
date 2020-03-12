@@ -245,7 +245,8 @@ int main(int argc, char** argv)
         if (evt.event_number()>last_event_number) continue;
         evt.set_run_info(input_file->run_info());
         //Note the difference between ROOT and Ascii readers. The former read GenRunInfo before first event and the later at the same time as first event.
-        if (!ignore_writer) 
+        if (!ignore_writer)
+        { 
         if (output_file)
         { 
         output_file->write_event(evt); 
@@ -253,6 +254,7 @@ int main(int argc, char** argv)
         else 
         { 
          Print::content(evt);
+        }
         }
         evt.clear();
         ++events_parsed;
