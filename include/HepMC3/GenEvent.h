@@ -208,15 +208,15 @@ public:
     void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0) {
         ///Disallow empty strings
         if (name.length()==0) return;     
+        if (!att)  return;
         std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-        if ( att ) {
-            m_attributes[name][id] = att;
-            att->m_event = this;
-            if ( id > 0 && id <= int(particles().size()) )
-                att->m_particle = particles()[id - 1];
-            if ( id < 0 && -id <= int(vertices().size()) )
-                att->m_vertex = vertices()[-id - 1];
-        }
+        if (m_attributes.count(name)==0) m_attributes[name]=std::map<int, std::shared_ptr<Attribute> >();
+        m_attributes[name][id] = att;
+        att->m_event = this;
+        if ( id > 0 && id <= int(particles().size()) )
+            att->m_particle = particles()[id - 1];
+        if ( id < 0 && -id <= int(vertices().size()) )
+            att->m_vertex = vertices()[-id - 1];
     }
 
     /// @brief Remove attribute
