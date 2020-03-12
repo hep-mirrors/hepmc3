@@ -2,9 +2,11 @@
 2020-01-30 Andrii Verbytskyi for HepMC
         * Bugfix release.
         * Explicit usage of namespaces.
+        * Disallow empty lines for the attribute names. 
         * Added an option for explicit selection of packages for testing.
         * Adjustments in the interfaces of Tauola/Photos/mc-tester
         *   as a part of preparation to the new releases of these libraries
+        * Experimental support for Python modulescompilation with pypy.
         * Bugfix in VectorString attribute, thanks to Luke Pickering 
         * and collaborators
         * Improvement in the attribute parsing. Thanks to Peter Onyisi.

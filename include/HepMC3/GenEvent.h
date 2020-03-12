@@ -206,6 +206,8 @@ public:
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0) {
+        ///Disallow empty strings
+        if (name.length()==0) return;     
         std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
         if ( att ) {
             m_attributes[name][id] = att;
