@@ -1,5 +1,5 @@
-  --------------------------  HepMC3.2.1 pre  --------------------------
-2020-01-30 Andrii Verbytskyi for HepMC
+  --------------------------  HepMC3.2.1 --------------------------
+2020-03-17 Andrii Verbytskyi for HepMC
         * Bugfix release.
         * Explicit usage of namespaces.
         * Disallow empty lines for the attribute names. 
