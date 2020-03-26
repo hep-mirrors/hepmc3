@@ -1,4 +1,4 @@
-from  pyHepMC3TestUtils import update_path
+from  pyHepMC3TestUtils import update_path,python_label
 import sys,os
 sys.path=update_path()
 
@@ -17,7 +17,7 @@ def test_Pythia8():
  pythia.init()
  p8tohm=Pythia8ToHepMC3 ()
  p8tohm.m_store_pdf=True
- out=hm.WriterAscii("test_Pythia.hepmc")
+ out=hm.WriterAscii(python_label()+"test_Pythia.hepmc")
  for iEvent in range(0, 100):
     if not pythia.next(): continue
     nCharged = 0

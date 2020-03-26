@@ -1,4 +1,4 @@
-from  pyHepMC3TestUtils import update_path
+from  pyHepMC3TestUtils import update_path,python_label
 import sys,os
 sys.path=update_path()
 
@@ -83,7 +83,7 @@ def test_Print():
     for ip in evt.particles():
       print ( hm.Print.line(ip,True))
     
-    xout1=hm.WriterAscii("testBoost1.out")
+    xout1=hm.WriterAscii(python_label()+"testBoost1.out")
     xout1.set_precision(6)
     xout1.write_event(evt)
     xout1.close()
@@ -96,11 +96,11 @@ def test_Print():
       print ( hm.Print.line(ip,True))
     for ip in evt.particles():
       print ( hm.Print.line(ip,True))
-    xout2=hm.WriterAscii("testBoost2.out")
+    xout2=hm.WriterAscii(python_label()+"testBoost2.out")
     xout2.set_precision(6)
     xout2.write_event(evt)
     xout2.close()
-    assert (COMPARE_ASCII_FILES("testBoost1.out","testBoost2.out")==0)
+    assert (COMPARE_ASCII_FILES(python_label()+"testBoost1.out",python_label()+"testBoost2.out")==0)
     evt.clear()
     return 0
 if __name__ == "__main__":
