@@ -71,10 +71,12 @@ endif()
 
 
 
-
-
+#Newest compillers want PIC
+SET(OLD_CMAKE_POSITION_INDEPENDENT_CODE ${CMAKE_POSITION_INDEPENDENT_CODE})
+SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 include(CheckLanguage)
 check_language(Fortran)
+SET(CMAKE_POSITION_INDEPENDENT_CODE ${OLD_CMAKE_POSITION_INDEPENDENT_CODE})
 if (CMAKE_Fortran_COMPILER)
 enable_language(Fortran)
 get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
