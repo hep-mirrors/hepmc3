@@ -241,7 +241,7 @@ public:
         EvaluatorPtr functor = m_internal;
         return [value, functor](ConstGenParticlePtr input)->bool{
             Feature_type local = (*functor)(input);
-            return std::abs(local - value) <= ((::abs(local) < std::abs(value))? std::abs(value) : ::abs(local)) * std::numeric_limits<double>::epsilon();
+            return std::abs(local - value) <  std::numeric_limits<double>::epsilon();
         };
     }
 
@@ -293,7 +293,7 @@ public:
         EvaluatorPtr functor = m_internal;
         return [value, functor](ConstGenParticlePtr input)->bool{
             Feature_type local = (*functor)(input);
-            return std::abs(local - value) <=  std::numeric_limits<Feature_type>::epsilon();
+            return std::abs(local - value) <  std::numeric_limits<Feature_type>::epsilon();
         };
     }
 
