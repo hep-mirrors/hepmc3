@@ -90,7 +90,7 @@ set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -Mpreprocess -Mextend -Mnosave
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "SunPro")
 set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS}  ")
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "XL")
-set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -qfixed=256  -qnosave ")
+set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -qfixed=256  -qnosave -qextname")
 elseif()
 message(STATUS "HepMC3 examples: Don't know how to set Fortran FLAGS for  ${Fortran_COMPILER_NAME} with ID ${Fortran_COMPILER_ID}")
 endif ()
