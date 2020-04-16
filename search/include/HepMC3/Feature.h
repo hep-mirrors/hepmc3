@@ -293,7 +293,7 @@ public:
         EvaluatorPtr functor = m_internal;
         return [value, functor](ConstGenParticlePtr input)->bool{
             Feature_type local = (*functor)(input);
-            return std::abs(local - value) <  std::numeric_limits<Feature_type>::epsilon();
+            return std::less_equal<Feature_type>{}(fabs(local - value) ,  std::numeric_limits<Feature_type>::epsilon());
         };
     }
 
