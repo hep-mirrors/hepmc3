@@ -123,6 +123,7 @@ if(HEPMC3_ENABLE_ROOTIO)
   set (ROOT_FIND_COMPONENTS Core RIO Tree)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
   list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
+  set(ROOT_CXX_FLAGS_BEFORE_ROOT "${ROOT_CXX_FLAGS}")
   find_package(ROOT REQUIRED COMPONENTS Core RIO Tree)
   set(CMAKE_CXX_FLAGS_BEFORE_ROOT "${CMAKE_CXX_FLAGS}")
   set(CMAKE_C_FLAGS_BEFORE_ROOT "${CMAKE_C_FLAGS}")
@@ -131,6 +132,10 @@ if(HEPMC3_ENABLE_ROOTIO)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_BEFORE_ROOT}")
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS_BEFORE_ROOT}")
   set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS_BEFORE_ROOT}")
+  if (ROOT_CXX_FLAGS_BEFORE_ROOT)
+  message(STATUS "Manualy set ROOT flags ${ROOT_CXX_FLAGS_BEFORE_ROOT}")
+  set( ROOT_CXX_FLAGS "${ROOT_CXX_FLAGS_BEFORE_ROOT}")
+  endif()
   message(STATUS "ROOT_FOUND:     ${ROOT_FOUND}")
   message(STATUS "ROOT_USE_FILE ${ROOT_USE_FILE}")
   message(STATUS "ROOT includes:  ${ROOT_INCLUDE_DIRS}")
@@ -217,33 +222,40 @@ endif()
 install(TARGETS HepMC3_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 endif()
 
-configure_file(HepMC3-config.in  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-config )
-
-
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
-
-install(FILES  ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/HepMC3-config  DESTINATION  ${CMAKE_INSTALL_BINDIR} COMPONENT libs   PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ  GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 # Generate config CMake files to be used by other projects
 #
 
 include(CMakePackageConfigHelpers)
 
-set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
-set(LIB_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
 set(INTERFACES_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/interfaces)
 set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/cmake)
 
-configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake
-                                 INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
-                                 PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR
-                                           INTERFACES_INSTALL_DIR)
+configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake
+  INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
+  PATH_VARS CMAKE_INSTALL_INCLUDEDIR
+            CMAKE_INSTALL_LIBDIR
+            HEPMC3_ROOTIO_INSTALL_LIBDIR
+            INTERFACES_INSTALL_DIR)
 
 write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake COMPATIBILITY SameMajorVersion)
+
+configure_package_config_file(HepMC3-config.in
+  ${CMAKE_CURRENT_BINARY_DIR}/outputs/bin/HepMC3-config
+  INSTALL_DESTINATION ${CMAKE_INSTALL_BINDIR}
+  PATH_VARS CMAKE_INSTALL_INCLUDEDIR
+            CMAKE_INSTALL_LIBDIR
+            HEPMC3_ROOTIO_INSTALL_LIBDIR)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake
         DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/bin/HepMC3-config
+        DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 ########################################################################
 ## Optional packages
