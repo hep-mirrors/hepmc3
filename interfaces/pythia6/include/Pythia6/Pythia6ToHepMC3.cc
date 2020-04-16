@@ -277,7 +277,7 @@ extern "C" {
             return 1;
         }
         if (hepmc3_gWriters[position].second->weights().size()<pos) {
-            printf("Warning in %s: Event has no weight with index %i does not exist, at %i\n",__FUNCTION__,position,pos);
+            printf("Warning in %s: Event has no weight with index %i does not exist, %i\n",__FUNCTION__,pos);
             return 2;
         }
         hepmc3_gWriters[position].second->weights()[pos]=val;

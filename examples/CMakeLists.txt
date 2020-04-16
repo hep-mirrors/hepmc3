@@ -71,26 +71,22 @@ endif()
 
 
 
-#Newest compillers want PIC
-SET(OLD_CMAKE_POSITION_INDEPENDENT_CODE ${CMAKE_POSITION_INDEPENDENT_CODE})
-SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+
 include(CheckLanguage)
 check_language(Fortran)
-SET(CMAKE_POSITION_INDEPENDENT_CODE ${OLD_CMAKE_POSITION_INDEPENDENT_CODE})
 if (CMAKE_Fortran_COMPILER)
 enable_language(Fortran)
 get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
-message(STATUS "HepMC3 examples: Fortran compiler found, Pythia6 example enabled. Fortran_COMPILER_NAME=${Fortran_COMPILER_NAME}  CMAKE_Fortran_COMPILER_ID=${CMAKE_Fortran_COMPILER_ID}")
+message(STATUS "HepMC3 examples: Fortran compiler found, Pythia6 example enabled. ${Fortran_COMPILER_NAME}")
 if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
 set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -fno-automatic -fno-backslash -ffixed-line-length-132")
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "Intel")
 set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -fno-automatic -fno-backslash -extend-source 132")
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "PGI")
-set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -Mpreprocess -Mextend -Mnosave -Mnofree")
+set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS}  ")
 elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "SunPro")
 set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS}  ")
-elseif (CMAKE_Fortran_COMPILER_ID STREQUAL "XL")
-set( CMAKE_Fortran_FLAGS  "${CMAKE_Fortran_FLAGS} -qfixed=256  -qnosave -qextname")
 elseif()
 message(STATUS "HepMC3 examples: Don't know how to set Fortran FLAGS for  ${Fortran_COMPILER_NAME} with ID ${Fortran_COMPILER_ID}")
 endif ()

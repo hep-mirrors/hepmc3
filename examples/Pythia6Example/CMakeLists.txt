@@ -9,7 +9,6 @@ add_executable(pythia6_example.exe ${CMAKE_CURRENT_SOURCE_DIR}/main63.f ${CMAKE_
 LINK_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../outputs/lib64/  ${CMAKE_CURRENT_SOURCE_DIR}/../outputs/lib/ )
 target_link_libraries(pythia6_example.exe  HepMC3)
 set_target_properties(pythia6_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
-set_target_properties(pythia6_example.exe PROPERTIES LINKER_LANGUAGE Fortran)
 if (USE_INSTALLED_HEPMC3)
 install(TARGETS pythia6_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()

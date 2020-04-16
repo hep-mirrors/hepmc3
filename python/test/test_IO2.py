@@ -1,4 +1,4 @@
-from  pyHepMC3TestUtils import update_path,python_label
+from  pyHepMC3TestUtils import update_path
 import sys,os
 sys.path=update_path()
 
@@ -10,7 +10,7 @@ print(dir(hmrootIO))
 def test_IO2():
  inputA=hm.ReaderAsciiHepMC2("inputIO2.hepmc")
  if inputA.failed(): sys.exit(1)
- outputA=hmrootIO.WriterRootTree  (python_label()+"frominputIO2.root")
+ outputA=hmrootIO.WriterRootTree  ("frominputIO2.root")
  if outputA.failed(): sys.exit(2)
  while  not inputA.failed():
         evt=hm.GenEvent()
@@ -23,9 +23,9 @@ def test_IO2():
  inputA.close()
  outputA.close()
  
- inputB=hmrootIO.ReaderRootTree (python_label()+"frominputIO2.root")
+ inputB=hmrootIO.ReaderRootTree ("frominputIO2.root")
  if inputB.failed(): sys.exit(3)
- outputB=hm.WriterAsciiHepMC2(python_label()+"fromfrominputIO2.hepmc")
+ outputB=hm.WriterAsciiHepMC2("fromfrominputIO2.hepmc")
  if outputB.failed(): sys.exit(4)
  while not inputB.failed():
         evt=hm.GenEvent()
@@ -37,7 +37,7 @@ def test_IO2():
         evt.clear()    
  inputB.close()
  outputB.close()
- assert(0 == COMPARE_ASCII_FILES(python_label()+"fromfrominputIO2.hepmc","inputIO2.hepmc"))
+ assert(0 == COMPARE_ASCII_FILES("fromfrominputIO2.hepmc","inputIO2.hepmc"))
  return 0
 if __name__ == "__main__":
     result=1

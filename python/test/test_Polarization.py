@@ -15,7 +15,7 @@
 #  7  !d!     1      1    5,5   -2.445   28.816    6.082   29.552    0.010
 #  8  !u~!    1     -2    5,5    3.962  -49.498  -26.687   56.373    0.006
 
-from  pyHepMC3TestUtils import update_path,python_label
+from  pyHepMC3TestUtils import update_path
 import sys,os
 sys.path=update_path()
 
@@ -24,10 +24,10 @@ from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
 from pyHepMC3 import HepMC3 as hm
 
 def test_Polarization():
-    xout1=hm.WriterAscii (python_label()+"testPolarization1.dat")
-    xout2=hm.WriterAscii(python_label()+"testPolarization2.dat")
-    xout4=hm.WriterAsciiHepMC2( python_label()+"testPolarization4.out" )
-    xout5=hm.WriterAscii( python_label()+"testPolarization5.out" )
+    xout1=hm.WriterAscii ("testPolarization1.dat")
+    xout2=hm.WriterAscii("testPolarization2.dat")
+    xout4=hm.WriterAsciiHepMC2( "testPolarization4.out" )
+    xout5=hm.WriterAscii( "testPolarization5.out" )
 
     # build the graph, which will look like
     #                       p7                   #
@@ -138,7 +138,7 @@ def test_Polarization():
 # contained in those vertices
     evt.clear()
 
-    assert((COMPARE_ASCII_FILES(python_label()+"testPolarization1.dat",python_label()+"testPolarization5.out")==0) and (COMPARE_ASCII_FILES(python_label()+"testPolarization1.dat",python_label()+"testPolarization2.dat")!=0))
+    assert((COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization5.out")==0) and (COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization2.dat")!=0))
     return 0
 if __name__ == "__main__":
     result=1

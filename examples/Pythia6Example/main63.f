@@ -43,7 +43,7 @@ C...HepMC3
       INTEGER          NEVHEP,NHEP,ISTHEP,IDHEP,JMOHEP,JDAHEP
       DOUBLE PRECISION PHEP,VHEP
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
-      include "Pythia6ToHepMC3.inc"
+include "Pythia6ToHepMC3.inc"
       INTEGER OUTID(2), HEPMC3STATUS
 
 C-----------------------------------------------------------------
