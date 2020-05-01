@@ -50,6 +50,9 @@ message(STATUS "HepMC3: HEPMC3_INSTALL_INTERFACES    ${HEPMC3_INSTALL_INTERFACES
 message(STATUS "HepMC3: HEPMC3_ROOTIO_INSTALL_LIBDIR ${HEPMC3_ROOTIO_INSTALL_LIBDIR}")
 
 if(HEPMC3_ENABLE_ROOTIO)
+  message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO is enabled. This requires CMake of version 3 or higher, depending on the used ROOT version.")
+  message(STATUS "HepMC3: If the configuration fails, please use a newer CMake or disable the ROOT I/O interface setting -DHEPMC3_ENABLE_ROOTIOLBOOL=OFF")
+  cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
   if( EXISTS "$ENV{ROOTSYS}" )
     message(STATUS "HepMC3: ROOTSYS provided $ENV{ROOTSYS}")
   elseif(ROOT_DIR)
