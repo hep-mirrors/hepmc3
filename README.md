@@ -5,7 +5,7 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
 
 0. The minimal requirements for the  installation from sources are 
  - C++ compiller with c++11 standard support
- - cmake version 3.X (the version 2.8 can be partially functional)
+ - cmake version 3.X.  The  support for version 2.8 is provided only for the core and search libraries.  It will be completely removed in the future versions.
  
 1. a)Checkout the HepMC from GIT repository:
  
@@ -45,7 +45,7 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   ```
   -DHEPMC3_ENABLE_PYTHON=OFF
   ```
-
+   Please note that on some RedHat-like systems the executable of cmake version 3 is called cmake3.
   
 4. In order to build with ROOTIO put the following flags and define LD_LIBRARY_PATH: 
   ```
