@@ -1,6 +1,6 @@
 #project(pyHepMC3 CXX)
 #Should be fixed 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 option(USE_INSTALLED_HEPMC3 "Use HepMC3 bindings as a standalone package" OFF)
@@ -314,7 +314,7 @@ add_custom_target(
 endif()
 endif()
 endif()
-message(STATUS "HepMC3 python: Tweek HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings.") 
+message(STATUS "HepMC3 python: Tweak HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings.") 
 if (WIN32)
 if (NOT HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
 set (HEPMC3_Python_SITEARCH ${CMAKE_INSTALL_LIBDIR}/${Python_VERSION})
@@ -323,6 +323,7 @@ else()
 set (HEPMC3_Python_SITEARCH ${HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}})
 message(STATUS "HepMC3 python: HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} is set to to ${HEPMC3_Python_SITEARCH}")
 endif()
+
 else()
 if (NOT HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
 set (HEPMC3_Python_SITEARCH ${Python_SITEARCH})
@@ -332,8 +333,11 @@ set (HEPMC3_Python_SITEARCH ${HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Pyt
 message(STATUS "HepMC3 python: HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} is set to to ${HEPMC3_Python_SITEARCH}")
 endif()
 endif()
-
-
+if(NOT (HEPMC3_Python_SITEARCH  MATCHES "^${CMAKE_INSTALL_PREFIX}(.*)"))
+message(STATUS "HepMC3 python: WARNING: The installation path of the python modules is HEPMC3_Python_SITEARCH=${HEPMC3_Python_SITEARCH}.") 
+message(STATUS "HepMC3 python: WARNING: The installation path of the python modules is outside of the global instalation path CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}.") 
+message(STATUS "HepMC3 python: WARNING: You can use the HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} variable to set the desired installation path for the Python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} modules.") 
+endif()
 
 install(TARGETS pyHepMC3${Python_VERSION} DESTINATION ${HEPMC3_Python_SITEARCH}/pyHepMC3  COMPONENT python)
 install(FILES src/__init__.py  DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3 COMPONENT python)
