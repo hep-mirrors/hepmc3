@@ -49,10 +49,33 @@ message(STATUS "HepMC3: HEPMC3_BUILD_EXAMPLES        ${HEPMC3_BUILD_EXAMPLES}")
 message(STATUS "HepMC3: HEPMC3_INSTALL_INTERFACES    ${HEPMC3_INSTALL_INTERFACES}")
 message(STATUS "HepMC3: HEPMC3_ROOTIO_INSTALL_LIBDIR ${HEPMC3_ROOTIO_INSTALL_LIBDIR}")
 
+
+
+if(${CMAKE_VERSION} VERSION_LESS "3.0.0")
+  message(STATUS "HepMC3: You are using CMake of version<3.0.0. The support for old CMake versions will be removed soon.")
+if(HEPMC3_ENABLE_TEST)
+  message(STATUS "HepMC3: HEPMC3_ENABLE_TEST is enabled. This requires CMake of version 3.0.0 or higher")
+  message(STATUS "HepMC3: Please use a newer CMake or disable the tests setting -DHEPMC3_ENABLE_TEST:BOOL=OFF")
+endif()
+if(HEPMC3_ENABLE_PYTHON)
+  message(STATUS "HepMC3: HEPMC3_ENABLE_PYTHON is enabled. This requires CMake of version 3.0.0 or higher.")
+  message(STATUS "HepMC3: Please use a newer CMake or disable the python bindings setting -DHEPMC3_ENABLE_PYTHON:BOOL=OFF")
+endif()
 if(HEPMC3_ENABLE_ROOTIO)
   message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO is enabled. This requires CMake of version 3 or higher, depending on the used ROOT version.")
-  message(STATUS "HepMC3: If the configuration fails, please use a newer CMake or disable the ROOT I/O interface setting -DHEPMC3_ENABLE_ROOTIOLBOOL=OFF")
-  cmake_minimum_required(VERSION 3.0.0 FATAL_ERROR)
+  message(STATUS "HepMC3: Please use a newer CMake or disable the ROOT I/O interface setting -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF")
+endif()
+if(HEPMC3_BUILD_EXAMPLES)
+  message(STATUS "HepMC3: HEPMC3_BUILD_EXAMPLES is enabled. This requires CMake of version 3 or higher.")
+  message(STATUS "HepMC3: Please use a newer CMake or disable the building of examples setting -DHEPMC3_BUILD_EXAMPLES:BOOL=OFF")
+endif()
+if(HEPMC3_ENABLE_TEST OR HEPMC3_ENABLE_PYTHON OR HEPMC3_ENABLE_ROOTIO OR HEPMC3_BUILD_EXAMPLES)
+  message(FATAL_ERROR "HepMC3: The CMake is too old for the selected configuration.  Exit.")
+endif()
+endif()
+
+
+if(HEPMC3_ENABLE_ROOTIO)
   if( EXISTS "$ENV{ROOTSYS}" )
     message(STATUS "HepMC3: ROOTSYS provided $ENV{ROOTSYS}")
   elseif(ROOT_DIR)
@@ -203,10 +226,18 @@ set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_library(HepMC3 SHARED ${hepmc3core_sources})
 target_include_directories(HepMC3 PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
+if(${CMAKE_VERSION} VERSION_LESS "3.0.0")
+#Problems with generator expressions for cmake2
+set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
+                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
+                                               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
+                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+else()
 set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+endif()
 if (UNIX)
 target_link_libraries(HepMC3 PRIVATE dl)
 endif()
@@ -217,11 +248,18 @@ if (HEPMC3_BUILD_STATIC_LIBS)
 add_library(HepMC3_static STATIC  ${hepmc3core_sources})
 target_include_directories(HepMC3_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_compile_definitions(HepMC3_static PRIVATE NO_DECLSPEC_hepevtptr)
-
+if(${CMAKE_VERSION} VERSION_LESS "3.0.0")
+#Problems with generator expressions for cmake2
+set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
+                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/ 
+                                               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
+                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+else()
 set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
+endif()
 if (UNIX)
 target_link_libraries(HepMC3_static PRIVATE dl)
 endif()
@@ -247,7 +285,7 @@ configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in
             HEPMC3_ROOTIO_INSTALL_LIBDIR
             INTERFACES_INSTALL_DIR)
 
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake COMPATIBILITY SameMajorVersion)
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake COMPATIBILITY SameMajorVersion VERSION ${PROJECT_VERSION})
 
 configure_package_config_file(HepMC3-config.in
   ${CMAKE_CURRENT_BINARY_DIR}/outputs/bin/HepMC3-config
