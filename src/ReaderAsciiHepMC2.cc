@@ -533,7 +533,7 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
         int flowvalue=atoi(cursor);
         flows[flowindex]=flowvalue;
     }
-    if (m_options.find("particle_flows_are_separated")!=m_options.end())
+    if (m_options.find("particle_flows_are_separated")==m_options.end())
     {
         std::vector<int> vectorflows;
         for (auto f: flows) vectorflows.push_back(f.second);
