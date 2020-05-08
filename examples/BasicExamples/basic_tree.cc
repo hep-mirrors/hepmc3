@@ -13,7 +13,6 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/Print.h"
 #include "HepMC3/Selector.h"
-#include "HepMC3/Relatives.h"
 
 using namespace HepMC3;
 
@@ -86,44 +85,6 @@ int main() {
     v4->add_particle_out(p7);
     v4->add_particle_out(p8);
 
-/* Unfortunatelly this code is not portable. TODO: make it portable.
-    //
-    // Example of use of the search engine
-    //
-
-    // 1)
-    std::cout << std::endl << "Find all stable particles: " << std::endl;
-
-    for(ConstGenParticlePtr p: applyFilter(StandardSelector::STATUS == 1, evt.particles())){
-      Print::line(p);
-    }
-
-    // 2)
-    std::cout <<std::endl << "Find all ancestors of particle with id " << p5->id() << ": " << std::endl;
-
-    for(ConstGenParticlePtr p: Relatives::ANCESTORS(p5)){
-      Print::line(p);
-    }
-  
-    // 3)
-    std::cout <<std::endl << "Find stable descendants of particle with id " << p4->id() << ": " << std::endl;
-    std::cout<<"We check both for STATUS == 1 (equivalent of IS_STABLE) and no end vertex, just to be safe" << std::endl;
-
-    Filter has_end_vtx = [](ConstGenParticlePtr input)->bool{return (bool)input->end_vertex();};
-  
-    vector<GenParticlePtr> results3 = applyFilter(StandardSelector::STATUS==1 && has_end_vtx, Relatives::DESCENDANTS(p4));
-    for(ConstGenParticlePtr p: results3){
-      Print::line(p);
-    }
-  
-    // 3b)
-    std::cout << std::endl << "Narrow down results of previous search to quarks only: " << std::endl;
-
-    // note the use of abs to obtain the absolute value of pdg_id :)
-    for(ConstGenParticlePtr p: applyFilter( *abs(StandardSelector::PDG_ID) <= 6, results3)){
-      Print::line(p);
-    }
-*/
     //
     // Example of adding event attributes
     //
