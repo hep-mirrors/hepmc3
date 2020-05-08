@@ -42,7 +42,6 @@ class GenRunInfo;
 
 /** @brief Forward declaration of GenParticle. */
 // class GenParticle;
-
 class Attribute {
 //
 // Constructors

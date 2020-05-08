@@ -1,10 +1,5 @@
-#ifndef _INCLUDED_binders_hpp_
-#define _INCLUDED_binders_hpp_
-
-#include <HepMC3/HEPEVT_Wrapper.h>
-#include <HepMC3/GenEvent.h>
-#include <HepMC3/LHEF.h>
-
+#include "binders.h"
+#include <HepMC3/Print.h>
 namespace binder {
 
 
@@ -62,12 +57,6 @@ void custom_FourVector_binder(pybind11::class_<HepMC3::FourVector, std::shared_p
 }
 
 
-
- template <typename T>  void custom_T_binder (pybind11::class_<T, std::shared_ptr<T>> cl)
-{
-//cl.def("print", (void (T::*)(std::ostream &) const) &T::print, "Print the object", pybind11::arg("file"));
-cl.def("print", [](T const &o, pybind11::object  & a1) -> void { std::stringstream b;  o.print(b); a1.attr("write")(pybind11::str(b.str().c_str())); }, "Print the object", pybind11::arg("file"));
-};
 
 
  void custom_LHEFTagBase_binder (pybind11::class_<LHEF::TagBase, std::shared_ptr<LHEF::TagBase>> cl)
@@ -162,4 +151,4 @@ void	print_binder(pybind11::module &M)
 
 } // namespace binder
 
-#endif // _INCLUDED_binders_hpp_
+

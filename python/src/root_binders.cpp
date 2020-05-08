@@ -1,5 +1,4 @@
-#ifndef _INCLUDED_root_binders_hpp_
-#define _INCLUDED_root_binders_hpp_
+#include "root_binders.h"
 
 namespace binder {
 	
@@ -72,5 +71,3 @@ namespace binder {
 
 
 } // namespace binder
-
-#endif // _INCLUDED_root_binders_hpp_

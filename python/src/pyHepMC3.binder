@@ -5,7 +5,7 @@
 
 
 +include <src/stl_binders.hpp>
-+include <src/binders.hpp>
++include <src/binders.h>
 +namespace HepMC3
 +namespace LHEF 
 +binder std::vector binder::vector_binder

@@ -97,9 +97,12 @@ if(ROOT_FOUND)
     configure_file("pyHepMC3.rootIO.egg-info.in" "pyHepMC3.rootIO.egg-info" IMMEDIATE @ONLY)
 endif()
 
-set(BN src/pyHepMC3.cpp  src/binders.hpp)
-set(BNrootIO src/pyHepMC3rootIO.cpp)
-set(BNsearch src/pyHepMC3search.cpp src/search_binders.hpp)
+set(autoBN       src/pyHepMC3.cpp       )
+set(autoBNrootIO src/pyHepMC3rootIO.cpp )
+set(autoBNsearch src/pyHepMC3search.cpp )
+set(BN       ${autoBN}       src/binders.cpp)
+set(BNrootIO ${autoBNrootIO} src/root_binders.cpp)
+set(BNsearch ${autoBNsearch} src/search_binders.cpp)
 if (RERUN_BINDER)
 find_program (BINDER binder HINTS $ENV{HOME}/binder/build/llvm-4.0.0/build_4.0.0.linux.mppui4.release/bin)
 if(BINDER)
@@ -107,7 +110,7 @@ message(STATUS "HepMC3 python: binder found in ${BINDER}. Automatic generatin of
 
 configure_file("all_includes.hpp.in" "all_includes.hpp" IMMEDIATE @ONLY)
 add_custom_command(
-OUTPUT  src/pyHepMC3.cpp 
+OUTPUT  ${autoBN} 
 DEPENDS all_includes.hpp src/pyHepMC3.binder 
 COMMAND ${BINDER} --single-file  --root-module pyHepMC3 --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3.binder   all_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -115,8 +118,8 @@ VERBATIM)
 if(ROOT_FOUND)
 configure_file("root_includes.hpp.in" "root_includes.hpp" IMMEDIATE @ONLY)
 add_custom_command(
-OUTPUT  src/pyHepMC3rootIO.cpp
-DEPENDS  root_includes.hpp src/pyHepMC3rootIO.binder
+OUTPUT  ${autoBNrootIO}
+DEPENDS root_includes.hpp src/pyHepMC3rootIO.binder
 COMMAND ${BINDER} --single-file  --root-module pyHepMC3rootIO --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3rootIO.binder   root_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 VERBATIM)
@@ -124,7 +127,7 @@ endif()
 if(HEPMC3_ENABLE_SEARCH)
 configure_file("search_includes.hpp.in" "search_includes.hpp" IMMEDIATE @ONLY)
 add_custom_command(
-OUTPUT  src/pyHepMC3search.cpp
+OUTPUT  ${autoBNsearch}
 DEPENDS search_includes.hpp src/pyHepMC3search.binder
 COMMAND ${BINDER} --single-file  --root-module pyHepMC3search --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3search.binder   search_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} 
 WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"

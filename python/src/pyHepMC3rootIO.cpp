@@ -21,7 +21,7 @@
 #include <HepMC3/WriterRootTree.h>
 #include <HepMC3/ReaderRoot.h>
 #include <HepMC3/ReaderRootTree.h>
-#include <src/root_binders.hpp>
+#include <src/root_binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -64,7 +64,7 @@ void bind_HepMC3_WriterRootTree(std::function< pybind11::module &(std::string co
 #include <HepMC3/WriterRootTree.h>
 #include <HepMC3/ReaderRoot.h>
 #include <HepMC3/ReaderRootTree.h>
-#include <src/root_binders.hpp>
+#include <src/root_binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -126,10 +126,10 @@ PYBIND11_MODULE(pyHepMC3rootIO, root_module) {
 
 }
 
-// Source list file: /ptmp/mpp/andriish/HOME/HepMC3/python/src/pyHepMC3rootIO.sources
+// Source list file: /home/andriish/Projects/HepMC3/python/src/pyHepMC3rootIO.sources
 // pyHepMC3rootIO.cpp
 // HepMC3/WriterRootTree.cpp
 // HepMC3/ReaderRootTree.cpp
 
-// Modules list file: /ptmp/mpp/andriish/HOME/HepMC3/python/src/pyHepMC3rootIO.modules
+// Modules list file: /home/andriish/Projects/HepMC3/python/src/pyHepMC3rootIO.modules
 // HepMC3 
