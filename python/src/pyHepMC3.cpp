@@ -10,7 +10,7 @@
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -24,8 +24,6 @@ void bind_HepMC3_Setup(std::function< pybind11::module &(std::string const &name
 {
 	{ // HepMC3::Setup file:HepMC3/Setup.h line:22
 		pybind11::class_<HepMC3::Setup, HepMC3::Setup*> cl(M("HepMC3"), "Setup", "Configuration for HepMC\n\n Contains macro definitions for printing debug output, feature deprecation, etc.\n Static class - configuration is shared among all HepMC events\n and program threads");
-		pybind11::handle cl_type = cl;
-
 		cl.def_static("print_errors", (bool (*)()) &HepMC3::Setup::print_errors, "Get error messages printing flag\n\nC++: HepMC3::Setup::print_errors() --> bool");
 		cl.def_static("set_print_errors", (void (*)(const bool)) &HepMC3::Setup::set_print_errors, "set error messages printing flag\n\nC++: HepMC3::Setup::set_print_errors(const bool) --> void", pybind11::arg("flag"));
 		cl.def_static("print_warnings", (bool (*)()) &HepMC3::Setup::print_warnings, "Get warning messages printing flag\n\nC++: HepMC3::Setup::print_warnings() --> bool");
@@ -48,7 +46,7 @@ void bind_HepMC3_Setup(std::function< pybind11::module &(std::string const &name
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -62,8 +60,6 @@ void bind_HepMC3_FourVector(std::function< pybind11::module &(std::string const 
 {
 	{ // HepMC3::FourVector file:HepMC3/FourVector.h line:35
 		pybind11::class_<HepMC3::FourVector, std::shared_ptr<HepMC3::FourVector>> cl(M("HepMC3"), "FourVector", "Generic 4-vector\n\n  Interpretation of its content depends on accessors used: it's much simpler to do this\n  than to distinguish between space and momentum vectors via the type system (especially\n  given the need for backward compatibility with HepMC2). Be sensible and don't call\n  energy functions on spatial vectors! To avoid duplication, most definitions are only\n  implemented on the spatial function names, with the energy-momentum functions as aliases.\n\n  This is  intended to be a fully featured 4-vector, but does contain the majority\n  of common non-boosting functionality, as well as a few support operations on\n  4-vectors.\n\n  The implementations in this class are fully inlined.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::FourVector(); } ) );
 		cl.def( pybind11::init<double, double, double, double>(), pybind11::arg("xx"), pybind11::arg("yy"), pybind11::arg("zz"), pybind11::arg("ee") );
 
@@ -159,7 +155,7 @@ void bind_HepMC3_FourVector(std::function< pybind11::module &(std::string const 
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -211,7 +207,7 @@ void bind_HepMC3_FourVector_1(std::function< pybind11::module &(std::string cons
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -263,7 +259,7 @@ void bind_std_stl_map(std::function< pybind11::module &(std::string const &names
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -357,7 +353,7 @@ void bind_std_stl_vector(std::function< pybind11::module &(std::string const &na
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -835,8 +831,6 @@ void bind_HepMC3_Attribute(std::function< pybind11::module &(std::string const &
 {
 	{ // HepMC3::Attribute file:HepMC3/Attribute.h line:45
 		pybind11::class_<HepMC3::Attribute, std::shared_ptr<HepMC3::Attribute>, PyCallBack_HepMC3_Attribute> cl(M("HepMC3"), "Attribute", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new PyCallBack_HepMC3_Attribute(); } ) );
 		cl.def(pybind11::init<PyCallBack_HepMC3_Attribute const &>());
 		cl.def("from_string", (bool (HepMC3::Attribute::*)(const std::string &)) &HepMC3::Attribute::from_string, "Fill class content from string.\n\nC++: HepMC3::Attribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
@@ -852,8 +846,6 @@ void bind_HepMC3_Attribute(std::function< pybind11::module &(std::string const &
 	}
 	{ // HepMC3::IntAttribute file:HepMC3/Attribute.h line:158
 		pybind11::class_<HepMC3::IntAttribute, std::shared_ptr<HepMC3::IntAttribute>, PyCallBack_HepMC3_IntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "IntAttribute", "Attribute that holds an Integer implemented as an int\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::IntAttribute(); }, [](){ return new PyCallBack_HepMC3_IntAttribute(); } ) );
 		cl.def( pybind11::init<int>(), pybind11::arg("val") );
 
@@ -867,8 +859,6 @@ void bind_HepMC3_Attribute(std::function< pybind11::module &(std::string const &
 	}
 	{ // HepMC3::LongAttribute file:HepMC3/Attribute.h line:199
 		pybind11::class_<HepMC3::LongAttribute, std::shared_ptr<HepMC3::LongAttribute>, PyCallBack_HepMC3_LongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "LongAttribute", "Attribute that holds an Integer implemented as an int\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::LongAttribute(); }, [](){ return new PyCallBack_HepMC3_LongAttribute(); } ) );
 		cl.def( pybind11::init<long>(), pybind11::arg("val") );
 
@@ -882,8 +872,6 @@ void bind_HepMC3_Attribute(std::function< pybind11::module &(std::string const &
 	}
 	{ // HepMC3::DoubleAttribute file:HepMC3/Attribute.h line:242
 		pybind11::class_<HepMC3::DoubleAttribute, std::shared_ptr<HepMC3::DoubleAttribute>, PyCallBack_HepMC3_DoubleAttribute, HepMC3::Attribute> cl(M("HepMC3"), "DoubleAttribute", "Attribute that holds a real number as a double.\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::DoubleAttribute(); }, [](){ return new PyCallBack_HepMC3_DoubleAttribute(); } ) );
 		cl.def( pybind11::init<double>(), pybind11::arg("val") );
 
@@ -897,8 +885,6 @@ void bind_HepMC3_Attribute(std::function< pybind11::module &(std::string const &
 	}
 	{ // HepMC3::FloatAttribute file:HepMC3/Attribute.h line:287
 		pybind11::class_<HepMC3::FloatAttribute, std::shared_ptr<HepMC3::FloatAttribute>, PyCallBack_HepMC3_FloatAttribute, HepMC3::Attribute> cl(M("HepMC3"), "FloatAttribute", "Attribute that holds a real number as a float.\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::FloatAttribute(); }, [](){ return new PyCallBack_HepMC3_FloatAttribute(); } ) );
 		cl.def( pybind11::init<float>(), pybind11::arg("val") );
 
@@ -912,8 +898,6 @@ void bind_HepMC3_Attribute(std::function< pybind11::module &(std::string const &
 	}
 	{ // HepMC3::StringAttribute file:HepMC3/Attribute.h line:336
 		pybind11::class_<HepMC3::StringAttribute, std::shared_ptr<HepMC3::StringAttribute>, PyCallBack_HepMC3_StringAttribute, HepMC3::Attribute> cl(M("HepMC3"), "StringAttribute", "Attribute that holds a string\n\n  Default attribute constructed when reading input files.\n  It can be then parsed by other attributes or left as a string.\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::StringAttribute(); }, [](){ return new PyCallBack_HepMC3_StringAttribute(); } ) );
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("st") );
 
@@ -927,8 +911,6 @@ void bind_HepMC3_Attribute(std::function< pybind11::module &(std::string const &
 	}
 	{ // HepMC3::CharAttribute file:HepMC3/Attribute.h line:380
 		pybind11::class_<HepMC3::CharAttribute, std::shared_ptr<HepMC3::CharAttribute>, PyCallBack_HepMC3_CharAttribute, HepMC3::Attribute> cl(M("HepMC3"), "CharAttribute", "Attribute that holds an Chareger implemented as an int\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::CharAttribute(); }, [](){ return new PyCallBack_HepMC3_CharAttribute(); } ) );
 		cl.def( pybind11::init<char>(), pybind11::arg("val") );
 
@@ -942,8 +924,6 @@ void bind_HepMC3_Attribute(std::function< pybind11::module &(std::string const &
 	}
 	{ // HepMC3::LongLongAttribute file:HepMC3/Attribute.h line:425
 		pybind11::class_<HepMC3::LongLongAttribute, std::shared_ptr<HepMC3::LongLongAttribute>, PyCallBack_HepMC3_LongLongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "LongLongAttribute", "Attribute that holds an Integer implemented as an int\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::LongLongAttribute(); }, [](){ return new PyCallBack_HepMC3_LongLongAttribute(); } ) );
 		cl.def( pybind11::init<long long>(), pybind11::arg("val") );
 
@@ -981,7 +961,7 @@ void bind_HepMC3_Attribute(std::function< pybind11::module &(std::string const &
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -1459,8 +1439,6 @@ void bind_HepMC3_Attribute_1(std::function< pybind11::module &(std::string const
 {
 	{ // HepMC3::LongDoubleAttribute file:HepMC3/Attribute.h line:468
 		pybind11::class_<HepMC3::LongDoubleAttribute, std::shared_ptr<HepMC3::LongDoubleAttribute>, PyCallBack_HepMC3_LongDoubleAttribute, HepMC3::Attribute> cl(M("HepMC3"), "LongDoubleAttribute", "Attribute that holds a real number as a double.\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::LongDoubleAttribute(); }, [](){ return new PyCallBack_HepMC3_LongDoubleAttribute(); } ) );
 		cl.def( pybind11::init<long double>(), pybind11::arg("val") );
 
@@ -1474,8 +1452,6 @@ void bind_HepMC3_Attribute_1(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::UIntAttribute file:HepMC3/Attribute.h line:515
 		pybind11::class_<HepMC3::UIntAttribute, std::shared_ptr<HepMC3::UIntAttribute>, PyCallBack_HepMC3_UIntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "UIntAttribute", "Attribute that holds an unsigned int\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::UIntAttribute(); }, [](){ return new PyCallBack_HepMC3_UIntAttribute(); } ) );
 		cl.def( pybind11::init<unsigned int>(), pybind11::arg("val") );
 
@@ -1489,8 +1465,6 @@ void bind_HepMC3_Attribute_1(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::ULongAttribute file:HepMC3/Attribute.h line:558
 		pybind11::class_<HepMC3::ULongAttribute, std::shared_ptr<HepMC3::ULongAttribute>, PyCallBack_HepMC3_ULongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "ULongAttribute", "Attribute that holds an unsigned long\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::ULongAttribute(); }, [](){ return new PyCallBack_HepMC3_ULongAttribute(); } ) );
 		cl.def( pybind11::init<unsigned long>(), pybind11::arg("val") );
 
@@ -1504,8 +1478,6 @@ void bind_HepMC3_Attribute_1(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::ULongLongAttribute file:HepMC3/Attribute.h line:600
 		pybind11::class_<HepMC3::ULongLongAttribute, std::shared_ptr<HepMC3::ULongLongAttribute>, PyCallBack_HepMC3_ULongLongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "ULongLongAttribute", "Attribute that holds an unsigned long long\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::ULongLongAttribute(); }, [](){ return new PyCallBack_HepMC3_ULongLongAttribute(); } ) );
 		cl.def( pybind11::init<unsigned long long>(), pybind11::arg("val") );
 
@@ -1519,8 +1491,6 @@ void bind_HepMC3_Attribute_1(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::BoolAttribute file:HepMC3/Attribute.h line:640
 		pybind11::class_<HepMC3::BoolAttribute, std::shared_ptr<HepMC3::BoolAttribute>, PyCallBack_HepMC3_BoolAttribute, HepMC3::Attribute> cl(M("HepMC3"), "BoolAttribute", "Attribute that holds an Booleger implemented as an int\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::BoolAttribute(); }, [](){ return new PyCallBack_HepMC3_BoolAttribute(); } ) );
 		cl.def( pybind11::init<bool>(), pybind11::arg("val") );
 
@@ -1534,8 +1504,6 @@ void bind_HepMC3_Attribute_1(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::VectorCharAttribute file:HepMC3/Attribute.h line:683
 		pybind11::class_<HepMC3::VectorCharAttribute, std::shared_ptr<HepMC3::VectorCharAttribute>, PyCallBack_HepMC3_VectorCharAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorCharAttribute", "Attribute that holds a vector of charegers of type  char\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorCharAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorCharAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<char, class std::allocator<char> >>(), pybind11::arg("val") );
 
@@ -1549,8 +1517,6 @@ void bind_HepMC3_Attribute_1(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::VectorFloatAttribute file:HepMC3/Attribute.h line:728
 		pybind11::class_<HepMC3::VectorFloatAttribute, std::shared_ptr<HepMC3::VectorFloatAttribute>, PyCallBack_HepMC3_VectorFloatAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorFloatAttribute", "Attribute that holds a vector of floategers of type  float\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorFloatAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorFloatAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<float, class std::allocator<float> >>(), pybind11::arg("val") );
 
@@ -1564,8 +1530,6 @@ void bind_HepMC3_Attribute_1(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::VectorLongDoubleAttribute file:HepMC3/Attribute.h line:774
 		pybind11::class_<HepMC3::VectorLongDoubleAttribute, std::shared_ptr<HepMC3::VectorLongDoubleAttribute>, PyCallBack_HepMC3_VectorLongDoubleAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorLongDoubleAttribute", "Attribute that holds a vector of long doubleegers of type  long double\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorLongDoubleAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorLongDoubleAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<long double, class std::allocator<long double> >>(), pybind11::arg("val") );
 
@@ -1603,7 +1567,7 @@ void bind_HepMC3_Attribute_1(std::function< pybind11::module &(std::string const
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -2023,8 +1987,6 @@ void bind_HepMC3_Attribute_2(std::function< pybind11::module &(std::string const
 {
 	{ // HepMC3::VectorLongLongAttribute file:HepMC3/Attribute.h line:821
 		pybind11::class_<HepMC3::VectorLongLongAttribute, std::shared_ptr<HepMC3::VectorLongLongAttribute>, PyCallBack_HepMC3_VectorLongLongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorLongLongAttribute", "Attribute that holds a vector of long longegers of type  long long\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorLongLongAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorLongLongAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<long long, class std::allocator<long long> >>(), pybind11::arg("val") );
 
@@ -2038,8 +2000,6 @@ void bind_HepMC3_Attribute_2(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::VectorUIntAttribute file:HepMC3/Attribute.h line:866
 		pybind11::class_<HepMC3::VectorUIntAttribute, std::shared_ptr<HepMC3::VectorUIntAttribute>, PyCallBack_HepMC3_VectorUIntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorUIntAttribute", "Attribute that holds a vector of unsigned integers of type  unsigned int\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorUIntAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorUIntAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<unsigned int, class std::allocator<unsigned int> >>(), pybind11::arg("val") );
 
@@ -2053,8 +2013,6 @@ void bind_HepMC3_Attribute_2(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::VectorULongAttribute file:HepMC3/Attribute.h line:911
 		pybind11::class_<HepMC3::VectorULongAttribute, std::shared_ptr<HepMC3::VectorULongAttribute>, PyCallBack_HepMC3_VectorULongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorULongAttribute", "Attribute that holds a vector of unsigned longegers of type  unsigned long\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorULongAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorULongAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<unsigned long, class std::allocator<unsigned long> >>(), pybind11::arg("val") );
 
@@ -2068,8 +2026,6 @@ void bind_HepMC3_Attribute_2(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::VectorULongLongAttribute file:HepMC3/Attribute.h line:957
 		pybind11::class_<HepMC3::VectorULongLongAttribute, std::shared_ptr<HepMC3::VectorULongLongAttribute>, PyCallBack_HepMC3_VectorULongLongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorULongLongAttribute", "Attribute that holds a vector of unsigned long longegers of type  unsigned long long\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorULongLongAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorULongLongAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<unsigned long long, class std::allocator<unsigned long long> >>(), pybind11::arg("val") );
 
@@ -2083,8 +2039,6 @@ void bind_HepMC3_Attribute_2(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::VectorIntAttribute file:HepMC3/Attribute.h line:1002
 		pybind11::class_<HepMC3::VectorIntAttribute, std::shared_ptr<HepMC3::VectorIntAttribute>, PyCallBack_HepMC3_VectorIntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorIntAttribute", "Attribute that holds a vector of integers of type  int\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorIntAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorIntAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<int, class std::allocator<int> >>(), pybind11::arg("val") );
 
@@ -2098,8 +2052,6 @@ void bind_HepMC3_Attribute_2(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::VectorLongIntAttribute file:HepMC3/Attribute.h line:1047
 		pybind11::class_<HepMC3::VectorLongIntAttribute, std::shared_ptr<HepMC3::VectorLongIntAttribute>, PyCallBack_HepMC3_VectorLongIntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorLongIntAttribute", "Attribute that holds a vector of integers of type  int\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorLongIntAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorLongIntAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<long, class std::allocator<long> >>(), pybind11::arg("val") );
 
@@ -2113,8 +2065,6 @@ void bind_HepMC3_Attribute_2(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::VectorDoubleAttribute file:HepMC3/Attribute.h line:1092
 		pybind11::class_<HepMC3::VectorDoubleAttribute, std::shared_ptr<HepMC3::VectorDoubleAttribute>, PyCallBack_HepMC3_VectorDoubleAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorDoubleAttribute", "Attribute that holds a vector of FPs of type  double\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorDoubleAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorDoubleAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<double, class std::allocator<double> >>(), pybind11::arg("val") );
 
@@ -2152,7 +2102,7 @@ void bind_HepMC3_Attribute_2(std::function< pybind11::module &(std::string const
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -2220,7 +2170,7 @@ struct PyCallBack_HepMC3_VectorStringAttribute : public HepMC3::VectorStringAttr
 	}
 };
 
-// HepMC3::GenHeavyIon file:HepMC3/GenHeavyIon.h line:27
+// HepMC3::GenHeavyIon file:HepMC3/GenHeavyIon.h line:28
 struct PyCallBack_HepMC3_GenHeavyIon : public HepMC3::GenHeavyIon {
 	using HepMC3::GenHeavyIon::GenHeavyIon;
 
@@ -2282,8 +2232,6 @@ void bind_HepMC3_Attribute_3(std::function< pybind11::module &(std::string const
 {
 	{ // HepMC3::VectorStringAttribute file:HepMC3/Attribute.h line:1138
 		pybind11::class_<HepMC3::VectorStringAttribute, std::shared_ptr<HepMC3::VectorStringAttribute>, PyCallBack_HepMC3_VectorStringAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorStringAttribute", "Attribute that holds a vector of FPs of type  string\n\n  \n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorStringAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorStringAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<std::string, class std::allocator<std::string > >>(), pybind11::arg("val") );
 
@@ -2295,10 +2243,8 @@ void bind_HepMC3_Attribute_3(std::function< pybind11::module &(std::string const
 		cl.def("set_value", (void (HepMC3::VectorStringAttribute::*)(const class std::vector<std::string, class std::allocator<std::string > > &)) &HepMC3::VectorStringAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorStringAttribute::set_value(const class std::vector<std::string, class std::allocator<std::string > > &) --> void", pybind11::arg("i"));
 		cl.def("assign", (class HepMC3::VectorStringAttribute & (HepMC3::VectorStringAttribute::*)(const class HepMC3::VectorStringAttribute &)) &HepMC3::VectorStringAttribute::operator=, "C++: HepMC3::VectorStringAttribute::operator=(const class HepMC3::VectorStringAttribute &) --> class HepMC3::VectorStringAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::GenHeavyIon file:HepMC3/GenHeavyIon.h line:27
+	{ // HepMC3::GenHeavyIon file:HepMC3/GenHeavyIon.h line:28
 		pybind11::class_<HepMC3::GenHeavyIon, std::shared_ptr<HepMC3::GenHeavyIon>, PyCallBack_HepMC3_GenHeavyIon, HepMC3::Attribute> cl(M("HepMC3"), "GenHeavyIon", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::GenHeavyIon(); }, [](){ return new PyCallBack_HepMC3_GenHeavyIon(); } ) );
 		cl.def( pybind11::init( [](PyCallBack_HepMC3_GenHeavyIon const &o){ return new PyCallBack_HepMC3_GenHeavyIon(o); } ) );
 		cl.def( pybind11::init( [](HepMC3::GenHeavyIon const &o){ return new HepMC3::GenHeavyIon(o); } ) );
@@ -2367,7 +2313,7 @@ void bind_HepMC3_Attribute_3(std::function< pybind11::module &(std::string const
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -2377,7 +2323,7 @@ void bind_HepMC3_Attribute_3(std::function< pybind11::module &(std::string const
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
 #endif
 
-// HepMC3::GenCrossSection file:HepMC3/GenCrossSection.h line:41
+// HepMC3::GenCrossSection file:HepMC3/GenCrossSection.h line:42
 struct PyCallBack_HepMC3_GenCrossSection : public HepMC3::GenCrossSection {
 	using HepMC3::GenCrossSection::GenCrossSection;
 
@@ -2437,10 +2383,8 @@ struct PyCallBack_HepMC3_GenCrossSection : public HepMC3::GenCrossSection {
 
 void bind_HepMC3_GenCrossSection(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::GenCrossSection file:HepMC3/GenCrossSection.h line:41
+	{ // HepMC3::GenCrossSection file:HepMC3/GenCrossSection.h line:42
 		pybind11::class_<HepMC3::GenCrossSection, std::shared_ptr<HepMC3::GenCrossSection>, PyCallBack_HepMC3_GenCrossSection, HepMC3::Attribute> cl(M("HepMC3"), "GenCrossSection", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](PyCallBack_HepMC3_GenCrossSection const &o){ return new PyCallBack_HepMC3_GenCrossSection(o); } ) );
 		cl.def( pybind11::init( [](HepMC3::GenCrossSection const &o){ return new HepMC3::GenCrossSection(o); } ) );
 		cl.def( pybind11::init( [](){ return new HepMC3::GenCrossSection(); }, [](){ return new PyCallBack_HepMC3_GenCrossSection(); } ) );
@@ -2470,8 +2414,6 @@ void bind_HepMC3_GenCrossSection(std::function< pybind11::module &(std::string c
 	}
 	{ // HepMC3::Units file: line:26
 		pybind11::class_<HepMC3::Units, std::shared_ptr<HepMC3::Units>> cl(M("HepMC3"), "Units", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::Units(); } ) );
 
 		pybind11::enum_<HepMC3::Units::MomentumUnit>(cl, "MomentumUnit", pybind11::arithmetic(), "Momentum units ")
@@ -2524,7 +2466,7 @@ void bind_HepMC3_GenCrossSection(std::function< pybind11::module &(std::string c
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -2594,15 +2536,11 @@ struct PyCallBack_HepMC3_GenPdfInfo : public HepMC3::GenPdfInfo {
 
 void bind_HepMC3_GenRunInfo(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::GenRunInfo file:HepMC3/GenRunInfo.h line:32
+	{ // HepMC3::GenRunInfo file:HepMC3/GenRunInfo.h line:33
 		pybind11::class_<HepMC3::GenRunInfo, std::shared_ptr<HepMC3::GenRunInfo>> cl(M("HepMC3"), "GenRunInfo", "Stores run-related information\n\n Manages run-related information.\n Contains run-wide attributes");
-		pybind11::handle cl_type = cl;
-
-		{ // HepMC3::GenRunInfo::ToolInfo file:HepMC3/GenRunInfo.h line:37
+		{ // HepMC3::GenRunInfo::ToolInfo file:HepMC3/GenRunInfo.h line:38
 			auto & enclosing_class = cl;
 			pybind11::class_<HepMC3::GenRunInfo::ToolInfo, std::shared_ptr<HepMC3::GenRunInfo::ToolInfo>> cl(enclosing_class, "ToolInfo", "Interrnal struct for keeping track of tools.");
-			pybind11::handle cl_type = cl;
-
 			cl.def( pybind11::init( [](HepMC3::GenRunInfo::ToolInfo const &o){ return new HepMC3::GenRunInfo::ToolInfo(o); } ) );
 			cl.def( pybind11::init( [](){ return new HepMC3::GenRunInfo::ToolInfo(); } ) );
 			cl.def_readwrite("name", &HepMC3::GenRunInfo::ToolInfo::name);
@@ -2633,8 +2571,6 @@ void bind_HepMC3_GenRunInfo(std::function< pybind11::module &(std::string const 
 	}
 	{ // HepMC3::GenParticleData file:HepMC3/Data/GenParticleData.h line:24
 		pybind11::class_<HepMC3::GenParticleData, std::shared_ptr<HepMC3::GenParticleData>> cl(M("HepMC3"), "GenParticleData", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::GenParticleData(); } ) );
 		cl.def( pybind11::init( [](HepMC3::GenParticleData const &o){ return new HepMC3::GenParticleData(o); } ) );
 		cl.def_readwrite("pid", &HepMC3::GenParticleData::pid);
@@ -2646,8 +2582,6 @@ void bind_HepMC3_GenRunInfo(std::function< pybind11::module &(std::string const 
 	}
 	{ // HepMC3::GenPdfInfo file: line:32
 		pybind11::class_<HepMC3::GenPdfInfo, std::shared_ptr<HepMC3::GenPdfInfo>, PyCallBack_HepMC3_GenPdfInfo, HepMC3::Attribute> cl(M("HepMC3"), "GenPdfInfo", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](PyCallBack_HepMC3_GenPdfInfo const &o){ return new PyCallBack_HepMC3_GenPdfInfo(o); } ) );
 		cl.def( pybind11::init( [](HepMC3::GenPdfInfo const &o){ return new HepMC3::GenPdfInfo(o); } ) );
 		cl.def( pybind11::init( [](){ return new HepMC3::GenPdfInfo(); }, [](){ return new PyCallBack_HepMC3_GenPdfInfo(); } ) );
@@ -2664,8 +2598,6 @@ void bind_HepMC3_GenRunInfo(std::function< pybind11::module &(std::string const 
 	}
 	{ // HepMC3::GenEvent file:HepMC3/GenEvent.h line:41
 		pybind11::class_<HepMC3::GenEvent, std::shared_ptr<HepMC3::GenEvent>> cl(M("HepMC3"), "GenEvent", "Stores event-related information\n\n Manages event-related information.\n Contains lists of GenParticle and GenVertex objects");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::GenEvent(); } ), "doc" );
 		cl.def( pybind11::init( [](enum HepMC3::Units::MomentumUnit const & a0){ return new HepMC3::GenEvent(a0); } ), "doc" , pybind11::arg("momentum_unit"));
 		cl.def( pybind11::init<enum HepMC3::Units::MomentumUnit, enum HepMC3::Units::LengthUnit>(), pybind11::arg("momentum_unit"), pybind11::arg("length_unit") );
@@ -2762,7 +2694,7 @@ void bind_HepMC3_GenRunInfo(std::function< pybind11::module &(std::string const 
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -2776,8 +2708,6 @@ void bind_HepMC3_GenParticle(std::function< pybind11::module &(std::string const
 {
 	{ // HepMC3::GenParticle file:HepMC3/GenParticle.h line:31
 		pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl(M("HepMC3"), "GenParticle", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::GenParticle(); } ), "doc" );
 		cl.def( pybind11::init( [](const class HepMC3::FourVector & a0){ return new HepMC3::GenParticle(a0); } ), "doc" , pybind11::arg("momentum"));
 		cl.def( pybind11::init( [](const class HepMC3::FourVector & a0, int const & a1){ return new HepMC3::GenParticle(a0, a1); } ), "doc" , pybind11::arg("momentum"), pybind11::arg("pid"));
@@ -2815,8 +2745,6 @@ void bind_HepMC3_GenParticle(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::GenVertexData file: line:22
 		pybind11::class_<HepMC3::GenVertexData, std::shared_ptr<HepMC3::GenVertexData>> cl(M("HepMC3"), "GenVertexData", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::GenVertexData(); } ) );
 		cl.def( pybind11::init( [](HepMC3::GenVertexData const &o){ return new HepMC3::GenVertexData(o); } ) );
 		cl.def_readwrite("status", &HepMC3::GenVertexData::status);
@@ -2826,8 +2754,6 @@ void bind_HepMC3_GenParticle(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::GenVertex file:HepMC3/GenVertex.h line:26
 		pybind11::class_<HepMC3::GenVertex, std::shared_ptr<HepMC3::GenVertex>> cl(M("HepMC3"), "GenVertex", "Stores vertex-related information");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::GenVertex(); } ), "doc" );
 		cl.def( pybind11::init<const class HepMC3::FourVector &>(), pybind11::arg("position") );
 
@@ -2860,8 +2786,6 @@ void bind_HepMC3_GenParticle(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::GenRunInfoData file:HepMC3/Data/GenRunInfoData.h line:23
 		pybind11::class_<HepMC3::GenRunInfoData, std::shared_ptr<HepMC3::GenRunInfoData>> cl(M("HepMC3"), "GenRunInfoData", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::GenRunInfoData(); } ) );
 		cl.def_readwrite("weight_names", &HepMC3::GenRunInfoData::weight_names);
 		cl.def_readwrite("tool_name", &HepMC3::GenRunInfoData::tool_name);
@@ -2907,7 +2831,7 @@ void bind_HepMC3_GenParticle(std::function< pybind11::module &(std::string const
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -3024,8 +2948,6 @@ void bind_HepMC3_Data_GenEventData(std::function< pybind11::module &(std::string
 {
 	{ // HepMC3::GenEventData file:HepMC3/Data/GenEventData.h line:26
 		pybind11::class_<HepMC3::GenEventData, std::shared_ptr<HepMC3::GenEventData>> cl(M("HepMC3"), "GenEventData", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::GenEventData(); } ) );
 		cl.def_readwrite("event_number", &HepMC3::GenEventData::event_number);
 		cl.def_readwrite("momentum_unit", &HepMC3::GenEventData::momentum_unit);
@@ -3048,8 +2970,6 @@ void bind_HepMC3_Data_GenEventData(std::function< pybind11::module &(std::string
 
 	{ // HepMC3::Writer file:HepMC3/Writer.h line:25
 		pybind11::class_<HepMC3::Writer, std::shared_ptr<HepMC3::Writer>, PyCallBack_HepMC3_Writer> cl(M("HepMC3"), "Writer", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new PyCallBack_HepMC3_Writer(); } ) );
 		cl.def("write_event", (void (HepMC3::Writer::*)(const class HepMC3::GenEvent &)) &HepMC3::Writer::write_event, "Write event  to output target\n\nC++: HepMC3::Writer::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("evt"));
 		cl.def("failed", (bool (HepMC3::Writer::*)()) &HepMC3::Writer::failed, "Get file and/or stream error state \n\nC++: HepMC3::Writer::failed() --> bool");
@@ -3061,8 +2981,6 @@ void bind_HepMC3_Data_GenEventData(std::function< pybind11::module &(std::string
 	}
 	{ // HepMC3::Reader file:HepMC3/Reader.h line:25
 		pybind11::class_<HepMC3::Reader, std::shared_ptr<HepMC3::Reader>, PyCallBack_HepMC3_Reader> cl(M("HepMC3"), "Reader", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new PyCallBack_HepMC3_Reader(); } ) );
 		cl.def("skip", (bool (HepMC3::Reader::*)(const int)) &HepMC3::Reader::skip, "skip or fast forward reading of some events\n\nC++: HepMC3::Reader::skip(const int) --> bool", pybind11::arg(""));
 		cl.def("read_event", (bool (HepMC3::Reader::*)(class HepMC3::GenEvent &)) &HepMC3::Reader::read_event, "Fill next event from input into \n\nC++: HepMC3::Reader::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
@@ -3104,7 +3022,7 @@ void bind_HepMC3_Data_GenEventData(std::function< pybind11::module &(std::string
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -3163,8 +3081,6 @@ void bind_HepMC3_WriterAscii(std::function< pybind11::module &(std::string const
 {
 	{ // HepMC3::WriterAscii file:HepMC3/WriterAscii.h line:25
 		pybind11::class_<HepMC3::WriterAscii, std::shared_ptr<HepMC3::WriterAscii>, PyCallBack_HepMC3_WriterAscii, HepMC3::Writer> cl(M("HepMC3"), "WriterAscii", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](const class std::basic_string<char> & a0){ return new HepMC3::WriterAscii(a0); }, [](const class std::basic_string<char> & a0){ return new PyCallBack_HepMC3_WriterAscii(a0); } ), "doc");
 		cl.def( pybind11::init<const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("run") );
 
@@ -3211,7 +3127,7 @@ void bind_HepMC3_WriterAscii(std::function< pybind11::module &(std::string const
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -3541,8 +3457,6 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 {
 	{ // HepMC3::ReaderAscii file:HepMC3/ReaderAscii.h line:29
 		pybind11::class_<HepMC3::ReaderAscii, std::shared_ptr<HepMC3::ReaderAscii>, PyCallBack_HepMC3_ReaderAscii, HepMC3::Reader> cl(M("HepMC3"), "ReaderAscii", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
 		cl.def("skip", (bool (HepMC3::ReaderAscii::*)(const int)) &HepMC3::ReaderAscii::skip, "skip events\n\nC++: HepMC3::ReaderAscii::skip(const int) --> bool", pybind11::arg(""));
@@ -3552,8 +3466,6 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::WriterAsciiHepMC2 file:HepMC3/WriterAsciiHepMC2.h line:26
 		pybind11::class_<HepMC3::WriterAsciiHepMC2, std::shared_ptr<HepMC3::WriterAsciiHepMC2>, PyCallBack_HepMC3_WriterAsciiHepMC2, HepMC3::Writer> cl(M("HepMC3"), "WriterAsciiHepMC2", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](const class std::basic_string<char> & a0){ return new HepMC3::WriterAsciiHepMC2(a0); }, [](const class std::basic_string<char> & a0){ return new PyCallBack_HepMC3_WriterAsciiHepMC2(a0); } ), "doc");
 		cl.def( pybind11::init<const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("run") );
 
@@ -3566,8 +3478,6 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::ReaderAsciiHepMC2 file:HepMC3/ReaderAsciiHepMC2.h line:30
 		pybind11::class_<HepMC3::ReaderAsciiHepMC2, std::shared_ptr<HepMC3::ReaderAsciiHepMC2>, PyCallBack_HepMC3_ReaderAsciiHepMC2, HepMC3::Reader> cl(M("HepMC3"), "ReaderAsciiHepMC2", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
 		cl.def("skip", (bool (HepMC3::ReaderAsciiHepMC2::*)(const int)) &HepMC3::ReaderAsciiHepMC2::skip, "skip events\n\nC++: HepMC3::ReaderAsciiHepMC2::skip(const int) --> bool", pybind11::arg(""));
@@ -3577,8 +3487,6 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::WriterHEPEVT file:HepMC3/WriterHEPEVT.h line:27
 		pybind11::class_<HepMC3::WriterHEPEVT, std::shared_ptr<HepMC3::WriterHEPEVT>, PyCallBack_HepMC3_WriterHEPEVT, HepMC3::Writer> cl(M("HepMC3"), "WriterHEPEVT", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
 		cl.def("write_hepevt_particle", [](HepMC3::WriterHEPEVT &o, int const & a0) -> void { return o.write_hepevt_particle(a0); }, "", pybind11::arg("index"));
@@ -3592,8 +3500,6 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 	}
 	{ // HepMC3::ReaderHEPEVT file:HepMC3/ReaderHEPEVT.h line:32
 		pybind11::class_<HepMC3::ReaderHEPEVT, std::shared_ptr<HepMC3::ReaderHEPEVT>, PyCallBack_HepMC3_ReaderHEPEVT, HepMC3::Reader> cl(M("HepMC3"), "ReaderHEPEVT", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
 		cl.def("read_hepevt_event_header", (bool (HepMC3::ReaderHEPEVT::*)()) &HepMC3::ReaderHEPEVT::read_hepevt_event_header, "Find and read event header line  from file\n\n    \n\nC++: HepMC3::ReaderHEPEVT::read_hepevt_event_header() --> bool");
@@ -3636,7 +3542,7 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -3648,10 +3554,8 @@ void bind_HepMC3_ReaderAscii(std::function< pybind11::module &(std::string const
 
 void bind_HepMC3_HEPEVT_Wrapper(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::HEPEVT_Wrapper file:HepMC3/HEPEVT_Wrapper.h line:97
+	{ // HepMC3::HEPEVT_Wrapper file:HepMC3/HEPEVT_Wrapper.h line:96
 		pybind11::class_<HepMC3::HEPEVT_Wrapper, std::shared_ptr<HepMC3::HEPEVT_Wrapper>> cl(M("HepMC3"), "HEPEVT_Wrapper", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::HEPEVT_Wrapper(); } ) );
 		cl.def_static("zero_everything", (void (*)()) &HepMC3::HEPEVT_Wrapper::zero_everything, "Set all entries in HEPEVT to zero \n\nC++: HepMC3::HEPEVT_Wrapper::zero_everything() --> void");
 		cl.def_static("GenEvent_to_HEPEVT", (bool (*)(const class HepMC3::GenEvent *)) &HepMC3::HEPEVT_Wrapper::GenEvent_to_HEPEVT, "Convert GenEvent to HEPEVT\n\nC++: HepMC3::HEPEVT_Wrapper::GenEvent_to_HEPEVT(const class HepMC3::GenEvent *) --> bool", pybind11::arg("evt"));
@@ -3717,7 +3621,7 @@ void bind_HepMC3_HEPEVT_Wrapper(std::function< pybind11::module &(std::string co
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -3731,8 +3635,6 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 {
 	{ // LHEF::OAttr file:HepMC3/LHEF.h line:45
 		pybind11::class_<LHEF::OAttr<std::string>, std::shared_ptr<LHEF::OAttr<std::string>>> cl(M("LHEF"), "OAttr_std_string_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<std::string, const std::string &>(), pybind11::arg("n"), pybind11::arg("v") );
 
 		cl.def( pybind11::init( [](LHEF::OAttr<std::string> const &o){ return new LHEF::OAttr<std::string>(o); } ) );
@@ -3744,8 +3646,6 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 	}
 	{ // LHEF::OAttr file:HepMC3/LHEF.h line:45
 		pybind11::class_<LHEF::OAttr<long>, std::shared_ptr<LHEF::OAttr<long>>> cl(M("LHEF"), "OAttr_long_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<std::string, const long &>(), pybind11::arg("n"), pybind11::arg("v") );
 
 		cl.def( pybind11::init( [](LHEF::OAttr<long> const &o){ return new LHEF::OAttr<long>(o); } ) );
@@ -3757,8 +3657,6 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 	}
 	{ // LHEF::OAttr file:HepMC3/LHEF.h line:45
 		pybind11::class_<LHEF::OAttr<double>, std::shared_ptr<LHEF::OAttr<double>>> cl(M("LHEF"), "OAttr_double_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<std::string, const double &>(), pybind11::arg("n"), pybind11::arg("v") );
 
 		cl.def( pybind11::init( [](LHEF::OAttr<double> const &o){ return new LHEF::OAttr<double>(o); } ) );
@@ -3770,8 +3668,6 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 	}
 	{ // LHEF::OAttr file:HepMC3/LHEF.h line:45
 		pybind11::class_<LHEF::OAttr<int>, std::shared_ptr<LHEF::OAttr<int>>> cl(M("LHEF"), "OAttr_int_t", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<std::string, const int &>(), pybind11::arg("n"), pybind11::arg("v") );
 
 		cl.def( pybind11::init( [](LHEF::OAttr<int> const &o){ return new LHEF::OAttr<int>(o); } ) );
@@ -3795,8 +3691,6 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 
 	{ // LHEF::XMLTag file:HepMC3/LHEF.h line:87
 		pybind11::class_<LHEF::XMLTag, std::shared_ptr<LHEF::XMLTag>> cl(M("LHEF"), "XMLTag", "The XMLTag struct is used to represent all information within an\n XML tag. It contains the attributes as a map, any sub-tags as a\n vector of pointers to other XMLTag objects, and any other\n information as a single string.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::XMLTag(); } ) );
 		cl.def( pybind11::init( [](LHEF::XMLTag const &o){ return new LHEF::XMLTag(o); } ) );
 		cl.def_readwrite("name", &LHEF::XMLTag::name);
@@ -3820,8 +3714,6 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 
 	{ // LHEF::TagBase file:HepMC3/LHEF.h line:345
 		pybind11::class_<LHEF::TagBase, std::shared_ptr<LHEF::TagBase>> cl(M("LHEF"), "TagBase", "This is the base class of all classes representing xml tags.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::TagBase(); } ) );
 		cl.def( pybind11::init( [](const class std::map<class std::basic_string<char>, class std::basic_string<char>, struct std::less<class std::basic_string<char> >, class std::allocator<struct std::pair<const class std::basic_string<char>, class std::basic_string<char> > > > & a0){ return new LHEF::TagBase(a0); } ), "doc" , pybind11::arg("attr"));
 		cl.def( pybind11::init<const class std::map<std::string, std::string, struct std::less<std::string >, class std::allocator<struct std::pair<const std::string, std::string > > > &, std::string>(), pybind11::arg("attr"), pybind11::arg("conts") );
@@ -3846,8 +3738,6 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 	}
 	{ // LHEF::Generator file:HepMC3/LHEF.h line:474
 		pybind11::class_<LHEF::Generator, std::shared_ptr<LHEF::Generator>, LHEF::TagBase> cl(M("LHEF"), "Generator", "The Generator class contains information about a generator used in a run.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
 		cl.def( pybind11::init( [](LHEF::Generator const &o){ return new LHEF::Generator(o); } ) );
@@ -3859,8 +3749,6 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 	}
 	{ // LHEF::XSecInfo file:HepMC3/LHEF.h line:511
 		pybind11::class_<LHEF::XSecInfo, std::shared_ptr<LHEF::XSecInfo>, LHEF::TagBase> cl(M("LHEF"), "XSecInfo", "The XSecInfo class contains information given in the xsecinfo tag.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::XSecInfo(); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
@@ -3880,8 +3768,6 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 	}
 	{ // LHEF::EventFile file:HepMC3/LHEF.h line:617
 		pybind11::class_<LHEF::EventFile, std::shared_ptr<LHEF::EventFile>, LHEF::TagBase> cl(M("LHEF"), "EventFile", "Simple struct to store information about separate eventfiles to be\n loaded.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::EventFile(); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
@@ -3919,7 +3805,7 @@ void bind_HepMC3_LHEF(std::function< pybind11::module &(std::string const &names
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -3933,8 +3819,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 {
 	{ // LHEF::Cut file:HepMC3/LHEF.h line:669
 		pybind11::class_<LHEF::Cut, std::shared_ptr<LHEF::Cut>, LHEF::TagBase> cl(M("LHEF"), "Cut", "The Cut class represents a cut used by the Matrix Element generator.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::Cut(); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &, const class std::map<std::string, class std::set<long, struct std::less<long>, class std::allocator<long> >, struct std::less<std::string >, class std::allocator<struct std::pair<const std::string, class std::set<long, struct std::less<long>, class std::allocator<long> > > > > &>(), pybind11::arg("tag"), pybind11::arg("ptypes") );
 
@@ -3959,8 +3843,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::ProcInfo file:HepMC3/LHEF.h line:915
 		pybind11::class_<LHEF::ProcInfo, std::shared_ptr<LHEF::ProcInfo>, LHEF::TagBase> cl(M("LHEF"), "ProcInfo", "The ProcInfo class represents the information in a procinfo tag.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::ProcInfo(); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
@@ -3978,8 +3860,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::MergeInfo file:HepMC3/LHEF.h line:992
 		pybind11::class_<LHEF::MergeInfo, std::shared_ptr<LHEF::MergeInfo>, LHEF::TagBase> cl(M("LHEF"), "MergeInfo", "The MergeInfo class represents the information in a mergeinfo tag.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::MergeInfo(); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
@@ -3993,8 +3873,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::WeightInfo file:HepMC3/LHEF.h line:1042
 		pybind11::class_<LHEF::WeightInfo, std::shared_ptr<LHEF::WeightInfo>, LHEF::TagBase> cl(M("LHEF"), "WeightInfo", "The WeightInfo class encodes the description of a given weight\n present for all events.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::WeightInfo(); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
@@ -4012,8 +3890,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::WeightGroup file:HepMC3/LHEF.h line:1128
 		pybind11::class_<LHEF::WeightGroup, std::shared_ptr<LHEF::WeightGroup>, LHEF::TagBase> cl(M("LHEF"), "WeightGroup", "The WeightGroup assigns a group-name to a set of WeightInfo objects.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::WeightGroup(); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &, int, class std::vector<struct LHEF::WeightInfo, class std::allocator<struct LHEF::WeightInfo> > &>(), pybind11::arg("tag"), pybind11::arg("groupIndex"), pybind11::arg("wiv") );
 
@@ -4024,8 +3900,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::Weight file:HepMC3/LHEF.h line:1169
 		pybind11::class_<LHEF::Weight, std::shared_ptr<LHEF::Weight>, LHEF::TagBase> cl(M("LHEF"), "Weight", "The Weight class represents the information in a weight tag.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::Weight(); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
@@ -4042,8 +3916,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::Clus file:HepMC3/LHEF.h line:1250
 		pybind11::class_<LHEF::Clus, std::shared_ptr<LHEF::Clus>, LHEF::TagBase> cl(M("LHEF"), "Clus", "The Clus class represents a clustering of two particle entries into\n one as defined in a clustering tag.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::Clus(); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
@@ -4059,8 +3931,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::Scale file:HepMC3/LHEF.h line:1313
 		pybind11::class_<LHEF::Scale, std::shared_ptr<LHEF::Scale>, LHEF::TagBase> cl(M("LHEF"), "Scale", "Store special scales from within a scales tag.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::Scale(); } ), "doc" );
 		cl.def( pybind11::init( [](class std::basic_string<char> const & a0){ return new LHEF::Scale(a0); } ), "doc" , pybind11::arg("st"));
 		cl.def( pybind11::init( [](class std::basic_string<char> const & a0, int const & a1){ return new LHEF::Scale(a0, a1); } ), "doc" , pybind11::arg("st"), pybind11::arg("emtr"));
@@ -4080,8 +3950,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::Scales file:HepMC3/LHEF.h line:1416
 		pybind11::class_<LHEF::Scales, std::shared_ptr<LHEF::Scales>, LHEF::TagBase> cl(M("LHEF"), "Scales", "Collect different scales relevant for an event.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::Scales(); } ), "doc" );
 		cl.def( pybind11::init( [](double const & a0){ return new LHEF::Scales(a0); } ), "doc" , pybind11::arg("defscale"));
 		cl.def( pybind11::init<double, int>(), pybind11::arg("defscale"), pybind11::arg("npart") );
@@ -4104,8 +3972,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::PDFInfo file:HepMC3/LHEF.h line:1540
 		pybind11::class_<LHEF::PDFInfo, std::shared_ptr<LHEF::PDFInfo>, LHEF::TagBase> cl(M("LHEF"), "PDFInfo", "The PDFInfo class represents the information in a pdfinto tag.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::PDFInfo(); } ), "doc" );
 		cl.def( pybind11::init<double>(), pybind11::arg("defscale") );
 
@@ -4127,8 +3993,6 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 	}
 	{ // LHEF::HEPRUP file:HepMC3/LHEF.h line:1627
 		pybind11::class_<LHEF::HEPRUP, std::shared_ptr<LHEF::HEPRUP>, LHEF::TagBase> cl(M("LHEF"), "HEPRUP", "The HEPRUP class is a simple container corresponding to the Les Houches\n accord (<A HREF=\"http://arxiv.org/abs/hep-ph/0109068\">hep-ph/0109068</A>)\n common block with the same name. The members are named in the same\n way as in the common block. However, fortran arrays are represented\n by vectors, except for the arrays of length two which are\n represented by pair objects.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::HEPRUP(); } ) );
 		cl.def( pybind11::init( [](LHEF::HEPRUP const &o){ return new LHEF::HEPRUP(o); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &, int>(), pybind11::arg("tagin"), pybind11::arg("versin") );
@@ -4191,7 +4055,7 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -4203,10 +4067,8 @@ void bind_HepMC3_LHEF_1(std::function< pybind11::module &(std::string const &nam
 
 void bind_HepMC3_LHEF_2(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // LHEF::EventGroup file:HepMC3/LHEF.h line:2070
-		pybind11::class_<LHEF::EventGroup, std::shared_ptr<LHEF::EventGroup>, std::vector<LHEF::HEPEUP *>> cl(M("LHEF"), "EventGroup", "The EventGroup represents a set of events which are to be\n considered together.");
-		pybind11::handle cl_type = cl;
-
+	{ // LHEF::EventGroup file:HepMC3/LHEF.h line:2069
+		pybind11::class_<LHEF::EventGroup, std::shared_ptr<LHEF::EventGroup>, std::vector<LHEF::HEPEUP *,std::allocator<LHEF::HEPEUP *>>> cl(M("LHEF"), "EventGroup", "The EventGroup represents a set of events which are to be\n considered together.");
 		cl.def( pybind11::init( [](){ return new LHEF::EventGroup(); } ) );
 		cl.def( pybind11::init( [](LHEF::EventGroup const &o){ return new LHEF::EventGroup(o); } ) );
 		cl.def_readwrite("nreal", &LHEF::EventGroup::nreal);
@@ -4214,10 +4076,8 @@ void bind_HepMC3_LHEF_2(std::function< pybind11::module &(std::string const &nam
 		cl.def("assign", (struct LHEF::EventGroup & (LHEF::EventGroup::*)(const struct LHEF::EventGroup &)) &LHEF::EventGroup::operator=, "The assignment also copies the included HEPEUP object.\n\nC++: LHEF::EventGroup::operator=(const struct LHEF::EventGroup &) --> struct LHEF::EventGroup &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 		cl.def("clear", (void (LHEF::EventGroup::*)()) &LHEF::EventGroup::clear, "Remove all subevents.\n\nC++: LHEF::EventGroup::clear() --> void");
 	}
-	{ // LHEF::HEPEUP file:HepMC3/LHEF.h line:2118
+	{ // LHEF::HEPEUP file:HepMC3/LHEF.h line:2117
 		pybind11::class_<LHEF::HEPEUP, std::shared_ptr<LHEF::HEPEUP>, LHEF::TagBase> cl(M("LHEF"), "HEPEUP", "The HEPEUP class is a simple container corresponding to the Les Houches accord\n (<A HREF=\"http://arxiv.org/abs/hep-ph/0109068\">hep-ph/0109068</A>)\n common block with the same name. The members are named in the same\n way as in the common block. However, fortran arrays are represented\n by vectors, except for the arrays of length two which are\n represented by pair objects.");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new LHEF::HEPEUP(); } ) );
 		cl.def( pybind11::init( [](LHEF::HEPEUP const &o){ return new LHEF::HEPEUP(o); } ) );
 		cl.def( pybind11::init<const struct LHEF::XMLTag &, class LHEF::HEPRUP &>(), pybind11::arg("tagin"), pybind11::arg("heprupin") );
@@ -4266,10 +4126,8 @@ void bind_HepMC3_LHEF_2(std::function< pybind11::module &(std::string const &nam
 
 		 binder::custom_T_binder<LHEF::HEPEUP>(cl);
 	}
-	{ // LHEF::Reader file:HepMC3/LHEF.h line:2744
+	{ // LHEF::Reader file:HepMC3/LHEF.h line:2742
 		pybind11::class_<LHEF::Reader, std::shared_ptr<LHEF::Reader>> cl(M("LHEF"), "Reader", "The Reader class is initialized with a stream from which to read a\n version 1/2 Les Houches Accord event file. In the constructor of\n the Reader object the optional header information is read and then\n the mandatory init is read. After this the whole header block\n including the enclosing lines with tags are available in the public\n headerBlock member variable. Also the information from the init\n block is available in the heprup member variable and any additional\n comment lines are available in initComments. After each successful\n call to the readEvent() function the standard Les Houches Accord\n information about the event is available in the hepeup member\n variable and any additional comments in the eventComments\n variable. A typical reading sequence would look as follows:\n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<std::string>(), pybind11::arg("filename") );
 
 		cl.def_readwrite("version", &LHEF::Reader::version);
@@ -4286,10 +4144,8 @@ void bind_HepMC3_LHEF_2(std::function< pybind11::module &(std::string const &nam
 		cl.def("readEvent", (bool (LHEF::Reader::*)()) &LHEF::Reader::readEvent, "Read an event from the file and store it in the hepeup\n object. Optional comment lines are stored i the eventComments\n member variable. \n \n\n true if the read sas successful.\n\nC++: LHEF::Reader::readEvent() --> bool");
 		cl.def("openeventfile", (void (LHEF::Reader::*)(int)) &LHEF::Reader::openeventfile, "Open the efentfile with index ifile. If another eventfile is\n being read, its remaining contents is discarded. This is a noop\n if current read session is not a multi-file run.\n\nC++: LHEF::Reader::openeventfile(int) --> void", pybind11::arg("ifile"));
 	}
-	{ // LHEF::Writer file:HepMC3/LHEF.h line:3092
+	{ // LHEF::Writer file:HepMC3/LHEF.h line:3090
 		pybind11::class_<LHEF::Writer, std::shared_ptr<LHEF::Writer>> cl(M("LHEF"), "Writer", "The Writer class is initialized with a stream to which to write a\n version 1.0 Les Houches Accord event file. In the constructor of\n the Writer object the main XML tag is written out, with the\n corresponding end tag is written in the destructor. After a Writer\n object has been created, it is possible to assign standard init\n information in the heprup member variable. In addition any XML\n formatted information can be added to the headerBlock member\n variable (directly or via the addHeader() function). Further\n comment line (beginning with a # character) can be\n added to the initComments variable (directly or with the\n addInitComment() function). After this information is set, it\n should be written out to the file with the init() function.\n\n Before each event is written out with the writeEvent() function,\n the standard event information can then be assigned to the hepeup\n variable and optional comment lines (beginning with a\n # character) may be given to the eventComments\n variable (directly or with the addEventComment() function).\n\n ");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<std::string>(), pybind11::arg("filename") );
 
 		cl.def_readwrite("heprup", &LHEF::Writer::heprup);
@@ -4339,7 +4195,7 @@ void bind_HepMC3_LHEF_2(std::function< pybind11::module &(std::string const &nam
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
-#include <src/binders.hpp>
+#include <src/binders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -4630,8 +4486,6 @@ void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string co
 {
 	{ // HepMC3::HEPRUPAttribute file:HepMC3/LHEFAttributes.h line:26
 		pybind11::class_<HepMC3::HEPRUPAttribute, std::shared_ptr<HepMC3::HEPRUPAttribute>, PyCallBack_HepMC3_HEPRUPAttribute, HepMC3::Attribute> cl(M("HepMC3"), "HEPRUPAttribute", "Class for storing data for LHEF run information");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::HEPRUPAttribute(); }, [](){ return new PyCallBack_HepMC3_HEPRUPAttribute(); } ) );
 		cl.def( pybind11::init<std::string>(), pybind11::arg("s") );
 
@@ -4646,8 +4500,6 @@ void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string co
 	}
 	{ // HepMC3::HEPEUPAttribute file:HepMC3/LHEFAttributes.h line:68
 		pybind11::class_<HepMC3::HEPEUPAttribute, std::shared_ptr<HepMC3::HEPEUPAttribute>, PyCallBack_HepMC3_HEPEUPAttribute, HepMC3::Attribute> cl(M("HepMC3"), "HEPEUPAttribute", "Class for storing data for LHEF run information");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](){ return new HepMC3::HEPEUPAttribute(); }, [](){ return new PyCallBack_HepMC3_HEPEUPAttribute(); } ) );
 		cl.def( pybind11::init<std::string>(), pybind11::arg("s") );
 
@@ -4665,8 +4517,6 @@ void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string co
 	}
 	{ // HepMC3::ReaderLHEF file:HepMC3/ReaderLHEF.h line:34
 		pybind11::class_<HepMC3::ReaderLHEF, std::shared_ptr<HepMC3::ReaderLHEF>, PyCallBack_HepMC3_ReaderLHEF, HepMC3::Reader> cl(M("HepMC3"), "ReaderLHEF", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
 		cl.def("skip", (bool (HepMC3::ReaderLHEF::*)(const int)) &HepMC3::ReaderLHEF::skip, "skip events\n\nC++: HepMC3::ReaderLHEF::skip(const int) --> bool", pybind11::arg(""));
@@ -4676,8 +4526,6 @@ void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string co
 	}
 	{ // HepMC3::ReaderPlugin file:HepMC3/ReaderPlugin.h line:23
 		pybind11::class_<HepMC3::ReaderPlugin, std::shared_ptr<HepMC3::ReaderPlugin>, PyCallBack_HepMC3_ReaderPlugin, HepMC3::Reader> cl(M("HepMC3"), "ReaderPlugin", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &>(), pybind11::arg("filename"), pybind11::arg("libname"), pybind11::arg("newreader") );
 
 		cl.def("read_event", (bool (HepMC3::ReaderPlugin::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderPlugin::read_event, "Reading event \n\nC++: HepMC3::ReaderPlugin::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("ev"));
@@ -4686,8 +4534,6 @@ void bind_HepMC3_LHEFAttributes(std::function< pybind11::module &(std::string co
 	}
 	{ // HepMC3::WriterPlugin file:HepMC3/WriterPlugin.h line:23
 		pybind11::class_<HepMC3::WriterPlugin, std::shared_ptr<HepMC3::WriterPlugin>, PyCallBack_HepMC3_WriterPlugin, HepMC3::Writer> cl(M("HepMC3"), "WriterPlugin", "");
-		pybind11::handle cl_type = cl;
-
 		cl.def( pybind11::init( [](const class std::basic_string<char> & a0, const class std::basic_string<char> & a1, const class std::basic_string<char> & a2){ return new HepMC3::WriterPlugin(a0, a1, a2); }, [](const class std::basic_string<char> & a0, const class std::basic_string<char> & a1, const class std::basic_string<char> & a2){ return new PyCallBack_HepMC3_WriterPlugin(a0, a1, a2); } ), "doc");
 		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("libname"), pybind11::arg("newwriter"), pybind11::arg("run") );
 
@@ -4774,7 +4620,7 @@ PYBIND11_MODULE(pyHepMC3, root_module) {
 
 }
 
-// Source list file: /ptmp/mpp/andriish/HOME/HepMC3/python/src/pyHepMC3.sources
+// Source list file: /home/andriish/Projects/HepMC3/python/src/pyHepMC3.sources
 // pyHepMC3.cpp
 // HepMC3/Setup.cpp
 // HepMC3/FourVector.cpp
@@ -4797,5 +4643,5 @@ PYBIND11_MODULE(pyHepMC3, root_module) {
 // HepMC3/LHEF_2.cpp
 // HepMC3/LHEFAttributes.cpp
 
-// Modules list file: /ptmp/mpp/andriish/HOME/HepMC3/python/src/pyHepMC3.modules
+// Modules list file: /home/andriish/Projects/HepMC3/python/src/pyHepMC3.modules
 // HepMC3 LHEF std 

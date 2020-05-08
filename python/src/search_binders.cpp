@@ -1,5 +1,4 @@
-#ifndef _INCLUDED_search_binders_hpp_
-#define _INCLUDED_search_binders_hpp_
+#include "search_binders.h"
 namespace binder {
 		void custom_Selector_binder( pybind11::class_<HepMC3::StandardSelector, std::shared_ptr<HepMC3::StandardSelector>> cl)
 		{
@@ -24,10 +23,7 @@ namespace binder {
 	// HepMC3::ACCEPT_ALL(class std::shared_ptr<const class HepMC3::GenParticle>) file: line:41
 	M.def("ACCEPT_ALL", (bool (*)(class std::shared_ptr<const class HepMC3::GenParticle>)) &HepMC3::ACCEPT_ALL, "A Filter that will accept all particles\n This might be needed if a signature requires a default Filter\n\nC++: HepMC3::ACCEPT_ALL(class std::shared_ptr<const class HepMC3::GenParticle>) --> bool", pybind11::arg("dummy"));
        }
-	
 
 
 
 } // namespace binder
-
-#endif // _INCLUDED_search_binders_hpp_
