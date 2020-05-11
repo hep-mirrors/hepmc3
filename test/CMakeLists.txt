@@ -91,6 +91,7 @@ set( HepMC_root_tests
 
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
 if ("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
 endif()
 if(Threads_FOUND)
