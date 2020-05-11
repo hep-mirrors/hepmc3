@@ -1,3 +1,12 @@
+  --------------------------  HepMC3.2.2-pre --------------------------
+2020-05-11 Andrii Verbytskyi for HepMC
+          * Bugfix release
+          * Fixed treatment of the weights in case of different number of weights and weight names. Reported byt Frank Siegert
+          * Fixed WriterAsciiHepMC2 option. Reported by Julian Lukwata.
+          * Improved treatment of python installation, Thanks to Mattias Ellert.
+          * Split the sources of python bindings into smaller files to optimize compilation.
+          * Improved cmake configuration for special cases, e.g. old cmake, no ROOT, some compillers, etc. Added more error handeling.
+          * Added an example for search module.
   --------------------------  HepMC3.2.1 --------------------------
 2020-03-17 Andrii Verbytskyi for HepMC
         * Bugfix release.

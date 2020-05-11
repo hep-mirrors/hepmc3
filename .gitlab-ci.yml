@@ -66,16 +66,18 @@ debian-salsa:
   stage: test
   before_script:
     - apt-get update 
-    - apt-get install -y -qq cmake g++ 
+    - apt-get install -y -qq cmake g++   apt-utils
     - apt-get install -y -qq gfortran  doxygen wget graphviz libz-dev
     - apt-get install -y -qq devscripts build-essential lintian dh-make
     - apt-get install -y -qq libpython-dev python
     - apt-get install -y -qq libpython3-dev python3
+    - apt-get install -y -qq dh-python
   script:
     - export
     - rm .gitlab-ci.yml
-    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.2.0/HepMC3-3.2.0.tar.gz
-    - mv HepMC3-master.tar.gz  ../hepmc3_3.2.0.orig.tar.gz
+#    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.2.0/HepMC3-3.2.0.tar.gz
+    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/master/HepMC3-master.tar.gz
+    - mv HepMC3-master.tar.gz  ../hepmc3_3.2.2.orig.tar.gz
 #    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.2.0/HepMC3-3.2.0.tar.gz
 #    - mv HepMC3-3.2.0.tar.gz  ../hepmc3_3.2.0.orig.tar.gz
     - debuild -us -uc
