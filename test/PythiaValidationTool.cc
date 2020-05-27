@@ -24,7 +24,7 @@ int PythiaValidationTool::process(GenEvent &hepmc) {
 }
 
 void PythiaValidationTool::finalize() {
-/* The condition below is true at least for 8.209+. 8.209- will probably fail */
+    /* The condition below is true at least for 8.209+. 8.209- will probably fail */
 #if defined(PYTHIA_VERSION_INTEGER) || defined (PYTHIA_VERSION)
     m_pythia.stat();
 #else
