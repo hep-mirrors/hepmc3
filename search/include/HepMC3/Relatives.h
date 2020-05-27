@@ -109,20 +109,19 @@ private:
     template<typename GenObject_type, typename dummy>
     GenParticles_type<GenObject_type> _recursive(GenObject_type input) const ;
 
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenVertex, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> _recursive(GenObject_type input) const {
+    GenParticles_type<GenVertexPtr> _recursive(GenVertexPtr input) const {
 
-        GenParticles_type <GenObject_type> results;
+        GenParticles_type <GenVertexPtr> results;
         if ( !input ) return results;
         for(auto v: m_checkedObjects) {
             if(v->id() == input->id()) return results;
         }
 
-        m_checkedObjects.emplace_back(new idInterface<GenObject_type>(input));
+        m_checkedObjects.emplace_back(new idInterface<GenVertexPtr>(input));
 
         for(auto p: m_applyRelation(input)) {
             results.emplace_back(p);
-            GenParticles_type <GenObject_type> tmp = _recursive(p);
+            GenParticles_type <GenVertexPtr> tmp = _recursive(p);
             results.insert(results.end(),
                            std::make_move_iterator(tmp.begin()),
                            std::make_move_iterator(tmp.end()));
@@ -131,10 +130,34 @@ private:
         return results;
     }
 
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenParticle, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> _recursive(GenObject_type input) const {
+    GenParticles_type<ConstGenVertexPtr> _recursive(ConstGenVertexPtr input) const {
+
+        GenParticles_type <ConstGenVertexPtr> results;
+        if ( !input ) return results;
+        for(auto v: m_checkedObjects) {
+            if(v->id() == input->id()) return results;
+        }
+
+        m_checkedObjects.emplace_back(new idInterface<ConstGenVertexPtr>(input));
+
+        for(auto p: m_applyRelation(input)) {
+            results.emplace_back(p);
+            GenParticles_type <ConstGenVertexPtr> tmp = _recursive(p);
+            results.insert(results.end(),
+                           std::make_move_iterator(tmp.begin()),
+                           std::make_move_iterator(tmp.end()));
+        }
+
+        return results;
+    }
+    
+    GenParticles_type<GenParticlePtr> _recursive(GenParticlePtr input) const {
         return _recursive(m_applyRelation.vertex(input));
     }
+    GenParticles_type<ConstGenParticlePtr> _recursive(ConstGenParticlePtr input) const {
+        return _recursive(m_applyRelation.vertex(input));
+    }
+
 
     /** @brief  hasID */
     class hasId {
