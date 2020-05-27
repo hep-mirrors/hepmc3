@@ -1,7 +1,7 @@
 stages:
   - test
 
-cc7:
+LCG_95_cc7-gcc8-opt:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
@@ -26,7 +26,7 @@ cc7:
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-ubuntu18:
+LCG_95_ubuntu1804-gcc8-opt:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
@@ -81,4 +81,988 @@ debian-salsa:
 #    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.2.0/HepMC3-3.2.0.tar.gz
 #    - mv HepMC3-3.2.0.tar.gz  ../hepmc3_3.2.0.orig.tar.gz
     - debuild -us -uc
+
+
+
+Fedora23-gcc-noroot-noexamples-notests-nopython:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:23
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=OFF -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+Fedora23-clang-noroot-noexamples-notests-nopython:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:23
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=OFF -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+Fedora24-gcc-noroot-noexamples-notests:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:24
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+Fedora24-clang-noroot-noexamples-notests:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:24
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+Fedora25-gcc-noroot-noexamples-notests:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:25
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+Fedora25-clang-noroot-noexamples-notests:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:25
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+Fedora26-gcc-noroot-noexamples-notests:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:26
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+Fedora26-clang-noroot-noexamples-notests:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:26
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+Fedora27-gcc:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:27
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+Fedora27-clang:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:27
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+Fedora28-gcc:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:28
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+Fedora28-clang:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:28
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+Fedora29-gcc:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:29
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+Fedora29-clang:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:29
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+
+
+Fedora30-gcc:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:30
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+Fedora30-clang:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:30
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+Fedora31-gcc:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:31
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+Fedora31-clang:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:31
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+Fedora32-gcc:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:32
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+Fedora32-clang:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:32
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+Fedora33-gcc:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:33
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+Fedora33-clang:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
+  image: fedora:33
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+
+
+CentOS7-gcc:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /CentOSCI/
+  image: centos:7
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install epel-release
+    - yum -y install  cmake3    
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+    - yum -y install  python34 python34-devel
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake3 .. -DHEPMC3_PYTHON_VERSIONS=2,3.4,3.6  -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+CentOS7-clang:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /CentOSCI/ 
+  image: centos:7
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install epel-release
+    - yum -y install  cmake3
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel
+    - yum -y install  python34 python34-devel
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+#    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake3 ..  -DHEPMC3_PYTHON_VERSIONS=2,3.4,3.6  -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CentOS8-gcc:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /CentOSCI/
+  image: centos:8
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum install -y https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
+    - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+    - dnf -y install 'dnf-command(config-manager)'
+    - dnf config-manager --set-enabled PowerTools  
+    - dnf config-manager --set-enabled AppStream  
+    - dnf config-manager --set-enabled epel-testing    
+    - yum -y install  cmake make binutils
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen --skip-broken
+#examples 
+    - yum -y install  gcc-gfortran
+#The nastiest package ever
+    - yum -y install libzstd  --enablerepo=epel --enablerepo=epel-testing  --enablerepo=elrepo --enablerepo=elrepo-testing
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz-devel pythia8 pythia8-devel  root
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+CentOS8-clang:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /CentOSCI/ 
+  image: centos:8
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum install -y https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
+    - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+    - dnf -y install 'dnf-command(config-manager)'
+    - dnf config-manager --set-enabled PowerTools  
+    - dnf config-manager --set-enabled AppStream  
+    - dnf config-manager --set-enabled epel-testing  
+    - yum -y install  cmake make binutils
+#    - yum -y install  gcc gcc-c++
+    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+#documentation 
+    - yum -y install  doxygen --skip-broken
+#examples 
+#    - yum -y install  gcc-gfortran
+#The nastiest package ever
+    - yum -y install libzstd  --enablerepo=epel --enablerepo=epel-testing  --enablerepo=elrepo --enablerepo=elrepo-testing
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz-devel pythia8 pythia8-devel  root
+  script:
+    - export
+    - mkdir build
+    - cd build
+#    - export CXX=g++
+#    - export CC=gcc
+#    - export FC=gfortran
+    - export CXX=clang++
+    - export CC=clang
+#    - export FC=gfortran
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+
+
+
+
+
+
+
+
 

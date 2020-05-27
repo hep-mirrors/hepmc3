@@ -24,8 +24,9 @@ int PythiaValidationTool::process(GenEvent &hepmc) {
 }
 
 void PythiaValidationTool::finalize() {
-#ifdef  PYTHIA_VERSION_INTEGER
-    if  (PYTHIA_VERSION_INTEGER>8200)  m_pythia.stat();
+/* The condition below is true at least for 8.209+. 8.209- will probably fail */
+#if defined(PYTHIA_VERSION_INTEGER) || defined (PYTHIA_VERSION)
+    m_pythia.stat();
 #else
     m_pythia.statistics();
 #endif

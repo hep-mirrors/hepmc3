@@ -9,7 +9,8 @@
 #ifdef HEPMC2
 #include "HepMC/GenEvent.h"
 #include "Pythia8/Pythia.h"
-#ifdef  PYTHIA_VERSION_INTEGER
+/* The condition below is true at least for 8.209+. 8.209- will probably fail */
+#if defined(PYTHIA_VERSION_INTEGER) || defined (PYTHIA_VERSION)
 #include "Pythia8Plugins/HepMC2.h"
 #else
 #include "Pythia8/Pythia8ToHepMC.h"
