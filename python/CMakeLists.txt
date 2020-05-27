@@ -44,6 +44,12 @@ CHECK_CXX_COMPILER_FLAG("-Wno-unused-but-set-variable" COMPILER_SUPPORTS_WNO_UNU
 if (COMPILER_SUPPORTS_WNO_UNUSED_BUT_SET_VARIABLE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-but-set-variable")
 endif()
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    CHECK_CXX_COMPILER_FLAG("-fsized-deallocation" COMPILER_SUPPORTS_-fsized-deallocation)
+    if (COMPILER_SUPPORTS_-fsized-deallocation)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsized-deallocation")
+    endif()
+endif()
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 if(COMPILER_SUPPORTS_CXX11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -246,9 +252,7 @@ set_target_properties(pyHepMC3${Python_VERSION} PROPERTIES
                                                            MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:> 
                                                            ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/$<0:>)
 target_link_libraries(pyHepMC3${Python_VERSION} PUBLIC ${Python_LIBRARIES} ${HEPMC3_LIB} )
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-    target_compile_options(pyHepMC3${Python_VERSION} PRIVATE "-fsized-deallocation")
-endif()
+
 target_include_directories(pyHepMC3${Python_VERSION} PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR} )
 if(ROOT_FOUND)
 set_target_properties(pyHepMC3rootIO${Python_VERSION} PROPERTIES
@@ -256,9 +260,6 @@ set_target_properties(pyHepMC3rootIO${Python_VERSION} PROPERTIES
                                                                  MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:> 
                                                                  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:>)
 target_link_libraries(pyHepMC3rootIO${Python_VERSION} PUBLIC ${Python_LIBRARIES}  ${HEPMC3_LIB} ${HEPMC3_ROOTIO_LIBRARY} )
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-    target_compile_options(pyHepMC3rootIO${Python_VERSION} PRIVATE "-fsized-deallocation")
-endif()
 target_include_directories(pyHepMC3rootIO${Python_VERSION} PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR} )
 
 endif()
@@ -268,9 +269,6 @@ set_target_properties(pyHepMC3search${Python_VERSION} PROPERTIES
                                                                  MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:> 
                                                                  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:>)
 target_link_libraries(pyHepMC3search${Python_VERSION} PUBLIC ${Python_LIBRARIES} ${HEPMC3_LIB} ${HEPMC3_SEARCH_LIB} )
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-    target_compile_options(pyHepMC3search${Python_VERSION} PRIVATE "-fsized-deallocation")
-endif()
 target_include_directories(pyHepMC3search${Python_VERSION} PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR} )
 endif()
 

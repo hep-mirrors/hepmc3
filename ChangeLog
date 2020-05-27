@@ -6,6 +6,7 @@
           * Improved treatment of python installation, Thanks to Mattias Ellert.
           * Split the sources of python bindings into smaller files to optimize compilation.
           * Improved cmake configuration for special cases, e.g. old cmake, no ROOT, some compillers, etc. Added more error handeling.
+          * Fixed compilation of the search module with Clang
           * Added an example for search module.
   --------------------------  HepMC3.2.1 --------------------------
 2020-03-17 Andrii Verbytskyi for HepMC
