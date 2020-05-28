@@ -193,7 +193,7 @@ Fedora24-gcc:
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora24-clang:
+Fedora24-clang-noroot:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
@@ -226,7 +226,7 @@ Fedora24-clang:
     - export CXX=clang++
     - export CC=clang
 #    - export FC=gfortran
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
     - make -j $(nproc)
     - ctest --output-on-failure 
 
