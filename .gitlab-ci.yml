@@ -84,7 +84,7 @@ debian-salsa:
 
 
 
-Fedora23-gcc-noroot-noexamples-notests-nopython:
+Fedora23-gcc-noroot-nopython:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
@@ -105,6 +105,8 @@ Fedora23-gcc-noroot-noexamples-notests-nopython:
 #examples 
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+#The older ROOT has suboptimal cmake config
+    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake      
   script:
     - export
     - mkdir build
@@ -115,11 +117,11 @@ Fedora23-gcc-noroot-noexamples-notests-nopython:
 #    - export CXX=clang++
 #    - export CC=clang
 #    - export FC=gfortran    
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=OFF -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=OFF -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora23-clang-noroot-noexamples-notests-nopython:
+Fedora23-clang-noroot-nopython:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
@@ -140,6 +142,8 @@ Fedora23-clang-noroot-noexamples-notests-nopython:
 #examples 
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+#The older ROOT has suboptimal cmake config
+    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake      
   script:
     - export
     - mkdir build
@@ -150,11 +154,11 @@ Fedora23-clang-noroot-noexamples-notests-nopython:
     - export CXX=clang++
     - export CC=clang
 #    - export FC=gfortran
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=OFF -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=OFF -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora24-gcc-noroot-noexamples-notests:
+Fedora24-gcc-noroot:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
@@ -175,6 +179,8 @@ Fedora24-gcc-noroot-noexamples-notests:
 #examples 
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+#The older ROOT has suboptimal cmake config
+    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake
   script:
     - export
     - mkdir build
@@ -185,11 +191,11 @@ Fedora24-gcc-noroot-noexamples-notests:
 #    - export CXX=clang++
 #    - export CC=clang
 #    - export FC=gfortran    
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora24-clang-noroot-noexamples-notests:
+Fedora24-clang-noroot:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
@@ -210,6 +216,8 @@ Fedora24-clang-noroot-noexamples-notests:
 #examples 
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+#The older ROOT has suboptimal cmake config
+    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake
   script:
     - export
     - mkdir build
@@ -220,11 +228,11 @@ Fedora24-clang-noroot-noexamples-notests:
     - export CXX=clang++
     - export CC=clang
 #    - export FC=gfortran
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora25-gcc-noroot-noexamples-notests:
+Fedora25-gcc-noroot:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
@@ -245,6 +253,8 @@ Fedora25-gcc-noroot-noexamples-notests:
 #examples 
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+#The older ROOT has suboptimal cmake config
+    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake    
   script:
     - export
     - mkdir build
@@ -255,11 +265,11 @@ Fedora25-gcc-noroot-noexamples-notests:
 #    - export CXX=clang++
 #    - export CC=clang
 #    - export FC=gfortran    
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora25-clang-noroot-noexamples-notests:
+Fedora25-clang-noroot:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
@@ -280,6 +290,8 @@ Fedora25-clang-noroot-noexamples-notests:
 #examples 
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+#The older ROOT has suboptimal cmake config
+    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake    
   script:
     - export
     - mkdir build
@@ -290,11 +302,11 @@ Fedora25-clang-noroot-noexamples-notests:
     - export CXX=clang++
     - export CC=clang
 #    - export FC=gfortran
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora26-gcc-noroot-noexamples-notests:
+Fedora26-gcc-noroot:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
@@ -315,6 +327,8 @@ Fedora26-gcc-noroot-noexamples-notests:
 #examples 
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+#The older ROOT has suboptimal cmake config
+    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake    
   script:
     - export
     - mkdir build
@@ -325,12 +339,12 @@ Fedora26-gcc-noroot-noexamples-notests:
 #    - export CXX=clang++
 #    - export CC=clang
 #    - export FC=gfortran    
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
     - make -j $(nproc)
     - ctest --output-on-failure 
 
 
-Fedora26-clang-noroot-noexamples-notests:
+Fedora26-clang-noroot:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
@@ -351,6 +365,8 @@ Fedora26-clang-noroot-noexamples-notests:
 #examples 
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+#The older ROOT has suboptimal cmake config
+    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake    
   script:
     - export
     - mkdir build
@@ -361,7 +377,7 @@ Fedora26-clang-noroot-noexamples-notests:
     - export CXX=clang++
     - export CC=clang
 #    - export FC=gfortran
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=OFF -DHEPMC3_ENABLE_TEST=OFF -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
     - make -j $(nproc)
     - ctest --output-on-failure 
 
