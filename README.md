@@ -221,9 +221,9 @@ python/src/stl_binders.hpp
 and automatically generated  binding sources
 
 ```
-python/src/pyHepMC3.cpp
-python/src/pyHepMC3rootIO.cpp
-python/src/pyHepMC3search.cpp
+python/src/pyHepMC3*.cpp
+python/src/pyHepMC3rootIO*.cpp
+python/src/pyHepMC3search*.cpp
 ```
 
 The automatically sources were generated using the binder configurations
