@@ -105,8 +105,7 @@ Fedora23-gcc-noroot-nopython:
 #examples 
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
-#The older ROOT has suboptimal cmake config
-    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake      
+# We have ROOT5 here   
   script:
     - export
     - mkdir build
@@ -142,8 +141,7 @@ Fedora23-clang-noroot-nopython:
 #examples 
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
-#The older ROOT has suboptimal cmake config
-    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake      
+# We have ROOT5 here
   script:
     - export
     - mkdir build
@@ -158,7 +156,7 @@ Fedora23-clang-noroot-nopython:
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora24-gcc-noroot:
+Fedora24-gcc:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
@@ -180,7 +178,7 @@ Fedora24-gcc-noroot:
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake
+    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
   script:
     - export
     - mkdir build
@@ -191,11 +189,11 @@ Fedora24-gcc-noroot:
 #    - export CXX=clang++
 #    - export CC=clang
 #    - export FC=gfortran    
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora24-clang-noroot:
+Fedora24-clang:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
@@ -217,7 +215,7 @@ Fedora24-clang-noroot:
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake
+    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
   script:
     - export
     - mkdir build
@@ -228,11 +226,11 @@ Fedora24-clang-noroot:
     - export CXX=clang++
     - export CC=clang
 #    - export FC=gfortran
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora25-gcc-noroot:
+Fedora25-gcc:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
@@ -254,7 +252,7 @@ Fedora25-gcc-noroot:
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake    
+    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
   script:
     - export
     - mkdir build
@@ -265,11 +263,11 @@ Fedora25-gcc-noroot:
 #    - export CXX=clang++
 #    - export CC=clang
 #    - export FC=gfortran    
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora25-clang-noroot:
+Fedora25-clang:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
@@ -291,7 +289,7 @@ Fedora25-clang-noroot:
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake    
+    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r    
   script:
     - export
     - mkdir build
@@ -302,11 +300,11 @@ Fedora25-clang-noroot:
     - export CXX=clang++
     - export CC=clang
 #    - export FC=gfortran
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
     - make -j $(nproc)
     - ctest --output-on-failure 
 
-Fedora26-gcc-noroot:
+Fedora26-gcc:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
@@ -328,7 +326,7 @@ Fedora26-gcc-noroot:
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake    
+    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
   script:
     - export
     - mkdir build
@@ -339,12 +337,12 @@ Fedora26-gcc-noroot:
 #    - export CXX=clang++
 #    - export CC=clang
 #    - export FC=gfortran    
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
     - make -j $(nproc)
     - ctest --output-on-failure 
 
 
-Fedora26-clang-noroot:
+Fedora26-clang:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/ 
@@ -366,7 +364,7 @@ Fedora26-clang-noroot:
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - rm -f /usr/share/root/cmake/ROOTConfig-targets-relwithdebinfo.cmake    
+    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
   script:
     - export
     - mkdir build
@@ -377,7 +375,7 @@ Fedora26-clang-noroot:
     - export CXX=clang++
     - export CC=clang
 #    - export FC=gfortran
-    - cmake .. -DHEPMC3_ENABLE_ROOTIO=OFF -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
     - make -j $(nproc)
     - ctest --output-on-failure 
 
