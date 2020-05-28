@@ -178,7 +178,18 @@ Fedora24-gcc:
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
+    - yum -y install python2-root python3-root root-cling root-core root-fftw root-foam root-fumili root-gdml 
+    - yum -y install root-genetic root-genvector root-geocad root-geom root-graf root-graf3d root-graf3d-eve root-graf3d-gl 
+    - yum -y install root-graf3d-gviz3d root-graf3d-x3d root-graf-asimage root-graf-fitsio root-graf-gpad root-graf-gviz 
+    - yum -y install root-graf-postscript root-graf-qt root-graf-x11 root-gui root-guibuilder root-gui-fitpanel root-gui-ged 
+    - yum -y install root-gui-qt root-gui-recorder root-hbook root-hist root-hist-factory root-hist-painter root-html root-io 
+    - yum -y install root-io-dcache root-io-gfal root-io-hdfs root-io-rfio root-io-sql root-io-xml root-mathcore root-mathmore 
+    - yum -y install root-matrix root-memstat root-minuit root-minuit2 root-mlp root-montecarlo-eg root-montecarlo-pythia8 
+    - yum -y install root-montecarlo-vmc root-multiproc root-net root-net-auth root-net-bonjour root-net-davix root-net-globus 
+    - yum -y install root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-netx root-physics root-proof root-proof-bench 
+    - yum -y install root-proof-sessionviewer root-quadp root-r root-roofit root-r-tools root-smatrix root-spectrum root-spectrum-painter 
+    - yum -y install root-splot root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva root-tmva-gui 
+    - yum -y install root-tmva-python root-tmva-r root-tree root-tree-player root-tree-viewer root-unfold root-unuran root-xproof 
   script:
     - export
     - mkdir build
@@ -215,7 +226,18 @@ Fedora24-clang:
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
+    - yum -y install python2-root python3-root root-cling root-core root-fftw root-foam root-fumili root-gdml 
+    - yum -y install root-genetic root-genvector root-geocad root-geom root-graf root-graf3d root-graf3d-eve root-graf3d-gl 
+    - yum -y install root-graf3d-gviz3d root-graf3d-x3d root-graf-asimage root-graf-fitsio root-graf-gpad root-graf-gviz 
+    - yum -y install root-graf-postscript root-graf-qt root-graf-x11 root-gui root-guibuilder root-gui-fitpanel root-gui-ged 
+    - yum -y install root-gui-qt root-gui-recorder root-hbook root-hist root-hist-factory root-hist-painter root-html root-io 
+    - yum -y install root-io-dcache root-io-gfal root-io-hdfs root-io-rfio root-io-sql root-io-xml root-mathcore root-mathmore 
+    - yum -y install root-matrix root-memstat root-minuit root-minuit2 root-mlp root-montecarlo-eg root-montecarlo-pythia8 
+    - yum -y install root-montecarlo-vmc root-multiproc root-net root-net-auth root-net-bonjour root-net-davix root-net-globus 
+    - yum -y install root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-netx root-physics root-proof root-proof-bench 
+    - yum -y install root-proof-sessionviewer root-quadp root-r root-roofit root-r-tools root-smatrix root-spectrum root-spectrum-painter 
+    - yum -y install root-splot root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva root-tmva-gui 
+    - yum -y install root-tmva-python root-tmva-r root-tree root-tree-player root-tree-viewer root-unfold root-unuran root-xproof 
   script:
     - export
     - mkdir build
@@ -252,7 +274,18 @@ Fedora25-gcc:
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
+    - yum -y install python2-root python3-root root-cling root-core root-fftw root-foam root-fumili root-gdml 
+    - yum -y install root-genetic root-genvector root-geocad root-geom root-graf root-graf3d root-graf3d-eve root-graf3d-gl 
+    - yum -y install root-graf3d-gviz3d root-graf3d-x3d root-graf-asimage root-graf-fitsio root-graf-gpad root-graf-gviz 
+    - yum -y install root-graf-postscript root-graf-qt root-graf-x11 root-gui root-guibuilder root-gui-fitpanel root-gui-ged 
+    - yum -y install root-gui-qt root-gui-recorder root-hbook root-hist root-hist-factory root-hist-painter root-html root-io 
+    - yum -y install root-io-dcache root-io-gfal root-io-hdfs root-io-rfio root-io-sql root-io-xml root-mathcore root-mathmore 
+    - yum -y install root-matrix root-memstat root-minuit root-minuit2 root-mlp root-montecarlo-eg root-montecarlo-pythia8 
+    - yum -y install root-montecarlo-vmc root-multiproc root-net root-net-auth root-net-bonjour root-net-davix root-net-globus 
+    - yum -y install root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-netx root-physics root-proof root-proof-bench 
+    - yum -y install root-proof-sessionviewer root-quadp root-r root-roofit root-r-tools root-smatrix root-spectrum root-spectrum-painter 
+    - yum -y install root-splot root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva root-tmva-gui 
+    - yum -y install root-tmva-python root-tmva-r root-tree root-tree-player root-tree-viewer root-unfold root-unuran root-xproof 
   script:
     - export
     - mkdir build
@@ -289,7 +322,18 @@ Fedora25-clang:
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r    
+    - yum -y install python2-root python3-root root-cling root-core root-fftw root-foam root-fumili root-gdml 
+    - yum -y install root-genetic root-genvector root-geocad root-geom root-graf root-graf3d root-graf3d-eve root-graf3d-gl 
+    - yum -y install root-graf3d-gviz3d root-graf3d-x3d root-graf-asimage root-graf-fitsio root-graf-gpad root-graf-gviz 
+    - yum -y install root-graf-postscript root-graf-qt root-graf-x11 root-gui root-guibuilder root-gui-fitpanel root-gui-ged 
+    - yum -y install root-gui-qt root-gui-recorder root-hbook root-hist root-hist-factory root-hist-painter root-html root-io 
+    - yum -y install root-io-dcache root-io-gfal root-io-hdfs root-io-rfio root-io-sql root-io-xml root-mathcore root-mathmore 
+    - yum -y install root-matrix root-memstat root-minuit root-minuit2 root-mlp root-montecarlo-eg root-montecarlo-pythia8 
+    - yum -y install root-montecarlo-vmc root-multiproc root-net root-net-auth root-net-bonjour root-net-davix root-net-globus 
+    - yum -y install root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-netx root-physics root-proof root-proof-bench 
+    - yum -y install root-proof-sessionviewer root-quadp root-r root-roofit root-r-tools root-smatrix root-spectrum root-spectrum-painter 
+    - yum -y install root-splot root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva root-tmva-gui 
+    - yum -y install root-tmva-python root-tmva-r root-tree root-tree-player root-tree-viewer root-unfold root-unuran root-xproof 
   script:
     - export
     - mkdir build
@@ -326,7 +370,18 @@ Fedora26-gcc:
     - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
+    - yum -y install python2-root python3-root root-cling root-core root-fftw root-foam root-fumili root-gdml 
+    - yum -y install root-genetic root-genvector root-geocad root-geom root-graf root-graf3d root-graf3d-eve root-graf3d-gl 
+    - yum -y install root-graf3d-gviz3d root-graf3d-x3d root-graf-asimage root-graf-fitsio root-graf-gpad root-graf-gviz 
+    - yum -y install root-graf-postscript root-graf-qt root-graf-x11 root-gui root-guibuilder root-gui-fitpanel root-gui-ged 
+    - yum -y install root-gui-qt root-gui-recorder root-hbook root-hist root-hist-factory root-hist-painter root-html root-io 
+    - yum -y install root-io-dcache root-io-gfal root-io-hdfs root-io-rfio root-io-sql root-io-xml root-mathcore root-mathmore 
+    - yum -y install root-matrix root-memstat root-minuit root-minuit2 root-mlp root-montecarlo-eg root-montecarlo-pythia8 
+    - yum -y install root-montecarlo-vmc root-multiproc root-net root-net-auth root-net-bonjour root-net-davix root-net-globus 
+    - yum -y install root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-netx root-physics root-proof root-proof-bench 
+    - yum -y install root-proof-sessionviewer root-quadp root-r root-roofit root-r-tools root-smatrix root-spectrum root-spectrum-painter 
+    - yum -y install root-splot root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva root-tmva-gui 
+    - yum -y install root-tmva-python root-tmva-r root-tree root-tree-player root-tree-viewer root-unfold root-unuran root-xproof 
   script:
     - export
     - mkdir build
@@ -364,7 +419,18 @@ Fedora26-clang:
 #    - yum -y install  gcc-gfortran
     - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
-    - yum -y install python3-root root-gdml root-geocad root-graf3d-eve root-graf3d-gl root-graf3d-gviz3d root-graf3d-x3d root-graf-fitsio root-graf-gviz root-graf-qt root-guibuilder root-gui-fitpanel root-gui-recorder root-hist-factory root-html root-memstat root-montecarlo-eg root-montecarlo-pythia8 root-montecarlo-vmc root-net-bonjour root-net-davix root-net-globus root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-proof-bench root-proof-sessionviewer root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva-gui root-tmva-python root-tmva-r
+    - yum -y install python2-root python3-root root-cling root-core root-fftw root-foam root-fumili root-gdml 
+    - yum -y install root-genetic root-genvector root-geocad root-geom root-graf root-graf3d root-graf3d-eve root-graf3d-gl 
+    - yum -y install root-graf3d-gviz3d root-graf3d-x3d root-graf-asimage root-graf-fitsio root-graf-gpad root-graf-gviz 
+    - yum -y install root-graf-postscript root-graf-qt root-graf-x11 root-gui root-guibuilder root-gui-fitpanel root-gui-ged 
+    - yum -y install root-gui-qt root-gui-recorder root-hbook root-hist root-hist-factory root-hist-painter root-html root-io 
+    - yum -y install root-io-dcache root-io-gfal root-io-hdfs root-io-rfio root-io-sql root-io-xml root-mathcore root-mathmore 
+    - yum -y install root-matrix root-memstat root-minuit root-minuit2 root-mlp root-montecarlo-eg root-montecarlo-pythia8 
+    - yum -y install root-montecarlo-vmc root-multiproc root-net root-net-auth root-net-bonjour root-net-davix root-net-globus 
+    - yum -y install root-net-http root-net-krb5 root-net-ldap root-net-rpdutils root-netx root-physics root-proof root-proof-bench 
+    - yum -y install root-proof-sessionviewer root-quadp root-r root-roofit root-r-tools root-smatrix root-spectrum root-spectrum-painter 
+    - yum -y install root-splot root-sql-mysql root-sql-odbc root-sql-pgsql root-sql-sqlite root-table root-tmva root-tmva-gui 
+    - yum -y install root-tmva-python root-tmva-r root-tree root-tree-player root-tree-viewer root-unfold root-unuran root-xproof 
   script:
     - export
     - mkdir build
