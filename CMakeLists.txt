@@ -325,7 +325,7 @@ option(USE_INTERFACE_FROM_PYTHIA8 "Use Pythia8ToHepMC3.h from Pythia8" OFF)
 if(HEPMC3_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
   add_subdirectory(examples)
-  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  FILES_MATCHING  PATTERN "include" PATTERN "*CMakeFiles*" PATTERN "Makefile" PATTERN "*cmake_install.cmake*"  PATTERN "*libAnalysis*" EXCLUDE )
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  FILES_MATCHING PATTERN "*"   PATTERN "*CMakeFiles*" EXCLUDE    PATTERN "Makefile" EXCLUDE  PATTERN "*cmake_install.cmake*" EXCLUDE  PATTERN "*libAnalysis*" EXCLUDE )
 endif()
 
 if(HEPMC3_BUILD_DOCS)
