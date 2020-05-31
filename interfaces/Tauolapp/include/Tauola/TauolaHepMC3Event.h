@@ -30,42 +30,42 @@
 namespace Tauolapp
 {
 using namespace HepMC3;
-class TauolaHepMC3Event : public TauolaEvent{
+class TauolaHepMC3Event : public TauolaEvent {
 
- public:
+public:
 
-  /** Constructor which keeps a pointer to the GenEvent*/
-  TauolaHepMC3Event(GenEvent * event);
+    /** Constructor which keeps a pointer to the GenEvent*/
+    TauolaHepMC3Event(GenEvent * event);
 
-  ~TauolaHepMC3Event();
+    ~TauolaHepMC3Event();
 
-  /** Returns the GenEvent */
-  GenEvent * getEvent();
+    /** Returns the GenEvent */
+    GenEvent * getEvent();
 
-  /** Implementation of TauolaEvent virtual method.
-      This returns a list of particles in the event with
-      pdg id = "pdgID". */
-  std::vector<TauolaParticle*> findParticles(int pdgID);
+    /** Implementation of TauolaEvent virtual method.
+        This returns a list of particles in the event with
+        pdg id = "pdgID". */
+    std::vector<TauolaParticle*> findParticles(int pdgID);
 
-  /** Implementation of TauolaEven virtual method.
-      This returns a list of particles in the event with
-      pdg id = "pdgID" and stable status code. */
-  std::vector<TauolaParticle*> findStableParticles(int pdgID);
+    /** Implementation of TauolaEven virtual method.
+        This returns a list of particles in the event with
+        pdg id = "pdgID" and stable status code. */
+    std::vector<TauolaParticle*> findStableParticles(int pdgID);
 
-  /** Overriding of TauolaEvent decayEndgame method.
-      Converts the momentum and length units */
-  void eventEndgame();
+    /** Overriding of TauolaEvent decayEndgame method.
+        Converts the momentum and length units */
+    void eventEndgame();
 
- private:
+private:
 
-  /** The event */
-  GenEvent * m_event;
-  /** List of particles to be decayed */
-  std::vector<TauolaParticle*> m_tau_list;
-  /** Momentum unit name */
-  string m_momentum_unit;
-  /** Length unit name */
-  string m_length_unit;
+    /** The event */
+    GenEvent * m_event;
+    /** List of particles to be decayed */
+    std::vector<TauolaParticle*> m_tau_list;
+    /** Momentum unit name */
+    string m_momentum_unit;
+    /** Length unit name */
+    string m_length_unit;
 
 };
 

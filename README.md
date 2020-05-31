@@ -4,7 +4,7 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
 # A Quick Start (applicable to recent versions):
 
 0. The minimal requirements for the  installation from sources are 
- - C++ compiller with c++11 standard support
+ - C++ compiler with c++11 standard support
  - cmake version 3.X.  The  support for version 2.8 is provided only for the core and search libraries.  It will be completely removed in the future versions.
  
 1. a)Checkout the HepMC from GIT repository:
@@ -14,8 +14,8 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   ```
   or b) download the tarball with wget or any other tool
   ```
-  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.0.tar.gz
-  tar -xzf HepMC3-3.2.0.tar.gz  
+  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.2.tar.gz
+  tar -xzf HepMC3-3.2.2.tar.gz  
   ```
 2. Create a workspace area on which to perform the builds 
   ```
@@ -30,7 +30,7 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
   ```
   or b)
   ```
-  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3-3.2.0 
+  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3-3.2.2 
   ```
   To disable compilation of search engine (enabled by default) add
   
@@ -92,7 +92,7 @@ cmake --build ./
 ```
 instead
 
-Please note that you have to have permissions to intall HepMC3 into the selected directory.
+Please note that you have to have permissions to install HepMC3 into the selected directory.
 
 
 8. To run the tests do
@@ -130,7 +130,7 @@ https://github.com/HDembinski/pyhepmc.
 
 Please note that 
 10a
-The installation path for the Python mudules can be tweaked with 
+The installation path for the Python modules can be tweaked with 
 the cmake variables
 ```
 HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}
@@ -147,10 +147,10 @@ for the HEPMC3_PYTHON_VERSIONS option, e.g.
 
 # Installation troubleshooting
 
-The possible problems during the HepMC3 instllation can be caused by
+The possible problems during the HepMC3 installation can be caused by
 
- - The used C++ compiller that does not support C++11.
-   The only solution is to use compiller with C++11 support
+ - The used C++ compiler that does not support C++11.
+   The only solution is to use compiler with C++11 support
  - The used cmake is too old. While the core library can be built with cmake 2.8, the python and ROOT extensions require cmake of higher versions.
    A possible solution is to use a newer cmake or disable the python/ROOT if these are not needed.
  
@@ -165,7 +165,7 @@ and run cmake, e.g.
 ```
 mkdir -p myexamples
 cd myexamples
-cp -r /usr/share/doc/HepMC3-3.2.0/examples ./
+cp -r /usr/share/doc/HepMC3-3.2.2/examples ./
 cd examples
 cmake -DUSE_INSTALLED_HEPMC3=ON CMakeLists.txt
 make
@@ -192,7 +192,7 @@ change log and a template for configuration file.
 ./ChangeLog
 ```
 
-1. The subrirectory src/ contains the core set of library sources while 
+1. The subdirectory src/ contains the core set of library sources while 
 the corresponding headers are located in include/HepMC3 directory.
 The subdirectory include/HepMC3/Data includes headers with definitions of 
 POD structures used in the library. 
@@ -267,7 +267,7 @@ The files in  test/ can be split in two groups:
 ./test/inputIO4.root
 ```
 and 
-these that are involved in testing of HePMC3 with the Monte Carlo generators/tools
+these that are involved in testing of HepMC3 with the Monte Carlo generators/tools
 
 ```
 ./test/McTesterValidationTool.cc
@@ -341,7 +341,7 @@ The files
 ./examples/ConvertExample/src/AnalysisExample.cc
 ./examples/ConvertExample/include/AnalysisExample.h
 ```
-illustrate an implementation of simple physics analysis using the HePMC3 library.
+illustrate an implementation of simple physics analysis using the HepMC3 library.
 
 - The ./examples/RootIOExample/ subdirectory contains source code of
 an utility that illustrates manipulations with LHEF event record.
@@ -355,15 +355,15 @@ an utility that reads HepMC3 events in ROOT TTree format.
 - The ./examples/RootIOExample2/ subdirectory contains source code of
 an utility that reads HepMC3 events and saves them using a custom ROOT-based class.
 
-- The ./examples/BasicExamples/ subdirectory contains source code of basic examples of HePMC3 usage, 
+- The ./examples/BasicExamples/ subdirectory contains source code of basic examples of HepMC3 usage, 
 e.g. building of event from scratch, reading and writing files, usage of fortran, etc.
 
 - The ./examples/Pythia6Example/ subdirectory contains source code of
-an utility that generates HePMC events with the Pythia6  Monte Carlo event
+an utility that generates HepMC events with the Pythia6 Monte Carlo event
 generator. 
 
 - The ./examples/Pythia8Example/ subdirectory contains source code of
-an utility that generates HePMC events with the Pythia8  Monte Carlo event
+an utility that generates HepMC events with the Pythia8 Monte Carlo event
 generator. 
 
 - The ./examples/LHEFExample/ subdirectory contains source code of
@@ -372,8 +372,9 @@ an utility that illustrates manipulations with LHEF event record.
 - The ./examples/ViewerExample/ subdirectory contains source code of ROOT 
 based GUI program that allows to visualize the HepMC3 events.
 
+- The ./examples/SearchExample/ subdirectory contains source code example that 
+deals with search of relations between particles inthe event.
 
 9. The doc/ directory contains files used for generation of library source code documentation with
 the Doxygen system. The doc/CMakeLists.txt file is used by cmake
 to build  the domination.
-

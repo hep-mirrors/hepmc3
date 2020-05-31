@@ -45,7 +45,6 @@ HepMC3::GenEvent* generate_event(const size_t  n,const  size_t  iterations)
 
 int main()
 {
-
     std::cout<<"search_example: start"<<std::endl;
     auto start0 = std::chrono::system_clock::now();
     for (int i=0; i<10000; i++)
@@ -125,5 +124,5 @@ int main()
     std::cout<<"search_example: generation of events and ancestors_of_other_type()   "<<std::chrono::duration_cast<std::chrono::milliseconds>(end3o - start3o).count()<<" ms"<<std::endl;
 
     std::cout<<"search_example: end"<<std::endl;
-    return 0;
+    return EXIT_SUCCESS;
 }

@@ -52,16 +52,16 @@ public:
      *
      *  @param[in] evt Event to be serialized
      */
-    void write_event(const GenEvent &evt);
+    void write_event(const GenEvent &evt) override;
 
     /** @brief Write the GenRunInfo object to file. */
     void write_run_info();
 
     /** @brief Close file stream */
-    void close();
+    void close() override;
 
     /** @brief Get stream error state flag */
-    bool failed();
+    bool failed() override;
 //
 // Fields
 //

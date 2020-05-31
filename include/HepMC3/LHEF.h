@@ -245,7 +245,7 @@ struct XMLTag {
     pos_t tend = str.find_first_of("= \t\n", curr);
     if ( tend == end || tend >= close ) break;
 
-    std::string name = str.substr(curr, tend - curr);
+    std::string namex = str.substr(curr, tend - curr);
     curr = str.find("=", curr) + 1;
 
     // OK now find the beginning and end of the atribute.
@@ -259,7 +259,7 @@ struct XMLTag {
 
     std::string value = str.substr(bega, curr == end? end: curr - bega);
 
-    tags.back()->attr[name] = value;
+    tags.back()->attr[namex] = value;
 
     ++curr;
 
@@ -1252,7 +1252,7 @@ struct Clus : public TagBase {
   /**
    * Initialize default values.
    */
-  Clus(): scale(-1.0), alphas(-1.0) {}
+  Clus(): scale(-1.0), alphas(-1.0), p1(0), p2(0), p0(0) {}
 
   /**
    * Initialize default values.

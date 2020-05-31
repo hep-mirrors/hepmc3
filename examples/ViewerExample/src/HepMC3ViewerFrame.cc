@@ -48,20 +48,18 @@ static bool show_as_parton(HepMC3::ConstGenParticlePtr p )
     return parton;
 }
 
-static char*  write_event_to_dot(char* m_cursor,const HepMC3::GenEvent &evt)
+static char*  write_event_to_dot(char* used_cursor,const HepMC3::GenEvent &evt,int used_style=1)
 {
-    int m_style=1;
-
-    m_cursor += sprintf(m_cursor, "digraph graphname%d {\n",evt.event_number());
-    m_cursor += sprintf(m_cursor, "v0[label=\"Machine\"];\n");
+    used_cursor += sprintf(used_cursor, "digraph graphname%d {\n",evt.event_number());
+    used_cursor += sprintf(used_cursor, "v0[label=\"Machine\"];\n");
     for(auto v: evt.vertices() )
     {
-        if (m_style!=0)
+        if (used_style!=0)
         {
-            if (m_style==1) //paint decay and fragmentation vertices in green
+            if (used_style==1) //paint decay and fragmentation vertices in green
             {
-                if (v->status()==2) m_cursor += sprintf(m_cursor, "node [color=\"green\"];\n");
-                else  m_cursor += sprintf(m_cursor, "node [color=\"black\"];\n");
+                if (v->status()==2) used_cursor += sprintf(used_cursor, "node [color=\"green\"];\n");
+                else  used_cursor += sprintf(used_cursor, "node [color=\"black\"];\n");
             }
         }
         HepMC3::FourVector in=HepMC3::FourVector(0,0,0,0);
@@ -84,22 +82,22 @@ static char*  write_event_to_dot(char* m_cursor,const HepMC3::GenEvent &evt)
 
         if(violation)
         {
-            m_cursor += sprintf(m_cursor, "node [shape=rectangle];\n");
-            m_cursor += sprintf(m_cursor, "v%d [label=\"%d\nd=%4.2f\"];\n", -v->id(),v->id(),energyviolation);
+            used_cursor += sprintf(used_cursor, "node [shape=rectangle];\n");
+            used_cursor += sprintf(used_cursor, "v%d [label=\"%d\nd=%4.2f\"];\n", -v->id(),v->id(),energyviolation);
         }
         else
         {
-            m_cursor += sprintf(m_cursor, "node [shape=ellipse];\n");
-            m_cursor += sprintf(m_cursor, "v%d[label=\"%d\"];\n", -v->id(),v->id());
+            used_cursor += sprintf(used_cursor, "node [shape=ellipse];\n");
+            used_cursor += sprintf(used_cursor, "v%d[label=\"%d\"];\n", -v->id(),v->id());
         }
 
-        m_cursor += sprintf(m_cursor, "node [shape=ellipse];\n");
+        used_cursor += sprintf(used_cursor, "node [shape=ellipse];\n");
     }
     for(auto p: evt.beams() )
     {
         if (!p->end_vertex()) continue;
-        m_cursor += sprintf(m_cursor, "node [shape=point];\n");
-        m_cursor += sprintf(m_cursor, "v0 -> v%d [label=\"%d(%d)\"];\n", -p->end_vertex()->id(),p->id(),p->pid());
+        used_cursor += sprintf(used_cursor, "node [shape=point];\n");
+        used_cursor += sprintf(used_cursor, "v0 -> v%d [label=\"%d(%d)\"];\n", -p->end_vertex()->id(),p->id(),p->pid());
     }
 
     for(auto v: evt.vertices() )
@@ -108,29 +106,29 @@ static char*  write_event_to_dot(char* m_cursor,const HepMC3::GenEvent &evt)
         for(auto p: v->particles_out() )
         {
             {
-                if (m_style!=0)
+                if (used_style!=0)
                 {
-                    if (m_style==1) //paint suspected partons and 81/82 in red
+                    if (used_style==1) //paint suspected partons and 81/82 in red
                     {
-                        if (show_as_parton(p)&&p->status()!=1) m_cursor += sprintf(m_cursor, "edge [color=\"red\"];\n");
-                        else        m_cursor +=sprintf(m_cursor, "edge [color=\"black\"];\n");
+                        if (show_as_parton(p)&&p->status()!=1) used_cursor += sprintf(used_cursor, "edge [color=\"red\"];\n");
+                        else        used_cursor +=sprintf(used_cursor, "edge [color=\"black\"];\n");
                     }
                 }
                 if (!p->end_vertex())
                 {
-                    m_cursor += sprintf(m_cursor, "node [shape=point];\n");
-                    m_cursor += sprintf(m_cursor, "v%d -> o%d [label=\"%d(%d)\"];\n", -v->id(),p->id(),p->id(),p->pid());
+                    used_cursor += sprintf(used_cursor, "node [shape=point];\n");
+                    used_cursor += sprintf(used_cursor, "v%d -> o%d [label=\"%d(%d)\"];\n", -v->id(),p->id(),p->id(),p->pid());
                     continue;
                 }
                 else
-                    m_cursor += sprintf(m_cursor, "v%d -> v%d [label=\"%d(%d)\"];\n", -v->id(),-p->end_vertex()->id(),p->id(),p->pid());
+                    used_cursor += sprintf(used_cursor, "v%d -> v%d [label=\"%d(%d)\"];\n", -v->id(),-p->end_vertex()->id(),p->id(),p->pid());
             }
         }
     }
-    m_cursor += sprintf(m_cursor, "labelloc=\"t\";\nlabel=\"Event %d; Vertices %lu; Particles %lu;\";\n", evt.event_number(), evt.vertices().size(), evt.particles().size());
-    m_cursor += sprintf(m_cursor,"}\n\n");
+    used_cursor += sprintf(used_cursor, "labelloc=\"t\";\nlabel=\"Event %d; Vertices %lu; Particles %lu;\";\n", evt.event_number(), evt.vertices().size(), evt.particles().size());
+    used_cursor += sprintf(used_cursor,"}\n\n");
 
-    return m_cursor;
+    return used_cursor;
 }
 
 
