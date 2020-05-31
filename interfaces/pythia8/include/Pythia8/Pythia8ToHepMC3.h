@@ -39,10 +39,10 @@ public:
     }
 
     // Alternative method to convert Pythia events into HepMC ones
-#if defined(PYTHIA_VERSION_INTEGER) && (PYTHIA_VERSION_INTEGER>8299) 
+#if defined(PYTHIA_VERSION_INTEGER) && (PYTHIA_VERSION_INTEGER>8299)
     bool fill_next_event( Pythia8::Event& pyev, GenEvent* evt,
                           int ievnum = -1, const Pythia8::Info* pyinfo = 0,
-                         Pythia8::Settings* pyset = 0)
+                          Pythia8::Settings* pyset = 0)
 #else
     bool fill_next_event( Pythia8::Event& pyev, GenEvent* evt,
                           int ievnum = -1, Pythia8::Info* pyinfo = 0,
@@ -84,7 +84,7 @@ public:
         // 3. Fill vertex information and find beam particles.
         std::vector<GenVertexPtr> vertex_cache;
         std::vector<GenParticlePtr> beam_particles;
-        for(size_t  i=0; i<pyev.size(); ++i) {
+        for(int  i=0; i<pyev.size(); ++i) {
 
             std::vector<int> mothers = pyev[i].motherList();
 
@@ -114,12 +114,12 @@ public:
 
         // Add particles and vertices in topological order
         if (beam_particles.size()!=2) {
-		 std::cerr << "There are  " << beam_particles.size() <<"!=2 particles without mothers"<< std::endl;
-         if ( m_crash_on_problem ) exit(1);
+            std::cerr << "There are  " << beam_particles.size() <<"!=2 particles without mothers"<< std::endl;
+            if ( m_crash_on_problem ) exit(1);
         }
         evt->add_tree( beam_particles );
         //Attributes should be set after adding the particles to event
-        for(size_t  i=0; i<pyev.size(); ++i) {
+        for(int  i=0; i<pyev.size(); ++i) {
             /* TODO: Set polarization */
             // Colour flow uses index 1 and 2.
             int colType = pyev[i].colType();

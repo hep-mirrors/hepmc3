@@ -51,7 +51,11 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         }
         
         std::ifstream* file= new std::ifstream(filename);
-         
+        if (!file)
+        {
+            printf("Error in deduce_reader: could not open file for testing HepMC version: %s\n",filename.c_str());
+            return std::shared_ptr<Reader>(nullptr);
+        }
         if(!file->is_open()) {
             printf("Error in deduce_reader: could not open file for testing HepMC version: %s\n",filename.c_str());
             file->close();
@@ -69,7 +73,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
             head.push_back(line);
         }
         file->close();
-        if (file) delete file;
+        delete file;
     }
     /* To assure there are at least two elements in the vector*/
     head.push_back("");
@@ -114,7 +118,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 }
 
 
-/** @brief THis function will deduce the type of input stream based on its content and will return appropriate Reader*/
+/** @brief This function will deduce the type of input stream based on its content and will return appropriate Reader*/
 std::shared_ptr<Reader> deduce_reader(std::istream &stream)
 {
     std::vector<std::string> head;

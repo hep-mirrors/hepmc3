@@ -34,24 +34,24 @@ using namespace HepMC3;
 class PhotosHepMC3Event : public PhotosEvent
 {
 public:
-        ~PhotosHepMC3Event();
+    ~PhotosHepMC3Event();
 
-        /** Constructor which keeps a pointer to the GenEvent*/
-        PhotosHepMC3Event(GenEvent * event);
+    /** Constructor which keeps a pointer to the GenEvent*/
+    PhotosHepMC3Event(GenEvent * event);
 
-        /** Returns the GenEvent */
-        GenEvent * getEvent();
+    /** Returns the GenEvent */
+    GenEvent * getEvent();
 
-        /** Returns the list of particles */
-        std::vector<PhotosParticle*> getParticleList();
+    /** Returns the list of particles */
+    std::vector<PhotosParticle*> getParticleList();
 
-        /** Prints event summary */
-        void print();
+    /** Prints event summary */
+    void print();
 private:
-        /** The event */
-        GenEvent * m_event;
-        /** Particle list */
-        std::vector<PhotosParticle *> particles;
+    /** The event */
+    GenEvent * m_event;
+    /** Particle list */
+    std::vector<PhotosParticle *> particles;
 };
 
 } // namespace Photospp

@@ -1147,9 +1147,8 @@ public:
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const string &att) override {
         size_t posb = att.find_first_not_of(' ');
-        size_t pose;
         do {
-           pose = att.find_first_of(' ', posb);
+           size_t pose = att.find_first_of(' ', posb);
            m_val.push_back(att.substr(posb, pose - posb));
            posb = att.find_first_not_of(' ', pose);
         } while (posb != std::string::npos);

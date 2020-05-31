@@ -201,14 +201,14 @@ void Print::listing( std::ostream& os, ConstGenParticlePtr p ) {
 }
 void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
     os <<"GenEvent: #" << event.event_number();
-    if(attributes) for (std::vector<std::string>::const_iterator s=event.attribute_names().begin(); s!=event.attribute_names().end(); ++s)
-            os<<" "<<*s<<"="<<event.attribute_as_string(*s);
+    if(attributes) for (std::string s: event.attribute_names())
+            os<<" "<<s<<"="<<event.attribute_as_string(s);
 }
 
 void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {
     os <<"GenRunInfo: Number of tools:" << RunInfo.tools().size();
-    if(attributes) for (std::vector<std::string>::const_iterator s=RunInfo.attribute_names().begin(); s!=RunInfo.attribute_names().end(); ++s)
-            os<<" "<<*s<<"="<<RunInfo.attribute_as_string(*s);
+    if(attributes) for (std::string s: RunInfo.attribute_names())
+            os<<" "<<s<<"="<<RunInfo.attribute_as_string(s);
 }
 
 void Print::line(std::ostream& os, const GenRunInfo::ToolInfo& t) {
