@@ -1,12 +1,12 @@
   --------------------------  HepMC3.2.2-pre --------------------------
 2020-06-01 Andrii Verbytskyi for HepMC
         * Bugfix release
-        * Fixed treatment of the weights in case of different number of weights and weight names. Reported byt Frank Siegert
+        * Fixed treatment of the weights in case of different number of weights and weight names. Reported by Frank Siegert.
         * Fixed WriterAsciiHepMC2 option for separate flows. Reported by Julian Lukwata.
         * Improved treatment of python installation, Thanks to Mattias Ellert.
         * Split the sources of python bindings into smaller files to optimize compilation.
         * Improved cmake configuration for special cases, e.g. old cmake, no ROOT, some compillers, etc. Added more error handeling.
-        * Fixed compilation of the search module with Clang
+        * Fixed compilation of the search module with Clang.
         * Added an example for search module.
         * Fixed the HepMC2 output for events without weights.
         * Fixed the signal vertex ID for HepMC2 output.
