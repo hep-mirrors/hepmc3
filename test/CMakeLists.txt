@@ -131,6 +131,9 @@ set( libMCEG_link_libraries_HEPMC3  )
 set( libMCEG_include_directories   ${CMAKE_CURRENT_SOURCE_DIR}/../include/  )
 set( MCEG_tests )
 
+set( convert_tests )
+
+
 if ("Pythia8" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
 find_package(Pythia8 8.220)
 endif()
@@ -280,6 +283,9 @@ PRIVATE ${libMCEG_include_directories}
 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   )
 
 
+list( APPEND convert_tests "testConvert1" )  
+list( APPEND convert_tests "testConvert2" )  
+
 macro( hepmc_mceghepmc2_test testname )
   message( STATUS "HepMC3 test: building MCEG2 test ${testname} with HEPMC2" )
   find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
@@ -305,6 +311,31 @@ endmacro( hepmc_mceghepmc2_test )
 foreach ( test ${MCEG_tests} )
   hepmc_mceghepmc2_test( ${test} )
 endforeach ( test ${MCEG_tests} )
+
+macro( hepmc_convert_test testname )
+  message( STATUS "HepMC3 test: building Convert test ${testname} with HEPMC2" )
+  find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+  message( STATUS "HepMC3 test: building Convert test ${testname} ${${testname}_source} with HEPMC2" )
+  ADD_EXECUTABLE(convert_${testname} ${${testname}_source}  ${ARGN} )
+  target_include_directories(convert_${testname} BEFORE
+  PUBLIC ${HEPMC2_INCLUDE_DIRS}
+  PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/   "${PROJECT_SOURCE_DIR}/interfaces/HepMCCompatibility/include" )  
+  target_link_libraries(convert_${testname} PRIVATE ${HEPMC2_LIBRARIES}   HepMC3  )
+  set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
+  set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
+  add_test( convert_${testname} convert_${testname} )
+  SET_TESTS_PROPERTIES(  convert_${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}")
+  file(GLOB INPUTconvert_${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
+  file(COPY ${INPUTconvert_${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  string(REPLACE "test" "" ${testname} name)
+  file(GLOB INPUTconvert_${name}  "${CMAKE_CURRENT_SOURCE_DIR}/input${name}*" )
+  file(COPY ${INPUTconvert_${name}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+endmacro( hepmc_convert_test )
+
+foreach ( test ${convert_tests} )
+  hepmc_convert_test( ${test} )
+endforeach ( test ${convert_tests} )
 
 endif()
 
