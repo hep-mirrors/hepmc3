@@ -248,9 +248,9 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             if (phi) m_particle_cache[i]->add_attribute("phi",phi);
             std::shared_ptr<DoubleAttribute> theta = m_particle_cache_ghost[i]->attribute<DoubleAttribute>("theta");
             if (theta) m_particle_cache[i]->add_attribute("theta",theta);
-            std::shared_ptr<IntAttribute> flow1 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow1");
             if (m_options.find("particle_flows_are_separated")!=m_options.end())
             {
+                std::shared_ptr<IntAttribute> flow1 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow1");
                 if (flow1) m_particle_cache[i]->add_attribute("flow1",flow1);
                 std::shared_ptr<IntAttribute> flow2 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow2");
                 if (flow2) m_particle_cache[i]->add_attribute("flow2",flow2);
@@ -275,6 +275,18 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
                 m_vertex_cache[i]->add_attribute("weight"+std::to_string((long long unsigned int)ii),rs);
             }
         }
+    std::shared_ptr<IntAttribute> signal_process_vertex_barcode=evt.attribute<IntAttribute>("signal_process_vertex");
+    if (signal_process_vertex_barcode) {
+        int signal_process_vertex_barcode_value=signal_process_vertex_barcode->value();
+        for(unsigned int i=0; i<m_vertex_cache.size(); ++i)
+        {
+            if (i>=m_vertex_barcodes.size()) continue;//this should not happen!
+            if (signal_process_vertex_barcode_value!=m_vertex_barcodes.at(i)) continue;
+            std::shared_ptr<IntAttribute> signal_process_vertex = std::make_shared<IntAttribute>(m_vertex_cache.at(i)->id());
+            evt.add_attribute("signal_process_vertex",signal_process_vertex);
+            break;
+        }
+    }
     m_particle_cache_ghost.clear();
     m_vertex_cache_ghost.clear();
     m_event_ghost->clear();
