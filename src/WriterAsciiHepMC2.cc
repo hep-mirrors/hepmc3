@@ -137,22 +137,22 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         m_cursor += sprintf(m_cursor, " %ii",(int)q);
     }
     flush();
+    m_cursor += sprintf(m_cursor, " %lu",evt.weights().size());
     if ( evt.weights().size() )
     {
-        m_cursor += sprintf(m_cursor, " %lu",evt.weights().size());
         for (double w: evt.weights())
             m_cursor += sprintf(m_cursor, " %.*e",m_precision, w);
         m_cursor += sprintf(m_cursor, "\n");
         flush();
-    }
-    m_cursor += sprintf(m_cursor, "N %lu",evt.weights().size());
-    std::vector<std::string> names = run_info()->weight_names();
-    for (size_t q=0; q<evt.weights().size(); q++)
-    {
-        if (q<names.size())
-            m_cursor += sprintf(m_cursor, " \"%s\"",names[q].c_str());
-        else
-            m_cursor += sprintf(m_cursor, " \"%i\"",(int)q);
+        m_cursor += sprintf(m_cursor, "N %lu",evt.weights().size());
+        std::vector<std::string> names = run_info()->weight_names();
+        for (size_t q=0; q<evt.weights().size(); q++)
+        {
+            if (q<names.size())
+                m_cursor += sprintf(m_cursor, " \"%s\"",names[q].c_str());
+            else
+                m_cursor += sprintf(m_cursor, " \"%i\"",(int)q);
+        }
     }
     m_cursor += sprintf(m_cursor, "\n");
     flush();
@@ -361,17 +361,30 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int second_field)
     flush();
     m_cursor += sprintf(m_cursor," %i", ev );
     flush();
-
-    std::shared_ptr<IntAttribute> A_flow1=p->attribute<IntAttribute>("flow1");
-    std::shared_ptr<IntAttribute> A_flow2=p->attribute<IntAttribute>("flow2");
-    int flowsize=0;
-    if (A_flow1) flowsize++;
-    if (A_flow2) flowsize++;
-    m_cursor += sprintf(m_cursor," %i", flowsize);
-    if (A_flow1) m_cursor += sprintf(m_cursor," 1 %i", A_flow1->value());
-    if (A_flow2) m_cursor += sprintf(m_cursor," 2 %i", A_flow2->value());
-    m_cursor += sprintf(m_cursor,"\n");
-    flush();
+    std::shared_ptr<VectorIntAttribute> A_flows=p->attribute<VectorIntAttribute>("flows");
+    if (A_flows)
+    {
+        std::vector<int> flowsv=A_flows->value();
+        int flowsize=flowsv.size();
+        m_cursor += sprintf(m_cursor," %i", flowsize);
+        for (size_t k=0; k<flowsv.size(); k++)  m_cursor += sprintf(m_cursor," %lu %i", k+1, flowsv.at(k));
+        m_cursor += sprintf(m_cursor,"\n");
+        flush();
+    } else {
+        std::shared_ptr<IntAttribute> A_flow1=p->attribute<IntAttribute>("flow1");
+        std::shared_ptr<IntAttribute> A_flow2=p->attribute<IntAttribute>("flow2");
+        std::shared_ptr<IntAttribute> A_flow3=p->attribute<IntAttribute>("flow3");
+        int flowsize=0;
+        if (A_flow1) flowsize++;
+        if (A_flow2) flowsize++;
+        if (A_flow3) flowsize++;
+        m_cursor += sprintf(m_cursor," %i", flowsize);
+        if (A_flow1) m_cursor += sprintf(m_cursor," 1 %i", A_flow1->value());
+        if (A_flow2) m_cursor += sprintf(m_cursor," 2 %i", A_flow2->value());
+        if (A_flow3) m_cursor += sprintf(m_cursor," 3 %i", A_flow3->value());
+        m_cursor += sprintf(m_cursor,"\n");
+        flush();
+    }
 }
 
 
