@@ -33,11 +33,11 @@ option(HEPMC3_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces." OF
 option(HEPMC3_BUILD_STATIC_LIBS  "Enables building of static libraties." ON)
 
 if (NOT HEPMC3_PYTHON_VERSIONS)
-set(HEPMC3_PYTHON_VERSIONS "2.X,3.X")
+  set(HEPMC3_PYTHON_VERSIONS "2.X,3.X")
 endif()
 
 if (NOT HEPMC3_ROOTIO_INSTALL_LIBDIR) 
-set(HEPMC3_ROOTIO_INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
+  set(HEPMC3_ROOTIO_INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
 endif()
 
 message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}") 
@@ -98,24 +98,24 @@ include(CheckCXXCompilerFlag)
 #This is a workaround for ROOT+Cmake problem.
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_STDEQCXX11_FLAG)
 if(COMPILER_SUPPORTS_STDEQCXX11_FLAG)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 else()
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+  set(CMAKE_CXX_STANDARD 11)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  set(CMAKE_CXX_EXTENSIONS OFF)
 #This is a workaround for wrong flag.
 if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
-set(CMAKE_CXX_EXTENSIONS ON)
+  set(CMAKE_CXX_EXTENSIONS ON)
 endif()
 endif()
 if (MSVC)
 #This is a workaround for VC memory problem and false positive warnings.
 set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/EHsc" "/D_CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
 foreach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
-CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
-if(COMPILER_SUPPORTS_${fl})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
-endif()
+  CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
+  if(COMPILER_SUPPORTS_${fl})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
+  endif()
 endforeach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
 endif()
 
@@ -229,43 +229,43 @@ target_include_directories(HepMC3 PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 if(${CMAKE_VERSION} VERSION_LESS "3.0.0")
 #Problems with generator expressions for cmake2
-set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
+  set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
 else()
-set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
+  set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 endif()
 if (UNIX)
-target_link_libraries(HepMC3 PRIVATE dl)
+  target_link_libraries(HepMC3 PRIVATE dl)
 endif()
 #---Install build products---------------------------------------------------
 install(TARGETS HepMC3 DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 
 if (HEPMC3_BUILD_STATIC_LIBS)
-add_library(HepMC3_static STATIC  ${hepmc3core_sources})
-target_include_directories(HepMC3_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_compile_definitions(HepMC3_static PRIVATE NO_DECLSPEC_hepevtptr)
-if(${CMAKE_VERSION} VERSION_LESS "3.0.0")
+  add_library(HepMC3_static STATIC  ${hepmc3core_sources})
+  target_include_directories(HepMC3_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
+  target_compile_definitions(HepMC3_static PRIVATE NO_DECLSPEC_hepevtptr)
+  if(${CMAKE_VERSION} VERSION_LESS "3.0.0")
 #Problems with generator expressions for cmake2
-set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
+    set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/ 
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
-else()
-set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
+  else()
+    set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-endif()
-if (UNIX)
-target_link_libraries(HepMC3_static PRIVATE dl)
-endif()
+  endif()
+  if (UNIX)
+    target_link_libraries(HepMC3_static PRIVATE dl)
+  endif()
 #---Install build products---------------------------------------------------
-install(TARGETS HepMC3_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+  install(TARGETS HepMC3_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 endif()
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
@@ -352,23 +352,21 @@ if(NOT TARGET uninstall)
         "cmake/Templates/cmake_uninstall.cmake.in"
         "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
         IMMEDIATE @ONLY)
-
-add_custom_target(uninstall
-COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+  add_custom_target(uninstall  COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 endif()
 #This is for developers only
 find_program (ASTYLE NAMES astyle)
 if (ASTYLE)
-message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of code is possible.")
-ADD_CUSTOM_TARGET(beauty
+  message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of code is possible.")
+  ADD_CUSTOM_TARGET(beauty
   COMMAND ${ASTYLE}  --keep-one-line-blocks  src/*cc  rootIO/src/*cc search/src/*cc  examples/*/src/*cc test/*cc  test/*h interfaces/*/include/*.h interfaces/*/include/*/*.h interfaces/*/src/*.cxx
   WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()
 find_program (CPPCHECK NAMES cppcheck)
 if(CPPCHECK)
-message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Static analysis of code is possible.")
-ADD_CUSTOM_TARGET(staticcheck    COMMAND ${CPPCHECK} --force  --suppress=unusedFunction --std=c++11 --enable=all -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}  ./src/*.cc  ./search/src/*.cc ./rootIO/src/*.cc examples/*/src/*cc )
+  message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Static analysis of code is possible.")
+  ADD_CUSTOM_TARGET(staticcheck    COMMAND ${CPPCHECK} --force  --suppress=unusedFunction --std=c++11 --enable=all -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}  ./src/*.cc  ./search/src/*.cc ./rootIO/src/*.cc examples/*/src/*cc )
 endif()
 ########################################################################
 ## CPACK
@@ -397,22 +395,22 @@ SET(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SOURCE_DIR}/COPYING)
 set(CPACK_COMPONENTS_ALL   devel libs   )
 
 if (HEPMC3_ENABLE_SEARCH)
-list(APPEND CPACK_COMPONENTS_ALL   searchlibs   searchdevel)
+  list(APPEND CPACK_COMPONENTS_ALL   searchlibs   searchdevel)
 endif()
 
 if (HEPMC3_ENABLE_PYTHON)
-list(APPEND CPACK_COMPONENTS_ALL   python)
-if (HEPMC3_ENABLE_SEARCH)
-list(APPEND CPACK_COMPONENTS_ALL   pythonsearch)
-endif()
+  list(APPEND CPACK_COMPONENTS_ALL   python)
+  if (HEPMC3_ENABLE_SEARCH)
+    list(APPEND CPACK_COMPONENTS_ALL   pythonsearch)
+  endif()
 endif()
 if (HEPMC3_BUILD_DOCS)
-list(APPEND CPACK_COMPONENTS_ALL   doc)
+  list(APPEND CPACK_COMPONENTS_ALL   doc)
 endif()
 if(ROOT_FOUND)
-list(APPEND CPACK_COMPONENTS_ALL   rootIOdevel rootIOlibs)
-if (HEPMC3_ENABLE_PYTHON)
-list(APPEND CPACK_COMPONENTS_ALL   pythonrootIO)
-endif()
+  list(APPEND CPACK_COMPONENTS_ALL   rootIOdevel rootIOlibs)
+  if (HEPMC3_ENABLE_PYTHON)
+    list(APPEND CPACK_COMPONENTS_ALL   pythonrootIO)
+  endif()
 endif()
 INCLUDE(CPack)
