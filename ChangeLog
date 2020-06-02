@@ -14,6 +14,7 @@
         * Added functions to search module: search for relatives (particle or vertex)->(particle or vertex) in different combinations. 
         *   This bumps so version of the libHepMC3search to 4.
         * Improved the configuration of Pythia8 for tests (minimal version requirement).
+        * Fixed compatibility of ROT trees written with HePMC3.0 and removed the typedefs in the dictionaries.
   --------------------------  HepMC3.2.1 --------------------------
 2020-03-17 Andrii Verbytskyi for HepMC
         * Bugfix release.
