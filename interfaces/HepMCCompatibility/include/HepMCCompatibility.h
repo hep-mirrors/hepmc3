@@ -315,18 +315,17 @@ HepMC3::GenEvent*  ConvertHepMCGenEvent_2to3(const HepMC::GenEvent& evt, std::sh
     /** Yes, the desing is not always perfect */
     std::stringstream ss;
     evt.weights().print(ss);
+    std::string allweights=ss.str();
     std::vector<std::string> wnames;
     std::string token;
-    while ( std::getline(ss, token, ' ') )
+    std::size_t pos=0;
+    for (;;)
     {
-        if (token.size()>4) {
-            token.erase(std::remove(token.begin(), token.end(), ')'), token.end());
-            token.erase(std::remove(token.begin(), token.end(), '('), token.end());
-            size_t del_pos=token.find_first_of(',');
-            std::string name=token.substr(0,del_pos);
-            wnames.push_back(name);
-        }
-        token.clear();
+        std::size_t name_begin=allweights.find_first_not_of(" (\n",pos);
+        if (name_begin==std::string::npos) break;
+        std::size_t name_end=allweights.find_first_of(",",name_begin);
+        wnames.push_back(allweights.substr(name_begin,name_end-name_begin));
+        pos=allweights.find_first_of(")",name_end)+1;
     }
     n->run_info()->set_weight_names(wnames);
     n->weights()=std::vector<double>(wnames.size(),1.0);
