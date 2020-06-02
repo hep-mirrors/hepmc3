@@ -56,8 +56,18 @@ bool ReaderRootTree::init()
     result=m_tree->SetBranchAddress("GenRunInfo",&m_run_info_data);
     if (result<0)
     {
-        HEPMC3_ERROR( "ReaderRootTree2: problem reading branch tree:  " << "GenRunInfo")
-        return false;
+        HEPMC3_WARNING( "ReaderRootTree: problem reading branch tree: GenRunInfo. Will attempt to read GenRunInfoData object.")
+        std::shared_ptr<GenRunInfo> ri = std::make_shared<GenRunInfo>();
+        GenRunInfoData *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
+        if(run) {
+            ri->read_data(*run);
+            delete run;
+            set_run_info(ri);
+            HEPMC3_WARNING( "ReaderRootTree::init The object was written with HepMC3 version 3.0" )
+        } else {
+            HEPMC3_ERROR( "ReaderRootTree: problem reading object GenRunInfoData")
+            return false;
+        }
     }
     set_run_info(std::make_shared<GenRunInfo>());
     return true;
