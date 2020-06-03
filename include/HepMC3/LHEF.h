@@ -1252,7 +1252,7 @@ struct Clus : public TagBase {
   /**
    * Initialize default values.
    */
-  Clus(): scale(-1.0), alphas(-1.0), p1(0), p2(0), p0(0) {}
+  Clus(): p1(0), p2(0), p0(0), scale(-1.0), alphas(-1.0) {}
 
   /**
    * Initialize default values.

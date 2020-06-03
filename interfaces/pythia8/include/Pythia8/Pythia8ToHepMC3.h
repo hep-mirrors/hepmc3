@@ -73,7 +73,7 @@ public:
         std::vector<GenParticlePtr> hepevt_particles;
         hepevt_particles.reserve( pyev.size() );
 
-        for(size_t i=0; i<pyev.size(); ++i) {
+        for(int i=0; i<pyev.size(); ++i) {
             hepevt_particles.push_back( std::make_shared<GenParticle>( FourVector( pyev[i].px(), pyev[i].py(),
                                         pyev[i].pz(), pyev[i].e() ),
                                         pyev[i].id(), pyev[i].statusHepMC() )
@@ -139,7 +139,7 @@ public:
         // 4. Check for particles which come from nowhere, i.e. are without
         // mothers or daughters. These need to be attached to a vertex, or else
         // they will never become part of the event.
-        for (size_t  i = 1; i < pyev.size(); ++i) {
+        for (int  i = 1; i < pyev.size(); ++i) {
 
             // Check for particles not added to the event
             // NOTE: We have to check if this step makes any sense in HepMC event standard
