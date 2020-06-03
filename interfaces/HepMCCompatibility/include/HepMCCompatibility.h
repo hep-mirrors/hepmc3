@@ -178,7 +178,6 @@ HepMC::GenEvent* ConvertHepMCGenEvent_3to2(const HepMC3::GenEvent& evt)
     double alphaQCD=A_alphaQCD?(A_alphaQCD->value()):0.0;
     int signal_process_id=A_signal_process_id?(A_signal_process_id->value()):0;
     int mpi=A_mpi?(A_mpi->value()):0;
-    int signal_process_vertex=A_signal_process_vertex?(A_signal_process_vertex->value()):0;
 
     std::vector<long> random_states;
     for (int i=0; i<100; i++)
