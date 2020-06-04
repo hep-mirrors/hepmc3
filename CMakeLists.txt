@@ -293,7 +293,8 @@ configure_package_config_file(HepMC3-config.in
   INSTALL_DESTINATION ${CMAKE_INSTALL_BINDIR}
   PATH_VARS CMAKE_INSTALL_INCLUDEDIR
             CMAKE_INSTALL_LIBDIR
-            HEPMC3_ROOTIO_INSTALL_LIBDIR)
+            HEPMC3_ROOTIO_INSTALL_LIBDIR
+            INTERFACES_INSTALL_DIR)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config.cmake
               ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake
