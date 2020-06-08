@@ -8,7 +8,7 @@ SET(HEPMC3_VERSION_MINOR  2)
 SET(HEPMC3_VERSION_PATCH  2)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-#This module respects HFS, e.g. defines lib or lib64 when it is needed. 
+#This module respects HFS, e.g. defines lib or lib64 when it is needed.
 include("GNUInstallDirs")
 #---Setting HepMC3 Build type-----------------------------------------------
 if(CMAKE_BUILD_TYPE)
@@ -27,26 +27,26 @@ option(HEPMC3_ENABLE_ROOTIO      "Enables building with ROOT O/I." ON)
 option(HEPMC3_ENABLE_PYTHON      "Enables building of Python  bindings, master switch" ON)
 option(HEPMC3_BUILD_DOCS         "Enables building of documentation" OFF)
 option(HEPMC3_BUILD_EXAMPLES     "Enables building of examples." OFF)
-option(HEPMC3_INSTALL_EXAMPLES   "Enables instalation of examples." ON)
+option(HEPMC3_INSTALL_EXAMPLES   "Enables installation of examples." ON)
 option(HEPMC3_ENABLE_TEST        "Enables building of tests." OFF)
-option(HEPMC3_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces." OFF)
+option(HEPMC3_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces to MC tools." OFF)
 option(HEPMC3_BUILD_STATIC_LIBS  "Enables building of static libraties." ON)
 
 if (NOT HEPMC3_PYTHON_VERSIONS)
   set(HEPMC3_PYTHON_VERSIONS "2.X,3.X")
 endif()
 
-if (NOT HEPMC3_ROOTIO_INSTALL_LIBDIR) 
+if (NOT HEPMC3_ROOTIO_INSTALL_LIBDIR)
   set(HEPMC3_ROOTIO_INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
 endif()
 
-message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}") 
-message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}") 
-message(STATUS "HepMC3: HEPMC3_ENABLE_PYTHON         ${HEPMC3_ENABLE_PYTHON}") 
-message(STATUS "HepMC3: HEPMC3_PYTHON_VERSIONS       ${HEPMC3_PYTHON_VERSIONS}") 
-message(STATUS "HepMC3: HEPMC3_ENABLE_TEST           ${HEPMC3_ENABLE_TEST}") 
-message(STATUS "HepMC3: HEPMC3_BUILD_DOCS            ${HEPMC3_BUILD_DOCS}") 
-message(STATUS "HepMC3: HEPMC3_BUILD_EXAMPLES        ${HEPMC3_BUILD_EXAMPLES}") 
+message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}")
+message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}")
+message(STATUS "HepMC3: HEPMC3_ENABLE_PYTHON         ${HEPMC3_ENABLE_PYTHON}")
+message(STATUS "HepMC3: HEPMC3_PYTHON_VERSIONS       ${HEPMC3_PYTHON_VERSIONS}")
+message(STATUS "HepMC3: HEPMC3_ENABLE_TEST           ${HEPMC3_ENABLE_TEST}")
+message(STATUS "HepMC3: HEPMC3_BUILD_DOCS            ${HEPMC3_BUILD_DOCS}")
+message(STATUS "HepMC3: HEPMC3_BUILD_EXAMPLES        ${HEPMC3_BUILD_EXAMPLES}")
 message(STATUS "HepMC3: HEPMC3_INSTALL_INTERFACES    ${HEPMC3_INSTALL_INTERFACES}")
 message(STATUS "HepMC3: HEPMC3_ROOTIO_INSTALL_LIBDIR ${HEPMC3_ROOTIO_INSTALL_LIBDIR}")
 
@@ -81,7 +81,7 @@ if(HEPMC3_ENABLE_ROOTIO)
     message(STATUS "HepMC3: ROOTSYS provided $ENV{ROOTSYS}")
   elseif(ROOT_DIR)
     message(STATUS "HepMC3: ROOT_DIR provided ${ROOT_DIR}")
-  else() 
+  else()
     message(STATUS "HepMC3: Warning: Building of ROOTIO requested but no ROOTSYS or ROOT_DIR provided")
     message(STATUS "HepMC3: Warning: Build will use ROOTConfig.cmake or FindROOT.cmake")
   endif()
@@ -129,7 +129,7 @@ SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 
 # when building, don't use the install RPATH already
 # (but later on when installing)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
 SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
@@ -173,7 +173,7 @@ if(HEPMC3_ENABLE_ROOTIO)
     message(STATUS "ROOT libraries: ${ROOT_LIBRARIES}")
     message(STATUS "ROOT definitions: ${ROOT_DEFINITIONS}")
     include_directories(${ROOT_INCLUDE_DIRS})
-    add_definitions(-DHEPMC3_ROOTIO)    
+    add_definitions(-DHEPMC3_ROOTIO)
     string(REPLACE " " ";" ROOT_CXX_FLAGS_LIST ${ROOT_CXX_FLAGS})
     foreach(fl ${ROOT_CXX_FLAGS_LIST})
     CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
@@ -198,27 +198,27 @@ message(STATUS "HepMC3: CMAKE_C_COMPILER_ID ${CMAKE_C_COMPILER_ID} " )
 ########################################################################
 ## Core
 ########################################################################
-set( hepmc3core_sources 
-${PROJECT_SOURCE_DIR}/src/GenCrossSection.cc 
-${PROJECT_SOURCE_DIR}/src/GenParticle.cc  
-${PROJECT_SOURCE_DIR}/src/GenVertex.cc      
-${PROJECT_SOURCE_DIR}/src/Print.cc             
-${PROJECT_SOURCE_DIR}/src/Setup.cc             
+set( hepmc3core_sources
+${PROJECT_SOURCE_DIR}/src/GenCrossSection.cc
+${PROJECT_SOURCE_DIR}/src/GenParticle.cc
+${PROJECT_SOURCE_DIR}/src/GenVertex.cc
+${PROJECT_SOURCE_DIR}/src/Print.cc
+${PROJECT_SOURCE_DIR}/src/Setup.cc
 ${PROJECT_SOURCE_DIR}/src/WriterHEPEVT.cc
-${PROJECT_SOURCE_DIR}/src/GenEvent.cc         
-${PROJECT_SOURCE_DIR}/src/GenPdfInfo.cc   
-${PROJECT_SOURCE_DIR}/src/HEPEVT_Wrapper.cc  
-${PROJECT_SOURCE_DIR}/src/ReaderAscii.cc        
-${PROJECT_SOURCE_DIR}/src/ReaderHEPEVT.cc   
+${PROJECT_SOURCE_DIR}/src/GenEvent.cc
+${PROJECT_SOURCE_DIR}/src/GenPdfInfo.cc
+${PROJECT_SOURCE_DIR}/src/HEPEVT_Wrapper.cc
+${PROJECT_SOURCE_DIR}/src/ReaderAscii.cc
+${PROJECT_SOURCE_DIR}/src/ReaderHEPEVT.cc
 ${PROJECT_SOURCE_DIR}/src/WriterAscii.cc
-${PROJECT_SOURCE_DIR}/src/GenHeavyIon.cc      
-${PROJECT_SOURCE_DIR}/src/GenRunInfo.cc   
-${PROJECT_SOURCE_DIR}/src/LHEFAttributes.cc  
-${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc  
-${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc     
+${PROJECT_SOURCE_DIR}/src/GenHeavyIon.cc
+${PROJECT_SOURCE_DIR}/src/GenRunInfo.cc
+${PROJECT_SOURCE_DIR}/src/LHEFAttributes.cc
+${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc
+${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc
 ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
-${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc   
-${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc   
+${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc
+${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
 )
 
 #We need to export all symbols on WIn to build .lib files
@@ -229,13 +229,13 @@ target_include_directories(HepMC3 PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 if(${CMAKE_VERSION} VERSION_LESS "3.0.0")
 #Problems with generator expressions for cmake2
-  set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
+  set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
 else()
-  set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3                                              
-                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
+  set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3
+                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 endif()
@@ -251,13 +251,13 @@ if (HEPMC3_BUILD_STATIC_LIBS)
   target_compile_definitions(HepMC3_static PRIVATE NO_DECLSPEC_hepevtptr)
   if(${CMAKE_VERSION} VERSION_LESS "3.0.0")
 #Problems with generator expressions for cmake2
-    set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
-                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/ 
+    set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static
+                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
   else()
-    set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static 
-                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:> 
+    set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static
+                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
   endif()

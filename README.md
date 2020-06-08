@@ -1,92 +1,93 @@
 # Introduction
-HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-memory navigation and the POD concept for the persistency. 
+HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-memory navigation and the POD concept for the persistency.
 
 # A Quick Start (applicable to recent versions):
 
-0. The minimal requirements for the  installation from sources are 
+0. The minimal requirements for the  installation from sources are
  - C++ compiler with c++11 standard support
  - cmake version 3.X.  The  support for version 2.8 is provided only for the core and search libraries.  It will be completely removed in the future versions.
- 
+
 1. a)Checkout the HepMC from GIT repository:
- 
+
   ```
   git clone https://gitlab.cern.ch/hepmc/HepMC3.git
   ```
   or b) download the tarball with wget or any other tool
   ```
   wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.2.tar.gz
-  tar -xzf HepMC3-3.2.2.tar.gz  
+  tar -xzf HepMC3-3.2.2.tar.gz
   ```
-2. Create a workspace area on which to perform the builds 
+
+2. Create a workspace area on which to perform the builds
   ```
   mkdir hepmc3-build
   cd hepmc3-build
   ```
-  
+
 3. Configure the build of the HepMC3
   a)
   ```
-  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3 
+  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3
   ```
   or b)
   ```
-  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3-3.2.2 
+  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3-3.2.2
   ```
   To disable compilation of search engine (enabled by default) add
-  
+
   ```
   -DHEPMC3_ENABLE_SEARCH=OFF
   ```
-  Please note, in case of using the search engine, the easiest way to link against 
+  Please note, in case of using the search engine, the easiest way to link against
   HepMC3search could be to use static version of the library.
 
   To disable compilation of python bindings (enabled by default) add
-  
+
   ```
   -DHEPMC3_ENABLE_PYTHON=OFF
   ```
    Please note that on some RedHat-like systems the executable of cmake version 3 is called cmake3.
-  
-4. In order to build with ROOTIO put the following flags and define LD_LIBRARY_PATH: 
+
+4. In order to build with ROOTIO put the following flags and define LD_LIBRARY_PATH:
   ```
   -DHEPMC3_ENABLE_ROOTIO=ON -DROOT_DIR=path_to_ROOT6_installation
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:path_to_ROOT6_libraries
   ```
-  
+
 5. In order to build with HepMC3 example put
   ```
-  -DHEPMC3_BUILD_EXAMPLES=ON 
-  ``` 
-  
-  Additional flags control the location installation of Photos, Tauola MC-TESTER, HepMC2 
+  -DHEPMC3_BUILD_EXAMPLES=ON
+  ```
+
+  Additional flags control the location installation of Photos, Tauola MC-TESTER, HepMC2
   and Pythia8  that are used for tests. Please note that some examples are disabled  on Windows.
 
   For tests and for development purposes  HepMC3 uses extra packages, e.g. ZLIB, GrpahViz, binder.
   On Windows, most extra packages (e.g. ZLIB) have no default location, therefore
-  one should specify their location manually, e.g. 
+  one should specify their location manually, e.g.
 ```
-cmake CMakeLists.txt -DZLIB_ROOT=C:\lib -DZLIB_INCLUDE_DIR=C:\include 
+cmake CMakeLists.txt -DZLIB_ROOT=C:\lib -DZLIB_INCLUDE_DIR=C:\include
 ```
 
-  
+
 6. In order to build and run tests put
   ```
   -DHEPMC3_ENABLE_TEST=ON
   ```
-  and run 
+  and run
   ```
   make test
   ```
   after compilation is completed
 
-  
+
 7. Build and install HepMC3
   ```
   make -jN install
 
   ```
 where N denotes a number of desired parallel jobs.
-On Windows (in Unix-compatible shell) one can use 
+On Windows (in Unix-compatible shell) one can use
 ```
 cmake --build ./
 ```
@@ -97,19 +98,19 @@ Please note that you have to have permissions to install HepMC3 into the selecte
 
 8. To run the tests do
 ```
-ctest . 
+ctest .
 ```
 On Windows/MSVC the build type should be specified
 ```
 ctest . -C Debug
 ```
-9. HepMC3 packages are available from standard repositories of Debian, 
-Redhat/Fedora, Arch, hep-homebrew and others. 
+9. HepMC3 packages are available from standard repositories of Debian,
+Redhat/Fedora, Arch, hep-homebrew and others.
 To build Windows installer use NSIS and run
 ```
 cpack.exe -G NSIS -C Debug
 ```
-The primary supported development chains are 
+The primary supported development chains are
 gcc@Linux, clang@Linux, gcc@OSX, clang@OSX and  MSVC@Windows10, however
 the code has been tested on other compilers and systems, e.g. clang@FreeBSD,
 Sun@Solaris11, gcc@Solaris11, Sun@Linux, PGC@Linux etc.
@@ -120,17 +121,17 @@ Only a limiter support can be offered for these systems.
 10. HepMC3 is supplied with Python bindings codes that can be build on multiple systems.
 The number of potential combinations of compiler suites, Python versions and operation systems is quite large,
 therefore it is recommended to install the HepMC3 form the default repositories of the used operating system.
-If not possible, the following options are available 
+If not possible, the following options are available
 - compile the python package from sources
 - use the precompiled binaries from pypi: https://pypi.org/project/HepMC3/
 - use the https://anaconda.org/conda-forge/hepmc3
-In addition to that part of the bindings are implemented in the pyhepmc project 
+In addition to that part of the bindings are implemented in the pyhepmc project
 
 https://github.com/HDembinski/pyhepmc.
 
-Please note that 
+Please note that
 10a
-The installation path for the Python modules can be tweaked with 
+The installation path for the Python modules can be tweaked with
 the cmake variables
 ```
 HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}
@@ -138,7 +139,7 @@ HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}
 By default these variables are set to the path of the used installation of python.
 10b
 
-The PyPy support is experimental. To build the bindings against pypy-c library use 'pypy<version>' 
+The PyPy support is experimental. To build the bindings against pypy-c library use 'pypy<version>'
 for the HEPMC3_PYTHON_VERSIONS option, e.g.
 ```
 -DHEPMC3_PYTHON_VERSIONS=pypy2
@@ -153,14 +154,14 @@ The possible problems during the HepMC3 installation can be caused by
    The only solution is to use compiler with C++11 support
  - The used cmake is too old. While the core library can be built with cmake 2.8, the python and ROOT extensions require cmake of higher versions.
    A possible solution is to use a newer cmake or disable the python/ROOT if these are not needed.
- 
+
 
 
 #  Examples
-HepMC3 is shipped with multiple examples. These can be compiled during installation as described above  
-or after the installation (for HepMC3>3.1.0). 
-To compile the examples after the installation  copy the installed directory with examples to desired directory 
-and run cmake, e.g. 
+HepMC3 is shipped with multiple examples. These can be compiled during installation as described above
+or after the installation (for HepMC3>3.1.0).
+To compile the examples after the installation  copy the installed directory with examples to desired directory
+and run cmake, e.g.
 
 ```
 mkdir -p myexamples
@@ -179,7 +180,7 @@ cmake will require an additional flag  -DHepMC3_DIR=/where/you/have/it to point 
 The package sources are organized as follows:
 
 0. The topmost directory contains the
-README and AUTHORS files, short design description, the main cmake file CMakeLists.txt, the package license, 
+README and AUTHORS files, short design description, the main cmake file CMakeLists.txt, the package license,
 change log and a template for configuration file.
 ```
 ./DESIGN
@@ -192,26 +193,26 @@ change log and a template for configuration file.
 ./ChangeLog
 ```
 
-1. The subdirectory src/ contains the core set of library sources while 
+1. The subdirectory src/ contains the core set of library sources while
 the corresponding headers are located in include/HepMC3 directory.
-The subdirectory include/HepMC3/Data includes headers with definitions of 
-POD structures used in the library. 
+The subdirectory include/HepMC3/Data includes headers with definitions of
+POD structures used in the library.
 
-2. The subdirectory search/src contains a set of source files of the search 
-sublibrary while the corresponding headers are located in 
+2. The subdirectory search/src contains a set of source files of the search
+sublibrary while the corresponding headers are located in
 the search/include/HepMC3 directory. The search/CMakeLists.txt file is used by cmake
 to build  the search sublibrary.
 
-3. The subdirectory rootIO/src contains a set of source files of the rootIO 
-sublibrary while the corresponding headers are located in 
-the search/include/HepMC3 and search/include/ directories. The 
-rootIO/CMakeLists.txt file is used by cmake to build  the search sublibrary. 
+3. The subdirectory rootIO/src contains a set of source files of the rootIO
+sublibrary while the corresponding headers are located in
+the search/include/HepMC3 and search/include/ directories. The
+rootIO/CMakeLists.txt file is used by cmake to build  the search sublibrary.
 
 4. The subdirectory python contains a set of source files required for compilation
-of the python bindings to the library. These include the python/include/pybind11 
-directory with the pybind11 headers.  The python/src/, 
- directory contains the  genuine 
- 
+of the python bindings to the library. These include the python/include/pybind11
+directory with the pybind11 headers.  The python/src/,
+ directory contains the  genuine
+
 ```
 python/src/root_binders.hpp
 python/src/binders.hpp
@@ -253,8 +254,8 @@ pyHepMC3.search.egg-info.in
 The python/CMakeLists.txt file is used by cmake
 to build  the binding.
 
-5. The subdirectory interfaces/ contains subdirectories with interfaces 
-(C++/Fortran source files, C++ headrs) to 
+5. The subdirectory interfaces/ contains subdirectories with interfaces
+(C++/Fortran source files, C++ headers) to
 Monte Carlo event generators and event processing tools
 mc-tester,  Photospp,  pythia6,  pythia8 and  Tauolapp.
 
@@ -266,7 +267,7 @@ The files in  test/ can be split in two groups:
 ./test/testIO4.cc
 ./test/inputIO4.root
 ```
-and 
+and
 these that are involved in testing of HepMC3 with the Monte Carlo generators/tools
 
 ```
@@ -297,13 +298,13 @@ these that are involved in testing of HepMC3 with the Monte Carlo generators/too
 ```
 
 7. The subdirectory cmake/Modules contains files needed for the cmake configuration
-The subdirectory cmake/Templates contains templates needed for generation 
-of the library cmake configuration files.  
+The subdirectory cmake/Templates contains templates needed for generation
+of the library cmake configuration files.
 
-8. The subdirectory examples contains several examples of usage of HepMC3 library 
+8. The subdirectory examples contains several examples of usage of HepMC3 library
 in standalone applications.
 Each example is located in its own directory and can be build using the CMakeLists.txt
-in the same directory. 
+in the same directory.
 
 - The ./examples/ConvertExample/ subdirectory contains source code of
 utility that converts different types of event records, including cusm event records, into each other.
@@ -328,7 +329,7 @@ The files
 contain an implementation of output format that can be used together with data from OPAL experiment.
 
 
-The files 
+The files
 ```
 ./examples/ConvertExample/include/ReaderGZ.h
 ./examples/ConvertExample/src/gzstream.C
@@ -336,7 +337,7 @@ The files
 ```
 implement an example of compressed input handling.
 
-The files 
+The files
 ```
 ./examples/ConvertExample/src/AnalysisExample.cc
 ./examples/ConvertExample/include/AnalysisExample.h
@@ -355,24 +356,24 @@ an utility that reads HepMC3 events in ROOT TTree format.
 - The ./examples/RootIOExample2/ subdirectory contains source code of
 an utility that reads HepMC3 events and saves them using a custom ROOT-based class.
 
-- The ./examples/BasicExamples/ subdirectory contains source code of basic examples of HepMC3 usage, 
+- The ./examples/BasicExamples/ subdirectory contains source code of basic examples of HepMC3 usage,
 e.g. building of event from scratch, reading and writing files, usage of fortran, etc.
 
 - The ./examples/Pythia6Example/ subdirectory contains source code of
 an utility that generates HepMC events with the Pythia6 Monte Carlo event
-generator. 
+generator.
 
 - The ./examples/Pythia8Example/ subdirectory contains source code of
 an utility that generates HepMC events with the Pythia8 Monte Carlo event
-generator. 
+generator.
 
 - The ./examples/LHEFExample/ subdirectory contains source code of
 an utility that illustrates manipulations with LHEF event record.
 
-- The ./examples/ViewerExample/ subdirectory contains source code of ROOT 
+- The ./examples/ViewerExample/ subdirectory contains source code of ROOT
 based GUI program that allows to visualize the HepMC3 events.
 
-- The ./examples/SearchExample/ subdirectory contains source code example that 
+- The ./examples/SearchExample/ subdirectory contains source code example that
 deals with search of relations between particles inthe event.
 
 9. The doc/ directory contains files used for generation of library source code documentation with

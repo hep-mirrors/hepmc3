@@ -5,26 +5,26 @@
         * Fixed WriterAsciiHepMC2 option for separate flows. Reported by Julian Lukwata.
         * Improved treatment of python installation, Thanks to Mattias Ellert.
         * Split the sources of python bindings into smaller files to optimize compilation.
-        * Improved cmake configuration for special cases, e.g. old cmake, no ROOT, some compillers, etc. Added more error handeling.
+        * Improved cmake configuration for special cases, e.g. old cmake, no ROOT, some compilers, etc. Added more error handling.
         * Fixed compilation of the search module with Clang.
         * Added an example for search module.
         * Fixed the HepMC2 output for events without weights.
         * Fixed the signal vertex ID for HepMC2 output.
         * Added an interface for HepMC2 (in-memory-conversion).
-        * Added functions to search module: search for relatives (particle or vertex)->(particle or vertex) in different combinations. 
-        *   This bumps so version of the libHepMC3search to 4.
+        * Added functions to search module: search for relatives (particle or vertex)->(particle or vertex) in different combinations.
+        * This bumps .so version of the libHepMC3search to 4.
         * Improved the configuration of Pythia8 for tests (minimal version requirement).
         * Fixed compatibility of ROT trees written with HePMC3.0 and removed the typedefs in the dictionaries.
   --------------------------  HepMC3.2.1 --------------------------
 2020-03-17 Andrii Verbytskyi for HepMC
         * Bugfix release.
         * Explicit usage of namespaces.
-        * Disallow empty lines for the attribute names. 
+        * Disallow empty lines for the attribute names.
         * Added an option for explicit selection of packages for testing.
         * Adjustments in the interfaces of Tauola/Photos/mc-tester
         *   as a part of preparation to the new releases of these libraries
         * Experimental support for Python modulescompilation with pypy.
-        * Bugfix in VectorString attribute, thanks to Luke Pickering 
+        * Bugfix in VectorString attribute, thanks to Luke Pickering
         * and collaborators
         * Improvement in the attribute parsing. Thanks to Peter Onyisi.
         * Added an option to handle Python 3.9. Thanks to Mattias Ellert.
@@ -43,7 +43,7 @@
         ** The standard Selector members from Selector (e.g. Selector::MASS) were moved into a new class StandardSelector.
         ** Added HEPMC3_ prefix to DEBUG, ERROR, WARNING  macros
         * Added Reader::skip(int &) for fast forwarding of input
-        * Added to LHEF::Writer wrapper functions that can be used in Python 
+        * Added to LHEF::Writer wrapper functions that can be used in Python
         * use delete/override for class members
         * The ** marked changes should be taken into account during the migration to 3.2
         * Thanks to Dominik Muller
