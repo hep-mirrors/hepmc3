@@ -7,7 +7,26 @@ HepMC3 is a new rewrite of HepMC event record. It uses shared pointers for in-me
  - C++ compiler with c++11 standard support
  - cmake version 3.X.  The  support for version 2.8 is provided only for the core and search libraries.  It will be completely removed in the future versions.
 
-1. a)Checkout the HepMC from GIT repository:
+It is strongly recommended to read this documentation completely before the installation. However, if for some reason that is not possible, 
+here is a  set of commands for the instalation that can be copied and pasted into a Unix terminal. In some cases this action might result in a fully functional installation.
+
+```
+  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.2.tar.gz
+  tar -xzf HepMC3-3.2.2.tar.gz
+  mkdir hepmc3-build
+  cd hepmc3-build
+  cmake -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=OFF  \
+      -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=2.7  \  
+      -DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF -DHEPMC3_BUILD_DOCS:BOOL=OFF  \
+      -DCMAKE_INSTALL_PREFIX=../hepmc3-install   \
+      -DHEPMC3_Python_SITEARCH27=../hepmc3-install/lib/python2.7/site-packages \
+      ../HepMC3-3.2.2
+  make
+  make install 
+```
+The full explanation  for the installation options is given below.
+1. The first step of the installation is to  
+  a)Checkout the HepMC from GIT repository:
 
   ```
   git clone https://gitlab.cern.ch/hepmc/HepMC3.git
@@ -130,16 +149,40 @@ In addition to that part of the bindings are implemented in the pyhepmc project
 https://github.com/HDembinski/pyhepmc.
 
 Please note that
+
+
 10a
+
 The installation path for the Python modules can be tweaked with
 the cmake variables
 ```
 HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}
 ```
-By default these variables are set to the path of the used installation of python.
+i.e. to set the installation path of the HepMC3 modules for Python2.7 add to the 
+arguments of cmake 
+```
+-DHEPMC3_Python_SITEARCH27=/path/where/I/want/my/python/of/version/2.7/modules
+```
+
+By default the `HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}`  
+variables are set to the path of the used installation of python. In some cases you 
+would not have permissions to install the python modules to that directory, so the change
+of the installation path for the Python modules would be mandatory.
+
+
+
+To specify the desired versions of the python to build the HePMC3 modules, put use HEPMC3_PYTHON_VERSIONS argument for the cmake, e.g.
+with the argument  
+```
+-DHEPMC3_PYTHON_VERSIONS=2,3.1,3.2
+```
+the python modules for versions Python 2.x (any Python of version 2), Python 3.1 and Python 3.2 will be build.
+By default cmake will attempt to build the python modules for the Python versions 2 and 3.
+
 10b
 
-The PyPy support is experimental. To build the bindings against pypy-c library use 'pypy<version>'
+In addition to the standard CPython  modules, it is possible to build HepMC3 modules for PyPy. 
+However, the PyPy support is experimental. To build the bindings against pypy-c library use 'pypy<version>'
 for the HEPMC3_PYTHON_VERSIONS option, e.g.
 ```
 -DHEPMC3_PYTHON_VERSIONS=pypy2
