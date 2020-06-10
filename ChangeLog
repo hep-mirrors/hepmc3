@@ -1,5 +1,5 @@
   --------------------------  HepMC3.2.2-pre --------------------------
-2020-06-01 Andrii Verbytskyi for HepMC
+2020-06-10 Andrii Verbytskyi for HepMC
         * Bugfix release
         * Fixed treatment of the weights in case of different number of weights and weight names. Reported by Frank Siegert.
         * Fixed WriterAsciiHepMC2 option for separate flows. Reported by Julian Lukwata.
