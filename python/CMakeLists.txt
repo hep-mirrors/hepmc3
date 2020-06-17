@@ -302,6 +302,7 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Pyth
         COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3.dll ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/HepMC3.dll
         COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3.dll ${CMAKE_CURRENT_SOURCE_DIR}/test/HepMC3.dll
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        DEPENDS HepMC3
                 )
       if(HEPMC3_ENABLE_SEARCH)
         add_custom_target(
@@ -309,6 +310,7 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Pyth
         COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3search.dll ${CMAKE_CURRENT_SOURCE_DIR}/${Python_VERSION}/pyHepMC3/search/HepMC3search.dll
         COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3search.dll ${CMAKE_CURRENT_SOURCE_DIR}/test/HepMC3search.dll
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        DEPENDS HepMC3search
                 )
       endif()
     endif()
