@@ -367,10 +367,7 @@ endif()
 find_program (BLACK NAMES black)
 if (BLACK)
   message(STATUS "HepMC3: Developers only: black found in ${BLACK}. Formating of Python code is possible.")
-  ADD_CUSTOM_TARGET(beautypython
-    COMMAND ${BLACK} -l 120  python/src/*py    python/test/*py
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-  )
+  ADD_CUSTOM_TARGET(beautypython COMMAND ${BLACK} -l 120  python/src/*py python/test/*py WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} )
 endif()
 find_program (CPPCHECK NAMES cppcheck)
 if(CPPCHECK)
