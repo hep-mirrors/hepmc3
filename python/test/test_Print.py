@@ -1,8 +1,8 @@
 from  pyHepMC3TestUtils import update_path,python_label
-import sys,os
+import sys
 sys.path=update_path()
 
-import math,random  
+import math,random
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
 from pyHepMC3 import HepMC3 as hm
 import io
@@ -28,7 +28,7 @@ def test_Print():
     p2.add_attribute("theta", hm.DoubleAttribute(random.random()*math.pi))
     p2.add_attribute("phi", hm.DoubleAttribute(random.random()*math.pi*2))
     v2.add_particle_in( p2 )
-#    
+#
 #     create the outgoing particles of v1 and v2
     p3=hm.GenParticle(hm.FourVector(.750,-1.569,32.191,32.238),1, 3 )
     evt.add_particle( p3 )
@@ -42,7 +42,7 @@ def test_Print():
     p4.add_attribute("theta", hm.DoubleAttribute(random.random()*math.pi))
     p4.add_attribute("phi", hm.DoubleAttribute(random.random()*math.pi*2))
     v2.add_particle_out( p4 )
-#    
+#
 #     create v3
     v3=hm.GenVertex()
     evt.add_vertex( v3 )
@@ -60,7 +60,7 @@ def test_Print():
     p5.add_attribute("theta", hm.DoubleAttribute(random.random()*math.pi))
     p5.add_attribute("phi", hm.DoubleAttribute(random.random()*math.pi*2))
     v3.add_particle_out( p5 )
-#    
+#
 #     create v4
     v4=hm.GenVertex(hm.FourVector(0.12,-0.3,0.05,0.004))
     evt.add_vertex( v4 )
@@ -71,7 +71,7 @@ def test_Print():
     p8=hm.GenParticle(hm.FourVector(3.962,-49.498,-26.687,56.373), -2,1 )
     evt.add_particle( p8 )
     v4.add_particle_out( p8 )
-#    
+#
 #     tell the event which vertex is the signal process vertex
 
     evt.add_attribute("signal_process_vertex", hm.IntAttribute(v3.id()))
@@ -82,7 +82,7 @@ def test_Print():
 #     print each particle so we can see the polarization
     for ip in evt.particles():
       print ( hm.Print.line(ip,True))
-    
+
     xout1=hm.WriterAscii(python_label()+"testBoost1.out")
     xout1.set_precision(6)
     xout1.write_event(evt)
@@ -103,11 +103,12 @@ def test_Print():
     assert (COMPARE_ASCII_FILES(python_label()+"testBoost1.out",python_label()+"testBoost2.out")==0)
     evt.clear()
     return 0
+
 if __name__ == "__main__":
     result=1
     try:
-     result=test_Print()
+        result=test_Print()
     except:
-     print ("FAILED")
-     result=1
+         print ("FAILED")
+         result=1
     sys.exit(result)

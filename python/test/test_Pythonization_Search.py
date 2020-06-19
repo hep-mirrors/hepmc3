@@ -1,5 +1,5 @@
 from  pyHepMC3TestUtils import update_path
-import sys,os
+import sys
 sys.path=update_path()
 
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
@@ -11,13 +11,13 @@ import random,math
 def test_Pythonization_Search():
     print (dir(hmsearch))
     inputA=hm.ReaderAsciiHepMC2("inputPythonization_Search.hepmc")
-    if inputA.failed(): 
+    if inputA.failed():
         print("No input")
         sys.exit(1)
     while  not inputA.failed():
         evt=hm.GenEvent()
         inputA.read_event(evt)
-        if inputA.failed(): 
+        if inputA.failed():
             print("End of file reached. Exit.\n")
             break
         v=evt.vertices()[2]
@@ -25,19 +25,14 @@ def test_Pythonization_Search():
 #        pa=hmsearch.ancestor_particles(v)
 #        print(v," has vertex   ancestors ",va)
 #        print(v," has particle ancestors ",pa)
-        evt.clear()    
+        evt.clear()
     inputA.close()
     return 0
 
 if __name__ == "__main__":
     result=1
     try:
-     result=test_Pythonization_Search()
+        result=test_Pythonization_Search()
     except:
-     result=1
+        result=1
     sys.exit(result)
-
-
-
-
-

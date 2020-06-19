@@ -1,5 +1,5 @@
 from  pyHepMC3TestUtils import update_path
-import sys,os
+import sys
 sys.path=update_path()
 
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
@@ -10,17 +10,12 @@ def test_Pythonization_docs():
     print (hm.GenEvent.particles.__doc__)
     print (hm.GenEvent.event_pos.__doc__)
     print (hm.GenVertex.particles_in.__doc__)
-    return 0    
+    return 0
 
 if __name__ == "__main__":
     result=1
     try:
-     result=test_Pythonization_docs()
+        result=test_Pythonization_docs()
     except:
-     result=1
+        result=1
     sys.exit(result)
-
-
-
-
-

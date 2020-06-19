@@ -1,5 +1,5 @@
 #project(pyHepMC3 CXX)
-#Should be fixed 
+#Should be fixed
 cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -102,7 +102,14 @@ if(ROOT_FOUND)
   configure_file("pyHepMC3.rootIO.egg-info.in" "pyHepMC3.rootIO.egg-info" IMMEDIATE @ONLY)
 endif()
 
-set(autoBN       src/pyHepMC3.cpp     src/pyHepMC3_0.cpp  src/pyHepMC3_1.cpp src/pyHepMC3_2.cpp src/pyHepMC3_3.cpp src/pyHepMC3_4.cpp src/pyHepMC3_5.cpp src/pyHepMC3_6.cpp src/pyHepMC3_7.cpp src/pyHepMC3_8.cpp src/pyHepMC3_9.cpp  src/pyHepMC3_10.cpp src/pyHepMC3_11.cpp src/pyHepMC3_12.cpp src/pyHepMC3_13.cpp src/pyHepMC3_14.cpp src/pyHepMC3_15.cpp src/pyHepMC3_16.cpp src/pyHepMC3_17.cpp)
+set(autoBN       src/pyHepMC3.cpp src/pyHepMC3_0.cpp src/pyHepMC3_1.cpp
+                 src/pyHepMC3_2.cpp src/pyHepMC3_3.cpp src/pyHepMC3_4.cpp
+                 src/pyHepMC3_5.cpp src/pyHepMC3_6.cpp src/pyHepMC3_7.cpp
+                 src/pyHepMC3_8.cpp src/pyHepMC3_9.cpp src/pyHepMC3_10.cpp
+                 src/pyHepMC3_11.cpp src/pyHepMC3_12.cpp src/pyHepMC3_13.cpp
+                 src/pyHepMC3_14.cpp src/pyHepMC3_15.cpp src/pyHepMC3_16.cpp
+                 src/pyHepMC3_17.cpp
+)
 set(autoBNrootIO src/pyHepMC3rootIO.cpp src/pyHepMC3rootIO_0.cpp src/pyHepMC3rootIO_1.cpp)
 set(autoBNsearch src/pyHepMC3search.cpp src/pyHepMC3search_0.cpp src/pyHepMC3search_1.cpp)
 set(BN       ${autoBN}       src/binders.cpp)
@@ -115,28 +122,30 @@ if (RERUN_BINDER)
 
     configure_file("all_includes.hpp.in" "all_includes.hpp" IMMEDIATE @ONLY)
     add_custom_command(
-    OUTPUT  ${autoBN} 
-    DEPENDS all_includes.hpp src/pyHepMC3.binder 
-    COMMAND ${BINDER} --flat --max-file-size=20000  --root-module pyHepMC3 --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3.binder   all_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    VERBATIM)
+      OUTPUT  ${autoBN}
+      DEPENDS all_includes.hpp src/pyHepMC3.binder
+      COMMAND ${BINDER} --flat --max-file-size=20000  --root-module pyHepMC3 --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3.binder   all_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
+      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+      VERBATIM
+    )
     if(ROOT_FOUND)
       configure_file("root_includes.hpp.in" "root_includes.hpp" IMMEDIATE @ONLY)
       add_custom_command(
-      OUTPUT  ${autoBNrootIO}
-      DEPENDS root_includes.hpp src/pyHepMC3rootIO.binder
-      COMMAND ${BINDER} --flat --max-file-size=5000  --root-module pyHepMC3rootIO --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3rootIO.binder   root_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-      VERBATIM)
+        OUTPUT  ${autoBNrootIO}
+        DEPENDS root_includes.hpp src/pyHepMC3rootIO.binder
+        COMMAND ${BINDER} --flat --max-file-size=5000  --root-module pyHepMC3rootIO --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3rootIO.binder   root_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        VERBATIM
+      )
     endif()
     if(HEPMC3_ENABLE_SEARCH)
       configure_file("search_includes.hpp.in" "search_includes.hpp" IMMEDIATE @ONLY)
       add_custom_command(
-      OUTPUT  ${autoBNsearch}
-      DEPENDS search_includes.hpp src/pyHepMC3search.binder
-      COMMAND ${BINDER} --flat --max-file-size=5000  --root-module pyHepMC3search --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3search.binder   search_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} 
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-      VERBATIM)
+        OUTPUT  ${autoBNsearch}
+        DEPENDS search_includes.hpp src/pyHepMC3search.binder
+        COMMAND ${BINDER} --flat --max-file-size=5000  --root-module pyHepMC3search --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3search.binder   search_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} 
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+        VERBATIM)
     endif()
   else()
     message(FATAL_ERROR "HepMC3  python: binder not found!  Automatic generatin of code for python bindings is not possible.")
@@ -303,7 +312,7 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Pyth
         COMMAND ${CMAKE_COMMAND} -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/HepMC3.dll ${CMAKE_CURRENT_SOURCE_DIR}/test/HepMC3.dll
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         DEPENDS HepMC3
-                )
+      )
       if(HEPMC3_ENABLE_SEARCH)
         add_custom_target(
         copysearch${Python_VERSION} ALL
@@ -315,11 +324,11 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Pyth
       endif()
     endif()
   endif()
-  message(STATUS "HepMC3 python: Tweak HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings.") 
+  message(STATUS "HepMC3 python: Tweak HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings.")
   if (WIN32)
     if (NOT HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
       set (HEPMC3_Python_SITEARCH ${CMAKE_INSTALL_LIBDIR}/${Python_VERSION})
-      message(STATUS "HepMC3 python: HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} defaults to ${HEPMC3_Python_SITEARCH}") 
+      message(STATUS "HepMC3 python: HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} defaults to ${HEPMC3_Python_SITEARCH}")
     else()
       set (HEPMC3_Python_SITEARCH ${HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}})
       message(STATUS "HepMC3 python: HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} is set to to ${HEPMC3_Python_SITEARCH}")
@@ -335,15 +344,15 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Pyth
     endif()
   endif()
   if(NOT (HEPMC3_Python_SITEARCH  MATCHES "^${CMAKE_INSTALL_PREFIX}(.*)"))
-    message(STATUS "HepMC3 python: WARNING: The installation path of the python modules is HEPMC3_Python_SITEARCH=${HEPMC3_Python_SITEARCH}.") 
-    message(STATUS "HepMC3 python: WARNING: The installation path of the python modules is outside of the global instalation path CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}.") 
-    message(STATUS "HepMC3 python: WARNING: You can use the HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} variable to set the desired installation path for the Python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} modules.") 
+    message(STATUS "HepMC3 python: WARNING: The installation path of the python modules is HEPMC3_Python_SITEARCH=${HEPMC3_Python_SITEARCH}.")
+    message(STATUS "HepMC3 python: WARNING: The installation path of the python modules is outside of the global instalation path CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}.")
+    message(STATUS "HepMC3 python: WARNING: You can use the HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} variable to set the desired installation path for the Python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} modules.")
   endif()
 
   install(TARGETS pyHepMC3${Python_VERSION} DESTINATION ${HEPMC3_Python_SITEARCH}/pyHepMC3  COMPONENT python)
   install(FILES src/__init__.py  DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3 COMPONENT python)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3.egg-info  DESTINATION  ${HEPMC3_Python_SITEARCH} RENAME pyHepMC3-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info COMPONENT python)
-  if(ROOT_FOUND)        
+  if(ROOT_FOUND)
     install(TARGETS pyHepMC3rootIO${Python_VERSION} DESTINATION ${HEPMC3_Python_SITEARCH}/pyHepMC3/rootIO  COMPONENT pythonrootIO)
     install(FILES src/rootIO/__init__.py  DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3/rootIO COMPONENT pythonrootIO)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3.rootIO.egg-info  DESTINATION  ${HEPMC3_Python_SITEARCH} RENAME pyHepMC3.rootIO-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info COMPONENT pythonrootIO)
@@ -354,7 +363,7 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Pyth
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3.search.egg-info  DESTINATION  ${HEPMC3_Python_SITEARCH} RENAME pyHepMC3.search-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info COMPONENT pythonsearch)
   endif()
 
-  set( HepMC_python_tests 
+  set( HepMC_python_tests
         test_IO1
         test_Boost
         test_Print
@@ -364,10 +373,10 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Pyth
         test_Pythonization_GenEvent
         test_Pythonization_GenRunInfo
         test_Units
-        )
-  if(ROOT_FOUND)        
+  )
+  if(ROOT_FOUND)
     list( APPEND HepMC_python_tests test_IO2)
-  endif()        
+  endif()
   if(HEPMC3_ENABLE_SEARCH)
     list( APPEND HepMC_python_tests test_Pythonization_Search)
   endif()
@@ -376,7 +385,10 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE AND ((${Pyth
       ENABLE_TESTING()
     endif()
     foreach ( ptest ${HepMC_python_tests} )
-      add_test(NAME python${Python_VERSION}_${ptest} COMMAND ${Python_EXECUTABLE} ${ptest}.py WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test")
+      add_test(NAME python${Python_VERSION}_${ptest}
+        COMMAND ${Python_EXECUTABLE} ${ptest}.py 
+        WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test"
+      )
     endforeach ( ptest ${HepMC_python_tests} )
   endif()
 else()
@@ -384,17 +396,16 @@ else()
 endif()
 unset(HEPMC3_Python_SITEARCH)
 endmacro(bindings)
+
 if (HEPMC3_PYTHON_VERSIONS)
   string(REPLACE "," ";" TEMPVERSIONS ${HEPMC3_PYTHON_VERSIONS})
   foreach( tempver ${TEMPVERSIONS} )
     string(REPLACE "." ";" MAJMIN "${tempver}.X.Y")
     list(GET MAJMIN 0 MAJ)
     list(GET MAJMIN 1 MIN)
-    bindings(${MAJ} ${MIN}) 
+    bindings(${MAJ} ${MIN})
   endforeach ()
 else()
   bindings(2 X)
   bindings(3 X)
 endif()
-
-

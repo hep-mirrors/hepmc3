@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 # Backup Files
 # CMake output files
 # Compiled Dynamic libraries
@@ -64,4 +53,6 @@ install_manifest_headers.txt
 outputs
 rootIO/rootIO_Classes.cxx
 rootIO/rootIO_Classes.h
-
+__pycache__
+*.pyc
+*.dll

@@ -16,7 +16,7 @@
 #  8  !u~!    1     -2    5,5    3.962  -49.498  -26.687   56.373    0.006
 
 from  pyHepMC3TestUtils import update_path,python_label
-import sys,os
+import sys
 sys.path=update_path()
 
 import random,math
@@ -105,7 +105,7 @@ def test_Polarization():
     p8=hm.GenParticle( hm.FourVector(3.962,-49.498,-26.687,56.373), -2,1 )
     evt.add_particle( p8 )
     v4.add_particle_out( p8 )
-    
+
     evt.add_attribute("signal_process_vertex", hm.IntAttribute(v3.id()))
 #the event is complete, we now print it out
     hm.Print.content(evt)
@@ -140,10 +140,11 @@ def test_Polarization():
 
     assert((COMPARE_ASCII_FILES(python_label()+"testPolarization1.dat",python_label()+"testPolarization5.out")==0) and (COMPARE_ASCII_FILES(python_label()+"testPolarization1.dat",python_label()+"testPolarization2.dat")!=0))
     return 0
+
 if __name__ == "__main__":
     result=1
     try:
-     result=test_Polarization()
+        result=test_Polarization()
     except:
-     result=1
+        result=1
     sys.exit(result)

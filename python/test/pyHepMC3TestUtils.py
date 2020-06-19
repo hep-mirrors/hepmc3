@@ -1,14 +1,13 @@
 import re
 import sys,os
 
-def update_path():
- v=sys.version_info
- return [os.path.abspath(os.path.join(os.pardir,str(v[0])+"."+str(v[1])+"."+str(v[2])))]+[os.getcwd()]+sys.path
-
 def python_label():
- v=sys.version_info
- return str(v[0])+"."+str(v[1])+"."+str(v[2])
+    v=sys.version_info
+    return str(v[0])+"."+str(v[1])+"."+str(v[2])
   
+def update_path():
+ return [os.path.abspath(os.path.join(os.pardir,python_label()))]+[os.getcwd()]+sys.path
+
 
 def COMPARE_ASCII_FILES(f1,f2):
  file1=open(f1)
