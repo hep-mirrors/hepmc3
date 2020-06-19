@@ -71,9 +71,9 @@ class Pythia8ToHepMC3:
                 flow1=0
                 flow2=0
                 if (colType ==  1 or colType == 2):
-                  flow1=pyev[i].col()
+                    flow1=pyev[i].col()
                 if (colType == -1 or colType == 2):
-                  flow2=pyev[i].acol()
+                    flow2=pyev[i].acol()
                 hepevt_particles[i].add_attribute("flow1",hm.IntAttribute(flow1))
                 hepevt_particles[i].add_attribute("flow2",hm.IntAttribute(flow2))
 #        // If hadronization switched on then no final coloured particles.
@@ -100,11 +100,11 @@ class Pythia8ToHepMC3:
                 if ( hepevt_particles[i].pid() == 21 and  (  hepevt_particles[i].end_vertex() is None ) ):
                     print( "gluon without end vertex ", i)
                     if ( self.m_crash_on_problem ):
-                     sys.exit(1)
+                        sys.exit(1)
                 if ( abs(hepevt_particles[i].pid()) <= 6 and ( hepevt_particles[i].end_vertex() is None) ):
                     print( "quark without end vertex " , i )
                     if ( self.m_crash_on_problem ):
-                     sys.exit(1)
+                        sys.exit(1)
 
 #        // 5. Store PDF, weight, cross section and other event information.
 #        // Flavours of incoming partons.
@@ -118,7 +118,7 @@ class Pythia8ToHepMC3:
             pdfinfo.set(id1pdf, id2pdf, pyinfo.x1pdf(), pyinfo.x2pdf(), pyinfo.QFac(), pyinfo.pdf1(), pyinfo.pdf2() )
 #            // Store PDF information.
             evt.set_pdf_info( pdfinfo );
-            
+
 #        // Store process code, scale, alpha_em, alpha_s.
         if (self.m_store_proc and pyinfo is not None):
             evt.add_attribute("mpi",hm.IntAttribute(pyinfo.nMPI()))
@@ -138,6 +138,6 @@ class Pythia8ToHepMC3:
             evt.weights().clear()
             for iweight in range(0,pyinfo.nWeights()):
                 evt.weights().append(pyinfo.weight(iweight))
- 
+
 #        // Done.
         return True

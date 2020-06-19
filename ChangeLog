@@ -1,3 +1,7 @@
+  --------------------------  HepMC master --------------------------
+2020-06-19 Andrii Verbytskyi for HepMC
+         * Updates to many python scripts from Marian Heil 
+
   --------------------------  HepMC3.2.2 --------------------------
 2020-06-10 Andrii Verbytskyi for HepMC
         * Bugfix release

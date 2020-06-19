@@ -1,5 +1,5 @@
 from  pyHepMC3TestUtils import update_path
-import sys,os
+import sys
 sys.path=update_path()
 
 from  pyHepMC3TestUtils import COMPARE_ASCII_FILES
@@ -18,7 +18,7 @@ def test_Pythonization_GenRunInfo():
     #ri.tools().append(a)
     #ri.tools().append(b)
     #print (ri.tools())
-    #print (len(ri.tools()))  
+    #print (len(ri.tools()))
     #print (a.name  )
     #print (ri.tools()[1].name )
     #ri.tools()[1]=a
@@ -30,12 +30,7 @@ def test_Pythonization_GenRunInfo():
 if __name__ == "__main__":
     result=1
     try:
-     result=test_Pythonization_GenRunInfo()
+        result=test_Pythonization_GenRunInfo()
     except:
-     result=1
+        result=1
     sys.exit(result)
-
-
-
-
-
