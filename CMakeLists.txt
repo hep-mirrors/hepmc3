@@ -358,9 +358,17 @@ endif()
 #This is for developers only
 find_program (ASTYLE NAMES astyle)
 if (ASTYLE)
-  message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of code is possible.")
+  message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of C++ code is possible.")
   ADD_CUSTOM_TARGET(beauty
     COMMAND ${ASTYLE}  --keep-one-line-blocks  src/*cc  rootIO/src/*cc search/src/*cc  examples/*/src/*cc test/*cc  test/*h interfaces/*/include/*.h interfaces/*/include/*/*.h interfaces/*/src/*.cxx
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+  )
+endif()
+find_program (BLACK NAMES black)
+if (BLACK)
+  message(STATUS "HepMC3: Developers only: black found in ${BLACK}. Formating of Python code is possible.")
+  ADD_CUSTOM_TARGET(beautypython
+    COMMAND ${BLACK} -l 120  python/*py    python/test/*py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()
