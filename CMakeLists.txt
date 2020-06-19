@@ -368,13 +368,13 @@ find_program (BLACK NAMES black)
 if (BLACK)
   message(STATUS "HepMC3: Developers only: black found in ${BLACK}. Formating of Python code is possible.")
   ADD_CUSTOM_TARGET(beautypython
-    COMMAND ${BLACK} -l 120  python/*py    python/test/*py
+    COMMAND ${BLACK} -l 120  python/src/*py    python/test/*py
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()
 find_program (CPPCHECK NAMES cppcheck)
 if(CPPCHECK)
-  message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Static analysis of code is possible.")
+  message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Static analysis of C++ code is possible.")
   ADD_CUSTOM_TARGET(staticcheck
     COMMAND ${CPPCHECK} --force  --suppress=unusedFunction --std=c++11 --enable=all
       -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}
