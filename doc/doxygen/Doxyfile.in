@@ -52,7 +52,7 @@ PROJECT_LOGO           =
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ./
+OUTPUT_DIRECTORY       = @CMAKE_CURRENT_BINARY_DIR@/doxygen
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -130,7 +130,7 @@ FULL_PATH_NAMES        = NO
 # relative paths, which will be relative from the directory where doxygen is
 # started.
 
-STRIP_FROM_PATH        =
+STRIP_FROM_PATH        =  @CMAKE_CURRENT_SOURCE_DIR@
 
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of
 # the path mentioned in the documentation of a class, which tells
@@ -668,8 +668,16 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = mainpage.txt features.txt differences.txt modules.txt \
-                         ../.. building.txt LHEF.txt search.txt ReaderFactory.txt Python.txt
+INPUT                  = @CMAKE_CURRENT_SOURCE_DIR@/../  \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doxygen/mainpage.txt \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doxygen/features.txt \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doxygen/differences.txt \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doxygen/modules.txt \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doxygen/building.txt \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doxygen/LHEF.txt \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doxygen/search.txt \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doxygen/ReaderFactory.txt \
+                         @CMAKE_CURRENT_SOURCE_DIR@/doxygen/Python.txt
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
@@ -729,7 +737,7 @@ EXCLUDE_SYMBOLS        =
 # directories that contain example code fragments that are included (see
 # the \include command).
 
-EXAMPLE_PATH           = ../../examples
+EXAMPLE_PATH           = @CMAKE_CURRENT_SOURCE_DIR@/../examples
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
