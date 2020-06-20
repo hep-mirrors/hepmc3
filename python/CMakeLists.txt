@@ -1,6 +1,9 @@
 #project(pyHepMC3 CXX)
 #Should be fixed
 cmake_minimum_required(VERSION 3.0.0)
+if(${CMAKE_VERSION} VERSION_LESS "3.14.00")
+SET_PROPERTY (GLOBAL PROPERTY CMAKE_ROLE "PROJECT")
+endif()
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 option(USE_INSTALLED_HEPMC3 "Use HepMC3 bindings as a standalone package" OFF)
@@ -89,6 +92,12 @@ else()
   set (HEPMC3_INCLUDE_DIRECTORIES  ${PROJECT_SOURCE_DIR}/include   ${PROJECT_SOURCE_DIR}/rootIO/include  ${PROJECT_SOURCE_DIR}/search/include)
   set ( HEPMC3_LIB HepMC3)
   set ( HEPMC3_SEARCH_LIB HepMC3search)
+  #CMAKE_POSITION_INDEPENDENT_CODE should be ON or the static libraries should be compilled with -fPIC
+  #This option should be documented
+  if (HEPMC3_USE_STATIC_LIBS_FOR_PYTHON AND HEPMC3_BUILD_STATIC_LIBS)
+   set ( HEPMC3_LIB HepMC3_static)
+   set ( HEPMC3_SEARCH_LIB HepMC3search_static)
+  endif()
   if(ROOT_FOUND)
     set (HEPMC3_ROOTIO_LIBRARY HepMC3rootIO)
   endif()
@@ -185,9 +194,9 @@ if (${ver} STREQUAL 2)
   unset(Python_INCLUDE_DIRS CACHE)
   unset(Python_LIBRARIES CACHE)
   if (${verminor} STREQUAL X)
-    find_package (Python ${ver} COMPONENTS  Development Interpreter)
+    find_package (Python ${ver} COMPONENTS  Interpreter Development.Module)
   else()
-    find_package (Python ${ver}.${verminor} EXACT COMPONENTS  Development Interpreter)
+    find_package (Python ${ver}.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
   endif()
 endif()
 
@@ -200,11 +209,11 @@ if (${ver} STREQUAL 3)
   unset(Python3_INCLUDE_DIRS CACHE)
   unset(Python3_LIBRARIES CACHE)
   if (${verminor} STREQUAL X)
-    find_package (Python3 ${ver} COMPONENTS  Development Interpreter)
+    find_package (Python3 ${ver} COMPONENTS  Interpreter Development.Module )
   else()
-    find_package (Python3 ${ver}.${verminor} EXACT COMPONENTS  Development Interpreter)
+    find_package (Python3 ${ver}.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
   endif()
-  if (Python3_VERSION AND Python3_LIBRARIES AND Python3_INCLUDE_DIRS AND Python3_EXECUTABLE  ) #something is set
+  if (Python3_VERSION AND Python3_INCLUDE_DIRS AND Python3_EXECUTABLE  ) #something is set
     SET( Python_VERSION ${Python3_VERSION})
     SET( Python_VERSION_MAJOR ${Python3_VERSION_MAJOR})
     SET( Python_VERSION_MINOR ${Python3_VERSION_MINOR})
@@ -215,9 +224,9 @@ if (${ver} STREQUAL 3)
   endif()
 endif()
 
-if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE
-    AND ((${Python_VERSION_MAJOR} STREQUAL ${ver} AND ${verminor} STREQUAL "X")
-      OR "${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}" STREQUAL "${ver}.${verminor}" ))
+if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
+    AND ((${Python_VERSION_MAJOR} STREQUAL ${ver} AND ${verminor} STREQUAL "X")  
+        OR "${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}" STREQUAL "${ver}.${verminor}" ))
   message(STATUS "HepMC3 python: Python verson ${ver}.${verminor} found in ${Python_EXECUTABLE}. Python bindings generation is possible.")
 
   if (${ver} MATCHES pypy* )
@@ -278,7 +287,7 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE
       MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/$<0:>
       ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/$<0:>)
   target_link_libraries(pyHepMC3${Python_VERSION}
-    PUBLIC ${Python_LIBRARIES} ${HEPMC3_LIB} )
+    PUBLIC  ${HEPMC3_LIB} )
 
   target_include_directories(pyHepMC3${Python_VERSION}
     PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR} )
@@ -289,7 +298,7 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE
         MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:>
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/rootIO/$<0:>)
     target_link_libraries(pyHepMC3rootIO${Python_VERSION}
-      PUBLIC ${Python_LIBRARIES}  ${HEPMC3_LIB} ${HEPMC3_ROOTIO_LIBRARY} )
+      PUBLIC  ${HEPMC3_LIB} ${HEPMC3_ROOTIO_LIBRARY} )
     target_include_directories(pyHepMC3rootIO${Python_VERSION}
       PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR} )
 
@@ -301,7 +310,7 @@ if ( Python_LIBRARIES AND Python_INCLUDE_DIRS AND Python_EXECUTABLE
         MODULE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:>
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/search/$<0:>)
     target_link_libraries(pyHepMC3search${Python_VERSION}
-      PUBLIC ${Python_LIBRARIES} ${HEPMC3_LIB} ${HEPMC3_SEARCH_LIB} )
+      PUBLIC  ${HEPMC3_LIB} ${HEPMC3_SEARCH_LIB} )
     target_include_directories(pyHepMC3search${Python_VERSION}
       PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR} )
   endif()
