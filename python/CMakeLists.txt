@@ -111,6 +111,12 @@ else()
   endif()
 endif()
 
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Sun*")
+    message(STATUS "HepMC3 python: WARNING: you are trying to use Oracle Studio compiller that is not officially supported by pybind11.\
+ This compiler does not have the needed functionality to build the HepMC3 python modules using pybind11. Most likely the build fill fail.\
+ To disable the build of python bindings use -DHEPMC3_ENABLE_PYTHON=OFF with cmake.")
+endif()
+
 #Workaround for nvc++ for this particular code
 if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
     message(STATUS "HepMC3 python: WARNING: you are using PGI/NVidia compiller that is not officially supported by pybind11.\
