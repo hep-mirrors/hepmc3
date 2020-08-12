@@ -104,10 +104,20 @@ else()
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set(CMAKE_CXX_EXTENSIONS OFF)
 #This is a workaround for wrong flag.
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
+    set(CMAKE_CXX_EXTENSIONS ON)
+  endif()
+endif()
+
+#Workaround for nvc++
 if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
-  set(CMAKE_CXX_EXTENSIONS ON)
+  if (WIN32)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1")
+  endif()
 endif()
-endif()
+
 if (MSVC)
 #This is a workaround for VC memory problem and false positive warnings.
 set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/EHsc" "/D_CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")

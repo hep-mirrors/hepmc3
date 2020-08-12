@@ -4,8 +4,9 @@ import sys, os
 
 def python_label():
     v = sys.version_info
-    return str(v[0]) + "." + str(v[1]) + "." + str(v[2])
-
+    a=str(v[0]) + "." + str(v[1]) + "." + str(v[2])
+    print(a)
+    return a
 
 def update_path():
     return [os.path.abspath(os.path.join(os.pardir, python_label()))] + [os.getcwd()] + sys.path

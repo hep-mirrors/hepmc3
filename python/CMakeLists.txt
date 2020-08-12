@@ -64,6 +64,14 @@ if (USE_INSTALLED_HEPMC3)
       set(CMAKE_CXX_EXTENSIONS ON)
     endif()
   endif()
+#Workaround for nvc++
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
+    if (WIN32)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
+    else()
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1")
+    endif()
+  endif()
   if (MSVC)
 #This is a workaround for VC memory problem and false positive warnings.
     set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/D _CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
@@ -102,6 +110,26 @@ else()
     set (HEPMC3_ROOTIO_LIBRARY HepMC3rootIO)
   endif()
 endif()
+
+#Workaround for nvc++ for this particular code
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
+    message(STATUS "HepMC3 python: WARNING: you are using PGI/NVidia compiller that is not officially supported by pybind11.\
+ The optimization and debug for the python modules will be disabled.")
+    string(REPLACE "-g"    ""  CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-fast" ""  CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-O4"   ""  CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-O3"   ""  CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-O2"   ""  CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-O1"   ""  CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-g"    ""  CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    string(REPLACE "-fast" ""  CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    string(REPLACE "-O4"   ""  CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    string(REPLACE "-O3"   ""  CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    string(REPLACE "-O2"   ""  CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    string(REPLACE "-O1"   ""  CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    set(CMAKE_CXX_FLAGS   "${CMAKE_CXX_FLAGS} -O0")
+endif()
+
 configure_file("pyHepMC3.egg-info.in" "pyHepMC3.egg-info" IMMEDIATE @ONLY)
 if(HEPMC3_ENABLE_SEARCH)
   add_definitions(-DHEPMC3_ENABLE_SEARCH)
@@ -422,6 +450,10 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
         test_Pythonization_GenRunInfo
         test_Units
   )
+#Workaround for nvc++ for this particular test
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")  
+    list(REMOVE_ITEM HepMC_python_tests  test_Print)
+  endif()
   if(ROOT_FOUND)
     list( APPEND HepMC_python_tests test_IO2)
   endif()

@@ -215,7 +215,9 @@ The possible problems during the HepMC3 installation can be caused by
    The only solution is to use compiler with C++11 support
  - The used CMake is too old. While the core library can be built with CMake 2.8, the Python and ROOT extensions require CMake of higher versions.
    A possible solution is to use a newer CMake or disable the Python/ROOT if these are not needed.
-
+ - Compilation of python bindings fails.
+   pybind11 used by HepMC3 to create the python bindings supports only some compilers (gcc,clang, MSVC), therefore
+   it is expected that the bindings will work  with these compilers.
 
 
 #  Examples
