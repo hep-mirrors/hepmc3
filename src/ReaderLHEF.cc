@@ -107,22 +107,24 @@ bool ReaderLHEF::read_event(GenEvent& ev)
                      std::make_shared<LongAttribute>(hepe->hepeup.IDPRUP));
 
     // Now add the Particles from the LHE event to HepMC
-    GenParticlePtr p1 = std::make_shared<GenParticle>(hepe->momentum(0),
-                        hepe->hepeup.IDUP[0],
-                        hepe->hepeup.ISTUP[0]);
-    GenParticlePtr p2 = std::make_shared<GenParticle>(hepe->momentum(1),
-                        hepe->hepeup.IDUP[1],
-                        hepe->hepeup.ISTUP[1]);
-    GenVertexPtr vx = std::make_shared<GenVertex>();
-    vx->add_particle_in(p1);
-    vx->add_particle_in(p2);
+    std::vector<GenParticlePtr> particles;
+    std::map< std::pair<int,int>, GenVertexPtr> vertices;
+    for ( int i = 0; i < hepe->hepeup.NUP; ++i )
+    {
+        particles.push_back(std::make_shared<GenParticle>(hepe->momentum(i),hepe->hepeup.IDUP[i],hepe->hepeup.ISTUP[i]));
+        if (i<2) continue;
+        std::pair<int,int> vertex_index(hepe->hepeup.MOTHUP[i].first,hepe->hepeup.MOTHUP[i].second);
+        if (vertices.find(vertex_index)==vertices.end())vertices[vertex_index]=std::make_shared<GenVertex>();
+        vertices[vertex_index]->add_particle_out(particles.back());
+    }
+    for ( auto v: vertices )
+    {
+        std::pair<int,int> vertex_index=v.first;
+        GenVertexPtr          vertex=v.second;
+        for (int i=vertex_index.first; i<=vertex_index.second; i++) vertex->add_particle_in(particles[i]);
+    }
+    for ( auto v: vertices ) ev.add_vertex(v.second);
 
-    for ( int i = 2; i < hepe->hepeup.NUP; ++i )
-        vx->add_particle_out(std::make_shared<GenParticle>
-                             (hepe->momentum(i),
-                              hepe->hepeup.IDUP[i],
-                              hepe->hepeup.ISTUP[i]));
-    ev.add_vertex(vx);
     // And we also want to add the weights.
     std::vector<double> wts;
     for ( int i = 0, N = hepe->hepeup.weights.size(); i < N; ++i )
@@ -136,5 +138,3 @@ bool ReaderLHEF::failed() { return m_failed;}
 /// @brief Close file stream
 void ReaderLHEF::close() { delete m_reader; };
 } // namespace HepMC3
-
-
