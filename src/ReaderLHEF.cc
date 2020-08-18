@@ -105,6 +105,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
     if (m_reader->hepeup.subevents.size()>0) input.insert(input.end(),hepe->hepeup.subevents.begin(),hepe->hepeup.subevents.end());
     else (input.push_back(&m_reader->hepeup));
     int first_group_event=m_neve;
+    m_neve++;
     for (auto ahepeup: input)
     {
         GenEvent evt;
