@@ -41,12 +41,26 @@ void ReaderLHEF::init()
     // Create a HEPRUP attribute and initialize it from the reader.
     m_hepr = std::make_shared<HEPRUPAttribute>();
     m_hepr->heprup = m_reader->heprup;
-
     // There may be some XML tags in the LHE file which are
     // non-standard, but we can save them as well.
     m_hepr->tags = LHEF::XMLTag::findXMLTags(m_reader->headerBlock + m_reader->initComments);
-
-    // Nowwe want to create a GenRunInfo object for the HepMC file, and
+    // This code is ugly and should be replaced.
+    size_t nweights=0;
+    for ( auto t1: m_hepr->tags) {
+        if(t1->name!="header") continue;
+        for ( auto t2: t1->tags) {
+            if(t2->name!="initrwgt") continue;
+            for ( auto t3: t2->tags) {
+                if(t3->name!="weightgroup") continue;
+                for (auto t4: t3->tags) if (t4->name=="weight") nweights++;
+                break;
+            }
+            break;
+        }
+        break;
+    }
+    //
+    // Now we want to create a GenRunInfo object for the HepMC file, and
     // we add the LHEF attribute to that.
     set_run_info(std::make_shared<GenRunInfo>());
     run_info()->add_attribute("HEPRUP", m_hepr);
@@ -59,13 +73,11 @@ void ReaderLHEF::init()
     // We want to be able to convey the different event weights to
     // HepMC. In particular we need to add the names of the weights to
     // the GenRunInfo object.
-    
+
     std::vector<std::string> weightnames;
-    weightnames.push_back("0"); // The first weight is always the
-    // default weight with name "0".
-    //printf("%i %i %i\n", m_hepr->heprup.weightinfo.size(), m_reader->hepeup.subevents.size(),m_hepr->heprup.weightgroup.size());
-    for ( int i = 0, N = m_hepr->heprup.weightinfo.size(); i < N; ++i )
-        weightnames.push_back(m_hepr->heprup.weightNameHepMC(i));
+    for ( int i = 0, N = m_hepr->heprup.weightinfo.size(); i < N; ++i ) weightnames.push_back(m_hepr->heprup.weightNameHepMC(i)); 
+    if (nweights==0) nweights=1;
+    for ( int i = weightnames.size(); i < nweights; ++i ) weightnames.push_back(std::to_string(i));
     run_info()->set_weight_names(weightnames);
 
     // We also want to convey the information about which generators was
@@ -146,9 +158,13 @@ bool ReaderLHEF::read_event(GenEvent& ev)
             evt.set_beam_particles(particles[0],particles[1]);
         }
         // And we also want to add the weights.
+
+
         std::vector<double> wts;
         for ( int i = 0, N = ahepeup->weights.size(); i < N; ++i )
+        {
             wts.push_back(ahepeup->weights[i].first);
+        }
         evt.weights() = wts;
         m_storage.push_back(evt);
     }
