@@ -19,6 +19,7 @@
  */
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
+#include <deque>
 #include <string>
 #include <fstream>
 #include <istream>
@@ -54,10 +55,11 @@ public:
     /** @brief Destructor */
     ~ReaderLHEF() ;
 private:
-    LHEF::Reader* m_reader;            ///< The actual reader
+    std::shared_ptr<LHEF::Reader> m_reader;            ///< The actual reader
     std::shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
     int m_neve;                         ///< Event counter
     bool m_failed;                      ///< State of reader
+    std::deque<GenEvent> m_storage; ///<storage used for subevents.
 };
 }
 #endif
