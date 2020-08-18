@@ -13,12 +13,12 @@ namespace HepMC3
 {
 ReaderLHEF::ReaderLHEF(const std::string& filename)
 {
-    m_reader = new LHEF::Reader(filename);
+    m_reader = std::make_shared<LHEF::Reader>(filename);
     init();
 }
 ReaderLHEF::ReaderLHEF(std::istream & stream)
 {
-    m_reader = new LHEF::Reader(stream);
+    m_reader = std::make_shared<LHEF::Reader>(stream);
     init();
 }
 
@@ -59,9 +59,11 @@ void ReaderLHEF::init()
     // We want to be able to convey the different event weights to
     // HepMC. In particular we need to add the names of the weights to
     // the GenRunInfo object.
+    
     std::vector<std::string> weightnames;
     weightnames.push_back("0"); // The first weight is always the
     // default weight with name "0".
+    //printf("%i %i %i\n", m_hepr->heprup.weightinfo.size(), m_reader->hepeup.subevents.size(),m_hepr->heprup.weightgroup.size());
     for ( int i = 0, N = m_hepr->heprup.weightinfo.size(); i < N; ++i )
         weightnames.push_back(m_hepr->heprup.weightNameHepMC(i));
     run_info()->set_weight_names(weightnames);
@@ -99,7 +101,6 @@ bool ReaderLHEF::read_event(GenEvent& ev)
         hepe->tags =  LHEF::XMLTag::findXMLTags(m_reader->outsideBlock);
 
     hepe->hepeup = m_reader->hepeup;
-    printf("%i\n",hepe->hepeup.subevents.size());
     std::vector<LHEF::HEPEUP*> input;
     if (m_reader->hepeup.subevents.size()>0) input.insert(input.end(),hepe->hepeup.subevents.begin(),hepe->hepeup.subevents.end());
     else (input.push_back(&m_reader->hepeup));
@@ -107,13 +108,11 @@ bool ReaderLHEF::read_event(GenEvent& ev)
     for (auto ahepeup: input)
     {
         GenEvent evt;
-        evt.set_event_number(m_neve);
-        m_neve++;
+        evt.set_event_number(first_group_event);
         evt.add_attribute("AlphaQCD", std::make_shared<DoubleAttribute>(ahepeup->AQCDUP));
         evt.add_attribute("AlphaEM", std::make_shared<DoubleAttribute>(ahepeup->AQEDUP));
         evt.add_attribute("NUP",  std::make_shared<IntAttribute>(ahepeup->NUP));
         evt.add_attribute("IDPRUP",std::make_shared<LongAttribute>(ahepeup->IDPRUP));
-        if (hepe->hepeup.subevents.size()) evt.add_attribute("eventgroup", std::make_shared<LongAttribute>(first_group_event));
         // Now add the Particles from the LHE event to HepMC
         std::vector<GenParticlePtr> particles;
         std::map< std::pair<int,int>, GenVertexPtr> vertices;
@@ -139,7 +138,12 @@ bool ReaderLHEF::read_event(GenEvent& ev)
                 else vertices[vertex_index]->add_particle_out(particles[i]);
 
         for ( auto v: vertices ) evt.add_vertex(v.second);
-
+        if (particles.size()>1)
+        {
+            particles[0]->set_status(4);
+            particles[1]->set_status(4);
+            evt.set_beam_particles(particles[0],particles[1]);
+        }
         // And we also want to add the weights.
         std::vector<double> wts;
         for ( int i = 0, N = ahepeup->weights.size(); i < N; ++i )
@@ -155,5 +159,5 @@ bool ReaderLHEF::read_event(GenEvent& ev)
 bool ReaderLHEF::failed() { return m_failed;}
 
 /// @brief Close file stream
-void ReaderLHEF::close() { delete m_reader; };
+void ReaderLHEF::close() { };
 } // namespace HepMC3
