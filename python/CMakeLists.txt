@@ -68,13 +68,14 @@ if (USE_INSTALLED_HEPMC3)
       set(CMAKE_CXX_EXTENSIONS ON)
     endif()
   endif()
-#Workaround for nvc++
+#Workarounds for nvc++
   if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
-    if (WIN32)
+      #Templates
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
-    else()
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1")
-    endif()
+      if(UNIX AND CMAKE_CXX_COMPILER_VERSION GREATER 20 )
+        # exception_ptr on old gcc
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1 -D__GCC_ATOMIC_INT_LOCK_FREE=3")
+      endif()
   endif()
   if (MSVC)
 #This is a workaround for VC memory problem and false positive warnings.

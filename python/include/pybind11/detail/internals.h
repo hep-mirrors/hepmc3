@@ -100,9 +100,7 @@ struct internals {
     std::unordered_set<std::pair<const PyObject *, const char *>, overload_hash> inactive_overload_cache;
     type_map<std::vector<bool (*)(PyObject *, void *&)>> direct_conversions;
     std::unordered_map<const PyObject *, std::vector<PyObject *>> patients;
-#if !defined (__PGIC__)
     std::forward_list<void (*) (std::exception_ptr)> registered_exception_translators;
-#endif
     std::unordered_map<std::string, void *> shared_data; // Custom data to be shared across extensions
     std::vector<PyObject *> loader_patient_stack; // Used by `loader_life_support`
     std::forward_list<std::string> static_strings; // Stores the std::strings backing detail::c_str()
@@ -214,7 +212,6 @@ inline internals **&get_internals_pp() {
     return internals_pp;
 }
 
-#if !defined (__PGIC__)
 inline void translate_exception(std::exception_ptr p) {
     try {
         if (p) std::rethrow_exception(p);
@@ -233,7 +230,6 @@ inline void translate_exception(std::exception_ptr p) {
         return;
     }
 }
-#endif
 
 #if !defined(__GLIBCXX__)
 inline void translate_local_exception(std::exception_ptr p) {
@@ -270,9 +266,7 @@ PYBIND11_NOINLINE inline internals &get_internals() {
         //
         // libstdc++ doesn't require this (types there are identified only by name)
 #if !defined(__GLIBCXX__)
-#if !defined (__PGIC__)
         (*internals_pp)->registered_exception_translators.push_front(&translate_local_exception);
-#endif
 #endif
     } else {
         if (!internals_pp) internals_pp = new internals*();
