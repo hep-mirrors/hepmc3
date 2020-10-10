@@ -5,12 +5,84 @@ HepMC3 is a new version of the HepMC event record. It uses shared pointers for i
 
 # Quick-start (applicable to recent versions):
 
-0. The minimal requirements for the  installation from sources are
- - C++ compiler with c++11 standard support
- - CMake version 3.X.  The  support for version 2.8 is provided only for the core and search libraries.  It will be completely removed in the future versions.
+0. On the Linux platform HepMC3 is available from the standard repositories of multiple many 
+linux distributions:  Fedora, CentOS7(EPEL),  Arch Linux, Mageia, openSUSE Tumbleweed, Debian (outdated) etc.
+It is recommended to use the system package manager to install HepMC3 for these systems.
+The following commands will install the HepMC3 in the corresponding systems:
+  - Fedora:
+    The package is available from the standard repository. To install:
 
-It is strongly recommended to read this documentation completely before the installation. However, if for some reason that is not possible,
-here is a  set of commands for the instalation that can be copied and pasted into a Unix terminal. In some cases this action might result in a fully functional installation.
+    ```
+    sudo yum install HepMC3 HepMC3-devel HepMC3-search HepMC3-search-devel HepMC3-interfaces-devel HepMC3-doc
+
+    ```
+    
+  - RHEL, CentOS and compatible
+    The package is available from the EPEL repository. To install:
+    
+    ```
+    sudo yum install epel-release
+    sudo yum install HepMC3 HepMC3-devel HepMC3-search HepMC3-search-devel HepMC3-interfaces-devel HepMC3-doc
+
+    ```
+  For the Fedora and CentOS the ROOT interface packages ``HepMC3-rootIO`` and ``HepMC3-rootIO-devel``
+  can be installed in the same way, but will bring root as a dependency.
+  The python binding packages could have different names depending on the used system, e.g. these are 
+  ``python2-HepMC3``, ``python34-HepMC3``, ``python36-HepMC3``, ``python2-HepMC3-rootIO``, ``python34-HepMC3-rootIO`` 
+  and ``python36-HepMC3-rootIO`` for the CentOS7. Therefore, the simplest solution is to install bindings for all the 
+  available python version in the system using 
+  ```
+    sudo yum install python*-HepMC3
+  ```
+  - openSUSE/Leap
+    The HepMC3 package is available from the standard repositories https://build.opensuse.org/package/show/openSUSE:Leap:15.2:Update/HepMC.
+    To install:
+    ```
+    sudo zypper install HepMC3
+    ```
+    The package does not include ROOT interface.
+    
+  - Arch linux 
+    The package is available from https://www.archlinux.org/packages/community/x86_64/hepmc/. To install:
+    ```
+    sudo pacman -Syu hepmc
+    ```  
+    The dependencies can vary.
+    
+  - MacOSX 
+    The HepMC3 package is available in the ``hephomebrew`` repository https://davidchall.github.io/homebrew-hep/.
+    To install:
+    ```
+    brew tap davidchall/hep
+    brew install hepmc3    
+    ```
+    The package does not include ROOT interface.
+    
+   - Windows
+    The precompilled HepMC3 packages are available in for Windows and other platforms also in PyPi.
+    The Windows users can use ``pip`` to install HepMC3.
+    ```
+    pip install HepMC3
+    ``` 
+    The packages from pip do not include ROOT interface.
+    
+   - LCG platforms
+     The HepMC3 package is available in the LCG from multiple platforms.
+     The HepMC3 cmake files are located under
+     ``/cvmfs/sft.cern.ch/lcg/views/LCG_97/${LCG_PLATFORM}/share/HepMC3/cmake``, e.g. in
+     ``/cvmfs/sft.cern.ch/lcg/views/LCG_97/x86_64-centos7-gcc8-opt/share/HepMC3/cmake`` for the ``x86_64-centos7-gcc8-opt`` platform.
+    
+If for any reason the instalation from the repositories is not possible or is not desired, the instructions to build 
+HepMC3 from the sources 
+The minimal requirements for the  installation from sources are
+ - C++ compiler with c++11 standard support
+ - CMake version 3.X.  The  support for version 2.8 is provided only for the core and search libraries. 
+    It will be completely removed in the future versions.
+ 
+It is strongly recommended to read this documentation completely before the installation. 
+However, if for some reason that is not possible, here is a  set of commands for the 
+instalation that can be copied and pasted into a Unix terminal. In some cases this 
+action might result in a fully functional installation.
 
 ```
   wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.2.tar.gz
@@ -421,6 +493,9 @@ an utility that reads HepMC3 events in ROOT TTree format.
 
 - The `./examples/RootIOExample2/` subdirectory contains source code of
 an utility that reads HepMC3 events and saves them using a custom ROOT-based class.
+
+- The `./examples/RootIOExample3/` subdirectory contains source code of
+an utility that reads HepMC3 events and saves them nto ROOT TTree. This is a simplified version of ConvertExample.
 
 - The `./examples/BasicExamples/` subdirectory contains source code of basic examples of HepMC3 usage,
 e.g. building of event from scratch, reading and writing files, usage of fortran, etc.

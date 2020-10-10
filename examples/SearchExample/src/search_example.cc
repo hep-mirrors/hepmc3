@@ -64,7 +64,9 @@ int main()
         delete evt;
     }
     auto end1 = std::chrono::system_clock::now();
-    std::cout<<"search_example: generation of events and descendants_of_same_type()  "<<std::chrono::duration_cast<std::chrono::milliseconds>(end1 - start1).count()<<" ms"<<std::endl;
+    std::cout<<"search_example: generation of events and descendants_of_same_type()  "
+             <<std::chrono::duration_cast<std::chrono::milliseconds>(end1 - start1).count()<<" ms"
+             << " total number of decandants: "<<np1<<std::endl;
 
     auto start2 = std::chrono::system_clock::now();
     size_t  np2=0;
@@ -75,7 +77,9 @@ int main()
         delete evt;
     }
     auto end2 = std::chrono::system_clock::now();
-    std::cout<<"search_example: generation of events and Relatives::DESCENDANTS()    "<<std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2).count()<<" ms"<<std::endl;
+    std::cout<<"search_example: generation of events and Relatives::DESCENDANTS()    "
+             <<std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2).count()<<" ms"
+             << " total number of decandants: "<<np2<<std::endl;
 
     auto start3 = std::chrono::system_clock::now();
     size_t  np3=0;
@@ -86,7 +90,9 @@ int main()
         delete evt;
     }
     auto end3 = std::chrono::system_clock::now();
-    std::cout<<"search_example: generation of events and ancestors_of_same_type()    "<<std::chrono::duration_cast<std::chrono::milliseconds>(end3 - start3).count()<<" ms"<<std::endl;
+    std::cout<<"search_example: generation of events and ancestors_of_same_type()    "
+             <<std::chrono::duration_cast<std::chrono::milliseconds>(end3 - start3).count()<<" ms"
+             << " total number of ancestors: "<<np3<<std::endl;
 
 
     auto start4 = std::chrono::system_clock::now();
@@ -98,7 +104,9 @@ int main()
         delete evt;
     }
     auto end4 = std::chrono::system_clock::now();
-    std::cout<<"search_example: generation of events and Relatives::ANCESTORS()      "<<std::chrono::duration_cast<std::chrono::milliseconds>(end4 - start4).count()<<" ms"<<std::endl;
+    std::cout<<"search_example: generation of events and Relatives::ANCESTORS()      "
+             <<std::chrono::duration_cast<std::chrono::milliseconds>(end4 - start4).count()<<" ms"
+             << " total number of ancestors: "<<np4<<std::endl;
 
     auto start1o = std::chrono::system_clock::now();
     size_t  np1o=0;
@@ -109,7 +117,9 @@ int main()
         delete evt;
     }
     auto end1o = std::chrono::system_clock::now();
-    std::cout<<"search_example: generation of events and descendants_of_other_type() "<<std::chrono::duration_cast<std::chrono::milliseconds>(end1o - start1o).count()<<" ms"<<std::endl;
+    std::cout<<"search_example: generation of events and descendants_of_other_type() "
+             <<std::chrono::duration_cast<std::chrono::milliseconds>(end1o - start1o).count()<<" ms"
+             << " total number of decandants: "<<np1o<<std::endl;
 
 
     auto start3o = std::chrono::system_clock::now();
@@ -121,7 +131,9 @@ int main()
         delete evt;
     }
     auto end3o = std::chrono::system_clock::now();
-    std::cout<<"search_example: generation of events and ancestors_of_other_type()   "<<std::chrono::duration_cast<std::chrono::milliseconds>(end3o - start3o).count()<<" ms"<<std::endl;
+    std::cout<<"search_example: generation of events and ancestors_of_other_type()   "
+             <<std::chrono::duration_cast<std::chrono::milliseconds>(end3o - start3o).count()<<" ms"
+             << " total number of decandants: "<<np3o<<std::endl;
 
     std::cout<<"search_example: end"<<std::endl;
     return EXIT_SUCCESS;
