@@ -371,7 +371,16 @@ find_program (ASTYLE NAMES astyle)
 if (ASTYLE)
   message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of C++ code is possible.")
   ADD_CUSTOM_TARGET(beauty
-    COMMAND ${ASTYLE}  --keep-one-line-blocks  src/*cc  rootIO/src/*cc search/src/*cc  examples/*/src/*cc test/*cc  test/*h interfaces/*/include/*.h interfaces/*/include/*/*.h interfaces/*/src/*.cxx
+    COMMAND ${ASTYLE}  --keep-one-line-blocks  
+    src/*cc  
+    rootIO/src/*cc 
+    search/src/*cc  
+    examples/*/src/*cc 
+    test/*cc  
+    test/*h 
+    interfaces/*/include/*.h 
+    interfaces/*/include/*/*.h 
+    interfaces/*/src/*.cxx
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()
@@ -384,9 +393,15 @@ find_program (CPPCHECK NAMES cppcheck)
 if(CPPCHECK)
   message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Static analysis of C++ code is possible.")
   ADD_CUSTOM_TARGET(staticcheck
-    COMMAND ${CPPCHECK} --force  --suppress=unusedFunction --std=c++11 --enable=all
+    COMMAND ${CPPCHECK} --force  --suppress=unusedFunction -v -x c++ --std=c++11 --enable=all
       -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}
-      src/*.cc search/src/*.cc rootIO/src/*.cc examples/*/src/*cc
+      src/*.cc 
+      search/src/*.cc 
+      rootIO/src/*.cc 
+      examples/*/src/*cc
+      interfaces/*/include/*h
+      interfaces/*/src/*cxx
+      interfaces/*/src/*cc
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()

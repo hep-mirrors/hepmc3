@@ -75,7 +75,7 @@ void ReaderLHEF::init()
     // the GenRunInfo object.
 
     std::vector<std::string> weightnames;
-    for ( int i = 0, N = m_hepr->heprup.weightinfo.size(); i < N; ++i ) weightnames.push_back(m_hepr->heprup.weightNameHepMC(i)); 
+    for ( int i = 0, N = m_hepr->heprup.weightinfo.size(); i < N; ++i ) weightnames.push_back(m_hepr->heprup.weightNameHepMC(i));
     if (nweights==0) nweights=1;
     for ( int i = weightnames.size(); i < nweights; ++i ) weightnames.push_back(std::to_string(i));
     run_info()->set_weight_names(weightnames);
