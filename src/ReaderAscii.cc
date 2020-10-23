@@ -451,7 +451,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     const char     *cursor  = buf;
     const char     *cursor2 = buf;
-    char            name[64];
+    char            name[512];
     int             id = 0;
 
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
@@ -461,7 +461,7 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     ++cursor;
 
     if( !(cursor2 = strchr(cursor,' ')) ) return false;
-    sprintf(name,"%.*s", (int)(cursor2-cursor), cursor);
+    snprintf(name, 512,"%.*s",(int)(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
 
@@ -476,13 +476,13 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
 bool ReaderAscii::parse_run_attribute(const char *buf) {
     const char     *cursor  = buf;
     const char     *cursor2 = buf;
-    char            name[64];
+    char            name[512];
 
     if( !(cursor = strchr(cursor+1,' ')) ) return false;
     ++cursor;
 
     if( !(cursor2 = strchr(cursor,' ')) ) return false;
-    sprintf(name,"%.*s", (int)(cursor2-cursor), cursor);
+    snprintf(name, 512,"%.*s", (int)(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
 

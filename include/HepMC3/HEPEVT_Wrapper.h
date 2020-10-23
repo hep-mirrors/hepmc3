@@ -173,7 +173,7 @@ inline void HEPEVT_Wrapper::print_hepevt( std::ostream& ostr )
 
 inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr )
 {
-    char buf[255];
+    char buf[255];//Note: the format is fixed, so no reason for complicatied tratment
 
     sprintf(buf,"%5i %6i",index,hepevtptr->idhep[index-1]);
     ostr << buf;

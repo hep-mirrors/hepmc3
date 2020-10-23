@@ -48,9 +48,9 @@ bool GenPdfInfo::from_string(const std::string &att) {
 }
 
 bool GenPdfInfo::to_string(std::string &att) const {
-    char buf[255];
+    char buf[255];//Note: the format is fixed, so no reason for complicatied tratment
 
-    sprintf(buf,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
+    snprintf(buf,255,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
             parton_id[0],
             parton_id[1],
             x[0],
