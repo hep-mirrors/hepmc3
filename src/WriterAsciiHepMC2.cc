@@ -152,6 +152,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
                 m_cursor += sprintf(m_cursor, " \"%s\"",names[q].c_str());
             else
                 m_cursor += sprintf(m_cursor, " \"%i\"",(int)q);
+            flush();
         }
     }
     m_cursor += sprintf(m_cursor, "\n");
