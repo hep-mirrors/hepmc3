@@ -67,22 +67,24 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}  FILES_MATCHING PATTERN "*env.sh*" )
 endif()
 
+#This is an option for developers only
+if ( HEPMC3_USE_GENGETOPT )
+  find_program(GENGETOPT gengetopt)
+  if( NOT GENGETOPT )
+    message( STATUS  "HepMC3 examples: gengetopt not found. Old scripts for options parsing will be used." )
+  else()
+    message( STATUS  "HepMC3 examples: gengetopt found in ${GENGETOPT}. New scripts for options parsing can be generated." )
+    add_custom_command(
+      OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.h
+      COMMAND ${GENGETOPT} -N --no-version --input=${CMAKE_CURRENT_SOURCE_DIR}/cmdline.ggo 
+      --file-name cmdline --output-dir=${CMAKE_CURRENT_SOURCE_DIR}
+      --include-getopt --show-required --unnamed-opts=\"inputfile outputfile\"
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.ggo 
+      COMMENT        "HepMC3 examples: Generating getopt parser code..."
+    )
+  endif()
+  add_custom_target( cmdlineoptions DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.h)
+  add_dependencies(  convert_example.exe cmdlineoptions )
+endif()
 
 
-
-
-#The cmdline.c and cmdline.h for this example are generated from file below
-#gengetopt -N  --no-version --input=hepmcconvert.ggo --include-getopt --show-required -u"inputfile outputfile"
-#version "3.1"
-#package "hepmcconvert"
-#purpose "Convert between different file formats of Monte Carlo event record.
-#Example:
-#         hepmcconvert -i hepmc2 -o treeroot input.hepmc output.root
-#"
-#option "input-format" i "Input format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot","lhef","gz","plugin"
-#option "output-format" o "Output format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot" ,"treerootopal","hpezeus", "dump", "dot","plugin"
-#option "extensions" e "Extensions, in a form extension=value, could be passed to readers/writers" multiple optional string
-#option "events-limit" - "Limit of events to read from input" optional long default="100000000"
-#option "first-event-number" -       "Lowest allowed event number" optional long default="-100000000"
-#option "last-event-number" -        "Highest allowed event number" optional long default="100000000"
-#option "print-every-events-parsed" - "Frequency of parsing information printouts" optional long default="100"
