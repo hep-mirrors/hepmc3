@@ -16,14 +16,22 @@ void custom_HEPEVT_Wrapper_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper, std::
 	
 	};
 
+void custom_GenParticle_binder(pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl)
+{
+    cl.def("attribute", (std::string (HepMC3::GenParticle::*)(const std::string &) const) &HepMC3::GenParticle::attribute_as_string, "Get attribute of any type as string\n\nC++: HepMC3::GenParticle::attribute_as_string(const std::string &) const --> std::string", pybind11::arg("name"));	
+}
+
+void custom_GenVertex_binder(pybind11::class_<HepMC3::GenVertex, std::shared_ptr<HepMC3::GenVertex>> cl)
+{
+    cl.def("attribute", (std::string (HepMC3::GenVertex::*)(const std::string &) const) &HepMC3::GenVertex::attribute_as_string, "Get attribute of any type as string\n\nC++: HepMC3::GenVertex::attribute_as_string(const std::string &) const --> std::string", pybind11::arg("name"));	
+}
+
+
 void custom_GenEvent_binder(pybind11::class_<HepMC3::GenEvent, std::shared_ptr<HepMC3::GenEvent>> cl)
 {
-		//cl.def("attribute", [](HepMC3::GenEvent const &o, const class std::basic_string<char> & a0) -> std::shared_ptr<class HepMC3::GenHeavyIon> { return o.attribute(a0); }, "", pybind11::arg("name"));
-		cl.def("attribute", (class std::shared_ptr<class HepMC3::GenHeavyIon> (HepMC3::GenEvent::*)(const std::string &, const int &) const) &HepMC3::GenEvent::attribute<HepMC3::GenHeavyIon>, "C++: HepMC3::GenEvent::attribute(const std::string &, const int &) const --> class std::shared_ptr<class HepMC3::GenHeavyIon>", pybind11::arg("name"), pybind11::arg("id"));
-		//cl.def("attribute", [](HepMC3::GenEvent const &o, const class std::basic_string<char> & a0) -> std::shared_ptr<class HepMC3::GenPdfInfo> { return o.attribute(a0); }, "", pybind11::arg("name"));
-		cl.def("attribute", (class std::shared_ptr<class HepMC3::GenPdfInfo> (HepMC3::GenEvent::*)(const std::string &, const int &) const) &HepMC3::GenEvent::attribute<HepMC3::GenPdfInfo>, "C++: HepMC3::GenEvent::attribute(const std::string &, const int &) const --> class std::shared_ptr<class HepMC3::GenPdfInfo>", pybind11::arg("name"), pybind11::arg("id"));
-		//cl.def("attribute", [](HepMC3::GenEvent const &o, const class std::basic_string<char> & a0) -> std::shared_ptr<class HepMC3::GenCrossSection> { return o.attribute(a0); }, "", pybind11::arg("name"));
-		cl.def("attribute", (class std::shared_ptr<class HepMC3::GenCrossSection> (HepMC3::GenEvent::*)(const std::string &, const int &) const) &HepMC3::GenEvent::attribute<HepMC3::GenCrossSection>, "C++: HepMC3::GenEvent::attribute(const std::string &, const int &) const --> class std::shared_ptr<class HepMC3::GenCrossSection>", pybind11::arg("name"), pybind11::arg("id"));
+		cl.def("attribute", [](HepMC3::GenEvent const &o, const class std::basic_string<char> & a0) -> std::string { return o.attribute_as_string(a0); }, "", pybind11::arg("name"));
+		cl.def("attribute", (std::string (HepMC3::GenEvent::*)(const std::string &, const int &) const) &HepMC3::GenEvent::attribute_as_string, "Get attribute of any type as string\n\nC++: HepMC3::GenEvent::attribute_as_string(const std::string &, const int &) const --> std::string", pybind11::arg("name"), pybind11::arg("id"));
+
 
 }
 

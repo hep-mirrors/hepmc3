@@ -23,11 +23,9 @@ namespace HepMC3
 class ReaderPlugin : public Reader
 {
 public:
-#ifndef HEPMC3_PYTHON_BINDINGS
 /** @brief Constructor  to read from stream*/
 ReaderPlugin(std::istream & stream,const std::string &libname, const std::string &newreader);
 /** @brief Constructor to read from file*/
-#endif
 ReaderPlugin(const std::string& filename,const std::string &libname, const std::string &newreader);
     /** @brief Reading event */
     bool read_event(GenEvent& ev)  override {if(!m_reader) return false; return m_reader->read_event(ev);};

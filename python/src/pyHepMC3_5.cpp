@@ -34,52 +34,52 @@
 struct PyCallBack_HepMC3_ULongAttribute : public HepMC3::ULongAttribute {
 	using HepMC3::ULongAttribute::ULongAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ULongAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ULongAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ULongAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ULongAttribute::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ULongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ULongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -92,52 +92,52 @@ struct PyCallBack_HepMC3_ULongAttribute : public HepMC3::ULongAttribute {
 struct PyCallBack_HepMC3_ULongLongAttribute : public HepMC3::ULongLongAttribute {
 	using HepMC3::ULongLongAttribute::ULongLongAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ULongLongAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ULongLongAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ULongLongAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ULongLongAttribute::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ULongLongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ULongLongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -150,52 +150,52 @@ struct PyCallBack_HepMC3_ULongLongAttribute : public HepMC3::ULongLongAttribute 
 struct PyCallBack_HepMC3_BoolAttribute : public HepMC3::BoolAttribute {
 	using HepMC3::BoolAttribute::BoolAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::BoolAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return BoolAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::BoolAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return BoolAttribute::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::BoolAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::BoolAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -208,52 +208,52 @@ struct PyCallBack_HepMC3_BoolAttribute : public HepMC3::BoolAttribute {
 struct PyCallBack_HepMC3_VectorCharAttribute : public HepMC3::VectorCharAttribute {
 	using HepMC3::VectorCharAttribute::VectorCharAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorCharAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorCharAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorCharAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorCharAttribute::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorCharAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorCharAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -266,52 +266,52 @@ struct PyCallBack_HepMC3_VectorCharAttribute : public HepMC3::VectorCharAttribut
 struct PyCallBack_HepMC3_VectorFloatAttribute : public HepMC3::VectorFloatAttribute {
 	using HepMC3::VectorFloatAttribute::VectorFloatAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorFloatAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorFloatAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorFloatAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorFloatAttribute::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorFloatAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorFloatAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -324,52 +324,52 @@ struct PyCallBack_HepMC3_VectorFloatAttribute : public HepMC3::VectorFloatAttrib
 struct PyCallBack_HepMC3_VectorLongDoubleAttribute : public HepMC3::VectorLongDoubleAttribute {
 	using HepMC3::VectorLongDoubleAttribute::VectorLongDoubleAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongDoubleAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorLongDoubleAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongDoubleAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorLongDoubleAttribute::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongDoubleAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongDoubleAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -382,52 +382,52 @@ struct PyCallBack_HepMC3_VectorLongDoubleAttribute : public HepMC3::VectorLongDo
 struct PyCallBack_HepMC3_VectorLongLongAttribute : public HepMC3::VectorLongLongAttribute {
 	using HepMC3::VectorLongLongAttribute::VectorLongLongAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongLongAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorLongLongAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongLongAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorLongLongAttribute::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongLongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongLongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -440,52 +440,52 @@ struct PyCallBack_HepMC3_VectorLongLongAttribute : public HepMC3::VectorLongLong
 struct PyCallBack_HepMC3_VectorUIntAttribute : public HepMC3::VectorUIntAttribute {
 	using HepMC3::VectorUIntAttribute::VectorUIntAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorUIntAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorUIntAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorUIntAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorUIntAttribute::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorUIntAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorUIntAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -498,52 +498,52 @@ struct PyCallBack_HepMC3_VectorUIntAttribute : public HepMC3::VectorUIntAttribut
 struct PyCallBack_HepMC3_VectorULongAttribute : public HepMC3::VectorULongAttribute {
 	using HepMC3::VectorULongAttribute::VectorULongAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorULongAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorULongAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorULongAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorULongAttribute::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorULongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorULongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));

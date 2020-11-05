@@ -40,7 +40,7 @@ void bind_pyHepMC3_14(std::function< pybind11::module &(std::string const &names
 		cl.def( pybind11::init( [](LHEF::OAttr<std::string> const &o){ return new LHEF::OAttr<std::string>(o); } ) );
 		cl.def_readwrite("name", &LHEF::OAttr<std::string>::name);
 		cl.def_readwrite("val", &LHEF::OAttr<std::string>::val);
-		cl.def("assign", (struct LHEF::OAttr<std::string > & (LHEF::OAttr<std::string>::*)(const struct LHEF::OAttr<std::string > &)) &LHEF::OAttr<std::string >::operator=, "C++: LHEF::OAttr<std::basic_string<char> >::operator=(const struct LHEF::OAttr<std::string > &) --> struct LHEF::OAttr<std::string > &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def("assign", (struct LHEF::OAttr<std::string > & (LHEF::OAttr<std::string>::*)(const struct LHEF::OAttr<std::string > &)) &LHEF::OAttr<std::string >::operator=, "C++: LHEF::OAttr<std::string >::operator=(const struct LHEF::OAttr<std::string > &) --> struct LHEF::OAttr<std::string > &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 
 		cl.def("__str__", [](LHEF::OAttr<std::string> const &o) -> std::string { std::ostringstream s; s << o; return s.str(); } );
 	}

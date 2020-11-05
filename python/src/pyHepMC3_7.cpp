@@ -34,52 +34,52 @@
 struct PyCallBack_HepMC3_GenCrossSection : public HepMC3::GenCrossSection {
 	using HepMC3::GenCrossSection::GenCrossSection;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenCrossSection *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return GenCrossSection::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenCrossSection *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return GenCrossSection::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenCrossSection *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenCrossSection *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -124,14 +124,14 @@ void bind_pyHepMC3_7(std::function< pybind11::module &(std::string const &namesp
 		cl.def( pybind11::init( [](){ return new HepMC3::Units(); } ) );
 
 		pybind11::enum_<HepMC3::Units::MomentumUnit>(cl, "MomentumUnit", pybind11::arithmetic(), "Momentum units ")
-			.value("MEV", HepMC3::Units::MomentumUnit::MEV)
-			.value("GEV", HepMC3::Units::MomentumUnit::GEV)
+			.value("MEV", HepMC3::Units::MEV)
+			.value("GEV", HepMC3::Units::GEV)
 			.export_values();
 
 
 		pybind11::enum_<HepMC3::Units::LengthUnit>(cl, "LengthUnit", pybind11::arithmetic(), "Position units ")
-			.value("MM", HepMC3::Units::LengthUnit::MM)
-			.value("CM", HepMC3::Units::LengthUnit::CM)
+			.value("MM", HepMC3::Units::MM)
+			.value("CM", HepMC3::Units::CM)
 			.export_values();
 
 		cl.def_static("momentum_unit", (enum HepMC3::Units::MomentumUnit (*)(const std::string &)) &HepMC3::Units::momentum_unit, "Get momentum unit based on its name\n\nC++: HepMC3::Units::momentum_unit(const std::string &) --> enum HepMC3::Units::MomentumUnit", pybind11::arg("name"));

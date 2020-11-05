@@ -13,6 +13,8 @@
 namespace binder {
 void custom_HEPEVT_Wrapper_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper, std::shared_ptr<HepMC3::HEPEVT_Wrapper>> cl);
 void custom_GenEvent_binder(pybind11::class_<HepMC3::GenEvent, std::shared_ptr<HepMC3::GenEvent>> cl);
+void custom_GenParticle_binder(pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl);
+void custom_GenVertex_binder(pybind11::class_<HepMC3::GenVertex, std::shared_ptr<HepMC3::GenVertex>> cl);
 
 void custom_GenRunInfo_binder(pybind11::class_<HepMC3::GenRunInfo, std::shared_ptr<HepMC3::GenRunInfo>> cl);
 void custom_Units_binder(pybind11::class_<HepMC3::Units, std::shared_ptr<HepMC3::Units>> cl);

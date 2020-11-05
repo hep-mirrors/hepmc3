@@ -8,21 +8,16 @@
   modules for Python2.6+ and Python3.
 
 The binding codes were  generated automatically using the binder utility 
-version 1.0 created by Sergey Lyskov, Johns Hopkins University.
+version 1.1.0 created by Sergey Lyskov, Johns Hopkins University.
 See 
 - https://cppbinder.readthedocs.io/en/latest/ for details.
 
-The binding codes use the pybind11 library by Wenzel Jakob, 
+The binding codes use the pybind11 library version 2.6.0 by Wenzel Jakob, 
 EPFL's School of Computer and Communication Sciences.
 See 
 - https://pybind11.readthedocs.io/en/master/ 
 - Wenzel Jakob and Jason Rhinelander and Dean Moldovan, 
   "pybind11 -- Seamless operability between C++11 and Python", 2017,  https://github.com/pybind/pybind11
-
-
-
-So far the bindings are available for all classes in HepMC3 and LHEF namespaces but some in Search engine.
-For usage examples please look into the tests.
 
 @section installationsources Installation sources
 
@@ -40,10 +35,9 @@ To do this, copy the python directory outside of source tree,  uncomment #projec
 run cmake inside python directory with -DUSE_INSTALLED_HEPMC3=ON  option. 
 
 @section developernotes Developer notes 
-- In the automatically generated codes it was assumed that std::ostream 
-will be mapped onto io.stringIO() and simailar objects.
+
 - The constructors of Readers/Writers with ifstreams/ostreams were not binded.
 
- Last update 27 Oct 2020
+ Last update 05 Nov 2020
 */
 

@@ -1,5 +1,5 @@
 import re
-import sys, os
+import sys, os, math
 
 
 def python_label():
@@ -34,3 +34,11 @@ def COMPARE_ASCII_FILES(f1, f2):
     file1.close()
     file2.close()
     return 0
+
+
+def fuse_equal(a,b,rtol=0.00001, atol=0.000001):
+    if abs(1.0*a-1.0*b)<atol:
+        return True
+    if abs(1.0*a-1.0*b)<rtol*(abs(1.0*a+1.0*b)):
+       return True
+    return False

@@ -37,10 +37,8 @@ class ReaderHEPEVT : public Reader
 public:
     /** @brief Default constructor */
     ReaderHEPEVT(const std::string &filename);
-#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderHEPEVT(std::istream &);
-#endif
 //
 // Functions
 //

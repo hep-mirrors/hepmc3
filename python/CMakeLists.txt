@@ -160,15 +160,15 @@ set(autoBN       src/pyHepMC3.cpp src/pyHepMC3_0.cpp src/pyHepMC3_1.cpp
                  src/pyHepMC3_8.cpp src/pyHepMC3_9.cpp src/pyHepMC3_10.cpp
                  src/pyHepMC3_11.cpp src/pyHepMC3_12.cpp src/pyHepMC3_13.cpp
                  src/pyHepMC3_14.cpp src/pyHepMC3_15.cpp src/pyHepMC3_16.cpp
-                 src/pyHepMC3_17.cpp
+                 src/pyHepMC3_17.cpp src/pyHepMC3_18.cpp 
 )
-set(autoBNrootIO src/pyHepMC3rootIO.cpp src/pyHepMC3rootIO_0.cpp src/pyHepMC3rootIO_1.cpp)
+set(autoBNrootIO src/pyHepMC3rootIO.cpp src/pyHepMC3rootIO_0.cpp src/pyHepMC3rootIO_1.cpp src/pyHepMC3rootIO_2.cpp)
 set(autoBNsearch src/pyHepMC3search.cpp src/pyHepMC3search_0.cpp src/pyHepMC3search_1.cpp)
 set(BN       ${autoBN}       src/binders.cpp)
 set(BNrootIO ${autoBNrootIO} src/root_binders.cpp)
 set(BNsearch ${autoBNsearch} src/search_binders.cpp)
 if (RERUN_BINDER)
-  find_program (BINDER binder HINTS $ENV{HOME}/binder/build/llvm-4.0.0/build_4.0.0.linux.mppui4.release/bin)
+  find_program (BINDER binder HINTS $ENV{HOME}/bin /usr/bin)
   if(BINDER)
     message(STATUS "HepMC3 python: binder found in ${BINDER}. Automatic generatin of code for python bindings is possible.")
 
@@ -176,7 +176,11 @@ if (RERUN_BINDER)
     add_custom_command(
       OUTPUT  ${autoBN}
       DEPENDS all_includes.hpp src/pyHepMC3.binder
-      COMMAND ${BINDER} --flat --max-file-size=20000  --root-module pyHepMC3 --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3.binder   all_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
+      COMMAND ${BINDER} --flat --max-file-size=20000  
+                        --root-module pyHepMC3 
+                        --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" 
+                        --config src/pyHepMC3.binder   all_includes.hpp 
+                        --  -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
       VERBATIM
     )
@@ -185,7 +189,11 @@ if (RERUN_BINDER)
       add_custom_command(
         OUTPUT  ${autoBNrootIO}
         DEPENDS root_includes.hpp src/pyHepMC3rootIO.binder
-        COMMAND ${BINDER} --flat --max-file-size=5000  --root-module pyHepMC3rootIO --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3rootIO.binder   root_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
+        COMMAND ${BINDER} --flat --max-file-size=5000  
+                          --root-module pyHepMC3rootIO 
+                          --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" 
+                          --config src/pyHepMC3rootIO.binder   root_includes.hpp 
+                          --  -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM
       )
@@ -195,7 +203,11 @@ if (RERUN_BINDER)
       add_custom_command(
         OUTPUT  ${autoBNsearch}
         DEPENDS search_includes.hpp src/pyHepMC3search.binder
-        COMMAND ${BINDER} --flat --max-file-size=5000  --root-module pyHepMC3search --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" --config src/pyHepMC3search.binder   search_includes.hpp -- -DHEPMC3_PYTHON_BINDINGS -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} 
+        COMMAND ${BINDER} --flat --max-file-size=5000  
+                          --root-module pyHepMC3search 
+                          --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/" 
+                          --config src/pyHepMC3search.binder   search_includes.hpp 
+                          -- -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} 
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM)
     endif()
@@ -429,7 +441,8 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3
     COMPONENT python)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3.egg-info
-    DESTINATION  ${HEPMC3_Python_SITEARCH} RENAME pyHepMC3-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info
+    DESTINATION  ${HEPMC3_Python_SITEARCH} 
+    RENAME pyHepMC3-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info
     COMPONENT python)
   if(ROOT_FOUND)
     install(TARGETS pyHepMC3rootIO${Python_VERSION}
@@ -439,7 +452,8 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3/rootIO
       COMPONENT pythonrootIO)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3.rootIO.egg-info
-      DESTINATION  ${HEPMC3_Python_SITEARCH} RENAME pyHepMC3.rootIO-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info
+      DESTINATION  ${HEPMC3_Python_SITEARCH} 
+      RENAME pyHepMC3.rootIO-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info
       COMPONENT pythonrootIO)
   endif()
   if(HEPMC3_ENABLE_SEARCH)
@@ -450,7 +464,8 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3/search
       COMPONENT pythonsearch)
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3.search.egg-info
-      DESTINATION  ${HEPMC3_Python_SITEARCH} RENAME pyHepMC3.search-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info
+      DESTINATION  ${HEPMC3_Python_SITEARCH} 
+      RENAME pyHepMC3.search-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info
       COMPONENT pythonsearch)
   endif()
 
@@ -464,6 +479,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
         test_Pythonization_GenEvent
         test_Pythonization_GenRunInfo
         test_Units
+        test_Attribute
   )
 #Workaround for nvc++ for this particular test
   if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")  
