@@ -31,10 +31,8 @@ public:
 
     /// @brief Constructor
     ReaderAscii(const std::string& filename);
-#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderAscii(std::istream &);
-#endif
     /// @brief Destructor
     ~ReaderAscii();
 

@@ -40,52 +40,52 @@
 struct PyCallBack_HepMC3_GenPdfInfo : public HepMC3::GenPdfInfo {
 	using HepMC3::GenPdfInfo::GenPdfInfo;
 
-	bool from_string(const class std::basic_string<char> & a0) override { 
+	bool from_string(const class std::basic_string<char> & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenPdfInfo *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return GenPdfInfo::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override { 
+	bool to_string(class std::basic_string<char> & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenPdfInfo *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return GenPdfInfo::to_string(a0);
 	}
-	bool init() override { 
+	bool init() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenPdfInfo *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
-	bool init(const class HepMC3::GenRunInfo & a0) override { 
+	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenPdfInfo *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -98,17 +98,6 @@ void bind_pyHepMC3_8(std::function< pybind11::module &(std::string const &namesp
 {
 	{ // HepMC3::GenRunInfo file:HepMC3/GenRunInfo.h line:33
 		pybind11::class_<HepMC3::GenRunInfo, std::shared_ptr<HepMC3::GenRunInfo>> cl(M("HepMC3"), "GenRunInfo", "Stores run-related information\n\n Manages run-related information.\n Contains run-wide attributes");
-		{ // HepMC3::GenRunInfo::ToolInfo file:HepMC3/GenRunInfo.h line:38
-			auto & enclosing_class = cl;
-			pybind11::class_<HepMC3::GenRunInfo::ToolInfo, std::shared_ptr<HepMC3::GenRunInfo::ToolInfo>> cl(enclosing_class, "ToolInfo", "Interrnal struct for keeping track of tools.");
-			cl.def( pybind11::init( [](HepMC3::GenRunInfo::ToolInfo const &o){ return new HepMC3::GenRunInfo::ToolInfo(o); } ) );
-			cl.def( pybind11::init( [](){ return new HepMC3::GenRunInfo::ToolInfo(); } ) );
-			cl.def_readwrite("name", &HepMC3::GenRunInfo::ToolInfo::name);
-			cl.def_readwrite("version", &HepMC3::GenRunInfo::ToolInfo::version);
-			cl.def_readwrite("description", &HepMC3::GenRunInfo::ToolInfo::description);
-			cl.def("assign", (struct HepMC3::GenRunInfo::ToolInfo & (HepMC3::GenRunInfo::ToolInfo::*)(const struct HepMC3::GenRunInfo::ToolInfo &)) &HepMC3::GenRunInfo::ToolInfo::operator=, "C++: HepMC3::GenRunInfo::ToolInfo::operator=(const struct HepMC3::GenRunInfo::ToolInfo &) --> struct HepMC3::GenRunInfo::ToolInfo &", pybind11::return_value_policy::automatic, pybind11::arg(""));
-		}
-
 		cl.def( pybind11::init( [](){ return new HepMC3::GenRunInfo(); } ) );
 		cl.def( pybind11::init( [](HepMC3::GenRunInfo const &o){ return new HepMC3::GenRunInfo(o); } ) );
 		cl.def("attribute", (class std::shared_ptr<class HepMC3::GenHeavyIon> (HepMC3::GenRunInfo::*)(const std::string &) const) &HepMC3::GenRunInfo::attribute<HepMC3::GenHeavyIon>, "C++: HepMC3::GenRunInfo::attribute(const std::string &) const --> class std::shared_ptr<class HepMC3::GenHeavyIon>", pybind11::arg("name"));
@@ -128,6 +117,18 @@ void bind_pyHepMC3_8(std::function< pybind11::module &(std::string const &namesp
 		cl.def("read_data", (void (HepMC3::GenRunInfo::*)(const struct HepMC3::GenRunInfoData &)) &HepMC3::GenRunInfo::read_data, "Fill GenRunInfo based on GenRunInfoData\n\nC++: HepMC3::GenRunInfo::read_data(const struct HepMC3::GenRunInfoData &) --> void", pybind11::arg("data"));
 
 		 binder::custom_GenRunInfo_binder(cl);
+
+		{ // HepMC3::GenRunInfo::ToolInfo file:HepMC3/GenRunInfo.h line:38
+			auto & enclosing_class = cl;
+			pybind11::class_<HepMC3::GenRunInfo::ToolInfo, std::shared_ptr<HepMC3::GenRunInfo::ToolInfo>> cl(enclosing_class, "ToolInfo", "Interrnal struct for keeping track of tools.");
+			cl.def( pybind11::init( [](HepMC3::GenRunInfo::ToolInfo const &o){ return new HepMC3::GenRunInfo::ToolInfo(o); } ) );
+			cl.def( pybind11::init( [](){ return new HepMC3::GenRunInfo::ToolInfo(); } ) );
+			cl.def_readwrite("name", &HepMC3::GenRunInfo::ToolInfo::name);
+			cl.def_readwrite("version", &HepMC3::GenRunInfo::ToolInfo::version);
+			cl.def_readwrite("description", &HepMC3::GenRunInfo::ToolInfo::description);
+			cl.def("assign", (struct HepMC3::GenRunInfo::ToolInfo & (HepMC3::GenRunInfo::ToolInfo::*)(const struct HepMC3::GenRunInfo::ToolInfo &)) &HepMC3::GenRunInfo::ToolInfo::operator=, "C++: HepMC3::GenRunInfo::ToolInfo::operator=(const struct HepMC3::GenRunInfo::ToolInfo &) --> struct HepMC3::GenRunInfo::ToolInfo &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		}
+
 	}
 	{ // HepMC3::GenParticleData file:HepMC3/Data/GenParticleData.h line:24
 		pybind11::class_<HepMC3::GenParticleData, std::shared_ptr<HepMC3::GenParticleData>> cl(M("HepMC3"), "GenParticleData", "");

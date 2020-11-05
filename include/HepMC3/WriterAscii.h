@@ -30,11 +30,9 @@ public:
     WriterAscii(const std::string& filename,
                 std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
 
-#ifndef HEPMC3_PYTHON_BINDINGS
     /// @brief Constructor from ostream
     WriterAscii(std::ostream& stream,
                 std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
-#endif
 
     /// @brief Destructor
     ~WriterAscii();

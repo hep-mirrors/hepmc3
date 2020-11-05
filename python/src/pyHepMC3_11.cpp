@@ -10,10 +10,13 @@
 #include <HepMC3/GenVertex.h>
 #include <HepMC3/WriterAscii.h>
 #include <functional>
+#include <ios>
 #include <iterator>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <sstream> // __str__
+#include <streambuf>
 #include <string>
 #include <utility>
 #include <vector>
@@ -40,39 +43,39 @@
 struct PyCallBack_HepMC3_WriterAscii : public HepMC3::WriterAscii {
 	using HepMC3::WriterAscii::WriterAscii;
 
-	void write_event(const class HepMC3::GenEvent & a0) override { 
+	void write_event(const class HepMC3::GenEvent & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterAscii *>(this), "write_event");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterAscii::write_event(a0);
 	}
-	bool failed() override { 
+	bool failed() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterAscii *>(this), "failed");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return WriterAscii::failed();
 	}
-	void close() override { 
+	void close() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterAscii *>(this), "close");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));

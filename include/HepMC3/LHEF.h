@@ -3091,14 +3091,12 @@ class Writer {
 
 public:
 
-#ifndef HEPMC3_PYTHON_BINDINGS
   /**
    * Create a Writer object giving a stream to write to.
    * @param os the stream where the event file is written.
    */
   Writer(std::ostream & os)
     : file(&os), initfile(&os), dirpath(""),lastevent(-1),curreventfile(-1),currfileevent(-1) {  }
-#endif
   /**
    * Create a Writer object giving a filename to write to.
    * @param filename the name of the event file to be written.
@@ -3124,7 +3122,6 @@ public:
     }
     *file << "</LesHouchesEvents>" << std::endl;
   }
-#ifndef HEPMC3_PYTHON_BINDINGS
   /**
    * Add header lines consisting of XML code with this stream.
    */
@@ -3145,7 +3142,6 @@ public:
   std::ostream & eventComments() {
     return eventStream;
   }
-#endif
   /**
    * Add header lines consisting of XML code with this stream.
    */

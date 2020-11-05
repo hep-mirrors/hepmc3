@@ -1,5 +1,4 @@
-#include <HepMC3/ReaderRootTree.h>
-#include <HepMC3/WriterRoot.h>
+#include <HepMC3/ReaderRoot.h>
 #include <functional>
 #include <iterator>
 #include <map>
@@ -31,12 +30,9 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
 #endif
 
-void bind_pyHepMC3rootIO_1(std::function< pybind11::module &(std::string const &namespace_) > &M)
+void bind_pyHepMC3rootIO_2(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	// HepMC3::ReaderRootTree file:HepMC3/ReaderRootTree.h line:34
-	 binder::ReaderRootTree_binder(M("HepMC3"));
-
-	// HepMC3::WriterRoot file:HepMC3/WriterRoot.h line:35
-	 binder::WriterRoot_binder(M("HepMC3"));
+	// HepMC3::ReaderRoot file:HepMC3/ReaderRoot.h line:32
+	 binder::ReaderRoot_binder(M("HepMC3"));
 
 }
