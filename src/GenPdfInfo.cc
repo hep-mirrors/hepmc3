@@ -51,15 +51,15 @@ bool GenPdfInfo::to_string(std::string &att) const {
     char buf[255];//Note: the format is fixed, so no reason for complicatied tratment
 
     snprintf(buf,255,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
-            parton_id[0],
-            parton_id[1],
-            x[0],
-            x[1],
-            scale,
-            xf[0],
-            xf[1],
-            pdf_id[0],
-            pdf_id[1]);
+             parton_id[0],
+             parton_id[1],
+             x[0],
+             x[1],
+             scale,
+             xf[0],
+             xf[1],
+             pdf_id[0],
+             pdf_id[1]);
 
     att = buf;
 

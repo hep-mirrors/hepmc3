@@ -4,9 +4,10 @@ import sys, os, math
 
 def python_label():
     v = sys.version_info
-    a=str(v[0]) + "." + str(v[1]) + "." + str(v[2])
+    a = str(v[0]) + "." + str(v[1]) + "." + str(v[2])
     print(a)
     return a
+
 
 def update_path():
     return [os.path.abspath(os.path.join(os.pardir, python_label()))] + [os.getcwd()] + sys.path
@@ -36,9 +37,9 @@ def COMPARE_ASCII_FILES(f1, f2):
     return 0
 
 
-def fuse_equal(a,b,rtol=0.00001, atol=0.000001):
-    if abs(1.0*a-1.0*b)<atol:
+def fuse_equal(a, b, rtol=0.00001, atol=0.000001):
+    if abs(1.0 * a - 1.0 * b) < atol:
         return True
-    if abs(1.0*a-1.0*b)<rtol*(abs(1.0*a+1.0*b)):
-       return True
+    if abs(1.0 * a - 1.0 * b) < rtol * (abs(1.0 * a + 1.0 * b)):
+        return True
     return False

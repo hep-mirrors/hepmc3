@@ -45,7 +45,7 @@ def test_Attribute():
     evt = hm.GenEvent(hm.Units.GEV, hm.Units.MM)
     evt.set_event_number(1)
     evt.add_attribute("signal_process_id", hm.IntAttribute(20))
-    x=hm.VectorIntAttribute()
+    x = hm.VectorIntAttribute()
     evt.add_attribute("somevector", x)
     v1 = hm.GenVertex()
     evt.add_vertex(v1)
@@ -53,9 +53,9 @@ def test_Attribute():
     evt.add_particle(p1)
     p1.add_attribute("flow1", hm.IntAttribute(231))
     p1.add_attribute("flow1", hm.IntAttribute(233))
-    random1=random.random() * math.pi
+    random1 = random.random() * math.pi
     p1.add_attribute("theta", hm.DoubleAttribute(random1))
-    random2=random.random() * math.pi*2
+    random2 = random.random() * math.pi * 2
     p1.add_attribute("phi", hm.DoubleAttribute(random2))
 
     v2 = hm.GenVertex()
@@ -63,37 +63,34 @@ def test_Attribute():
     p2 = hm.GenParticle(hm.FourVector(0, 0, -7000, 7000), 2212, 3)
     evt.add_particle(p2)
     p2.add_attribute("flow1", hm.IntAttribute(243))
-    random3=random.random() * math.pi
+    random3 = random.random() * math.pi
     p2.add_attribute("theta", hm.DoubleAttribute(random3))
-    random4=random.random() * math.pi * 2
+    random4 = random.random() * math.pi * 2
     p2.add_attribute("phi", hm.DoubleAttribute(random4))
     v2.add_particle_in(p2)
 
-    evt_spid_back=hm.IntAttribute()
+    evt_spid_back = hm.IntAttribute()
     evt_spid_back.from_string(evt.attribute("signal_process_id"))
-    assert(evt_spid_back.value()==20)
-    
-    p1_flow1_back=hm.IntAttribute()
+    assert evt_spid_back.value() == 20
+
+    p1_flow1_back = hm.IntAttribute()
     p1_flow1_back.from_string(p1.attribute("flow1"))
-    assert(p1_flow1_back.value()==233)
+    assert p1_flow1_back.value() == 233
 
-
-
-    p2_flow1_back=hm.IntAttribute()
+    p2_flow1_back = hm.IntAttribute()
     p2_flow1_back.from_string(p2.attribute("flow1"))
-    assert(p2_flow1_back.value()==243)
+    assert p2_flow1_back.value() == 243
 
-
-    p1_theta_back=hm.DoubleAttribute()
+    p1_theta_back = hm.DoubleAttribute()
     p1_theta_back.from_string(p1.attribute("theta"))
 
-    assert(fuse_equal(p1_theta_back.value(),random1))    
+    assert fuse_equal(p1_theta_back.value(), random1)
 
-    p2_phi_back=hm.DoubleAttribute()
+    p2_phi_back = hm.DoubleAttribute()
     p2_phi_back.from_string(p2.attribute("phi"))
 
-    assert(fuse_equal(p2_phi_back.value(),random4))
-    
+    assert fuse_equal(p2_phi_back.value(), random4)
+
     evt.clear()
 
     return 0
