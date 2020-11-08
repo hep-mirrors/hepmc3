@@ -227,10 +227,17 @@
     particles. (and subsequently, all of their decays).
 
     ###########################################################################
-    @subsection barcodes Barcodes can no longer be set
+    @subsection barcodes Barcodes can no longer be se (Use constant ID instead)
     ###########################################################################
-
-    Barcodes are no longer available. Use attributes to provide additional
+    The "barcode" integer in HepMC2 was an uncomfortable object, simultaneously
+    declared in the code documentation to be a meaningless unique identifier for
+    vertex and particle objects, and set to specific ranges by experiments'
+    production systems to encode information about a particle's origins. It proved
+    impossible to satisfactorily reconcile these twin uses, and experiments' demands
+    for particle provenance information have exceeded the capacity of an int (or
+    even a long int).
+    
+    Hence, barcodes are no longer available. Use attributes to provide additional
     information that was previously encoded using barcodes
     (see module @ref attributes).
     
@@ -239,6 +246,16 @@
     be changed. Id is not permanently attached to particle/vertex. When
     a particle or vertex is removed from the event, id's of other particles
     or vertices may change.
+    ###########################################################################
+    @subsection flow  Flow is not a clas on its own (it is an attribute).
+    ###########################################################################
+
+    The Flow class has been removed, since it was unused by any widespread event
+    generator, and to our knowledge the only active use-case is an abuse of it to
+    provide more ints in which to encode provenance information. As this is now done
+    via attributes, there is no case for Flow's continued existence. No backward
+    compatibility Flow class is provided since this usage is extremely localised in
+    one piece of user code and migration to the newer scheme should be simple.
 
     ###########################################################################
     @subsection units Units are no longer defined at compilation time
