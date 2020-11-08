@@ -56,7 +56,8 @@ CODING STYLE
 ------------
 
 To perform an automatic formating the astyle utility is used.
-Run ``make beauty`` to format the code.
+Run ``make beauty`` to format the C++ code with ``astyle`` and ``make beautypython``
+to fotmat the python code with ``black``.
 
 
 --------------

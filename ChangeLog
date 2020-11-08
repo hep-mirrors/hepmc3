@@ -1,8 +1,13 @@
-  --------------------------  HepMC master --------------------------
+  --------------------------  HepMC3.2.3-pre --------------------------
+2020-11-08 Andrii Verbytskyi for HepMC
+         * Documentation and copyright years were updated.
+         * Python bindings were regenerated with binder 1.1.0 and the pybind11 copy updated to 2.6.0.
+         * The #ifdefs around the functions that had to be excluded from bindings but binder 1.0.0 was not doing that were removed. 
+         * A python test with attributes was added.
+         * ReaderLHEF was fixed for to treat correctly more comaplicated input. Inspied by discussion with Bryan Foo and Christopher Palmer.
 2020-06-19 Andrii Verbytskyi for HepMC
-         * Updates to many python scripts from Marian Heil. 
-         * Updates to CMake scripts from Marian Heil.
-
+         * Included updates to many python scripts from Marian Heil. 
+         * Included updates to CMake scripts from Marian Heil.
   --------------------------  HepMC3.2.2 --------------------------
 2020-06-10 Andrii Verbytskyi for HepMC
         * Bugfix release
