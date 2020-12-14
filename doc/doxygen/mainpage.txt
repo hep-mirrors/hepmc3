@@ -60,9 +60,7 @@
       - <a href="releases/hepmc2.06.09.tgz">hepmc2.06.09.tgz</a> HepMC2.06.09 <b> 05.June.2012</b>
 
     @subsection heppdt_releases HepPDT releases
-     
-     - <a href="releases/HepPDT-3.04.01.tar.gz">HepPDT-3.04.01.tar.gz</a> HepPDT-3.04.01
-
+      - <a href="releases/HepPDT-3.04.01.tar.gz">HepPDT-3.04.01.tar.gz</a> HepPDT-3.04.01
 
     @subsection contact Contact information:
 
@@ -75,8 +73,7 @@
     - @subpage differences
     - HepMC2.06 <a href="releases/HepMC2_user_manual.pdf">user manual</a> and <a href="releases/HepMC2_reference_manual.pdf">reference manual</a> (old documents NOT covering HepMC3)
 
-    @subsection linksx  Links to project-related web-pages
-    
+    @subsection linksx  Links to project-related web-pages  
      - <a href="https://gitlab.cern.ch/hepmc/HepMC3">       <b>HepMC3 GitLab repository </b></a>
      - <a href="https://gitlab.cern.ch/hepmc/HepMC">        <b>HepMC2 GitLab repository </b></a>
      - <a href="https://sft.its.cern.ch/jira/browse/HEPMC"> <b>HepMC project JIRA instance </b></a>
