@@ -999,7 +999,7 @@ CentOS8-gcc:
     - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
     - dnf -y install 'dnf-command(config-manager)'
     - dnf config-manager --set-enabled powertools  
-    - dnf config-manager --set-enabled AppStream  
+    - dnf config-manager --set-enabled apptream  
     - dnf config-manager --set-enabled epel-testing    
     - yum -y install  cmake make binutils sed gawk grep
     - yum -y install  gcc gcc-c++
@@ -1044,7 +1044,7 @@ CentOS8-clang:
     - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
     - dnf -y install 'dnf-command(config-manager)'
     - dnf config-manager --set-enabled powertools  
-    - dnf config-manager --set-enabled AppStream  
+    - dnf config-manager --set-enabled appstream  
     - dnf config-manager --set-enabled epel-testing  
     - yum -y install  cmake make binutils sed gawk grep
 #    - yum -y install  gcc gcc-c++
