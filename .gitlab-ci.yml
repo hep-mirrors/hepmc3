@@ -998,7 +998,7 @@ CentOS8-gcc:
     - yum install -y https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
     - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
     - dnf -y install 'dnf-command(config-manager)'
-    - dnf config-manager --set-enabled PowerTools  
+    - dnf config-manager --set-enabled powertools  
     - dnf config-manager --set-enabled AppStream  
     - dnf config-manager --set-enabled epel-testing    
     - yum -y install  cmake make binutils sed gawk grep
@@ -1043,7 +1043,7 @@ CentOS8-clang:
     - yum install -y https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
     - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
     - dnf -y install 'dnf-command(config-manager)'
-    - dnf config-manager --set-enabled PowerTools  
+    - dnf config-manager --set-enabled powertools  
     - dnf config-manager --set-enabled AppStream  
     - dnf config-manager --set-enabled epel-testing  
     - yum -y install  cmake make binutils sed gawk grep
