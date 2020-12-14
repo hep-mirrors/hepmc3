@@ -35,7 +35,7 @@
 
     @subsection hepmc3_releases HepMC3 releases
     <a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>
-      
+      - <a href="releases/HepMC3-3.2.3.tar.gz">HepMC-3.2.3.tar.gz</a> HepMC3-3.2.3 <b> 14.Dec.2020</b>
       - <a href="releases/HepMC3-3.2.2.tar.gz">HepMC-3.2.2.tar.gz</a> HepMC3-3.2.2 <b> 10.Jun.2020</b>
       - <a href="releases/HepMC3-3.2.1.tar.gz">HepMC-3.2.1.tar.gz</a> HepMC3-3.2.1 <b> 17.Mar.2020</b>
       - <a href="releases/HepMC3-3.2.0.tar.gz">HepMC-3.2.0.tar.gz</a> HepMC3-3.2.0 <b> 27.Nov.2019</b>
@@ -61,7 +61,7 @@
 
     @subsection heppdt_releases HepPDT releases
      
-     - <a href="releases/HepPDT-3.04.01.tar.gz">HepPDT-3.04.01.tar.gz</a> HepPDT-3.04.01</li>
+     - <a href="releases/HepPDT-3.04.01.tar.gz">HepPDT-3.04.01.tar.gz</a> HepPDT-3.04.01
 
 
     @subsection contact Contact information:
