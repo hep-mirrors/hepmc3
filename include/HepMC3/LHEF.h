@@ -3096,14 +3096,16 @@ public:
    * @param os the stream where the event file is written.
    */
   Writer(std::ostream & os)
-    : file(&os), initfile(&os), dirpath(""),lastevent(-1),curreventfile(-1),currfileevent(-1) {  }
+    : file(&os), initfile(&os), lastevent(-1), curreventfile(-1),
+      currfileevent(-1), dirpath("") {}
+
   /**
    * Create a Writer object giving a filename to write to.
    * @param filename the name of the event file to be written.
    */
   Writer(std::string filename)
     : intstream(filename.c_str()), file(&intstream), initfile(&intstream),
-      dirpath(""),lastevent(-1),curreventfile(-1),currfileevent(-1) {
+      lastevent(-1), curreventfile(-1), currfileevent(-1), dirpath("") {
     size_t slash = filename.find_last_of('/');
     if ( slash != std::string::npos ) dirpath = filename.substr(0, slash + 1);
   }

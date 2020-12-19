@@ -77,7 +77,7 @@ void ReaderLHEF::init()
     std::vector<std::string> weightnames;
     for ( int i = 0, N = m_hepr->heprup.weightinfo.size(); i < N; ++i ) weightnames.push_back(m_hepr->heprup.weightNameHepMC(i));
     if (nweights==0) nweights=1;
-    for ( int i = weightnames.size(); i < nweights; ++i ) weightnames.push_back(std::to_string(i));
+    for ( size_t i = weightnames.size(); i < nweights; ++i ) weightnames.push_back(std::to_string(i));
     run_info()->set_weight_names(weightnames);
 
     // We also want to convey the information about which generators was
@@ -142,14 +142,18 @@ bool ReaderLHEF::read_event(GenEvent& ev)
         {
             std::pair<int,int> vertex_index=v.first;
             GenVertexPtr          vertex=v.second;
-            for (int i=vertex_index.first-1; i<vertex_index.second; i++) if (i>=0&&i<particles.size()) vertex->add_particle_in(particles[i]);
+            for (int i=vertex_index.first-1; i<vertex_index.second; ++i)
+                if (i>=0 && i<(int)particles.size())
+                    vertex->add_particle_in(particles[i]);
         }
         std::pair<int,int> vertex_index(0,0);
         if (vertices.find(vertex_index)==vertices.end())vertices[vertex_index]=std::make_shared<GenVertex>();
-        for (size_t i=0; i<particles.size(); i++) if (!particles[i]->end_vertex()&&!particles[i]->production_vertex())
+        for (size_t i=0; i<particles.size(); ++i)
+            if (!particles[i]->end_vertex() && !particles[i]->production_vertex())
+            {
                 if (i<2) vertices[vertex_index]->add_particle_in(particles[i]);
                 else vertices[vertex_index]->add_particle_out(particles[i]);
-
+            }
         for ( auto v: vertices ) evt.add_vertex(v.second);
         if (particles.size()>1)
         {

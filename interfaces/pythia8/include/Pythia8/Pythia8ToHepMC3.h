@@ -143,9 +143,9 @@ public:
 
             // Check for particles not added to the event
             // NOTE: We have to check if this step makes any sense in HepMC event standard
-            if ( !hepevt_particles[i] ) {
+            if ( !hepevt_particles[i]->in_event() ) {
                 std::cerr << "hanging particle " << i << std::endl;
-                GenVertexPtr prod_vtx;
+                GenVertexPtr prod_vtx = std::make_shared<GenVertex>();
                 prod_vtx->add_particle_out( hepevt_particles[i] );
                 evt->add_vertex(prod_vtx);
             }
