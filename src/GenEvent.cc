@@ -355,7 +355,7 @@ void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
     if ( m_rootvertex->id() != 0 ) {
         const int vx = -1 - m_rootvertex->id();
         const int rootid = m_rootvertex->id();
-        if ( vx >= 0 && vx < m_vertices.size() && m_vertices[vx] == m_rootvertex ) {
+        if ( vx >= 0 && vx < (int) m_vertices.size() && m_vertices[vx] == m_rootvertex ) {
             auto next = m_vertices.erase(m_vertices.begin() + vx);
             std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
             for(auto & vt1: m_attributes ) {
