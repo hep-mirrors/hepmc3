@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenRunInfo.cc
@@ -82,7 +82,6 @@ std::vector<std::string> GenRunInfo::attribute_names( ) const {
 
 void GenRunInfo::read_data(const GenRunInfoData& data) {
 
-    //this->clear();
 
     // Weight names
     set_weight_names(data.weight_names);
