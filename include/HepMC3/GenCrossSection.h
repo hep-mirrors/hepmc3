@@ -155,7 +155,6 @@ private:
 
 };
 
-
 } // namespace HepMC3
 
 #endif

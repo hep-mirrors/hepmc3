@@ -2,6 +2,7 @@
 //
 // This file is part of HepMC
 // Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+//
 /**
  *  @file Errors.h
  *  @brief Implementation of  error and HEPMC3_HEPMC3_WARNING macros
@@ -41,9 +42,6 @@ namespace HepMC3 {
 #endif
 
 //@}
-
-
-
 
 } // namespace HepMC3
 

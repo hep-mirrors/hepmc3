@@ -243,7 +243,6 @@ public:
 
 };
 
-
 #ifndef HEPMC3_NO_DEPRECATED
 typedef GenHeavyIon HeavyIon; ///< Backward compatibility typedef
 #endif
