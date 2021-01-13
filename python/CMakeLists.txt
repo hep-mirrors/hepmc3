@@ -220,6 +220,7 @@ macro(bindings ver verminor)
 SET( Python_VERSION_MAJOR "0")
 SET( Python_VERSION_MINOR "0")
 
+#Compilation with PyPy
 if (${ver} MATCHES pypy* )
   unset(Python_FOUND CACHE)
   unset(Python_VERSION CACHE)
@@ -231,32 +232,43 @@ if (${ver} MATCHES pypy* )
   unset(_Python_EXECUTABLE CACHE)
   string(REPLACE "pypy" "" forpypy "${ver}")
   find_package(PyPy  ${forpypy})
-  set(Python_EXECUTABLE ${PyPy_EXE})
-  set(Python_Interpreter ${PyPy_EXE})
-  set(Python_VERSION pypy${PyPy_Python_VERSION})
-  set(Python_VERSION_MAJOR pypy${PyPy_Python_VERSION_MAJOR})
+  set(Python_EXECUTABLE        ${PyPy_EXE})
+  set(Python_Interpreter       ${PyPy_EXE})
+  set(Python_VERSION           pypy${PyPy_Python_VERSION})
+  set(Python_VERSION_MAJOR     pypy${PyPy_Python_VERSION_MAJOR})
   set(Python_VERSION_MINOR     ${PyPy_Python_VERSION_MINOR})
   set(Python_LIBRARIES         ${PyPy_LIBRARIES})
   set(Python_INCLUDE_DIRS      ${PyPy_INCLUDE_DIRS})
   set(Python_SITEARCH          ${PyPy_SITEARCH})
 endif()
 
+#Compilation with CPython2
 if (${ver} STREQUAL 2)
-  unset(Python_FOUND CACHE)
-  unset(Python_VERSION CACHE)
-  unset(Python_Interpreter_FOUND CACHE)
-  unset(Python_EXECUTABLE CACHE)
-  unset(Python_INCLUDE_DIR CACHE)
-  unset(Python_INCLUDE_DIRS CACHE)
-  unset(Python_LIBRARIES CACHE)
-  unset(_Python_EXECUTABLE CACHE)
+  unset(Python2_FOUND CACHE)
+  unset(Python2_VERSION CACHE)
+  unset(Python2_Interpreter_FOUND CACHE)
+  unset(Python2_EXECUTABLE CACHE)
+  unset(Python2_INCLUDE_DIR CACHE)
+  unset(Python2_INCLUDE_DIRS CACHE)
+  unset(Python2_LIBRARIES CACHE)
+  unset(_Python2_EXECUTABLE CACHE) #Don't even know why
   if (${verminor} STREQUAL X)
-    find_package (Python ${ver} COMPONENTS  Interpreter Development.Module)
+    find_package (Python2 ${ver} COMPONENTS  Interpreter Development.Module)
   else()
-    find_package (Python ${ver}.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
+    find_package (Python2 ${ver}.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
+  endif()
+  if (Python2_VERSION AND Python2_INCLUDE_DIRS AND Python2_EXECUTABLE  ) #something is set
+    SET( Python_VERSION       ${Python2_VERSION})
+    SET( Python_VERSION_MAJOR ${Python2_VERSION_MAJOR})
+    SET( Python_VERSION_MINOR ${Python2_VERSION_MINOR})
+    SET( Python_LIBRARIES     ${Python2_LIBRARIES})
+    SET( Python_SITEARCH      ${Python2_SITEARCH})
+    SET( Python_EXECUTABLE    ${Python2_EXECUTABLE})
+    SET( Python_INCLUDE_DIRS  ${Python2_INCLUDE_DIRS})
   endif()
 endif()
 
+#Compilation with CPython3
 if (${ver} STREQUAL 3)
   unset(Python3_FOUND CACHE)
   unset(Python3_VERSION CACHE)
@@ -265,28 +277,30 @@ if (${ver} STREQUAL 3)
   unset(Python3_INCLUDE_DIR CACHE)
   unset(Python3_INCLUDE_DIRS CACHE)
   unset(Python3_LIBRARIES CACHE)
-  unset(_Python3_EXECUTABLE CACHE)
+  unset(_Python3_EXECUTABLE CACHE) #Don't even know why
   if (${verminor} STREQUAL X)
     find_package (Python3 ${ver} COMPONENTS  Interpreter Development.Module )
   else()
     find_package (Python3 ${ver}.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
   endif()
   if (Python3_VERSION AND Python3_INCLUDE_DIRS AND Python3_EXECUTABLE  ) #something is set
-    SET( Python_VERSION ${Python3_VERSION})
+    SET( Python_VERSION       ${Python3_VERSION})
     SET( Python_VERSION_MAJOR ${Python3_VERSION_MAJOR})
     SET( Python_VERSION_MINOR ${Python3_VERSION_MINOR})
-    SET( Python_LIBRARIES ${Python3_LIBRARIES})
-    SET( Python_SITEARCH ${Python3_SITEARCH})
-    SET( Python_EXECUTABLE ${Python3_EXECUTABLE})
-    SET( Python_INCLUDE_DIRS ${Python3_INCLUDE_DIRS})
+    SET( Python_LIBRARIES     ${Python3_LIBRARIES})
+    SET( Python_SITEARCH      ${Python3_SITEARCH})
+    SET( Python_EXECUTABLE    ${Python3_EXECUTABLE})
+    SET( Python_INCLUDE_DIRS  ${Python3_INCLUDE_DIRS})
   endif()
 endif()
+
 
 if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     AND ((${Python_VERSION_MAJOR} STREQUAL ${ver} AND ${verminor} STREQUAL "X")  
         OR "${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}" STREQUAL "${ver}.${verminor}" ))
   message(STATUS "HepMC3 python: Python verson ${ver}.${verminor} found in ${Python_EXECUTABLE}. Python bindings generation is possible.")
 
+#Compilation with PyPy
   if (${ver} MATCHES pypy* )
     add_library(pyHepMC3${Python_VERSION} MODULE  ${BN}   )
     set_target_properties(pyHepMC3${Python_VERSION}
@@ -308,22 +322,25 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
           OUTPUT_NAME pyHepMC3search.pypy-${PyPy_PyPy_VERSION_MAJOR}${PyPy_PyPy_VERSION_MINOR})
     endif()
   endif()
-
+  
+#Compilation with CPython2
   if (${ver} STREQUAL 2)
-    Python_add_library(pyHepMC3${Python_VERSION} MODULE  ${BN}   )
+    Python2_add_library(pyHepMC3${Python_VERSION} MODULE  ${BN}   )
     set_target_properties(pyHepMC3${Python_VERSION}
       PROPERTIES  OUTPUT_NAME pyHepMC3  )
     if(ROOT_FOUND)
-      Python_add_library(pyHepMC3rootIO${Python_VERSION} MODULE  ${BNrootIO}   )
+      Python2_add_library(pyHepMC3rootIO${Python_VERSION} MODULE  ${BNrootIO}   )
       set_target_properties(pyHepMC3rootIO${Python_VERSION}
         PROPERTIES  OUTPUT_NAME pyHepMC3rootIO  )
     endif()
     if(HEPMC3_ENABLE_SEARCH)
-      Python_add_library(pyHepMC3search${Python_VERSION} MODULE  ${BNsearch}   )
+      Python2_add_library(pyHepMC3search${Python_VERSION} MODULE  ${BNsearch}   )
       set_target_properties(pyHepMC3search${Python_VERSION}
         PROPERTIES  OUTPUT_NAME pyHepMC3search  )
     endif()
   endif()
+
+#Compilation with CPython3
   if (${ver} STREQUAL 3)
     Python3_add_library(pyHepMC3${Python_VERSION} MODULE  ${BN} )
     set_target_properties(pyHepMC3${Python_VERSION}
