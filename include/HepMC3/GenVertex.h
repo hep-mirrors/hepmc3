@@ -79,6 +79,12 @@ public:
     /// Remove outgoing particle
     void remove_particle_out( GenParticlePtr p);
 
+    /// Number of incoming particles, HepMC2 compatiility
+    inline int particles_in_size() const { return m_particles_in.size(); }
+    /// Number of outgoing particles, HepMC2 compatiility
+    inline int particles_out_size() const { return m_particles_out.size(); }
+
+
     /// Get list of incoming particles
     const std::vector<GenParticlePtr>& particles_in() { return m_particles_in; }
     /// Get list of incoming particles (for const access)

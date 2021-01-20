@@ -143,6 +143,8 @@ public:
     double length2()  const { return x()*x() + y()*y() + z()*z(); }
     /// Magnitude of spatial (x, y, z) 3-vector
     double length()  const { return std::sqrt(length2()); }
+    /// Magnitude of spatial (x, y, z) 3-vector, for HepMC2 compatibility
+    double rho()    const { return length(); }
     /// Squared magnitude of (x, y) vector
     double perp2()      const { return  x()*x() + y()*y(); }
     /// Magnitude of (x, y) vector

@@ -79,6 +79,18 @@ public:
     //@}
 
 
+    /// @name Particle and vertex access
+    //@{
+    ///Particles size, HepMC2 compatiility
+    inline int particles_size() const { return m_particles.size(); } 
+    ///Particles empty, HepMC2 compatiility
+    inline bool particles_empty() const { return m_particles.empty(); }
+    ///Vertices size, HepMC2 compatiility
+    inline int vertices_size() const { return m_vertices.size(); }
+    ///Vertices empty, HepMC2 compatiility
+    inline bool vertices_empty() const { return m_vertices.empty(); }
+    //@}
+
     /// @name Event weights
     //@{
 
