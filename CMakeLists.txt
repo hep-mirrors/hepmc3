@@ -376,6 +376,7 @@ if (ASTYLE)
     rootIO/src/*cc 
     search/src/*cc  
     examples/*/src/*cc 
+    examples/*/include/*h
     test/*cc  
     test/*h 
     interfaces/*/include/*.h 

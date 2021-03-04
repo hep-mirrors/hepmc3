@@ -5,7 +5,7 @@
 //
 ///
 /// @class HepMC3ViewerFrame
-/// @brief Definition of \b class HepMC3ViewerFrame used for simple GUI viewer 
+/// @brief Definition of \b class HepMC3ViewerFrame used for simple GUI viewer
 ///
 #include <TGClient.h>
 #include <TBuffer.h>
@@ -44,10 +44,10 @@ private:
     TRootEmbeddedCanvas *fEmbEventImageCanvas;   ///< Event canvas
     TRootEmbeddedCanvas *fEmbAnalysisCanvas;     ///< Analysis canvas
     std::shared_ptr<HepMC3::Reader> fReader;                  ///< Reader
-    HepMC3::GenEvent *fCurrentEvent;                          ///<Event 
+    HepMC3::GenEvent *fCurrentEvent;                          ///<Event
     std::vector<HepMC3::GenEvent*> fEventsCache;              ///<Cache of events
     TCanvas* fEventImageCanvas;                               ///< Event canvas
-    TCanvas *fAnalysisCanvas;                                 ///<Analysis canvas  
+    TCanvas *fAnalysisCanvas;                                 ///<Analysis canvas
     TImage *fGraphImage;                                      ///<Image passed from graphviz
     std::map<std::string, TH1*> fAnalysisH;                   ///< Analysis histograms
     static const size_t m_char_buffer_size=100000;            ///<Size of writer buffer

@@ -36,7 +36,7 @@ public:
     /// @brief Close file stream
     void close() override;
     /// @brief destructor
-   ~AnalysisExample(){ close(); }
+    ~AnalysisExample() { close(); }
 
     double m_sum_of_weights=0;  //!< Sum of event weights
     double m_sum_of_weights2=0; //!< Sum of event weights**2
