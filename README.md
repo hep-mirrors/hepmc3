@@ -482,6 +482,13 @@ The files
 ```
 illustrate an implementation of simple physics analysis using the HepMC3 library.
 
+The files
+```
+./examples/ConvertExample/include/ReaderuprootTree.h
+./examples/ConvertExample/src/ReaderuprootTree.cc
+```
+implement an a reader for ROOT files based on uproot.
+
 - The `./examples/RootIOExample/` subdirectory contains source code of
 an utility that illustrates manipulations with LHEF event record.
 
