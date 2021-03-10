@@ -1,17 +1,19 @@
+2021-03-10  Andy Buckley  <andy.buckley@cern.ch>
+         * Reduce debug-printout verbosity in ReaderFactory format autodetection.
   --------------------------  HepMC3.2.4-pre --------------------------
 2021-03-05 Andrii Verbytskyi for HepMC
          * Added uproot-based reader to examples.
-         * Fixed cmake configuration to allow multiple python versions.
+         * Fixed cmake configuration to allow multiple Python versions.
          * Fixes of compilation warnings by Mattias Ellert.
   --------------------------  HepMC3.2.3-pre --------------------------
 2020-11-08 Andrii Verbytskyi for HepMC
          * Documentation and copyright years were updated.
          * Python bindings were regenerated with binder 1.1.0 and the pybind11 copy updated to 2.6.0.
-         * The #ifdefs around the functions that had to be excluded from bindings but binder 1.0.0 was not doing that were removed. 
-         * A python test with attributes was added.
+         * The #ifdefs around the functions that had to be excluded from bindings but binder 1.0.0 was not doing that were removed.
+         * A Python test with attributes was added.
          * ReaderLHEF was fixed for to treat correctly more comaplicated input. Inspied by discussion with Bryan Foo and Christopher Palmer.
 2020-06-19 Andrii Verbytskyi for HepMC
-         * Included updates to many python scripts from Marian Heil. 
+         * Included updates to many Python scripts from Marian Heil.
          * Included updates to CMake scripts from Marian Heil.
   --------------------------  HepMC3.2.2 --------------------------
 2020-06-10 Andrii Verbytskyi for HepMC
