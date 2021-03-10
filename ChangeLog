@@ -1,3 +1,5 @@
+2021-03-10  Andy Buckley  <andy.buckley@cern.ch>
+	* Reduce debug-printout verbosity in ReaderFactory format autodetection.
   --------------------------  HepMC3.2.2-pre --------------------------
 2020-06-10 Andrii Verbytskyi for HepMC
         * Bugfix release
