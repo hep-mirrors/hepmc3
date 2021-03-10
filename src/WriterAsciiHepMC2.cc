@@ -285,13 +285,13 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
     }
     else
     {
-        m_cursor += sprintf(m_cursor," %.*e",m_precision,pos.x());
+        m_cursor += sprintf(m_cursor," %.*e", m_precision, pos.x());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",   m_precision,pos.y());
+        m_cursor += sprintf(m_cursor," %.*e", m_precision, pos.y());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",   m_precision,pos.z());
+        m_cursor += sprintf(m_cursor," %.*e", m_precision, pos.z());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e", m_precision,pos.t());
+        m_cursor += sprintf(m_cursor," %.*e", m_precision, pos.t());
         flush();
     }
     m_cursor += sprintf(m_cursor," %i %lu %lu",orph,v->particles_out().size(),weights.size());
