@@ -58,15 +58,18 @@
     ###########################################################################
     @subsection pythia6 Fortran generators 
     ###########################################################################
-    An example of interface to Pythia6 Fortran blocks is given in the examples.
+    An example of interface to Pythia6 Fortran blocks  is given in the examples.
+    Please note that the provided interface Pythia6ToHepMC3.cc and Pythia6ToHepMC3.inc
+    is an interface for HepMC3 from Pythia6 and not an interface to Pythia6 from HepMC,
+    as it was in the case of the HepMC2.
 
     ###########################################################################
-    @subsection io Changes to the I/O handeling
+    @subsection io Changes to the I/O handling
     ###########################################################################    
     Multiple file formats are supported. The implementation of reading  and wrining 
     is separated in HepMC3. All the reading operations are performed in 
     "reader" objects inherited from HepMC::Reader and the writing operations in the "writer" 
-    objects inherited from HePMC::Writer. Therefore it is to use the desired headers explicitely, as needed.
+    objects inherited from HePMC::Writer. Therefore it is to use the desired headers explicitly, as needed.
     
     The IO_GenEvent.h header is not available anymore.
     to write and/or read HepMC2 files the following includes 
@@ -94,10 +97,10 @@
 
     Implementation of custom Reader and Writer objects is possible as well.
     
-    Please, note the difference in the behaviour of default Readers with respect to HepMC2. 
+    Please, note the difference in the behavior of default Readers with respect to HepMC2. 
     when reading files with multiple headers. The ASCII files with multiple headers ( e.g. obtained with 
     cat 1.hepmc 2.hepmc > 12.hepmc) will be processed by the readers only till the 
-    first occurance of END_EVENT_LISTING. 
+    first occurrence of END_EVENT_LISTING. 
     ###########################################################################
     @subsection memory Memory managed by shared pointers
     ###########################################################################
@@ -132,7 +135,7 @@
     @subsection iterators Iterators
     ###########################################################################
 
-    The iterator-bases classe and access functions from HepMC2, e.g.
+    The iterator-bases classes and access functions from HepMC2, e.g.
     @code{.cpp}
     class particle_iterator;
     class vertex_iterator;
@@ -144,7 +147,7 @@
     
     @endcode
     were removed. 
-    The C++11 itarations should be used instead, e.g. instead of 
+    The C++11 iterations should be used instead, e.g. instead of 
     @code{.cpp}
     for (GenEvent::particle_const_iterator p = evt->particles_begin(); p != evt->particles_end(); ++p ) {
     ...
@@ -224,10 +227,17 @@
     particles. (and subsequently, all of their decays).
 
     ###########################################################################
-    @subsection barcodes Barcodes can no longer be set
+    @subsection barcodes Barcodes can no longer be se (Use constant ID instead)
     ###########################################################################
-
-    Barcodes are no longer available. Use attributes to provide additional
+    The "barcode" integer in HepMC2 was an uncomfortable object, simultaneously
+    declared in the code documentation to be a meaningless unique identifier for
+    vertex and particle objects, and set to specific ranges by experiments'
+    production systems to encode information about a particle's origins. It proved
+    impossible to satisfactorily reconcile these twin uses, and experiments' demands
+    for particle provenance information have exceeded the capacity of an int (or
+    even a long int).
+    
+    Hence, barcodes are no longer available. Use attributes to provide additional
     information that was previously encoded using barcodes
     (see module @ref attributes).
     
@@ -236,6 +246,16 @@
     be changed. Id is not permanently attached to particle/vertex. When
     a particle or vertex is removed from the event, id's of other particles
     or vertices may change.
+    ###########################################################################
+    @subsection flow  Flow is not a clas on its own (it is an attribute).
+    ###########################################################################
+
+    The Flow class has been removed, since it was unused by any widespread event
+    generator, and to our knowledge the only active use-case is an abuse of it to
+    provide more ints in which to encode provenance information. As this is now done
+    via attributes, there is no case for Flow's continued existence. No backward
+    compatibility Flow class is provided since this usage is extremely localised in
+    one piece of user code and migration to the newer scheme should be simple.
 
     ###########################################################################
     @subsection units Units are no longer defined at compilation time
@@ -415,5 +435,6 @@
      that belong to a GenEvent object.
      
     <hr>
-    Last update 24 Jan 2019
+
+ Last update 08 Nov 2020
 */

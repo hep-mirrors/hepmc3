@@ -1,8 +1,7 @@
 // -*- C++ -*-
-// -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERLHEF_H
 #define HEPMC3_READERLHEF_H
@@ -19,6 +18,7 @@
  */
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
+#include <deque>
 #include <string>
 #include <fstream>
 #include <istream>
@@ -34,10 +34,8 @@ namespace HepMC3
 class ReaderLHEF : public Reader
 {
 public:
-#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stream
     ReaderLHEF(std::istream &);
-#endif
 private:
     void init();                       ///< Init helper
 public:
@@ -54,10 +52,11 @@ public:
     /** @brief Destructor */
     ~ReaderLHEF() ;
 private:
-    LHEF::Reader* m_reader;            ///< The actual reader
+    std::shared_ptr<LHEF::Reader> m_reader;            ///< The actual reader
     std::shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
     int m_neve;                         ///< Event counter
     bool m_failed;                      ///< State of reader
+    std::deque<GenEvent> m_storage; ///<storage used for subevents.
 };
 }
 #endif

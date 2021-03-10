@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderHEPEVT.cc
@@ -118,8 +118,8 @@ bool ReaderHEPEVT::read_hepevt_particle( int i)
     else
     {
         if (!static_cast<bool>(st_p>>intcodes[0]>>intcodes[1]>>intcodes[4]>>intcodes[5]>>fltcodes1[0]>>fltcodes1[1]>>fltcodes1[2]>>fltcodes1[4])) {HEPMC3_ERROR( "ReaderHEPEVT: HEPMC3_ERROR reading particle momenta");     return false;}
-        intcodes[2]=0;//FIXME!
-        intcodes[3]=0;//FIXME!
+        intcodes[2]=0;//FIXME! This is a feature of this format, but maybe there are better ideas.
+        intcodes[3]=0;//FIXME! This is a feature of this format, but maybe there are better ideas.
         fltcodes1[3]=std::sqrt(fltcodes1[0]*fltcodes1[0]+fltcodes1[1]*fltcodes1[1]+fltcodes1[2]*fltcodes1[2]+fltcodes1[4]*fltcodes1[4]);
         fltcodes2[0]=0;
         fltcodes2[1]=0;

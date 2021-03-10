@@ -10,6 +10,7 @@ typedef std::function< pybind11::module & (std::string const &) > ModuleGetter;
 
 void bind_pyHepMC3rootIO_0(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_pyHepMC3rootIO_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_pyHepMC3rootIO_2(std::function< pybind11::module &(std::string const &namespace_) > &M);
 
 
 PYBIND11_MODULE(pyHepMC3rootIO, root_module) {
@@ -33,5 +34,6 @@ PYBIND11_MODULE(pyHepMC3rootIO, root_module) {
 
 	bind_pyHepMC3rootIO_0(M);
 	bind_pyHepMC3rootIO_1(M);
+	bind_pyHepMC3rootIO_2(M);
 
 }

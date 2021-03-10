@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenPdfInfo.cc
@@ -48,18 +48,18 @@ bool GenPdfInfo::from_string(const std::string &att) {
 }
 
 bool GenPdfInfo::to_string(std::string &att) const {
-    char buf[255];
+    char buf[255];//Note: the format is fixed, so no reason for complicatied tratment
 
-    sprintf(buf,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
-            parton_id[0],
-            parton_id[1],
-            x[0],
-            x[1],
-            scale,
-            xf[0],
-            xf[1],
-            pdf_id[0],
-            pdf_id[1]);
+    snprintf(buf,255,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
+             parton_id[0],
+             parton_id[1],
+             x[0],
+             x[1],
+             scale,
+             xf[0],
+             xf[1],
+             pdf_id[0],
+             pdf_id[1]);
 
     att = buf;
 

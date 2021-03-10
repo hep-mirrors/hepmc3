@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef _TauolaHepMC3Event_h_included_
 #define _TauolaHepMC3Event_h_included_

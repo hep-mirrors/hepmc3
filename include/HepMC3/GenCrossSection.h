@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_CROSS_SECTION_H
 #define HEPMC3_CROSS_SECTION_H
@@ -154,7 +154,6 @@ private:
     int windx(std::string wName) const;
 
 };
-
 
 } // namespace HepMC3
 

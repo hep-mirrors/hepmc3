@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file Relatives.h
@@ -173,7 +173,7 @@ private:
 
     public:
         constexpr idInterface(ID_type genObject): m_object(genObject) {}
-        int id() const {return m_object->id();}
+        int id() const override {return m_object->id();}
 
     private:
 

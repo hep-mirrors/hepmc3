@@ -45,12 +45,14 @@
 #ifdef HEPMCCONVERT_EXTENSION_GZ
 #include "ReaderGZ.h"
 #endif
-
+#ifdef HEPMCCONVERT_EXTENSION_UPROOTTREEREADER
+#include "ReaderuprootTree.h"
+#endif
 
 
 #include "cmdline.h"
 using namespace HepMC3;
-enum formats {autodetect, hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, gz, plugin, none};
+enum formats {autodetect, hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, gz, uproot, plugin, none};
 int main(int argc, char** argv)
 {
     gengetopt_args_info ai;
@@ -75,6 +77,7 @@ int main(int argc, char** argv)
     format_map.insert(std::pair<std::string,formats> ( "dump", dump ));
     format_map.insert(std::pair<std::string,formats> ( "dot", dot ));
     format_map.insert(std::pair<std::string,formats> ( "gz", gz ));
+    format_map.insert(std::pair<std::string,formats> ( "uproot", uproot ));
     format_map.insert(std::pair<std::string,formats> ( "plugin", plugin ));
     format_map.insert(std::pair<std::string,formats> ( "none", none ));
     std::map<std::string, std::string> options;
@@ -125,6 +128,14 @@ int main(int argc, char** argv)
     case gz:
 #ifdef HEPMCCONVERT_EXTENSION_GZ
         input_file=std::make_shared<ReaderGZ>(ai.inputs[0]);
+        break;
+#else
+        printf("Input format %s  is not supported\n",ai.input_format_arg);
+        exit(2);
+#endif
+    case uproot:
+#ifdef HEPMCCONVERT_EXTENSION_UPROOTTREEREADER
+        input_file=std::make_shared<ReaderuprootTree>(ai.inputs[0]);
         break;
 #else
         printf("Input format %s  is not supported\n",ai.input_format_arg);

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_GENPARTICLE_H
 #define HEPMC3_GENPARTICLE_H
@@ -84,7 +84,7 @@ public:
     std::vector<ConstGenParticlePtr> children() const;
 
     int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
-    int   abs_pid()               const { return abs(pid());            } //!< Get absolute value of PDG ID
+    int   abs_pid()               const { return std::abs(pid());            } //!< Get absolute value of PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
     const FourVector& momentum()  const { return m_data.momentum;       } //!< Get momentum
     bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
@@ -147,7 +147,6 @@ private:
 
     std::weak_ptr<GenVertex>    m_production_vertex; //!< Production vertex
     std::weak_ptr<GenVertex>    m_end_vertex;        //!< End vertex
-//    weak_ptr<GenParticle>  m_this;              //!< Pointer to shared pointer managing this particle
 };
 
 } // namespace HepMC3

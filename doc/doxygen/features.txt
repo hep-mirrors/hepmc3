@@ -14,7 +14,7 @@
     @section gen_run GenRunInfo class
     ###########################################################################
 
-    A new class has been provided to store run-level informations, such as
+    A new class has been provided to store run-level information, such as
     weight names, names and description of tools used to generate the event,
     global attributes such as LHE run information or any other run information
     provided by user. See HepMC::GenRunInfo class description for details.
@@ -89,7 +89,7 @@ GenEventData*  A=...
 ...
 int i;
 int j;
-int current_l=0;                             //If the  incoming electron is the first paricle in the list
+int current_l=0;                             //If the  incoming electron is the first particle in the list
 int vertex_l=0;                              //We set final vertex to some nonsense value. 
 bool found_next_vertex=true;
 while(found_next_vertex)                     // Looking for the electron end vertex
@@ -128,5 +128,6 @@ while(found_next_vertex)                     // Looking for the electron end ver
     @endcode
 
     <hr>
-    Last update 24 Jan 2019
+
+    Last update 27 Oct 2020
 */

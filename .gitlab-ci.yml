@@ -104,7 +104,7 @@ Fedora23-gcc-noroot-nopython:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
 # We have ROOT5 here   
   script:
     - export
@@ -140,7 +140,7 @@ Fedora23-clang-noroot-nopython:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
 # We have ROOT5 here
   script:
     - export
@@ -176,7 +176,7 @@ Fedora24-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
     - sed -i 's@message(FATAL_ERROR \"The imported @message(STATUS \"The imported@g' /usr/share/root/cmake/ROOTConfig-targets.cmake
   script:
@@ -213,7 +213,7 @@ Fedora24-clang-noroot:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
     - sed -i 's@message(FATAL_ERROR \"The imported @message(STATUS \"The imported@g' /usr/share/root/cmake/ROOTConfig-targets.cmake
   script:
@@ -250,7 +250,7 @@ Fedora25-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
     - sed -i 's@message(FATAL_ERROR \"The imported @message(STATUS \"The imported@g' /usr/share/root/cmake/ROOTConfig-targets.cmake
   script:
@@ -287,7 +287,7 @@ Fedora25-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
     - sed -i 's@message(FATAL_ERROR \"The imported @message(STATUS \"The imported@g' /usr/share/root/cmake/ROOTConfig-targets.cmake
   script:
@@ -324,7 +324,7 @@ Fedora26-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
     - sed -i 's@message(FATAL_ERROR \"The imported @message(STATUS \"The imported@g' /usr/share/root/cmake/ROOTConfig-targets.cmake
   script:
@@ -362,7 +362,7 @@ Fedora26-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
 #The older ROOT has suboptimal cmake config
     - sed -i 's@message(FATAL_ERROR \"The imported @message(STATUS \"The imported@g' /usr/share/root/cmake/ROOTConfig-targets.cmake
   script:
@@ -401,7 +401,7 @@ Fedora27-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -437,7 +437,7 @@ Fedora27-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -472,7 +472,7 @@ Fedora28-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -508,7 +508,7 @@ Fedora28-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -545,7 +545,7 @@ Fedora29-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -581,7 +581,7 @@ Fedora29-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -620,7 +620,7 @@ Fedora30-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -656,7 +656,7 @@ Fedora30-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -693,7 +693,7 @@ Fedora31-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -729,7 +729,7 @@ Fedora31-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -765,7 +765,7 @@ Fedora32-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -801,7 +801,7 @@ Fedora32-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -837,7 +837,7 @@ Fedora33-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -874,7 +874,7 @@ Fedora33-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -890,6 +890,41 @@ Fedora33-clang:
     - ctest --output-on-failure 
 
 
+Fedora33-gcc-pypy:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch" && $CI_COMMIT_MESSAGE =~ /FedoraCI/
+  image: fedora:33
+  stage: test
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+#essentials
+    - yum -y install  cmake make binutils sed gawk grep
+    - yum -y install  gcc gcc-c++
+#    - yum -y install  clang
+#python bindings
+    - yum -y install  python3 python3-devel python2 python2-devel 
+    - yum -y install  pypy pypy-devel  
+#documentation 
+    - yum -y install  doxygen 
+#examples 
+    - yum -y install  gcc-gfortran
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
+  script:
+    - export
+    - mkdir build
+    - cd build
+    - export CXX=g++
+    - export CC=gcc
+    - export FC=gfortran
+#    - export CXX=clang++
+#    - export CC=clang
+#    - export FC=gfortran    
+    - cmake .. -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_PYTHON_VERSIONS=2,3,pypy2 -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON 
+    - make -j $(nproc)
+    - ctest --output-on-failure 
 
 
 
@@ -916,7 +951,7 @@ CentOS7-gcc:
     - yum -y install  doxygen 
 #examples 
     - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -956,7 +991,7 @@ CentOS7-clang:
     - yum -y install  doxygen 
 #examples 
 #    - yum -y install  gcc-gfortran
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz graphviz-devel pythia8 pythia8-devel  root 
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root 
   script:
     - export
     - mkdir build
@@ -970,18 +1005,6 @@ CentOS7-clang:
     - cmake3 ..  -DHEPMC3_PYTHON_VERSIONS=2,3.4,3.6  -DHEPMC3_ENABLE_ROOTIO=ON -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_ENABLE_PYTHON=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=On -DHEPMC3_BUILD_DOCS=ON
     - make -j $(nproc)
     - ctest --output-on-failure 
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 CentOS8-gcc:
@@ -998,8 +1021,8 @@ CentOS8-gcc:
     - yum install -y https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
     - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
     - dnf -y install 'dnf-command(config-manager)'
-    - dnf config-manager --set-enabled PowerTools  
-    - dnf config-manager --set-enabled AppStream  
+    - dnf config-manager --set-enabled powertools  
+    - dnf config-manager --set-enabled appstream  
     - dnf config-manager --set-enabled epel-testing    
     - yum -y install  cmake make binutils sed gawk grep
     - yum -y install  gcc gcc-c++
@@ -1012,7 +1035,7 @@ CentOS8-gcc:
     - yum -y install  gcc-gfortran
 #The nastiest package ever
     - yum -y install libzstd  --enablerepo=epel --enablerepo=epel-testing  --enablerepo=elrepo --enablerepo=elrepo-testing
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz-devel pythia8 pythia8-devel  root
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz-devel pythia8 pythia8-devel  root
   script:
     - export
     - mkdir build
@@ -1043,8 +1066,8 @@ CentOS8-clang:
     - yum install -y https://www.elrepo.org/elrepo-release-8.el8.elrepo.noarch.rpm
     - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
     - dnf -y install 'dnf-command(config-manager)'
-    - dnf config-manager --set-enabled PowerTools  
-    - dnf config-manager --set-enabled AppStream  
+    - dnf config-manager --set-enabled powertools  
+    - dnf config-manager --set-enabled appstream  
     - dnf config-manager --set-enabled epel-testing  
     - yum -y install  cmake make binutils sed gawk grep
 #    - yum -y install  gcc gcc-c++
@@ -1057,7 +1080,7 @@ CentOS8-clang:
 #    - yum -y install  gcc-gfortran
 #The nastiest package ever
     - yum -y install libzstd  --enablerepo=epel --enablerepo=epel-testing  --enablerepo=elrepo --enablerepo=elrepo-testing
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel graphviz-devel pythia8 pythia8-devel  root
+    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz-devel pythia8 pythia8-devel  root
   script:
     - export
     - mkdir build

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_FOURVECTOR_H
 #define HEPMC3_FOURVECTOR_H
@@ -142,11 +142,11 @@ public:
     /// Squared magnitude of (x, y, z) 3-vector
     double length2()  const { return x()*x() + y()*y() + z()*z(); }
     /// Magnitude of spatial (x, y, z) 3-vector
-    double length()  const { return sqrt(length2()); }
+    double length()  const { return std::sqrt(length2()); }
     /// Squared magnitude of (x, y) vector
     double perp2()      const { return  x()*x() + y()*y(); }
     /// Magnitude of (x, y) vector
-    double perp()      const { return sqrt(perp2()); }
+    double perp()      const { return std::sqrt(perp2()); }
     /// Spacetime invariant interval s^2 = t^2 - x^2 - y^2 - z^2
     double interval() const { return t()*t() - length2(); }
 
@@ -164,9 +164,9 @@ public:
     double m() const { return (m2() > 0.0) ? std::sqrt(m2()) : -std::sqrt(-m2()); }
 
     /// Azimuthal angle
-    double phi() const { return atan2( y(), x() ); }
+    double phi() const { return std::atan2( y(), x() ); }
     /// Polar angle w.r.t. z direction
-    double theta() const {  return atan2( perp(), z() ); }
+    double theta() const {  return std::atan2( perp(), z() ); }
     // /// Cosine of polar angle w.r.t. z direction
     // double costheta() const {  return z() / p3mod(); }
     /// Pseudorapidity
@@ -213,7 +213,7 @@ public:
 
     /// R_eta-distance separation dR = sqrt(dphi^2 + deta^2)
     double delta_r_eta(const FourVector &v) const {
-        return sqrt( delta_r2_eta(v) );
+        return std::sqrt( delta_r2_eta(v) );
     }
 
     /// R_rap^2-distance separation dR^2 = dphi^2 + drap^2
@@ -223,7 +223,7 @@ public:
 
     /// R-rap-distance separation dR = sqrt(dphi^2 + drap^2)
     double delta_r_rap(const FourVector &v) const {
-        return sqrt( delta_r2_rap(v) );
+        return std::sqrt( delta_r2_rap(v) );
     }
 
     //@}
@@ -333,6 +333,4 @@ inline double delta_r_rap(const FourVector &a, const FourVector &b) { return b.d
 
 
 } // namespace HepMC3
-
-
 #endif

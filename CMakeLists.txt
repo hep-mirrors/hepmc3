@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 2.8.9 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3)
-set(PROJECT_VERSION 3.02.02)
-SET(HEPMC3_VERSION 3.02.02)
+set(PROJECT_VERSION 3.02.03)
+SET(HEPMC3_VERSION 3.02.03)
 SET(HEPMC3_VERSION_MAJOR  3)
 SET(HEPMC3_VERSION_MINOR  2)
-SET(HEPMC3_VERSION_PATCH  2)
+SET(HEPMC3_VERSION_PATCH  3)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 #This module respects HFS, e.g. defines lib or lib64 when it is needed.
@@ -96,18 +96,29 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 
 include(CheckCXXCompilerFlag)
 #This is a workaround for ROOT+Cmake problem.
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_STDEQCXX11_FLAG)
-if(COMPILER_SUPPORTS_STDEQCXX11_FLAG)
+CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_-std=c++11)
+if(COMPILER_SUPPORTS_-std=c++11)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 else()
   set(CMAKE_CXX_STANDARD 11)
   set(CMAKE_CXX_STANDARD_REQUIRED ON)
   set(CMAKE_CXX_EXTENSIONS OFF)
 #This is a workaround for wrong flag.
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
+    set(CMAKE_CXX_EXTENSIONS ON)
+  endif()
+endif()
+
+#Workarounds for nvc++
 if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
-  set(CMAKE_CXX_EXTENSIONS ON)
+  #Templates
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
+  if(UNIX AND CMAKE_CXX_COMPILER_VERSION GREATER 20 )
+    # exception_ptr on old gcc
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1 -D__GCC_ATOMIC_INT_LOCK_FREE=3")
+  endif()
 endif()
-endif()
+
 if (MSVC)
 #This is a workaround for VC memory problem and false positive warnings.
 set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/EHsc" "/D_CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
@@ -199,26 +210,26 @@ message(STATUS "HepMC3: CMAKE_C_COMPILER_ID ${CMAKE_C_COMPILER_ID} " )
 ## Core
 ########################################################################
 set( hepmc3core_sources
-${PROJECT_SOURCE_DIR}/src/GenCrossSection.cc
-${PROJECT_SOURCE_DIR}/src/GenParticle.cc
-${PROJECT_SOURCE_DIR}/src/GenVertex.cc
-${PROJECT_SOURCE_DIR}/src/Print.cc
-${PROJECT_SOURCE_DIR}/src/Setup.cc
-${PROJECT_SOURCE_DIR}/src/WriterHEPEVT.cc
-${PROJECT_SOURCE_DIR}/src/GenEvent.cc
-${PROJECT_SOURCE_DIR}/src/GenPdfInfo.cc
-${PROJECT_SOURCE_DIR}/src/HEPEVT_Wrapper.cc
-${PROJECT_SOURCE_DIR}/src/ReaderAscii.cc
-${PROJECT_SOURCE_DIR}/src/ReaderHEPEVT.cc
-${PROJECT_SOURCE_DIR}/src/WriterAscii.cc
-${PROJECT_SOURCE_DIR}/src/GenHeavyIon.cc
-${PROJECT_SOURCE_DIR}/src/GenRunInfo.cc
-${PROJECT_SOURCE_DIR}/src/LHEFAttributes.cc
-${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc
-${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc
-${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
-${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc
-${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
+  ${PROJECT_SOURCE_DIR}/src/GenCrossSection.cc
+  ${PROJECT_SOURCE_DIR}/src/GenParticle.cc
+  ${PROJECT_SOURCE_DIR}/src/GenVertex.cc
+  ${PROJECT_SOURCE_DIR}/src/Print.cc
+  ${PROJECT_SOURCE_DIR}/src/Setup.cc
+  ${PROJECT_SOURCE_DIR}/src/WriterHEPEVT.cc
+  ${PROJECT_SOURCE_DIR}/src/GenEvent.cc
+  ${PROJECT_SOURCE_DIR}/src/GenPdfInfo.cc
+  ${PROJECT_SOURCE_DIR}/src/HEPEVT_Wrapper.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderAscii.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderHEPEVT.cc
+  ${PROJECT_SOURCE_DIR}/src/WriterAscii.cc
+  ${PROJECT_SOURCE_DIR}/src/GenHeavyIon.cc
+  ${PROJECT_SOURCE_DIR}/src/GenRunInfo.cc
+  ${PROJECT_SOURCE_DIR}/src/LHEFAttributes.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderAsciiHepMC2.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderLHEF.cc
+  ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc
+  ${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
 )
 
 #We need to export all symbols on WIn to build .lib files
@@ -358,16 +369,42 @@ endif()
 #This is for developers only
 find_program (ASTYLE NAMES astyle)
 if (ASTYLE)
-  message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of code is possible.")
+  message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of C++ code is possible.")
   ADD_CUSTOM_TARGET(beauty
-  COMMAND ${ASTYLE}  --keep-one-line-blocks  src/*cc  rootIO/src/*cc search/src/*cc  examples/*/src/*cc test/*cc  test/*h interfaces/*/include/*.h interfaces/*/include/*/*.h interfaces/*/src/*.cxx
-  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMAND ${ASTYLE}  --keep-one-line-blocks  
+    src/*cc  
+    rootIO/src/*cc 
+    search/src/*cc  
+    examples/*/src/*cc 
+    examples/*/include/*h
+    test/*cc  
+    test/*h 
+    interfaces/*/include/*.h 
+    interfaces/*/include/*/*.h 
+    interfaces/*/src/*.cxx
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
+endif()
+find_program (BLACK NAMES black)
+if (BLACK)
+  message(STATUS "HepMC3: Developers only: black found in ${BLACK}. Formating of Python code is possible.")
+  ADD_CUSTOM_TARGET(beautypython COMMAND ${BLACK} -l 120  python/src/*py python/test/*py WORKING_DIRECTORY ${PROJECT_SOURCE_DIR} )
 endif()
 find_program (CPPCHECK NAMES cppcheck)
 if(CPPCHECK)
-  message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Static analysis of code is possible.")
-  ADD_CUSTOM_TARGET(staticcheck    COMMAND ${CPPCHECK} --force  --suppress=unusedFunction --std=c++11 --enable=all -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}  ./src/*.cc  ./search/src/*.cc ./rootIO/src/*.cc examples/*/src/*cc )
+  message(STATUS "HepMC3: Developers only: cppcheck found in ${CPPCHECK}. Static analysis of C++ code is possible.")
+  ADD_CUSTOM_TARGET(staticcheck
+    COMMAND ${CPPCHECK} --force  --suppress=unusedFunction -v -x c++ --std=c++11 --enable=all
+      -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}
+      src/*.cc 
+      search/src/*.cc 
+      rootIO/src/*.cc 
+      examples/*/src/*cc
+      interfaces/*/include/*h
+      interfaces/*/src/*cxx
+      interfaces/*/src/*cc
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+  )
 endif()
 ########################################################################
 ## CPACK
@@ -381,7 +418,7 @@ set(CPACK_PACKAGE_VENDOR "HepMC3 Developers")
 set(CPACK_PACKAGE_VERSION 3)
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 2)
-set(CPACK_PACKAGE_VERSION_PATCH 2)
+set(CPACK_PACKAGE_VERSION_PATCH 3)
 set(CPACK_PACKAGE_RELEASE 0)
 set(CPACK_PACKAGE_FILE_NAME "HepMC3")
 set(CPACK_PACKAGE_DESCRIPTION "Event record library for high energy physics Monte Carlo")

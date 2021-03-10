@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERHEPEVT_H
 #define HEPMC3_READERHEPEVT_H
@@ -37,10 +37,8 @@ class ReaderHEPEVT : public Reader
 public:
     /** @brief Default constructor */
     ReaderHEPEVT(const std::string &filename);
-#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderHEPEVT(std::istream &);
-#endif
 //
 // Functions
 //
@@ -76,7 +74,6 @@ private:
     std::ifstream m_file; //!< Input file
     std::istream* m_stream; //!< For ctor when reading from stdin
     bool m_isstream; //!< toggles usage of m_file or m_stream
-    bool m_vertices_positions_present; //!< true if vertex positions are available
 };
 
 } // namespace HepMC3

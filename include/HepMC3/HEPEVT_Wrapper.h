@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_HEPEVT_WRAPPER_H
 #define HEPMC3_HEPEVT_WRAPPER_H
@@ -173,7 +173,7 @@ inline void HEPEVT_Wrapper::print_hepevt( std::ostream& ostr )
 
 inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr )
 {
-    char buf[255];
+    char buf[255];//Note: the format is fixed, so no reason for complicatied tratment
 
     sprintf(buf,"%5i %6i",index,hepevtptr->idhep[index-1]);
     ostr << buf;

@@ -75,7 +75,7 @@ void PhotosHepMC3Particle::setMothers(vector<PhotosParticle*> mothers) {
         //Loop over all mothers to check that the end points to the right place
         vector<PhotosParticle*>::iterator mother_itr;
         for(mother_itr = mothers.begin(); mother_itr != mothers.end();
-                mother_itr++) {
+                ++mother_itr) {
 
             GenParticlePtr moth;
             moth = dynamic_cast<PhotosHepMC3Particle*>(*mother_itr)->getHepMC3();
@@ -139,7 +139,7 @@ void PhotosHepMC3Particle::setDaughters(vector<PhotosParticle*> daughters) {
         //Loop over all daughters to check that the end points to the right place
         vector<PhotosParticle*>::iterator daughter_itr;
         for(daughter_itr = daughters.begin(); daughter_itr != daughters.end();
-                daughter_itr++) {
+                ++daughter_itr) {
 
             GenParticlePtr daug;
             daug = dynamic_cast<PhotosHepMC3Particle*>(*daughter_itr)->getHepMC3();

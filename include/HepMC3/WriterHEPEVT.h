@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_WRITERHEPEVT_H
 #define HEPMC3_WRITERHEPEVT_H
@@ -35,10 +35,8 @@ public:
      */
     WriterHEPEVT(const std::string &filename);
 
-#ifndef HEPMC3_PYTHON_BINDINGS
     /// @brief Constructor from ostream
     WriterHEPEVT(std::ostream& stream);
-#endif
 //
 // Functions
 //
@@ -67,10 +65,14 @@ public:
 
     /** @brief Get stream error state flag */
     bool failed()  override;
-    /** @brief  set flag if vertex positions are available */
+    /** @brief  set flag if vertex positions are available. 
+     *  Effectively this adds or removes key "vertices_positions_are_absent" 
+     *  to/from the m_options.*/
     void set_vertices_positions_present(bool iflong);
 
-    /** @brief  get flag if vertex positions are available */
+    /** @brief  get flag if vertex positions are available. 
+     * The flag is deduced from m_options. If the m_options have the key 
+     * "vertices_positions_are_absent" the result if false. True otherwise. */
     bool get_vertices_positions_present() const;
 
 protected:
@@ -78,7 +80,6 @@ protected:
     std::ostream* m_stream; //!< Output stream
     char* hepevtbuffer;   //!< Pointer to HEPEVT Fortran common block/C struct
     int   m_events_count; //!< Events count. Needed to generate unique object name
-    bool m_vertices_positions_present; //!< true if vertex positions are available
 };
 
 } // namespace HepMC3

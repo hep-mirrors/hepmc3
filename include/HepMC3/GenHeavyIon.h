@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_HEAVYION_H
 #define HEPMC3_HEAVYION_H
@@ -242,7 +242,6 @@ public:
 #endif
 
 };
-
 
 #ifndef HEPMC3_NO_DEPRECATED
 typedef GenHeavyIon HeavyIon; ///< Backward compatibility typedef

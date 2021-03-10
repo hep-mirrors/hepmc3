@@ -14,10 +14,14 @@
 #include <HepMC3/WriterAsciiHepMC2.h>
 #include <HepMC3/WriterHEPEVT.h>
 #include <functional>
+#include <ios>
+#include <istream>
 #include <iterator>
 #include <map>
 #include <memory>
+#include <ostream>
 #include <sstream> // __str__
+#include <streambuf>
 #include <string>
 #include <utility>
 #include <vector>
@@ -44,52 +48,52 @@
 struct PyCallBack_HepMC3_ReaderAscii : public HepMC3::ReaderAscii {
 	using HepMC3::ReaderAscii::ReaderAscii;
 
-	bool skip(const int a0) override { 
+	bool skip(const int a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAscii *>(this), "skip");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderAscii::skip(a0);
 	}
-	bool read_event(class HepMC3::GenEvent & a0) override { 
+	bool read_event(class HepMC3::GenEvent & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAscii *>(this), "read_event");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderAscii::read_event(a0);
 	}
-	bool failed() override { 
+	bool failed() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAscii *>(this), "failed");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderAscii::failed();
 	}
-	void close() override { 
+	void close() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAscii *>(this), "close");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
@@ -102,39 +106,39 @@ struct PyCallBack_HepMC3_ReaderAscii : public HepMC3::ReaderAscii {
 struct PyCallBack_HepMC3_WriterAsciiHepMC2 : public HepMC3::WriterAsciiHepMC2 {
 	using HepMC3::WriterAsciiHepMC2::WriterAsciiHepMC2;
 
-	void write_event(const class HepMC3::GenEvent & a0) override { 
+	void write_event(const class HepMC3::GenEvent & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterAsciiHepMC2 *>(this), "write_event");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterAsciiHepMC2::write_event(a0);
 	}
-	bool failed() override { 
+	bool failed() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterAsciiHepMC2 *>(this), "failed");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return WriterAsciiHepMC2::failed();
 	}
-	void close() override { 
+	void close() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterAsciiHepMC2 *>(this), "close");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
@@ -147,52 +151,52 @@ struct PyCallBack_HepMC3_WriterAsciiHepMC2 : public HepMC3::WriterAsciiHepMC2 {
 struct PyCallBack_HepMC3_ReaderAsciiHepMC2 : public HepMC3::ReaderAsciiHepMC2 {
 	using HepMC3::ReaderAsciiHepMC2::ReaderAsciiHepMC2;
 
-	bool skip(const int a0) override { 
+	bool skip(const int a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAsciiHepMC2 *>(this), "skip");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderAsciiHepMC2::skip(a0);
 	}
-	bool read_event(class HepMC3::GenEvent & a0) override { 
+	bool read_event(class HepMC3::GenEvent & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAsciiHepMC2 *>(this), "read_event");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderAsciiHepMC2::read_event(a0);
 	}
-	bool failed() override { 
+	bool failed() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAsciiHepMC2 *>(this), "failed");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderAsciiHepMC2::failed();
 	}
-	void close() override { 
+	void close() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderAsciiHepMC2 *>(this), "close");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
@@ -205,65 +209,65 @@ struct PyCallBack_HepMC3_ReaderAsciiHepMC2 : public HepMC3::ReaderAsciiHepMC2 {
 struct PyCallBack_HepMC3_WriterHEPEVT : public HepMC3::WriterHEPEVT {
 	using HepMC3::WriterHEPEVT::WriterHEPEVT;
 
-	void write_hepevt_particle(int a0, bool a1) override { 
+	void write_hepevt_particle(int a0, bool a1) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "write_hepevt_particle");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterHEPEVT::write_hepevt_particle(a0, a1);
 	}
-	void write_hepevt_event_header() override { 
+	void write_hepevt_event_header() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "write_hepevt_event_header");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterHEPEVT::write_hepevt_event_header();
 	}
-	void write_event(const class HepMC3::GenEvent & a0) override { 
+	void write_event(const class HepMC3::GenEvent & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "write_event");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterHEPEVT::write_event(a0);
 	}
-	void close() override { 
+	void close() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "close");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterHEPEVT::close();
 	}
-	bool failed() override { 
+	bool failed() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "failed");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -276,78 +280,78 @@ struct PyCallBack_HepMC3_WriterHEPEVT : public HepMC3::WriterHEPEVT {
 struct PyCallBack_HepMC3_ReaderHEPEVT : public HepMC3::ReaderHEPEVT {
 	using HepMC3::ReaderHEPEVT::ReaderHEPEVT;
 
-	bool read_hepevt_event_header() override { 
+	bool read_hepevt_event_header() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "read_hepevt_event_header");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderHEPEVT::read_hepevt_event_header();
 	}
-	bool read_hepevt_particle(int a0) override { 
+	bool read_hepevt_particle(int a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "read_hepevt_particle");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderHEPEVT::read_hepevt_particle(a0);
 	}
-	bool skip(const int a0) override { 
+	bool skip(const int a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "skip");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderHEPEVT::skip(a0);
 	}
-	bool read_event(class HepMC3::GenEvent & a0) override { 
+	bool read_event(class HepMC3::GenEvent & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "read_event");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderHEPEVT::read_event(a0);
 	}
-	void close() override { 
+	void close() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "close");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::overload_caster_t<void> caster;
+				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return ReaderHEPEVT::close();
 	}
-	bool failed() override { 
+	bool failed() override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "failed");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::overload_caster_t<bool> caster;
+				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
@@ -398,8 +402,8 @@ void bind_pyHepMC3_12(std::function< pybind11::module &(std::string const &names
 		cl.def("write_event", (void (HepMC3::WriterHEPEVT::*)(const class HepMC3::GenEvent &)) &HepMC3::WriterHEPEVT::write_event, "Write event to file\n\n  \n Event to be serialized\n\nC++: HepMC3::WriterHEPEVT::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("evt"));
 		cl.def("close", (void (HepMC3::WriterHEPEVT::*)()) &HepMC3::WriterHEPEVT::close, "Close file stream \n\nC++: HepMC3::WriterHEPEVT::close() --> void");
 		cl.def("failed", (bool (HepMC3::WriterHEPEVT::*)()) &HepMC3::WriterHEPEVT::failed, "Get stream error state flag \n\nC++: HepMC3::WriterHEPEVT::failed() --> bool");
-		cl.def("set_vertices_positions_present", (void (HepMC3::WriterHEPEVT::*)(bool)) &HepMC3::WriterHEPEVT::set_vertices_positions_present, "set flag if vertex positions are available \n\nC++: HepMC3::WriterHEPEVT::set_vertices_positions_present(bool) --> void", pybind11::arg("iflong"));
-		cl.def("get_vertices_positions_present", (bool (HepMC3::WriterHEPEVT::*)() const) &HepMC3::WriterHEPEVT::get_vertices_positions_present, "get flag if vertex positions are available \n\nC++: HepMC3::WriterHEPEVT::get_vertices_positions_present() const --> bool");
+		cl.def("set_vertices_positions_present", (void (HepMC3::WriterHEPEVT::*)(bool)) &HepMC3::WriterHEPEVT::set_vertices_positions_present, "set flag if vertex positions are available. \n  Effectively this adds or removes key \"vertices_positions_are_absent\" \n  to/from the m_options.\n\nC++: HepMC3::WriterHEPEVT::set_vertices_positions_present(bool) --> void", pybind11::arg("iflong"));
+		cl.def("get_vertices_positions_present", (bool (HepMC3::WriterHEPEVT::*)() const) &HepMC3::WriterHEPEVT::get_vertices_positions_present, "get flag if vertex positions are available. \n The flag is deduced from m_options. If the m_options have the key \n \"vertices_positions_are_absent\" the result if false. True otherwise. \n\nC++: HepMC3::WriterHEPEVT::get_vertices_positions_present() const --> bool");
 	}
 	{ // HepMC3::ReaderHEPEVT file:HepMC3/ReaderHEPEVT.h line:32
 		pybind11::class_<HepMC3::ReaderHEPEVT, std::shared_ptr<HepMC3::ReaderHEPEVT>, PyCallBack_HepMC3_ReaderHEPEVT, HepMC3::Reader> cl(M("HepMC3"), "ReaderHEPEVT", "");

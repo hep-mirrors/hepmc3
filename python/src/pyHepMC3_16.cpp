@@ -3,6 +3,7 @@
 #include <istream>
 #include <iterator>
 #include <memory>
+#include <ostream>
 #include <sstream> // __str__
 #include <streambuf>
 #include <string>

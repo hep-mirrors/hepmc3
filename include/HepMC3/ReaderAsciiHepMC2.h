@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READER_ASCII_HEPMC2_H
 #define HEPMC3_READER_ASCII_HEPMC2_H
@@ -35,10 +35,8 @@ public:
     /** @brief Default constructor */
     ReaderAsciiHepMC2(const std::string& filename);
 
-#ifndef HEPMC3_PYTHON_BINDINGS
     /// The ctor to read from stdin
     ReaderAsciiHepMC2(std::istream &);
-#endif
 
     /// @brief Destructor
     ~ReaderAsciiHepMC2();

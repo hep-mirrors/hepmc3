@@ -20,7 +20,7 @@
     <hr>
     
     Optionally the I/O capabilities can be implemented as plugin Reader/Write classes compiled 
-    separately into dynamically loadable libraires and used via  RearedPlugin and WriterPlugin classes.
+    separately into dynamically loadable libraries and used via  RearedPlugin and WriterPlugin classes.
     Please note that all required libraries/dlls should be loadable.
     See examples for details.
     Last update 24 Jan 2019
@@ -108,5 +108,7 @@
     For other examples see attributes provided in the HepMC3 package.
 
     <hr>
-    Last update 25 November 2014
+    
+ Last update 27 Oct 2020
 */
+

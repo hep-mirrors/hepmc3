@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenEvent.cc
@@ -45,7 +45,6 @@ const std::vector<ConstGenVertexPtr>& GenEvent::vertices() const {
 }
 
 
-// void GenEvent::add_particle( const GenParticlePtr &p ) {
 void GenEvent::add_particle( GenParticlePtr p ) {
     if( !p|| p->in_event() ) return;
 
@@ -355,7 +354,7 @@ void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
     if ( m_rootvertex->id() != 0 ) {
         const int vx = -1 - m_rootvertex->id();
         const int rootid = m_rootvertex->id();
-        if ( vx >= 0 && vx < m_vertices.size() && m_vertices[vx] == m_rootvertex ) {
+        if ( vx >= 0 && vx < (int) m_vertices.size() && m_vertices[vx] == m_rootvertex ) {
             auto next = m_vertices.erase(m_vertices.begin() + vx);
             std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
             for(auto & vt1: m_attributes ) {
@@ -450,8 +449,8 @@ bool GenEvent::rotate( const FourVector&  delta )
         long double tempZ_;
 
 
-        long double cosa=cos(delta.x());
-        long double sina=sin(delta.x());
+        long double cosa=std::cos(delta.x());
+        long double sina=std::sin(delta.x());
 
         tempY_= cosa*tempY+sina*tempZ;
         tempZ_=-sina*tempY+cosa*tempZ;
@@ -459,16 +458,16 @@ bool GenEvent::rotate( const FourVector&  delta )
         tempZ=tempZ_;
 
 
-        long double cosb=cos(delta.y());
-        long double sinb=sin(delta.y());
+        long double cosb=std::cos(delta.y());
+        long double sinb=std::sin(delta.y());
 
         tempX_= cosb*tempX-sinb*tempZ;
         tempZ_= sinb*tempX+cosb*tempZ;
         tempX=tempX_;
         tempZ=tempZ_;
 
-        long double cosg=cos(delta.z());
-        long double sing=sin(delta.z());
+        long double cosg=std::cos(delta.z());
+        long double sing=std::sin(delta.z());
 
         tempX_= cosg*tempX+sing*tempY;
         tempY_=-sing*tempX+cosg*tempY;
@@ -490,8 +489,8 @@ bool GenEvent::rotate( const FourVector&  delta )
         long double tempZ_;
 
 
-        long double cosa=cos(delta.x());
-        long double sina=sin(delta.x());
+        long double cosa=std::cos(delta.x());
+        long double sina=std::sin(delta.x());
 
         tempY_= cosa*tempY+sina*tempZ;
         tempZ_=-sina*tempY+cosa*tempZ;
@@ -499,16 +498,16 @@ bool GenEvent::rotate( const FourVector&  delta )
         tempZ=tempZ_;
 
 
-        long double cosb=cos(delta.y());
-        long double sinb=sin(delta.y());
+        long double cosb=std::cos(delta.y());
+        long double sinb=std::sin(delta.y());
 
         tempX_= cosb*tempX-sinb*tempZ;
         tempZ_= sinb*tempX+cosb*tempZ;
         tempX=tempX_;
         tempZ=tempZ_;
 
-        long double cosg=cos(delta.z());
-        long double sing=sin(delta.z());
+        long double cosg=std::cos(delta.z());
+        long double sing=std::sin(delta.z());
 
         tempX_= cosg*tempX+sing*tempY;
         tempY_=-sing*tempX+cosg*tempY;

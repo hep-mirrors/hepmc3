@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file WriterHEPEVT.cc
@@ -17,14 +17,14 @@ namespace HepMC3
 {
 
 
-WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_file(filename), m_stream(&m_file), m_events_count(0),m_vertices_positions_present(true)
+WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_file(filename), m_stream(&m_file), m_events_count(0)
 {
     HEPMC3_WARNING( "WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead." )
     hepevtbuffer=(char*)(new struct HEPEVT());
     HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
 }
 
-WriterHEPEVT::WriterHEPEVT(std::ostream& stream): m_file(), m_stream(&stream), m_events_count(0),m_vertices_positions_present(true)
+WriterHEPEVT::WriterHEPEVT(std::ostream& stream): m_file(), m_stream(&stream), m_events_count(0)
 {
     HEPMC3_WARNING( "WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead." )
     hepevtbuffer=(char*)(new struct HEPEVT());
@@ -66,7 +66,7 @@ void WriterHEPEVT::write_event(const GenEvent &evt)
     HEPEVT_Wrapper::GenEvent_to_HEPEVT(&evt);
     HEPEVT_Wrapper::fix_daughters();
     write_hepevt_event_header();
-    for( int i=1; i<=HEPEVT_Wrapper::number_entries(); ++i )  write_hepevt_particle(i,m_vertices_positions_present);
+    for( int i=1; i<=HEPEVT_Wrapper::number_entries(); ++i )  write_hepevt_particle(i,get_vertices_positions_present());
     m_events_count++;
 }
 
@@ -82,8 +82,8 @@ bool WriterHEPEVT::failed()
     return (bool)m_file.rdstate();
 }
 
-void WriterHEPEVT::set_vertices_positions_present(bool iflong) {m_vertices_positions_present=iflong;}
+void WriterHEPEVT::set_vertices_positions_present(bool iflong) { if (iflong) m_options["vertices_positions_are_absent"]=""; else m_options.erase("vertices_positions_are_absent"); }
 
-bool WriterHEPEVT::get_vertices_positions_present() const { return m_vertices_positions_present;}
+bool WriterHEPEVT::get_vertices_positions_present() const { return  (m_options.find("vertices_positions_are_absent")==m_options.end()); }
 
 } // namespace HepMC3

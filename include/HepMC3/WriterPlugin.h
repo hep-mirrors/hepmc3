@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_WRITERPLUGIN_H
 #define HEPMC3_WRITERPLUGIN_H
@@ -23,12 +23,10 @@ namespace HepMC3
 class WriterPlugin : public Writer
 {
 public:
-#ifndef HEPMC3_PYTHON_BINDINGS
 
 /** @brief Constructor  to read from stream*/
 WriterPlugin(std::ostream & stream,const std::string &libname, const std::string &newwriter, std::shared_ptr<HepMC3::GenRunInfo>run=std::shared_ptr<GenRunInfo>());
 
-#endif
 
 /** @brief Constructor to read from file*/
 WriterPlugin(const std::string& filename,const std::string &libname, const std::string &newwriter, std::shared_ptr<HepMC3::GenRunInfo>run=std::shared_ptr<GenRunInfo>());

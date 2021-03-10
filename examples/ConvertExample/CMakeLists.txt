@@ -10,27 +10,46 @@ set(basic_dependencies )
 set(basic_libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" )
 find_package(ZLIB)
 if(ZLIB_FOUND)
-message(STATUS "HepMC3 ConvertExample: zlib found. Compressed files support enabled. ${ZLIB_INCLUDE_DIR} ${ZLIB_LIBRARIES} ")
-list(APPEND basic_includes ${ZLIB_INCLUDE_DIR})
-list(APPEND basic_sources  ${CMAKE_CURRENT_SOURCE_DIR}/src/gzstream.C )
-list(APPEND basic_libraries ${ZLIB_LIBRARIES})
-list(APPEND basic_defines HEPMCCONVERT_EXTENSION_GZ=1)
-# create environment scripts
-set(basic_libdir "${basic_libdir}:${ZLIB_ROOT}")
+  message(STATUS "HepMC3 ConvertExample: zlib found. Compressed files support enabled. ${ZLIB_INCLUDE_DIR} ${ZLIB_LIBRARIES} ")
+  list(APPEND basic_includes ${ZLIB_INCLUDE_DIR})
+  list(APPEND basic_sources  ${CMAKE_CURRENT_SOURCE_DIR}/src/gzstream.C )
+  list(APPEND basic_libraries ${ZLIB_LIBRARIES})
+  list(APPEND basic_defines HEPMCCONVERT_EXTENSION_GZ=1)
+  # create environment scripts
+  set(basic_libdir "${basic_libdir}:${ZLIB_ROOT}")
 elseif()
-message(STATUS "HepMC3 ConvertExample: zlib not found. Compressed files support disabled.")
+  message(STATUS "HepMC3 ConvertExample: zlib not found. Compressed files support disabled.")
 endif()
 
 if(ROOT_FOUND)
-list(APPEND basic_includes ${PROJECT_SOURCE_DIR}/rootIO/include  ${ROOT_INCLUDE_DIRS})
-list(APPEND basic_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterRootTreeOPAL.cc )
-list(APPEND basic_libraries ${ROOT_LIBRARIES} HepMC3rootIO)
-list(APPEND basic_defines HEPMCCONVERT_EXTENSION_ROOTTREEOPAL=1)
-list(APPEND basic_dependencies dictionary)
-# create environment scripts
-set(basic_libdir "${basic_libdir}:${ROOT_LIBRARY_DIR}")
+  list(APPEND basic_includes ${PROJECT_SOURCE_DIR}/rootIO/include  ${ROOT_INCLUDE_DIRS})
+  list(APPEND basic_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterRootTreeOPAL.cc )
+  list(APPEND basic_libraries ${ROOT_LIBRARIES} HepMC3rootIO)
+  list(APPEND basic_defines HEPMCCONVERT_EXTENSION_ROOTTREEOPAL=1)
+  list(APPEND basic_dependencies dictionary)
+  # create environment scripts
+  set(basic_libdir "${basic_libdir}:${ROOT_LIBRARY_DIR}")
 endif()
 
+if(${CMAKE_VERSION} VERSION_GREATER "3.8")
+########################################################################
+#FindPython is not reenterant, so we have to hack the cache.
+########################################################################
+  unset(_Python3_LIBRARY_RELEASE CACHE) # Attempt to make FindPython reenterant
+  unset(_Python3_NumPy_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
+  find_package(Python3 3.5 COMPONENTS Development.Embed NumPy)
+  if (Python3_FOUND)
+     list(APPEND basic_includes  ${Python3_INCLUDE_DIRS} ${Python3_NumPy_INCLUDE_DIRS})
+     list(APPEND basic_sources   ${CMAKE_CURRENT_SOURCE_DIR}/src/ReaderuprootTree.cc )
+     list(APPEND basic_libraries ${Python3_LIBRARIES})
+     list(APPEND basic_defines HEPMCCONVERT_EXTENSION_UPROOTTREEREADER=1)
+  elseif()
+     message(STATUS "HepMC3 ConvertExample: Python3.5 with NumPy not found. uproot support disabled.")
+  endif()
+  unset(_Python3_LIBRARY_RELEASE CACHE) # Attempt to make FindPython reenterant
+  unset(_Python3_NumPy_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
+########################################################################
+endif()
 
 add_executable(convert_example.exe  ${basic_sources} )
 add_library(Analysis SHARED src/AnalysisExample.cc)
@@ -67,22 +86,24 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}  FILES_MATCHING PATTERN "*env.sh*" )
 endif()
 
+#This is an option for developers only
+if ( HEPMC3_USE_GENGETOPT )
+  find_program(GENGETOPT gengetopt)
+  if( NOT GENGETOPT )
+    message( STATUS  "HepMC3 examples: gengetopt not found. Old scripts for options parsing will be used." )
+  else()
+    message( STATUS  "HepMC3 examples: gengetopt found in ${GENGETOPT}. New scripts for options parsing can be generated." )
+    add_custom_command(
+      OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.h
+      COMMAND ${GENGETOPT} -N --no-version --input=${CMAKE_CURRENT_SOURCE_DIR}/cmdline.ggo 
+      --file-name cmdline --output-dir=${CMAKE_CURRENT_SOURCE_DIR}
+      --include-getopt --show-required --unnamed-opts=\"inputfile outputfile\"
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.ggo 
+      COMMENT        "HepMC3 examples: Generating getopt parser code..."
+    )
+  endif()
+  add_custom_target( cmdlineoptions DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.h)
+  add_dependencies(  convert_example.exe cmdlineoptions )
+endif()
 
 
-
-
-#The cmdline.c and cmdline.h for this example are generated from file below
-#gengetopt -N  --no-version --input=hepmcconvert.ggo --include-getopt --show-required -u"inputfile outputfile"
-#version "3.1"
-#package "hepmcconvert"
-#purpose "Convert between different file formats of Monte Carlo event record.
-#Example:
-#         hepmcconvert -i hepmc2 -o treeroot input.hepmc output.root
-#"
-#option "input-format" i "Input format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot","lhef","gz","plugin"
-#option "output-format" o "Output format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot" ,"treerootopal","hpezeus", "dump", "dot","plugin"
-#option "extensions" e "Extensions, in a form extension=value, could be passed to readers/writers" multiple optional string
-#option "events-limit" - "Limit of events to read from input" optional long default="100000000"
-#option "first-event-number" -       "Lowest allowed event number" optional long default="-100000000"
-#option "last-event-number" -        "Highest allowed event number" optional long default="100000000"
-#option "print-every-events-parsed" - "Frequency of parsing information printouts" optional long default="100"

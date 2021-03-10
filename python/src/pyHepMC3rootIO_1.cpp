@@ -1,4 +1,3 @@
-#include <HepMC3/ReaderRoot.h>
 #include <HepMC3/ReaderRootTree.h>
 #include <HepMC3/WriterRoot.h>
 #include <functional>
@@ -39,8 +38,5 @@ void bind_pyHepMC3rootIO_1(std::function< pybind11::module &(std::string const &
 
 	// HepMC3::WriterRoot file:HepMC3/WriterRoot.h line:35
 	 binder::WriterRoot_binder(M("HepMC3"));
-
-	// HepMC3::ReaderRoot file:HepMC3/ReaderRoot.h line:32
-	 binder::ReaderRoot_binder(M("HepMC3"));
 
 }
