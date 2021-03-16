@@ -251,7 +251,8 @@ if (${ver} STREQUAL 2)
   unset(Python2_INCLUDE_DIR CACHE)
   unset(Python2_INCLUDE_DIRS CACHE)
   unset(Python2_LIBRARIES CACHE)
-  unset(_Python2_EXECUTABLE CACHE) #Don't even know why
+  unset(_Python2_EXECUTABLE CACHE) # Attempt to make FindPython reenterant
+  unset(_Python2_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
   if (${verminor} STREQUAL X)
     find_package (Python2 ${ver} COMPONENTS  Interpreter Development.Module)
   else()
@@ -265,6 +266,8 @@ if (${ver} STREQUAL 2)
     SET( Python_SITEARCH      ${Python2_SITEARCH})
     SET( Python_EXECUTABLE    ${Python2_EXECUTABLE})
     SET( Python_INCLUDE_DIRS  ${Python2_INCLUDE_DIRS})
+    unset(_Python2_EXECUTABLE CACHE) # Attempt to make FindPython reenterant
+    unset(_Python2_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
   endif()
 endif()
 
@@ -277,7 +280,8 @@ if (${ver} STREQUAL 3)
   unset(Python3_INCLUDE_DIR CACHE)
   unset(Python3_INCLUDE_DIRS CACHE)
   unset(Python3_LIBRARIES CACHE)
-  unset(_Python3_EXECUTABLE CACHE) #Don't even know why
+  unset(_Python3_EXECUTABLE CACHE) # Attempt to make FindPython reenterant
+  unset(_Python3_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
   if (${verminor} STREQUAL X)
     find_package (Python3 ${ver} COMPONENTS  Interpreter Development.Module )
   else()
@@ -291,6 +295,8 @@ if (${ver} STREQUAL 3)
     SET( Python_SITEARCH      ${Python3_SITEARCH})
     SET( Python_EXECUTABLE    ${Python3_EXECUTABLE})
     SET( Python_INCLUDE_DIRS  ${Python3_INCLUDE_DIRS})
+    unset(_Python3_EXECUTABLE CACHE) # Attempt to make FindPython reenterant
+    unset(_Python3_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
   endif()
 endif()
 

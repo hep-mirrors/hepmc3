@@ -41,7 +41,7 @@ void Print::content( std::ostream& os, const GenEvent &event ) {
 
     os<<"GenVertexPtr ("<<event.vertices().size()<<")"<<std::endl;
     for( ConstGenVertexPtr v: event.vertices() ) {
-        Print::line(v);
+        Print::line(v,true);
     }
 
     os<<"-----------------------------"<<std::endl;
@@ -124,6 +124,7 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
 }
 
 void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
+    if (!v) { os << "Vtx: Empty vertex" << std::endl; return;}
     os << "Vtx: ";
     os.width(6);
     os << v->id() << " stat: ";
@@ -166,6 +167,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
 }
 
 void Print::listing( std::ostream& os, ConstGenParticlePtr p ) {
+	if (!p) { os << " Empty particle" << std::endl; return;}
     os << " ";
     os.width(6);
     os << p->id();
@@ -205,7 +207,7 @@ void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
             os<<" "<<s<<"="<<event.attribute_as_string(s);
 }
 
-void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {
+void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {	
     os <<"GenRunInfo: Number of tools:" << RunInfo.tools().size();
     if(attributes) for (std::string s: RunInfo.attribute_names())
             os<<" "<<s<<"="<<RunInfo.attribute_as_string(s);
@@ -216,6 +218,7 @@ void Print::line(std::ostream& os, const GenRunInfo::ToolInfo& t) {
 }
 
 void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
+    if (!v) { os << "GenVertex: Empty" << std::endl; return;}
     os << "GenVertex:  " << v->id() << " stat: ";
     os.width(3);
     os << v->status();
@@ -229,13 +232,16 @@ void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
     else                        os << "false";
 
     os << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t();
-    if(attributes)for (std::vector<std::string>::const_iterator s= v->attribute_names().begin(); s!= v->attribute_names().end(); ++s)
-            os<<" "<<*s<<"="<<v->attribute_as_string(*s);
+    if(attributes)
+    {
+        std::vector<std::string> names     =v->attribute_names();
+        for (auto ss: names)
+            os<<" "<<ss<<"="<<(*v).attribute_as_string(ss);
+    }
 
 }
 
 void Print::line(std::ostream& os, const FourVector& p) {
-
     os << "FourVector: ";
     // Find the current stream state
     std::ios_base::fmtflags orig = os.flags();
@@ -255,7 +261,7 @@ void Print::line(std::ostream& os, const FourVector& p) {
 }
 
 void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
-
+    if (!p) { os << "GenParticle: Empty" << std::endl; return;}
     os << "GenParticle: ";
     os.width(3);
     os << p->id() <<" PDGID: ";
@@ -302,6 +308,7 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
 }
 
 void Print::line(std::ostream& os, std::shared_ptr<GenCrossSection> &cs) {
+	if (!cs) {os << " GenCrossSection: Empty"; return;}
     os << " GenCrossSection: " << cs->xsec(0)
        << " " << cs->xsec_err(0)
        << " " << cs->get_accepted_events()
@@ -309,6 +316,7 @@ void Print::line(std::ostream& os, std::shared_ptr<GenCrossSection> &cs) {
 }
 
 void Print::line(std::ostream& os, std::shared_ptr<GenHeavyIon> &hi) {
+    if (!hi) {os << " GenHeavyIon: Empty"; return;}
     os << " GenHeavyIon: " << hi->Ncoll_hard
        << " " << hi->Npart_proj
        << " " << hi->Npart_targ
@@ -325,6 +333,7 @@ void Print::line(std::ostream& os, std::shared_ptr<GenHeavyIon> &hi) {
 }
 
 void Print::line(std::ostream& os, std::shared_ptr<GenPdfInfo> &pi) {
+    if (!pi) {os << " GenPdfInfo: Empty"; return;}
     os << " GenPdfInfo: " << pi->parton_id[0]
        << " " << pi->parton_id[1]
        << " " << pi->x[0]

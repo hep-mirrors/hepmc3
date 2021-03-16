@@ -10,27 +10,46 @@ set(basic_dependencies )
 set(basic_libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" )
 find_package(ZLIB)
 if(ZLIB_FOUND)
-message(STATUS "HepMC3 ConvertExample: zlib found. Compressed files support enabled. ${ZLIB_INCLUDE_DIR} ${ZLIB_LIBRARIES} ")
-list(APPEND basic_includes ${ZLIB_INCLUDE_DIR})
-list(APPEND basic_sources  ${CMAKE_CURRENT_SOURCE_DIR}/src/gzstream.C )
-list(APPEND basic_libraries ${ZLIB_LIBRARIES})
-list(APPEND basic_defines HEPMCCONVERT_EXTENSION_GZ=1)
-# create environment scripts
-set(basic_libdir "${basic_libdir}:${ZLIB_ROOT}")
+  message(STATUS "HepMC3 ConvertExample: zlib found. Compressed files support enabled. ${ZLIB_INCLUDE_DIR} ${ZLIB_LIBRARIES} ")
+  list(APPEND basic_includes ${ZLIB_INCLUDE_DIR})
+  list(APPEND basic_sources  ${CMAKE_CURRENT_SOURCE_DIR}/src/gzstream.C )
+  list(APPEND basic_libraries ${ZLIB_LIBRARIES})
+  list(APPEND basic_defines HEPMCCONVERT_EXTENSION_GZ=1)
+  # create environment scripts
+  set(basic_libdir "${basic_libdir}:${ZLIB_ROOT}")
 elseif()
-message(STATUS "HepMC3 ConvertExample: zlib not found. Compressed files support disabled.")
+  message(STATUS "HepMC3 ConvertExample: zlib not found. Compressed files support disabled.")
 endif()
 
 if(ROOT_FOUND)
-list(APPEND basic_includes ${PROJECT_SOURCE_DIR}/rootIO/include  ${ROOT_INCLUDE_DIRS})
-list(APPEND basic_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterRootTreeOPAL.cc )
-list(APPEND basic_libraries ${ROOT_LIBRARIES} HepMC3rootIO)
-list(APPEND basic_defines HEPMCCONVERT_EXTENSION_ROOTTREEOPAL=1)
-list(APPEND basic_dependencies dictionary)
-# create environment scripts
-set(basic_libdir "${basic_libdir}:${ROOT_LIBRARY_DIR}")
+  list(APPEND basic_includes ${PROJECT_SOURCE_DIR}/rootIO/include  ${ROOT_INCLUDE_DIRS})
+  list(APPEND basic_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterRootTreeOPAL.cc )
+  list(APPEND basic_libraries ${ROOT_LIBRARIES} HepMC3rootIO)
+  list(APPEND basic_defines HEPMCCONVERT_EXTENSION_ROOTTREEOPAL=1)
+  list(APPEND basic_dependencies dictionary)
+  # create environment scripts
+  set(basic_libdir "${basic_libdir}:${ROOT_LIBRARY_DIR}")
 endif()
 
+if(${CMAKE_VERSION} VERSION_GREATER "3.8")
+########################################################################
+#FindPython is not reenterant, so we have to hack the cache.
+########################################################################
+  unset(_Python3_LIBRARY_RELEASE CACHE) # Attempt to make FindPython reenterant
+  unset(_Python3_NumPy_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
+  find_package(Python3 3.5 COMPONENTS Development.Embed NumPy)
+  if (Python3_FOUND)
+     list(APPEND basic_includes  ${Python3_INCLUDE_DIRS} ${Python3_NumPy_INCLUDE_DIRS})
+     list(APPEND basic_sources   ${CMAKE_CURRENT_SOURCE_DIR}/src/ReaderuprootTree.cc )
+     list(APPEND basic_libraries ${Python3_LIBRARIES})
+     list(APPEND basic_defines HEPMCCONVERT_EXTENSION_UPROOTTREEREADER=1)
+  elseif()
+     message(STATUS "HepMC3 ConvertExample: Python3.5 with NumPy not found. uproot support disabled.")
+  endif()
+  unset(_Python3_LIBRARY_RELEASE CACHE) # Attempt to make FindPython reenterant
+  unset(_Python3_NumPy_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
+########################################################################
+endif()
 
 add_executable(convert_example.exe  ${basic_sources} )
 add_library(Analysis SHARED src/AnalysisExample.cc)

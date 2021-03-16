@@ -230,7 +230,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             if (beams.size()==0) m_vertex_cache[i] = nullptr;
         }
         else if( m_vertex_cache[i]->particles_out().size() == 0 ) {
-            HEPMC3_DEBUG( 30, "ReaderAsciiHepMC2::read_event - found a vertex without outgouing particles: "<<m_vertex_cache[i]->id() );
+            HEPMC3_DEBUG( 30, "ReaderAsciiHepMC2::read_event - found a vertex without outgoing particles: "<<m_vertex_cache[i]->id() );
             m_vertex_cache[i] = nullptr;
         }
     }
