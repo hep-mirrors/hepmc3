@@ -1,5 +1,6 @@
 stages:
   - test
+########################################################################
 LCG_99_x86_64-centos7-gcc8-opt:
   only:
     variables:
@@ -52,7 +53,7 @@ LCG_95_x86_64-centos7-gcc8-opt:
     - make -j $(nproc)
     - ctest --output-on-failure
     - make -j $(nproc) install
-
+########################################################################
 LCG_95_x86_64-ubuntu1804-gcc8-opt:
   only:
     variables:
@@ -85,7 +86,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - make -j $(nproc)
     - ctest --output-on-failure
     - make -j $(nproc) install
-    
+########################################################################
 debian-salsa:
   only:
     variables:
