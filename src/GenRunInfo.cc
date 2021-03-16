@@ -55,7 +55,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     // Attributes
     typedef std::map<std::string, std::shared_ptr<Attribute> >::value_type att_val_t;
 
-    for(const att_val_t& vt: m_attributes ) {
+    for (const att_val_t& vt: m_attributes ) {
         std::string att;
         vt.second->to_string(att);
 
@@ -64,7 +64,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     }
 
     // Tools
-    for( const ToolInfo &tool: this->tools() ) {
+    for ( const ToolInfo &tool: this->tools() ) {
         data.tool_name.       push_back(tool.name);
         data.tool_version.    push_back(tool.version);
         data.tool_description.push_back(tool.description);
@@ -74,7 +74,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
 
 std::vector<std::string> GenRunInfo::attribute_names( ) const {
     std::vector<std::string> results;
-    for(auto vt1: m_attributes ) {
+    for (auto vt1: m_attributes ) {
         results.push_back( vt1.first );
     }
     return results;
@@ -85,13 +85,13 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
     set_weight_names(data.weight_names);
 
     // Attributes
-    for(unsigned int i=0; i<data.attribute_name.size(); ++i) {
+    for (unsigned int i=0; i<data.attribute_name.size(); ++i) {
         add_attribute( data.attribute_name[i],
                        std::make_shared<StringAttribute>(data.attribute_string[i]) );
     }
 
     // Tools
-    for(unsigned int i=0; i<data.tool_name.size(); ++i) {
+    for (unsigned int i=0; i<data.tool_name.size(); ++i) {
         ToolInfo ti;
         ti.name        = data.tool_name[i];
         ti.version     = data.tool_version[i];

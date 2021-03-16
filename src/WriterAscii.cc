@@ -140,7 +140,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
     // Print particles
     std::map<ConstGenVertexPtr,bool>  alreadywritten;
-    for(ConstGenParticlePtr p: evt.particles() ) {
+    for (ConstGenParticlePtr p: evt.particles() ) {
         // Check to see if we need to write a vertex first
         ConstGenVertexPtr v = p->production_vertex();
         int parent_object = 0;
@@ -210,10 +210,10 @@ void WriterAscii::write_vertex(ConstGenVertexPtr v) {
 
     bool printed_first = false;
     std::vector<int> pids;
-    for(ConstGenParticlePtr p: v->particles_in() ) pids.push_back(p->id());
+    for (ConstGenParticlePtr p: v->particles_in() ) pids.push_back(p->id());
 //We order pids to be able to compare ascii files
     std::sort(pids.begin(),pids.end());
-    for(auto pid: pids ) {
+    for (auto pid: pids ) {
         if ( !printed_first ) {
             m_cursor  += sprintf(m_cursor,"%i", pid);
             printed_first = true;

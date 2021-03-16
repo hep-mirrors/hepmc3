@@ -12,6 +12,8 @@
 #ifndef HEPMC3_ATTRIBUTE_FEATURE_H
 #define HEPMC3_ATTRIBUTE_FEATURE_H
 
+#include <memory>
+#include <string>
 #include "HepMC3/Attribute.h"
 #include "HepMC3/Filter.h"
 
@@ -19,7 +21,6 @@ namespace HepMC3 {
 
 class AttributeFeature {
 public:
-
     AttributeFeature(const std::string &name): m_name(name) {}
 
     Filter exists() const {
@@ -51,7 +52,6 @@ public:
     }
 
 private:
-
     std::string m_name;
 };
 }

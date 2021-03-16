@@ -10,6 +10,8 @@
 #ifndef HEPMC3_SELECTOR_H
 #define HEPMC3_SELECTOR_H
 
+#include <string>
+#include <memory>
 #include "HepMC3/Filter.h"
 #include "HepMC3/Feature.h"
 #include "HepMC3/AttributeFeature.h"
@@ -77,7 +79,6 @@ public:
 
     virtual ConstSelectorPtr abs() const = 0;
     static AttributeFeature ATTRIBUTE(const std::string &name);
-
 };
 /** @brief  SelectorWrapper */
 template<typename Feature_type>
@@ -140,9 +141,7 @@ public:
     }
 
 private:
-
     Feature<Feature_type> m_internal;  ///< Internal feauture holder
-
 };
 /** @brief ConstSelectorPtr abs*/
 ConstSelectorPtr abs(const Selector &input);

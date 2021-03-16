@@ -27,20 +27,20 @@ void Print::content( std::ostream& os, const GenEvent &event ) {
 
     os<<"Attributes:"<<std::endl;
 
-    for( auto vt1: event.attributes() ) {
-        for( auto vt2: vt1.second ) {
+    for ( auto vt1: event.attributes() ) {
+        for ( auto vt2: vt1.second ) {
             os << vt2.first << ": " << vt1.first << std::endl;
         }
     }
 
     os<<"GenParticlePtr ("<<event.particles().size()<<")"<<std::endl;
 
-    for( ConstGenParticlePtr p: event.particles()) {
+    for ( ConstGenParticlePtr p: event.particles()) {
         Print::line(p,true);
     }
 
     os<<"GenVertexPtr ("<<event.vertices().size()<<")"<<std::endl;
-    for( ConstGenVertexPtr v: event.vertices() ) {
+    for ( ConstGenVertexPtr v: event.vertices() ) {
         Print::line(v,true);
     }
 
@@ -74,7 +74,7 @@ void Print::listing( std::ostream& os, const GenEvent &event, unsigned short pre
     os << "________________________________________________________________________" << std::endl;
 
     // Print all vertices
-    for(ConstGenVertexPtr v: event.vertices() ) {
+    for (ConstGenVertexPtr v: event.vertices() ) {
         Print::listing(os,v);
     }
 
@@ -102,7 +102,7 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
 
     os << " Tools: "<< std::endl;
 
-    for(auto t: ri.tools()) {
+    for (auto t: ri.tools()) {
         Print::line(os,t);
     }
     os<<"Attributes:"<<std::endl;
@@ -140,7 +140,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
     bool printed_header = false;
 
     // Print out all the incoming particles
-    for(ConstGenParticlePtr p: v->particles_in() ) {
+    for (ConstGenParticlePtr p: v->particles_in() ) {
         if ( !printed_header ) {
             os << " I: ";
             printed_header = true;
@@ -153,7 +153,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
     printed_header = false;
 
     // Print out all the outgoing particles
-    for(ConstGenParticlePtr p: v->particles_out() ) {
+    for (ConstGenParticlePtr p: v->particles_out() ) {
         if ( !printed_header ) {
             os << " O: ";
             printed_header = true;

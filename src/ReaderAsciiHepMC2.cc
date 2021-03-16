@@ -205,10 +205,10 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     }
 
     // Restore production vertex pointers
-    for(unsigned int i=0; i<m_particle_cache.size(); ++i) {
+    for (unsigned int i=0; i<m_particle_cache.size(); ++i) {
         if ( !m_end_vertex_barcodes[i] ) continue;
 
-        for(unsigned int j=0; j<m_vertex_cache.size(); ++j) {
+        for (unsigned int j=0; j<m_vertex_cache.size(); ++j) {
             if ( m_vertex_barcodes[j] == m_end_vertex_barcodes[i] ) {
                 m_vertex_cache[j]->add_particle_in(m_particle_cache[i]);
                 break;
@@ -217,7 +217,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     }
 
     // Remove vertices with no incoming particles or no outgoing particles
-    for(unsigned int i=0; i<m_vertex_cache.size(); ++i) {
+    for (unsigned int i=0; i<m_vertex_cache.size(); ++i) {
         if ( m_vertex_cache[i]->particles_in().size() == 0 ) {
             HEPMC3_DEBUG( 30, "ReaderAsciiHepMC2::read_event - found a vertex without incoming particles: "<<m_vertex_cache[i]->id() );
 //Sometimes the root vertex has no incoming particles.  Here we try to save the event.
@@ -243,7 +243,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Add whole event tree in topological order
     evt.add_tree( m_particle_cache );
 
-    for(unsigned int i=0; i<m_particle_cache.size(); ++i) {
+    for (unsigned int i=0; i<m_particle_cache.size(); ++i) {
         if (m_particle_cache_ghost[i]->attribute_names().size())
         {
             std::shared_ptr<DoubleAttribute> phi = m_particle_cache_ghost[i]->attribute<DoubleAttribute>("phi");
@@ -267,7 +267,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         }
     }
 
-    for(unsigned int i=0; i<m_vertex_cache.size(); ++i)
+    for (unsigned int i=0; i<m_vertex_cache.size(); ++i)
         if (m_vertex_cache_ghost[i]->attribute_names().size())
         {
             for (size_t ii=0; ii<max_weights_size; ii++)
@@ -280,7 +280,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     std::shared_ptr<IntAttribute> signal_process_vertex_barcode=evt.attribute<IntAttribute>("signal_process_vertex");
     if (signal_process_vertex_barcode) {
         int signal_process_vertex_barcode_value=signal_process_vertex_barcode->value();
-        for(unsigned int i=0; i<m_vertex_cache.size(); ++i)
+        for (unsigned int i=0; i<m_vertex_cache.size(); ++i)
         {
             if (i>=m_vertex_barcodes.size()) continue;//this should not happen!
             if (signal_process_vertex_barcode_value!=m_vertex_barcodes.at(i)) continue;
@@ -607,7 +607,7 @@ bool ReaderAsciiHepMC2::parse_weight_names(const char *buf) {
 
     w_names.resize(w_count);
 
-    for( int i=0; i < w_count; ++i ) {
+    for ( int i=0; i < w_count; ++i ) {
         // Find pair of '"' characters
         if ( !(cursor  = strchr(cursor+1,'"')) ) return false;
         if ( !(cursor2 = strchr(cursor+1,'"')) ) return false;

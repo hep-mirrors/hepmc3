@@ -103,7 +103,7 @@ const FourVector& GenVertex::position() const {
         //This could be a recussive call.  Try to prevent it.
         if (!cycles||cycles->value()==0)
         {
-            for(ConstGenParticlePtr p: m_particles_in ) {
+            for (ConstGenParticlePtr p: m_particles_in ) {
                 ConstGenVertexPtr v = p->production_vertex();
                 if (v) return v->position();
             }
