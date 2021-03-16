@@ -26,7 +26,6 @@
 namespace HepMC3 {
 
 ReaderPlugin::ReaderPlugin(std::istream & stream,const std::string &libname, const std::string &newreader) {
-
 #ifdef WIN32
     dll_handle=nullptr;
     dll_handle = LoadLibrary(libname.c_str());
@@ -46,11 +45,9 @@ ReaderPlugin::ReaderPlugin(std::istream & stream,const std::string &libname, con
     if (!newReader) { printf("Error  while loading function %s from  library %s: %s\n",newreader.c_str(),libname.c_str(),dlerror()); m_reader=nullptr; return;   }
     m_reader=(Reader*)(newReader(stream));
 #endif
-
 }
 /** @brief Constructor */
 ReaderPlugin::ReaderPlugin(const std::string& filename,const std::string &libname, const std::string &newreader) {
-
 #ifdef WIN32
     dll_handle=nullptr;
     dll_handle = LoadLibrary(libname.c_str());
@@ -75,12 +72,12 @@ ReaderPlugin::~ReaderPlugin() {
     if (m_reader) m_reader->close();
     if (m_reader) delete m_reader;
 #ifdef WIN32
-    if(dll_handle) {
+    if (dll_handle) {
         FreeLibrary((HINSTANCE)(dll_handle));
     }
 #endif
 #if defined(__linux__) || defined(__darwin__)
-    if(dll_handle) {
+    if (dll_handle) {
         dlclose(dll_handle);
         dll_handle = nullptr;
     }

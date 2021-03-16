@@ -18,7 +18,6 @@
 namespace HepMC3 {
 
 class AttributeFeature {
-
 public:
 
     AttributeFeature(const std::string &name): m_name(name) {}
@@ -54,7 +53,6 @@ public:
 private:
 
     std::string m_name;
-
 };
 }
 #endif

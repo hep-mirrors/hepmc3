@@ -14,13 +14,14 @@
  *
  */
 #ifndef HEPEVT_WRAPPER_HEADER_ONLY
+#include <algorithm>
+#include <set>
+#include <vector>
+
 #include "HepMC3/HEPEVT_Wrapper.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
-#include <algorithm>
-#include <set>
-#include <vector>
 namespace HepMC3
 {
 
@@ -38,7 +39,6 @@ struct GenParticlePtr_greater_order
         if (lx->status() !=rx->status()) return (lx->status() < rx->status());
         /*Hopefully it will reach this point not too ofter.*/
         return (lx->momentum().e()<rx->momentum().e());
-
     }
 };
 /** @brief  Order vertices with equal paths. */
@@ -132,7 +132,7 @@ bool HEPEVT_Wrapper::HEPEVT_to_GenEvent( GenEvent* evt )
     }
     /* The part above is always correct as it is a raw information without any topology.*/
 
-    /* In this way we trust mother information TODO: implement "Trust daughters"*/
+    /* In this way we trust mother information. The "Trust daughters" is not implemented.*/
     for (std::map<GenParticlePtr,int >::iterator it1= hepevt_particles.begin(); it1!= hepevt_particles.end(); ++it1)
         for (std::map<GenParticlePtr,int >::iterator it2= hepevt_particles.begin(); it2!= hepevt_particles.end(); ++it2)
             if   (HEPEVT_Wrapper::first_parent(it2->second)<=it1->second&&it1->second<=HEPEVT_Wrapper::last_parent(it2->second)) /*I'm you father, Luck!*/
@@ -202,7 +202,7 @@ bool HEPEVT_Wrapper::GenEvent_to_HEPEVT( const GenEvent* evt )
         copy(Q.begin(),Q.end(),std::back_inserter(sorted_particles));
         /*For each vertex put all outgoing particles w/o end vertex. Ordering of particles to produces reproduceable record*/
         for(ConstGenParticlePtr pp: it.first->particles_out())
-            if(!(pp->end_vertex())) stable_particles.push_back(pp);
+            if (!(pp->end_vertex())) stable_particles.push_back(pp);
     }
     sort(stable_particles.begin(),stable_particles.end(),GenParticlePtr_greater_order());
     copy(stable_particles.begin(),stable_particles.end(),std::back_inserter(sorted_particles));

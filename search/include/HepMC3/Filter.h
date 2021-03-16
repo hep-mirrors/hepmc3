@@ -10,8 +10,9 @@
 #ifndef HEPMC3_FILTER_H
 #define HEPMC3_FILTER_H
 
-#include "HepMC3/GenParticle.h"
 #include <functional>
+#include "HepMC3/GenParticle.h"
+
 namespace HepMC3 {
 /// @brief type of Filter
 using Filter = std::function<bool(ConstGenParticlePtr)>;
@@ -21,7 +22,7 @@ using Filter = std::function<bool(ConstGenParticlePtr)>;
 inline std::vector<GenParticlePtr> applyFilter(const Filter &filter, const std::vector<GenParticlePtr> &particles) {
     std::vector<GenParticlePtr> result;
     for(GenParticlePtr p: particles) {
-        if(filter(p)) result.push_back(p);
+        if (filter(p)) result.push_back(p);
     }
     return result;
 }
@@ -31,7 +32,7 @@ inline std::vector<GenParticlePtr> applyFilter(const Filter &filter, const std::
 inline std::vector<ConstGenParticlePtr> applyFilter(const Filter &filter, const std::vector<ConstGenParticlePtr> &particles) {
     std::vector<ConstGenParticlePtr> result;
     for(ConstGenParticlePtr p: particles) {
-        if(filter(p)) result.push_back(p);
+        if (filter(p)) result.push_back(p);
     }
     return result;
 }

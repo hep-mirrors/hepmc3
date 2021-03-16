@@ -53,12 +53,11 @@ using ConstSelectorPtr = std::shared_ptr<const Selector>;
  *  bool passCuts = myCuts(p);
  */
 class Selector {
-
 public:
 /** @brief  Destructor */
     virtual ~Selector() {};
 
-    virtual Filter operator > (int value) const = 0;   
+    virtual Filter operator > (int value) const = 0;
     virtual Filter operator > (double value) const = 0;
 
     virtual Filter operator >= (int value) const = 0;
@@ -83,9 +82,7 @@ public:
 /** @brief  SelectorWrapper */
 template<typename Feature_type>
 class SelectorWrapper : public Selector {
-
 public:
-
     SelectorWrapper(typename Feature<Feature_type>::Evaluator_type functor): m_internal(functor) {}
 
     Filter operator > (int value) const override {
@@ -153,18 +150,17 @@ ConstSelectorPtr abs(const Selector &input);
 #ifndef NO_DECLSPEC_StandardSelector
 #ifdef WIN32
 #ifdef HepMC3search_EXPORTS
-#define DECLSPEC_StandardSelector __declspec(dllexport) 
+#define DECLSPEC_StandardSelector __declspec(dllexport)
 #else
-#define DECLSPEC_StandardSelector  __declspec(dllimport) 
-#endif 
+#define DECLSPEC_StandardSelector  __declspec(dllimport)
+#endif
 #else
 #define NO_DECLSPEC_StandardSelector
-#endif 
-#endif 
+#endif
+#endif
 
 /** @brief  StandardSelector */
 class StandardSelector: public Selector {
-
 public:
 #ifdef NO_DECLSPEC_StandardSelector
     static const SelectorWrapper<int>    STATUS;   ///< Status

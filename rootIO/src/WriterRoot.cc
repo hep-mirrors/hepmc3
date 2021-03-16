@@ -8,9 +8,9 @@
  *  @brief Implementation of \b class WriterRoot
  *
  */
+#include <cstdio>  // sprintf
 #include "HepMC3/WriterRoot.h"
 #include "HepMC3/Version.h"
-#include <cstdio>  // sprintf
 // ROOT header files
 #include "TFile.h"
 #include "TTree.h"
@@ -52,7 +52,7 @@ void WriterRoot::write_event(const GenEvent &evt) {
 
     int nbytes = m_file->WriteObject(&data, buf);
 
-    if( nbytes == 0 ) {
+    if ( nbytes == 0 ) {
         HEPMC3_ERROR( "WriterRoot: error writing event")
         m_file->Close();
     }
@@ -66,7 +66,7 @@ void WriterRoot::write_run_info() {
 
     int nbytes = m_file->WriteObject(&data,"GenRunInfoData");
 
-    if( nbytes == 0 ) {
+    if ( nbytes == 0 ) {
         HEPMC3_ERROR( "WriterRoot: error writing GenRunInfo")
         m_file->Close();
     }

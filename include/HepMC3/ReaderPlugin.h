@@ -28,11 +28,11 @@ ReaderPlugin(std::istream & stream,const std::string &libname, const std::string
 /** @brief Constructor to read from file*/
 ReaderPlugin(const std::string& filename,const std::string &libname, const std::string &newreader);
     /** @brief Reading event */
-    bool read_event(GenEvent& ev)  override {if(!m_reader) return false; return m_reader->read_event(ev);};
+    bool read_event(GenEvent& ev)  override {if (!m_reader) return false; return m_reader->read_event(ev);};
     /** @brief Close */
-    void close() override { if(!m_reader) return; m_reader->close(); };
+    void close() override { if (!m_reader) return; m_reader->close(); };
     /** @brief State */
-    bool failed() override {if(!m_reader) return true; return m_reader->failed();};
+    bool failed() override {if (!m_reader) return true; return m_reader->failed();};
     /** @brief Destructor */
 ~ReaderPlugin()  override;
 private:

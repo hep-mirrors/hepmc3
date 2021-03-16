@@ -8,10 +8,11 @@
  *  @brief Implementation of \b class GenPdfInfo
  *
  */
-#include "HepMC3/GenPdfInfo.h"
 #include <cstring> // memcmp
 #include <cstdlib> // atoi
 #include <cstdio> // sprintf
+
+#include "HepMC3/GenPdfInfo.h"
 
 namespace HepMC3 {
 
@@ -20,28 +21,28 @@ bool GenPdfInfo::from_string(const std::string &att) {
 
     parton_id[0] = atoi(cursor);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     parton_id[1] = atoi(cursor);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     x[0] = atof(cursor);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     x[1] = atof(cursor);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     scale = atof(cursor);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     xf[0] = atof(cursor);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     xf[1] = atof(cursor);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     pdf_id[0] = atoi(cursor);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     pdf_id[1] = atoi(cursor);
 
     return true;
@@ -90,15 +91,15 @@ bool GenPdfInfo::operator!=( const GenPdfInfo& a ) const {
 
 bool GenPdfInfo::is_valid() const
 {
-    if( parton_id[0] != 0 ) return true;
-    if( parton_id[1] != 0 ) return true;
-    if( x[0]         != 0 ) return true;
-    if( x[1]         != 0 ) return true;
-    if( scale        != 0 ) return true;
-    if( xf[0]        != 0 ) return true;
-    if( xf[1]        != 0 ) return true;
-    if( pdf_id[0]    != 0 ) return true;
-    if( pdf_id[1]    != 0 ) return true;
+    if ( parton_id[0] != 0 ) return true;
+    if ( parton_id[1] != 0 ) return true;
+    if ( x[0]         != 0 ) return true;
+    if ( x[1]         != 0 ) return true;
+    if ( scale        != 0 ) return true;
+    if ( xf[0]        != 0 ) return true;
+    if ( xf[1]        != 0 ) return true;
+    if ( pdf_id[0]    != 0 ) return true;
+    if ( pdf_id[1]    != 0 ) return true;
 
     return false;
 }

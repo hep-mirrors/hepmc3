@@ -11,9 +11,10 @@
 #ifndef HEPMC3_FEATURE_H
 #define HEPMC3_FEATURE_H
 
+#include <functional>
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/Filter.h"
-#include <functional>
+
 
 namespace HepMC3 {
 
@@ -118,7 +119,6 @@ protected:
     // on the heap so will persist in resulting Filters even if
     // parent Feature object was destroyed
     EvaluatorPtr m_internal;
-
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -161,7 +161,6 @@ template<typename Feature_type, typename Dummy=void>
 class Feature : public GenericFeature<Feature_type> {
 
 public:
-
     using typename GenericFeature<Feature_type>::Evaluator_type;
     using typename GenericFeature<Feature_type>::EvaluatorPtr;
     using GenericFeature<Feature_type>::m_internal;

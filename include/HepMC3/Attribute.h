@@ -649,8 +649,8 @@ public:
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const std::string &att)  override{
         if (att.size()!=1) return false;
-        if(att==std::string("1")) {m_val = true;  return true;}
-        if(att==std::string("0")) {m_val = false; return true;}
+        if (att==std::string("1")) {m_val = true;  return true;}
+        if (att==std::string("0")) {m_val = false; return true;}
         return false;
     }
 

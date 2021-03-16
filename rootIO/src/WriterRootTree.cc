@@ -8,9 +8,9 @@
  *  @brief Implementation of \b class WriterRootTree
  *
  */
+#include <cstdio>  // sprintf
 #include "HepMC3/WriterRootTree.h"
 #include "HepMC3/Version.h"
-#include <cstdio>  // sprintf
 // ROOT header files
 #include "TFile.h"
 #include "TTree.h"
@@ -92,7 +92,6 @@ void WriterRootTree::write_run_info() {}
 
 void WriterRootTree::close()
 {
-
     m_file->WriteTObject(m_tree);
     m_file->Close();
     delete m_event_data;

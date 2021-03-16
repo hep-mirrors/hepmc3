@@ -115,7 +115,7 @@ private:
         GenParticles_type <GenVertexPtr> results;
         if ( !input ) return results;
         for(auto v: m_checkedObjects) {
-            if(v->id() == input->id()) return results;
+            if (v->id() == input->id()) return results;
         }
 
         m_checkedObjects.emplace_back(new idInterface<GenVertexPtr>(input));
@@ -136,7 +136,7 @@ private:
         GenParticles_type <ConstGenVertexPtr> results;
         if ( !input ) return results;
         for(auto v: m_checkedObjects) {
-            if(v->id() == input->id()) return results;
+            if (v->id() == input->id()) return results;
         }
 
         m_checkedObjects.emplace_back(new idInterface<ConstGenVertexPtr>(input));
@@ -170,7 +170,6 @@ private:
     /** @brief  iDinterface */
     template<typename ID_type>
     class idInterface : public hasId {
-
     public:
         constexpr idInterface(ID_type genObject): m_object(genObject) {}
         int id() const override {return m_object->id();}
@@ -183,7 +182,6 @@ private:
 
     Relation_type m_applyRelation;
     mutable std::vector<hasId*> m_checkedObjects;
-
 };
 
 /** @brief Provides operator to find the parent particles of a Vertex or Particle
@@ -191,9 +189,7 @@ private:
  * Note you would usually not instantiate this directly, but wrap it in a RelativesInterface
  */
 class _parents {
-
 public:
-
     template<typename GenObject_type, typename dummy>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
 
@@ -205,7 +201,6 @@ public:
 
     template<typename GenObject_type>
     GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->production_vertex();}
-
 };
 
 /** @brief Provides operator to find the child particles of a Vertex or Particle
@@ -213,9 +208,7 @@ public:
  * Note you would usually not instantiate this directly, but wrap it in a RelativesInterface
  */
 class _children {
-
 public:
-
     template<typename GenObject_type, typename dummy>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
 
@@ -227,7 +220,6 @@ public:
 
     template<typename GenObject_type>
     GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->end_vertex();}
-
 };
 
 }
@@ -240,7 +232,7 @@ std::vector<HepMC3::ConstGenParticlePtr> children_particles(HepMC3::ConstGenVert
 std::vector<HepMC3::GenVertexPtr>        children_vertices(HepMC3::GenParticlePtr O); ///< Return children vertices
 std::vector<HepMC3::ConstGenVertexPtr>   children_vertices(HepMC3::ConstGenParticlePtr O); ///< Return children vertices
 std::vector<HepMC3::GenParticlePtr>      grandchildren_particles(HepMC3::GenParticlePtr O);  ///< Return grandchildren particles
-std::vector<HepMC3::ConstGenParticlePtr> grandchildren_particles(HepMC3::ConstGenParticlePtr O);  ///< Return grandchildren particles 
+std::vector<HepMC3::ConstGenParticlePtr> grandchildren_particles(HepMC3::ConstGenParticlePtr O);  ///< Return grandchildren particles
 std::vector<HepMC3::GenVertexPtr>        grandchildren_vertices(HepMC3::GenVertexPtr O);   ///< Return grandchildren vertices
 std::vector<HepMC3::ConstGenVertexPtr>   grandchildren_vertices(HepMC3::ConstGenVertexPtr O); ///< Return grandchildren vertices
 std::vector<HepMC3::GenParticlePtr>      parent_particles(HepMC3::GenVertexPtr O);  ///< Return parent particles

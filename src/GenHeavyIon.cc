@@ -8,16 +8,16 @@
  *  @brief Implementation of \b class GenHeavyIon
  *
  */
-#include "HepMC3/GenHeavyIon.h"
 #include <cstring> // memcmp
 #include <cstdlib> // atoi
 #include <cstdio> // sprintf
 #include <sstream> // sprintf
 
+#include "HepMC3/GenHeavyIon.h"
+
 namespace HepMC3 {
 
 bool GenHeavyIon::from_string(const std::string &att) {
-
 #ifdef HEPMC3_NO_DEPRECATED
     double spectator_neutrons, spectator_protons, eccentricity;
 #endif
@@ -135,20 +135,20 @@ void GenHeavyIon::set( const int&nh, const int&np, const int&nt, const int&nc, c
 }
 
 bool GenHeavyIon::is_valid() const {
-    if( Ncoll_hard                   != 0 ) return true;
-    if( Npart_proj                   != 0 ) return true;
-    if( Npart_targ                   != 0 ) return true;
-    if( Ncoll                        != 0 ) return true;
-    if( spectator_neutrons           != 0 ) return true;
-    if( spectator_protons            != 0 ) return true;
-    if( N_Nwounded_collisions        != 0 ) return true;
-    if( Nwounded_N_collisions        != 0 ) return true;
-    if( Nwounded_Nwounded_collisions != 0 ) return true;
-    if( impact_parameter             != 0 ) return true;
-    if( event_plane_angle            != 0 ) return true;
-    if( eccentricity                 != 0 ) return true;
-    if( sigma_inel_NN                != 0 ) return true;
-    if( centrality                   != 0 ) return true;
+    if ( Ncoll_hard                   != 0 ) return true;
+    if ( Npart_proj                   != 0 ) return true;
+    if ( Npart_targ                   != 0 ) return true;
+    if ( Ncoll                        != 0 ) return true;
+    if ( spectator_neutrons           != 0 ) return true;
+    if ( spectator_protons            != 0 ) return true;
+    if ( N_Nwounded_collisions        != 0 ) return true;
+    if ( Nwounded_N_collisions        != 0 ) return true;
+    if ( Nwounded_Nwounded_collisions != 0 ) return true;
+    if ( impact_parameter             != 0 ) return true;
+    if ( event_plane_angle            != 0 ) return true;
+    if ( eccentricity                 != 0 ) return true;
+    if ( sigma_inel_NN                != 0 ) return true;
+    if ( centrality                   != 0 ) return true;
     return false;
 }
 

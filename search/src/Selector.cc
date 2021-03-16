@@ -30,5 +30,4 @@ ConstSelectorPtr abs(const Selector &input)
 
 AttributeFeature Selector::ATTRIBUTE(const std::string &name) {return AttributeFeature(name);}
 
-}
-
+} // namespace HepMC3

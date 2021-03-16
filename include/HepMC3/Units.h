@@ -34,8 +34,8 @@ public:
 public:
     /** @brief Get momentum unit based on its name*/
     static MomentumUnit momentum_unit( const std::string& name ) {
-        if( name.compare(0,3,"GEV") == 0 ) return GEV;
-        if( name.compare(0,3,"MEV") == 0 ) return MEV;
+        if ( name.compare(0,3,"GEV") == 0 ) return GEV;
+        if ( name.compare(0,3,"MEV") == 0 ) return MEV;
 
         HEPMC3_ERROR("Units::momentum_unit: unrecognised unit name: '" << name <<"', setting to GEV" )
 
@@ -44,8 +44,8 @@ public:
 
     /** @brief Get length unit based on its name*/
     static LengthUnit length_unit( const std::string& name ) {
-        if( name.compare(0,2,"CM") == 0 ) return CM;
-        if( name.compare(0,2,"MM") == 0 ) return MM;
+        if ( name.compare(0,2,"CM") == 0 ) return CM;
+        if ( name.compare(0,2,"MM") == 0 ) return MM;
 
         HEPMC3_ERROR("Units::length_unit: unrecognised unit name: '" << name <<"', setting to CM" )
 
@@ -79,13 +79,13 @@ public:
     /** @brief Convert FourVector to different momentum unit */
     template <typename T>
     static void convert( T &m, MomentumUnit from, MomentumUnit to ) {
-        if( from == to ) return;
+        if ( from == to ) return;
 
-        if( from == GEV ) {
+        if ( from == GEV ) {
             // GEV -> MEV
             m *= 1000.;
         }
-        else if( from == MEV ) {
+        else if ( from == MEV ) {
             // MEV -> GEV
             m *= 0.001;
         }
@@ -94,13 +94,13 @@ public:
     /** @brief Convert FourVector to different length unit */
     template <typename T>
     static void convert( T &m, LengthUnit from, LengthUnit to ) {
-        if( from == to ) return;
+        if ( from == to ) return;
 
-        if( from == CM ) {
+        if ( from == CM ) {
             // CM -> MM
             m *= 10.0;
         }
-        else if( from == MM ) {
+        else if ( from == MM ) {
             // MM -> CM
             m *= 0.1;
         }

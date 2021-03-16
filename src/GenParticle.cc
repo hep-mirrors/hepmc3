@@ -33,7 +33,7 @@ GenParticle::GenParticle( const GenParticleData &dat ):
 }
 
 double GenParticle::generated_mass() const {
-    if(m_data.is_mass_set) return m_data.mass;
+    if (m_data.is_mass_set) return m_data.mass;
     else                   return m_data.momentum.m();
 }
 
