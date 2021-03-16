@@ -89,12 +89,12 @@ bool GenHeavyIon::to_string(std::string &att) const {
        << Nspec_proj_p << " " << Nspec_targ_p << " ";
 
     os << participant_plane_angles.size();
-    for ( std::map<int,double>::const_iterator it = participant_plane_angles.begin();
+    for ( std::map<int, double>::const_iterator it = participant_plane_angles.begin();
             it != participant_plane_angles.end(); ++it )
         os << " " << it->first << " " << it->second;
 
     os << " " << eccentricities.size();
-    for ( std::map<int,double>::const_iterator it = eccentricities.begin();
+    for ( std::map<int, double>::const_iterator it = eccentricities.begin();
             it != eccentricities.end(); ++it )
         os << " " << it->first << " " << it->second;
 
@@ -106,17 +106,17 @@ bool GenHeavyIon::to_string(std::string &att) const {
 
 #ifndef HEPMC3_NO_DEPRECATED
 
-bool GenHeavyIon::operator==( const GenHeavyIon& a ) const {
+bool GenHeavyIon::operator==(const GenHeavyIon& a) const {
     return ( memcmp( (void*) this, (void*) &a, sizeof(class GenHeavyIon) ) == 0 );
 }
 
-bool GenHeavyIon::operator!=( const GenHeavyIon& a ) const {
+bool GenHeavyIon::operator!=(const GenHeavyIon& a) const {
     return !( a == *this );
 }
 
-void GenHeavyIon::set( const int&nh, const int&np, const int&nt, const int&nc, const int&ns, const int&nsp,
+void GenHeavyIon::set(const int&nh, const int&np, const int&nt, const int&nc, const int&ns, const int&nsp,
                        const int&nnw, const int&nwn, const int&nwnw,
-                       const double& im, const double& pl, const double& ec, const double& s, const double& cent, const double& usrcent ) {
+                       const double& im, const double& pl, const double& ec, const double& s, const double& cent, const double& usrcent) {
     Ncoll_hard                   = nh;
     Npart_proj                   = np;
     Npart_targ                   = nt;

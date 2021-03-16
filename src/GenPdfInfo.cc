@@ -21,28 +21,28 @@ bool GenPdfInfo::from_string(const std::string &att) {
 
     parton_id[0] = atoi(cursor);
 
-    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     parton_id[1] = atoi(cursor);
 
-    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     x[0] = atof(cursor);
 
-    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     x[1] = atof(cursor);
 
-    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     scale = atof(cursor);
 
-    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     xf[0] = atof(cursor);
 
-    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     xf[1] = atof(cursor);
 
-    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     pdf_id[0] = atoi(cursor);
 
-    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     pdf_id[1] = atoi(cursor);
 
     return true;
@@ -51,7 +51,7 @@ bool GenPdfInfo::from_string(const std::string &att) {
 bool GenPdfInfo::to_string(std::string &att) const {
     char buf[255];//Note: the format is fixed, so no reason for complicatied tratment
 
-    snprintf(buf,255,"%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
+    snprintf(buf, 255, "%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
              parton_id[0],
              parton_id[1],
              x[0],
@@ -68,7 +68,7 @@ bool GenPdfInfo::to_string(std::string &att) const {
 }
 
 void GenPdfInfo::set(const int& parton_id1, const int& parton_id2, const double& x1, const double& x2,
-                     const double& scale_in, const double& xf1,const double& xf2,
+                     const double& scale_in, const double& xf1, const double& xf2,
                      const int& pdf_id1, const int& pdf_id2) {
     parton_id[0] = parton_id1;
     parton_id[1] = parton_id2;
@@ -81,11 +81,11 @@ void GenPdfInfo::set(const int& parton_id1, const int& parton_id2, const double&
     pdf_id[1]    = pdf_id2;
 }
 
-bool GenPdfInfo::operator==( const GenPdfInfo& a ) const {
+bool GenPdfInfo::operator==(const GenPdfInfo& a) const {
     return ( memcmp( (void*)this, (void*)&a, sizeof(class GenPdfInfo) ) == 0 );
 }
 
-bool GenPdfInfo::operator!=( const GenPdfInfo& a ) const {
+bool GenPdfInfo::operator!=(const GenPdfInfo& a) const {
     return !( a == *this );
 }
 

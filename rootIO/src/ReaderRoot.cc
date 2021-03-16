@@ -19,7 +19,7 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
     m_next = new TIter(m_file->GetListOfKeys());
 
     if ( !m_file->IsOpen() ) {
-        HEPMC3_ERROR( "ReaderRoot: problem opening file: " << filename )
+        HEPMC3_ERROR("ReaderRoot: problem opening file: " << filename)
         return;
     }
 
@@ -38,7 +38,7 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
 bool ReaderRoot::skip(const int n)
 {
     GenEvent evt;
-    for (int nn=n; nn>0; --nn)
+    for (int nn = n; nn > 0; --nn)
     {
         if (!read_event(evt)) return false;
         evt.clear();
@@ -50,7 +50,7 @@ bool ReaderRoot::read_event(GenEvent& evt) {
     // Skip object of different type than GenEventData
     GenEventData *data = nullptr;
 
-    while(true) {
+    while (true) {
         TKey *key = (TKey*) (*m_next)();
 
         if ( !key ) {
@@ -61,10 +61,10 @@ bool ReaderRoot::read_event(GenEvent& evt) {
         const char *cl = key->GetClassName();
 
         if ( !cl ) continue;
-        size_t geneventdata30=strncmp(cl,"HepMC::GenEventData",19);
-        size_t geneventdata31=strncmp(cl,"HepMC3::GenEventData",20);
-        if ( geneventdata31==0 || geneventdata30==0 ) {
-            if (geneventdata30==0) HEPMC3_WARNING( "ReaderRoot::read_event: The object was written with HepMC3 version 3.0" )
+        size_t geneventdata30 = strncmp(cl, "HepMC::GenEventData", 19);
+        size_t geneventdata31 = strncmp(cl, "HepMC3::GenEventData", 20);
+        if ( geneventdata31 == 0 || geneventdata30 == 0 ) {
+            if (geneventdata30 == 0) HEPMC3_WARNING("ReaderRoot::read_event: The object was written with HepMC3 version 3.0")
                 data = reinterpret_cast<GenEventData*>(key->ReadObj());
             break;
         }
@@ -77,7 +77,7 @@ bool ReaderRoot::read_event(GenEvent& evt) {
     }
 
     evt.read_data(*data);
-    evt.set_run_info( run_info() );
+    evt.set_run_info(run_info());
 
     delete data;
     return true;

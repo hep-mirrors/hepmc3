@@ -22,9 +22,9 @@ WriterRoot::WriterRoot(const std::string &filename, std::shared_ptr<GenRunInfo> 
     m_events_count(0) {
     set_run_info(run);
 
-    m_file = TFile::Open(filename.c_str(),"RECREATE");
+    m_file = TFile::Open(filename.c_str(), "RECREATE");
     if ( !m_file->IsOpen() ) {
-        HEPMC3_ERROR( "WriterRoot: problem opening file: " << filename )
+        HEPMC3_ERROR("WriterRoot: problem opening file: " << filename)
         return;
     }
 
@@ -39,21 +39,21 @@ void WriterRoot::write_event(const GenEvent &evt) {
         write_run_info();
     } else {
         if ( evt.run_info() && run_info() != evt.run_info() )
-            HEPMC3_WARNING( "WriterAscii::write_event: GenEvents contain "
+            HEPMC3_WARNING("WriterAscii::write_event: GenEvents contain "
                             "different GenRunInfo objects from - only the "
-                            "first such object will be serialized." )
+                            "first such object will be serialized.")
         }
 
     GenEventData data;
     evt.write_data(data);
 
     char buf[16] = "";
-    sprintf(buf,"%15i",++m_events_count);
+    sprintf(buf, "%15i", ++m_events_count);
 
     int nbytes = m_file->WriteObject(&data, buf);
 
     if ( nbytes == 0 ) {
-        HEPMC3_ERROR( "WriterRoot: error writing event")
+        HEPMC3_ERROR("WriterRoot: error writing event")
         m_file->Close();
     }
 }
@@ -64,10 +64,10 @@ void WriterRoot::write_run_info() {
     GenRunInfoData data;
     run_info()->write_data(data);
 
-    int nbytes = m_file->WriteObject(&data,"GenRunInfoData");
+    int nbytes = m_file->WriteObject(&data, "GenRunInfoData");
 
     if ( nbytes == 0 ) {
-        HEPMC3_ERROR( "WriterRoot: error writing GenRunInfo")
+        HEPMC3_ERROR("WriterRoot: error writing GenRunInfo")
         m_file->Close();
     }
 }
