@@ -18,6 +18,8 @@
  *  @ingroup IO
  *
  */
+#include <string>
+#include <memory>
 #include "HepMC3/Writer.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Data/GenEventData.h"
@@ -47,7 +49,6 @@ public:
 // Functions
 //
 public:
-
     /** @brief Write event to file
      *
      *  @param[in] evt Event to be serialized

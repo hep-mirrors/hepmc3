@@ -177,9 +177,9 @@ std::shared_ptr<T> GenRunInfo::attribute(const std::string &name) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std::map< std::string, std::shared_ptr<Attribute> >::iterator i =
         m_attributes.find(name);
-    if( i == m_attributes.end() ) return std::shared_ptr<T>();
+    if ( i == m_attributes.end() ) return std::shared_ptr<T>();
 
-    if( !i->second->is_parsed() ) {
+    if ( !i->second->is_parsed() ) {
 
         std::shared_ptr<T> att = std::make_shared<T>();
         if ( att->from_string(i->second->unparsed_string()) &&

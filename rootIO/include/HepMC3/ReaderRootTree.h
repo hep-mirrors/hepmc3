@@ -18,6 +18,7 @@
  *  @ingroup IO
  *
  */
+#include <string>
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Data/GenEventData.h"
@@ -40,13 +41,12 @@ public:
     /** @brief Default constructor */
     ReaderRootTree(const std::string &filename);
     /** @brief Constructor with tree name*/
-    ReaderRootTree(const std::string &filename,const std::string &treename,const std::string &branchname);
+    ReaderRootTree(const std::string &filename, const std::string &treename, const std::string &branchname);
 
 //
 // Functions
 //
 public:
-
     /// @brief skip events
     bool skip(const int)  override;
 

@@ -17,9 +17,10 @@
 /// and examples of its use.
 ///
 /// @ingroup searchengine
+#include <string>
+#include <memory>
 #include "HepMC3/Filter.h"
 #include "HepMC3/Attribute.h"
-#include <string>
 
 namespace HepMC3 {
 /** Deprecated */
@@ -33,22 +34,21 @@ public:
     /// @brief Default constructor
     ///
     /// Provides the name of the attribute used in by the filter
-    ATTRIBUTE(const std::string &name):Filter(ATTRIBUTE_EXISTS,name) {}
+    ATTRIBUTE(const std::string &name):Filter(ATTRIBUTE_EXISTS, name) {}
 
 //
 // Operators
 //
 public:
-
     /// @brief Compare if this attribute is equal to other attribute
-    Filter& operator==( std::shared_ptr<Attribute> &at ) {
+    Filter& operator==(std::shared_ptr<Attribute> &at) {
         m_attribute = ATTRIBUTE_IS_EQUAL;
         at->to_string(m_attribute_str);
         return *this;
     }
 
     /// @brief Compare if this attribute is not equal to other attribute
-    Filter& operator!=( std::shared_ptr<Attribute> &at ) {
+    Filter& operator!=(std::shared_ptr<Attribute> &at) {
         m_bool_value = !m_bool_value;
         m_attribute  = ATTRIBUTE_IS_EQUAL;
         at->to_string(m_attribute_str);
@@ -56,14 +56,14 @@ public:
     }
 
     /// @brief Compare if string version of this attribute is equal value
-    Filter& operator==( const std::string &value ) {
+    Filter& operator==(const std::string &value) {
         m_attribute     = ATTRIBUTE_IS_EQUAL;
         m_attribute_str = value;
         return *this;
     }
 
     /// @brief Compare if string version of this attribute is not equal value
-    Filter& operator!=( const std::string &value ) {
+    Filter& operator!=(const std::string &value) {
         m_bool_value    = !m_bool_value;
         m_attribute     = ATTRIBUTE_IS_EQUAL;
         m_attribute_str = value;

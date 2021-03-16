@@ -13,7 +13,6 @@
 
 namespace HepMC3 {
 
-
 void HEPRUPAttribute::clear() {
     for ( int i = 0, N = tags.size(); i < N; ++i ) delete tags[i];
     tags.clear();
@@ -61,7 +60,7 @@ bool HEPEUPAttribute::to_string(std::string &att) const {
     if ( hepeup.heprup ) hepeup.print(os);
     for ( int i = 0, N = tags.size(); i < N; ++i )
         if ( !hepeup.heprup ||
-                ( tags[i]->name != "event" && tags[i]->name != "eventgroup" ) )
+                (tags[i]->name != "event" && tags[i]->name != "eventgroup") )
             tags[i]->print(os);
     att = os.str();
     return true;

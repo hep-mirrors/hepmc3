@@ -11,9 +11,12 @@
 #ifndef HEPMC3_FEATURE_H
 #define HEPMC3_FEATURE_H
 
+#include <functional>
+#include <memory>
+#include <limits>
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/Filter.h"
-#include <functional>
+
 
 namespace HepMC3 {
 
@@ -54,9 +57,7 @@ namespace HepMC3 {
  */
 template<typename Feature_type>
 class GenericFeature {
-
 public:
-
     using Evaluator_type = std::function<Feature_type(ConstGenParticlePtr)>;
     using EvaluatorPtr   =  std::shared_ptr<Evaluator_type>;
 
@@ -107,7 +108,6 @@ public:
     }
 
 protected:
-
     /// Hide the constructor so no one can use GenericFeature directly
     GenericFeature(Evaluator_type functor):m_internal(std::make_shared<Evaluator_type>(functor)) {}
 
@@ -118,7 +118,6 @@ protected:
     // on the heap so will persist in resulting Filters even if
     // parent Feature object was destroyed
     EvaluatorPtr m_internal;
-
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -157,11 +156,9 @@ protected:
  *  Selector::RAPIDITY;
 
  */
-template<typename Feature_type, typename Dummy=void>
+template<typename Feature_type, typename Dummy = void>
 class Feature : public GenericFeature<Feature_type> {
-
 public:
-
     using typename GenericFeature<Feature_type>::Evaluator_type;
     using typename GenericFeature<Feature_type>::EvaluatorPtr;
     using GenericFeature<Feature_type>::m_internal;
@@ -182,7 +179,6 @@ public:
         Evaluator_type absfunctor = [functor](ConstGenParticlePtr p)->Feature_type{return ::abs((*functor)(p));};
         return Feature<Feature_type>(absfunctor);
     }
-
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -202,9 +198,7 @@ public:
  */
 template<typename Feature_type>
 class Feature<Feature_type, typename std::enable_if<std::is_integral<Feature_type>::value, void>::type> : public GenericFeature<Feature_type> {
-
 public:
-
     using GenericFeature<Feature_type>::operator ();
     using GenericFeature<Feature_type>::operator >;
     using GenericFeature<Feature_type>::operator >=;
@@ -250,9 +244,8 @@ public:
     Filter operator <= (double value) const { return !( (*this) > value );}
 
     Filter operator != (double value) const {
-        return !( (*this)==value );
+        return !( (*this) == value );
     }
-
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -266,9 +259,7 @@ public:
 
 template<typename Feature_type>
 class Feature<Feature_type, typename std::enable_if<std::is_floating_point<Feature_type>::value, void>::type> : public GenericFeature<Feature_type> {
-
 public:
-
     using typename GenericFeature<Feature_type>::Evaluator_type;
     using typename GenericFeature<Feature_type>::EvaluatorPtr;
 
@@ -298,9 +289,8 @@ public:
     }
 
     Filter operator != (Feature_type value) const override {
-        return !( (*this)==value );
+        return !( (*this) == value );
     }
-
 };
 
 //////////////////////////////////////////////////////////////////////

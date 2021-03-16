@@ -8,9 +8,10 @@
  *  @brief Implementation of \b class GenRunInfo
  *
  */
+#include <sstream>
+
 #include "HepMC3/GenRunInfo.h"
 #include "HepMC3/Data/GenRunInfoData.h"
-#include <sstream>
 
 namespace HepMC3 {
 
@@ -37,9 +38,9 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
 std::string GenRunInfo::attribute_as_string(const std::string &name) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std::map< std::string, std::shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
-    if( i == m_attributes.end() ) return std::string();
+    if ( i == m_attributes.end() ) return std::string();
 
-    if( !i->second ) return std::string();
+    if ( !i->second ) return std::string();
 
     std::string ret;
     i->second->to_string(ret);
@@ -48,14 +49,13 @@ std::string GenRunInfo::attribute_as_string(const std::string &name) const {
 }
 
 void GenRunInfo::write_data(GenRunInfoData& data) const {
-
     // Weight names
     data.weight_names = this->weight_names();
 
     // Attributes
     typedef std::map<std::string, std::shared_ptr<Attribute> >::value_type att_val_t;
 
-    for(const att_val_t& vt: m_attributes ) {
+    for (const att_val_t& vt: m_attributes) {
         std::string att;
         vt.second->to_string(att);
 
@@ -64,7 +64,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     }
 
     // Tools
-    for( const ToolInfo &tool: this->tools() ) {
+    for ( const ToolInfo &tool: this->tools() ) {
         data.tool_name.       push_back(tool.name);
         data.tool_version.    push_back(tool.version);
         data.tool_description.push_back(tool.description);
@@ -72,28 +72,26 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
 }
 
 
-std::vector<std::string> GenRunInfo::attribute_names( ) const {
+std::vector<std::string> GenRunInfo::attribute_names() const {
     std::vector<std::string> results;
-    for(auto vt1: m_attributes ) {
-        results.push_back( vt1.first );
+    for (auto vt1: m_attributes) {
+        results.push_back(vt1.first);
     }
     return results;
 }
 
 void GenRunInfo::read_data(const GenRunInfoData& data) {
-
-
     // Weight names
     set_weight_names(data.weight_names);
 
     // Attributes
-    for(unsigned int i=0; i<data.attribute_name.size(); ++i) {
-        add_attribute( data.attribute_name[i],
-                       std::make_shared<StringAttribute>(data.attribute_string[i]) );
+    for (unsigned int i = 0; i < data.attribute_name.size(); ++i) {
+        add_attribute(data.attribute_name[i],
+                       std::make_shared<StringAttribute>(data.attribute_string[i]));
     }
 
     // Tools
-    for(unsigned int i=0; i<data.tool_name.size(); ++i) {
+    for (unsigned int i = 0; i < data.tool_name.size(); ++i) {
         ToolInfo ti;
         ti.name        = data.tool_name[i];
         ti.version     = data.tool_version[i];

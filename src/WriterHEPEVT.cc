@@ -19,46 +19,46 @@ namespace HepMC3
 
 WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_file(filename), m_stream(&m_file), m_events_count(0)
 {
-    HEPMC3_WARNING( "WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead." )
-    hepevtbuffer=(char*)(new struct HEPEVT());
+    HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
+    hepevtbuffer = (char*)(new struct HEPEVT());
     HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
 }
 
 WriterHEPEVT::WriterHEPEVT(std::ostream& stream): m_file(), m_stream(&stream), m_events_count(0)
 {
-    HEPMC3_WARNING( "WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead." )
-    hepevtbuffer=(char*)(new struct HEPEVT());
+    HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
+    hepevtbuffer = (char*)(new struct HEPEVT());
     HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
 }
 
-void WriterHEPEVT::write_hepevt_particle( int index, bool iflong )
+void WriterHEPEVT::write_hepevt_particle(int index, bool iflong)
 {
     char buf[512];//Note: the format is fixed, so no reason for complicatied tratment
-    char* cursor=&(buf[0]);
-    cursor +=sprintf(cursor, "% 8i% 8i",HEPEVT_Wrapper::status(index), HEPEVT_Wrapper::id(index));
+    char* cursor = &(buf[0]);
+    cursor += sprintf(cursor, "% 8i% 8i", HEPEVT_Wrapper::status(index), HEPEVT_Wrapper::id(index));
     if (iflong)
     {
-        cursor +=sprintf(cursor,"% 8i% 8i",HEPEVT_Wrapper::first_parent(index),HEPEVT_Wrapper::last_parent(index));
-        cursor +=sprintf(cursor,"% 8i% 8i",HEPEVT_Wrapper::first_child(index),HEPEVT_Wrapper::last_child(index));
-        cursor +=sprintf(cursor,"% 19.8E% 19.8E% 19.8E% 19.8E% 19.8E\n",HEPEVT_Wrapper::px(index),HEPEVT_Wrapper::py(index),HEPEVT_Wrapper::pz(index),HEPEVT_Wrapper::e(index),HEPEVT_Wrapper::m(index));
-        cursor +=sprintf(cursor, "%-48s% 19.8E% 19.8E% 19.8E% 19.8E\n"," ",HEPEVT_Wrapper::x(index),HEPEVT_Wrapper::y(index),HEPEVT_Wrapper::z(index),HEPEVT_Wrapper::t(index));
+        cursor += sprintf(cursor, "% 8i% 8i", HEPEVT_Wrapper::first_parent(index), HEPEVT_Wrapper::last_parent(index));
+        cursor += sprintf(cursor, "% 8i% 8i", HEPEVT_Wrapper::first_child(index), HEPEVT_Wrapper::last_child(index));
+        cursor += sprintf(cursor, "% 19.8E% 19.8E% 19.8E% 19.8E% 19.8E\n", HEPEVT_Wrapper::px(index), HEPEVT_Wrapper::py(index), HEPEVT_Wrapper::pz(index), HEPEVT_Wrapper::e(index), HEPEVT_Wrapper::m(index));
+        cursor += sprintf(cursor, "%-48s% 19.8E% 19.8E% 19.8E% 19.8E\n", " ", HEPEVT_Wrapper::x(index), HEPEVT_Wrapper::y(index), HEPEVT_Wrapper::z(index), HEPEVT_Wrapper::t(index));
     }
     else
     {
-        cursor +=sprintf(cursor, "% 8i% 8i",HEPEVT_Wrapper::first_child(index),HEPEVT_Wrapper::last_child(index));
-        cursor +=sprintf(cursor, "% 19.8E% 19.8E% 19.8E% 19.8E\n",HEPEVT_Wrapper::px(index),HEPEVT_Wrapper::py(index),HEPEVT_Wrapper::pz(index),HEPEVT_Wrapper::m(index));
+        cursor += sprintf(cursor, "% 8i% 8i", HEPEVT_Wrapper::first_child(index), HEPEVT_Wrapper::last_child(index));
+        cursor += sprintf(cursor, "% 19.8E% 19.8E% 19.8E% 19.8E\n", HEPEVT_Wrapper::px(index), HEPEVT_Wrapper::py(index), HEPEVT_Wrapper::pz(index), HEPEVT_Wrapper::m(index));
     }
     unsigned long length = cursor - &(buf[0]);
-    m_stream->write( buf, length );
+    m_stream->write(buf, length);
 }
 
 void WriterHEPEVT::write_hepevt_event_header()
 {
     char buf[512];//Note: the format is fixed, so no reason for complicatied tratment
-    char* cursor=buf;
-    cursor +=sprintf(cursor,"E% 8i %8i\n",HEPEVT_Wrapper::event_number(),HEPEVT_Wrapper::number_entries());
+    char* cursor = buf;
+    cursor += sprintf(cursor, "E% 8i %8i\n", HEPEVT_Wrapper::event_number(), HEPEVT_Wrapper::number_entries());
     unsigned long length = cursor - &(buf[0]);
-    m_stream->write( buf, length );
+    m_stream->write(buf, length);
 }
 
 void WriterHEPEVT::write_event(const GenEvent &evt)
@@ -66,7 +66,7 @@ void WriterHEPEVT::write_event(const GenEvent &evt)
     HEPEVT_Wrapper::GenEvent_to_HEPEVT(&evt);
     HEPEVT_Wrapper::fix_daughters();
     write_hepevt_event_header();
-    for( int i=1; i<=HEPEVT_Wrapper::number_entries(); ++i )  write_hepevt_particle(i,get_vertices_positions_present());
+    for ( int i = 1; i <= HEPEVT_Wrapper::number_entries(); ++i )  write_hepevt_particle(i, get_vertices_positions_present());
     m_events_count++;
 }
 
@@ -82,8 +82,8 @@ bool WriterHEPEVT::failed()
     return (bool)m_file.rdstate();
 }
 
-void WriterHEPEVT::set_vertices_positions_present(bool iflong) { if (iflong) m_options["vertices_positions_are_absent"]=""; else m_options.erase("vertices_positions_are_absent"); }
+void WriterHEPEVT::set_vertices_positions_present(bool iflong) { if (iflong) m_options["vertices_positions_are_absent"] = ""; else m_options.erase("vertices_positions_are_absent"); }
 
-bool WriterHEPEVT::get_vertices_positions_present() const { return  (m_options.find("vertices_positions_are_absent")==m_options.end()); }
+bool WriterHEPEVT::get_vertices_positions_present() const { return  (m_options.find("vertices_positions_are_absent") == m_options.end()); }
 
 } // namespace HepMC3

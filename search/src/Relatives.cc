@@ -16,9 +16,6 @@ thread_local const Ancestors   Relatives::ANCESTORS;
 thread_local const Descendants Relatives::DESCENDANTS;
 }
 
-
-
-
 namespace HepMC3 {
 
 std::vector<HepMC3::GenParticlePtr>      children(HepMC3::GenVertexPtr O) {
@@ -103,91 +100,91 @@ std::vector<HepMC3::ConstGenVertexPtr>   grandparents(HepMC3::ConstGenVertexPtr 
 
 template <class O>  std::vector<O> descendants_of_same_type(O obj)
 {
-    std::vector<O>  result=grandchildren(obj);
-    size_t gc=0;
+    std::vector<O>  result = grandchildren(obj);
+    size_t gc = 0;
     for (;;)
     {
         std::vector<O>  temp;
-        for (; gc<result.size(); gc++)
+        for (; gc < result.size(); gc++)
         {
-            auto  temp0=grandchildren(result[gc]);
-            temp.insert(temp.end(),temp0.begin(),temp0.end());
+            auto  temp0 = grandchildren(result[gc]);
+            temp.insert(temp.end(), temp0.begin(), temp0.end());
         }
-        for (auto p2: temp) if (std::find(result.begin(),result.end(),p2)==result.end()) result.push_back(p2);
-        if (gc>=result.size()) break;
+        for (auto p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.push_back(p2);
+        if (gc >= result.size()) break;
     }
     return result;
 }
 
 
-template <class O,class R>  std::vector<R> descendants_of_other_type(O obj)
+template <class O, class R>  std::vector<R> descendants_of_other_type(O obj)
 {
-    std::vector<R> localchildren=children(obj);
-    std::vector<R>  result=localchildren;
+    std::vector<R> localchildren = children(obj);
+    std::vector<R>  result = localchildren;
     for (auto c: localchildren)
     {
-        std::vector<R> desc=descendants_of_same_type(c);
-        for (auto d: desc) if (std::find(result.begin(),result.end(),d)==result.end()) result.push_back(d);
+        std::vector<R> desc = descendants_of_same_type(c);
+        for (auto d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.push_back(d);
     }
     return result;
 }
 
 template <class O>  std::vector<O> ancestors_of_same_type(O obj)
 {
-    std::vector<O>  result=grandparents(obj);
-    size_t gc=0;
+    std::vector<O>  result = grandparents(obj);
+    size_t gc = 0;
     for (;;)
     {
         std::vector<O>  temp;
-        for (; gc<result.size(); gc++)
+        for (; gc < result.size(); gc++)
         {
-            auto  temp0=grandparents(result[gc]);
-            temp.insert(temp.end(),temp0.begin(),temp0.end());
+            auto  temp0 = grandparents(result[gc]);
+            temp.insert(temp.end(), temp0.begin(), temp0.end());
         }
-        for (auto p2: temp) if (std::find(result.begin(),result.end(),p2)==result.end()) result.push_back(p2);
-        if (gc>=result.size()) break;
+        for (auto p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.push_back(p2);
+        if (gc >= result.size()) break;
     }
     return result;
 }
 
-template <class O,class R>  std::vector<R> ancestors_of_other_type(O obj)
+template <class O, class R>  std::vector<R> ancestors_of_other_type(O obj)
 {
-    std::vector<R> localparents=parents(obj);
-    std::vector<R>  result=localparents;
+    std::vector<R> localparents = parents(obj);
+    std::vector<R>  result = localparents;
     for (auto c: localparents)
     {
-        std::vector<R> desc=ancestors_of_same_type(c);
-        for (auto d: desc) if (std::find(result.begin(),result.end(),d)==result.end()) result.push_back(d);
+        std::vector<R> desc = ancestors_of_same_type(c);
+        for (auto d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.push_back(d);
     }
     return result;
 }
 
 std::vector<HepMC3::ConstGenParticlePtr> descendant_particles(HepMC3::ConstGenVertexPtr obj) {
-    return  descendants_of_other_type<HepMC3::ConstGenVertexPtr,HepMC3::ConstGenParticlePtr>(obj);
+    return  descendants_of_other_type<HepMC3::ConstGenVertexPtr, HepMC3::ConstGenParticlePtr>(obj);
 }
 std::vector<HepMC3::GenParticlePtr> descendant_particles(HepMC3::GenVertexPtr obj) {
-    return descendants_of_other_type<HepMC3::GenVertexPtr,HepMC3::GenParticlePtr>(obj);
+    return descendants_of_other_type<HepMC3::GenVertexPtr, HepMC3::GenParticlePtr>(obj);
 }
 
 std::vector<ConstGenVertexPtr> descendant_vertices(HepMC3::ConstGenParticlePtr obj) {
-    return descendants_of_other_type<HepMC3::ConstGenParticlePtr,HepMC3::ConstGenVertexPtr>(obj);
+    return descendants_of_other_type<HepMC3::ConstGenParticlePtr, HepMC3::ConstGenVertexPtr>(obj);
 }
 std::vector<HepMC3::GenVertexPtr> descendant_vertices(HepMC3::GenParticlePtr obj) {
-    return descendants_of_other_type<HepMC3::GenParticlePtr,HepMC3::GenVertexPtr>(obj);
+    return descendants_of_other_type<HepMC3::GenParticlePtr, HepMC3::GenVertexPtr>(obj);
 }
 
 std::vector<HepMC3::ConstGenParticlePtr> ancestor_particles(HepMC3::ConstGenVertexPtr obj) {
-    return  ancestors_of_other_type<HepMC3::ConstGenVertexPtr,HepMC3::ConstGenParticlePtr>(obj);
+    return  ancestors_of_other_type<HepMC3::ConstGenVertexPtr, HepMC3::ConstGenParticlePtr>(obj);
 }
 std::vector<HepMC3::GenParticlePtr> ancestor_particles(HepMC3::GenVertexPtr obj) {
-    return ancestors_of_other_type<HepMC3::GenVertexPtr,HepMC3::GenParticlePtr>(obj);
+    return ancestors_of_other_type<HepMC3::GenVertexPtr, HepMC3::GenParticlePtr>(obj);
 }
 
 std::vector<HepMC3::ConstGenVertexPtr> ancestor_vertices(HepMC3::ConstGenParticlePtr obj) {
-    return ancestors_of_other_type<HepMC3::ConstGenParticlePtr,HepMC3::ConstGenVertexPtr>(obj);
+    return ancestors_of_other_type<HepMC3::ConstGenParticlePtr, HepMC3::ConstGenVertexPtr>(obj);
 }
 std::vector<HepMC3::GenVertexPtr> ancestor_vertices(HepMC3::GenParticlePtr obj) {
-    return ancestors_of_other_type<HepMC3::GenParticlePtr,HepMC3::GenVertexPtr>(obj);
+    return ancestors_of_other_type<HepMC3::GenParticlePtr, HepMC3::GenVertexPtr>(obj);
 }
 
 
@@ -217,4 +214,4 @@ std::vector<HepMC3::GenVertexPtr>        grandparent_vertices(HepMC3::GenVertexP
 std::vector<HepMC3::ConstGenVertexPtr>   grandparent_vertices(HepMC3::ConstGenVertexPtr O)      { return grandparents(O); }
 
 
-}
+} // namespace HepMC3

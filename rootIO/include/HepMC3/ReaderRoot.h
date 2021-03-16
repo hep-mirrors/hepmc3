@@ -18,6 +18,7 @@
  *  @ingroup IO
  *
  */
+#include <string>
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Data/GenEventData.h"

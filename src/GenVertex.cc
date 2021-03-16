@@ -8,74 +8,75 @@
  *  @brief Implementation of \b class GenVertex
  *
  */
+#include <algorithm> // std::remove
+
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Setup.h"
 #include "HepMC3/Attribute.h"
-#include <algorithm> // std::remove
 
 namespace HepMC3 {
 
 
-GenVertex::GenVertex( const FourVector& pos):
+GenVertex::GenVertex(const FourVector& pos):
     m_event(nullptr),
     m_id(0) {
     m_data.status   = 0;
     m_data.position = pos;
 }
 
-GenVertex::GenVertex( const GenVertexData &dat):
+GenVertex::GenVertex(const GenVertexData &dat):
     m_event(nullptr),
     m_id(0),
     m_data(dat) {
 }
 
 
-void GenVertex::add_particle_in( GenParticlePtr p ) {
-    if(!p) return;
+void GenVertex::add_particle_in(GenParticlePtr p) {
+    if (!p) return;
 
     // Avoid duplicates
-    if (std::find(particles_in().begin(),particles_in().end(),p)!=particles_in().end()) return;
+    if (std::find(particles_in().begin(), particles_in().end(), p) != particles_in().end()) return;
 
     m_particles_in.push_back(p);
 
-    if( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
+    if ( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
 
     p->m_end_vertex = shared_from_this();
 
-    if(m_event) m_event->add_particle(p);
+    if (m_event) m_event->add_particle(p);
 }
 
 
-void GenVertex::add_particle_out(GenParticlePtr p ) {
-    if(!p) return;
+void GenVertex::add_particle_out(GenParticlePtr p) {
+    if (!p) return;
 
     // Avoid duplicates
-    if (std::find(particles_out().begin(),particles_out().end(),p)!=particles_out().end()) return;
+    if (std::find(particles_out().begin(), particles_out().end(), p) != particles_out().end()) return;
 
     m_particles_out.push_back(p);
 
-    if( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
+    if ( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
 
     p->m_production_vertex = shared_from_this();
 
-    if(m_event) m_event->add_particle(p);
+    if (m_event) m_event->add_particle(p);
 }
 
-void GenVertex::remove_particle_in( GenParticlePtr p ) {
-    if(!p) return;
-    if (std::find(m_particles_in.begin(),m_particles_in.end(),p)==m_particles_in.end()) return;
+void GenVertex::remove_particle_in(GenParticlePtr p) {
+    if (!p) return;
+    if (std::find(m_particles_in.begin(), m_particles_in.end(), p) == m_particles_in.end()) return;
     p->m_end_vertex.reset();
-    m_particles_in.erase( std::remove( m_particles_in.begin(), m_particles_in.end(), p), m_particles_in.end());
+    m_particles_in.erase(std::remove(m_particles_in.begin(), m_particles_in.end(), p), m_particles_in.end());
 }
 
 
-void GenVertex::remove_particle_out( GenParticlePtr p ) {
-    if(!p) return;
-    if (std::find(m_particles_out.begin(),m_particles_out.end(),p)==m_particles_out.end()) return;
+void GenVertex::remove_particle_out(GenParticlePtr p) {
+    if (!p) return;
+    if (std::find(m_particles_out.begin(), m_particles_out.end(), p) == m_particles_out.end()) return;
     p->m_production_vertex.reset();
-    m_particles_out.erase( std::remove( m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
+    m_particles_out.erase(std::remove(m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
 }
 
 void GenVertex::set_id(int id) {
@@ -93,20 +94,18 @@ const std::vector<ConstGenParticlePtr>& GenVertex::particles_out()const {
 }
 
 const FourVector& GenVertex::position() const {
-
-    if( has_set_position() ) return m_data.position;
+    if ( has_set_position() ) return m_data.position;
 
     // No position information - look at event and/or search ancestors
-    if( parent_event() )
+    if ( parent_event() )
     {
-        std::shared_ptr<IntAttribute> cycles=parent_event()->attribute<IntAttribute>("cycles");
+        std::shared_ptr<IntAttribute> cycles = parent_event()->attribute<IntAttribute>("cycles");
         //This could be a recussive call.  Try to prevent it.
-        if (!cycles||cycles->value()==0)
+        if (!cycles || cycles->value() == 0)
         {
-
-            for(ConstGenParticlePtr p: m_particles_in ) {
+            for (ConstGenParticlePtr p: m_particles_in) {
                 ConstGenVertexPtr v = p->production_vertex();
-                if(v) return v->position();
+                if (v) return v->position();
             }
         }
         return parent_event()->event_pos();

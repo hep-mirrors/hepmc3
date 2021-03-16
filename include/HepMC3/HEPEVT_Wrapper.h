@@ -165,7 +165,7 @@ inline void HEPEVT_Wrapper::print_hepevt( std::ostream& ostr )
 {
     ostr << " Event No.: " << hepevtptr->nevhep << std::endl;
     ostr<< "  Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M." << std::endl;
-    for( int i=1; i<=hepevtptr->nhep; ++i )
+    for ( int i=1; i<=hepevtptr->nhep; ++i )
     {
         HEPEVT_Wrapper::print_hepevt_particle( i, ostr );
     }
@@ -214,7 +214,7 @@ inline int HEPEVT_Wrapper::number_children( const int& index )
 inline int HEPEVT_Wrapper::number_children_exact( const int& index )
 {
     int nc=0;
-    for( int i=1; i<=hepevtptr->nhep; ++i )
+    for ( int i=1; i<=hepevtptr->nhep; ++i )
         if (((hepevtptr->jmohep[i-1][0]<=index&&hepevtptr->jmohep[i-1][1]>=index))||(hepevtptr->jmohep[i-1][0]==index)||(hepevtptr->jmohep[i-1][1]==index)) nc++;
     return nc;
 }
@@ -264,12 +264,12 @@ inline bool HEPEVT_Wrapper::fix_daughters()
     The return tells if the record was fixed succesfully.
     */
 
-    for( int i=1; i<=HEPEVT_Wrapper::number_entries(); i++ )
-        for( int k=1; k<=HEPEVT_Wrapper::number_entries(); k++ ) if (i!=k)
+    for ( int i=1; i<=HEPEVT_Wrapper::number_entries(); i++ )
+        for ( int k=1; k<=HEPEVT_Wrapper::number_entries(); k++ ) if (i!=k)
                 if ((HEPEVT_Wrapper::first_parent(k)<=i)&&(i<=HEPEVT_Wrapper::last_parent(k)))
                     HEPEVT_Wrapper::set_children(i,(HEPEVT_Wrapper::first_child(i)==0?k:std::min(HEPEVT_Wrapper::first_child(i),k)),(HEPEVT_Wrapper::last_child(i)==0?k:std::max(HEPEVT_Wrapper::last_child(i),k)));
     bool is_fixed=true;
-    for( int i=1; i<=HEPEVT_Wrapper::number_entries(); i++ )
+    for ( int i=1; i<=HEPEVT_Wrapper::number_entries(); i++ )
         is_fixed=(is_fixed&&(HEPEVT_Wrapper::number_children_exact(i)==HEPEVT_Wrapper::number_children(i)));
     return is_fixed;
 }

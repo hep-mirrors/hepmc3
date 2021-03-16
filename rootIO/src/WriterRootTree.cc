@@ -8,9 +8,9 @@
  *  @brief Implementation of \b class WriterRootTree
  *
  */
+#include <cstdio>  // sprintf
 #include "HepMC3/WriterRootTree.h"
 #include "HepMC3/Version.h"
-#include <cstdio>  // sprintf
 // ROOT header files
 #include "TFile.h"
 #include "TTree.h"
@@ -25,17 +25,17 @@ WriterRootTree::WriterRootTree(const std::string &filename, std::shared_ptr<GenR
     m_tree_name("hepmc3_tree"),
     m_branch_name("hepmc3_event")
 {
-    m_file = TFile::Open(filename.c_str(),"RECREATE");
+    m_file = TFile::Open(filename.c_str(), "RECREATE");
     if (!init(run)) return;
 }
 
-WriterRootTree::WriterRootTree(const std::string &filename,const std::string &treename,const std::string &branchname, std::shared_ptr<GenRunInfo> run):
+WriterRootTree::WriterRootTree(const std::string &filename, const std::string &treename, const std::string &branchname, std::shared_ptr<GenRunInfo> run):
     m_tree(0),
     m_events_count(0),
     m_tree_name(treename.c_str()),
     m_branch_name(branchname.c_str())
 {
-    m_file = TFile::Open(filename.c_str(),"RECREATE");
+    m_file = TFile::Open(filename.c_str(), "RECREATE");
     if (!init(run)) return;
 }
 
@@ -43,14 +43,14 @@ bool WriterRootTree::init(std::shared_ptr<GenRunInfo> run )
 {
     if ( !m_file->IsOpen() )
     {
-        HEPMC3_ERROR( "WriterRootTree: problem opening file: " <<m_file->GetName() )
+        HEPMC3_ERROR("WriterRootTree: problem opening file: " << m_file->GetName())
         return false;
     }
-    m_event_data= new GenEventData();
-    m_run_info_data= new GenRunInfoData();
+    m_event_data = new GenEventData();
+    m_run_info_data = new GenRunInfoData();
     set_run_info(run);
     if ( run_info() ) run_info()->write_data(*m_run_info_data);
-    m_tree= new TTree(m_tree_name.c_str(),"hepmc3_tree");
+    m_tree = new TTree(m_tree_name.c_str(), "hepmc3_tree");
     m_tree->Branch(m_branch_name.c_str(), m_event_data);
     m_tree->Branch("GenRunInfo", m_run_info_data);
     return true;
@@ -59,8 +59,8 @@ bool WriterRootTree::init(std::shared_ptr<GenRunInfo> run )
 void WriterRootTree::write_event(const GenEvent &evt)
 {
     if ( !m_file->IsOpen() ) return;
-    bool refill=false;
-    if ( evt.run_info()&&(!run_info() || (run_info() != evt.run_info())))  { set_run_info(evt.run_info()); refill=true;}
+    bool refill = false;
+    if ( evt.run_info()&&(!run_info() || (run_info() != evt.run_info())))  { set_run_info(evt.run_info()); refill = true;}
     if (refill)
     {
         m_run_info_data->weight_names.clear();
@@ -92,7 +92,6 @@ void WriterRootTree::write_run_info() {}
 
 void WriterRootTree::close()
 {
-
     m_file->WriteTObject(m_tree);
     m_file->Close();
     delete m_event_data;

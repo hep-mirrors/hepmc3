@@ -16,15 +16,15 @@ namespace HepMC3
 HEPMC3_DECLARE_READER_FILE(ReaderRootTree)
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
-    m_tree(0),m_events_count(0),m_tree_name("hepmc3_tree"),m_branch_name("hepmc3_event")
+    m_tree(0), m_events_count(0), m_tree_name("hepmc3_tree"), m_branch_name("hepmc3_event")
 {
     m_file = TFile::Open(filename.c_str());
     if (!init()) return;
 }
 
 
-ReaderRootTree::ReaderRootTree(const std::string &filename,const std::string &treename,const std::string &branchname):
-    m_tree(0),m_events_count(0),m_tree_name(treename.c_str()),m_branch_name(branchname.c_str())
+ReaderRootTree::ReaderRootTree(const std::string &filename, const std::string &treename, const std::string &branchname):
+    m_tree(0), m_events_count(0), m_tree_name(treename.c_str()), m_branch_name(branchname.c_str())
 {
     m_file = TFile::Open(filename.c_str());
     if (!init()) return;
@@ -34,38 +34,38 @@ bool ReaderRootTree::init()
 {
     if ( !m_file->IsOpen() )
     {
-        HEPMC3_ERROR( "ReaderRootTree: problem opening file: " << m_file->GetName() )
+        HEPMC3_ERROR("ReaderRootTree: problem opening file: " << m_file->GetName())
         return false;
     }
 
 
-    m_tree=reinterpret_cast<TTree*>(m_file->Get(m_tree_name.c_str()));
+    m_tree = reinterpret_cast<TTree*>(m_file->Get(m_tree_name.c_str()));
     if (!m_tree)
     {
-        HEPMC3_ERROR( "ReaderRootTree: problem opening tree:  " << m_tree_name)
+        HEPMC3_ERROR("ReaderRootTree: problem opening tree:  " << m_tree_name)
         return false;
     }
-    m_event_data=new GenEventData();
-    int result=m_tree->SetBranchAddress(m_branch_name.c_str(),&m_event_data);
-    if (result<0)
+    m_event_data = new GenEventData();
+    int result = m_tree->SetBranchAddress(m_branch_name.c_str(), &m_event_data);
+    if (result < 0)
     {
-        HEPMC3_ERROR( "ReaderRootTree: problem reading branch tree:  " << m_tree_name)
+        HEPMC3_ERROR("ReaderRootTree: problem reading branch tree:  " << m_tree_name)
         return false;
     }
-    m_run_info_data= new GenRunInfoData();
-    result=m_tree->SetBranchAddress("GenRunInfo",&m_run_info_data);
-    if (result<0)
+    m_run_info_data = new GenRunInfoData();
+    result = m_tree->SetBranchAddress("GenRunInfo", &m_run_info_data);
+    if (result < 0)
     {
-        HEPMC3_WARNING( "ReaderRootTree: problem reading branch tree: GenRunInfo. Will attempt to read GenRunInfoData object.")
+        HEPMC3_WARNING("ReaderRootTree: problem reading branch tree: GenRunInfo. Will attempt to read GenRunInfoData object.")
         std::shared_ptr<GenRunInfo> ri = std::make_shared<GenRunInfo>();
         GenRunInfoData *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
-        if(run) {
+        if (run) {
             ri->read_data(*run);
             delete run;
             set_run_info(ri);
-            HEPMC3_WARNING( "ReaderRootTree::init The object was written with HepMC3 version 3.0" )
+            HEPMC3_WARNING("ReaderRootTree::init The object was written with HepMC3 version 3.0")
         } else {
-            HEPMC3_ERROR( "ReaderRootTree: problem reading object GenRunInfoData")
+            HEPMC3_ERROR("ReaderRootTree: problem reading object GenRunInfoData")
             return false;
         }
     }
@@ -76,7 +76,7 @@ bool ReaderRootTree::init()
 bool ReaderRootTree::skip(const int n)
 {
     m_events_count+=n;
-    if (m_events_count>m_tree->GetEntries()) return false;
+    if (m_events_count > m_tree->GetEntries()) return false;
     return true;
 }
 
@@ -84,7 +84,7 @@ bool ReaderRootTree::skip(const int n)
 
 bool ReaderRootTree::read_event(GenEvent& evt)
 {
-    if (m_events_count>m_tree->GetEntries()) return false;
+    if (m_events_count > m_tree->GetEntries()) return false;
     m_event_data->particles.clear();
     m_event_data->vertices.clear();
     m_event_data->links1.clear();
@@ -118,7 +118,7 @@ void ReaderRootTree::close()
 bool ReaderRootTree::failed()
 {
     if ( !m_file->IsOpen() ) return true;
-    if (m_events_count>m_tree->GetEntries()) return true;
+    if (m_events_count > m_tree->GetEntries()) return true;
     return false;
 }
 
