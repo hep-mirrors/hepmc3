@@ -18,6 +18,8 @@
  *  @ingroup IO
  *
  */
+#include <string>
+#include <memory>
 #include "HepMC3/Writer.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Data/GenEventData.h"
@@ -47,13 +49,12 @@ public:
     WriterRootTree(const std::string &filename,
                    std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
     /** @brief Constructor with tree name*/
-    WriterRootTree(const std::string &filename,const std::string &treename,const std::string &branchname,
+    WriterRootTree(const std::string &filename, const std::string &treename, const std::string &branchname,
                    std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
 //
 // Functions
 //
 public:
-
     /** @brief Write event to file
      *
      *  @param[in] evt Event to be serialized

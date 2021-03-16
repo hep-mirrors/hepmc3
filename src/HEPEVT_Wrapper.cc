@@ -92,7 +92,7 @@ struct pair_GenVertexPtr_int_greater
 void calculate_longest_path_to_top(ConstGenVertexPtr v,std::map<ConstGenVertexPtr,int>& pathl)
 {
     int p=0;
-    for(ConstGenParticlePtr pp: v->particles_in()) {
+    for (ConstGenParticlePtr pp: v->particles_in()) {
         ConstGenVertexPtr v2 = pp->production_vertex();
         if (v2==v) continue; //LOOP! THIS SHOULD NEVER HAPPEN FOR A PROPER EVENT!
         if (!v2) p=std::max(p,1);
@@ -201,7 +201,7 @@ bool HEPEVT_Wrapper::GenEvent_to_HEPEVT( const GenEvent* evt )
         sort(Q.begin(),Q.end(),GenParticlePtr_greater_order());
         copy(Q.begin(),Q.end(),std::back_inserter(sorted_particles));
         /*For each vertex put all outgoing particles w/o end vertex. Ordering of particles to produces reproduceable record*/
-        for(ConstGenParticlePtr pp: it.first->particles_out())
+        for (ConstGenParticlePtr pp: it.first->particles_out())
             if (!(pp->end_vertex())) stable_particles.push_back(pp);
     }
     sort(stable_particles.begin(),stable_particles.end(),GenParticlePtr_greater_order());
@@ -228,7 +228,7 @@ bool HEPEVT_Wrapper::GenEvent_to_HEPEVT( const GenEvent* evt )
             std::vector<int> mothers;
             mothers.clear();
 
-            for(ConstGenParticlePtr it: sorted_particles[i-1]->production_vertex()->particles_in())
+            for (ConstGenParticlePtr it: sorted_particles[i-1]->production_vertex()->particles_in())
                 for ( int j = 1; j <= particle_counter; ++j )
                     if (sorted_particles[j-1]==(it))
                         mothers.push_back(j);

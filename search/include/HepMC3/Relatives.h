@@ -10,6 +10,7 @@
 #ifndef HEPMC3_RELATIVES_H
 #define HEPMC3_RELATIVES_H
 
+#include <vector>
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 
@@ -50,9 +51,7 @@ using Descendants = RelativesInterface<Recursive<_children> >;
  *         Relatives * relo = new RelativesInterface<MyRelationClass>();
  */
 class Relatives {
-
 public:
-
     virtual std::vector<GenParticlePtr> operator()(GenParticlePtr input) const = 0;
     virtual std::vector<ConstGenParticlePtr> operator()(ConstGenParticlePtr input) const = 0;
     virtual std::vector<GenParticlePtr> operator()(GenVertexPtr input) const = 0;
@@ -73,11 +72,8 @@ public:
  */
 template<typename Relative_type>
 class RelativesInterface : public Relatives {
-
 public:
-
     //RelativesInterface(Relative_type relatives): _internal(relatives){}
-
     constexpr RelativesInterface() {}
 
     GenParticles_type<GenParticlePtr> operator()(GenParticlePtr input) const override {return _internal(input);}
@@ -86,19 +82,15 @@ public:
     GenParticles_type<ConstGenVertexPtr> operator()(ConstGenVertexPtr input) const override {return _internal(input);}
 
 private:
-
     Relative_type _internal;
-
 };
 /** @brief  Recursive */
 template<typename Relation_type>
 class Recursive {
-
 public:
-
     template<typename GenObject_type>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const {
-        for(auto obj: m_checkedObjects) {
+        for (auto obj: m_checkedObjects) {
             delete obj;
         }
         m_checkedObjects.clear();
@@ -106,21 +98,19 @@ public:
     }
 
 private:
-
     template<typename GenObject_type, typename dummy>
-    GenParticles_type<GenObject_type> _recursive(GenObject_type input) const ;
+    GenParticles_type<GenObject_type> _recursive(GenObject_type input) const;
 
     GenParticles_type<GenVertexPtr> _recursive(GenVertexPtr input) const {
-
         GenParticles_type <GenVertexPtr> results;
         if ( !input ) return results;
-        for(auto v: m_checkedObjects) {
+        for (auto v: m_checkedObjects) {
             if (v->id() == input->id()) return results;
         }
 
         m_checkedObjects.emplace_back(new idInterface<GenVertexPtr>(input));
 
-        for(auto p: m_applyRelation(input)) {
+        for (auto p: m_applyRelation(input)) {
             results.emplace_back(p);
             GenParticles_type <GenVertexPtr> tmp = _recursive(p);
             results.insert(results.end(),
@@ -132,16 +122,15 @@ private:
     }
 
     GenParticles_type<ConstGenVertexPtr> _recursive(ConstGenVertexPtr input) const {
-
         GenParticles_type <ConstGenVertexPtr> results;
         if ( !input ) return results;
-        for(auto v: m_checkedObjects) {
+        for (auto v: m_checkedObjects) {
             if (v->id() == input->id()) return results;
         }
 
         m_checkedObjects.emplace_back(new idInterface<ConstGenVertexPtr>(input));
 
-        for(auto p: m_applyRelation(input)) {
+        for (auto p: m_applyRelation(input)) {
             results.emplace_back(p);
             GenParticles_type <ConstGenVertexPtr> tmp = _recursive(p);
             results.insert(results.end(),
@@ -151,7 +140,7 @@ private:
 
         return results;
     }
-    
+
     GenParticles_type<GenParticlePtr> _recursive(GenParticlePtr input) const {
         return _recursive(m_applyRelation.vertex(input));
     }
@@ -162,7 +151,6 @@ private:
 
     /** @brief  hasID */
     class hasId {
-
     public:
         virtual ~hasId() {}
         virtual int id() const = 0;
@@ -175,9 +163,7 @@ private:
         int id() const override {return m_object->id();}
 
     private:
-
         ID_type m_object;
-
     };
 
     Relation_type m_applyRelation;

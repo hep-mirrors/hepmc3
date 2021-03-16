@@ -105,14 +105,14 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     //Find beam particles
     std::vector<int> beams;
     int idbeam=0;
-    for(ConstGenVertexPtr v: evt.vertices() )
+    for (ConstGenVertexPtr v: evt.vertices() )
     {
-        for(ConstGenParticlePtr p: v->particles_in())
+        for (ConstGenParticlePtr p: v->particles_in())
         {
             if (!p->production_vertex())         { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
             else if (p->production_vertex()->id()==0) { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
         }
-        for( ConstGenParticlePtr p: v->particles_out()) { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
+        for ( ConstGenParticlePtr p: v->particles_out()) { if (p->status()==4) beams.push_back(idbeam); idbeam++;}
     }
     //
     int idbeam1=10000;
@@ -192,12 +192,12 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         }
     }
     m_particle_counter=0;
-    for(ConstGenVertexPtr v: evt.vertices() )
+    for (ConstGenVertexPtr v: evt.vertices() )
     {
         int production_vertex = 0;
         production_vertex=v->id();
         write_vertex(v);
-        for(ConstGenParticlePtr p: v->particles_in())
+        for (ConstGenParticlePtr p: v->particles_in())
         {
             if (!p->production_vertex()) write_particle( p, production_vertex );
             else
@@ -205,7 +205,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
                 if (p->production_vertex()->id()==0)write_particle( p, production_vertex );
             }
         }
-        for(ConstGenParticlePtr p: v->particles_out())
+        for (ConstGenParticlePtr p: v->particles_out())
             write_particle( p, production_vertex );
     }
 
@@ -271,7 +271,7 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
     m_cursor += sprintf( m_cursor, "V %i %i",v->id(),v->status() );
     flush();
     int orph=0;
-    for(ConstGenParticlePtr p: v->particles_in())
+    for (ConstGenParticlePtr p: v->particles_in())
     {
         if (!p->production_vertex()) orph++;
         else

@@ -10,6 +10,7 @@
 #ifndef HEPMC3_FILTER_H
 #define HEPMC3_FILTER_H
 
+#include <vector>
 #include <functional>
 #include "HepMC3/GenParticle.h"
 
@@ -21,7 +22,7 @@ using Filter = std::function<bool(ConstGenParticlePtr)>;
 /// Returns a vector of GenParticles that satisfy the Filter
 inline std::vector<GenParticlePtr> applyFilter(const Filter &filter, const std::vector<GenParticlePtr> &particles) {
     std::vector<GenParticlePtr> result;
-    for(GenParticlePtr p: particles) {
+    for (GenParticlePtr p: particles) {
         if (filter(p)) result.push_back(p);
     }
     return result;
@@ -31,7 +32,7 @@ inline std::vector<GenParticlePtr> applyFilter(const Filter &filter, const std::
 /// Returns a vector of ConstGenParticles that satisfy the Filter
 inline std::vector<ConstGenParticlePtr> applyFilter(const Filter &filter, const std::vector<ConstGenParticlePtr> &particles) {
     std::vector<ConstGenParticlePtr> result;
-    for(ConstGenParticlePtr p: particles) {
+    for (ConstGenParticlePtr p: particles) {
         if (filter(p)) result.push_back(p);
     }
     return result;
@@ -55,7 +56,7 @@ inline Filter operator || (const Filter & lhs, const Filter &rhs) {
 
 /// @brief The negation of a Filter is itself a Filter
 inline Filter operator !(const Filter &rhs) {
-    return [rhs](ConstGenParticlePtr p)->bool{return ! (rhs(p));};
+    return [rhs](ConstGenParticlePtr p)->bool{return !(rhs(p));};
 }
 
 }

@@ -66,7 +66,7 @@ void WriterHEPEVT::write_event(const GenEvent &evt)
     HEPEVT_Wrapper::GenEvent_to_HEPEVT(&evt);
     HEPEVT_Wrapper::fix_daughters();
     write_hepevt_event_header();
-    for( int i=1; i<=HEPEVT_Wrapper::number_entries(); ++i )  write_hepevt_particle(i,get_vertices_positions_present());
+    for ( int i=1; i<=HEPEVT_Wrapper::number_entries(); ++i )  write_hepevt_particle(i,get_vertices_positions_present());
     m_events_count++;
 }
 
