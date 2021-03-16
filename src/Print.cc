@@ -14,46 +14,46 @@
 
 namespace HepMC3 {
 
-void Print::content( std::ostream& os, const GenEvent &event ) {
-    os<<"--------------------------------"<<std::endl;
-    os<<"--------- EVENT CONTENT --------"<<std::endl;
-    os<<"--------------------------------"<<std::endl;
-    os<<std::endl;
+void Print::content(std::ostream& os, const GenEvent &event) {
+    os << "--------------------------------" << std::endl;
+    os << "--------- EVENT CONTENT --------" << std::endl;
+    os << "--------------------------------" << std::endl;
+    os << std::endl;
 
-    os<<"Weights (" << event.weights().size() <<"): "<<std::endl;
-    for (std::vector<double>::const_iterator w=event.weights().begin(); w!=event.weights().end(); ++w )
-        os <<" "<<*w;
+    os << "Weights (" << event.weights().size() << "): " << std::endl;
+    for (std::vector<double>::const_iterator w = event.weights().begin(); w != event.weights().end(); ++w )
+        os << " " << *w;
 
 
-    os<<"Attributes:"<<std::endl;
+    os << "Attributes:" << std::endl;
 
-    for ( auto vt1: event.attributes() ) {
-        for ( auto vt2: vt1.second ) {
+    for (auto vt1: event.attributes()) {
+        for (auto vt2: vt1.second) {
             os << vt2.first << ": " << vt1.first << std::endl;
         }
     }
 
-    os<<"GenParticlePtr ("<<event.particles().size()<<")"<<std::endl;
+    os << "GenParticlePtr (" << event.particles().size() << ")" << std::endl;
 
-    for ( ConstGenParticlePtr p: event.particles()) {
-        Print::line(p,true);
+    for (ConstGenParticlePtr p: event.particles()) {
+        Print::line(p, true);
     }
 
-    os<<"GenVertexPtr ("<<event.vertices().size()<<")"<<std::endl;
+    os << "GenVertexPtr (" << event.vertices().size() << ")" << std::endl;
     for ( ConstGenVertexPtr v: event.vertices() ) {
-        Print::line(v,true);
+        Print::line(v, true);
     }
 
-    os<<"-----------------------------"<<std::endl;
+    os << "-----------------------------" << std::endl;
 }
 
-void Print::listing( std::ostream& os, const GenEvent &event, unsigned short precision ) {
+void Print::listing(std::ostream& os, const GenEvent &event, unsigned short precision) {
     // Find the current stream state
     std::ios_base::fmtflags orig = os.flags();
     std::streamsize         prec = os.precision();
 
     // Set precision
-    os.precision( precision );
+    os.precision(precision);
 
     os << "________________________________________________________________________" << std::endl;
     os << "GenEvent: #" << event.event_number() << std::endl;
@@ -74,8 +74,8 @@ void Print::listing( std::ostream& os, const GenEvent &event, unsigned short pre
     os << "________________________________________________________________________" << std::endl;
 
     // Print all vertices
-    for (ConstGenVertexPtr v: event.vertices() ) {
-        Print::listing(os,v);
+    for (ConstGenVertexPtr v: event.vertices()) {
+        Print::listing(os, v);
     }
 
     // Restore the stream state
@@ -90,29 +90,29 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
     std::streamsize         prec = os.precision();
 
     // Set precision
-    os.precision( precision );
+    os.precision(precision);
 
     os << "________________________________________________________________________" << std::endl;
     os << "GenRunInfo:" << std::endl;
 
     std::vector<std::string> names = ri.weight_names();
     os << " Names: ( ";
-    for (auto n: names) os<<n;
-    os<<" )"<< std::endl;
+    for (auto n: names) os << n;
+    os << " )" << std::endl;
 
-    os << " Tools: "<< std::endl;
+    os << " Tools: " << std::endl;
 
     for (auto t: ri.tools()) {
-        Print::line(os,t);
+        Print::line(os, t);
     }
-    os<<"Attributes:"<<std::endl;
-    for ( auto att: ri.attributes() ) {
+    os << "Attributes:" << std::endl;
+    for (auto att: ri.attributes()) {
         std::string st;
-        if ( ! att.second->to_string(st) ) {
-            HEPMC3_WARNING ("Print::listing: problem serializing attribute: "<< att.first )
+        if ( !att.second->to_string(st) ) {
+            HEPMC3_WARNING("Print::listing: problem serializing attribute: " << att.first)
         }
-        else { os<<att.first<<" "<<att.second->to_string(st);}
-        os<<std::endl;
+        else { os << att.first << " " << att.second->to_string(st);}
+        os << std::endl;
     }
 
     // Restore the stream state
@@ -121,7 +121,7 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
     os << "________________________________________________________________________" << std::endl;
 }
 
-void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
+void Print::listing(std::ostream& os, ConstGenVertexPtr v) {
     if (!v) { os << "Vtx: Empty vertex" << std::endl; return;}
     os << "Vtx: ";
     os.width(6);
@@ -131,7 +131,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
 
     const FourVector &pos = v->position();
     if ( !pos.is_zero() ) {
-        os << " (X,cT): " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
+        os << " (X,cT): " << pos.x() << " " << pos.y() << " " << pos.z() << " " << pos.t();
     }
     else os << " (X,cT): 0";
 
@@ -140,7 +140,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
     bool printed_header = false;
 
     // Print out all the incoming particles
-    for (ConstGenParticlePtr p: v->particles_in() ) {
+    for (ConstGenParticlePtr p: v->particles_in()) {
         if ( !printed_header ) {
             os << " I: ";
             printed_header = true;
@@ -153,7 +153,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
     printed_header = false;
 
     // Print out all the outgoing particles
-    for (ConstGenParticlePtr p: v->particles_out() ) {
+    for (ConstGenParticlePtr p: v->particles_out()) {
         if ( !printed_header ) {
             os << " O: ";
             printed_header = true;
@@ -164,7 +164,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
     }
 }
 
-void Print::listing( std::ostream& os, ConstGenParticlePtr p ) {
+void Print::listing(std::ostream& os, ConstGenParticlePtr p) {
     if (!p) { os << " Empty particle" << std::endl; return;}
     os << " ";
     os.width(6);
@@ -200,19 +200,19 @@ void Print::listing( std::ostream& os, ConstGenParticlePtr p ) {
     os << std::endl;
 }
 void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
-    os <<"GenEvent: #" << event.event_number();
+    os << "GenEvent: #" << event.event_number();
     if (attributes) for (std::string s: event.attribute_names())
-            os<<" "<<s<<"="<<event.attribute_as_string(s);
+            os << " " << s << "=" <<event.attribute_as_string(s);
 }
 
 void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {
     os <<"GenRunInfo: Number of tools:" << RunInfo.tools().size();
     if (attributes) for (std::string s: RunInfo.attribute_names())
-            os<<" "<<s<<"="<<RunInfo.attribute_as_string(s);
+            os << " " << s << "=" << RunInfo.attribute_as_string(s);
 }
 
 void Print::line(std::ostream& os, const GenRunInfo::ToolInfo& t) {
-    os<<"GenRunInfo::ToolInfo "<<t.name<<" "<<t.version<<" "<<t.description;
+    os << "GenRunInfo::ToolInfo " << t.name<< " " << t.version << " " << t.description;
 }
 
 void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
@@ -229,12 +229,12 @@ void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
     if ( v->has_set_position() ) os << "true";
     else                        os << "false";
 
-    os << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t();
+    os << " (X,cT): " << pos.x() << ", " <<pos.y() << ", " << pos.z() << ", " << pos.t();
     if (attributes)
     {
-        std::vector<std::string> names     =v->attribute_names();
+        std::vector<std::string> names     = v->attribute_names();
         for (auto ss: names)
-            os<<" "<<ss<<"="<<(*v).attribute_as_string(ss);
+            os << " " << ss << "=" << (*v).attribute_as_string(ss);
     }
 }
 
@@ -246,7 +246,7 @@ void Print::line(std::ostream& os, const FourVector& p) {
     os.setf(std::ios_base::showpos);
     std::streamsize prec = os.precision();
     // Set precision
-    os.precision( 2 );
+    os.precision(2);
     os << " (P,E)=" << p.x()
        << "," << p.y()
        << "," << p.z()
@@ -273,7 +273,7 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
     std::streamsize prec = os.precision();
 
     // Set precision
-    os.precision( 2 );
+    os.precision(2);
 
     const FourVector &momentum = p->momentum();
 
@@ -298,9 +298,9 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
 
     if (attributes)
     {
-        std::vector<std::string> names     =p->attribute_names();
+        std::vector<std::string> names     = p->attribute_names();
         for (auto ss: names)
-            os<<" "<<ss<<"="<<(*p).attribute_as_string(ss);
+            os << " " << ss << "=" << (*p).attribute_as_string(ss);
     }
 }
 

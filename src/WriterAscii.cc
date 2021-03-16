@@ -27,11 +27,11 @@ WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo
       m_precision(16),
       m_buffer(nullptr),
       m_cursor(nullptr),
-      m_buffer_size( 256*1024 )
+      m_buffer_size(256*1024)
 {
     set_run_info(run);
     if ( !m_file.is_open() ) {
-        HEPMC3_ERROR( "WriterAscii: could not open output file: "<<filename )
+        HEPMC3_ERROR("WriterAscii: could not open output file: " << filename)
     } else {
         m_file << "HepMC::Version " << version() << std::endl;
         m_file << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
@@ -46,7 +46,7 @@ WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
       m_precision(16),
       m_buffer(nullptr),
       m_cursor(nullptr),
-      m_buffer_size( 256*1024 )
+      m_buffer_size(256*1024)
 
 {
     set_run_info(run);
@@ -75,9 +75,9 @@ void WriterAscii::write_event(const GenEvent &evt) {
         write_run_info();
     } else {
         if ( evt.run_info() && (run_info() != evt.run_info()) ) {
-            HEPMC3_WARNING( "WriterAscii::write_event: GenEvents contain "
+            HEPMC3_WARNING("WriterAscii::write_event: GenEvents contain "
                             "different GenRunInfo objects from - only the "
-                            "first such object will be serialized." )
+                            "first such object will be serialized.")
         }
         // else {
         //write_run_info();
@@ -91,17 +91,17 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Write event position if not zero
     const FourVector &pos = evt.event_pos();
     if ( !pos.is_zero() ) {
-        m_cursor += sprintf(m_cursor," @ %.*e",m_precision,pos.x());
+        m_cursor += sprintf(m_cursor, " @ %.*e", m_precision, pos.x());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",  m_precision,pos.y());
+        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.y());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",  m_precision,pos.z());
+        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.z());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",  m_precision,pos.t());
+        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.t());
         flush();
     }
 
-    m_cursor += sprintf(m_cursor,"\n");
+    m_cursor += sprintf(m_cursor, "\n");
     flush();
 
     // Write units
@@ -112,7 +112,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     if ( evt.weights().size() ) {
         m_cursor += sprintf(m_cursor, "W");
         for (auto  w: evt.weights())
-            m_cursor += sprintf(m_cursor, " %.*e",std::min(3*m_precision,22), w);
+            m_cursor += sprintf(m_cursor, " %.*e", std::min(3*m_precision, 22), w);
         m_cursor += sprintf(m_cursor, "\n");
         flush();
     }
@@ -124,11 +124,11 @@ void WriterAscii::write_event(const GenEvent &evt) {
             bool status = vt2.second->to_string(st);
 
             if ( !status ) {
-                HEPMC3_WARNING( "WriterAscii::write_event: problem serializing attribute: "<<vt1.first )
+                HEPMC3_WARNING("WriterAscii::write_event: problem serializing attribute: " << vt1.first)
             }
             else {
                 m_cursor +=
-                    sprintf(m_cursor, "A %i %s ",vt2.first,vt1.first.c_str());
+                    sprintf(m_cursor, "A %i %s ", vt2.first, vt1.first.c_str());
                 flush();
                 write_string(escape(st));
                 m_cursor += sprintf(m_cursor, "\n");
@@ -139,8 +139,8 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
 
     // Print particles
-    std::map<ConstGenVertexPtr,bool>  alreadywritten;
-    for (ConstGenParticlePtr p: evt.particles() ) {
+    std::map<ConstGenVertexPtr, bool>  alreadywritten;
+    for (ConstGenParticlePtr p: evt.particles()) {
         // Check to see if we need to write a vertex first
         ConstGenVertexPtr v = p->production_vertex();
         int parent_object = 0;
@@ -153,11 +153,11 @@ void WriterAscii::write_event(const GenEvent &evt) {
             //Add check for attributes of this vertex
             else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in()[0]->id();
             //Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
-            if (alreadywritten.find(v)==alreadywritten.end()&&parent_object<0)
-            { write_vertex(v); alreadywritten[v]=true;}
+            if (alreadywritten.find(v) == alreadywritten.end() && parent_object < 0)
+            { write_vertex(v); alreadywritten[v] = true;}
         }
 
-        write_particle( p, parent_object );
+        write_particle(p, parent_object);
     }
     alreadywritten.clear();
 
@@ -168,18 +168,18 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
 void WriterAscii::allocate_buffer() {
     if ( m_buffer ) return;
-    while( m_buffer==nullptr && m_buffer_size >= 256 ) {
+    while ( m_buffer == nullptr && m_buffer_size >= 256 ) {
         try {
             m_buffer = new char[ m_buffer_size ]();
         }     catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
-            HEPMC3_WARNING( "WriterAscii::allocate_buffer:"<<e.what()<<" buffer size too large. Dividing by 2. New size: " << m_buffer_size )
+            HEPMC3_WARNING("WriterAscii::allocate_buffer:" << e.what() << " buffer size too large. Dividing by 2. New size: " << m_buffer_size)
         }
     }
 
     if ( !m_buffer ) {
-        HEPMC3_ERROR( "WriterAscii::allocate_buffer: could not allocate buffer!" )
+        HEPMC3_ERROR("WriterAscii::allocate_buffer: could not allocate buffer!")
         return;
     }
     m_cursor = m_buffer;
@@ -188,7 +188,7 @@ void WriterAscii::allocate_buffer() {
 
 std::string WriterAscii::escape(const std::string& s)  const {
     std::string ret;
-    ret.reserve( s.length()*2 );
+    ret.reserve(s.length()*2);
     for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
         switch ( *it ) {
         case '\\':
@@ -205,37 +205,37 @@ std::string WriterAscii::escape(const std::string& s)  const {
 }
 
 void WriterAscii::write_vertex(ConstGenVertexPtr v) {
-    m_cursor += sprintf( m_cursor, "V %i %i [",v->id(),v->status() );
+    m_cursor += sprintf(m_cursor, "V %i %i [", v->id(), v->status());
     flush();
 
     bool printed_first = false;
     std::vector<int> pids;
-    for (ConstGenParticlePtr p: v->particles_in() ) pids.push_back(p->id());
+    for (ConstGenParticlePtr p: v->particles_in()) pids.push_back(p->id());
 //We order pids to be able to compare ascii files
-    std::sort(pids.begin(),pids.end());
-    for (auto pid: pids ) {
+    std::sort(pids.begin(), pids.end());
+    for (auto pid: pids) {
         if ( !printed_first ) {
-            m_cursor  += sprintf(m_cursor,"%i", pid);
+            m_cursor  += sprintf(m_cursor, "%i", pid);
             printed_first = true;
         }
-        else m_cursor += sprintf(m_cursor,",%i",pid);
+        else m_cursor += sprintf(m_cursor, ",%i", pid);
 
         flush();
     }
 
     const FourVector &pos = v->position();
     if ( !pos.is_zero() ) {
-        m_cursor += sprintf(m_cursor,"] @ %.*e",m_precision,pos.x());
+        m_cursor += sprintf(m_cursor, "] @ %.*e", m_precision, pos.x());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",   m_precision,pos.y());
+        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.y());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e",   m_precision,pos.z());
+        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.z());
         flush();
-        m_cursor += sprintf(m_cursor," %.*e\n", m_precision,pos.t());
+        m_cursor += sprintf(m_cursor, " %.*e\n", m_precision, pos.t());
         flush();
     }
     else {
-        m_cursor += sprintf(m_cursor,"]\n");
+        m_cursor += sprintf(m_cursor, "]\n");
         flush();
     }
 }
@@ -247,14 +247,14 @@ inline void WriterAscii::flush() {
     // we will not allow precision larger than 24 anyway
     unsigned long length = m_cursor - m_buffer;
     if ( m_buffer_size - length < 32 ) {
-        m_stream->write( m_buffer, length );
+        m_stream->write(m_buffer, length);
         m_cursor = m_buffer;
     }
 }
 
 
 inline void WriterAscii::forced_flush() {
-    m_stream->write( m_buffer, m_cursor - m_buffer );
+    m_stream->write(m_buffer, m_cursor - m_buffer);
     m_cursor = m_buffer;
 }
 
@@ -277,7 +277,7 @@ void WriterAscii::write_run_info() {
         m_cursor += sprintf(m_cursor, "\n");
     }
 
-    for ( int i = 0, N = run_info()->tools().size(); i < N; ++i  ) {
+    for (int i = 0, N = run_info()->tools().size(); i < N; ++i) {
         std::string out = "T " + run_info()->tools()[i].name + "\n"
                           + run_info()->tools()[i].version + "\n"
                           + run_info()->tools()[i].description;
@@ -288,8 +288,8 @@ void WriterAscii::write_run_info() {
 
     for ( auto att: run_info()->attributes() ) {
         std::string st;
-        if ( ! att.second->to_string(st) ) {
-            HEPMC3_WARNING ("WriterAscii::write_run_info: problem serializing attribute: "<< att.first )
+        if ( !att.second->to_string(st) ) {
+            HEPMC3_WARNING("WriterAscii::write_run_info: problem serializing attribute: " << att.first)
         }
         else {
             m_cursor +=
@@ -303,41 +303,41 @@ void WriterAscii::write_run_info() {
 }
 
 void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
-    m_cursor += sprintf(m_cursor,"P %i",p->id());
+    m_cursor += sprintf(m_cursor, "P %i", p->id());
     flush();
 
-    m_cursor += sprintf(m_cursor," %i",   second_field);
+    m_cursor += sprintf(m_cursor, " %i", second_field);
     flush();
-    m_cursor += sprintf(m_cursor," %i",   p->pid() );
+    m_cursor += sprintf(m_cursor, " %i", p->pid());
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().px() );
+    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().px());
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().py());
+    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().py());
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().pz() );
+    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().pz());
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->momentum().e() );
+    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().e());
     flush();
-    m_cursor += sprintf(m_cursor," %.*e", m_precision,p->generated_mass() );
+    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->generated_mass());
     flush();
-    m_cursor += sprintf(m_cursor," %i\n", p->status() );
+    m_cursor += sprintf(m_cursor, " %i\n", p->status() );
     flush();
 }
 
 
-inline void WriterAscii::write_string( const std::string &str ) {
+inline void WriterAscii::write_string(const std::string &str) {
     // First let's check if string will fit into the buffer
     unsigned long length = m_cursor-m_buffer;
 
     if ( m_buffer_size - length > str.length() ) {
-        strncpy(m_cursor,str.data(),str.length());
+        strncpy(m_cursor, str.data(), str.length());
         m_cursor += str.length();
         flush();
     }
     // If not, flush the buffer and write the string directly
     else {
         forced_flush();
-        m_stream->write( str.data(), str.length() );
+        m_stream->write(str.data(), str.length());
     }
 }
 

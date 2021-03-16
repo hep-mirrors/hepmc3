@@ -16,7 +16,7 @@
 
 namespace HepMC3 {
 
-GenParticle::GenParticle( const FourVector &mom, int pidin, int stat):
+GenParticle::GenParticle(const FourVector &mom, int pidin, int stat):
     m_event(nullptr),
     m_id(0) {
     m_data.pid               = pidin;
@@ -26,7 +26,7 @@ GenParticle::GenParticle( const FourVector &mom, int pidin, int stat):
     m_data.mass              = 0.0;
 }
 
-GenParticle::GenParticle( const GenParticleData &dat ):
+GenParticle::GenParticle(const GenParticleData &dat):
     m_event(nullptr),
     m_id(0),
     m_data(dat) {

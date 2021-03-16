@@ -20,13 +20,10 @@ const SelectorWrapper<double> StandardSelector::PHI      = SelectorWrapper<doubl
 const SelectorWrapper<double> StandardSelector::ET       = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().e() * (p->momentum().pt() / p->momentum().p3mod());});
 const SelectorWrapper<double> StandardSelector::MASS     = SelectorWrapper<double>([](ConstGenParticlePtr p)->double{return p->momentum().m();});
 
-
-
 ConstSelectorPtr abs(const Selector &input)
 {
     return input.abs();
 }
-
 
 AttributeFeature Selector::ATTRIBUTE(const std::string &name) {return AttributeFeature(name);}
 
