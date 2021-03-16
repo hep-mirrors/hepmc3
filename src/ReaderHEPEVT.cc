@@ -8,17 +8,19 @@
  *  @brief Implementation of \b class ReaderHEPEVT
  *
  */
+#include <sstream>
+
 #include "HepMC3/ReaderHEPEVT.h"
 #include "HepMC3/HEPEVT_Wrapper.h"
 
-#include <sstream>
+
 namespace HepMC3
 {
 
 ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
     : m_file(filename), m_stream(0), m_isstream(false)
 {
-    if( !m_file.is_open() ) {
+    if ( !m_file.is_open() ) {
         HEPMC3_ERROR( "ReaderHEPEVT: could not open input file: "<<filename )
     }
     else
@@ -33,7 +35,7 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
 ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
     : m_stream(&stream), m_isstream(true)
 {
-    if( !m_stream->good() ) {
+    if ( !m_stream->good() ) {
         HEPMC3_ERROR( "ReaderHEPEVT: could not open input stream  ")
     }
     else
@@ -53,7 +55,7 @@ bool ReaderHEPEVT::skip(const int n)
         char peek;
         if ( (!m_file.is_open()) && (!m_isstream) ) return false;
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
-        if( peek=='E' ) nn--;
+        if ( peek=='E' ) nn--;
         if (nn<0) return true;
         m_isstream ? m_stream->getline(buf,max_buffer_size) : m_file.getline(buf,max_buffer_size);
     }
@@ -71,7 +73,7 @@ bool ReaderHEPEVT::read_hepevt_event_header()
     while(!eventline)
     {
         m_isstream ? m_stream->getline(buf_e,max_e_buffer_size) : m_file.getline(buf_e,max_e_buffer_size);
-        if( strlen(buf_e) == 0 ) return false;
+        if ( strlen(buf_e) == 0 ) return false;
         std::stringstream st_e(buf_e);
         char attr=' ';
         eventline=false;
@@ -102,11 +104,11 @@ bool ReaderHEPEVT::read_hepevt_particle( int i)
     double fltcodes1[5];
     double fltcodes2[4];
     m_isstream ? m_stream->getline(buf_p,max_p_buffer_size) : m_file.getline(buf_p,max_p_buffer_size);
-    if( strlen(buf_p) == 0 ) return false;
+    if ( strlen(buf_p) == 0 ) return false;
     if (m_options.find("vertices_positions_are_absent")==m_options.end())
     {
         m_isstream ? m_stream->getline(buf_v,max_v_buffer_size) : m_file.getline(buf_v,max_v_buffer_size);
-        if( strlen(buf_v) == 0 ) return false;
+        if ( strlen(buf_v) == 0 ) return false;
     }
     std::stringstream st_p(buf_p);
     std::stringstream st_v(buf_v);
@@ -134,7 +136,6 @@ bool ReaderHEPEVT::read_hepevt_particle( int i)
     HEPEVT_Wrapper::set_mass(i,fltcodes1[4]);
     HEPEVT_Wrapper::set_position(i,fltcodes2[0],fltcodes2[1],fltcodes2[2],fltcodes2[3]);
     return true;
-
 }
 
 bool ReaderHEPEVT::read_event(GenEvent& evt)
@@ -167,7 +168,7 @@ bool ReaderHEPEVT::read_event(GenEvent& evt)
 void ReaderHEPEVT::close()
 {
     if (hepevtbuffer) delete hepevtbuffer;
-    if( !m_file.is_open()) return;
+    if ( !m_file.is_open()) return;
     m_file.close();
 }
 

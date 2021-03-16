@@ -48,7 +48,6 @@ void Print::content( std::ostream& os, const GenEvent &event ) {
 }
 
 void Print::listing( std::ostream& os, const GenEvent &event, unsigned short precision ) {
-
     // Find the current stream state
     std::ios_base::fmtflags orig = os.flags();
     std::streamsize         prec = os.precision();
@@ -86,7 +85,6 @@ void Print::listing( std::ostream& os, const GenEvent &event, unsigned short pre
 }
 
 void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short precision) {
-
     // Find the current stream state
     std::ios_base::fmtflags orig = os.flags();
     std::streamsize         prec = os.precision();
@@ -132,7 +130,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
     os << v->status();
 
     const FourVector &pos = v->position();
-    if( !pos.is_zero() ) {
+    if ( !pos.is_zero() ) {
         os << " (X,cT): " << pos.x()<<" "<<pos.y()<<" "<<pos.z()<<" "<<pos.t();
     }
     else os << " (X,cT): 0";
@@ -143,7 +141,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
 
     // Print out all the incoming particles
     for(ConstGenParticlePtr p: v->particles_in() ) {
-        if( !printed_header ) {
+        if ( !printed_header ) {
             os << " I: ";
             printed_header = true;
         }
@@ -156,7 +154,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
 
     // Print out all the outgoing particles
     for(ConstGenParticlePtr p: v->particles_out() ) {
-        if( !printed_header ) {
+        if ( !printed_header ) {
             os << " O: ";
             printed_header = true;
         }
@@ -194,7 +192,7 @@ void Print::listing( std::ostream& os, ConstGenParticlePtr p ) {
 
     ConstGenVertexPtr prod = p->production_vertex();
 
-    if( prod ) {
+    if ( prod ) {
         os.width(6);
         os << prod->id();
     }
@@ -203,13 +201,13 @@ void Print::listing( std::ostream& os, ConstGenParticlePtr p ) {
 }
 void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
     os <<"GenEvent: #" << event.event_number();
-    if(attributes) for (std::string s: event.attribute_names())
+    if (attributes) for (std::string s: event.attribute_names())
             os<<" "<<s<<"="<<event.attribute_as_string(s);
 }
 
 void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {
     os <<"GenRunInfo: Number of tools:" << RunInfo.tools().size();
-    if(attributes) for (std::string s: RunInfo.attribute_names())
+    if (attributes) for (std::string s: RunInfo.attribute_names())
             os<<" "<<s<<"="<<RunInfo.attribute_as_string(s);
 }
 
@@ -228,17 +226,16 @@ void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
 
     const FourVector &pos = v->position();
     os << " has_set_position: ";
-    if( v->has_set_position() ) os << "true";
+    if ( v->has_set_position() ) os << "true";
     else                        os << "false";
 
     os << " (X,cT): " << pos.x()<<", "<<pos.y()<<", "<<pos.z()<<", "<<pos.t();
-    if(attributes)
+    if (attributes)
     {
         std::vector<std::string> names     =v->attribute_names();
         for (auto ss: names)
             os<<" "<<ss<<"="<<(*v).attribute_as_string(ss);
     }
-
 }
 
 void Print::line(std::ostream& os, const FourVector& p) {
@@ -299,7 +296,7 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
        << " EV: " << end_vtx_id
        << " Attr: " << (*p).attribute_names().size();
 
-    if(attributes)
+    if (attributes)
     {
         std::vector<std::string> names     =p->attribute_names();
         for (auto ss: names)

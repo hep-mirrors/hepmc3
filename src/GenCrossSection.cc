@@ -8,12 +8,13 @@
  *  @brief Implementation of \b class GenCrossSection
  *
  */
-#include "HepMC3/GenCrossSection.h"
-#include "HepMC3/GenEvent.h"
 #include <cstring> // memcmp
 #include <cstdlib> // atoi
 #include <sstream>
 #include <iomanip>
+#include "HepMC3/GenCrossSection.h"
+#include "HepMC3/GenEvent.h"
+
 
 namespace HepMC3 {
 
@@ -44,24 +45,24 @@ bool GenCrossSection::from_string(const std::string &att) {
     double cross_section = atof(cursor);
     cross_sections.push_back(cross_section);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     double cross_section_error = atof(cursor);
     cross_section_errors.push_back(cross_section_error);
 
-    if( !(cursor = strchr(cursor+1,' ')) ) {accepted_events = -1; attempted_events = -1;}
+    if ( !(cursor = strchr(cursor+1,' ')) ) {accepted_events = -1; attempted_events = -1;}
     else
     {
         accepted_events = atoi(cursor);
-        if( !(cursor = strchr(cursor+1,' ')) ) attempted_events = -1;
+        if ( !(cursor = strchr(cursor+1,' ')) ) attempted_events = -1;
         else attempted_events = atoi(cursor);
     }
     size_t N=1;
     if ( event() ) N=std::max(event()->weights().size(),N);
     const size_t max_n_cross_sections=1000;
     while (cross_sections.size()<max_n_cross_sections) {
-        if( !(cursor = strchr(cursor+1,' ')) ) break;
+        if ( !(cursor = strchr(cursor+1,' ')) ) break;
         cross_sections.push_back(atof(cursor));
-        if( !(cursor = strchr(cursor+1,' ')) ) break;
+        if ( !(cursor = strchr(cursor+1,' ')) ) break;
         cross_section_errors.push_back(atof(cursor));
     }
     if (cross_sections.size()>=max_n_cross_sections)
@@ -102,11 +103,11 @@ bool GenCrossSection::operator!=( const GenCrossSection& a ) const {
 }
 
 bool GenCrossSection::is_valid() const {
-    if( cross_sections.size()       == 0 ) return false;
-    if( cross_section_errors.size() == 0 ) return false;
-    if( cross_section_errors.size()!=cross_sections.size() ) return false;
-    if( cross_sections.at(0)       != 0 ) return true;
-    if( cross_section_errors.at(0) != 0 ) return true;
+    if ( cross_sections.size()       == 0 ) return false;
+    if ( cross_section_errors.size() == 0 ) return false;
+    if ( cross_section_errors.size()!=cross_sections.size() ) return false;
+    if ( cross_sections.at(0)       != 0 ) return true;
+    if ( cross_section_errors.at(0) != 0 ) return true;
     return false;
 }
 

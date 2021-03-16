@@ -8,13 +8,13 @@
  *  @brief Implementation of \b class GenEvent
  *
  */
+#include <deque>
+#include <algorithm> // sort
+
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Data/GenEventData.h"
-
-#include <deque>
-#include <algorithm> // sort
 
 namespace HepMC3 {
 
@@ -46,7 +46,7 @@ const std::vector<ConstGenVertexPtr>& GenEvent::vertices() const {
 
 
 void GenEvent::add_particle( GenParticlePtr p ) {
-    if( !p|| p->in_event() ) return;
+    if ( !p|| p->in_event() ) return;
 
     m_particles.push_back(p);
 
@@ -54,7 +54,7 @@ void GenEvent::add_particle( GenParticlePtr p ) {
     p->m_id = particles().size();
 
     // Particles without production vertex are added to the root vertex
-    if( !p->production_vertex() )
+    if ( !p->production_vertex() )
         m_rootvertex->add_particle_out(p);
 }
 
@@ -94,7 +94,7 @@ GenEvent& GenEvent::operator=(const GenEvent& e) {
 
 
 void GenEvent::add_vertex( GenVertexPtr v ) {
-    if( !v|| v->in_event() ) return;
+    if ( !v|| v->in_event() ) return;
     m_vertices.push_back(v);
 
     v->m_event = this;
@@ -102,35 +102,35 @@ void GenEvent::add_vertex( GenVertexPtr v ) {
 
     // Add all incoming and outgoing particles and restore their production/end vertices
     for(auto p: v->particles_in() ) {
-        if(!p->in_event()) add_particle(p);
+        if (!p->in_event()) add_particle(p);
         p->m_end_vertex = v->shared_from_this();
     }
 
     for(auto p: v->particles_out() ) {
-        if(!p->in_event()) add_particle(p);
+        if (!p->in_event()) add_particle(p);
         p->m_production_vertex = v;
     }
 }
 
 
 void GenEvent::remove_particle( GenParticlePtr p ) {
-    if( !p || p->parent_event() != this ) return;
+    if ( !p || p->parent_event() != this ) return;
 
     HEPMC3_DEBUG( 30, "GenEvent::remove_particle - called with particle: "<<p->id() );
     GenVertexPtr end_vtx = p->end_vertex();
-    if( end_vtx ) {
+    if ( end_vtx ) {
         end_vtx->remove_particle_in(p);
 
         // If that was the only incoming particle, remove vertex from the event
-        if( end_vtx->particles_in().size() == 0 )  remove_vertex(end_vtx);
+        if ( end_vtx->particles_in().size() == 0 )  remove_vertex(end_vtx);
     }
 
     GenVertexPtr prod_vtx = p->production_vertex();
-    if( prod_vtx ) {
+    if ( prod_vtx ) {
         prod_vtx->remove_particle_out(p);
 
         // If that was the only outgoing particle, remove vertex from the event
-        if( prod_vtx->particles_out().size() == 0 ) remove_vertex(prod_vtx);
+        if ( prod_vtx->particles_out().size() == 0 ) remove_vertex(prod_vtx);
     }
 
     HEPMC3_DEBUG( 30, "GenEvent::remove_particle - erasing particle: " << p->id() )
@@ -154,7 +154,7 @@ void GenEvent::remove_particle( GenParticlePtr p ) {
         changed_attributes.clear();
 
         for ( std::map<int, std::shared_ptr<Attribute> >::iterator vt2=vt1.second.begin(); vt2!=vt1.second.end(); ++vt2) {
-            if( (*vt2).first > p->id() ) {
+            if ( (*vt2).first > p->id() ) {
                 changed_attributes.push_back(*vt2);
             }
         }
@@ -182,7 +182,6 @@ struct sort_by_id_asc {
 };
 
 void GenEvent::remove_particles( std::vector<GenParticlePtr> v ) {
-
     std::sort( v.begin(), v.end(), sort_by_id_asc() );
 
     for (std::vector<GenParticlePtr>::iterator p=v.begin(); p!=v.end(); ++p) {
@@ -191,7 +190,7 @@ void GenEvent::remove_particles( std::vector<GenParticlePtr> v ) {
 }
 
 void GenEvent::remove_vertex( GenVertexPtr v ) {
-    if( !v || v->parent_event() != this ) return;
+    if ( !v || v->parent_event() != this ) return;
 
     HEPMC3_DEBUG( 30, "GenEvent::remove_vertex   - called with vertex:  "<<v->id() );
     std::shared_ptr<GenVertex> null_vtx;
@@ -229,7 +228,7 @@ void GenEvent::remove_vertex( GenVertexPtr v ) {
         changed_attributes.clear();
 
         for ( std::map<int, std::shared_ptr<Attribute> >::iterator vt2=vt1.second.begin(); vt2!=vt1.second.end(); ++vt2) {
-            if( (*vt2).first < v->id() ) {
+            if ( (*vt2).first < v->id() ) {
                 changed_attributes.push_back(*vt2);
             }
         }
@@ -264,20 +263,19 @@ static bool visit_children(std::map<ConstGenVertexPtr,int>  &a, ConstGenVertexPt
 }
 
 void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
-
     std::shared_ptr<IntAttribute> existing_hc=attribute<IntAttribute>("cycles");
     bool has_cycles=false;
     std::map<GenVertexPtr,int>  sortingv;
     std::vector<GenVertexPtr> noinv;
     if (existing_hc)     if (existing_hc->value()!=0) has_cycles=true;
-    if(!existing_hc)
+    if (!existing_hc)
     {
         for(GenParticlePtr p: parts ) {
             GenVertexPtr v = p->production_vertex();
-            if(v) sortingv[v]=0;
-            if( !v || v->particles_in().size()==0 ) {
+            if (v) sortingv[v]=0;
+            if ( !v || v->particles_in().size()==0 ) {
                 GenVertexPtr v2 = p->end_vertex();
-                if(v2) {noinv.push_back(v2); sortingv[v2]=0;}
+                if (v2) {noinv.push_back(v2); sortingv[v2]=0;}
             }
         }
         for (GenVertexPtr v: noinv) {
@@ -288,7 +286,7 @@ void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
     if (has_cycles) {
         add_attribute("cycles", std::make_shared<IntAttribute>(1));
         /* Commented out  as improvemnts allow us to do sorting in other way.
-         for( std::map<GenVertexPtr,int>::iterator vi=sortingv.begin();vi!=sortingv.end();++vi) if( !vi->first->in_event() ) add_vertex(vi->first);
+         for( std::map<GenVertexPtr,int>::iterator vi=sortingv.begin();vi!=sortingv.end();++vi) if ( !vi->first->in_event() ) add_vertex(vi->first);
          return;
          */
     }
@@ -298,9 +296,9 @@ void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
     // Find all starting vertices (end vertex of particles that have no production vertex)
     for(auto p: parts ) {
         const GenVertexPtr &v = p->production_vertex();
-        if( !v || v->particles_in().size()==0 ) {
+        if ( !v || v->particles_in().size()==0 ) {
             const GenVertexPtr &v2 = p->end_vertex();
-            if(v2) sorting.push_back(v2);
+            if (v2) sorting.push_back(v2);
         }
     }
 
@@ -312,7 +310,7 @@ void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
     // Add vertices to the event in topological order
     while( !sorting.empty() ) {
         HEPMC3_DEBUG_CODE_BLOCK(
-            if( sorting.size() > max_deque_size ) max_deque_size = sorting.size();
+            if ( sorting.size() > max_deque_size ) max_deque_size = sorting.size();
             ++sorting_loop_count;
         )
 
@@ -323,7 +321,7 @@ void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
         // Add all mothers to the front of the list
         for( auto p: v->particles_in() ) {
             GenVertexPtr v2 = p->production_vertex();
-            if( v2 && !v2->in_event() && find(sorting.begin(),sorting.end(),v2)==sorting.end()) {
+            if ( v2 && !v2->in_event() && find(sorting.begin(),sorting.end(),v2)==sorting.end()) {
                 sorting.push_front(v2);
                 added = true;
             }
@@ -331,17 +329,16 @@ void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
 
         // If we have added at least one production vertex,
         // our vertex is not the first one on the list
-        if( added ) continue;
+        if ( added ) continue;
 
         // If vertex not yet added
-        if( !v->in_event() ) {
-
+        if ( !v->in_event() ) {
             add_vertex(v);
 
             // Add all end vertices to the end of the list
             for(auto p: v->particles_out() ) {
                 GenVertexPtr v2 = p->end_vertex();
-                if( v2 && !v2->in_event()&& find(sorting.begin(),sorting.end(),v2)==sorting.end() ) {
+                if ( v2 && !v2->in_event()&& find(sorting.begin(),sorting.end(),v2)==sorting.end() ) {
                     sorting.push_back(v2);
                 }
             }
@@ -360,7 +357,7 @@ void GenEvent::add_tree( const std::vector<GenParticlePtr> &parts ) {
             for(auto & vt1: m_attributes ) {
                 std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
                 for ( auto vt2 : vt1.second )
-                    if( vt2.first <= rootid )
+                    if ( vt2.first <= rootid )
                         changed_attributes.push_back(vt2);
                 for( auto val : changed_attributes ) {
                     vt1.second.erase(val.first);
@@ -392,7 +389,7 @@ void GenEvent::reserve(const size_t& parts, const size_t& verts) {
 
 
 void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUnit new_length_unit) {
-    if( new_momentum_unit != m_momentum_unit ) {
+    if ( new_momentum_unit != m_momentum_unit ) {
         for( GenParticlePtr p: m_particles ) {
             Units::convert( p->m_data.momentum, m_momentum_unit, new_momentum_unit );
             Units::convert( p->m_data.mass, m_momentum_unit, new_momentum_unit );
@@ -401,10 +398,10 @@ void GenEvent::set_units( Units::MomentumUnit new_momentum_unit, Units::LengthUn
         m_momentum_unit = new_momentum_unit;
     }
 
-    if( new_length_unit != m_length_unit ) {
+    if ( new_length_unit != m_length_unit ) {
         for(GenVertexPtr &v: m_vertices ) {
             FourVector &fv = v->m_data.position;
-            if( !fv.is_zero() ) Units::convert( fv, m_length_unit, new_length_unit );
+            if ( !fv.is_zero() ) Units::convert( fv, m_length_unit, new_length_unit );
         }
 
         m_length_unit = new_length_unit;
@@ -436,7 +433,6 @@ void GenEvent::shift_position_by( const FourVector & delta ) {
 
 bool GenEvent::rotate( const FourVector&  delta )
 {
-
     for ( auto p: m_particles)
     {
         FourVector mom=p->momentum();
@@ -556,7 +552,6 @@ bool GenEvent::reflect(const int axis)
 
 bool GenEvent::boost( const FourVector&  delta )
 {
-
     double deltalength2d=delta.length2();
     if (deltalength2d>1.0)
     {
@@ -601,9 +596,6 @@ bool GenEvent::boost( const FourVector&  delta )
     return true;
 }
 
-
-
-
 void GenEvent::clear() {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     m_event_number = 0;
@@ -614,17 +606,14 @@ void GenEvent::clear() {
     m_vertices.clear();
 }
 
-
-
-
 void GenEvent::remove_attribute(const std::string &name,  const int& id) {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std:: map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 =
         m_attributes.find(name);
-    if( i1 == m_attributes.end() ) return;
+    if ( i1 == m_attributes.end() ) return;
 
     std::map<int, std::shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
-    if( i2 == i1->second.end() ) return;
+    if ( i2 == i1->second.end() ) return;
 
     i1->second.erase(i2);
 }
@@ -633,7 +622,7 @@ std::vector<std::string> GenEvent::attribute_names( const int& id) const {
     std::vector<std::string> results;
 
     for(const att_key_t& vt1: m_attributes ) {
-        if( vt1.second.count( id ) == 1 ) {
+        if ( vt1.second.count( id ) == 1 ) {
             results.push_back( vt1.first );
         }
     }
@@ -681,12 +670,11 @@ void GenEvent::write_data(GenEventData& data) const {
 
     for( const att_key_t& vt1: this->attributes() ) {
         for( const att_val_t& vt2: vt1.second ) {
-
             std::string st;
 
             bool status = vt2.second->to_string(st);
 
-            if( !status ) {
+            if ( !status ) {
                 HEPMC3_WARNING( "GenEvent::write_data: problem serializing attribute: "<<vt1.first )
             }
             else {
@@ -755,7 +743,6 @@ void GenEvent::read_data(const GenEventData &data) {
 }
 
 
-
 //
 // Deprecated functions
 //
@@ -781,7 +768,7 @@ void GenEvent::add_beam_particle(GenParticlePtr p1) {
         HEPMC3_WARNING("Attempting to add an empty particle as beam particle. Ignored.")
         return;
     }
-    if( p1->in_event()) if (p1->parent_event()!=this)
+    if ( p1->in_event()) if (p1->parent_event()!=this)
         {
             HEPMC3_WARNING("Attempting to add particle from another event. Ignored.")
             return;
@@ -798,7 +785,7 @@ std::string GenEvent::attribute_as_string(const std::string &name, const int& id
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 =
         m_attributes.find(name);
-    if( i1 == m_attributes.end() ) {
+    if ( i1 == m_attributes.end() ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute_as_string(name);
         }
@@ -808,7 +795,7 @@ std::string GenEvent::attribute_as_string(const std::string &name, const int& id
     std::map<int, std::shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
     if (i2 == i1->second.end() ) return std::string();
 
-    if( !i2->second ) return std::string();
+    if ( !i2->second ) return std::string();
 
     std::string ret;
     i2->second->to_string(ret);

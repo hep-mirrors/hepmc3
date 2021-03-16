@@ -390,7 +390,7 @@ std::shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) 
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 =
         m_attributes.find(name);
-    if( i1 == m_attributes.end() ) {
+    if ( i1 == m_attributes.end() ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute<T>(name);
         }

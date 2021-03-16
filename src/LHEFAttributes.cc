@@ -13,7 +13,6 @@
 
 namespace HepMC3 {
 
-
 void HEPRUPAttribute::clear() {
     for ( int i = 0, N = tags.size(); i < N; ++i ) delete tags[i];
     tags.clear();

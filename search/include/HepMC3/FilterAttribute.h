@@ -17,9 +17,9 @@
 /// and examples of its use.
 ///
 /// @ingroup searchengine
+#include <string>
 #include "HepMC3/Filter.h"
 #include "HepMC3/Attribute.h"
-#include <string>
 
 namespace HepMC3 {
 /** Deprecated */

@@ -47,11 +47,11 @@ void ReaderLHEF::init()
     // This code is ugly and should be replaced.
     size_t nweights=0;
     for ( auto t1: m_hepr->tags) {
-        if(t1->name!="header") continue;
+        if (t1->name!="header") continue;
         for ( auto t2: t1->tags) {
-            if(t2->name!="initrwgt") continue;
+            if (t2->name!="initrwgt") continue;
             for ( auto t3: t2->tags) {
-                if(t3->name!="weightgroup") continue;
+                if (t3->name!="weightgroup") continue;
                 for (auto t4: t3->tags) if (t4->name=="weight") nweights++;
                 break;
             }

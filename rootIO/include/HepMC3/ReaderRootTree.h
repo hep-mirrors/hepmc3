@@ -46,7 +46,6 @@ public:
 // Functions
 //
 public:
-
     /// @brief skip events
     bool skip(const int)  override;
 

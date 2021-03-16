@@ -7,6 +7,8 @@
 /// @file WriterAsciiHepMC2.cc
 /// @brief Implementation of \b class WriterAsciiHepMC2
 ///
+#include <cstring>
+
 #include "HepMC3/WriterAsciiHepMC2.h"
 
 #include "HepMC3/Version.h"
@@ -14,7 +16,6 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Units.h"
-#include <cstring>
 
 namespace HepMC3
 {
@@ -161,7 +162,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
     std::shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
-    if(cs) {m_cursor += sprintf(m_cursor, "C %.*e %.*e\n",m_precision, cs->xsec(),m_precision,cs->xsec_err());  flush(); }
+    if (cs) {m_cursor += sprintf(m_cursor, "C %.*e %.*e\n",m_precision, cs->xsec(),m_precision,cs->xsec_err());  flush(); }
 
 
     // Write attributes
@@ -169,11 +170,10 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     {
         for ( auto vt2: vt1.second )
         {
-
             std::string st;
             bool status = vt2.second->to_string(st);
 
-            if( !status )
+            if ( !status )
             {
                 HEPMC3_WARNING( "WriterAsciiHepMC2::write_event: problem serializing attribute: "<<vt1.first )
             }
@@ -319,7 +319,6 @@ inline void WriterAsciiHepMC2::flush()
 
 inline void WriterAsciiHepMC2::forced_flush()
 {
-    // m_file.write( m_buffer, m_cursor-m_buffer );
     m_stream->write( m_buffer, m_cursor - m_buffer );
     m_cursor = m_buffer;
 }
@@ -329,7 +328,6 @@ void WriterAsciiHepMC2::write_run_info() {}
 
 void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int second_field)
 {
-
     m_cursor += sprintf(m_cursor,"P %i",int(10001+m_particle_counter));
     m_particle_counter++;
     flush();
@@ -391,7 +389,6 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int second_field)
 
 inline void WriterAsciiHepMC2::write_string( const std::string &str )
 {
-
     // First let's check if string will fit into the buffer
     unsigned long length = m_cursor-m_buffer;
 

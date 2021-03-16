@@ -27,7 +27,6 @@
 namespace HepMC3 {
 
 WriterPlugin::WriterPlugin(std::ostream & stream,const std::string &libname, const std::string &newwriter,std::shared_ptr<GenRunInfo> run) {
-
 #ifdef WIN32
     dll_handle=nullptr;
     dll_handle = LoadLibrary(libname.c_str());
@@ -47,11 +46,9 @@ WriterPlugin::WriterPlugin(std::ostream & stream,const std::string &libname, con
     if (!newWriter) { printf("Error  while loading function %s from  library %s: %s\n",newwriter.c_str(),libname.c_str(),dlerror()); m_writer=nullptr; return;   }
     m_writer=(Writer*)(newWriter(stream,run));
 #endif
-
-
 }
-WriterPlugin::WriterPlugin(const std::string& filename,const std::string &libname, const std::string &newwriter,std::shared_ptr<GenRunInfo> run) {
 
+WriterPlugin::WriterPlugin(const std::string& filename,const std::string &libname, const std::string &newwriter,std::shared_ptr<GenRunInfo> run) {
 #ifdef WIN32
     dll_handle=nullptr;
     dll_handle = LoadLibrary(libname.c_str());
@@ -77,12 +74,12 @@ WriterPlugin::~WriterPlugin() {
     if (m_writer) m_writer->close();
     if (m_writer) delete m_writer;
 #ifdef WIN32
-    if(dll_handle) {
+    if (dll_handle) {
         FreeLibrary((HINSTANCE)dll_handle);
     }
 #endif
 #if defined(__linux__) || defined(__darwin__)
-    if(dll_handle) {
+    if (dll_handle) {
         dlclose(dll_handle);
         dll_handle = nullptr;
     }

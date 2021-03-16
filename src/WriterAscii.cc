@@ -7,6 +7,9 @@
 /// @file WriterAscii.cc
 /// @brief Implementation of \b class WriterAscii
 ///
+#include <cstring>
+#include <algorithm>//min max for VS2017
+
 #include "HepMC3/WriterAscii.h"
 
 #include "HepMC3/Version.h"
@@ -14,8 +17,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Units.h"
-#include <cstring>
-#include <algorithm>//min max for VS2017
+
 namespace HepMC3 {
 
 
@@ -61,7 +63,6 @@ WriterAscii::~WriterAscii() {
 
 
 void WriterAscii::write_event(const GenEvent &evt) {
-
     // if ( !m_file.is_open() ) return;
     allocate_buffer();
     if ( !m_buffer ) return;
@@ -119,11 +120,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Write attributes
     for ( auto vt1: evt.attributes() ) {
         for ( auto vt2: vt1.second ) {
-
             std::string st;
             bool status = vt2.second->to_string(st);
 
-            if( !status ) {
+            if ( !status ) {
                 HEPMC3_WARNING( "WriterAscii::write_event: problem serializing attribute: "<<vt1.first )
             }
             else {
@@ -141,7 +141,6 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Print particles
     std::map<ConstGenVertexPtr,bool>  alreadywritten;
     for(ConstGenParticlePtr p: evt.particles() ) {
-
         // Check to see if we need to write a vertex first
         ConstGenVertexPtr v = p->production_vertex();
         int parent_object = 0;
@@ -151,7 +150,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
             //Yes, use vertex as parent object
             if ( v->particles_in().size() > 1 || !v->data().is_zero() ) parent_object = v->id();
             //No, use particle as parent object
-            //TODO: add check for attributes of this vertex
+            //Add check for attributes of this vertex
             else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in()[0]->id();
             //Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
             if (alreadywritten.find(v)==alreadywritten.end()&&parent_object<0)
@@ -206,7 +205,6 @@ std::string WriterAscii::escape(const std::string& s)  const {
 }
 
 void WriterAscii::write_vertex(ConstGenVertexPtr v) {
-
     m_cursor += sprintf( m_cursor, "V %i %i [",v->id(),v->status() );
     flush();
 
@@ -216,7 +214,6 @@ void WriterAscii::write_vertex(ConstGenVertexPtr v) {
 //We order pids to be able to compare ascii files
     std::sort(pids.begin(),pids.end());
     for(auto pid: pids ) {
-
         if ( !printed_first ) {
             m_cursor  += sprintf(m_cursor,"%i", pid);
             printed_first = true;
@@ -250,7 +247,6 @@ inline void WriterAscii::flush() {
     // we will not allow precision larger than 24 anyway
     unsigned long length = m_cursor - m_buffer;
     if ( m_buffer_size - length < 32 ) {
-        // m_file.write( m_buffer, length );
         m_stream->write( m_buffer, length );
         m_cursor = m_buffer;
     }
@@ -258,14 +254,12 @@ inline void WriterAscii::flush() {
 
 
 inline void WriterAscii::forced_flush() {
-    // m_file.write( m_buffer, m_cursor-m_buffer );
     m_stream->write( m_buffer, m_cursor - m_buffer );
     m_cursor = m_buffer;
 }
 
 
 void WriterAscii::write_run_info() {
-
     allocate_buffer();
 
     // If no run info object set, create a dummy one.
@@ -309,7 +303,6 @@ void WriterAscii::write_run_info() {
 }
 
 void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
-
     m_cursor += sprintf(m_cursor,"P %i",p->id());
     flush();
 
@@ -333,7 +326,6 @@ void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
 
 
 inline void WriterAscii::write_string( const std::string &str ) {
-
     // First let's check if string will fit into the buffer
     unsigned long length = m_cursor-m_buffer;
 
@@ -345,7 +337,6 @@ inline void WriterAscii::write_string( const std::string &str ) {
     // If not, flush the buffer and write the string directly
     else {
         forced_flush();
-        // m_file.write( str.data(), str.length() );
         m_stream->write( str.data(), str.length() );
     }
 }

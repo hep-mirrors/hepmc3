@@ -16,9 +16,6 @@ thread_local const Ancestors   Relatives::ANCESTORS;
 thread_local const Descendants Relatives::DESCENDANTS;
 }
 
-
-
-
 namespace HepMC3 {
 
 std::vector<HepMC3::GenParticlePtr>      children(HepMC3::GenVertexPtr O) {
@@ -217,4 +214,4 @@ std::vector<HepMC3::GenVertexPtr>        grandparent_vertices(HepMC3::GenVertexP
 std::vector<HepMC3::ConstGenVertexPtr>   grandparent_vertices(HepMC3::ConstGenVertexPtr O)      { return grandparents(O); }
 
 
-}
+} // namespace HepMC3

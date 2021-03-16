@@ -30,7 +30,7 @@ namespace HepMC3 {
 #ifndef HEPMC3_RELEASE_VERSION
 
 /** @brief Macro for printing debug messages with appropriate debug level */
-#define HEPMC3_DEBUG(LEVEL,MESSAGE) if( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
+#define HEPMC3_DEBUG(LEVEL,MESSAGE) if ( Setup::debug_level()>=(LEVEL) ) { std::cout << "DEBUG(" << LEVEL <<")::" << MESSAGE << std::endl; }
 /** @brief Macro for storing code useful for debugging */
 #define HEPMC3_DEBUG_CODE_BLOCK( x ) x
 

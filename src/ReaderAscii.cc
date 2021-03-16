@@ -7,14 +7,15 @@
 /// @file ReaderAscii.cc
 /// @brief Implementation of \b class ReaderAscii
 ///
+#include <cstring>
+#include <sstream>
+
 #include "HepMC3/ReaderAscii.h"
 
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Units.h"
-#include <cstring>
-#include <sstream>
 
 namespace HepMC3 {
 
@@ -22,7 +23,7 @@ namespace HepMC3 {
 ReaderAscii::ReaderAscii(const std::string &filename)
     : m_file(filename), m_stream(0), m_isstream(false)
 {
-    if( !m_file.is_open() ) {
+    if ( !m_file.is_open() ) {
         HEPMC3_ERROR( "ReaderAscii: could not open input file: "<<filename )
     }
     set_run_info(std::make_shared<GenRunInfo>());
@@ -33,7 +34,7 @@ ReaderAscii::ReaderAscii(const std::string &filename)
 ReaderAscii::ReaderAscii(std::istream & stream)
     : m_stream(&stream), m_isstream(true)
 {
-    if( !m_stream->good() ) {
+    if ( !m_stream->good() ) {
         HEPMC3_ERROR( "ReaderAscii: could not open input stream " )
     }
     set_run_info(std::make_shared<GenRunInfo>());
@@ -52,7 +53,7 @@ bool ReaderAscii::skip(const int n)
         char  peek;
         if ( (!m_file.is_open()) && (!m_isstream) ) return false;
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
-        if( peek=='E' ) nn--;
+        if ( peek=='E' ) nn--;
         if (nn<0) return true;
         m_isstream ? m_stream->getline(buf,max_buffer_size) : m_file.getline(buf,max_buffer_size);
     }
@@ -78,20 +79,19 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     // Parse event, vertex and particle information
     //
     while(!failed()) {
-
         m_isstream ? m_stream->getline(buf,max_buffer_size) : m_file.getline(buf,max_buffer_size);
 
-        if( strlen(buf) == 0 ) continue;
+        if ( strlen(buf) == 0 ) continue;
 
         // Check for ReaderAscii header/footer
-        if( strncmp(buf,"HepMC",5) == 0 ) {
-            if( strncmp(buf,"HepMC::Version",14) != 0 && strncmp(buf,"HepMC::Asciiv3",14)!=0 )
+        if ( strncmp(buf,"HepMC",5) == 0 ) {
+            if ( strncmp(buf,"HepMC::Version",14) != 0 && strncmp(buf,"HepMC::Asciiv3",14)!=0 )
             {
                 HEPMC3_WARNING( "ReaderAscii: found unsupported expression in header. Will close the input." )
                 std::cout<<buf<<std::endl;
                 m_isstream ? m_stream->clear(std::ios::eofbit) : m_file.clear(std::ios::eofbit);
             }
-            if(parsed_event_header) {
+            if (parsed_event_header) {
                 is_parsing_successful = true;
                 break;
             }
@@ -138,11 +138,11 @@ bool ReaderAscii::read_event(GenEvent &evt) {
             break;
         }
 
-        if( !is_parsing_successful ) break;
+        if ( !is_parsing_successful ) break;
 
         // Check for next event
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
-        if( parsed_event_header && peek=='E' ) break;
+        if ( parsed_event_header && peek=='E' ) break;
     }
 
 
@@ -170,7 +170,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         is_parsing_successful =  false;
     }
     // Check if there were HEPMC3_ERRORs during parsing
-    if( !is_parsing_successful ) {
+    if ( !is_parsing_successful ) {
         HEPMC3_ERROR( "ReaderAscii: event parsing failed. Returning empty event" )
         HEPMC3_DEBUG( 1, "Parsing failed at line:" << std::endl << buf )
 
@@ -211,35 +211,34 @@ std::pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const cha
     FourVector                  position;
 
     // event number
-    if( !(cursor = strchr(cursor+1,' ')) ) return err;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return err;
     event_no = atoi(cursor);
     evt.set_event_number(event_no);
 
     // num_vertices
-    if( !(cursor = strchr(cursor+1,' ')) ) return err;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return err;
     ret.first = atoi(cursor);
 
     // num_particles
-    if( !(cursor = strchr(cursor+1,' ')) ) return err;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return err;
     ret.second = atoi(cursor);
 
     // check if there is position information
-    if( (cursor = strchr(cursor+1,'@')) ) {
-
+    if ( (cursor = strchr(cursor+1,'@')) ) {
         // x
-        if( !(cursor = strchr(cursor+1,' ')) ) return err;
+        if ( !(cursor = strchr(cursor+1,' ')) ) return err;
         position.setX(atof(cursor));
 
         // y
-        if( !(cursor = strchr(cursor+1,' ')) ) return err;
+        if ( !(cursor = strchr(cursor+1,' ')) ) return err;
         position.setY(atof(cursor));
 
         // z
-        if( !(cursor = strchr(cursor+1,' ')) ) return err;
+        if ( !(cursor = strchr(cursor+1,' ')) ) return err;
         position.setZ(atof(cursor));
 
         // t
-        if( !(cursor = strchr(cursor+1,' ')) ) return err;
+        if ( !(cursor = strchr(cursor+1,' ')) ) return err;
         position.setT(atof(cursor));
         evt.shift_position_to( position );
     }
@@ -251,7 +250,6 @@ std::pair<int,int> ReaderAscii::parse_event_information(GenEvent &evt, const cha
 
 
 bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
-
     std::istringstream iss(buf + 1);
     std::vector<double> wts;
     double w;
@@ -271,12 +269,12 @@ bool ReaderAscii::parse_units(GenEvent &evt, const char *buf) {
     const char *cursor = buf;
 
     // momentum
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     ++cursor;
     Units::MomentumUnit momentum_unit = Units::momentum_unit(cursor);
 
     // length
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     ++cursor;
     Units::LengthUnit length_unit = Units::length_unit(cursor);
 
@@ -297,15 +295,15 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     int           highest_id      = evt.particles().size();
 
     // id
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     id = atoi(cursor);
 
     // status
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     data->set_status( atoi(cursor) );
 
     // skip to the list of particles
-    if( !(cursor = strchr(cursor+1,'[')) ) return false;
+    if ( !(cursor = strchr(cursor+1,'[')) ) return false;
 
     while(true) {
         ++cursor;             // skip the '[' or ',' character
@@ -313,7 +311,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
         int  particle_in = atoi(cursor);
 
         // add incoming particle to the vertex
-        if( particle_in > 0) {
+        if ( particle_in > 0) {
 //Particles are always ordered, so id==position in event.
             if (particle_in <= highest_id)
                 data->add_particle_in( evt.particles()[particle_in-1] );
@@ -322,32 +320,30 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
         }
 
         // check for next particle or end of particle list
-        if( !(cursor = strchr(cursor+1,',')) ) {
-            if( !(cursor = strchr(cursor2+1,']')) ) return false;
+        if ( !(cursor = strchr(cursor+1,',')) ) {
+            if ( !(cursor = strchr(cursor2+1,']')) ) return false;
             break;
         }
     }
 
     // check if there is position information
-    if( (cursor = strchr(cursor+1,'@')) ) {
-
+    if ( (cursor = strchr(cursor+1,'@')) ) {
         // x
-        if( !(cursor = strchr(cursor+1,' ')) ) return false;
+        if ( !(cursor = strchr(cursor+1,' ')) ) return false;
         position.setX(atof(cursor));
 
         // y
-        if( !(cursor = strchr(cursor+1,' ')) ) return false;
+        if ( !(cursor = strchr(cursor+1,' ')) ) return false;
         position.setY(atof(cursor));
 
         // z
-        if( !(cursor = strchr(cursor+1,' ')) ) return false;
+        if ( !(cursor = strchr(cursor+1,' ')) ) return false;
         position.setZ(atof(cursor));
 
         // t
-        if( !(cursor = strchr(cursor+1,' ')) ) return false;
+        if ( !(cursor = strchr(cursor+1,' ')) ) return false;
         position.setT(atof(cursor));
         data->set_position( position );
-
     }
 
     HEPMC3_DEBUG( 10, "ReaderAscii: V: "<<id<<" with "<<data->particles_in().size()<<" particles)" )
@@ -367,26 +363,25 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     int             mother_id = 0;
 
     // verify id
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
 
-    if( atoi(cursor) != (int)evt.particles().size() + 1 ) {
+    if ( atoi(cursor) != (int)evt.particles().size() + 1 ) {
         /// @todo Should be an exception
         HEPMC3_ERROR( "ReaderAscii: particle ID mismatch" )
         return false;
     }
 
     // mother id
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     mother_id = atoi(cursor);
 
     // Parent object is a particle. Particleas are always ordered id==position in event.
-    if( mother_id > 0 && mother_id <= (int)evt.particles().size() ) {
-
+    if ( mother_id > 0 && mother_id <= (int)evt.particles().size() ) {
         GenParticlePtr mother = evt.particles()[ mother_id-1 ];
         GenVertexPtr   vertex = mother->end_vertex();
 
         // create new vertex if needed
-        if( !vertex ) {
+        if ( !vertex ) {
             vertex = std::make_shared<GenVertex>();
             vertex->add_particle_in(mother);
         }
@@ -397,7 +392,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
         vertex->set_id(0);
     }
     // Parent object is vertex
-    else if( mother_id < 0 )
+    else if ( mother_id < 0 )
     {
         //Vertices are not always ordered, e.g. when one reads HepMC2 event, so we check their ids.
         bool found=false;
@@ -412,32 +407,32 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     }
 
     // pdg id
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     data->set_pid( atoi(cursor) );
 
     // px
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     momentum.setPx(atof(cursor));
 
     // py
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     momentum.setPy(atof(cursor));
 
     // pz
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     momentum.setPz(atof(cursor));
 
     // pe
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     momentum.setE(atof(cursor));
     data->set_momentum(momentum);
 
     // m
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     data->set_generated_mass( atof(cursor) );
 
     // status
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     data->set_status( atoi(cursor) );
 
     evt.add_particle(data);
@@ -454,13 +449,13 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     char            name[512];
     int             id = 0;
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     id = atoi(cursor);
 
-    if( !(cursor  = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor  = strchr(cursor+1,' ')) ) return false;
     ++cursor;
 
-    if( !(cursor2 = strchr(cursor,' ')) ) return false;
+    if ( !(cursor2 = strchr(cursor,' ')) ) return false;
     snprintf(name, 512,"%.*s",(int)(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
@@ -478,10 +473,10 @@ bool ReaderAscii::parse_run_attribute(const char *buf) {
     const char     *cursor2 = buf;
     char            name[512];
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     ++cursor;
 
-    if( !(cursor2 = strchr(cursor,' ')) ) return false;
+    if ( !(cursor2 = strchr(cursor,' ')) ) return false;
     snprintf(name, 512,"%.*s", (int)(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
@@ -492,14 +487,13 @@ bool ReaderAscii::parse_run_attribute(const char *buf) {
     run_info()->add_attribute(std::string(name), att);
 
     return true;
-
 }
 
 
 bool ReaderAscii::parse_weight_names(const char *buf) {
     const char     *cursor  = buf;
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     ++cursor;
 
     std::istringstream iss(unescape(cursor));
@@ -510,13 +504,12 @@ bool ReaderAscii::parse_weight_names(const char *buf) {
     run_info()->set_weight_names(names);
 
     return true;
-
 }
 
 bool ReaderAscii::parse_tool(const char *buf) {
     const char     *cursor  = buf;
 
-    if( !(cursor = strchr(cursor+1,' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1,' ')) ) return false;
     ++cursor;
     std::string line = unescape(cursor);
     GenRunInfo::ToolInfo tool;
@@ -529,7 +522,6 @@ bool ReaderAscii::parse_tool(const char *buf) {
     run_info()->tools().push_back(tool);
 
     return true;
-
 }
 
 
@@ -553,7 +545,7 @@ std::string ReaderAscii::unescape(const std::string& s) {
 bool ReaderAscii::failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
 
 void ReaderAscii::close() {
-    if( !m_file.is_open()) return;
+    if ( !m_file.is_open()) return;
     m_file.close();
 }
 
