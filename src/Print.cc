@@ -167,7 +167,7 @@ void Print::listing( std::ostream& os, ConstGenVertexPtr v ) {
 }
 
 void Print::listing( std::ostream& os, ConstGenParticlePtr p ) {
-	if (!p) { os << " Empty particle" << std::endl; return;}
+    if (!p) { os << " Empty particle" << std::endl; return;}
     os << " ";
     os.width(6);
     os << p->id();
@@ -207,7 +207,7 @@ void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
             os<<" "<<s<<"="<<event.attribute_as_string(s);
 }
 
-void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {	
+void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {
     os <<"GenRunInfo: Number of tools:" << RunInfo.tools().size();
     if(attributes) for (std::string s: RunInfo.attribute_names())
             os<<" "<<s<<"="<<RunInfo.attribute_as_string(s);
@@ -308,7 +308,7 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
 }
 
 void Print::line(std::ostream& os, std::shared_ptr<GenCrossSection> &cs) {
-	if (!cs) {os << " GenCrossSection: Empty"; return;}
+    if (!cs) {os << " GenCrossSection: Empty"; return;}
     os << " GenCrossSection: " << cs->xsec(0)
        << " " << cs->xsec_err(0)
        << " " << cs->get_accepted_events()
