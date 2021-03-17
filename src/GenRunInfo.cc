@@ -87,7 +87,7 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
     // Attributes
     for (unsigned int i = 0; i < data.attribute_name.size(); ++i) {
         add_attribute(data.attribute_name[i],
-                       std::make_shared<StringAttribute>(data.attribute_string[i]));
+                      std::make_shared<StringAttribute>(data.attribute_string[i]));
     }
 
     // Tools

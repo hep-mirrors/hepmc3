@@ -115,8 +115,8 @@ bool GenHeavyIon::operator!=(const GenHeavyIon& a) const {
 }
 
 void GenHeavyIon::set(const int&nh, const int&np, const int&nt, const int&nc, const int&ns, const int&nsp,
-                       const int&nnw, const int&nwn, const int&nwnw,
-                       const double& im, const double& pl, const double& ec, const double& s, const double& cent, const double& usrcent) {
+                      const int&nnw, const int&nwn, const int&nwnw,
+                      const double& im, const double& pl, const double& ec, const double& s, const double& cent, const double& usrcent) {
     Ncoll_hard                   = nh;
     Npart_proj                   = np;
     Npart_targ                   = nt;
