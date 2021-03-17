@@ -10,6 +10,7 @@
  *  @brief Definition of \b class FourVector
  */
 #include <cmath>
+#include <limits>
 #ifndef M_PI
 /** @brief Definition of PI. Needed on some platforms */
 #define M_PI 3.14159265358979323846264338327950288
@@ -167,8 +168,6 @@ public:
     double phi() const { return std::atan2( y(), x() ); }
     /// Polar angle w.r.t. z direction
     double theta() const {  return std::atan2( perp(), z() ); }
-    // /// Cosine of polar angle w.r.t. z direction
-    // double costheta() const {  return z() / p3mod(); }
     /// Pseudorapidity
     double eta() const  { return 0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) ); }
     /// Rapidity

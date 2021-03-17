@@ -40,8 +40,8 @@ void WriterRoot::write_event(const GenEvent &evt) {
     } else {
         if ( evt.run_info() && run_info() != evt.run_info() )
             HEPMC3_WARNING("WriterAscii::write_event: GenEvents contain "
-                            "different GenRunInfo objects from - only the "
-                            "first such object will be serialized.")
+                           "different GenRunInfo objects from - only the "
+                           "first such object will be serialized.")
         }
 
     GenEventData data;

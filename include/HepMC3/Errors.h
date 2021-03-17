@@ -13,7 +13,7 @@
 
 #include <iostream>
 #include <stdexcept>
-
+#include <HepMC3/Setup.h>
 namespace HepMC3 {
 
 

@@ -375,8 +375,8 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
 
     HEPMC3_DEBUG_CODE_BLOCK(
         HEPMC3_DEBUG(6, "GenEvent - particles sorted: "
-                      << this->particles().size() << ", max deque size: "
-                      << max_deque_size << ", iterations: " << sorting_loop_count)
+                     << this->particles().size() << ", max deque size: "
+                     << max_deque_size << ", iterations: " << sorting_loop_count)
     )
     return;
 }
@@ -737,8 +737,8 @@ void GenEvent::read_data(const GenEventData &data) {
     // Read attributes
     for (unsigned int i = 0; i < data.attribute_id.size(); ++i) {
         add_attribute(data.attribute_name[i],
-                       std::make_shared<StringAttribute>(data.attribute_string[i]),
-                       data.attribute_id[i]);
+                      std::make_shared<StringAttribute>(data.attribute_string[i]),
+                      data.attribute_id[i]);
     }
 }
 
