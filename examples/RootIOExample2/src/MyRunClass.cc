@@ -1,6 +1,6 @@
 #include "MyRunClass.h"
 
-MyRunClass::MyRunClass():someint(0), run(0) {};
+MyRunClass::MyRunClass():someint(0), run(0) {}
 
 void MyRunClass::SetRunInfo(GenRunInfo* myrun)
 {

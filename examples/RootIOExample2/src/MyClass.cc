@@ -1,6 +1,6 @@
 #include "MyClass.h"
 
-MyClass::MyClass():someint(0), event(0) {};
+MyClass::MyClass():someint(0), event(0) {}
 
 void MyClass::SetEvent(GenEvent* myevt)
 {

@@ -145,23 +145,23 @@ void HepMC3Particle::SetEvent(HEPEvent * event) {
     this->event=(HepMC3Event*)event;
 }
 
-void HepMC3Particle::SetId( int id ) {
+void HepMC3Particle::SetId(int id) {
     this->id = id;
 }
 
 //Can not use these methods for HepMC
-void HepMC3Particle::SetMother( int mother ) {}
-void HepMC3Particle::SetMother2( int mother ) {}
-void HepMC3Particle::SetFirstDaughter( int daughter ) {}
-void HepMC3Particle::SetLastDaughter ( int daughter ) {}
+void HepMC3Particle::SetMother(int /*mother*/) {}
+void HepMC3Particle::SetMother2(int /*mother*/) {}
+void HepMC3Particle::SetFirstDaughter(int /*daughter*/) {}
+void HepMC3Particle::SetLastDaughter (int /*daughter*/) {}
 
-void HepMC3Particle::SetE( double E ) {
+void HepMC3Particle::SetE(double E) {
     HepMC3::FourVector temp_mom(part->momentum());
     temp_mom.setE(E);
     part->set_momentum(temp_mom);
 }
 
-void HepMC3Particle::SetPx( double px ) {
+void HepMC3Particle::SetPx(double px) {
     HepMC3::FourVector temp_mom(part->momentum());
     temp_mom.setPx(px);
     part->set_momentum(temp_mom);
@@ -179,7 +179,7 @@ void HepMC3Particle::SetPz( double pz ) {
     part->set_momentum(temp_mom);
 }
 
-void HepMC3Particle::SetM( double m ) {
+void HepMC3Particle::SetM(double /*m*/) {
     //Can not set in GenEvent
     std::cout << "Can not set mass in HepMC3Particle. Set e, px, py, pz instead" <<std::endl;
 }
@@ -192,19 +192,19 @@ void HepMC3Particle::SetStatus( int st) {
     part->set_status( st );
 }
 
-void HepMC3Particle::SetVx ( double vx) {
+void HepMC3Particle::SetVx (double /*vx*/) {
     //Not implemented
 }
 
-void HepMC3Particle::SetVy ( double vy) {
+void HepMC3Particle::SetVy (double /*vy*/) {
     //Not implemented
 }
 
-void HepMC3Particle::SetVz ( double vz) {
+void HepMC3Particle::SetVz (double /*vz*/) {
     //Not implemented
 }
 
-void HepMC3Particle::SetTau( double tau) {
+void HepMC3Particle::SetTau(double /*tau*/) {
     //Not implemented
 }
 

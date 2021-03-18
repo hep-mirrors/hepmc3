@@ -101,7 +101,7 @@ int main(int /*argc*/, char ** /*argv*/) {
         {
             std::pair<int,int> vertex_index=v.first;
             GenVertexPtr          vertex=v.second;
-            for (int i=vertex_index.first-1; i<vertex_index.second; i++) if (i>=0&&i<particles.size()) vertex->add_particle_in(particles[i]);
+            for (int i=vertex_index.first-1; i<vertex_index.second; i++) if (i>=0&&i<(int)particles.size()) vertex->add_particle_in(particles[i]);
         }
         for ( auto v: vertices ) ev.add_vertex(v.second);
 

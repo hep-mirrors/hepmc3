@@ -6,7 +6,7 @@
 #include "ValidationControl.h"
 #include <iostream>
 #include <stdio.h>
-int main(int argc, char **argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     FILE* F=fopen("testTauola1.config","w");
     fprintf(F,"\

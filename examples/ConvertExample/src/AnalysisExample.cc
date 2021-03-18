@@ -5,7 +5,7 @@ namespace HepMC3
 HEPMC3_DECLARE_WRITER_FILE(AnalysisExample)
 HEPMC3_DECLARE_WRITER_STREAM(AnalysisExample)
 
-AnalysisExample::AnalysisExample(const std::string &filename,std::shared_ptr<GenRunInfo> run): m_file(filename),
+AnalysisExample::AnalysisExample(const std::string &filename,std::shared_ptr<GenRunInfo> /*run*/): m_file(filename),
     m_stream(&m_file)
 {
     if ( !m_file.is_open() ) {

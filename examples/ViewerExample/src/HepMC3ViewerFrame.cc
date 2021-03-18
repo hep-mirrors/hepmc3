@@ -1,12 +1,14 @@
 #include "HepMC3/ReaderRootTree.h"
 #include "HepMC3/ReaderFactory.h"
-#include "HepMC3ViewerFrame.h"
-
-
-
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
+#include "HepMC3ViewerFrame.h"
+
+/* Older graphviz versions can have conflictiong declarations  of memcmp/strcmp function
+ * This can break compilation with -pedantic. Uncomenting line below can fix it. 
+ */
+// #define _PACKAGE_ast 1
 
 #include <graphviz/gvc.h>
 #define CONSERVATION_TOLERANCE 1e-5

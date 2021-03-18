@@ -96,7 +96,7 @@ PyObject* ReaderuprootTree::init_python_module(const std::string& code)
 }
 
 ReaderuprootTree::ReaderuprootTree(const std::string &filename,const std::string &treename,const std::string &branchname):
-    m_tree(0),m_events_count(0),m_tree_name(treename.c_str()),m_branch_name(branchname.c_str())
+    m_events_count(0),m_tree(nullptr),m_tree_name(treename.c_str()),m_branch_name(branchname.c_str())
 {
     if (!init(filename)) return;
 }
@@ -284,7 +284,7 @@ bool ReaderuprootTree::read_event(GenEvent& evt)
     m_event_data->links1=links1;
     m_event_data->links2=links2;
 
-    for (int k=0; k < particlesparticlespid.size(); k++)
+    for (size_t k=0; k < particlesparticlespid.size(); k++)
     {
         HepMC3::GenParticleData p= { particlesparticlespid[k], particlesparticlesstatus[k], particlesis_mass_set[k], particlesmass[k],
                                      HepMC3::FourVector(particlesmomentumm_v1[k], particlesmomentumm_v1[k], particlesmomentumm_v1[k], particlesmomentumm_v1[k])
@@ -292,7 +292,7 @@ bool ReaderuprootTree::read_event(GenEvent& evt)
         m_event_data->particles.push_back(p);
     }
 
-    for (int k=0; k < verticesverticesstatus.size(); k++)
+    for (size_t k=0; k < verticesverticesstatus.size(); k++)
     {
         HepMC3::GenVertexData v= { verticesverticesstatus[k], HepMC3::FourVector(verticespositionm_v1[k], verticespositionm_v2[k], verticespositionm_v3[k], verticespositionm_v4[k])};
         m_event_data->vertices.push_back(v);
