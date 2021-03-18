@@ -5,7 +5,7 @@
 ClassImp(HepMC3Event)
 #endif
 
-HepMC3Event::HepMC3Event( HepMC3::GenEvent &e, bool include_self_decay) {
+HepMC3Event::HepMC3Event(HepMC3::GenEvent &e, bool include_self_decay) {
 
     evt = &e;
     // Make a list of the particles in the event.
@@ -27,7 +27,7 @@ int HepMC3Event::GetNumOfParticles() {
     return m_particle_count;
 }
 
-void  HepMC3Event::SetNumOfParticles(int num) {
+void  HepMC3Event::SetNumOfParticles(int /*num*/) {
     // Should throw some error as this can not be set
     std::cout << "Warning, should not be doing this for HepMCEvent" << std::endl;
 }
@@ -88,26 +88,26 @@ HEPParticleList* HepMC3Event::FindParticle(int pdg, HEPParticleList *list)
 
 
 //Methods not implemented
-void  HepMC3Event::AddParticle( HEPParticle *p) {}
-void  HepMC3Event::SetParticle(int idx,HEPParticle *p) {}
-void  HepMC3Event::InsertParticle(int at_idx,HEPParticle *p) {}
-void  HepMC3Event::Clear(int fromIdx=1) {}
-void  HepMC3Event::AddParticle( int id,
-                                int pdgid,
-                                int status,
-                                int mother,
-                                int mother2,
-                                int firstdaughter,
-                                int lastdaughter,
-                                double E,
-                                double px,
-                                double py,
-                                double pz,
-                                double m,
-                                double vx,
-                                double vy,
-                                double vz,
-                                double tau) {}
+void  HepMC3Event::AddParticle(HEPParticle* /*p*/) {}
+void  HepMC3Event::SetParticle(int /*idx*/,HEPParticle* /*p*/) {}
+void  HepMC3Event::InsertParticle(int /*at_idx*/,HEPParticle* /*p*/) {}
+void  HepMC3Event::Clear(int /*fromIdx=1*/) {}
+void  HepMC3Event::AddParticle(int /*id*/,
+                                int /*pdgid*/,
+                                int /*status*/,
+                                int /*mother*/,
+                                int /*mother2*/,
+                                int /*firstdaughter*/,
+                                int /*lastdaughter*/,
+                                double /*E*/,
+                                double /*px*/,
+                                double /*py*/,
+                                double /*pz*/,
+                                double /*m*/,
+                                double /*vx*/,
+                                double /*vy*/,
+                                double /*vz*/,
+                                double /*tau*/) {}
 
 std::vector<double> * HepMC3Event::Sum4Momentum() {
     std::vector<double> * sum = new std::vector<double>(4,0.0);

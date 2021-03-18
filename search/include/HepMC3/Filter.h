@@ -40,7 +40,7 @@ inline std::vector<ConstGenParticlePtr> applyFilter(const Filter &filter, const 
 
 /// @brief A Filter that will accept all particles
 /// This might be needed if a signature requires a default Filter
-inline bool ACCEPT_ALL(ConstGenParticlePtr dummy) {
+inline bool ACCEPT_ALL(ConstGenParticlePtr /*dummy*/) {
     return true;
 }
 

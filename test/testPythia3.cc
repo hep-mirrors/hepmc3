@@ -6,7 +6,7 @@
 #include "ValidationControl.h"
 #include <iostream>
 #include <stdio.h>
-int main(int argc, char **argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     FILE* Finput=fopen("testPythia3.input","w");
     fprintf(Finput,"\

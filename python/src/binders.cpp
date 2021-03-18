@@ -60,7 +60,7 @@ void custom_FourVector_binder(pybind11::class_<HepMC3::FourVector, std::shared_p
 
 		cl.def("__getitem__", [](const HepMC3::FourVector& v, size_t i) { if (i==0) return  v.x(); if (i==1) return  v.y(); if (i==2) return  v.z();  if (i==3) return  v.t(); return 0.0;});
 		cl.def("__setitem__", [](HepMC3::FourVector& v, size_t i, double  a ) { if (i==0)   { v.setX(a); return; }if (i==1)  { v.setY(a);return; } if (i==2)  { v.setZ(a);return; }  if (i==3) {v.setT(a);return; }});
-		cl.def("__len__", [](const HepMC3::FourVector& v) { return 4;});
+		cl.def("__len__", [](const HepMC3::FourVector& /*v*/) { return 4;});
 		
 }
 
@@ -75,7 +75,7 @@ void custom_FourVector_binder(pybind11::class_<HepMC3::FourVector, std::shared_p
 		//cl.def("closetag", (void (LHEF::TagBase::*)(std::ostream &, std::string) const) &LHEF::TagBase::closetag, "Print out end of tag marker. Print contents if not empty else\n print simple close tag.\n\nC++: LHEF::TagBase::closetag(std::ostream &, std::string) const --> void", pybind11::arg("file"), pybind11::arg("tag"));
 		cl.def("closetag", [](LHEF::TagBase const &o, pybind11::object  & a1, std::string a2) -> void { std::stringstream b;  o.closetag(b,a2); a1.attr("write")(pybind11::str(b.str().c_str())); }, "Print out end of tag marker. Print contents if not empty else\n print simple close tag.\n\nC++: LHEF::TagBase::closetag(std::ostream &, std::string) const --> void", pybind11::arg("file"), pybind11::arg("tag"));
 
-};
+}
 
 
 void	print_binder(pybind11::module &M)

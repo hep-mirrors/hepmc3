@@ -1645,7 +1645,7 @@ public:
   /**
    * Assignment operator.
    */
-  HEPRUP & operator=(const HEPRUP & x) = default;
+  HEPRUP & operator=(const HEPRUP & /*x*/) = default;
 
   /**
    * Construct from a given init tag.

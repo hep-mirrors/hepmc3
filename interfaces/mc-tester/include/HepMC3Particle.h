@@ -30,10 +30,10 @@ private:
     HepMC3Event *   event;
     /** ID number of particle as given by MC-TESTER (not the same as
       GenParticle pdg_id or barcode).*/
-    int           id ;
+    int           id;
 
 public:
-    /** Plain constructor.*/
+    /** Plain  constructor.*/
     HepMC3Particle();
     /** Constructor which makes a HepMC3Particle from GenParticle. */
     HepMC3Particle(HepMC3::GenParticle& particle, HEPEvent * e, int Id);
@@ -44,7 +44,7 @@ public:
     const HepMC3Particle operator=(HEPParticle &p);
 
     /** Returns the event that this particle belongs to.*/
-    HEPEvent* GetEvent()            ;
+    HEPEvent* GetEvent();
     /** returns the ID number of particle as used by MC-TESTER (not
       the same as GenParticle pdg_id or barcode).*/
     int    const GetId()            ;
@@ -91,41 +91,41 @@ public:
     double const     GetTau ()      ;
 
     /** Sets the event that this particle belongs to */
-    void   SetEvent        ( HEPEvent  *event );
-    /** Sets ID (as used by MC-TESTER) of this particle */
-    void   SetId           ( int id       );
+    void   SetEvent(HEPEvent  *event);
+    /** Sets ID (as used by MC-TESTER)of this particle */
+    void   SetId(int id);
     /** Dummy function definition. Do not use.*/
-    void   SetMother       ( int mother   );
+    void   SetMother(int mother);
     /** Dummy function definition. Do not use.*/
-    void   SetMother2      ( int mother   );
+    void   SetMother2(int mother);
     /** Dummy function definition. Do not use.*/
-    void   SetFirstDaughter( int daughter );
+    void   SetFirstDaughter(int daughter);
     /** Dummy function definition. Do not use.*/
-    void   SetLastDaughter ( int daughter );
+    void   SetLastDaughter(int daughter);
 
     /** Sets the energy of this particle */
-    void   SetE  ( double E  )      ;
+    void   SetE(double E);
     /** Sets the x component of this particle's momentum */
-    void   SetPx ( double px )      ;
+    void   SetPx(double px);
     /** Sets the x component of this particle's momentum */
-    void   SetPy ( double py )      ;
+    void   SetPy(double py);
     /** Sets the x component of this particle's momentum */
-    void   SetPz ( double pz )      ;
+    void   SetPz(double pz);
     /** Dummy function definition. Do not use.*/
-    void   SetM  ( double m  )      ;
+    void   SetM(double m);
 
     /** Sets the PDG ID code of this particle */
-    void   SetPDGId ( int pdg )     ;
+    void   SetPDGId(int pdg);
     /** Sets the status code of this particle */
-    void   SetStatus( int st  )     ;
+    void   SetStatus(int st);
     /** Sets the x value of this particle's production vertex */
-    void   SetVx ( double vx  )     ;
+    void   SetVx(double vx);
     /** Sets the y value of this particle's production vertex */
-    void   SetVy ( double vy  )     ;
+    void   SetVy(double vy);
     /** Sets the z value of this particle's production vertex */
-    void   SetVz ( double vz  )     ;
+    void   SetVz(double vz);
     /** Dummy function definition. Do not use.*/
-    void   SetTau( double tau )     ;
+    void   SetTau(double tau);
 
     /** Returns a list of daughter particles of this particle.
       If a list of particle is given as a parameter, the daughters
@@ -133,7 +133,7 @@ public:
       in the list, it is not added. The function finds daughters by
       iterating over the outgoing particles from the end vertex.
       The daughter particle must be stable of decaying to be added to
-      the list. (for pythia 8) if the status code is negative, the
+      the list. (for Pythia 8) if the status code is negative, the
       daughter's daughters are searched recursively.*/
 
     HEPParticleList*  GetDaughterList(HEPParticleList *list);

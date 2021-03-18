@@ -325,7 +325,7 @@ inline void WriterAsciiHepMC2::forced_flush()
 
 void WriterAsciiHepMC2::write_run_info() {}
 
-void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int second_field)
+void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field*/)
 {
     m_cursor += sprintf(m_cursor, "P %i", int(10001+m_particle_counter));
     m_particle_counter++;

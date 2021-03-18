@@ -59,31 +59,31 @@ public:
     /** Returns the HEPParticle with id "idx". This is the id number as used
      by MC-TESTER and not the id number from the original GenParticle.
      Note: Indecies begin at 1.*/
-    HEPParticle* GetParticle( int idx);
+    HEPParticle* GetParticle(int idx);
 
     /** Returns the HepMC3Particle by its id. This is the ID
       number from the original GenParticle and not the ID used by
       MC-TESTER. */
-    HepMC3Particle* GetParticleWithId( int id );
+    HepMC3Particle* GetParticleWithId(int id);
 
     /** Dummy function definition. Do not use */
-    void  SetParticle( int idx, HEPParticle *particle) ;
+    void  SetParticle(int idx, HEPParticle *particle);
 
     /** Dummy function definition. Do not use */
-    void  AddParticle( HEPParticle *particle);
+    void  AddParticle(HEPParticle *particle);
 
     /** Dummy function definition. Do not use */
     void  Clear (int fromIdx);
 
     /** Dummy function definition. Do not use */
-    void  InsertParticle(int at_idx,HEPParticle *p);
+    void  InsertParticle(int at_idx, HEPParticle *p);
 
     /** Dummy function definition. Do not use */
-    void  AddParticle( int id, int pdgid, int status,
-                       int mother, int mother2,
-                       int firstdaughter, int lastdaughter,
-                       double E,double px, double py, double pz, double m,
-                       double vx, double vy, double vz, double tau);
+    void  AddParticle(int id, int pdgid, int status,
+                      int mother, int mother2,
+                      int firstdaughter, int lastdaughter,
+                      double E,double px, double py, double pz, double m,
+                      double vx, double vy, double vz, double tau);
 
     std::vector<double> * Sum4Momentum();
 
@@ -96,7 +96,7 @@ private:
     HepMC3::GenEvent *evt;
     int m_particle_count;
 #ifdef _USE_ROOT_
-    ClassDef(HepMC3Event,1)  //Interface to HepMC event record
+    ClassDef(HepMC3Event,1)//Interface to HepMC event record
 #endif
 };
 #endif

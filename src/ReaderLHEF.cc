@@ -92,7 +92,7 @@ void ReaderLHEF::init()
     }
 }
 /// @brief Destructor
-ReaderLHEF::~ReaderLHEF() {close();};
+ReaderLHEF::~ReaderLHEF() {close();}
 
 bool ReaderLHEF::read_event(GenEvent& ev)
 {
@@ -180,5 +180,5 @@ bool ReaderLHEF::read_event(GenEvent& ev)
 bool ReaderLHEF::failed() { return m_failed;}
 
 /// @brief Close file stream
-void ReaderLHEF::close() { };
+void ReaderLHEF::close() { }
 } // namespace HepMC3
