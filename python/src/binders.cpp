@@ -13,8 +13,7 @@ void custom_HEPEVT_Wrapper_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper, std::
 		cl.def_static("print_hepevt_particle", [](int const & a0) -> void { return HepMC3::HEPEVT_Wrapper::print_hepevt_particle(a0); }, "", pybind11::arg("index"));
 		//cl.def_static("print_hepevt_particle", (void (*)(int, std::ostream &)) &HepMC3::HEPEVT_Wrapper::print_hepevt_particle, "Print particle information \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt_particle(int, std::ostream &) --> void", pybind11::arg("index"), pybind11::arg("ostr"));
 		cl.def_static("print_hepevt_particle", [](int a0, pybind11::object  & a1) -> void {  std::stringstream b;  HepMC3::HEPEVT_Wrapper::print_hepevt_particle(a0,b); a1.attr("write")(pybind11::str(b.str().c_str())); }, "Print particle information \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt_particle(int, std::ostream &) --> void", pybind11::arg("index"), pybind11::arg("ostr"));
-	
-	};
+}
 
 void custom_GenParticle_binder(pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl)
 {
@@ -31,33 +30,26 @@ void custom_GenEvent_binder(pybind11::class_<HepMC3::GenEvent, std::shared_ptr<H
 {
 		cl.def("attribute", [](HepMC3::GenEvent const &o, const class std::basic_string<char> & a0) -> std::string { return o.attribute_as_string(a0); }, "", pybind11::arg("name"));
 		cl.def("attribute", (std::string (HepMC3::GenEvent::*)(const std::string &, const int &) const) &HepMC3::GenEvent::attribute_as_string, "Get attribute of any type as string\n\nC++: HepMC3::GenEvent::attribute_as_string(const std::string &, const int &) const --> std::string", pybind11::arg("name"), pybind11::arg("id"));
-
-
 }
 
 void custom_GenRunInfo_binder(pybind11::class_<HepMC3::GenRunInfo, std::shared_ptr<HepMC3::GenRunInfo>> cl)
 {
-
 		cl.def("tools", (class std::vector<struct HepMC3::GenRunInfo::ToolInfo, class std::allocator<struct HepMC3::GenRunInfo::ToolInfo> > & (HepMC3::GenRunInfo::*)()) &HepMC3::GenRunInfo::tools, "The vector of tools used to produce this run.\n\nC++: HepMC3::GenRunInfo::tools() --> class std::vector<struct HepMC3::GenRunInfo::ToolInfo, class std::allocator<struct HepMC3::GenRunInfo::ToolInfo> > &", pybind11::return_value_policy::reference_internal);
 }
 
 
 void custom_Units_binder(pybind11::class_<HepMC3::Units, std::shared_ptr<HepMC3::Units>> cl)
 {
-
 		//cl.def_static("convert",  []( auto & a1, enum HepMC3::Units::MomentumUnit a2, enum HepMC3::Units::MomentumUnit a3)-> void { HepMC3::Units::convert<decltype(a1)>(a1,a2,a3); }, "C++: HepMC3::Units::convert(class HepMC3::FourVector &, enum HepMC3::Units::MomentumUnit, enum HepMC3::Units::MomentumUnit) --> void", pybind11::arg("m"), pybind11::arg("from"), pybind11::arg("to"));
 		//cl.def_static("convert", []( auto & a1, enum HepMC3::Units::LengthUnit a2, enum HepMC3::Units::LengthUnit a3)-> void { HepMC3::Units::convert<decltype(a1)>(a1,a2,a3); }, "C++: HepMC3::Units::convert(class HepMC3::FourVector &, enum HepMC3::Units::MomentumUnit, enum HepMC3::Units::MomentumUnit) --> void", pybind11::arg("m"), pybind11::arg("from"), pybind11::arg("to"));
 
 		cl.def_static("convert",  [](HepMC3::FourVector & a1, enum HepMC3::Units::MomentumUnit a2, enum HepMC3::Units::MomentumUnit a3)-> void { HepMC3::Units::convert<HepMC3::FourVector>(a1,a2,a3); }, "C++: HepMC3::Units::convert(class HepMC3::FourVector &, enum HepMC3::Units::MomentumUnit, enum HepMC3::Units::MomentumUnit) --> void", pybind11::arg("m"), pybind11::arg("from"), pybind11::arg("to"));
 		cl.def_static("convert", []( HepMC3::FourVector & a1, enum HepMC3::Units::LengthUnit a2, enum HepMC3::Units::LengthUnit a3)-> void { HepMC3::Units::convert<HepMC3::FourVector>(a1,a2,a3); }, "C++: HepMC3::Units::convert(class HepMC3::FourVector &, enum HepMC3::Units::MomentumUnit, enum HepMC3::Units::MomentumUnit) --> void", pybind11::arg("m"), pybind11::arg("from"), pybind11::arg("to"));
-		
-		
 }
 
 
 void custom_FourVector_binder(pybind11::class_<HepMC3::FourVector, std::shared_ptr<HepMC3::FourVector>> cl)
 {
-
 		cl.def("__getitem__", [](const HepMC3::FourVector& v, size_t i) { if (i==0) return  v.x(); if (i==1) return  v.y(); if (i==2) return  v.z();  if (i==3) return  v.t(); return 0.0;});
 		cl.def("__setitem__", [](HepMC3::FourVector& v, size_t i, double  a ) { if (i==0)   { v.setX(a); return; }if (i==1)  { v.setY(a);return; } if (i==2)  { v.setZ(a);return; }  if (i==3) {v.setT(a);return; }});
 		cl.def("__len__", [](const HepMC3::FourVector& /*v*/) { return 4;});
@@ -69,7 +61,6 @@ void custom_FourVector_binder(pybind11::class_<HepMC3::FourVector, std::shared_p
 
  void custom_LHEFTagBase_binder (pybind11::class_<LHEF::TagBase, std::shared_ptr<LHEF::TagBase>> cl)
 {
-
 		//cl.def("printattrs", (void (LHEF::TagBase::*)(std::ostream &) const) &LHEF::TagBase::printattrs, "print out ' name=\"value\"' for all unparsed attributes.\n\nC++: LHEF::TagBase::printattrs(std::ostream &) const --> void", pybind11::arg("file"));
 		cl.def("printattrs", [](LHEF::TagBase const &o, pybind11::object  & a1) -> void { std::stringstream b;  o.printattrs(b); a1.attr("write")(pybind11::str(b.str().c_str())); }, "print out ' name=\"value\"' for all unparsed attributes.\n\nC++: LHEF::TagBase::printattrs(std::ostream &) const --> void", pybind11::arg("file"));
 		//cl.def("closetag", (void (LHEF::TagBase::*)(std::ostream &, std::string) const) &LHEF::TagBase::closetag, "Print out end of tag marker. Print contents if not empty else\n print simple close tag.\n\nC++: LHEF::TagBase::closetag(std::ostream &, std::string) const --> void", pybind11::arg("file"), pybind11::arg("tag"));

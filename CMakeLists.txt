@@ -94,43 +94,6 @@ endif()
 #
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 
-include(CheckCXXCompilerFlag)
-#This is a workaround for ROOT+Cmake problem.
-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_-std=c++11)
-if(COMPILER_SUPPORTS_-std=c++11)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-else()
-  set(CMAKE_CXX_STANDARD 11)
-  set(CMAKE_CXX_STANDARD_REQUIRED ON)
-  set(CMAKE_CXX_EXTENSIONS OFF)
-#This is a workaround for wrong flag.
-  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
-    set(CMAKE_CXX_EXTENSIONS ON)
-  endif()
-endif()
-
-#Workarounds for nvc++
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
-  #Templates
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
-  if(UNIX AND CMAKE_CXX_COMPILER_VERSION GREATER 20 )
-    # exception_ptr on old gcc
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__GCC_ATOMIC_TEST_AND_SET_TRUEVAL=1 -D__GCC_ATOMIC_INT_LOCK_FREE=3")
-  endif()
-endif()
-
-if (MSVC)
-#This is a workaround for VC memory problem and false positive warnings.
-set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/EHsc" "/D_CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
-foreach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
-  CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
-  if(COMPILER_SUPPORTS_${fl})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
-  endif()
-endforeach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
-endif()
-
-
 #### RPATH handling #####
 
 set(CMAKE_MACOSX_RPATH 1)
@@ -155,8 +118,11 @@ IF("${isSystemDir}" STREQUAL "-1")
 ENDIF("${isSystemDir}" STREQUAL "-1")
 
 
-#---Optional build of rootIO-------------------------------------------------
-
+#----------------------------------------------------
+include(CheckCXXCompilerFlag)
+if (NOT HEPMC3_CXX_STANDARD)
+  set(HEPMC3_CXX_STANDARD 11)
+endif()
 if(HEPMC3_ENABLE_ROOTIO)
   set (ROOT_FIND_COMPONENTS Core RIO Tree)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
@@ -172,11 +138,11 @@ if(HEPMC3_ENABLE_ROOTIO)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS_BEFORE_ROOT}")
     set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS_BEFORE_ROOT}")
     if (ROOT_CXX_FLAGS_BEFORE_ROOT)
-    message(STATUS "Manualy set ROOT flags ${ROOT_CXX_FLAGS_BEFORE_ROOT}")
-    set( ROOT_CXX_FLAGS "${ROOT_CXX_FLAGS_BEFORE_ROOT}")
+      message(STATUS "Manualy set ROOT flags ${ROOT_CXX_FLAGS_BEFORE_ROOT}")
+      set( ROOT_CXX_FLAGS "${ROOT_CXX_FLAGS_BEFORE_ROOT}")
     endif()
     if (${CMAKE_CXX_COMPILER_ID} MATCHES "SunPro")
-    add_definitions(-DANSICPP)
+      add_definitions(-DANSICPP)
     endif()
     message(STATUS "ROOT_FOUND:     ${ROOT_FOUND}")
     message(STATUS "ROOT_USE_FILE ${ROOT_USE_FILE}")
@@ -187,10 +153,22 @@ if(HEPMC3_ENABLE_ROOTIO)
     add_definitions(-DHEPMC3_ROOTIO)
     string(REPLACE " " ";" ROOT_CXX_FLAGS_LIST ${ROOT_CXX_FLAGS})
     foreach(fl ${ROOT_CXX_FLAGS_LIST})
-    CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
-    if(COMPILER_SUPPORTS_${fl})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
-    endif()
+      CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
+      if(COMPILER_SUPPORTS_${fl})
+        if ("${fl}" MATCHES   ".*\\+\\+14$" OR "${fl}" MATCHES   ".*\\+\\+1y$" ) 
+          set(HEPMC3_CXX_STANDARD 14)
+        endif()  
+        if ("${fl}" MATCHES   ".*\\+\\+17$" OR "${fl}" MATCHES   ".*\\+\\+1z$" ) 
+          set(HEPMC3_CXX_STANDARD 17)
+        endif()  
+        if ("${fl}" MATCHES   ".*\\+\\+20$" OR "${fl}" MATCHES   ".*\\+\\+2a$" ) 
+          set(HEPMC3_CXX_STANDARD 20)
+        endif()  
+        if ("${fl}" MATCHES   ".*\\+\\+23$" OR "${fl}" MATCHES   ".*\\+\\+2b$" ) 
+          set(HEPMC3_CXX_STANDARD 23)
+        endif() 
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
+      endif()
     endforeach(fl ${ROOT_CXX_FLAGS_LIST})
     set(HEPMC3_ROOTIO_LIBRARY "-lHepMC3rootIO" )
   else()
@@ -200,8 +178,33 @@ if(HEPMC3_ENABLE_ROOTIO)
   endif()
 endif()
 
+#Workarounds for gcc/clang
+set(CMAKE_CXX_STANDARD ${HEPMC3_CXX_STANDARD})
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+CHECK_CXX_COMPILER_FLAG("-Wno-strict-aliasing" COMPILER_SUPPORTS_-Wno-strict-aliasing)
+if (COMPILER_SUPPORTS_-Wno-strict-aliasing)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
+endif()
+#Workarounds for nvc++
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
+    set(CMAKE_CXX_EXTENSIONS ON)
+    #Workaround for pybind11 templates
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
+endif()
+#Workarounds for VS
+if (MSVC)
+#Memory problem and false positive warnings.
+  set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/D _CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
+  foreach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
+    CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
+    if(COMPILER_SUPPORTS_${fl})
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
+    endif()
+  endforeach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
+endif()
 
-
+message(STATUS "HepMC3: HEPMC3_CXX_STANDARD ${HEPMC3_CXX_STANDARD} " )
 message(STATUS "HepMC3: CMAKE_CXX_COMPILER_ID ${CMAKE_CXX_COMPILER_ID} " )
 message(STATUS "HepMC3: CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}}  " )
 message(STATUS "HepMC3: CMAKE_C_COMPILER_ID ${CMAKE_C_COMPILER_ID} " )
