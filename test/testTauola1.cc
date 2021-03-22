@@ -8,7 +8,7 @@
 #include <stdio.h>
 int main(int /*argc*/, char** /*argv*/)
 {
-    FILE* F=fopen("testTauola1.config","w");
+    FILE* F=fopen("testTauola1.input","w");
     fprintf(F,"\
 #\n\
 # Process: ee -> Z -> tau+ tau- @ 92GeV\n\
@@ -49,11 +49,13 @@ EVENTS 1000\n\
     control.read_file("testTauola1.config");
     control.set_event_limit(1000);
     control.initialize();
+    int counter=0;
     while( control.new_event() )
     {
         GenEvent HepMCEvt(Units::GEV,Units::MM);
         control.process(HepMCEvt);
+        counter++;
     }
     control.finalize();
-    return 0;
+    return 1*(counter-1000);
 }

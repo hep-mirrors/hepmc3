@@ -50,11 +50,13 @@ EVENTS 1000\n\
     ValidationControl control;
     control.read_file("testPythia1.config");
     control.initialize();
+    int counter=0;
     while( control.new_event() )
     {
         GenEvent HepMCEvt(Units::GEV,Units::MM);
         control.process(HepMCEvt);
+        counter++;
     }
     control.finalize();
-    return 0;
+    return 1*(counter-1000);
 }

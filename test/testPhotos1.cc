@@ -51,11 +51,13 @@ EVENTS 1000\n\
     control.read_file("testPhotos1.config");
     control.set_event_limit(1000);
     control.initialize();
+    int counter=0;
     while( control.new_event() )
     {
         GenEvent HepMCEvt(Units::GEV,Units::MM);
         control.process(HepMCEvt);
+        counter++;
     }
     control.finalize();
-    return 0;
+    return 1*(counter-1000);
 }
