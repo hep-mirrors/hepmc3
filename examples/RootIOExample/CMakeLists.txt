@@ -14,16 +14,15 @@ set_target_properties(rootIO_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTO
 set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}:${ROOT_LIBRARY_DIR}")
  
-configure_file(
-${CMAKE_CURRENT_SOURCE_DIR}/rootIO_example_env.sh.in
-	    ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/rootIO_example_env.sh
-     	     @ONLY
-      	     )
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/rootIO_example_env.sh.in
+                ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/rootIO_example_env.sh
+                @ONLY
+                )
 
 # installs 
 if (USE_INSTALLED_HEPMC3)
-install(TARGETS rootIO_example_write.exe rootIO_example_read.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(FILES example.hepmc3 DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
+  install(TARGETS rootIO_example_write.exe rootIO_example_read.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install(FILES example.hepmc3 DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*env.sh*")
 endif()

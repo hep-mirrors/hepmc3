@@ -56,17 +56,17 @@ add_library(Analysis SHARED src/AnalysisExample.cc)
 target_link_libraries(Analysis HepMC3 )
 
 if (MSVC)
-set(  MSVCLINKFLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib")
-if(ZLIB_FOUND)
-set(  MSVCLINKFLAGS "${MSVCLINKFLAGS} /WHOLEARCHIVE:${ZLIB_LIBRARIES}")
-endif()
-set_target_properties(convert_example.exe PROPERTIES LINK_FLAGS ${MSVCLINKFLAGS})
+  set(  MSVCLINKFLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib")
+  if(ZLIB_FOUND)
+    set(  MSVCLINKFLAGS "${MSVCLINKFLAGS} /WHOLEARCHIVE:${ZLIB_LIBRARIES}")
+  endif()
+  set_target_properties(convert_example.exe PROPERTIES LINK_FLAGS ${MSVCLINKFLAGS})
 endif()
 include_directories(${basic_includes})
 target_link_libraries(convert_example.exe ${basic_libraries} )
 target_compile_definitions(convert_example.exe PRIVATE ${basic_defines} )
 if (basic_dependencies)
-add_dependencies( convert_example.exe ${basic_dependencies} )
+  add_dependencies( convert_example.exe ${basic_dependencies} )
 endif()
 # create environment scripts
 set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
@@ -80,10 +80,10 @@ configure_file(
 
 # installs 
 if (USE_INSTALLED_HEPMC3)
-install(TARGETS convert_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(TARGETS Analysis DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" PATTERN  "*.ilk"  EXCLUDE)
-install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}  FILES_MATCHING PATTERN "*env.sh*" )
+  install(TARGETS convert_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install(TARGETS Analysis DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" PATTERN  "*.ilk"  EXCLUDE)
+  install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}  FILES_MATCHING PATTERN "*env.sh*" )
 endif()
 
 #This is an option for developers only
