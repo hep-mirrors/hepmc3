@@ -32,17 +32,16 @@ add_dependencies( class_example_write.exe dictionary )
 set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}:${ROOT_LIBRARY_DIR}")
  
-configure_file(
-${CMAKE_CURRENT_SOURCE_DIR}/class_example_env.sh.in
-	    ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/class_example_env.sh
-     	     @ONLY
-      	     )
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/class_example_env.sh.in
+                ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/class_example_env.sh
+                @ONLY
+              )
 
 # installs 
 if (USE_INSTALLED_HEPMC3)
-install(TARGETS class_example_write.exe class_example_read.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config" PATTERN "CMakeFiles" EXCLUDE )
-install(FILES example.hepmc3 DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
+  install(TARGETS class_example_write.exe class_example_read.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config" PATTERN "CMakeFiles" EXCLUDE )
+  install(FILES example.hepmc3 DESTINATION ${CMAKE_INSTALL_BINDIR})
+  install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*env.sh*")
 endif()

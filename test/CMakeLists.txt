@@ -38,14 +38,6 @@ macro( hepmc_root_test testname )
 endmacro( hepmc_root_test )
 
 
-
-
-
-
-
-
-
-
 set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
 cmake_policy(SET CMP0057 NEW)
 if (NOT HEPMC3_TEST_PACKAGES)
@@ -57,9 +49,6 @@ if (NOT HEPMC3_TEST_PACKAGES)
 endif()
 message(STATUS "HepMC3 test: The following packages are enabled for tests HEPMC3_TEST_PACKAGES=${HEPMC3_TEST_PACKAGES}" )
 string(REPLACE "," ";" HEPMC3_TEST_PACKAGES_LIST ${HEPMC3_TEST_PACKAGES})
-
-
-
 
 file(GLOB INPUTFILES  "${CMAKE_CURRENT_SOURCE_DIR}/*.input" )
 file(COPY ${INPUTFILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
