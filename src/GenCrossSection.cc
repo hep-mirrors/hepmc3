@@ -80,14 +80,14 @@ bool GenCrossSection::to_string(std::string &att) const {
     std::ostringstream os;
 
     os << std::setprecision(8) << std::scientific
-       << cross_sections.at(0) << " "
-       << cross_section_errors.at(0) << " "
+       << (cross_sections.size()>0?cross_sections.at(0):0.0) << " "
+       << (cross_section_errors.size()>0?cross_section_errors.at(0):0.0) << " "
        << accepted_events << " "
        << attempted_events;
 
     for (size_t i = 1; i < cross_sections.size(); ++i )
         os << " " << cross_sections.at(i)
-           << " " << cross_section_errors.at(i);
+           << " " << (cross_section_errors.size()>i?cross_section_errors.at(i):0.0);
 
     att = os.str();
 
