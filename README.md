@@ -6,7 +6,7 @@ HepMC3 is a new version of the HepMC event record. It uses shared pointers for i
 # Quick-start (applicable to recent versions):
 
 0. On the Linux platform HepMC3 is available from the standard repositories of multiple many 
-linux distributions:  Fedora, CentOS7(EPEL),  Arch Linux, Mageia, openSUSE Tumbleweed, Debian (outdated) etc.
+linux distributions:  Fedora, CentOS(EPEL),  Arch Linux, Mageia, openSUSE Tumbleweed, Debian (outdated) etc.
 It is recommended to use the system package manager to install HepMC3 for these systems.
 The following commands will install the HepMC3 in the corresponding systems:
   - Fedora:
@@ -50,7 +50,7 @@ The following commands will install the HepMC3 in the corresponding systems:
     The dependencies can vary.
     
   - MacOSX 
-    The HepMC3 package is available in the ``hephomebrew`` repository https://davidchall.github.io/homebrew-hep/.
+    The HepMC3 package is available in the ``homebrew-hep`` repository https://davidchall.github.io/homebrew-hep/.
     To install:
     ```
     brew tap davidchall/hep
@@ -75,9 +75,8 @@ The following commands will install the HepMC3 in the corresponding systems:
 If for any reason the instalation from the repositories is not possible or is not desired, the instructions to build 
 HepMC3 from the sources 
 The minimal requirements for the  installation from sources are
- - C++ compiler with c++11 standard support
- - CMake version 3.X.  The  support for version 2.8 is provided only for the core and search libraries. 
-    It will be completely removed in the future versions.
+ - C++ compiler with c++11 standard support.
+ - CMake version 3.X.
  
 It is strongly recommended to read this documentation completely before the installation. 
 However, if for some reason that is not possible, here is a  set of commands for the 
@@ -285,8 +284,7 @@ The possible problems during the HepMC3 installation can be caused by
 
  - The used C++ compiler that does not support C++11.
    The only solution is to use compiler with C++11 support
- - The used CMake is too old. While the core library can be built with CMake 2.8, the Python and ROOT extensions require CMake of higher versions.
-   A possible solution is to use a newer CMake or disable the Python/ROOT if these are not needed.
+ - The used CMake is too old. 
  - Compilation of python bindings fails.
    pybind11 used by HepMC3 to create the python bindings supports only some compilers (gcc,clang, MSVC), therefore
    it is expected that the bindings will work  with these compilers.
