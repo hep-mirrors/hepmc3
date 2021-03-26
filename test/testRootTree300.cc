@@ -23,5 +23,5 @@ int main()
         evt.clear();
     }
     inputA.close();
-    return (particles!=1200);
+    return 1*(particles!=1200);
 }
