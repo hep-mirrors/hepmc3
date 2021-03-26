@@ -48,12 +48,32 @@ bool ReaderAscii::skip(const int n)
 {
     const size_t       max_buffer_size = 512*512;
     char               buf[max_buffer_size];
+    bool               event_context    = false;
+    bool               run_info_context    = false;
     int nn = n;
     while (!failed()) {
         char  peek;
         if ( (!m_file.is_open()) && (!m_isstream) ) return false;
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
-        if ( peek == 'E' ) nn--;
+        if ( peek == 'E' ) { event_context = true; nn--; }
+        //We have to read each run info.
+        if ( !event_context && ( peek == 'W' || peek == 'A' || peek == 'T' ) ) {
+            m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
+            if (!run_info_context) {
+                set_run_info(std::make_shared<GenRunInfo>());
+                run_info_context = true;
+            }
+            if ( peek == 'W' ) {
+                parse_weight_names(buf);
+            }
+            if ( peek == 'T' ) {
+                parse_tool(buf);
+            }
+            if ( peek == 'A' ) {
+                parse_run_attribute(buf);
+            }
+        }
+        if ( event_context && ( peek == 'V' || peek == 'P' ) ) event_context=false;
         if (nn < 0) return true;
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
     }
@@ -67,7 +87,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     char               peek;
     const size_t       max_buffer_size = 512*512;
     char               buf[max_buffer_size];
-    bool               parsed_event_header    = false;
+    bool               event_context    = false;
+    bool               parsed_weights    = false;
+    bool               parsed_particles_or_vertices    = false;
+    bool               run_info_context    = false;
     bool               is_parsing_successful  = true;
     std::pair<int, int> vertices_and_particles(0, 0);
 
@@ -91,7 +114,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 std::cout << buf << std::endl;
                 m_isstream ? m_stream->clear(std::ios::eofbit) : m_file.clear(std::ios::eofbit);
             }
-            if (parsed_event_header) {
+            if (event_context) {
                 is_parsing_successful = true;
                 break;
             }
@@ -105,32 +128,59 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 is_parsing_successful = false;
             } else {
                 is_parsing_successful = true;
-                parsed_event_header   = true;
+                event_context   = true;
+                parsed_weights = false;
+                parsed_particles_or_vertices = false;
             }
+            run_info_context   = false;
             break;
         case 'V':
             is_parsing_successful = parse_vertex_information(evt, buf);
+            parsed_particles_or_vertices =  true;
             break;
         case 'P':
             is_parsing_successful = parse_particle_information(evt, buf);
+            parsed_particles_or_vertices =  true;
             break;
         case 'W':
-            if ( parsed_event_header )
+            if ( event_context ) {
                 is_parsing_successful = parse_weight_values(evt, buf);
-            else
+                parsed_weights=true;
+            } else {
+                if ( !run_info_context ) {
+                    set_run_info(std::make_shared<GenRunInfo>());
+                    evt.set_run_info(run_info());
+                }
+                run_info_context = true;
                 is_parsing_successful = parse_weight_names(buf);
+            }
             break;
         case 'U':
             is_parsing_successful = parse_units(evt, buf);
             break;
         case 'T':
-            is_parsing_successful = parse_tool(buf);
+            if ( event_context ) {
+                //We ignore T in the event context
+            } else {
+                if ( !run_info_context ) {
+                    set_run_info(std::make_shared<GenRunInfo>());
+                    evt.set_run_info(run_info());
+                }
+                run_info_context = true;
+                is_parsing_successful = parse_tool(buf);
+            }
             break;
         case 'A':
-            if ( parsed_event_header )
+            if ( event_context ) {
                 is_parsing_successful = parse_attribute(evt, buf);
-            else
+            } else {
+                if ( !run_info_context ) {
+                    set_run_info(std::make_shared<GenRunInfo>());
+                    evt.set_run_info(run_info());
+                }
+                run_info_context = true;
                 is_parsing_successful = parse_run_attribute(buf);
+            }
             break;
         default:
             HEPMC3_WARNING("ReaderAscii: skipping unrecognised prefix: " << buf[0])
@@ -140,9 +190,21 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         if ( !is_parsing_successful ) break;
 
-        // Check for next event
+        // Check for next event or run info
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
-        if ( parsed_event_header && peek == 'E' ) break;
+        //End of event. The next entry is event.
+        if ( event_context &&  peek == 'E' ) break;
+
+        //End of event. The next entry is run info which starts from weight name.
+        if ( event_context &&  peek == 'W' && parsed_weights  ) break;
+
+        //End of event. The next entry is run info which starts from attribute.
+        if ( event_context &&  peek == 'A' && parsed_particles_or_vertices  ) break;
+
+        //End of event. The next entry is run info which starts from tool.
+        if ( event_context &&  peek == 'T' ) break;
+
+
     }
 
 

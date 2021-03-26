@@ -93,21 +93,21 @@ void  HepMC3Event::SetParticle(int /*idx*/,HEPParticle* /*p*/) {}
 void  HepMC3Event::InsertParticle(int /*at_idx*/,HEPParticle* /*p*/) {}
 void  HepMC3Event::Clear(int /*fromIdx=1*/) {}
 void  HepMC3Event::AddParticle(int /*id*/,
-                                int /*pdgid*/,
-                                int /*status*/,
-                                int /*mother*/,
-                                int /*mother2*/,
-                                int /*firstdaughter*/,
-                                int /*lastdaughter*/,
-                                double /*E*/,
-                                double /*px*/,
-                                double /*py*/,
-                                double /*pz*/,
-                                double /*m*/,
-                                double /*vx*/,
-                                double /*vy*/,
-                                double /*vz*/,
-                                double /*tau*/) {}
+                               int /*pdgid*/,
+                               int /*status*/,
+                               int /*mother*/,
+                               int /*mother2*/,
+                               int /*firstdaughter*/,
+                               int /*lastdaughter*/,
+                               double /*E*/,
+                               double /*px*/,
+                               double /*py*/,
+                               double /*pz*/,
+                               double /*m*/,
+                               double /*vx*/,
+                               double /*vy*/,
+                               double /*vz*/,
+                               double /*tau*/) {}
 
 std::vector<double> * HepMC3Event::Sum4Momentum() {
     std::vector<double> * sum = new std::vector<double>(4,0.0);
