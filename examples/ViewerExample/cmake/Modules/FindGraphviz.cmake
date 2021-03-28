@@ -79,8 +79,24 @@ if(GRAPHVIZ_FOUND)
       message(STATUS "Graphviz include: ${GRAPHVIZ_INCLUDE_DIRS}")
       message(STATUS "Graphviz libraries: ${GRAPHVIZ_CDT_LIBRARY} ${GRAPHVIZ_GVC_LIBRARY} ${GRAPHVIZ_CGRAPH_LIBRARY} ${GRAPHVIZ_PATHPLAN_LIBRARY}")
     endif()
+   
+    set(FIND_GRAPHVIZ_NOAST_SOURCE
+      "#include <string.h>\n#include <graphviz/gvc.h>\n int main()\n {return strcmp(\"AB\",\"A\");\n }\n")
+    set(FIND_GRAPHVIZ_AST_SOURCE
+      "#include <string.h>\n#define _PACKAGE_ast #include <graphviz/gvc.h>\n int main()\n {return strcmp(\"AB\",\"A\");\n }\n")
+    set(GRAPHVIZ_DEFINES "")
+    set(CMAKE_REQUIRED_FLAGS    ${CMAKE_CXX_FLAGS})
+    set(CMAKE_REQUIRED_INCLUDES ${GRAPHVIZ_INCLUDE_DIRS})
+    set(CMAKE_REQUIRED_LIBRARIES ${GRAPHVIZ_CDT_LIBRARY} ${GRAPHVIZ_GVC_LIBRARY} ${GRAPHVIZ_CGRAPH_LIBRARY} ${GRAPHVIZ_PATHPLAN_LIBRARY})
+    check_cxx_source_compiles("${FIND_GRAPHVIZ_AST_SOURCE}" GRAPHVIZ_AST_COMPILES )
+    check_cxx_source_compiles("${FIND_GRAPHVIZ_NOAST_SOURCE}" GRAPHVIZ_NOAST_COMPILES )
+    if (GRAPHVIZ_AST_COMPILES AND  (NOT GRAPHVIZ_NOAST_COMPILES ) )
+      set(GRAPHVIZ_DEFINES "-D_PACKAGE_ast=1")
+    endif()
 endif()
 
 if(Graphviz_FIND_REQUIRED AND NOT GRAPHVIZ_FOUND)
   message(FATAL_ERROR "Could not find GraphViz.")
 endif()
+
+mark_as_advanced(GRAPHVIZ_DEFINES)

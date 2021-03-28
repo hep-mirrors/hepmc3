@@ -1,7 +1,7 @@
 #include "WriterDOT.h"
 namespace HepMC3
 {
-WriterDOT::WriterDOT(const std::string &filename,std::shared_ptr<GenRunInfo> run): m_file(filename),
+WriterDOT::WriterDOT(const std::string &filename,std::shared_ptr<GenRunInfo> /*run*/): m_file(filename),
     m_stream(&m_file),
     m_style(0),
     m_buffer(nullptr),
@@ -13,7 +13,7 @@ WriterDOT::WriterDOT(const std::string &filename,std::shared_ptr<GenRunInfo> run
     }
 }
 
-WriterDOT::WriterDOT(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
+WriterDOT::WriterDOT(std::ostream &stream, std::shared_ptr<GenRunInfo> /*run*/)
     : m_file(),
       m_stream(&stream),
       m_style(0),
