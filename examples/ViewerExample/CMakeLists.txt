@@ -7,6 +7,7 @@ if(GRAPHVIZ_FOUND AND ROOT_FOUND)
   ROOT_GENERATE_DICTIONARY(HepMC3ViewerFrameDict include/HepMC3ViewerFrame.h LINKDEF include/LinkDef.h OPTIONS -inlineInputHeader)
   ADD_EXECUTABLE(HepMC3Viewer.exe  src/main.cc  src/HepMC3ViewerFrame.cc HepMC3ViewerFrameDict.cxx  )
   set_target_properties(HepMC3Viewer.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
+  target_compile_definitions(HepMC3Viewer.exe PRIVATE ${GRAPHVIZ_DEFINES} )
   include_directories( include  )
 
   SET(linklibraties ${ROOT_LIBRARIES}  ${GRAPHVIZ_CGRAPH_LIBRARY}  ${GRAPHVIZ_GVC_LIBRARY}  HepMC3 HepMC3rootIO )
