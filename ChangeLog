@@ -1,11 +1,13 @@
-  --------------------------  HepMC3.2.4-pre --------------------------
+--------------------------  HepMC3.2.4-pre --------------------------
+2021-04-29 Andy Buckley for HepMC
+         * Convert event number from int to long, requested by ATLAS.
 2021-03-24 Andrii Verbytskyi for HepMC
          * Enable reading of multiple run info objects from ASCII files.
          * Fixes to the tests.
 2021-03-24 Andrii Verbytskyi for HepMC
          * Drop cmake2 support
          * Update cmake so the c++ standard is deduced from the ROOT configuration if ROOT is used. Otherwise c++11 is used.
-         * Fix a bug in GenCrossSection: acces to non-existing vector element in to_string() function. Happened for incomplete objects. 
+         * Fix a bug in GenCrossSection: acces to non-existing vector element in to_string() function. Happened for incomplete objects.
          * Fixed formating.
          * Added compiler flags to reduce the amount of warnings.
          * Fixed a bug in Tauola test, which was not reading proper config.

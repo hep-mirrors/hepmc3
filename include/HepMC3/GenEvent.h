@@ -132,9 +132,9 @@ public:
     }
 
     /// @brief Get event number
-    int  event_number() const { return m_event_number; }
+    long event_number() const { return m_event_number; }
     /// @brief Set event number
-    void set_event_number(const int& num) { m_event_number = num; }
+    void set_event_number(long num) { m_event_number = num; }
 
     /// @brief Get momentum unit
     const Units::MomentumUnit& momentum_unit() const { return m_momentum_unit; }
@@ -207,7 +207,7 @@ public:
     /// with the same name is present
     void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0) {
         ///Disallow empty strings
-        if (name.length()==0) return;     
+        if (name.length()==0) return;
         if (!att)  return;
         std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
         if (m_attributes.count(name)==0) m_attributes[name]=std::map<int, std::shared_ptr<Attribute> >();
@@ -346,7 +346,7 @@ private:
     std::vector<GenVertexPtr> m_vertices;
 
     /// Event number
-    int m_event_number;
+    long m_event_number;
 
     /// Event weights
     std::vector<double> m_weights;
