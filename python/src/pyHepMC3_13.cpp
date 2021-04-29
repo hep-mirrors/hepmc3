@@ -48,7 +48,7 @@ void bind_pyHepMC3_13(std::function< pybind11::module &(std::string const &names
 		cl.def_static("fix_daughters", (bool (*)()) &HepMC3::HEPEVT_Wrapper::fix_daughters, "Tries to fix list of daughters \n\nC++: HepMC3::HEPEVT_Wrapper::fix_daughters() --> bool");
 		cl.def_static("set_hepevt_address", (void (*)(char *)) &HepMC3::HEPEVT_Wrapper::set_hepevt_address, "C++: HepMC3::HEPEVT_Wrapper::set_hepevt_address(char *) --> void", pybind11::arg("c"));
 		cl.def_static("max_number_entries", (int (*)()) &HepMC3::HEPEVT_Wrapper::max_number_entries, "C++: HepMC3::HEPEVT_Wrapper::max_number_entries() --> int");
-		cl.def_static("event_number", (int (*)()) &HepMC3::HEPEVT_Wrapper::event_number, "C++: HepMC3::HEPEVT_Wrapper::event_number() --> int");
+		cl.def_static("event_number", (long (*)()) &HepMC3::HEPEVT_Wrapper::event_number, "C++: HepMC3::HEPEVT_Wrapper::event_number() --> long");
 		cl.def_static("number_entries", (int (*)()) &HepMC3::HEPEVT_Wrapper::number_entries, "C++: HepMC3::HEPEVT_Wrapper::number_entries() --> int");
 		cl.def_static("status", (int (*)(const int &)) &HepMC3::HEPEVT_Wrapper::status, "C++: HepMC3::HEPEVT_Wrapper::status(const int &) --> int", pybind11::arg("index"));
 		cl.def_static("id", (int (*)(const int &)) &HepMC3::HEPEVT_Wrapper::id, "C++: HepMC3::HEPEVT_Wrapper::id(const int &) --> int", pybind11::arg("index"));
@@ -68,7 +68,7 @@ void bind_pyHepMC3_13(std::function< pybind11::module &(std::string const &names
 		cl.def_static("number_parents", (int (*)(const int &)) &HepMC3::HEPEVT_Wrapper::number_parents, "C++: HepMC3::HEPEVT_Wrapper::number_parents(const int &) --> int", pybind11::arg("index"));
 		cl.def_static("number_children", (int (*)(const int &)) &HepMC3::HEPEVT_Wrapper::number_children, "C++: HepMC3::HEPEVT_Wrapper::number_children(const int &) --> int", pybind11::arg("index"));
 		cl.def_static("number_children_exact", (int (*)(const int &)) &HepMC3::HEPEVT_Wrapper::number_children_exact, "C++: HepMC3::HEPEVT_Wrapper::number_children_exact(const int &) --> int", pybind11::arg("index"));
-		cl.def_static("set_event_number", (void (*)(const int &)) &HepMC3::HEPEVT_Wrapper::set_event_number, "C++: HepMC3::HEPEVT_Wrapper::set_event_number(const int &) --> void", pybind11::arg("evtno"));
+		cl.def_static("set_event_number", (void (*)(const long &)) &HepMC3::HEPEVT_Wrapper::set_event_number, "C++: HepMC3::HEPEVT_Wrapper::set_event_number(const long &) --> void", pybind11::arg("evtno"));
 		cl.def_static("set_number_entries", (void (*)(const int &)) &HepMC3::HEPEVT_Wrapper::set_number_entries, "C++: HepMC3::HEPEVT_Wrapper::set_number_entries(const int &) --> void", pybind11::arg("noentries"));
 		cl.def_static("set_status", (void (*)(const int &, const int &)) &HepMC3::HEPEVT_Wrapper::set_status, "C++: HepMC3::HEPEVT_Wrapper::set_status(const int &, const int &) --> void", pybind11::arg("index"), pybind11::arg("status"));
 		cl.def_static("set_id", (void (*)(const int &, const int &)) &HepMC3::HEPEVT_Wrapper::set_id, "C++: HepMC3::HEPEVT_Wrapper::set_id(const int &, const int &) --> void", pybind11::arg("index"), pybind11::arg("id"));

@@ -48,7 +48,7 @@ void WriterDOT::write_event(const GenEvent &evt)
     allocate_buffer();
     if ( !m_buffer ) return;
     flush();
-    m_cursor += sprintf(m_cursor, "digraph graphname%d {\n",evt.event_number());
+    m_cursor += sprintf(m_cursor, "digraph graphname%d {\n", evt.event_number());
     m_cursor += sprintf(m_cursor, "v0[label=\"Machine\"];\n");
     for(auto v: evt.vertices() ) {
         if (m_style!=0)

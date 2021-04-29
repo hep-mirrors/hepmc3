@@ -24,7 +24,7 @@
 namespace HepMC3 {
 
 struct GenEventData {
-    int                 event_number;  ///< Event number
+    long                event_number;  ///< Event number
     Units::MomentumUnit momentum_unit; ///< Momentum unit
     Units::LengthUnit   length_unit;   ///< Length unit
 

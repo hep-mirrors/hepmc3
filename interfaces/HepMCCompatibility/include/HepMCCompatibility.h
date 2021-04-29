@@ -4,7 +4,7 @@
 // Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 ///
 /// @file HepMCCompatibility.h
-/// @brief Implementation of compatibility layer (in-memory conversion functions) between HePMC2 and HepMC3
+/// @brief Implementation of compatibility layer (in-memory conversion functions) between HepMC2 and HepMC3
 ///
 #ifndef HEPMCCOMPATIBILITY_H
 #define HEPMCCOMPATIBILITY_H
@@ -188,7 +188,7 @@ HepMC::GenEvent* ConvertHepMCGenEvent_3to2(const HepMC3::GenEvent& evt)
     }
     n->set_mpi( mpi );
     n->set_signal_process_id( signal_process_id );
-    n->set_event_number( evt.event_number() );
+    n->set_event_number( int(evt.event_number()) ); //< TODO: ok? HepMC3 event number is long, HepMC2 is int. Need explicit truncation check?
     n->set_random_states( random_states );
     n->set_event_scale( event_scale );
     n->set_alphaQCD( alphaQCD );

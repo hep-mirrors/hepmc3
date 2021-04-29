@@ -269,7 +269,7 @@ std::pair<int, int> ReaderAscii::parse_event_information(GenEvent &evt, const ch
     static const std::pair<int, int>  err(-1, -1);
     std::pair<int, int>               ret(-1, -1);
     const char                 *cursor   = buf;
-    int                         event_no = 0;
+    long                        event_no = 0;
     FourVector                  position;
 
     // event number

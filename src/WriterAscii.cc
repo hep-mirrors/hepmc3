@@ -85,7 +85,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     }
 
     // Write event info
-    m_cursor += sprintf(m_cursor, "E %d %lu %lu", evt.event_number(), evt.vertices().size(), evt.particles().size());
+    m_cursor += sprintf(m_cursor, "E %ld %lu %lu", evt.event_number(), evt.vertices().size(), evt.particles().size());
     flush();
 
     // Write event position if not zero

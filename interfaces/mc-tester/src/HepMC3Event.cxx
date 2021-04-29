@@ -32,11 +32,11 @@ void  HepMC3Event::SetNumOfParticles(int /*num*/) {
     std::cout << "Warning, should not be doing this for HepMCEvent" << std::endl;
 }
 
-int HepMC3Event::GetEventNumber() {
+long HepMC3Event::GetEventNumber() {
     return evt->event_number();
 }
 
-void HepMC3Event::SetEventNumber(int num) {
+void HepMC3Event::SetEventNumber(long num) {
     evt->set_event_number( num );
 }
 
@@ -136,6 +136,3 @@ void HepMC3Event::Streamer(TBuffer &)
     // streamer class for ROOT compatibility
 }
 #endif
-
-
-

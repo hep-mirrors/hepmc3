@@ -30,7 +30,7 @@ class Pythia8ToHepMC3:
             self.m_internal_event_number = ievnum
         else:
             evt.set_event_number(self.m_internal_event_number)
-            self.m_internal_event_number = self.m_internal_event_number + 1
+            self.m_internal_event_number += 1
         evt.set_units(hm.Units.GEV, hm.Units.MM)
         #        // 2. Fill particle information
         hepevt_particles = []

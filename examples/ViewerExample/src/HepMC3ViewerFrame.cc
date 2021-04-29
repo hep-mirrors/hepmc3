@@ -52,7 +52,7 @@ static bool show_as_parton(HepMC3::ConstGenParticlePtr p )
 
 static char*  write_event_to_dot(char* used_cursor,const HepMC3::GenEvent &evt,int used_style=1)
 {
-    used_cursor += sprintf(used_cursor, "digraph graphname%d {\n",evt.event_number());
+    used_cursor += sprintf(used_cursor, "digraph graphname%d {\n", evt.event_number());
     used_cursor += sprintf(used_cursor, "v0[label=\"Machine\"];\n");
     for(auto v: evt.vertices() )
     {

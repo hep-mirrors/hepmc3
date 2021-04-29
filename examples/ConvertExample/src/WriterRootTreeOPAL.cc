@@ -13,7 +13,7 @@ void WriterRootTreeOPAL::init_branches()
 }
 void WriterRootTreeOPAL::write_event(const GenEvent &evt)
 {
-    m_Ievnt=evt.event_number();
+    m_Ievnt=int(evt.event_number()); //< TODO: ok? GenEvent::event_number() is now a long int
     std::vector<size_t> beams;
     for (size_t i=0; i<evt.particles().size(); i++)
         if (evt.particles().at(i)->status()==4&&std::abs(evt.particles().at(i)->pid())==11)

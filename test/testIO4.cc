@@ -23,8 +23,8 @@ class SomeAnalysis
 public :
     TChain         *fChain;   //!pointer to the analyzed TTree or TChain
     // Declaration of leaf types
-//GenEventData *hepmc3_event;
-    Int_t           event_number;
+    //GenEventData *hepmc3_event;
+    Long64_t        event_number;
     Int_t           momentum_unit;
     Int_t           length_unit;
     Int_t           particles_;

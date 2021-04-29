@@ -297,7 +297,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
 int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     const char          *cursor             = buf;
-    int                  event_no           = 0;
+    long                 event_no           = 0;
     int                  vertices_count     = 0;
     int                  random_states_size = 0;
     int                  weights_size       = 0;
