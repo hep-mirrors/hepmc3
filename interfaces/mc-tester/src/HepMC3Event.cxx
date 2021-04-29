@@ -32,8 +32,8 @@ void  HepMC3Event::SetNumOfParticles(int /*num*/) {
     std::cout << "Warning, should not be doing this for HepMCEvent" << std::endl;
 }
 
-long HepMC3Event::GetEventNumber() {
-    return evt->event_number();
+int HepMC3Event::GetEventNumber() {
+    return int(evt->event_number()); //< note type truncation, forced by MCTester interface
 }
 
 void HepMC3Event::SetEventNumber(long num) {

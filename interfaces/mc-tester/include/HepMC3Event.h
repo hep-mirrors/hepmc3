@@ -48,7 +48,7 @@ public:
     int GetNumOfParticles();
 
     /** returns the event number */
-    long GetEventNumber();
+    int GetEventNumber(); //< TODO: the HepMC3 internal event number is a long, but MCTester requires int
 
     /** Dummy function definition. Do not use */
     void SetNumOfParticles(int n);
