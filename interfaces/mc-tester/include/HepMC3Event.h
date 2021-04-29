@@ -48,13 +48,13 @@ public:
     int GetNumOfParticles();
 
     /** returns the event number */
-    int GetEventNumber();
+    long GetEventNumber();
 
     /** Dummy function definition. Do not use */
     void SetNumOfParticles(int n);
 
     /** Dummy function definition. Do not use */
-    void SetEventNumber(int ev);
+    void SetEventNumber(long ev);
 
     /** Returns the HEPParticle with id "idx". This is the id number as used
      by MC-TESTER and not the id number from the original GenParticle.
