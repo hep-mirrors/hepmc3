@@ -36,6 +36,9 @@ int HepMC3Event::GetEventNumber() {
     return int(evt->event_number()); //< note type truncation, forced by MCTester interface
 }
 
+void HepMC3Event::SetEventNumber(int num) {
+    evt->set_event_number( num );
+}
 void HepMC3Event::SetEventNumber(long num) {
     evt->set_event_number( num );
 }

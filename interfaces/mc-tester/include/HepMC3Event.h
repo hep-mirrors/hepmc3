@@ -54,6 +54,7 @@ public:
     void SetNumOfParticles(int n);
 
     /** Dummy function definition. Do not use */
+    void SetEventNumber(int ev); //< TODO: the HepMC3 internal event number is a long, but MCTester requires int
     void SetEventNumber(long ev);
 
     /** Returns the HEPParticle with id "idx". This is the id number as used

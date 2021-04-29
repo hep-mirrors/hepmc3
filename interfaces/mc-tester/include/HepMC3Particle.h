@@ -45,50 +45,53 @@ public:
 
     /** Returns the event that this particle belongs to.*/
     HEPEvent* GetEvent();
+
+    // NOTE: the following const-return-by-value and non-const methods make no sense, but that's the MCTester API
+
     /** returns the ID number of particle as used by MC-TESTER (not
       the same as GenParticle pdg_id or barcode).*/
-    int    GetId();
+    int const   GetId();
     /** Dummy function definition. Do not use.*/
-    int    GetMother();
+    int const    GetMother();
     /** Dummy function definition. Do not use.*/
-    int    GetMother2();
+    int const    GetMother2();
     /** Dummy function definition. Do not use.*/
-    int    GetFirstDaughter();
+    int const    GetFirstDaughter();
     /** Dummy function definition. Do not use.*/
-    int    GetLastDaughter();
+    int const    GetLastDaughter();
 
     /** Returns the particle's energy */
-    double GetE();
+    double const GetE();
     /** Returns the x component of the particle's momentum */
-    double GetPx();
+    double const GetPx();
     /** Returns the y component of the particle's momentum */
-    double GetPy();
+    double const GetPy();
     /** Returns the z component of the particle's momentum */
-    double GetPz();
+    double const GetPz();
     /** Returns the particle's mass */
-    double GetM();
+    double const GetM();
     /** Returns the particle's PDG ID code. */
-    int    GetPDGId();
+    int const    GetPDGId();
     /** Returns the particle's Status code. */
-    int    GetStatus();
+    int const    GetStatus();
     /** Returns true is the particle has status code 1. */
-    int    IsStable();
+    int const    IsStable();
     /** Returns true is the particle has status code 2
       or (for pythia 8) if it has a status < 0, has an end vertex and
       does not have any daughters of the same PDG code.*/
-    int    Decays();
+    int const    Decays();
     /** Returns true is the particle has status code 3 or (for pythia 8)
      if fails both IsStable() and Decays().*/
-    int    IsHistoryEntry();
+    int const    IsHistoryEntry();
 
     /** Returns the x value of the particle's production vertex */
-    double GetVx();
+    double const GetVx();
     /** Returns the y value of the particle's production vertex */
-    double GetVy();
+    double const GetVy();
     /** Returns the z value of the particle's production vertex */
-    double GetVz();
+    double const GetVz();
     /** Dummy function definition. Do not use.*/
-    double GetTau();
+    double const GetTau();
 
     /** Sets the event that this particle belongs to */
     void   SetEvent(HEPEvent  *event);

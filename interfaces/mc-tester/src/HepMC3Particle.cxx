@@ -49,85 +49,85 @@ HEPEvent* HepMC3Particle::GetEvent() {
     return event;
 }
 
-int HepMC3Particle::GetId() {
+int const HepMC3Particle::GetId() {
     return id;
 }
 
 //GetMother and Daughter methods not implemented here
 //GetDaughterList() and GetMotherList() should be used
 //instead. Still to do: some errors should be thrown.
-int HepMC3Particle::GetMother() {
+int const HepMC3Particle::GetMother() {
     return 0;
 }
 
-int HepMC3Particle::GetMother2() {
+int const HepMC3Particle::GetMother2() {
     return 0;
 }
 
-int HepMC3Particle::GetFirstDaughter() {
+int const HepMC3Particle::GetFirstDaughter() {
     return 0;
 }
 
-int HepMC3Particle::GetLastDaughter() {
+int const HepMC3Particle::GetLastDaughter() {
     return 0;
 }
 
-double HepMC3Particle::GetE() {
+double const HepMC3Particle::GetE() {
     return part->momentum().e();
 }
 
-double HepMC3Particle::GetPx() {
+double const HepMC3Particle::GetPx() {
     return part->momentum().px();
 }
 
-double HepMC3Particle::GetPy() {
+double const HepMC3Particle::GetPy() {
     return part->momentum().py();
 }
 
-double HepMC3Particle::GetPz() {
+double const HepMC3Particle::GetPz() {
     return part->momentum().pz();
 }
 
-double HepMC3Particle::GetM() {
+double const HepMC3Particle::GetM() {
     return part->momentum().m();
 }
 
-int HepMC3Particle::GetPDGId() {
+int const HepMC3Particle::GetPDGId() {
     return part->pid();
 }
 
-int HepMC3Particle::GetStatus() {
+int const HepMC3Particle::GetStatus() {
     return part->status();
 }
 
-int HepMC3Particle::IsStable() {
+int const HepMC3Particle::IsStable() {
     return (GetStatus() == 1 || !part->end_vertex());
 }
 
-int HepMC3Particle::Decays() {
+int const HepMC3Particle::Decays() {
     return (!IsHistoryEntry() && !IsStable());
 }
 
-int HepMC3Particle::IsHistoryEntry() {
+int const HepMC3Particle::IsHistoryEntry() {
     return (GetStatus() == 3);
 }
 
-double HepMC3Particle::GetVx() {
+double const HepMC3Particle::GetVx() {
     if(part->production_vertex()) return part->production_vertex()->position().x();
     return 0.;
 }
 
-double HepMC3Particle::GetVy() {
+double const HepMC3Particle::GetVy() {
     if(part->production_vertex()) return part->production_vertex()->position().y();
     return 0.;
 }
 
-double HepMC3Particle::GetVz() {
+double const HepMC3Particle::GetVz() {
     if(part->production_vertex()) return part->production_vertex()->position().z();
     return 0.;
 }
 
-double HepMC3Particle::GetTau() {
+double const HepMC3Particle::GetTau() {
     //Not implemented
     if(part->end_vertex()&&part->production_vertex())
         return (part->end_vertex()->position().t()-part->production_vertex()->position().t()); //not correct, but will see if it's empty
