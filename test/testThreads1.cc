@@ -18,8 +18,8 @@ const int NinputCopies=4;
 const int NmaxThreads=3;
 void attribute_function1(const GenEvent& e, const int& id)
 {
-    shared_ptr<GenCrossSection>  xs     = e.attribute<GenCrossSection>("GenCrossSection",0);
-    printf("XS in event  %i  is %f, id=%i\n",e.event_number(),xs->xsec(),id);
+    shared_ptr<GenCrossSection> xs = e.attribute<GenCrossSection>("GenCrossSection",0);
+    printf("XS in event  %li  is %f, id=%i\n", e.event_number(), xs->xsec(), id);
 }
 int main()
 {
