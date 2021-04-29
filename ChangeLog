@@ -1,5 +1,6 @@
 --------------------------  HepMC3.2.4-pre --------------------------
 2021-04-29 Andy Buckley for HepMC
+         * Fix const method declarations in MCTester interface.
          * Convert event number from int to long, requested by ATLAS.
 2021-03-24 Andrii Verbytskyi for HepMC
          * Enable reading of multiple run info objects from ASCII files.
