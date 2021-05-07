@@ -10,7 +10,7 @@ if(GRAPHVIZ_FOUND AND ROOT_FOUND)
   target_compile_definitions(HepMC3Viewer.exe PRIVATE ${GRAPHVIZ_DEFINES} )
   include_directories( include  )
 
-  SET(linklibraties ${ROOT_LIBRARIES}  ${GRAPHVIZ_CGRAPH_LIBRARY}  ${GRAPHVIZ_GVC_LIBRARY}  HepMC3 HepMC3rootIO )
+  SET(linklibraties ${ROOT_LIBRARIES}  ${GRAPHVIZ_CGRAPH_LIBRARY}  ${GRAPHVIZ_GVC_LIBRARY}  ${HEPMC3_LIB} ${HEPMC3_ROOTIO_LIB} )
   if (GRAPHVIZ_GRAPH_LIBRARY)
     list(APPEND linklibraties  ${GRAPHVIZ_GRAPH_LIBRARY}  )
   endif()

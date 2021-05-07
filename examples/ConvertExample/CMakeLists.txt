@@ -4,7 +4,7 @@ set(basic_sources   ${CMAKE_CURRENT_SOURCE_DIR}/convert_example.cc
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterDOT.cc 
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterHEPEVTZEUS.cc )
 set(basic_includes ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} )
-set(basic_libraries HepMC3)
+set(basic_libraries ${HEPMC3_LIB})
 set(basic_defines   HEPMCCONVERT_EXTENSION_HEPEVTZEUS=1   HEPMCCONVERT_EXTENSION_DOT=1)
 set(basic_dependencies )
 set(basic_libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" )
@@ -24,7 +24,7 @@ endif()
 if(ROOT_FOUND)
   list(APPEND basic_includes ${PROJECT_SOURCE_DIR}/rootIO/include  ${ROOT_INCLUDE_DIRS})
   list(APPEND basic_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterRootTreeOPAL.cc )
-  list(APPEND basic_libraries ${ROOT_LIBRARIES} HepMC3rootIO)
+  list(APPEND basic_libraries ${ROOT_LIBRARIES} ${HEPMC3_ROOTIO_LIB})
   list(APPEND basic_defines HEPMCCONVERT_EXTENSION_ROOTTREEOPAL=1)
   list(APPEND basic_dependencies dictionary)
   # create environment scripts
