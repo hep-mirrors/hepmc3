@@ -80,6 +80,10 @@ if (USE_INSTALLED_HEPMC3)
       endif()
     endforeach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
   endif()
+else()
+  set(HEPMC3_ROOTIO_LIB HepMC3rootIO)
+  set(HEPMC3_SEARCH_LIB HepMC3search)
+  set(HEPMC3_LIB HepMC3)
 endif()
 #<-This is needed for standalone compilation 
 
