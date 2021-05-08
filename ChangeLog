@@ -1,4 +1,6 @@
   --------------------------  HepMC3.2.4-pre --------------------------
+2021-05-08 Andrii Verbytskyi for HepMC
+         * Fix buffer overflow in WritterAscii/WriterAsciiHepMC2. Thanks for Fabian Klimpel for help with debug.
 2021-03-24 Andrii Verbytskyi for HepMC
          * Enable reading of multiple run info objects from ASCII files.
          * Fixes to the tests.

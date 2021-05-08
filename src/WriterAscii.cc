@@ -86,6 +86,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
     // Write event info
     m_cursor += sprintf(m_cursor, "E %d %lu %lu", evt.event_number(), evt.vertices().size(), evt.particles().size());
+    //4+d+2*lu
     flush();
 
     // Write event position if not zero
@@ -106,13 +107,17 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
     // Write units
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
+    //3+2*3
     flush();
 
     // Write weight values if present
     if ( evt.weights().size() ) {
         m_cursor += sprintf(m_cursor, "W");
         for (auto  w: evt.weights())
+        {
             m_cursor += sprintf(m_cursor, " %.*e", std::min(3*m_precision, 22), w);
+            flush();
+        }
         m_cursor += sprintf(m_cursor, "\n");
         flush();
     }
@@ -127,9 +132,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
                 HEPMC3_WARNING("WriterAscii::write_event: problem serializing attribute: " << vt1.first)
             }
             else {
-                m_cursor +=
-                    sprintf(m_cursor, "A %i %s ", vt2.first, vt1.first.c_str());
+                m_cursor += sprintf(m_cursor, "A %i ", vt2.first);
+                write_string(escape(vt1.first));
                 flush();
+                m_cursor += sprintf(m_cursor," "); 
                 write_string(escape(st));
                 m_cursor += sprintf(m_cursor, "\n");
                 flush();
@@ -168,7 +174,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
 void WriterAscii::allocate_buffer() {
     if ( m_buffer ) return;
-    while ( m_buffer == nullptr && m_buffer_size >= 256 ) {
+    while ( m_buffer == nullptr && m_buffer_size >= 512 ) {
         try {
             m_buffer = new char[ m_buffer_size ]();
         }     catch (const std::bad_alloc& e) {
@@ -206,6 +212,7 @@ std::string WriterAscii::escape(const std::string& s)  const {
 
 void WriterAscii::write_vertex(ConstGenVertexPtr v) {
     m_cursor += sprintf(m_cursor, "V %i %i [", v->id(), v->status());
+    //3+2*i
     flush();
 
     bool printed_first = false;
@@ -243,10 +250,10 @@ void WriterAscii::write_vertex(ConstGenVertexPtr v) {
 
 inline void WriterAscii::flush() {
     // The maximum size of single add to the buffer (other than by
-    // using WriterAscii::write) is 32 bytes. This is a safe value as
+    // using WriterAscii::write_string) should not be larger than 256. This is a safe value as
     // we will not allow precision larger than 24 anyway
     unsigned long length = m_cursor - m_buffer;
-    if ( m_buffer_size - length < 32 ) {
+    if ( m_buffer_size - length < 256 ) {
         m_stream->write(m_buffer, length);
         m_cursor = m_buffer;
     }
@@ -292,9 +299,10 @@ void WriterAscii::write_run_info() {
             HEPMC3_WARNING("WriterAscii::write_run_info: problem serializing attribute: " << att.first)
         }
         else {
-            m_cursor +=
-                sprintf(m_cursor, "A %s ", att.first.c_str());
+            m_cursor += sprintf(m_cursor, "A ");
+            write_string(att.first);
             flush();
+            m_cursor += sprintf(m_cursor, " ");
             write_string(escape(st));
             m_cursor += sprintf(m_cursor, "\n");
             flush();
@@ -362,7 +370,7 @@ int WriterAscii::precision() const {
 
 void WriterAscii::set_buffer_size(const size_t& size ) {
     if (m_buffer) return;
-    if (size < 256) return;
+    if (size < 512) return;
     m_buffer_size = size;
 }
 
