@@ -130,18 +130,23 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
                         evt.vertices().size(),
                         idbeam1, idbeam2);
 
+    //11+4*d+3*e+2*i+lu
+    // This should be the largest single add to the buffer. Its size 11+4*11+3*22+2*11+10=153
     flush();
     m_cursor += sprintf(m_cursor, " %zu", m_random_states.size());
     for (size_t  q = 0; q < m_random_states.size(); q++)
     {
         m_cursor += sprintf(m_cursor, " %ii", (int)q);
+        flush();
     }
     flush();
     m_cursor += sprintf(m_cursor, " %lu", evt.weights().size());
     if ( evt.weights().size() )
     {
-        for (double w: evt.weights())
+        for (double w: evt.weights()) {
             m_cursor += sprintf(m_cursor, " %.*e", m_precision, w);
+            flush();
+        }
         m_cursor += sprintf(m_cursor, "\n");
         flush();
         m_cursor += sprintf(m_cursor, "N %lu", evt.weights().size());
@@ -149,9 +154,15 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         for (size_t q = 0; q < evt.weights().size(); q++)
         {
             if (q < names.size())
+                write_string(" \""+names[q]+"\"");
+            else
+                write_string(" \""+std::to_string(q)+"\"");
+/*
+            if (q < names.size())                
                 m_cursor += sprintf(m_cursor, " \"%s\"", names[q].c_str());
             else
                 m_cursor += sprintf(m_cursor, " \"%i\"", (int)q);
+*/                
             flush();
         }
     }
@@ -180,8 +191,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
             {
                 if (vt1.first == "GenPdfInfo")
                 {
-                    m_cursor +=
-                        sprintf(m_cursor, "F ");
+                    m_cursor += sprintf(m_cursor, "F ");
                     flush();
                     write_string(escape(st));
                     m_cursor += sprintf(m_cursor, "\n");
@@ -216,7 +226,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
 void WriterAsciiHepMC2::allocate_buffer()
 {
     if ( m_buffer ) return;
-    while ( m_buffer == nullptr && m_buffer_size >= 256 ) {
+    while ( m_buffer == nullptr && m_buffer_size >= 512 ) {
         try {
             m_buffer = new char[ m_buffer_size ]();
         }     catch (const std::bad_alloc& e) {
@@ -282,6 +292,7 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
     if (pos.is_zero())
     {
         m_cursor += sprintf(m_cursor, " 0 0 0 0");
+        flush();
     }
     else
     {
@@ -296,7 +307,7 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
     }
     m_cursor += sprintf(m_cursor, " %i %lu %lu", orph, v->particles_out().size(), weights.size());
     flush();
-    for (size_t i = 0; i < weights.size(); i++) m_cursor += sprintf(m_cursor, " %.*e",   m_precision, weights[i]);
+    for (size_t i = 0; i < weights.size(); i++) { m_cursor += sprintf(m_cursor, " %.*e",   m_precision, weights[i]);  flush(); }
     m_cursor += sprintf(m_cursor, "\n");
     flush();
 }
@@ -304,11 +315,10 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
 
 inline void WriterAsciiHepMC2::flush()
 {
-    // The maximum size of single add to the buffer (other than by
-    // using WriterAsciiHepMC2::write) is 32 bytes. This is a safe value as
+    // The maximum size of single add to the buffer should not be larger than 256. This is a safe value as
     // we will not allow precision larger than 24 anyway
     unsigned long length = m_cursor - m_buffer;
-    if ( m_buffer_size - length < 32 )
+    if ( m_buffer_size - length < 256 )
     {
         m_stream->write(m_buffer, length);
         m_cursor = m_buffer;
@@ -365,7 +375,7 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
         std::vector<int> flowsv = A_flows->value();
         int flowsize = flowsv.size();
         m_cursor += sprintf(m_cursor, " %i", flowsize);
-        for (size_t k=0; k < flowsv.size(); k++)  m_cursor += sprintf(m_cursor, " %lu %i", k+1, flowsv.at(k));
+        for (size_t k=0; k < flowsv.size(); k++)  { m_cursor += sprintf(m_cursor, " %lu %i", k+1, flowsv.at(k)); flush();}
         m_cursor += sprintf(m_cursor, "\n");
         flush();
     } else {
@@ -381,6 +391,7 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
         if (A_flow2) m_cursor += sprintf(m_cursor, " 2 %i", A_flow2->value());
         if (A_flow3) m_cursor += sprintf(m_cursor, " 3 %i", A_flow3->value());
         m_cursor += sprintf(m_cursor, "\n");
+        //10+4*i
         flush();
     }
 }
@@ -427,7 +438,7 @@ int WriterAsciiHepMC2::precision() const {
 
 void WriterAsciiHepMC2::set_buffer_size(const size_t& size ) {
     if (m_buffer) return;
-    if (size < 256) return;
+    if (size < 512) return;
     m_buffer_size = size;
 }
 } // namespace HepMC3
