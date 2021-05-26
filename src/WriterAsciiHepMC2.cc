@@ -317,7 +317,7 @@ inline void WriterAsciiHepMC2::flush()
 {
     // The maximum size of single add to the buffer should not be larger than 256. This is a safe value as
     // we will not allow precision larger than 24 anyway
-    unsigned long length = m_cursor - m_buffer;
+    std::ptrdiff_t length = m_cursor - m_buffer;
     if ( m_buffer_size - length < 256 )
     {
         m_stream->write(m_buffer, length);
@@ -328,7 +328,8 @@ inline void WriterAsciiHepMC2::flush()
 
 inline void WriterAsciiHepMC2::forced_flush()
 {
-    m_stream->write(m_buffer, m_cursor - m_buffer);
+    std::ptrdiff_t length = m_cursor - m_buffer;
+    m_stream->write(m_buffer, length);
     m_cursor = m_buffer;
 }
 
