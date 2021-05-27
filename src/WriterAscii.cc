@@ -252,8 +252,8 @@ inline void WriterAscii::flush() {
     // The maximum size of single add to the buffer (other than by
     // using WriterAscii::write_string) should not be larger than 256. This is a safe value as
     // we will not allow precision larger than 24 anyway
-    std::ptrdiff_t length = m_cursor - m_buffer;
-    if ( m_buffer_size - length < 256 ) {
+    if ( m_buffer + m_buffer_size < m_cursor + 256 ) {
+        std::ptrdiff_t length = m_cursor - m_buffer;
         m_stream->write(m_buffer, length);
         m_cursor = m_buffer;
     }
@@ -336,9 +336,7 @@ void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
 
 inline void WriterAscii::write_string(const std::string &str) {
     // First let's check if string will fit into the buffer
-    unsigned long length = m_cursor-m_buffer;
-
-    if ( m_buffer_size - length > str.length() ) {
+    if ( m_buffer + m_buffer_size  > m_cursor + str.length() ) {
         strncpy(m_cursor, str.data(), str.length());
         m_cursor += str.length();
         flush();
