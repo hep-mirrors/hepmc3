@@ -50,7 +50,6 @@ public:
     /** @brief read particle from file
     *
     * @param[in] i Particle id
-    * @param[in] iflong Event style
     */
     virtual bool read_hepevt_particle(int i);
 

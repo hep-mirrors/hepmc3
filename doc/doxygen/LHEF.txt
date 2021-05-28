@@ -340,7 +340,8 @@ following tags are defined.
         </li>
         <li> other values are allowed but are not included in the standard.
         </li>
-      </ul>
+        </ul>
+      </li>
     </ul>
   </li>
   <li><b><tt><procinfo></tt></b>(optional, multiple, see LHEF::HEPRUP::procinfo)<br>
@@ -473,7 +474,7 @@ following tags are defined.
   </li>
 </ul>
 
-@subsection LHEF-init Standardised tags in the events block.
+@subsection LHEF-events Standardised tags in the events block.
 
 After the <tt>init</tt> block any number of events can be given. In
 addition events can be given in separate files declared
@@ -535,6 +536,7 @@ block. Here is a list of additional tags that may be provided.
     </ul>
     Also other attributes are allowed and will be stored in
     LHEF::Scales::attributes.<br>
+  </li>
   <li><b><tt><scale></tt></b> (optional inside a <tt><scales></tt>
     tag)<br> It is also possible to specify an individual scale for
     any particle in the event in a <tt><scale></tt> tag. This is
@@ -553,7 +555,8 @@ block. Here is a list of additional tags that may be provided.
         be used to specify all leptons and electro-weak bosons, and
         "QCD" can be used to specify the guon and all quarks.
       </li>
-      The contents of the tag gives the scale in GeV.
+    </ul>
+    The contents of the tag gives the scale in GeV.
   </li>
 </ul>
 
