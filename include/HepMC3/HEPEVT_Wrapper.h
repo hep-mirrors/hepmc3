@@ -88,8 +88,10 @@ namespace HepMC3
 #endif
 
 #ifdef NO_DECLSPEC_hepevtptr
+/** @brief This is a pointer to HEPEVT common block */
 extern struct HEPEVT*  hepevtptr;
 #else
+/** @brief This is a pointer to HEPEVT common block */
 DECLSPEC_hepevtptr  extern struct HEPEVT*  hepevtptr;
 #endif
 

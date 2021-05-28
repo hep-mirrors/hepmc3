@@ -361,6 +361,7 @@ if(CPPCHECK)
       search/src/*.cc 
       rootIO/src/*.cc 
       examples/*/src/*cc
+      examples/*/include/*h
       interfaces/*/include/*h
       interfaces/*/src/*cxx
       interfaces/*/src/*cc

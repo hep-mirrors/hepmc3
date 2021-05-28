@@ -59,17 +59,17 @@ public:
 /** @brief  Destructor */
     virtual ~Selector() {};
 
-    virtual Filter operator > (int value) const = 0;
-    virtual Filter operator > (double value) const = 0;
+    virtual Filter operator > (int value) const = 0;        ///< Operator >
+    virtual Filter operator > (double value) const = 0;     ///< Operator >
 
-    virtual Filter operator >= (int value) const = 0;
-    virtual Filter operator >= (double value) const = 0;
+    virtual Filter operator >= (int value) const = 0;       ///< Operator >=
+    virtual Filter operator >= (double value) const = 0;    ///< Operator >=
 
-    virtual Filter operator < (int value) const = 0;
-    virtual Filter operator < (double value) const = 0;
+    virtual Filter operator < (int value) const = 0;        ///< Operator <
+    virtual Filter operator < (double value) const = 0;     ///< Operator <
 
-    virtual Filter operator <= (int value) const = 0;
-    virtual Filter operator <= (double value) const = 0;
+    virtual Filter operator <= (int value) const = 0;       ///< Operator <=
+    virtual Filter operator <= (double value) const = 0;    ///< Operator <=
 
     virtual Filter operator == (int value) const = 0;      ///< Equality
     virtual Filter operator == (double value) const = 0;      ///< Equality
