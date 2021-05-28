@@ -136,7 +136,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, " %zu", m_random_states.size());
     for (size_t q = 0; q < m_random_states.size(); q++)
     {
-        m_cursor += sprintf(m_cursor, " %ii", (int)q);
+        m_cursor += sprintf(m_cursor, " %i", (int)q);
         flush();
     }
     flush();
@@ -157,12 +157,12 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
                 write_string(" \""+names[q]+"\"");
             else
                 write_string(" \""+std::to_string(q)+"\"");
-/*
-            if (q < names.size())
-                m_cursor += sprintf(m_cursor, " \"%s\"", names[q].c_str());
-            else
-                m_cursor += sprintf(m_cursor, " \"%i\"", (int)q);
-*/
+            /*
+                        if (q < names.size())
+                            m_cursor += sprintf(m_cursor, " \"%s\"", names[q].c_str());
+                        else
+                            m_cursor += sprintf(m_cursor, " \"%i\"", (int)q);
+            */
             flush();
         }
     }

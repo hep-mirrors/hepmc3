@@ -48,7 +48,7 @@
     will return mass calculated from 4-momentum using HepMC3::FourVector.m()
 
     ###########################################################################
-    @subsection iterators Iterators
+    @subsection newiterators Iterators
     ###########################################################################
 
     GenEvent and GenVertex containers are now of std::vector type.

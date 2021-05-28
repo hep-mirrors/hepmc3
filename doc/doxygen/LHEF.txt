@@ -372,7 +372,7 @@ following tags are defined.
         calculate the matrix elements. If absent, a pure tree-level
         calculation is assumed. Other possible values could be
         CSdipole (NLO calculation with Catani-Seymour subtraction),
-        MC@NLO, POWHEG and NLOexclusive (NLO calculation according to
+        MCatNLO, POWHEG and NLOexclusive (NLO calculation according to
         the exclusive cross section withing the given cuts).
       </li>
     </ul>

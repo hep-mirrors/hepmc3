@@ -40,8 +40,7 @@ class GenEvent;
 /** @brief Forward declaration of GenRunInfo. */
 class GenRunInfo;
 
-/** @brief Forward declaration of GenParticle. */
-// class GenParticle;
+/** @brief  Base attribute class. */
 class Attribute {
 //
 // Constructors
@@ -1039,7 +1038,7 @@ private:
 };
 
 /**
- *  @class HepMC3::VectorIntAttribute
+ *  @class HepMC3::VectorLongIntAttribute
  *  @brief Attribute that holds a vector of integers of type  int
  *
  *  @ingroup attributes
@@ -1084,7 +1083,7 @@ private:
 };
 
 /**
- *  @class HepMC3::VectorIntAttribute
+ *  @class HepMC3::VectorDoubleAttribute
  *  @brief Attribute that holds a vector of FPs of type  double
  *
  *  @ingroup attributes
@@ -1130,7 +1129,7 @@ private:
 
 
 /**
- *  @class HepMC3::VectorIntAttribute
+ *  @class HepMC3::VectorStringAttribute
  *  @brief Attribute that holds a vector of FPs of type  string
  *
  *  @ingroup attributes
