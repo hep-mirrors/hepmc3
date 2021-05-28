@@ -85,7 +85,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     }
 
     // Write event info
-    m_cursor += sprintf(m_cursor, "E %d %lu %lu", evt.event_number(), evt.vertices().size(), evt.particles().size());
+    m_cursor += sprintf(m_cursor, "E %d %zu %zu", evt.event_number(), evt.vertices().size(), evt.particles().size());
     //4+d+2*lu
     flush();
 
@@ -113,7 +113,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Write weight values if present
     if ( evt.weights().size() ) {
         m_cursor += sprintf(m_cursor, "W");
-        for (auto  w: evt.weights())
+        for (auto w: evt.weights())
         {
             m_cursor += sprintf(m_cursor, " %.*e", std::min(3*m_precision, 22), w);
             flush();
@@ -135,7 +135,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
                 m_cursor += sprintf(m_cursor, "A %i ", vt2.first);
                 write_string(escape(vt1.first));
                 flush();
-                m_cursor += sprintf(m_cursor," "); 
+                m_cursor += sprintf(m_cursor, " ");
                 write_string(escape(st));
                 m_cursor += sprintf(m_cursor, "\n");
                 flush();
@@ -145,7 +145,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
 
     // Print particles
-    std::map<ConstGenVertexPtr, bool>  alreadywritten;
+    std::map<ConstGenVertexPtr, bool> alreadywritten;
     for (ConstGenParticlePtr p: evt.particles()) {
         // Check to see if we need to write a vertex first
         ConstGenVertexPtr v = p->production_vertex();
@@ -160,7 +160,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
             else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in()[0]->id();
             //Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
             if (alreadywritten.find(v) == alreadywritten.end() && parent_object < 0)
-            { write_vertex(v); alreadywritten[v] = true;}
+            { write_vertex(v); alreadywritten[v] = true; }
         }
 
         write_particle(p, parent_object);
@@ -177,7 +177,7 @@ void WriterAscii::allocate_buffer() {
     while ( m_buffer == nullptr && m_buffer_size >= 512 ) {
         try {
             m_buffer = new char[ m_buffer_size ]();
-        }     catch (const std::bad_alloc& e) {
+        } catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
             HEPMC3_WARNING("WriterAscii::allocate_buffer:" << e.what() << " buffer size too large. Dividing by 2. New size: " << m_buffer_size)
@@ -192,7 +192,7 @@ void WriterAscii::allocate_buffer() {
 }
 
 
-std::string WriterAscii::escape(const std::string& s)  const {
+std::string WriterAscii::escape(const std::string& s) const {
     std::string ret;
     ret.reserve(s.length()*2);
     for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
@@ -222,7 +222,7 @@ void WriterAscii::write_vertex(ConstGenVertexPtr v) {
     std::sort(pids.begin(), pids.end());
     for (auto pid: pids) {
         if ( !printed_first ) {
-            m_cursor  += sprintf(m_cursor, "%i", pid);
+            m_cursor += sprintf(m_cursor, "%i", pid);
             printed_first = true;
         }
         else m_cursor += sprintf(m_cursor, ",%i", pid);
@@ -336,7 +336,7 @@ void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
 
 inline void WriterAscii::write_string(const std::string &str) {
     // First let's check if string will fit into the buffer
-    if ( m_buffer + m_buffer_size  > m_cursor + str.length() ) {
+    if ( m_buffer + m_buffer_size > m_cursor + str.length() ) {
         strncpy(m_cursor, str.data(), str.length());
         m_cursor += str.length();
         flush();

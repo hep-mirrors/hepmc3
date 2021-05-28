@@ -109,17 +109,17 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     {
         for (ConstGenParticlePtr p: v->particles_in())
         {
-            if (!p->production_vertex())         { if (p->status() == 4) beams.push_back(idbeam); idbeam++;}
-            else if (p->production_vertex()->id() == 0) { if (p->status() == 4) beams.push_back(idbeam); idbeam++;}
+            if (!p->production_vertex())                { if (p->status() == 4) beams.push_back(idbeam); idbeam++; }
+            else if (p->production_vertex()->id() == 0) { if (p->status() == 4) beams.push_back(idbeam); idbeam++; }
         }
-        for (ConstGenParticlePtr p: v->particles_out()) { if (p->status() == 4) beams.push_back(idbeam); idbeam++;}
+        for (ConstGenParticlePtr p: v->particles_out()) { if (p->status() == 4) beams.push_back(idbeam); idbeam++; }
     }
     //
     int idbeam1 = 10000;
     int idbeam2 = 10000;
     if (beams.size() > 0) idbeam1 += beams[0] + 1;
     if (beams.size() > 1) idbeam2 += beams[1] + 1;
-    m_cursor += sprintf(m_cursor, "E %d %d %e %e %e %d %d %lu %i %i",
+    m_cursor += sprintf(m_cursor, "E %d %d %e %e %e %d %d %zu %i %i",
                         evt.event_number(),
                         mpi,
                         event_scale,
@@ -134,13 +134,13 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     // This should be the largest single add to the buffer. Its size 11+4*11+3*22+2*11+10=153
     flush();
     m_cursor += sprintf(m_cursor, " %zu", m_random_states.size());
-    for (size_t  q = 0; q < m_random_states.size(); q++)
+    for (size_t q = 0; q < m_random_states.size(); q++)
     {
         m_cursor += sprintf(m_cursor, " %ii", (int)q);
         flush();
     }
     flush();
-    m_cursor += sprintf(m_cursor, " %lu", evt.weights().size());
+    m_cursor += sprintf(m_cursor, " %zu", evt.weights().size());
     if ( evt.weights().size() )
     {
         for (double w: evt.weights()) {
@@ -149,7 +149,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         }
         m_cursor += sprintf(m_cursor, "\n");
         flush();
-        m_cursor += sprintf(m_cursor, "N %lu", evt.weights().size());
+        m_cursor += sprintf(m_cursor, "N %zu", evt.weights().size());
         std::vector<std::string> names = run_info()->weight_names();
         for (size_t q = 0; q < evt.weights().size(); q++)
         {
@@ -158,11 +158,11 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
             else
                 write_string(" \""+std::to_string(q)+"\"");
 /*
-            if (q < names.size())                
+            if (q < names.size())
                 m_cursor += sprintf(m_cursor, " \"%s\"", names[q].c_str());
             else
                 m_cursor += sprintf(m_cursor, " \"%i\"", (int)q);
-*/                
+*/
             flush();
         }
     }
@@ -172,7 +172,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
     std::shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
-    if (cs) {m_cursor += sprintf(m_cursor, "C %.*e %.*e\n", m_precision, cs->xsec(), m_precision, cs->xsec_err());  flush(); }
+    if (cs) { m_cursor += sprintf(m_cursor, "C %.*e %.*e\n", m_precision, cs->xsec(), m_precision, cs->xsec_err()); flush(); }
 
 
     // Write attributes
@@ -229,7 +229,7 @@ void WriterAsciiHepMC2::allocate_buffer()
     while ( m_buffer == nullptr && m_buffer_size >= 512 ) {
         try {
             m_buffer = new char[ m_buffer_size ]();
-        }     catch (const std::bad_alloc& e) {
+        } catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
             HEPMC3_WARNING("WriterAsciiHepMC2::allocate_buffer:" << e.what() << " buffer size too large. Dividing by 2. New size: " << m_buffer_size)
@@ -305,9 +305,9 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
         m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.t());
         flush();
     }
-    m_cursor += sprintf(m_cursor, " %i %lu %lu", orph, v->particles_out().size(), weights.size());
+    m_cursor += sprintf(m_cursor, " %i %zu %zu", orph, v->particles_out().size(), weights.size());
     flush();
-    for (size_t i = 0; i < weights.size(); i++) { m_cursor += sprintf(m_cursor, " %.*e",   m_precision, weights[i]);  flush(); }
+    for (size_t i = 0; i < weights.size(); i++) { m_cursor += sprintf(m_cursor, " %.*e", m_precision, weights[i]); flush(); }
     m_cursor += sprintf(m_cursor, "\n");
     flush();
 }
@@ -341,7 +341,7 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
     m_cursor += sprintf(m_cursor, "P %i", int(10001+m_particle_counter));
     m_particle_counter++;
     flush();
-    m_cursor += sprintf(m_cursor, " %i",   p->pid() );
+    m_cursor += sprintf(m_cursor, " %i", p->pid() );
     flush();
     m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().px() );
     flush();
@@ -376,7 +376,7 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
         std::vector<int> flowsv = A_flows->value();
         int flowsize = flowsv.size();
         m_cursor += sprintf(m_cursor, " %i", flowsize);
-        for (size_t k=0; k < flowsv.size(); k++)  { m_cursor += sprintf(m_cursor, " %lu %i", k+1, flowsv.at(k)); flush();}
+        for (size_t k = 0; k < flowsv.size(); k++) { m_cursor += sprintf(m_cursor, " %zu %i", k + 1, flowsv.at(k)); flush(); }
         m_cursor += sprintf(m_cursor, "\n");
         flush();
     } else {
@@ -401,7 +401,7 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
 inline void WriterAsciiHepMC2::write_string(const std::string &str)
 {
     // First let's check if string will fit into the buffer
-    if ( m_buffer + m_buffer_size  > m_cursor + str.length() )
+    if ( m_buffer + m_buffer_size > m_cursor + str.length() )
     {
         strncpy(m_cursor, str.data(), str.length());
         m_cursor += str.length();
