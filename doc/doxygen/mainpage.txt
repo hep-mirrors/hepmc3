@@ -18,7 +18,7 @@
     @section releases Status of releases
     The current development effort is concentrated on the HepMC3 series. Users 
     are encouraged to integrate that version in their applications and to provide 
-    any feedback they may have.
+    any feedback they may have. Visit the CERN GitLab repository https://gitlab.cern.ch/hepmc/HepMC3 for more information.
     
     
     The HepMC2 series development has been essentially stopped and in particular 
