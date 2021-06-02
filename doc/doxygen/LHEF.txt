@@ -68,17 +68,17 @@ however the following basic stucture must be observed.
     compulsory initialization information
     # optional initialization information
   </init>
-  <event>                            
-    compulsory event information       
-    # optional event information       
-  </event>                           
   <event>
     compulsory event information
-    <!-- more optional information --> 
+    # optional event information
+  </event>
+  <event>
+    compulsory event information
+    <!-- more optional information -->
   </event>
   <!-- and as many events that you want, but ending with -->
 </LesHouchesEvents>
-@endcode 
+@endcode
 
 This looks like fairly normal XML tags, and indeed they are. The only
 addition to the structure is that the <tt>init</tt> and
@@ -87,7 +87,7 @@ alone on a line, and the content of these blocks are required to
 start with a number of lines on a specific format that follows
 exactly the structure of the fortran common block in original Les
 Houches Accord. This means that the first line in the
-<tt>init</tt> block must start with a line containing the numbers 
+<tt>init</tt> block must start with a line containing the numbers
 @code
 IDBMUP(1) IDBMUP(2) EBMUP(1) EBMUP(2) PDFGUP(1) PDFGUP(2) PDFSUP(1) PDFSUP(2) IDWTUP NPRUP
 @endcode
@@ -137,7 +137,7 @@ LHEF::HEPRUP with public members mimicking the Fortran common
 block variables.
 
 
-  
+
 Similarly, every <tt>event</tt> block must start with a line
 containing then numbers
 @code
@@ -376,7 +376,7 @@ following tags are defined.
         the exclusive cross section withing the given cuts).
       </li>
     </ul>
-    The content of this tag is a string with arbitrary information about the process. 
+    The content of this tag is a string with arbitrary information about the process.
   </li>
   <li><b><tt><mergeinfo></tt></b>(DEPRECATED, multiple, see LHEF::HEPRUP::mergeinfo)<br>
     For some merging schemes (eg. for CKKW) it is possible to reweight the
@@ -500,25 +500,25 @@ corresponding to the original Les Houches Accord Fortran common
 block. Here is a list of additional tags that may be provided.
 
 <ul>
-  <li><b><tt><weights></tt></b> (optional, see LHEF::HEPEUP::weights)<br> 
+  <li><b><tt><weights></tt></b> (optional, see LHEF::HEPEUP::weights)<br>
     This tag should contain a list of weights or the events given in
     the order they are defined by the <tt>weightinfo</tt> tags in the <tt>init</tt>
     block. If for some obscure reason a weight is absent, it should be
     anyway be included as a zero weight. Note that the weight for the
     nominal event is still given by <tt>XWGTUP</tt>. This tag has no attributes.
   </li>
-  <li><b><tt><rwgt></tt></b> (optional, see LHEF::HEPEUP::weights)<br> 
+  <li><b><tt><rwgt></tt></b> (optional, see LHEF::HEPEUP::weights)<br>
     For weights declared in <tt>initrwgt</tt> this should contain the
     weights for this event. The difference wrt. the <tt>weights</tt>
     tag is that each weight needs to be given in an <tt>wgt</tt> tag.
   </li>
-  <li><b><tt><wgt></tt></b> (optional, see LHEF::HEPEUP::weights)<br> 
+  <li><b><tt><wgt></tt></b> (optional, see LHEF::HEPEUP::weights)<br>
     This tag contains a single weight correspoding to a weight
     declared in the <tt>initrwgt</tt> tag. The only attribute is
     the <tt>id</tt> of the weight defined in the
     corresponing <tt>weightinfo</tt> tag.
   </li>
-  <li><b><tt><scales></tt></b> (optional, see LHEF::HEPEUP::scales)<br> 
+  <li><b><tt><scales></tt></b> (optional, see LHEF::HEPEUP::scales)<br>
     Since it is often necessary to define more than one scale in an
     event, this tag is provided to specify these. The scales are given
     as the followin attributes:

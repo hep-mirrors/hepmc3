@@ -23,7 +23,7 @@ find_path(PYTHIA8_INCLUDE_DIR Pythia.h Pythia8/Pythia.h
   HINTS  ${PYTHIA8_ROOT_DIR}/include)
 
 find_path(PYTHIA8_XMLDOC_DIR Version.xml
-  HINTS  ${PYTHIA8_ROOT_DIR}/xmldoc  ${PYTHIA8_ROOT_DIR}/share/Pythia8/xmldoc ${PYTHIA8_ROOT_DIR}/share/pythia8-data/xmldoc  ${PYTHIA8_ROOT_DIR}/share/doc/packages/pythia/xmldoc ) 
+  HINTS  ${PYTHIA8_ROOT_DIR}/xmldoc  ${PYTHIA8_ROOT_DIR}/share/Pythia8/xmldoc ${PYTHIA8_ROOT_DIR}/share/pythia8-data/xmldoc  ${PYTHIA8_ROOT_DIR}/share/doc/packages/pythia/xmldoc )
 
 if(PYTHIA8_INCLUDE_DIR AND PYTHIA8_XMLDOC_DIR)
   file(READ ${PYTHIA8_XMLDOC_DIR}/Version.xml versionstr)

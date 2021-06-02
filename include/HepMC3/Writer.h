@@ -27,7 +27,7 @@ public:
 
     ///Constructor
     Writer() {}
-    
+
     /// Virtual destructor
     virtual ~Writer() {}
 
@@ -49,9 +49,9 @@ public:
     }
 
 ///deleted copy constructor
-    Writer(const Writer&) = delete; 
+    Writer(const Writer&) = delete;
 ///deleted copy assignment operator
-    Writer& operator = (const Writer &) = delete;            
+    Writer& operator = (const Writer &) = delete;
     /// Set options
     void set_options(const std::map<std::string, std::string>& options)
     {
@@ -66,12 +66,12 @@ protected:
 
     /// options
     std::map<std::string, std::string> m_options;
-   
+
 private:
 
     /// The global GenRunInfo object.
     std::shared_ptr<GenRunInfo> m_run_info;
- 
+
 };
 
 

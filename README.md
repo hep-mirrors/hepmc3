@@ -6,7 +6,7 @@ Visit the home page of the project http://hepmc.web.cern.ch/hepmc/ or the CERN G
 
 # Quick-start (applicable to recent versions):
 
-0. On the Linux platform HepMC3 is available from the standard repositories of multiple many 
+0. On the Linux platform HepMC3 is available from the standard repositories of multiple many
 linux distributions:  Fedora, CentOS(EPEL),  Arch Linux, Mageia, openSUSE Tumbleweed, Debian (outdated) etc.
 It is recommended to use the system package manager to install HepMC3 for these systems.
 The following commands will install the HepMC3 in the corresponding systems:
@@ -17,10 +17,10 @@ The following commands will install the HepMC3 in the corresponding systems:
     sudo yum install HepMC3 HepMC3-devel HepMC3-search HepMC3-search-devel HepMC3-interfaces-devel HepMC3-doc
 
     ```
-    
+
   - RHEL, CentOS and compatible
     The package is available from the EPEL repository. To install:
-    
+
     ```
     sudo yum install epel-release
     sudo yum install HepMC3 HepMC3-devel HepMC3-search HepMC3-search-devel HepMC3-interfaces-devel HepMC3-doc
@@ -28,10 +28,10 @@ The following commands will install the HepMC3 in the corresponding systems:
     ```
   For the Fedora and CentOS the ROOT interface packages ``HepMC3-rootIO`` and ``HepMC3-rootIO-devel``
   can be installed in the same way, but will bring root as a dependency.
-  The python binding packages could have different names depending on the used system, e.g. these are 
-  ``python2-HepMC3``, ``python34-HepMC3``, ``python36-HepMC3``, ``python2-HepMC3-rootIO``, ``python34-HepMC3-rootIO`` 
-  and ``python36-HepMC3-rootIO`` for the CentOS7. Therefore, the simplest solution is to install bindings for all the 
-  available python version in the system using 
+  The python binding packages could have different names depending on the used system, e.g. these are
+  ``python2-HepMC3``, ``python34-HepMC3``, ``python36-HepMC3``, ``python2-HepMC3-rootIO``, ``python34-HepMC3-rootIO``
+  and ``python36-HepMC3-rootIO`` for the CentOS7. Therefore, the simplest solution is to install bindings for all the
+  available python version in the system using
   ```
     sudo yum install python*-HepMC3
   ```
@@ -42,46 +42,46 @@ The following commands will install the HepMC3 in the corresponding systems:
     sudo zypper install HepMC3
     ```
     The package does not include ROOT interface.
-    
-  - Arch linux 
+
+  - Arch linux
     The package is available from https://www.archlinux.org/packages/community/x86_64/hepmc/. To install:
     ```
     sudo pacman -Syu hepmc
-    ```  
+    ```
     The dependencies can vary.
-    
-  - MacOSX 
+
+  - MacOSX
     The HepMC3 package is available in the ``homebrew-hep`` repository https://davidchall.github.io/homebrew-hep/.
     To install:
     ```
     brew tap davidchall/hep
-    brew install hepmc3    
+    brew install hepmc3
     ```
     The package does not include ROOT interface.
-    
+
    - Windows
     The precompilled HepMC3 packages are available in for Windows and other platforms also in PyPi.
     The Windows users can use ``pip`` to install HepMC3.
     ```
     pip install HepMC3
-    ``` 
+    ```
     The packages from pip do not include ROOT interface.
-    
+
    - LCG platforms
      The HepMC3 package is available in the LCG from multiple platforms.
      The HepMC3 cmake files are located under
      ``/cvmfs/sft.cern.ch/lcg/views/LCG_97/${LCG_PLATFORM}/share/HepMC3/cmake``, e.g. in
      ``/cvmfs/sft.cern.ch/lcg/views/LCG_97/x86_64-centos7-gcc8-opt/share/HepMC3/cmake`` for the ``x86_64-centos7-gcc8-opt`` platform.
-    
-If for any reason the instalation from the repositories is not possible or is not desired, the instructions to build 
-HepMC3 from the sources 
+
+If for any reason the instalation from the repositories is not possible or is not desired, the instructions to build
+HepMC3 from the sources
 The minimal requirements for the  installation from sources are
  - C++ compiler with c++11 standard support.
  - CMake version 3.X.
- 
-It is strongly recommended to read this documentation completely before the installation. 
-However, if for some reason that is not possible, here is a  set of commands for the 
-instalation that can be copied and pasted into a Unix terminal. In some cases this 
+
+It is strongly recommended to read this documentation completely before the installation.
+However, if for some reason that is not possible, here is a  set of commands for the
+instalation that can be copied and pasted into a Unix terminal. In some cases this
 action might result in a fully functional installation.
 
 ```
@@ -285,7 +285,7 @@ The possible problems during the HepMC3 installation can be caused by
 
  - The used C++ compiler that does not support C++11.
    The only solution is to use compiler with C++11 support
- - The used CMake is too old. 
+ - The used CMake is too old.
  - Compilation of python bindings fails.
    pybind11 used by HepMC3 to create the python bindings supports only some compilers (gcc,clang, MSVC), therefore
    it is expected that the bindings will work  with these compilers.

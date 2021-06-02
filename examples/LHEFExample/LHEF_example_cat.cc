@@ -80,11 +80,11 @@ int main(int /*argc*/, char ** /*argv*/) {
         ev.add_attribute("AlphaQCD",
                         std:: make_shared<DoubleAttribute>(hepe->hepeup.AQCDUP));
         ev.add_attribute("AlphaEM",
-                         std::make_shared<DoubleAttribute>(hepe->hepeup.AQEDUP)); 
+                         std::make_shared<DoubleAttribute>(hepe->hepeup.AQEDUP));
         ev.add_attribute("NUP",
-                         std::make_shared<IntAttribute>(hepe->hepeup.NUP)); 
+                         std::make_shared<IntAttribute>(hepe->hepeup.NUP));
         ev.add_attribute("IDPRUP",
-                         std::make_shared<LongAttribute>(hepe->hepeup.IDPRUP)); 
+                         std::make_shared<LongAttribute>(hepe->hepeup.IDPRUP));
 
         // Now add the Particles from the LHE event to HepMC
         std::vector<GenParticlePtr> particles;
@@ -113,8 +113,8 @@ int main(int /*argc*/, char ** /*argv*/) {
 
         // Let's see if we can associate p1 and p2.
         ev.add_attribute("OtherIncoming",
-                         std::make_shared<AssociatedParticle>(particles[1]), particles[0]->id()); 
-        
+                         std::make_shared<AssociatedParticle>(particles[1]), particles[0]->id());
+
 
         // And then we are done and can write out the GenEvent.
         output.write_event(ev);

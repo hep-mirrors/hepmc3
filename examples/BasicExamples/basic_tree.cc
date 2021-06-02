@@ -148,7 +148,7 @@ int main() {
 
     v3->add_attribute( "vtx_att" , test_attribute );
     v4->add_attribute( "vtx_att" , test_attribute2 );
-/* TODO: Make this code portable  
+/* TODO: Make this code portable
 
     std::cout << std::endl << "Find all particles with attribute 'tool' "<< std::endl;
     std::cout << "(should return particles 2,4,6):" << std::endl;
@@ -156,27 +156,27 @@ int main() {
     /// @todo can we add some utility funcs to simplify creation of Features from Attributes and check they exist.
     /// Features and Attributes are quite similar concepts anyway, can they be unified (but Features can also be
     ///  non-attribute-like e.g. pT, rapidity or any quantity it is possible to obtain from a particle)
-  
+
     for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("tool"), evt.particles())){
       Print::line(p);
     }
-  
+
     std::cout <<std::endl << "Find all particles with attribute 'tool' equal 1 "<< std::endl;
     std::cout << "(should return particles 2,4):" <<std::endl;
-  
+
     for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("tool") && Selector::ATTRIBUTE("tool") == tool1, evt.particles())){
       Print::line(p);
     }
-  
+
     std::cout << std::endl << "Find all particles with a string attribute 'other' equal 'test attribute' "<< std::endl;
     std::cout << "(should return particle 2):" << std::endl;
-  
-  
+
+
     for(ConstGenParticlePtr p: applyFilter(Selector::ATTRIBUTE("other") && Selector::ATTRIBUTE("other") == "test_attribute", evt.particles())){
       Print::line(p);
     }
-*/  
-  
+*/
+
     std::cout << std::endl << "Offsetting event position by 5,5,5,5" << std::endl;
 
     evt.shift_position_by( FourVector(5,5,5,5) );

@@ -32,9 +32,9 @@ endif()
 
 find_path(GRAPHVIZ_INCLUDE_DIR         NAMES graphviz/cgraph.h
           HINTS ${_GRAPHVIZ_INCLUDE_DIR})
-find_library(GRAPHVIZ_CDT_LIBRARY      NAMES cdt 
+find_library(GRAPHVIZ_CDT_LIBRARY      NAMES cdt
              HINTS ${_GRAPHVIZ_LIBRARY_DIR}  ${GRAPHVIZ_ROOT}/lib64 )
-find_library(GRAPHVIZ_GVC_LIBRARY      NAMES gvc 
+find_library(GRAPHVIZ_GVC_LIBRARY      NAMES gvc
              HINTS ${_GRAPHVIZ_LIBRARY_DIR}  ${GRAPHVIZ_ROOT}/lib64 )
 find_library(GRAPHVIZ_CGRAPH_LIBRARY   NAMES cgraph
              HINTS ${_GRAPHVIZ_LIBRARY_DIR}  ${GRAPHVIZ_ROOT}/lib64 )
@@ -57,29 +57,29 @@ if(GRAPHVIZ_FOUND)
       "#include <graphviz/graphviz_version.h>\n#include <stdio.h>\n int main()\n {\n printf(\"%s\",PACKAGE_VERSION);return 1;\n }\n")
     set(FIND_GRAPHVIZ_VERSION_SOURCE_FILE ${CMAKE_BINARY_DIR}/CMakeTmp/FindGRAPHVIZ.cxx)
     file(WRITE "${FIND_GRAPHVIZ_VERSION_SOURCE_FILE}" "${FIND_GRAPHVIZ_VERSION_SOURCE}")
-    
+
     set(FIND_GRAPHVIZ_VERSION_ADD_INCLUDES
       "-DINCLUDE_DIRECTORIES:STRING=${GRAPHVIZ_INCLUDE_DIR}")
-    
+
     try_run(RUN_RESULT COMPILE_RESULT
       ${CMAKE_BINARY_DIR}
       ${FIND_GRAPHVIZ_VERSION_SOURCE_FILE}
       CMAKE_FLAGS "${FIND_GRAPHVIZ_VERSION_ADD_INCLUDES}"
       RUN_OUTPUT_VARIABLE GRAPHVIZ_VERSION)
-    
+
     if(COMPILE_RESULT AND RUN_RESULT EQUAL 1)
       message(STATUS "Graphviz version: ${GRAPHVIZ_VERSION}")
     else()
       message(FATAL_ERROR "Unable to compile or run the graphviz version detection program.")
     endif()
-    
+
     set(GRAPHVIZ_INCLUDE_DIRS ${GRAPHVIZ_INCLUDE_DIR} ${GRAPHVIZ_INCLUDE_DIR}/graphviz)
-    
+
     if(NOT Graphviz_FIND_QUIETLY)
       message(STATUS "Graphviz include: ${GRAPHVIZ_INCLUDE_DIRS}")
       message(STATUS "Graphviz libraries: ${GRAPHVIZ_CDT_LIBRARY} ${GRAPHVIZ_GVC_LIBRARY} ${GRAPHVIZ_CGRAPH_LIBRARY} ${GRAPHVIZ_PATHPLAN_LIBRARY}")
     endif()
-   
+
     set(FIND_GRAPHVIZ_NOAST_SOURCE
       "#include <string.h>\n#include <graphviz/gvc.h>\n int main()\n {return strcmp(\"AB\",\"A\");\n }\n")
     set(FIND_GRAPHVIZ_AST_SOURCE

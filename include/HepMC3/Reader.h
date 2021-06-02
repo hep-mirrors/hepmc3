@@ -46,9 +46,9 @@ public:
     }
 
 ///deleted copy constructor
-    Reader(const Reader&) = delete; 
+    Reader(const Reader&) = delete;
 ///deleted copy assignment operator
-    Reader& operator = (const Reader &) = delete;            
+    Reader& operator = (const Reader &) = delete;
     /// Set options
     void set_options(const std::map<std::string, std::string>& options)
     {

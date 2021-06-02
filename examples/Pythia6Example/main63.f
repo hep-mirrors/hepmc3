@@ -1,12 +1,12 @@
 C...A simple skeleton program, illustrating a typical Pythia run:
-C...Z0 production at LEP 1. 
+C...Z0 production at LEP 1.
 C...Toy task: compare multiplicity distribution with matrix elements
 C...and with parton showers (using same fragmentation parameters).
 C...This code contains modifications for HepMC3 examples
 C-----------------------------------------------------------------
 
 C...Preamble: declarations.
- 
+
 C...All real arithmetic in double precision.
       IMPLICIT DOUBLE PRECISION(A-H, O-Z)
 C...Three Pythia functions return integers, so need declaring.
@@ -26,7 +26,7 @@ C...Decay information.
       COMMON/PYDAT3/MDCY(500,3),MDME(8000,2),BRAT(8000),KFDP(8000,5)
 C...Selection of hard scattering subprocesses.
       COMMON/PYSUBS/MSEL,MSELPD,MSUB(500),KFIN(2,-40:40),CKIN(200)
-C...Parameters. 
+C...Parameters.
       COMMON/PYPARS/MSTP(200),PARP(200),MSTI(200),PARI(200)
 C...Supersymmetry parameters.
       COMMON/PYMSSM/IMSS(0:99),RMSS(0:99)
@@ -42,14 +42,14 @@ C...HepMC3
      &                 VHEP(4,NMXHEP)
       INTEGER          NEVHEP,NHEP,ISTHEP,IDHEP,JMOHEP,JDAHEP
       DOUBLE PRECISION PHEP,VHEP
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       include "Pythia6ToHepMC3.inc"
       INTEGER OUTID(2), HEPMC3STATUS
 
 C-----------------------------------------------------------------
 
 C...First section: initialization.
- 
+
 C...Main parameters of run: c.m. energy and number of events.
       ECM=91.2D0
       NEV=1000
@@ -75,16 +75,16 @@ C...Book histograms.
 C...Create output writers
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       OUTID(1)=HepMC3_new_writer(0,1,'ME.hepmc'//char(0))
-      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'Default'//char(0))      
-      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'weme1'//char(0))      
+      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'Default'//char(0))
+      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'weme1'//char(0))
       HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'weme2'//char(0))
       OUTID(2)=HepMC3_new_writer(0,1,'PS.hepmc'//char(0))
       HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'Default'//char(0))
-      HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'weps1'//char(0))      
+      HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'weps1'//char(0))
       HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'weps2'//char(0))
       NEVHEP=-123456
       HEPMC3STATUS=HepMC3_set_hepevt_address(NEVHEPL)
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C-----------------------------------------------------------------
 
 C...Second section: event loop.
@@ -96,9 +96,9 @@ C...Outer loop over ME and PS options.
           MSTJ(101)=2
         ELSE
           MSTP(48)=0
-        ENDIF 
- 
- 
+        ENDIF
+
+
 C...Begin event loop.
         DO 200 IEV=1,NEV
           CALL PYEVNT
@@ -127,7 +127,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
           VHEPL(2,J)=VHEP(2,J)
           VHEPL(3,J)=VHEP(3,J)
           VHEPL(4,J)=VHEP(4,J)
-  500     CONTINUE                    
+  500     CONTINUE
           HEPMC3STATUS=HepMC3_convert_event(OUTID(ICA))
 C...Note: no explicit XS uncertainty
           HEPMC3STATUS=HepMC3_set_cross_section(OUTID(ICA),
@@ -136,8 +136,8 @@ C...Note: no explicit XS uncertainty
      &    NGEN(0,3),0)
           HEPMC3STATUS=HepMC3_set_pdf_info(OUTID(ICA),
      &    MSTI(15),MSTI(16),PARI(33),PARI(34),PARI(23),
-     &    MSTP(51),MSTP(52))     
-C...The values below are not always meaningful     
+     &    MSTP(51),MSTP(52))
+C...The values below are not always meaningful
           HEPMC3STATUS=HepMC3_set_attribute_int(OUTID(ICA),-1,
      &   'mpi'//char(0))
           HEPMC3STATUS=HepMC3_set_attribute_int(OUTID(ICA),MSUB(1),
@@ -149,25 +149,25 @@ C...The values below are not always meaningful
           HEPMC3STATUS=HepMC3_set_attribute_double(OUTID(ICA),-1.0D0,
      &   'alphaQCD'//char(0))
           HEPMC3STATUS=HepMC3_set_attribute_double(OUTID(ICA),q2pdfeval,
-     &   'event_scale'//char(0))      
-          HEPMC3STATUS=HepMC3_set_weight_by_index(OUTID(ICA),1.0D0,0) 
-          if (ICA.eq.1) then 
+     &   'event_scale'//char(0))
+          HEPMC3STATUS=HepMC3_set_weight_by_index(OUTID(ICA),1.0D0,0)
+          if (ICA.eq.1) then
           HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(1),
-     &    1.1111D0,'weme1'//char(0)) 
+     &    1.1111D0,'weme1'//char(0))
           HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(1),
-     &    1.2222D0,'weme2'//char(0)) 
+     &    1.2222D0,'weme2'//char(0))
           endif
-          if (ICA.eq.2) then 
+          if (ICA.eq.2) then
           HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(2),
-     &    1.5555D0,'weps1'//char(0)) 
+     &    1.5555D0,'weps1'//char(0))
           HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(2),
-     &    1.6666D0,'weps2'//char(0)) 
+     &    1.6666D0,'weps2'//char(0))
           endif
 
 C Note there should be PDF ids
           HEPMC3STATUS=HepMC3_write_event(OUTID(ICA))
-          HEPMC3STATUS=HepMC3_clear_event(OUTID(ICA))          
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 
+          HEPMC3STATUS=HepMC3_clear_event(OUTID(ICA))
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C...Extract and fill event properties.
           CALL PYEDIT(3)
           CALL PYFILL(ICA,DBLE(N),1D0)
@@ -177,10 +177,10 @@ C...End event loop.
 C...End outer loop.
   300 CONTINUE
 C...Delete output writers
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       HEPMC3STATUS=HepMC3_delete_writer(OUTID(1))
       HEPMC3STATUS=HepMC3_delete_writer(OUTID(2))
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C-----------------------------------------------------------------
 
 C...Third section: produce output and end.

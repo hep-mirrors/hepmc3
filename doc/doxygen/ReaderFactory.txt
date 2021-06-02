@@ -65,6 +65,6 @@
   but such a Reader will not be discoverable by ReaderFactory - it could only be
   constructed directly.  ReaderFactory is an optional utility to make user code
   simpler, but it is not mandatory to use it.
- 
+
  Last update 27 Oct 2020
 */

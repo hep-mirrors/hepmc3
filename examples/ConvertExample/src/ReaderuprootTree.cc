@@ -116,42 +116,42 @@ bool ReaderuprootTree::init(const std::string &filename)
     m_python_module = init_python_module(
 
                           R"EOT(
-import uproot                                           
-import numpy                                            
-def init_file(filename):                                
-    rootfile=uproot.open(str(filename))                 
-#    print(rootfile.keys())                              
-    return rootfile                                     
+import uproot
+import numpy
+def init_file(filename):
+    rootfile=uproot.open(str(filename))
+#    print(rootfile.keys())
+    return rootfile
 
-def close_file(filename):                                
-    return filename.close()                                     
-                                                        
-def init_tree(rootfile,treename,branchname):            
-    tree=rootfile[str(treename)+"/"+str(branchname)]  
-#    print(tree.keys())                                  
-    return tree                                         
-                                                        
-def init_genruninfo(rootfile,treename,branchname):      
-    tree=rootfile[str(treename)+"/"+str(branchname)]  
-#    print(tree.keys())                                  
-    return tree                                         
-                                                        
-def get_number_of_entries_in_tree(tree):                             
-    return tree.num_entries                             
-                                                        
-def get_array_from_tree(tree,branch,i,destype):                 
-    result=tree[str(branch)].array(library="np")[i]   
-    if len(destype.strip()) == 0:                       
-     output=numpy.array([result])                       
-    else:                                               
-     output=numpy.array([result], dtype=destype)        
+def close_file(filename):
+    return filename.close()
+
+def init_tree(rootfile,treename,branchname):
+    tree=rootfile[str(treename)+"/"+str(branchname)]
+#    print(tree.keys())
+    return tree
+
+def init_genruninfo(rootfile,treename,branchname):
+    tree=rootfile[str(treename)+"/"+str(branchname)]
+#    print(tree.keys())
+    return tree
+
+def get_number_of_entries_in_tree(tree):
+    return tree.num_entries
+
+def get_array_from_tree(tree,branch,i,destype):
+    result=tree[str(branch)].array(library="np")[i]
+    if len(destype.strip()) == 0:
+     output=numpy.array([result])
+    else:
+     output=numpy.array([result], dtype=destype)
 #    print("a.shape={}, a.dtype={}".format(output.shape, output.dtype))
 #    print(branch,output)
-    return output                                       
+    return output
 )EOT"
 );
      bool result =false;
-     if (!m_python_module) { 
+     if (!m_python_module) {
      HEPMC3_ERROR( "ReaderuprootTree: cannot initialize python modulr. Please check your uproot and/or numpy instalation.")
      return result;
      }
@@ -193,7 +193,7 @@ if (m_access_function && pFuncInitFile && pFuncInitTree && pFuncEntries) {
     }
 
     if (m_tree){
-    m_tree_getEntries = 0; 
+    m_tree_getEntries = 0;
     pArgsEntries = PyTuple_New(1);
     PyTuple_SetItem(pArgsEntries, 0, m_tree);
     PyObject * ret = PyObject_CallObject(pFuncEntries,pArgsEntries);
@@ -201,12 +201,12 @@ if (m_access_function && pFuncInitFile && pFuncInitTree && pFuncEntries) {
     Py_DECREF(ret);
     }
    if (m_tree && m_file && m_genruninfo && m_tree_getEntries) result=true;
-} 
+}
 
     Py_DECREF(pFuncInitFile);
     Py_DECREF(pFuncInitTree);
     Py_DECREF(pArgsEntries);
-    
+
     Py_DECREF(pFuncEntries);
     Py_DECREF(pArgsFile);
     return result;
@@ -234,7 +234,7 @@ bool ReaderuprootTree::read_event(GenEvent& evt)
     m_event_data->attribute_string.clear();
 
     auto event_number_v  = get_vector<int>(m_tree, "event_number");
-    if (event_number_v.size() == 0) { m_events_count++; return false;}    
+    if (event_number_v.size() == 0) { m_events_count++; return false;}
     auto weights = get_vector<double>(m_tree, "weights");
     auto event_pos_1_v = get_vector<double>(m_tree, "event_pos/event_pos.m_v1");
     if (event_pos_1_v.size() == 0) { m_events_count++; return false;}
@@ -330,12 +330,12 @@ void ReaderuprootTree::close()
     Py_DECREF(m_file); //This should close the file, right?
     Py_DECREF(m_access_function);
     Py_DECREF(m_python_module);
-    
+
     m_file = nullptr;
-    m_tree = nullptr;                       
-    m_genruninfo = nullptr;                 
-    m_access_function = nullptr;            
-    m_python_module = nullptr;              
+    m_tree = nullptr;
+    m_genruninfo = nullptr;
+    m_access_function = nullptr;
+    m_python_module = nullptr;
     Py_DECREF( PyImport_ImportModule("threading")); //If someone, at some point would document it in CPython...
     Py_Finalize();
 }

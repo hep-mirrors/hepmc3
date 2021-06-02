@@ -9,13 +9,13 @@ set_target_properties(LHEF_example_cat.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY $
 
 set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
- 
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LHEF_example_env.sh.in
                ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/LHEF_example_env.sh
                @ONLY
                )
 
-# installs 
+# installs
 if (USE_INSTALLED_HEPMC3)
   install(TARGETS LHEF_example_cat.exe DESTINATION ${CMAKE_INSTALL_BINDIR}/$<0:>)
   install(FILES LHEF_example.lhe LHEF_example_cmp.lhe DESTINATION ${CMAKE_INSTALL_BINDIR})

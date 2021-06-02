@@ -65,13 +65,13 @@ public:
 
     /** @brief Get stream error state flag */
     bool failed()  override;
-    /** @brief  set flag if vertex positions are available. 
-     *  Effectively this adds or removes key "vertices_positions_are_absent" 
+    /** @brief  set flag if vertex positions are available.
+     *  Effectively this adds or removes key "vertices_positions_are_absent"
      *  to/from the m_options.*/
     void set_vertices_positions_present(bool iflong);
 
-    /** @brief  get flag if vertex positions are available. 
-     * The flag is deduced from m_options. If the m_options have the key 
+    /** @brief  get flag if vertex positions are available.
+     * The flag is deduced from m_options. If the m_options have the key
      * "vertices_positions_are_absent" the result if false. True otherwise. */
     bool get_vertices_positions_present() const;
 
