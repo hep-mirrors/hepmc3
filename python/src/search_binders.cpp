@@ -22,8 +22,8 @@ namespace binder {
 
 	// HepMC3::ACCEPT_ALL(class std::shared_ptr<const class HepMC3::GenParticle>) file: line:41
 	M.def("ACCEPT_ALL", (bool (*)(class std::shared_ptr<const class HepMC3::GenParticle>)) &HepMC3::ACCEPT_ALL, "A Filter that will accept all particles\n This might be needed if a signature requires a default Filter\n\nC++: HepMC3::ACCEPT_ALL(class std::shared_ptr<const class HepMC3::GenParticle>) --> bool", pybind11::arg("dummy"));
-       
-       
+
+
   M.def("children_particles",   (std::vector<HepMC3::GenParticlePtr>(*)(HepMC3::GenVertexPtr)      ) &HepMC3::children_particles,  "See documentation");
   M.def("children_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(HepMC3::ConstGenVertexPtr) ) &HepMC3::children_particles,  "See documentation");
   M.def("children_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)(HepMC3::GenParticlePtr)        ) &HepMC3::children_vertices,  "See documentation");

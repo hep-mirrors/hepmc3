@@ -20,7 +20,7 @@ if(GRAPHVIZ_FOUND AND ROOT_FOUND)
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION ${CMAKE_INSTALL_BINDIR} FILES_MATCHING PATTERN "*.pcm" PATTERN "*config"  PATTERN "CMakeFiles" EXCLUDE )
     install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}
         FILES_MATCHING PATTERN "*env.sh*")
-  endif()        
+  endif()
 elseif()
   message(STATUS "HepMC3 ViewerExample: GraphViz or ROOT package not found. GUI Browser example disabled.")
 endif()

@@ -17,9 +17,9 @@ endif()
 endif()
 
 find_path(HEPMC2_INCLUDE_DIR HepMC/GenEvent.h
-          HINTS $ENV{HEPMC2_ROOT_DIR}/include 
+          HINTS $ENV{HEPMC2_ROOT_DIR}/include
           HINTS ${HEPMC2_ROOT_DIR}/include
-          HINTS $ENV{HEPMC2_DIR}/include 
+          HINTS $ENV{HEPMC2_DIR}/include
           HINTS ${HEPMC2_DIR}/include
           )
 

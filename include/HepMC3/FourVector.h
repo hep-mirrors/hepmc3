@@ -59,7 +59,7 @@ public:
     }
 
     /// set component of position/displacement
-    void set_component(const int i, const double x)   
+    void set_component(const int i, const double x)
     {
     if (i==0) {m_v1=x; return; }
     if (i==1) {m_v2=x; return; }

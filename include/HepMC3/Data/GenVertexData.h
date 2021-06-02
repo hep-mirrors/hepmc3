@@ -22,11 +22,11 @@ namespace HepMC3 {
 struct GenVertexData {
     int        status;   ///< Vertex status
     FourVector position; ///< Position in time-space
-    
+
     /// @brief Check if this struct fields are zero
     bool is_zero() const {
         if( status ) return false;
-        
+
         return position.is_zero();
     }
 };

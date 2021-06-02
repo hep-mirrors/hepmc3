@@ -2,7 +2,7 @@
     @defgroup data Particle, Vertex and event serializable data
 
     This module contains structures used for serializing/deserializing
-    GenEvent objects. To link core functionality in your code use 
+    GenEvent objects. To link core functionality in your code use
     libHepMC3.so (libHepMC3.dylib) library.
 
     <hr>
@@ -18,8 +18,8 @@
     including an adapter for older version of \b HepMC files.
     To link rootIO engine in your code use libHepMC3rootIO.so (libHepMC3rootIO.dylib) library.
     <hr>
-    
-    Optionally the I/O capabilities can be implemented as plugin Reader/Write classes compiled 
+
+    Optionally the I/O capabilities can be implemented as plugin Reader/Write classes compiled
     separately into dynamically loadable libraries and used via  RearedPlugin and WriterPlugin classes.
     Please note that all required libraries/dlls should be loadable.
     See examples for details.
@@ -108,7 +108,7 @@
     For other examples see attributes provided in the HepMC3 package.
 
     <hr>
-    
+
  Last update 27 Oct 2020
 */
 

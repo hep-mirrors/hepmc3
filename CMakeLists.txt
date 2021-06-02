@@ -130,18 +130,18 @@ if(HEPMC3_ENABLE_ROOTIO)
     foreach(fl ${ROOT_CXX_FLAGS_LIST})
       CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
       if(COMPILER_SUPPORTS_${fl})
-        if ("${fl}" MATCHES   ".*\\+\\+14$" OR "${fl}" MATCHES   ".*\\+\\+1y$" ) 
+        if ("${fl}" MATCHES   ".*\\+\\+14$" OR "${fl}" MATCHES   ".*\\+\\+1y$" )
           set(HEPMC3_CXX_STANDARD 14)
-        endif()  
-        if ("${fl}" MATCHES   ".*\\+\\+17$" OR "${fl}" MATCHES   ".*\\+\\+1z$" ) 
+        endif()
+        if ("${fl}" MATCHES   ".*\\+\\+17$" OR "${fl}" MATCHES   ".*\\+\\+1z$" )
           set(HEPMC3_CXX_STANDARD 17)
-        endif()  
-        if ("${fl}" MATCHES   ".*\\+\\+20$" OR "${fl}" MATCHES   ".*\\+\\+2a$" ) 
+        endif()
+        if ("${fl}" MATCHES   ".*\\+\\+20$" OR "${fl}" MATCHES   ".*\\+\\+2a$" )
           set(HEPMC3_CXX_STANDARD 20)
-        endif()  
-        if ("${fl}" MATCHES   ".*\\+\\+23$" OR "${fl}" MATCHES   ".*\\+\\+2b$" ) 
+        endif()
+        if ("${fl}" MATCHES   ".*\\+\\+23$" OR "${fl}" MATCHES   ".*\\+\\+2b$" )
           set(HEPMC3_CXX_STANDARD 23)
-        endif() 
+        endif()
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
       endif()
     endforeach(fl ${ROOT_CXX_FLAGS_LIST})
@@ -332,16 +332,16 @@ find_program (ASTYLE NAMES astyle)
 if (ASTYLE)
   message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of C++ code is possible.")
   ADD_CUSTOM_TARGET(beauty
-    COMMAND ${ASTYLE}  --keep-one-line-blocks  
-    src/*cc  
-    rootIO/src/*cc 
-    search/src/*cc  
-    examples/*/src/*cc 
+    COMMAND ${ASTYLE}  --keep-one-line-blocks
+    src/*cc
+    rootIO/src/*cc
+    search/src/*cc
+    examples/*/src/*cc
     examples/*/include/*h
-    test/*cc  
-    test/*h 
-    interfaces/*/include/*.h 
-    interfaces/*/include/*/*.h 
+    test/*cc
+    test/*h
+    interfaces/*/include/*.h
+    interfaces/*/include/*/*.h
     interfaces/*/src/*.cxx
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
@@ -357,9 +357,9 @@ if(CPPCHECK)
   ADD_CUSTOM_TARGET(staticcheck
     COMMAND ${CPPCHECK} --force  --suppress=unusedFunction -v -x c++ --std=c++11 --enable=all
       -I./include -I./search/include -I./rootIO/include -I${ROOT_INCLUDE_DIRS}
-      src/*.cc 
-      search/src/*.cc 
-      rootIO/src/*.cc 
+      src/*.cc
+      search/src/*.cc
+      rootIO/src/*.cc
       examples/*/src/*cc
       examples/*/include/*h
       interfaces/*/include/*h

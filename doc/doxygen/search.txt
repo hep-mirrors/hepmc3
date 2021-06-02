@@ -2,8 +2,8 @@
     @defgroup Search Search-related classes and interfaces
 
     HepMC3 comes with an optional "Search" library for finding particles
-    related to other particles or vertices.  
-    It provides a set of functions to perform simple search operations e.g. 
+    related to other particles or vertices.
+    It provides a set of functions to perform simple search operations e.g.
     @code
     std::vector<HepMC3::GenParticlePtr>      children_particles(HepMC3::GenVertexPtr O);   ///< Return children particles
     std::vector<HepMC3::ConstGenVertexPtr>   grandchildren_vertices(HepMC3::ConstGenVertexPtr O); ///< Return grandchildren vertices

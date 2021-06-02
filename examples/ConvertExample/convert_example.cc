@@ -105,9 +105,9 @@ int main(int argc, char** argv)
     bool ignore_writer=false;
     switch (format_map.at(std::string(ai.input_format_arg)))
     {
-    case autodetect:        
+    case autodetect:
         input_file=(input_is_stdin?deduce_reader(std::cin):deduce_reader(ai.inputs[0]));
-        if (!input_file) 
+        if (!input_file)
         {
         input_is_stdin?printf("Input format  detection for std input has failed\n"):printf("Input format  detection for file %s has failed\n",ai.inputs[0]);
         exit(2);
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
 #endif
     case plugin:
         if (options.find("InputPluginLibrary")==options.end())         { printf("InputPluginLibrary option required\n"); exit(2);} else InputPluginLibrary=options.at("InputPluginLibrary");
-        if (options.find("InputPluginName")==options.end())            { printf("InputPluginName option required\n"); exit(2);} else InputPluginName=options.at("InputPluginName");        
+        if (options.find("InputPluginName")==options.end())            { printf("InputPluginName option required\n"); exit(2);} else InputPluginName=options.at("InputPluginName");
         input_file=std::make_shared<ReaderPlugin>(std::string(ai.inputs[0]),InputPluginLibrary,InputPluginName);
         if (input_file->failed()) { printf("Plugin initialization failed\n"); exit(2);}
         break;
@@ -217,7 +217,7 @@ int main(int argc, char** argv)
         exit(2);
 #endif
     case dot:
-#ifdef HEPMCCONVERT_EXTENSION_DOT 
+#ifdef HEPMCCONVERT_EXTENSION_DOT
        output_file=std::make_shared<WriterDOT>(ai.inputs[1]);
        if (options.find("Style")!=options.end()) (std::dynamic_pointer_cast<WriterDOT>(output_file))->set_style(std::atoi(options.at("Style").c_str()));
        break;
@@ -228,7 +228,7 @@ int main(int argc, char** argv)
 #endif
     case plugin:
         if (options.find("OutputPluginLibrary")==options.end())         { printf("OutputPluginLibrary option required, e.g. OutputPluginLibrary=libAnalysis.so\n"); exit(2);} else OutputPluginLibrary=options.at("OutputPluginLibrary");
-        if (options.find("OutputPluginName")==options.end())            { printf("OutputPluginName option required, e.g. OutputPluginName=newAnalysisExamplefile\n"); exit(2);} else OutputPluginName=options.at("OutputPluginName");        
+        if (options.find("OutputPluginName")==options.end())            { printf("OutputPluginName option required, e.g. OutputPluginName=newAnalysisExamplefile\n"); exit(2);} else OutputPluginName=options.at("OutputPluginName");
         output_file=std::make_shared<WriterPlugin>(std::string(ai.inputs[1]),OutputPluginLibrary,OutputPluginName);
         if (output_file->failed()) { printf("Plugin initialization failed\n"); exit(2);}
         break;
@@ -257,13 +257,13 @@ int main(int argc, char** argv)
         evt.set_run_info(input_file->run_info());
         //Note the difference between ROOT and Ascii readers. The former read GenRunInfo before first event and the later at the same time as first event.
         if (!ignore_writer)
-        { 
+        {
         if (output_file)
-        { 
-        output_file->write_event(evt); 
+        {
+        output_file->write_event(evt);
         }
-        else 
-        { 
+        else
+        {
          Print::content(evt);
         }
         }

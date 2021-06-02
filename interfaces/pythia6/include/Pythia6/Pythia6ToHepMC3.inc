@@ -1,8 +1,8 @@
-CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC      
+CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C...Copyright (C) 2014-2020 The HepMC collaboration
 C...These variables will be used for conversion. Block size is different
 C...in Pythia6 and in HepMC3, so the most simple portable way is to have
-C... a second block of same size as in HepMC3 and  copy the content of 
+C... a second block of same size as in HepMC3 and  copy the content of
 C...block directly.
       INTEGER NMXHEPL
       PARAMETER (NMXHEPL=10000)
@@ -11,7 +11,7 @@ C...block directly.
      &                 VHEPL(4,NMXHEPL)
       INTEGER          NEVHEPL,NHEPL,ISTHEPL,IDHEPL,JMOHEPL,JDAHEPL
       DOUBLE PRECISION PHEPL,VHEPL
-      
+
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C...Glue functions

@@ -192,7 +192,7 @@ inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr
 /*
 inline bool HEPEVT_Wrapper::check_hepevt_consistency()
 {
-    
+
     printf("HEPEVT_Wrapper::check_hepevt_consistency is not implemented!\n");
     return true;
 }

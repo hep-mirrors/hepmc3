@@ -207,7 +207,7 @@ public:
     /// with the same name is present
     void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0) {
         ///Disallow empty strings
-        if (name.length()==0) return;     
+        if (name.length()==0) return;
         if (!att)  return;
         std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
         if (m_attributes.count(name)==0) m_attributes[name]=std::map<int, std::shared_ptr<Attribute> >();

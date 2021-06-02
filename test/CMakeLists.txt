@@ -25,7 +25,7 @@ macro( hepmc_root_test testname )
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../rootIO/include/)
   target_link_libraries(${testname} PRIVATE HepMC3 HepMC3rootIO)
-   
+
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${testname} )
@@ -57,10 +57,10 @@ set( HepMC_tests
         testBoost
         testMass
         testPrintBug
-        testPolarization 
+        testPolarization
         testUnits
         testMultipleCopies
-        testWeights 
+        testWeights
         testLoops
         testDelete
         testSkip1
@@ -72,7 +72,7 @@ set( HepMC_tests
         testSingleVertexHepMC2
          )
 
-set( HepMC_root_tests 
+set( HepMC_root_tests
         testIO2
         testIO4
         testReaderFactory2
@@ -88,7 +88,7 @@ if ("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
 endif()
 if(Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI"))
   message(STATUS "HepMC3 test: Threads library found.  Thread safety tests enabled")
-  list( APPEND HepMC_tests "testThreads1" )   
+  list( APPEND HepMC_tests "testThreads1" )
 else()
   message(STATUS "HepMC3 test: No threads library found or disabled for compiller with ID ${CMAKE_CXX_COMPILER_ID}. Thread safety tests are disabled")
 endif()
@@ -130,16 +130,16 @@ if ("Pythia8" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
   find_package(Pythia8 8.220)
 endif()
 if(NOT PYTHIA8_FOUND)
-  message(STATUS "HepMC3 test: Pythia8 package not found, was disabled or too old. The minimal supported Pythia8 version is 8.220. Please check if PYTHIA8_ROOT_DIR is set properly.") 
+  message(STATUS "HepMC3 test: Pythia8 package not found, was disabled or too old. The minimal supported Pythia8 version is 8.220. Please check if PYTHIA8_ROOT_DIR is set properly.")
 else()
-  message(STATUS "HepMC3 test: Pythia8 package found. ${PYTHIA8_LIBRARIES} ${PYTHIA8_VERSION}") 
+  message(STATUS "HepMC3 test: Pythia8 package found. ${PYTHIA8_LIBRARIES} ${PYTHIA8_VERSION}")
   list( APPEND libMCEG_sources    "PythiaValidationTool.cc" )
   list( APPEND libMCEG_link_libraries_HEPMC2  "${PYTHIA8_LIBRARIES}")
   list( APPEND libMCEG_link_libraries_HEPMC3  "${PYTHIA8_LIBRARIES}")
   SET(interfacelocation ${PROJECT_SOURCE_DIR}/interfaces/pythia8/include/Pythia8)
   if (USE_INTERFACE_FROM_PYTHIA)
     find_file(interfacefrompythia8 ${PYTHIA8_INCLUDE_DIR}/Pythia8Plugins/Pythia8ToHepMC3.h)
-    if (interfacefrompythia8) 
+    if (interfacefrompythia8)
       message(STATUS "HepMC3 test: Found Pythia8Plugins/Pythia8ToHepMC3.h  in Pythia8 installation in ${PYTHIA8_INCLUDE_DIR}")
     else()
       message(FATAL "HepMC3 test: Pythia8Plugins/Pythia8ToHepMC3.h  is absent in Pythia8 installation in ${PYTHIA8_INCLUDE_DIR}")
@@ -149,16 +149,16 @@ else()
   list( APPEND libMCEG_include_directories  "${interfacelocation}"   "${PYTHIA8_INCLUDE_DIRS}")
   list( APPEND libMCEG_compile_definitions  "-DPYTHIA8")
 
-  list( APPEND MCEG_tests "testPythia1" )   
-  list( APPEND MCEG_tests "testPythia2" )   
-  list( APPEND MCEG_tests "testPythia3" )   
+  list( APPEND MCEG_tests "testPythia1" )
+  list( APPEND MCEG_tests "testPythia2" )
+  list( APPEND MCEG_tests "testPythia3" )
 endif()
 
 if ("Photospp" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
   find_package(Photospp )
 endif()
 if(NOT PHOTOSPP_FOUND)
-  message(STATUS "HepMC3 test: Photospp package not found or disabled. Please check if PHOTOSPP_ROOT_DIR is set properly.") 
+  message(STATUS "HepMC3 test: Photospp package not found or disabled. Please check if PHOTOSPP_ROOT_DIR is set properly.")
 else()
   message(STATUS "HepMC3 test: Photospp package found. Building Photospp tests. PHOTOSPP_LIBRARIES ${PHOTOSPP_LIBRARIES} PHOTOSPP_HEPMC2_LIBRARIES ${PHOTOSPP_HEPMC2_LIBRARIES} PHOTOSPP_INCLUDE_DIRS ${PHOTOSPP_INCLUDE_DIRS}")
   list( APPEND  libMCEG_sources   "PhotosValidationTool.cc" )
@@ -168,14 +168,14 @@ else()
   list( APPEND  libMCEG_include_directories  "${PROJECT_SOURCE_DIR}/interfaces/Photospp/include" "${PROJECT_SOURCE_DIR}/interfaces/Photospp/include/Photos"  "${PHOTOSPP_INCLUDE_DIRS}" "${PHOTOSPP_INCLUDE_DIR}/Photos" )
   list( APPEND  libMCEG_compile_definitions  "-DPHOTOSPP")
 
-  list( APPEND  MCEG_tests "testPhotos1" )   
+  list( APPEND  MCEG_tests "testPhotos1" )
 endif()
 
 if ("Tauolapp" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
   find_package(Tauolapp )
 endif()
 if(NOT TAUOLAPP_FOUND)
-  message(STATUS "HepMC3 test: Tauolapp package not found or disabled. Please check if TAUOLA_ROOT_DIR is set properly.") 
+  message(STATUS "HepMC3 test: Tauolapp package not found or disabled. Please check if TAUOLA_ROOT_DIR is set properly.")
 else()
   message(STATUS "HepMC3 test: Tauolapp package found. Building Tauolapp tests. TAUOLAPP_LIBRARIES ${TAUOLAPP_LIBRARIES} TAUOLAPP_HepMC_LIBRARY ${TAUOLAPP_HepMC_LIBRARY} TAUOLAPP_INCLUDE_DIRS ${TAUOLAPP_INCLUDE_DIRS}")
   list( APPEND  libMCEG_sources "TauolaValidationTool.cc" )
@@ -186,9 +186,9 @@ else()
     list( APPEND  libMCEG_link_libraries_HEPMC2  "${TAUOLAPP_CxxInterface_LIBRARY}" "${TAUOLAPP_Fortran_LIBRARY}" )
   endif()
   list( APPEND  libMCEG_link_libraries_HEPMC3  "${TAUOLAPP_CxxInterface_LIBRARY}" "${TAUOLAPP_Fortran_LIBRARY}" )
-  list( APPEND  libMCEG_include_directories    "${TAUOLAPP_INCLUDE_DIRS}" "${PROJECT_SOURCE_DIR}/interfaces/Tauolapp/include") 
+  list( APPEND  libMCEG_include_directories    "${TAUOLAPP_INCLUDE_DIRS}" "${PROJECT_SOURCE_DIR}/interfaces/Tauolapp/include")
   list( APPEND  libMCEG_compile_definitions  "-DTAUOLAPP")
-  list( APPEND  MCEG_tests "testTauola1" )   
+  list( APPEND  MCEG_tests "testTauola1" )
 endif()
 
 
@@ -198,7 +198,7 @@ if(HEPMC3_ENABLE_ROOTIO)
     find_package(MCTester )
   endif()
   if(NOT MCTESTER_FOUND)
-    message(STATUS "HepMC3 test: MCTester package not found or disabled. Please check if MCTESTER_ROOT_DIR is set properly.") 
+    message(STATUS "HepMC3 test: MCTester package not found or disabled. Please check if MCTESTER_ROOT_DIR is set properly.")
   else()
     message(STATUS "HepMC3 test: MCTester package found. Building MCTester tests. MCTESTER_LIBRARIES ${MCTESTER_LIBRARIES} MCTESTER_INCLUDE_DIRS ${MCTESTER_INCLUDE_DIRS}")
     list( APPEND  libMCEG_sources "McTesterValidationTool.cc" )
@@ -207,7 +207,7 @@ if(HEPMC3_ENABLE_ROOTIO)
     list( APPEND  libMCEG_link_libraries_HEPMC3  "${MCTESTER_LIBRARIES}" "${ROOT_LIBRARIES}" )
     list( APPEND  libMCEG_include_directories  "${PROJECT_SOURCE_DIR}/interfaces/mc-tester/include" "${MCTESTER_INCLUDE_DIRS}"  "${ROOT_INCLUDE_DIRS}")
     list( APPEND  libMCEG_compile_definitions  "-DMCTESTER")
-    list( APPEND  MCEG_tests "testMCTester1" )   
+    list( APPEND  MCEG_tests "testMCTester1" )
   endif()
 endif()
 
@@ -216,7 +216,7 @@ add_library(MCEG3 SHARED ${libMCEG_sources} ${libMCEG_sources_HEPMC3})
 target_link_libraries(MCEG3  PRIVATE HepMC3 PUBLIC ${libMCEG_link_libraries_HEPMC3} )
 target_compile_definitions(MCEG3  PRIVATE ${libMCEG_compile_definitions})
 target_include_directories(MCEG3   BEFORE
-PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 PRIVATE ${libMCEG_include_directories}
 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/)
 
@@ -231,11 +231,11 @@ macro( hepmc_mceghepmc3_test testname )
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/   )
   #The flag is needed for Taoula that conflates generic C++ interface with the HepMC2 interface
   #FIXME put here Visual studio flags when needed
-  #For Darwin target_link_libraries(${testname}  "-undefined dynamic_lookup"  HepMC3  MCEG3)   
-if (APPLE)  
-  target_link_libraries(${testname}  "-undefined dynamic_lookup"  HepMC3  MCEG3)   
+  #For Darwin target_link_libraries(${testname}  "-undefined dynamic_lookup"  HepMC3  MCEG3)
+if (APPLE)
+  target_link_libraries(${testname}  "-undefined dynamic_lookup"  HepMC3  MCEG3)
 else()
-  target_link_libraries(${testname}  "-Wl,--allow-shlib-undefined"  HepMC3  MCEG3)   
+  target_link_libraries(${testname}  "-Wl,--allow-shlib-undefined"  HepMC3  MCEG3)
 endif()
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
@@ -261,20 +261,20 @@ find_package(HepMC2 QUIET)
 endif()
 
 if(NOT HEPMC2_FOUND)
-  message(STATUS "HepMC3 test: HEPMC2 package not found or disabled. Please check if HEPMC2_ROOT_DIR is set properly.") 
+  message(STATUS "HepMC3 test: HEPMC2 package not found or disabled. Please check if HEPMC2_ROOT_DIR is set properly.")
 else()
-  message(STATUS "HepMC3 test: HEPMC2 package found. ${HEPMC2_LIBRARIES}") 
+  message(STATUS "HepMC3 test: HEPMC2 package found. ${HEPMC2_LIBRARIES}")
   add_library(MCEG2 SHARED ${libMCEG_sources})
   target_link_libraries(MCEG2  PRIVATE ${HEPMC2_LIBRARIES} PUBLIC ${libMCEG_link_libraries_HEPMC2} )
   target_compile_definitions(MCEG2  PRIVATE ${libMCEG_compile_definitions} -DHEPMC2)
   target_include_directories(MCEG2   BEFORE
   PUBLIC ${HEPMC2_INCLUDE_DIRS}
-  PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
+  PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE ${libMCEG_include_directories}
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   )
 
-  list( APPEND convert_tests "testConvert1" )  
-  list( APPEND convert_tests "testConvert2" )  
+  list( APPEND convert_tests "testConvert1" )
+  list( APPEND convert_tests "testConvert2" )
 
 macro( hepmc_mceghepmc2_test testname )
   message( STATUS "HepMC3 test: building MCEG2 test ${testname} with HEPMC2" )
@@ -283,7 +283,7 @@ macro( hepmc_mceghepmc2_test testname )
   target_compile_definitions(hepmc2_${testname}  PRIVATE  -DHEPMC2)
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/   )  
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/   )
   target_link_libraries(hepmc2_${testname} PRIVATE ${HEPMC2_LIBRARIES}   MCEG2   )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
@@ -310,7 +310,7 @@ macro( hepmc_convert_test testname )
   target_include_directories(convert_${testname} BEFORE
   PUBLIC ${HEPMC2_INCLUDE_DIRS}
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/   "${PROJECT_SOURCE_DIR}/interfaces/HepMCCompatibility/include" )  
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/   "${PROJECT_SOURCE_DIR}/interfaces/HepMCCompatibility/include" )
   target_link_libraries(convert_${testname} PRIVATE ${HEPMC2_LIBRARIES}   HepMC3  )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
@@ -336,14 +336,14 @@ if ("valgrind" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
   find_program( MEMORYCHECK_COMMAND valgrind )
 endif()
 if(MEMORYCHECK_COMMAND)
-  message(STATUS "HepMC3 test: valgrind package found in ${MEMORYCHECK_COMMAND}.  memory check tests enabled.") 
+  message(STATUS "HepMC3 test: valgrind package found in ${MEMORYCHECK_COMMAND}.  memory check tests enabled.")
   set( MEMORYCHECK_COMMAND_OPTIONS "--trace-children=yes --leak-check=full --error-exitcode=1 --default-suppressions=yes" )
   if (${CMAKE_CXX_COMPILER_ID} MATCHES "Intel")
      file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/intelHepMC3.supp" "{\n<HepMC3_at_Linux_with_Intel_1>\nMemcheck:Addr32\nfun:__intel_*\n}\n{\n<HepMC3_at_Linux_with_Intel_2>\nMemcheck:Cond\nfun:*strchr\n}\n"  )
      set( MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --suppressions=${CMAKE_CURRENT_BINARY_DIR}/intelHepMC3.supp")
   endif()
 elseif()
-  message(STATUS "HepMC3 test: valgrind package not found or disabled.  memory check tests disabled.") 
+  message(STATUS "HepMC3 test: valgrind package not found or disabled.  memory check tests disabled.")
 endif()
 
 

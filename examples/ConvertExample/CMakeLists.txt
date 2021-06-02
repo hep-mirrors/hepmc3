@@ -1,7 +1,7 @@
 
 set(basic_sources   ${CMAKE_CURRENT_SOURCE_DIR}/convert_example.cc
                     ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c
-                    ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterDOT.cc 
+                    ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterDOT.cc
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterHEPEVTZEUS.cc )
 set(basic_includes ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} )
 set(basic_libraries ${HEPMC3_LIB})
@@ -73,12 +73,12 @@ set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(libdir ${basic_libdir})
 set_target_properties(convert_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/$<0:>)
 set_target_properties(Analysis PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/$<0:>)
- 
+
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/convert_example_env.sh.in
 	    ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/convert_example_env.sh @ONLY)
 
-# installs 
+# installs
 if (USE_INSTALLED_HEPMC3)
   install(TARGETS convert_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
   install(TARGETS Analysis DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -95,10 +95,10 @@ if ( HEPMC3_USE_GENGETOPT )
     message( STATUS  "HepMC3 examples: gengetopt found in ${GENGETOPT}. New scripts for options parsing can be generated." )
     add_custom_command(
       OUTPUT  ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.h
-      COMMAND ${GENGETOPT} -N --no-version --input=${CMAKE_CURRENT_SOURCE_DIR}/cmdline.ggo 
+      COMMAND ${GENGETOPT} -N --no-version --input=${CMAKE_CURRENT_SOURCE_DIR}/cmdline.ggo
       --file-name cmdline --output-dir=${CMAKE_CURRENT_SOURCE_DIR}
       --include-getopt --show-required --unnamed-opts=\"inputfile outputfile\"
-      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.ggo 
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.ggo
       COMMENT        "HepMC3 examples: Generating getopt parser code..."
     )
   endif()
