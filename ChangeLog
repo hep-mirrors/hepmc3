@@ -1,4 +1,8 @@
   --------------------------  HepMC3.2.4-pre --------------------------
+2021-06-04 Andrii Verbytskyi for HepMC
+         * Bugfix: avoid cretion of empty attributes in ReaderAsciiHepMC2. Thanks to Pavel Demin for a hint.
+2021-06-03 Andrii Verbytskyi for HepMC
+         * Removal of trailing empty lines by Mattias Ellert.
 2021-05-28 Andrii Verbytskyi for HepMC
          * Multiple fixes to style and printf by Mattias Ellert.
 2021-05-26 Andrii Verbytskyi for HepMC
