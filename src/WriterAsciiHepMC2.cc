@@ -95,11 +95,16 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     int signal_process_vertex = A_signal_process_vertex?(A_signal_process_vertex->value()):0;
 
     std::vector<long> m_random_states;
-    for (int i = 0; i < 100; i++)
-    {
-        std::shared_ptr<IntAttribute> rs = evt.attribute<IntAttribute>("random_states"+std::to_string((long long unsigned int)i));
-        if (!rs) break;
-        m_random_states.push_back(rs->value());
+    std::shared_ptr<VectorLongIntAttribute> random_states_a = evt.attribute<VectorLongIntAttribute>("random_states");
+    if (random_states_a) {
+      m_random_states = random_states_a->value();
+    } else {
+      for (int i = 0; i < 100; i++)
+      {
+          std::shared_ptr<LongAttribute> rs = evt.attribute<LongAttribute>("random_states"+std::to_string((long long unsigned int)i));
+          if (!rs) break;
+          m_random_states.push_back(rs->value());
+      }
     }
     // Write event info
     //Find beam particles
@@ -270,13 +275,17 @@ std::string WriterAsciiHepMC2::escape(const std::string& s) const
 void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
 {
     std::vector<double> weights;
-    for (int i = 0; i < 100; i++)
-    {
-        std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string((long long unsigned int)i));
-        if (!rs) break;
-        weights.push_back(rs->value());
+    std::shared_ptr<VectorDoubleAttribute> weights_a = v->attribute<VectorDoubleAttribute>("weights");
+    if (weights_a) {
+       weights = weights_a->value();
+    } else {
+      for (int i = 0; i < 100; i++)
+      {
+          std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string((long long unsigned int)i));
+          if (!rs) break;
+          weights.push_back(rs->value());
+      }
     }
-
     m_cursor += sprintf(m_cursor, "V %i %i", v->id(), v->status());
     flush();
     int orph = 0;

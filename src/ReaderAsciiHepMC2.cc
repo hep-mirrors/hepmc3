@@ -360,7 +360,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     }
     if (m_options.find("event_random_states_are_separated") != m_options.end())
     {
-        evt.add_attribute("random_states", std::make_shared<VectorLongIntAttribute>(random_states));
+        if (random_states.size()) evt.add_attribute("random_states", std::make_shared<VectorLongIntAttribute>(random_states));
     }
     else
     {
@@ -470,8 +470,7 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     }
     else
     {
-        data_ghost->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(weights));
-        data_ghost->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(weights));
+        if (weights.size()) data_ghost->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(weights));
     }
     m_vertex_cache_ghost.push_back(data_ghost);
 
@@ -551,7 +550,7 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     {
         std::vector<int> vectorflows;
         for (auto f: flows) vectorflows.push_back(f.second);
-        data_ghost->add_attribute("flows", std::make_shared<VectorIntAttribute>(vectorflows));
+        if (vectorflows.size()) data_ghost->add_attribute("flows", std::make_shared<VectorIntAttribute>(vectorflows));
     }
     else
     {
