@@ -690,7 +690,7 @@ void GenEvent::write_data(GenEventData& data) const {
 void GenEvent::read_data(const GenEventData &data) {
     this->clear();
     this->set_event_number(data.event_number);
-//Note: set_units checks the current unit of event, i.e. applicable only for fully constructed event.
+    //Note: set_units checks the current unit of event, i.e. applicable only for fully constructed event.
     m_momentum_unit = data.momentum_unit;
     m_length_unit = data.length_unit;
     this->shift_position_to(data.event_pos);
@@ -774,7 +774,7 @@ void GenEvent::add_beam_particle(GenParticlePtr p1) {
             return;
         }
     if (p1->production_vertex())  p1->production_vertex()->remove_particle_out(p1);
-//Particle w/o production vertex is added to root vertex.
+    //Particle w/o production vertex is added to root vertex.
     add_particle(p1);
     p1->set_status(4);
     return;

@@ -30,7 +30,7 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
     set_run_info(std::make_shared<GenRunInfo>());
     m_event_ghost = new GenEvent();
 }
-// Ctor for reading from stdin
+
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
     : m_stream(&stream), m_isstream(true)
 {
@@ -220,7 +220,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     for (unsigned int i = 0; i < m_vertex_cache.size(); ++i) {
         if ( m_vertex_cache[i]->particles_in().size() == 0 ) {
             HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - found a vertex without incoming particles: " << m_vertex_cache[i]->id());
-//Sometimes the root vertex has no incoming particles.  Here we try to save the event.
+            //Sometimes the root vertex has no incoming particles.  Here we try to save the event.
             std::vector<GenParticlePtr> beams;
             for (auto p: m_vertex_cache[i]->particles_out()) if (p->status() == 4 && !(p->end_vertex())) beams.push_back(p);
             for (auto p: beams)
@@ -446,7 +446,6 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     num_particles_out = atoi(cursor);
 
     //  weights
-
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
     weights_size = atoi(cursor);
     weights.resize(weights_size);
@@ -556,7 +555,7 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     {
         for (auto f: flows)   data_ghost->add_attribute("flow"+std::to_string((long long int)f.first), std::make_shared<IntAttribute>(f.second));
     }
-// Set prod_vtx link
+    // Set prod_vtx link
     if ( end_vtx == m_vertex_barcodes.back() ) {
         m_vertex_cache.back()->add_particle_in(data);
         end_vtx = 0;

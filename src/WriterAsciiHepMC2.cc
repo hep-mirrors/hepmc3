@@ -135,7 +135,6 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
                         evt.vertices().size(),
                         idbeam1, idbeam2);
 
-    //11+4*d+3*e+2*i+lu
     // This should be the largest single add to the buffer. Its size 11+4*11+3*22+2*11+10=153
     flush();
     m_cursor += sprintf(m_cursor, " %zu", m_random_states.size());
@@ -162,12 +161,6 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
                 write_string(" \""+names[q]+"\"");
             else
                 write_string(" \""+std::to_string(q)+"\"");
-            /*
-                        if (q < names.size())
-                            m_cursor += sprintf(m_cursor, " \"%s\"", names[q].c_str());
-                        else
-                            m_cursor += sprintf(m_cursor, " \"%i\"", (int)q);
-            */
             flush();
         }
     }
@@ -401,7 +394,6 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
         if (A_flow2) m_cursor += sprintf(m_cursor, " 2 %i", A_flow2->value());
         if (A_flow3) m_cursor += sprintf(m_cursor, " 3 %i", A_flow3->value());
         m_cursor += sprintf(m_cursor, "\n");
-        //10+4*i
         flush();
     }
 }
