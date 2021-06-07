@@ -79,14 +79,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
                            "different GenRunInfo objects from - only the "
                            "first such object will be serialized.")
         }
-        // else {
-        //write_run_info();
-        //    }
     }
 
     // Write event info
     m_cursor += sprintf(m_cursor, "E %d %zu %zu", evt.event_number(), evt.vertices().size(), evt.particles().size());
-    //4+d+2*lu
     flush();
 
     // Write event position if not zero
@@ -107,7 +103,6 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
     // Write units
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
-    //3+2*3
     flush();
 
     // Write weight values if present
@@ -153,12 +148,12 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
         if (v) {
             // Check if we need this vertex at all
-            //Yes, use vertex as parent object
+            // Yes, use vertex as parent object
             if ( v->particles_in().size() > 1 || !v->data().is_zero() ) parent_object = v->id();
-            //No, use particle as parent object
-            //Add check for attributes of this vertex
+            // No, use particle as parent object
+            // Add check for attributes of this vertex
             else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in()[0]->id();
-            //Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
+            // Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
             if (alreadywritten.find(v) == alreadywritten.end() && parent_object < 0)
             { write_vertex(v); alreadywritten[v] = true; }
         }
@@ -212,13 +207,12 @@ std::string WriterAscii::escape(const std::string& s) const {
 
 void WriterAscii::write_vertex(ConstGenVertexPtr v) {
     m_cursor += sprintf(m_cursor, "V %i %i [", v->id(), v->status());
-    //3+2*i
     flush();
 
     bool printed_first = false;
     std::vector<int> pids;
     for (ConstGenParticlePtr p: v->particles_in()) pids.push_back(p->id());
-//We order pids to be able to compare ascii files
+    //We order pids to be able to compare ascii files
     std::sort(pids.begin(), pids.end());
     for (auto pid: pids) {
         if ( !printed_first ) {

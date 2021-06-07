@@ -34,10 +34,10 @@ struct GenParticlePtr_greater_order
     /** @brief comparison of two particles */
     bool operator()(ConstGenParticlePtr lx, ConstGenParticlePtr rx) const
     {
-        /* Cannot use id as it could be different*/
+        /* Cannot use id as it could be different.*/
         if (lx->pid() != rx->pid()) return (lx->pid() < rx->pid());
         if (lx->status() != rx->status()) return (lx->status() < rx->status());
-        /*Hopefully it will reach this point not too ofter.*/
+        /*Hopefully it will reach this point not too often.*/
         return (lx->momentum().e() < rx->momentum().e());
     }
 };

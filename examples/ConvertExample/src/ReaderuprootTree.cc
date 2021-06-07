@@ -96,7 +96,7 @@ PyObject* ReaderuprootTree::init_python_module(const std::string& code)
 }
 
 ReaderuprootTree::ReaderuprootTree(const std::string &filename,const std::string &treename,const std::string &branchname):
-    m_events_count(0),m_tree(nullptr),m_tree_name(treename.c_str()), m_branch_name(branchname.c_str())
+    m_events_count(0),m_tree_name(treename.c_str()), m_branch_name(branchname.c_str()),m_tree(nullptr)
 {
     if (!init(filename)) return;
 }
