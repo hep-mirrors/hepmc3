@@ -6,6 +6,8 @@
 #ifndef _PhotosHepMC3Particle_h_included_
 #define _PhotosHepMC3Particle_h_included_
 
+#warning "HepMC3 interface is available in the latest version of PHOTOS, see http://photospp.web.cern.ch/photospp/. This interface will be removed in the future HepMC3 versions."
+
 /**
  * @class PhotosHepMC3Particle
  *

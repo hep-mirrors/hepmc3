@@ -6,6 +6,8 @@
 #ifndef Pythia8_Pythia8ToHepMC3_H
 #define Pythia8_Pythia8ToHepMC3_H
 
+#warning "HepMC3 interface is available in the latest versions of Pythia8, see https://pythia.org. This interface will be removed in the future HepMC3 versions."
+
 #include <vector>
 #include "Pythia8/Pythia.h"
 #include "HepMC3/GenVertex.h"

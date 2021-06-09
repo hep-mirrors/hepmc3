@@ -11,6 +11,8 @@
 #ifndef _HepMC3Particle_H
 #define _HepMC3Particle_H
 
+#warning "HepMC3 interface is available in the latest version of MC-TESTER, see https://gitlab.cern.ch/cvsmctst/mc-tester. This interface will be removed in the future HepMC3 versions."
+
 #include "HEPParticle.H"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"

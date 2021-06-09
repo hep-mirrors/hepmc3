@@ -294,7 +294,6 @@ if(ROOT_FOUND)
    add_subdirectory(rootIO)
 endif()
 
-option(USE_INTERFACE_FROM_PYTHIA8 "Use Pythia8ToHepMC3.h from Pythia8" OFF)
 # Add the examples subdirectories
 if(HEPMC3_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")

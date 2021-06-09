@@ -97,14 +97,14 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     std::vector<long> m_random_states;
     std::shared_ptr<VectorLongIntAttribute> random_states_a = evt.attribute<VectorLongIntAttribute>("random_states");
     if (random_states_a) {
-      m_random_states = random_states_a->value();
+        m_random_states = random_states_a->value();
     } else {
-      for (int i = 0; i < 100; i++)
-      {
-          std::shared_ptr<LongAttribute> rs = evt.attribute<LongAttribute>("random_states"+std::to_string((long long unsigned int)i));
-          if (!rs) break;
-          m_random_states.push_back(rs->value());
-      }
+        for (int i = 0; i < 100; i++)
+        {
+            std::shared_ptr<LongAttribute> rs = evt.attribute<LongAttribute>("random_states"+std::to_string((long long unsigned int)i));
+            if (!rs) break;
+            m_random_states.push_back(rs->value());
+        }
     }
     // Write event info
     //Find beam particles
