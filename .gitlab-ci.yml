@@ -18,11 +18,12 @@ LCG_99_x86_64-centos7-gcc8-opt:
     - source ${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/graphviz-env.sh
     - source ${LCG_LOCATION}/zlib/1.2.11/${LCGPLATFORM}/zlib-env.sh
     - source ${LCG_LOCATION}/Python/3.8.6/${LCGPLATFORM}/Python-env.sh
+    - source ${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/HepMC-env.sh 
   script:
     - export
     - mkdir build
     - cd build
-    - cmake .. -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3 -DCMAKE_INSTALL_PREFIX=$(pwd)/install -DHEPMC3_Python_SITEARCH38=$(pwd)/install/lib/python3.8/site-packages -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPYTHIA8_ROOT_DIR=${LCG_LOCATION}/MCGenerators/pythia8/244/${LCGPLATFORM} -DPHOTOSPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/photos++/3.64/${LCGPLATFORM}/ -DTAUOLAPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/tauola++/1.1.8/${LCGPLATFORM}/ -DMCTESTER_ROOT_DIR=${LCG_LOCATION}/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ -DHEPMC2_ROOT_DIR=${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/ -DGRAPHVIZ_ROOT=${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/ 
+    - cmake .. -DHEPMC3_USE_INTERFACE_FROM_PYTHIA8:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3 -DCMAKE_INSTALL_PREFIX=$(pwd)/install -DHEPMC3_Python_SITEARCH38=$(pwd)/install/lib/python3.8/site-packages -DHEPMC3_BUILD_EXAMPLES=ON -DHEPMC3_ENABLE_TEST=ON -DHEPMC3_INSTALL_INTERFACES=ON -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DPYTHIA8_ROOT_DIR=${LCG_LOCATION}/MCGenerators/pythia8/244/${LCGPLATFORM} -DPHOTOSPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/photos++/3.64/${LCGPLATFORM}/ -DTAUOLAPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/tauola++/1.1.8/${LCGPLATFORM}/ -DMCTESTER_ROOT_DIR=${LCG_LOCATION}/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ -DHEPMC2_ROOT_DIR=${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/ -DGRAPHVIZ_ROOT=${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/ 
     - make -j $(nproc)
     - ctest --output-on-failure
     - make -j $(nproc) install
@@ -207,6 +208,14 @@ Fedora33-gcc-pypy:
     - ctest --output-on-failure
     - make -j $(nproc) install
 ########################################################################
+Fedora34-gcc:
+  image: fedora:34
+  extends: .Fedora-gcc
+########################################################################
+Fedora34-clang:
+  image: fedora:34
+  extends: .Fedora-clang
+########################################################################
 Fedora33-gcc:
   image: fedora:33
   extends: .Fedora-gcc
@@ -222,38 +231,38 @@ Fedora32-gcc:
 Fedora32-clang:
   image: fedora:32
   extends: .Fedora-clang
-########################################################################
-Fedora31-gcc:
-  image: fedora:31
-  extends: .Fedora-gcc
-########################################################################
-Fedora31-clang:
-  image: fedora:31
-  extends: .Fedora-clang
-########################################################################
-Fedora30-gcc:
-  image: fedora:30
-  extends: .Fedora-gcc
-########################################################################
-Fedora30-clang:
-  image: fedora:30
-  extends: .Fedora-clang
-########################################################################
-Fedora29-gcc:
-  image: fedora:29
-  extends: .Fedora-gcc
-########################################################################
-Fedora29-clang:
-  image: fedora:29
-  extends: .Fedora-clang
-########################################################################
-Fedora28-gcc:
-  image: fedora:28
-  extends: .Fedora-gcc
-########################################################################
-Fedora28-clang:
-  image: fedora:28
-  extends: .Fedora-clang
+#########################################################################
+#Fedora31-gcc:
+  #image: fedora:31
+  #extends: .Fedora-gcc
+#########################################################################
+#Fedora31-clang:
+  #image: fedora:31
+  #extends: .Fedora-clang
+#########################################################################
+#Fedora30-gcc:
+  #image: fedora:30
+  #extends: .Fedora-gcc
+#########################################################################
+#Fedora30-clang:
+  #image: fedora:30
+  #extends: .Fedora-clang
+#########################################################################
+#Fedora29-gcc:
+  #image: fedora:29
+  #extends: .Fedora-gcc
+#########################################################################
+#Fedora29-clang:
+  #image: fedora:29
+  #extends: .Fedora-clang
+#########################################################################
+#Fedora28-gcc:
+  #image: fedora:28
+  #extends: .Fedora-gcc
+#########################################################################
+#Fedora28-clang:
+  #image: fedora:28
+  #extends: .Fedora-clang
 ########################################################################
 Fedora27-gcc:
   image: fedora:27

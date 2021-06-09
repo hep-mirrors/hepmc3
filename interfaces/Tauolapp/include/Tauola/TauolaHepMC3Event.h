@@ -6,6 +6,8 @@
 #ifndef _TauolaHepMC3Event_h_included_
 #define _TauolaHepMC3Event_h_included_
 
+#warning "HepMC3 interface is available in the latest version of TAUOLA, see http://tauolapp.web.cern.ch/tauolapp/. This interface will be removed in the future HepMC3 versions."
+
 /**
  * @class TauolaHepMC3Event
  *

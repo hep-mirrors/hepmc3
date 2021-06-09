@@ -15,6 +15,8 @@
 #ifndef _HepMC3Event_H
 #define _HepMC3Event_H
 
+#warning "HepMC3 interface is available in the latest version of MC-TESTER, see https://gitlab.cern.ch/cvsmctst/mc-tester. This interface will be removed in the future HepMC3 versions."
+
 #ifdef _USE_ROOT_
 #include <TObject.h>
 #include <TBuffer.h>

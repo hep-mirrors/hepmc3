@@ -376,8 +376,8 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
             if (particle_in <= highest_id) {
                 data->add_particle_in(evt.particles()[particle_in-1]);
             } else {
-              //If the particle has not been red yet, we store its id to add the particle later.
-              m_forward_mothers[data].insert(particle_in);
+                //If the particle has not been red yet, we store its id to add the particle later.
+                m_forward_mothers[data].insert(particle_in);
             }
         }
 
