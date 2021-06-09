@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 
         if( events_parsed == 0 ) {
             std::cout << "First event: " << std::endl;
-	    Print::listing(*(myevent->GetEvent()));
+            Print::listing(*(myevent->GetEvent()));
         }
 
         if( run_info ) {

@@ -41,9 +41,9 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
     #endif
     bool remote=false;
     bool pipe=false;
-    if (filename.find("http://")!=std::string::npos) 	 remote=true;
-    if (filename.find("https://")!=std::string::npos) 	 remote=true;
-    if (filename.find("root://")!=std::string::npos) 	 remote=true;
+    if (filename.find("http://")!=std::string::npos)    remote=true;
+    if (filename.find("https://")!=std::string::npos)   remote=true;
+    if (filename.find("root://")!=std::string::npos)    remote=true;
     if (filename.find("gsidcap://")!=std::string::npos) remote=true;
 
     std::vector<std::string> head;

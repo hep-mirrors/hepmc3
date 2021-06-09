@@ -270,14 +270,14 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
     std::vector<double> weights;
     std::shared_ptr<VectorDoubleAttribute> weights_a = v->attribute<VectorDoubleAttribute>("weights");
     if (weights_a) {
-       weights = weights_a->value();
+        weights = weights_a->value();
     } else {
-      for (int i = 0; i < 100; i++)
-      {
-          std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string((long long unsigned int)i));
-          if (!rs) break;
-          weights.push_back(rs->value());
-      }
+        for (int i = 0; i < 100; i++)
+        {
+            std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string((long long unsigned int)i));
+            if (!rs) break;
+            weights.push_back(rs->value());
+        }
     }
     m_cursor += sprintf(m_cursor, "V %i %i", v->id(), v->status());
     flush();
