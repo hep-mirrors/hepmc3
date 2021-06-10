@@ -279,10 +279,10 @@ for the `HEPMC3_PYTHON_VERSIONS` option, e.g.
 -DHEPMC3_PYTHON_VERSIONS=pypy2
 ```
 
-11 
+11
 
 HepMC3 is shipped with interfaces to some MC event generators/codes located in the interfaces/ directory.
-This is done to allow the usage of HepMC3 with codes that so far don't have HepMC3 interfaces. 
+This is done to allow the usage of HepMC3 with codes that so far don't have HepMC3 interfaces.
 In the future the codes from the interfaces  will be submitted to the
 upstream of corresponding projects and removed from HepMC3.
 
