@@ -28,7 +28,8 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, std::shared_pt
       m_buffer(nullptr),
       m_cursor(nullptr),
       m_buffer_size(256*1024),
-      m_particle_counter(0)
+      m_particle_counter(0),
+      m_float_printf_specifier(" %.*e")
 {
     HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead.")
     set_run_info(run);
@@ -51,7 +52,8 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, std::shared_ptr<GenRu
       m_buffer(nullptr),
       m_cursor(nullptr),
       m_buffer_size(256*1024),
-      m_particle_counter(0)
+      m_particle_counter(0),
+      m_float_printf_specifier(" %.*e")
 {
     HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 format is outdated. Please use HepMC3 format instead.")
     set_run_info(run);
@@ -72,7 +74,12 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
 {
     allocate_buffer();
     if ( !m_buffer ) return;
-
+    auto float_printf_specifier_option = m_options.find("float_printf_specifier");
+    if ( float_printf_specifier_option != m_options.end()) 
+    { 
+      m_float_printf_specifier = std::string(" %.*")+float_printf_specifier_option->second.substr(0,2);
+    }
+    const char * current_float_printf_specifier = m_float_printf_specifier.c_str();
     // Make sure nothing was left from previous event
     flush();
 
@@ -148,7 +155,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     if ( evt.weights().size() )
     {
         for (double w: evt.weights()) {
-            m_cursor += sprintf(m_cursor, " %.*e", m_precision, w);
+            m_cursor += sprintf(m_cursor, current_float_printf_specifier, m_precision, w);
             flush();
         }
         m_cursor += sprintf(m_cursor, "\n");
@@ -170,7 +177,11 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
     std::shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
-    if (cs) { m_cursor += sprintf(m_cursor, "C %.*e %.*e\n", m_precision, cs->xsec(), m_precision, cs->xsec_err()); flush(); }
+    if (cs) { 
+      std::string csspecifier = "C" + m_float_printf_specifier+m_float_printf_specifier+"\n";
+      m_cursor += sprintf(m_cursor, csspecifier.c_str(), m_precision, cs->xsec(), m_precision, cs->xsec_err()); 
+      flush(); 
+    }
 
 
     // Write attributes
@@ -298,18 +309,18 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
     }
     else
     {
-        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.x());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.x());
         flush();
-        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.y());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.y());
         flush();
-        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.z());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.z());
         flush();
-        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.t());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.t());
         flush();
     }
     m_cursor += sprintf(m_cursor, " %i %zu %zu", orph, v->particles_out().size(), weights.size());
     flush();
-    for (size_t i = 0; i < weights.size(); i++) { m_cursor += sprintf(m_cursor, " %.*e", m_precision, weights[i]); flush(); }
+    for (size_t i = 0; i < weights.size(); i++) { m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, weights[i]); flush(); }
     m_cursor += sprintf(m_cursor, "\n");
     flush();
 }
@@ -345,15 +356,15 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
     flush();
     m_cursor += sprintf(m_cursor, " %i", p->pid() );
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().px() );
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().px() );
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().py());
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().py());
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().pz() );
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().pz() );
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().e() );
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().e() );
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->generated_mass() );
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->generated_mass() );
     flush();
     m_cursor += sprintf(m_cursor, " %i", p->status() );
     flush();
@@ -364,10 +375,10 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
 
     std::shared_ptr<DoubleAttribute> A_theta = p->attribute<DoubleAttribute>("theta");
     std:: shared_ptr<DoubleAttribute> A_phi = p->attribute<DoubleAttribute>("phi");
-    if (A_theta) m_cursor += sprintf(m_cursor, " %.*e", m_precision, A_theta->value());
+    if (A_theta) m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, A_theta->value());
     else m_cursor += sprintf(m_cursor, " 0");
     flush();
-    if (A_phi) m_cursor += sprintf(m_cursor, " %.*e", m_precision, A_phi->value());
+    if (A_phi) m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, A_phi->value());
     else m_cursor += sprintf(m_cursor, " 0");
     flush();
     m_cursor += sprintf(m_cursor, " %i", ev);

@@ -19,11 +19,47 @@
     To link rootIO engine in your code use libHepMC3rootIO.so (libHepMC3rootIO.dylib) library.
     <hr>
 
-    Optionally the I/O capabilities can be implemented as plugin Reader/Write classes compiled
+    Optionally the I/O capabilities can be implemented as plugin Reader/Writer classes compiled
     separately into dynamically loadable libraries and used via  RearedPlugin and WriterPlugin classes.
     Please note that all required libraries/dlls should be loadable.
     See examples for details.
-    Last update 24 Jan 2019
+    
+    In some cases the fine tuning of the Reader/Writer classes behaviour can be done using a 
+    map of string "options"    
+ 
+    @code{.cpp}
+           void Reader::set_options(const std::map<std::string, std::string>& options)
+           
+           std::map<std::string, std::string> Reader::get_options() const
+    @endcode
+    
+    The options for ReaderAsciiHepMC2
+    
+      "particle_flows_are_separated"
+      "event_random_states_are_separated"
+      "vertex_weights_are_separated"
+      "particle_flows_are_separated"
+     regulate if the corresponding information from IO_GenEvent would be stored into multiple attributes as
+     individual numbers, i.e. "separated" or as a single std::vector. The former behaviour is used if 
+     the corresponding option name is present in the list of options, regardless of the option value.
+     The later behaviour is the default one.
+
+    The option for WriterAscii and WriterAsciiHepMC2
+     
+     "float_printf_specifier"
+     
+     specifies the float printf specifier used for the output format of the floats.
+     Two first characters from the  option value are used.
+     The default behaviour is equivalend to setting this option to "e" and results in the output formatted as 
+     " %.*e". To save the disk space one can use the "g" option, e.g.
+    @code{.cpp}
+    WriterAscii       outputA("someoutput.hepmc");    
+    auto optionsA =  outputA.get_options();
+    optionsA["float_printf_specifier"] = "g";
+    outputA.set_options(optionsA);
+    @endcode
+    This option will be the default on in the future.
+    Last update 12 Jun 2021
 */
 
 

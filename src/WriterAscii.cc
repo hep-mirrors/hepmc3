@@ -27,7 +27,8 @@ WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo
       m_precision(16),
       m_buffer(nullptr),
       m_cursor(nullptr),
-      m_buffer_size(256*1024)
+      m_buffer_size(256*1024),
+      m_float_printf_specifier(" %.*e")
 {
     set_run_info(run);
     if ( !m_file.is_open() ) {
@@ -46,7 +47,8 @@ WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
       m_precision(16),
       m_buffer(nullptr),
       m_cursor(nullptr),
-      m_buffer_size(256*1024)
+      m_buffer_size(256*1024),
+      m_float_printf_specifier(" %.*e")
 
 {
     set_run_info(run);
@@ -63,7 +65,11 @@ WriterAscii::~WriterAscii() {
 
 
 void WriterAscii::write_event(const GenEvent &evt) {
-    // if ( !m_file.is_open() ) return;
+    auto float_printf_specifier_option = m_options.find("float_printf_specifier");
+    if ( float_printf_specifier_option != m_options.end())
+    { 
+      m_float_printf_specifier = std::string(" %.*")+float_printf_specifier_option->second.substr(0,2);
+    }
     allocate_buffer();
     if ( !m_buffer ) return;
 
@@ -88,13 +94,15 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Write event position if not zero
     const FourVector &pos = evt.event_pos();
     if ( !pos.is_zero() ) {
-        m_cursor += sprintf(m_cursor, " @ %.*e", m_precision, pos.x());
+        m_cursor += sprintf(m_cursor, " @"); 
         flush();
-        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.y());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.x());
         flush();
-        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.z());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.y());
         flush();
-        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.t());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.z());
+        flush();
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.t());
         flush();
     }
 
@@ -110,7 +118,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
         m_cursor += sprintf(m_cursor, "W");
         for (auto w: evt.weights())
         {
-            m_cursor += sprintf(m_cursor, " %.*e", std::min(3*m_precision, 22), w);
+            m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), std::min(3*m_precision, 22), w);
             flush();
         }
         m_cursor += sprintf(m_cursor, "\n");
@@ -226,13 +234,17 @@ void WriterAscii::write_vertex(ConstGenVertexPtr v) {
 
     const FourVector &pos = v->position();
     if ( !pos.is_zero() ) {
-        m_cursor += sprintf(m_cursor, "] @ %.*e", m_precision, pos.x());
+        m_cursor += sprintf(m_cursor, "] @");
         flush();
-        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.y());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.x());
         flush();
-        m_cursor += sprintf(m_cursor, " %.*e", m_precision, pos.z());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.y());
         flush();
-        m_cursor += sprintf(m_cursor, " %.*e\n", m_precision, pos.t());
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.z());
+        flush();
+        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.t());
+        flush();
+        m_cursor += sprintf(m_cursor, "\n");
         flush();
     }
     else {
@@ -313,15 +325,15 @@ void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
     flush();
     m_cursor += sprintf(m_cursor, " %i", p->pid());
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().px());
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().px());
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().py());
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().py());
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().pz());
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().pz());
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->momentum().e());
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().e());
     flush();
-    m_cursor += sprintf(m_cursor, " %.*e", m_precision, p->generated_mass());
+    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->generated_mass());
     flush();
     m_cursor += sprintf(m_cursor, " %i\n", p->status() );
     flush();

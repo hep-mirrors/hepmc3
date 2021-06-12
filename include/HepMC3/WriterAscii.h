@@ -119,7 +119,7 @@ private:
     char* m_buffer;  //!< Stream buffer
     char* m_cursor;  //!< Cursor inside stream buffer
     unsigned long m_buffer_size; //!< Buffer size
-
+    std::string m_float_printf_specifier; //!< the specifier of printf used for floats
 };
 
 

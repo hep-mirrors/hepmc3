@@ -121,7 +121,7 @@ private:
     char* m_cursor;  //!< Cursor inside stream buffer
     unsigned long m_buffer_size; //!< Buffer size
     unsigned long m_particle_counter; //!< Used to set bar codes
-
+    std::string m_float_printf_specifier; //!< the specifier of printf used for floats
 };
 
 
