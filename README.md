@@ -15,9 +15,10 @@ The following commands will install the HepMC3 in the corresponding systems:
     The package is available from the standard repository. To install:
 
     ```
-    sudo yum install HepMC3 HepMC3-devel HepMC3-search HepMC3-search-devel HepMC3-interfaces-devel HepMC3-doc
+    sudo dnf install HepMC3 HepMC3-devel HepMC3-search HepMC3-search-devel HepMC3-interfaces-devel HepMC3-doc
 
     ```
+    To have a full installation of the HepMC3-doc package, add an option `--setopt=tsflags=''`
 
   - RHEL, CentOS and compatible
     The package is available from the EPEL repository. To install:
@@ -290,10 +291,10 @@ To enable the installation of interfaces use `-DHEPMC3_INSTALL_INTERFACES:BOOL=O
 In the test suite the already installed interfaces from MC event generators are used by default.
 To use the interfaces and tests shipped with HepMC3, one can set the following options for cmake
 ```
--DHEPMC3_USE_INTERFACE_FROM_MCTESTER=OFF
--DHEPMC3_USE_INTERFACE_FROM_PHOTOSPP=OFF
--DHEPMC3_USE_INTERFACE_FROM_TAUOLAPP=OFF
--DHEPMC3_USE_INTERFACE_FROM_PYTHIA8=OFF
+-DHEPMC3_USE_INTERFACE_FROM_MCTESTER:BOOL=OFF
+-DHEPMC3_USE_INTERFACE_FROM_PHOTOSPP:BOOL=OFF
+-DHEPMC3_USE_INTERFACE_FROM_TAUOLAPP:BOOL=OFF
+-DHEPMC3_USE_INTERFACE_FROM_PYTHIA8:BOOL=OFF
 ```
 
 
