@@ -67,8 +67,8 @@ WriterAscii::~WriterAscii() {
 void WriterAscii::write_event(const GenEvent &evt) {
     auto float_printf_specifier_option = m_options.find("float_printf_specifier");
     if ( float_printf_specifier_option != m_options.end())
-    { 
-      m_float_printf_specifier = std::string(" %.*")+float_printf_specifier_option->second.substr(0,2);
+    {
+        m_float_printf_specifier = std::string(" %.*")+float_printf_specifier_option->second.substr(0,2);
     }
     allocate_buffer();
     if ( !m_buffer ) return;
@@ -94,7 +94,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Write event position if not zero
     const FourVector &pos = evt.event_pos();
     if ( !pos.is_zero() ) {
-        m_cursor += sprintf(m_cursor, " @"); 
+        m_cursor += sprintf(m_cursor, " @");
         flush();
         m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.x());
         flush();
