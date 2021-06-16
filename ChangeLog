@@ -1,4 +1,6 @@
   --------------------------  HepMC3.2.4-pre --------------------------
+2021-16-08 Andrii Verbytskyi for HepMC
+         * Speed optimizations for ReaderAsciiHepMC2.
 2021-06-08 Andrii Verbytskyi for HepMC
          * Deprecate Pythia8, MC-TESTER, Taoulapp and Photospp interfaces, as these were picked-up by the upstream.
 2021-06-04 Andrii Verbytskyi for HepMC
