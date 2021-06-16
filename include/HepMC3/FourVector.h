@@ -169,9 +169,9 @@ public:
     /// Polar angle w.r.t. z direction
     double theta() const {  return std::atan2( perp(), z() ); }
     /// Pseudorapidity
-    double eta() const  { return 0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) ); }
+    double eta() const  { return ( p3mod() == 0.0 ) ? 0.0: (0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) )); }
     /// Rapidity
-    double rap() const {   return 0.5*std::log( (e() + pz()) / (e() - pz()) ); }
+    double rap() const {   return ( e() == 0.0 ) ? 0.0: (0.5*std::log( (e() + pz()) / (e() - pz()) )); }
     /// Absolute pseudorapidity
     double abs_eta() const { return std::abs( eta() ); }
     /// Absolute rapidity
