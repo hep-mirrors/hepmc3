@@ -40,7 +40,7 @@ int main()
     if(outputB.failed()) return 4;
     auto optionsB =  outputB.get_options();
     optionsB["float_printf_specifier"] = "g";
-    outputB.set_options(optionsB);    
+    outputB.set_options(optionsB);
     while( !inputB.failed() )
     {
         GenEvent evt(Units::GEV,Units::MM);

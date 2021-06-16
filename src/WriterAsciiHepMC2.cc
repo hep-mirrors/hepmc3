@@ -75,9 +75,9 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     allocate_buffer();
     if ( !m_buffer ) return;
     auto float_printf_specifier_option = m_options.find("float_printf_specifier");
-    if ( float_printf_specifier_option != m_options.end()) 
-    { 
-      m_float_printf_specifier = std::string(" %.*")+float_printf_specifier_option->second.substr(0,2);
+    if ( float_printf_specifier_option != m_options.end())
+    {
+        m_float_printf_specifier = std::string(" %.*")+float_printf_specifier_option->second.substr(0,2);
     }
     const char * current_float_printf_specifier = m_float_printf_specifier.c_str();
     // Make sure nothing was left from previous event
@@ -177,10 +177,10 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
     std::shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
-    if (cs) { 
-      std::string csspecifier = "C" + m_float_printf_specifier+m_float_printf_specifier+"\n";
-      m_cursor += sprintf(m_cursor, csspecifier.c_str(), m_precision, cs->xsec(), m_precision, cs->xsec_err()); 
-      flush(); 
+    if (cs) {
+        std::string csspecifier = "C" + m_float_printf_specifier+m_float_printf_specifier+"\n";
+        m_cursor += sprintf(m_cursor, csspecifier.c_str(), m_precision, cs->xsec(), m_precision, cs->xsec_err());
+        flush();
     }
 
 
