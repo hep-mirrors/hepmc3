@@ -182,33 +182,44 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         m_cursor += sprintf(m_cursor, csspecifier.c_str(), m_precision, cs->xsec(), m_precision, cs->xsec_err());
         flush();
     }
+    
+    std::shared_ptr<GenHeavyIon> hi = evt.attribute<GenHeavyIon>("GenHeavyIon");
+    if (hi) {
+        m_cursor += sprintf(m_cursor, "H %i %i %i %i %i %i %i %i %i %e %e %e %e\n",
+                            hi->Ncoll_hard,
+                            hi->Npart_proj,
+                            hi->Npart_targ,
+                            hi->Ncoll,
+                            hi->spectator_neutrons,
+                            hi->spectator_protons,
+                            hi->N_Nwounded_collisions,
+                            hi->Nwounded_N_collisions,
+                            hi->Nwounded_Nwounded_collisions,
+                            hi->impact_parameter,
+                            hi->event_plane_angle,
+                            hi->eccentricity,
+                            hi->sigma_inel_NN);
+        flush();
+    }
 
-
-    // Write attributes
-    for ( auto vt1: evt.attributes() )
-    {
-        for ( auto vt2: vt1.second )
+    std::shared_ptr<GenPdfInfo> pi = evt.attribute<GenPdfInfo>("GenPdfInfo");
+    if (pi) {
+        std::string st;
+        // We use it here because the HepMC3 GenPdfInfo has the same format as in HepMC2 IO_GenEvent and get error handeling for free.
+        bool status = pi->to_string(st);
+        if ( !status )
         {
-            std::string st;
-            bool status = vt2.second->to_string(st);
-
-            if ( !status )
-            {
-                HEPMC3_WARNING("WriterAsciiHepMC2::write_event: problem serializing attribute: " << vt1.first)
-            }
-            else
-            {
-                if (vt1.first == "GenPdfInfo")
-                {
-                    m_cursor += sprintf(m_cursor, "F ");
-                    flush();
-                    write_string(escape(st));
-                    m_cursor += sprintf(m_cursor, "\n");
-                    flush();
-                }
-            }
+            HEPMC3_WARNING("WriterAsciiHepMC2::write_event: problem serializing GenPdfInfo attribute")
+        } else {
+            m_cursor += sprintf(m_cursor, "F ");
+            flush();
+            write_string(escape(st));
+            m_cursor += sprintf(m_cursor, "\n");
+            flush();
         }
     }
+
+
     m_particle_counter = 0;
     for (ConstGenVertexPtr v: evt.vertices() )
     {
