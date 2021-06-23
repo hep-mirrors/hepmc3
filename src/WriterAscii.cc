@@ -27,8 +27,7 @@ WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo
       m_precision(16),
       m_buffer(nullptr),
       m_cursor(nullptr),
-      m_buffer_size(256*1024),
-      m_float_printf_specifier(" %.*e")
+      m_buffer_size(256*1024)
 {
     set_run_info(run);
     if ( !m_file.is_open() ) {
@@ -38,6 +37,15 @@ WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo
         m_file << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
         if ( run_info() ) write_run_info();
     }
+    m_float_printf_specifier = " %." + std::to_string(m_precision) + "e";
+    m_particle_printf_specifier = "P %i %i %i"
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier + " %i\n";
+    m_vertex_short_printf_specifier = "V %i %i [%s]\n";
+    m_vertex_long_printf_specifier = "V %i %i [%s] @"+ m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + "\n";
 }
 
 
@@ -47,14 +55,21 @@ WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
       m_precision(16),
       m_buffer(nullptr),
       m_cursor(nullptr),
-      m_buffer_size(256*1024),
-      m_float_printf_specifier(" %.*e")
-
+      m_buffer_size(256*1024)
 {
     set_run_info(run);
     (*m_stream) << "HepMC::Version " << version() << std::endl;
     (*m_stream) << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
     if ( run_info() ) write_run_info();
+    m_float_printf_specifier = " %." + std::to_string(m_precision) + "e";
+    m_particle_printf_specifier = "P %i %i %i"
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier + " %i\n";
+    m_vertex_short_printf_specifier = "V %i %i [%s]\n";
+    m_vertex_long_printf_specifier = "V %i %i [%s] @"+ m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + "\n";
 }
 
 
@@ -65,13 +80,22 @@ WriterAscii::~WriterAscii() {
 
 
 void WriterAscii::write_event(const GenEvent &evt) {
-    auto float_printf_specifier_option = m_options.find("float_printf_specifier");
-    if ( float_printf_specifier_option != m_options.end())
-    {
-        m_float_printf_specifier = std::string(" %.*")+float_printf_specifier_option->second.substr(0,2);
-    }
     allocate_buffer();
     if ( !m_buffer ) return;
+    auto float_printf_specifier_option = m_options.find("float_printf_specifier");
+    std::string  letter=(float_printf_specifier_option != m_options.end())?float_printf_specifier_option->second.substr(0,2):"e";
+    if (letter != "e" && letter != "E" && letter != "G" && letter != "g" && letter != "f" && letter != "F" ) letter = "e";
+    m_float_printf_specifier = " %." + std::to_string(m_precision) + letter;
+
+
+    m_particle_printf_specifier = "P %i %i %i"
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier + " %i\n";
+    m_vertex_short_printf_specifier = "V %i %i [%s]\n";
+    m_vertex_long_printf_specifier = "V %i %i [%s] @"+ m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + "\n";
 
     // Make sure nothing was left from previous event
     flush();
@@ -88,25 +112,18 @@ void WriterAscii::write_event(const GenEvent &evt) {
     }
 
     // Write event info
-    m_cursor += sprintf(m_cursor, "E %d %zu %zu", evt.event_number(), evt.vertices().size(), evt.particles().size());
     flush();
-
+    std::string especifier =  "E " + std::to_string(evt.event_number()) + " "
+                              + std::to_string(evt.vertices().size()) + " "
+                              + std::to_string(evt.particles().size());
     // Write event position if not zero
     const FourVector &pos = evt.event_pos();
     if ( !pos.is_zero() ) {
-        m_cursor += sprintf(m_cursor, " @");
-        flush();
-        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.x());
-        flush();
-        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.y());
-        flush();
-        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.z());
-        flush();
-        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.t());
-        flush();
+        especifier += ( " @"  + m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + "\n" );
+        m_cursor += sprintf(m_cursor, especifier.c_str(), pos.x(), pos.y(), pos.z(), pos.t());
+    } else {
+        m_cursor += sprintf(m_cursor, "%s\n", especifier.c_str());
     }
-
-    m_cursor += sprintf(m_cursor, "\n");
     flush();
 
     // Write units
@@ -118,7 +135,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
         m_cursor += sprintf(m_cursor, "W");
         for (auto w: evt.weights())
         {
-            m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), std::min(3*m_precision, 22), w);
+            m_cursor += sprintf(m_cursor, " %.*e", std::min(3*m_precision, 22), w);
             flush();
         }
         m_cursor += sprintf(m_cursor, "\n");
@@ -148,7 +165,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
 
     // Print particles
-    std::map<ConstGenVertexPtr, bool> alreadywritten;
+    std::map<int, bool> alreadywritten;
     for (ConstGenParticlePtr p: evt.particles()) {
         // Check to see if we need to write a vertex first
         ConstGenVertexPtr v = p->production_vertex();
@@ -162,8 +179,8 @@ void WriterAscii::write_event(const GenEvent &evt) {
             // Add check for attributes of this vertex
             else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in()[0]->id();
             // Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
-            if (alreadywritten.find(v) == alreadywritten.end() && parent_object < 0)
-            { write_vertex(v); alreadywritten[v] = true; }
+            if (alreadywritten.find(v->id()) == alreadywritten.end() && parent_object < 0)
+            { write_vertex(v); alreadywritten[v->id()] = true; }
         }
 
         write_particle(p, parent_object);
@@ -214,43 +231,22 @@ std::string WriterAscii::escape(const std::string& s) const {
 }
 
 void WriterAscii::write_vertex(ConstGenVertexPtr v) {
-    m_cursor += sprintf(m_cursor, "V %i %i [", v->id(), v->status());
     flush();
-
-    bool printed_first = false;
+    std::string vlist;
     std::vector<int> pids;
+    pids.reserve(v->particles_in().size());
     for (ConstGenParticlePtr p: v->particles_in()) pids.push_back(p->id());
     //We order pids to be able to compare ascii files
     std::sort(pids.begin(), pids.end());
-    for (auto pid: pids) {
-        if ( !printed_first ) {
-            m_cursor += sprintf(m_cursor, "%i", pid);
-            printed_first = true;
-        }
-        else m_cursor += sprintf(m_cursor, ",%i", pid);
-
-        flush();
-    }
-
+    for (auto p: pids) vlist.append( std::to_string(p).append(",") );
+    if ( pids.size() ) vlist.pop_back();
     const FourVector &pos = v->position();
     if ( !pos.is_zero() ) {
-        m_cursor += sprintf(m_cursor, "] @");
-        flush();
-        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.x());
-        flush();
-        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.y());
-        flush();
-        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.z());
-        flush();
-        m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, pos.t());
-        flush();
-        m_cursor += sprintf(m_cursor, "\n");
-        flush();
+        m_cursor += sprintf(m_cursor, m_vertex_long_printf_specifier.c_str(),  v->id(), v->status(), vlist.c_str(), pos.x(), pos.y(), pos.z(), pos.t() );
+    } else {
+        m_cursor += sprintf(m_cursor, m_vertex_short_printf_specifier.c_str(), v->id(), v->status(), vlist.c_str());
     }
-    else {
-        m_cursor += sprintf(m_cursor, "]\n");
-        flush();
-    }
+    flush();
 }
 
 
@@ -258,7 +254,7 @@ inline void WriterAscii::flush() {
     // The maximum size of single add to the buffer (other than by
     // using WriterAscii::write_string) should not be larger than 256. This is a safe value as
     // we will not allow precision larger than 24 anyway
-    if ( m_buffer + m_buffer_size < m_cursor + 256 ) {
+    if ( m_buffer + m_buffer_size < m_cursor + 512 ) {
         std::ptrdiff_t length = m_cursor - m_buffer;
         m_stream->write(m_buffer, length);
         m_cursor = m_buffer;
@@ -279,7 +275,7 @@ void WriterAscii::write_run_info() {
     // If no run info object set, create a dummy one.
     if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
 
-    std::vector<std::string> names = run_info()->weight_names();
+    const std::vector<std::string> names = run_info()->weight_names();
 
     if ( !names.empty() ) {
         std::string out = names[0];
@@ -318,24 +314,8 @@ void WriterAscii::write_run_info() {
 }
 
 void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
-    m_cursor += sprintf(m_cursor, "P %i", p->id());
     flush();
-
-    m_cursor += sprintf(m_cursor, " %i", second_field);
-    flush();
-    m_cursor += sprintf(m_cursor, " %i", p->pid());
-    flush();
-    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().px());
-    flush();
-    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().py());
-    flush();
-    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().pz());
-    flush();
-    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->momentum().e());
-    flush();
-    m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), m_precision, p->generated_mass());
-    flush();
-    m_cursor += sprintf(m_cursor, " %i\n", p->status() );
+    m_cursor += sprintf(m_cursor, m_particle_printf_specifier.c_str(), p->id(), second_field, p->pid(), p->momentum().px(), p->momentum().py(), p->momentum().pz(), p->momentum().e(), p->generated_mass(), p->status());
     flush();
 }
 
@@ -375,7 +355,7 @@ int WriterAscii::precision() const {
 
 void WriterAscii::set_buffer_size(const size_t& size ) {
     if (m_buffer) return;
-    if (size < 512) return;
+    if (size < 1024) return;
     m_buffer_size = size;
 }
 

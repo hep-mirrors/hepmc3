@@ -120,6 +120,9 @@ private:
     char* m_cursor;  //!< Cursor inside stream buffer
     unsigned long m_buffer_size; //!< Buffer size
     std::string m_float_printf_specifier; //!< the specifier of printf used for floats
+    std::string m_particle_printf_specifier; //!< the specifier of printf used for floats
+    std::string m_vertex_short_printf_specifier; //!< the specifier of printf used for zero vertices
+    std::string m_vertex_long_printf_specifier; //!< the specifier of printf used for vertices
 };
 
 

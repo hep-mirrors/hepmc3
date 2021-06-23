@@ -32,6 +32,7 @@ public:
         return p->attribute_as_string(m_name).length() != 0;
     }
 
+    /// @brief equality operator
     Filter operator == (const Attribute &rhs) const {
         std::string name = m_name;
         std::string other;
@@ -39,6 +40,7 @@ public:
         return [other, name](ConstGenParticlePtr p)->bool{return p->attribute_as_string(name).compare(other) == 0;};
     }
 
+    /// @brief equality operator
     Filter operator == (std::shared_ptr<const Attribute> rhs) const {
         std::string name = m_name;
         std::string other;
@@ -46,13 +48,14 @@ public:
         return [other, name](ConstGenParticlePtr p)->bool{return p->attribute_as_string(name).compare(other) == 0;};
     }
 
+    /// @brief equality operator
     Filter operator == (std::string rhs) const {
         const std::string &name = m_name;
         return [name, rhs](ConstGenParticlePtr p)->bool{return p->attribute_as_string(name).compare(rhs) == 0;};
     }
 
 private:
-    std::string m_name;
+    std::string m_name;  ///< holds name
 };
 }
 #endif

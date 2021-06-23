@@ -77,8 +77,8 @@ public:
     virtual Filter operator != (int value) const = 0;      ///< NonEquality
     virtual Filter operator != (double value) const = 0;      ///< NonEquality
 
-    virtual ConstSelectorPtr abs() const = 0;
-    static AttributeFeature ATTRIBUTE(const std::string &name);
+    virtual ConstSelectorPtr abs() const = 0;    ///< abs function
+    static AttributeFeature ATTRIBUTE(const std::string &name);  ///< ATTRIBUTE function
 };
 /** @brief  SelectorWrapper */
 template<typename Feature_type>

@@ -215,6 +215,7 @@ public:
     Feature(Evaluator_type functor) : GenericFeature<Feature_type>(functor) {}
     Feature(const Feature &copy) : GenericFeature<Feature_type>(copy) {}
 
+    /// @brief abs function
     Feature<Feature_type> abs() const {
         EvaluatorPtr functor = m_internal;
         Evaluator_type absfunctor = [functor](ConstGenParticlePtr p)->Feature_type{return ::abs((*functor)(p));};
@@ -226,11 +227,13 @@ public:
         return [value, functor](ConstGenParticlePtr input)->bool{return (*functor)(input) >  value;};
     }
 
+    /// @brief less operator
     Filter operator < (double value) const {
         EvaluatorPtr functor = m_internal;
         return [value, functor](ConstGenParticlePtr input)->bool{return (*functor)(input) <  value;};
     }
 
+    /// @brief equal operator
     Filter operator == (double value) const {
         EvaluatorPtr functor = m_internal;
         return [value, functor](ConstGenParticlePtr input)->bool{
@@ -239,10 +242,13 @@ public:
         };
     }
 
+    /// @brief greater or equal operator
     Filter operator >= (double value) const { return !( (*this) < value );}
 
+    /// @brief less or equal operator
     Filter operator <= (double value) const { return !( (*this) > value );}
 
+    /// @brief not equal operator
     Filter operator != (double value) const {
         return !( (*this) == value );
     }
