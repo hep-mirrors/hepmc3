@@ -84,56 +84,70 @@ public:
 template<typename Feature_type>
 class SelectorWrapper : public Selector {
 public:
+    /// @brief Constructor
     SelectorWrapper(typename Feature<Feature_type>::Evaluator_type functor): m_internal(functor) {}
 
+    /// @brief Operator >
     Filter operator > (int value) const override {
         return m_internal > value;
     }
 
+    /// @brief Operator >
     Filter operator > (double value) const override {
         return m_internal > value;
     }
 
+    /// @brief Operator >=
     Filter operator >= (int value) const override {
         return m_internal >= value;
     }
 
+    /// @brief Operator >=
     Filter operator >= (double value) const override {
         return m_internal >= value;
     }
 
+    /// @brief Operator <
     Filter operator < (int value) const override {
         return m_internal < value;
     }
 
+    /// @brief Operator <
     Filter operator < (double value) const override {
         return m_internal < value;
     }
 
+    /// @brief Operator <=
     Filter operator <= (int value) const override {
         return m_internal <= value;
     }
 
+    /// @brief Operator <=
     Filter operator <= (double value) const override {
         return m_internal <= value;
     }
 
+    /// @brief Operator ==
     Filter operator == (int value) const override {
         return m_internal == value;
     }
 
+    /// @brief Operator ==
     Filter operator == (double value) const override {
         return m_internal == value;
     }
 
+    /// @brief Operator !=
     Filter operator != (int value) const override {
         return m_internal != value;
     }
 
+    /// @brief Operator !=
     Filter operator != (double value) const override {
         return m_internal != value;
     }
 
+    /// @brief Function abs
     ConstSelectorPtr abs() const override {
         SelectorWrapper<Feature_type> *copy = new SelectorWrapper<Feature_type>(*this);
         copy->m_internal = m_internal.abs();

@@ -21,13 +21,16 @@ namespace HepMC3 {
 
 class AttributeFeature {
 public:
+    /// @brief constructor
     AttributeFeature(const std::string &name): m_name(name) {}
 
+    /// @brief existence
     Filter exists() const {
         std::string name = m_name;
         return [name](ConstGenParticlePtr p)->bool{return p->attribute_as_string(name).length() != 0;};
     }
 
+    /// @brief evaluate
     bool operator()(ConstGenParticlePtr p) const {
         return p->attribute_as_string(m_name).length() != 0;
     }

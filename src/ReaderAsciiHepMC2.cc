@@ -64,7 +64,6 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
     char               peek;
     const size_t  max_buffer_size = 512*512;
-    const size_t  max_weights_size = 256;
     char          buf[max_buffer_size];
     bool          parsed_event_header            = false;
     bool          is_parsing_successful          = true;
