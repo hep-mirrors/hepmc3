@@ -88,21 +88,22 @@ public:
     std::vector<double>& weights() { return m_weights; }
     /// Get event weight accessed by index (or the canonical/first one if there is no argument)
     /// @note It's the user's responsibility to ensure that the given index exists!
-    double weight(const unsigned long& index=0) const { return weights().at(index); }
+    double weight(const unsigned long& index=0) const { if ( index < weights().size() ) return weights().at(index); else  throw std::runtime_error("GenEvent::weight(const unsigned long&): weight index outside of range"); return 0.0; }
     /// Get event weight accessed by weight name
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
     double weight(const std::string& name) const {
-        if (!run_info()) throw std::runtime_error("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
+        if (!run_info()) throw std::runtime_error("GenEvent::weight(const std::string&): named access to event weights requires the event to have a GenRunInfo");
         return weight(run_info()->weight_index(name));
     }
     /// Get event weight accessed by weight name
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
     double& weight(const std::string& name) {
-        if (!run_info()) throw std::runtime_error("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
-        int pos=run_info()->weight_index(name);
-        if (pos<0) throw std::runtime_error("GenEvent::weight(str): no weight with given name in this run");
+        if (!run_info()) throw std::runtime_error("GenEvent::weight(const std::string&): named access to event weights requires the event to have a GenRunInfo");
+        int pos = run_info()->weight_index(name);
+        if ( pos < 0 ) throw std::runtime_error("GenEvent::weight(const std::string&): no weight with given name in this run");
+        if ( pos >= int(m_weights.size())) throw std::runtime_error("GenEvent::weight(const std::string&): weight index outside of range");
         return m_weights[pos];
     }
     /// Get event weight names, if there are some

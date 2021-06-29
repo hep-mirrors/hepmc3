@@ -4,7 +4,7 @@ namespace HepMC3
 
 HEPMC3_DECLARE_READER_FILE(ReaderuprootTree)
 
-/// @brief obtain vector of objects using mane and type
+/// @brief obtain vector of objects using name and type
 template <class T> std::vector<T>
 ReaderuprootTree::get_vector(PyObject * file_name, const std::string& array_name, std::string desired_type) {
     int i = m_events_count;
@@ -29,6 +29,7 @@ ReaderuprootTree::get_vector(PyObject * file_name, const std::string& array_name
     return out;
 }
 
+/// @brief obtain vector of objects using name and type, specified for std::string
 template <>
 std::vector<std::string>
 ReaderuprootTree::get_vector<std::string>(PyObject * file_name, const std::string& array_name, std::string desired_type) {

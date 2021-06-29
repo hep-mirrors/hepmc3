@@ -13,8 +13,7 @@
 /// @brief Filter for the attributes
 ///
 /// Used to construct filters that can check if an attribute exists
-/// or to compare against other attribute. See @ref searchengine for details
-/// and examples of its use.
+/// or to compare against other attribute.
 ///
 /// @ingroup searchengine
 #include <string>
