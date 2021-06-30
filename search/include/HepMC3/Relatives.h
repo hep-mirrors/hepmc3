@@ -152,7 +152,7 @@ private:
 
         return results;
     }
-    
+
     /** @brief  recursive */
     GenParticles_type<GenParticlePtr> _recursive(GenParticlePtr input) const {
         return _recursive(m_applyRelation.vertex(input));
