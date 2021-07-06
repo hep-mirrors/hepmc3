@@ -53,7 +53,7 @@ endif()
 
 add_executable(convert_example.exe  ${basic_sources} )
 add_library(Analysis SHARED src/AnalysisExample.cc)
-target_link_libraries(Analysis HepMC3 )
+target_link_libraries(Analysis ${HEPMC3_LIB} )
 
 if (MSVC)
   set(  MSVCLINKFLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib")
