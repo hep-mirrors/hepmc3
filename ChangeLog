@@ -1,4 +1,6 @@
   --------------------------  HepMC3.2.4 --------------------------
+2021-07-06 Andrii Verbytskyi for HepMC
+         * Minor fixes to the CMake configuration of examples
 2021-06-29 Andrii Verbytskyi for HepMC
          * Minor fixes in Pythia6 interface.
 2021-06-22 Andrii Verbytskyi for HepMC
