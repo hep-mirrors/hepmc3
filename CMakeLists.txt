@@ -198,6 +198,7 @@ set( hepmc3core_sources
   ${PROJECT_SOURCE_DIR}/src/GenPdfInfo.cc
   ${PROJECT_SOURCE_DIR}/src/HEPEVT_Wrapper.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderAscii.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderOSCAR.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderHEPEVT.cc
   ${PROJECT_SOURCE_DIR}/src/WriterAscii.cc
   ${PROJECT_SOURCE_DIR}/src/GenHeavyIon.cc
