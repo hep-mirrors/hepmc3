@@ -70,6 +70,7 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
           } else {	
 		     m_header.push_back(std::string(buf[2]));
 	      }
+	      continue;
 	    } 
 	    if ( strncmp(buf, "0 0 ", 4) == 0 )
              if ( !(cursor = strchr(cursor+4, ' ')) ) return false;
@@ -79,10 +80,36 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
              evt.add_attribute("impact_parameter", std::make_shared<DoubleAttribute>(impact_parameter));
 			 end_event();
 			 cursor = buf;	
+	         continue;
 	    }
+	    int nin = atoi(cursor);
+	    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
+	    int nout = atoi(cursor);
+	    m_interaction.clear();
+	    m_interaction.push_back(std::string(buf));
+	    for (int i=0; i<nin+nout; i++ ) {
+			m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
+			m_interaction.push_back(std::string(buf));
+		}	
     }
     return true;
 }
+GenParticlePtr ReaderOSCAR::parse_particle(const std::string& s) {
+	
+	GenParticlePtr p = std::make_shared<GenParticle>();
+	return p;
+}
+
+void ReaderOSCAR::parse_interaction() {
+	GenVertexPtr v = std::make_shared<GenVertex>();
+	const char                 *cursor   = m_interaction.at(0).c_str();
+	int nin = atoi(cursor);
+	if ( !(cursor = strchr(cursor+1, ' ')) ) return;
+	int nout = atoi(cursor);
+	for (int i=1; i<nin+1; i++ ) v.add_particle_in(parse_particle(m_interaction.at(i)));
+	for (int i=nin+1; i<nout+nin+1; i++ ) v.add_particle_out(parse_particle(m_interaction.at(i)));
+	m_vertices.push_back(v);
+	}
 void ReaderOSCAR::end_event() { parse_header();  }
 void ReaderOSCAR::parse_header() {
 	if (m_header.empty()) return;

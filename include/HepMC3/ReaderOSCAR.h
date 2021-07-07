@@ -57,6 +57,7 @@ public:
 
     void parse_header();
     void end_event();
+    void parse_interaction();
 
 private:
 
@@ -64,7 +65,9 @@ private:
     std::istream* m_stream; ///< For ctor when reading from stdin
     bool m_isstream; ///< toggles usage of m_file or m_stream
     std::vector<std::string> m_header; ///< header lines 
-
+    std::vector<std::string> m_interaction; ///< header lines 
+    std::vector<GenVertexPtr> m_vertices;
+    GenParticlePtr parse_particle(const std::string& s);
 };
 
 
