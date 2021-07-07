@@ -16,6 +16,7 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Units.h"
+#include "HepMC3/Print.h"
 
 namespace HepMC3 {
 
@@ -56,11 +57,12 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
     const char                 *cursor   = buf;
 
     evt.clear();
+    m_vertices.clear();
     evt.set_run_info(run_info());
 
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
-
+cursor = buf;
         if ( strlen(buf) == 0 ) continue;
         // Check for ReaderOSCAR header/footer
         if ( strncmp(buf, "# ", 2) == 0 ) {
@@ -73,17 +75,25 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
             continue;
         }
         if ( strncmp(buf, "0 0 ", 4) == 0 ) {
-            if ( !(cursor = strchr(cursor+4, ' ')) ) return false;
+            
+            if ( !(cursor = strchr(cursor+3, ' ')) ) return false;
             evt.set_event_number(atoi(cursor));
             if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
             double impact_parameter = atof(cursor);
+            printf("--->%s\n",cursor);
             evt.add_attribute("impact_parameter", std::make_shared<DoubleAttribute>(impact_parameter));
             end_event();
 
-            cursor = buf;
+            
             if (m_vertices.empty()) continue;
-            evt.add_vertex(m_vertices.front());
-            continue;
+            auto v= m_vertices.front();
+            evt.add_vertex(v);
+            evt.add_beam_particle(v->particles_in()[0]);
+            evt.add_beam_particle(v->particles_in()[1]);
+            printf("-->%i %i\n",evt.vertices().size(),evt.particles().size());
+            for (auto p: v->particles_out()) p->set_status(1);
+            Print::content(evt);
+            break;
         }
         int nin = atoi(cursor);
         if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
@@ -101,8 +111,14 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
 
 
 GenParticlePtr ReaderOSCAR::parse_particle(const std::string& s) {
-
+char buf[512];
+    sprintf(buf,"%s\n",s.c_str());
+    const char                 *cursor   = buf;
+    int nin = atoi(cursor);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    int pdg = atoi(cursor);
     GenParticlePtr p = std::make_shared<GenParticle>();
+    p->set_pid(pdg);
     return p;
 }
 
@@ -114,7 +130,7 @@ void ReaderOSCAR::parse_interaction() {
     int nin = atoi(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return;
     int nout = atoi(cursor);
-    printf("%i %i %i\n", nin, nout, m_interaction.size());
+  //  printf("%i %i %i\n", nin, nout, m_interaction.size());
     for (int i=1; i<nin+1; i++ ) v->add_particle_in(parse_particle(m_interaction.at(i)));
     for (int i=nin+1; i<nout+nin+1; i++ ) v->add_particle_out(parse_particle(m_interaction.at(i)));
     m_vertices.push_back(v);
