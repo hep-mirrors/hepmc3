@@ -53,26 +53,44 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
     const size_t       max_buffer_size = 512*512;
     char               buf[max_buffer_size];
+    const char                 *cursor   = buf;
+
     evt.clear();
     evt.set_run_info(run_info());
 
-    //
-    // Parse event, vertex and particle information
-    //
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
 
         if ( strlen(buf) == 0 ) continue;
         // Check for ReaderOSCAR header/footer
-        if ( strncmp(buf, "# OSC1999A", 10) == 0 ) {
-                HEPMC3_WARNING("ReaderOSCAR: So far OSCAR format is not supported. Will close the input.")
-                std::cout << buf << std::endl;
-                m_isstream ? m_stream->clear(std::ios::eofbit) : m_file.clear(std::ios::eofbit);
-        }
+        if ( strncmp(buf, "# ", 2) == 0 ) {
+          if ( strncmp(buf, "# OSC1999A", 10) == 0 ) {
+            HEPMC3_WARNING("ReaderOSCAR: So far OSCAR format is not supported. Will close the input after processing the header.")
+            m_header.clear();
+          } else {	
+		     m_header.push_back(std::string(buf[2]));
+	      }
+	    } 
+	    if ( strncmp(buf, "0 0 ", 4) == 0 )
+             if ( !(cursor = strchr(cursor+4, ' ')) ) return false;
+             evt.set_event_number(atoi(cursor));
+             if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
+             double impact_parameter = atof(cursor);
+             evt.add_attribute("impact_parameter", std::make_shared<DoubleAttribute>(impact_parameter));
+			 end_event();
+			 cursor = buf;	
+	    }
     }
     return true;
 }
-
+void ReaderOSCAR::end_event() { parse_header();  }
+void ReaderOSCAR::parse_header() {
+	if (m_header.empty()) return;
+	if (m_header.size() > 2 && m_header[2].length() > 2) {
+        struct GenRunInfo::ToolInfo generator = {m_header[2].substr(2), "0" , std::string("Used generator")};
+		run_info()->tools().push_back(generator);
+	}	
+}
 
 bool ReaderOSCAR::failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
 
