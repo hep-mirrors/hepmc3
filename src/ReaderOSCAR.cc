@@ -41,7 +41,9 @@ ReaderOSCAR::ReaderOSCAR(std::istream & stream)
 
 
 
-ReaderOSCAR::~ReaderOSCAR() { if (!m_isstream) close(); }
+ReaderOSCAR::~ReaderOSCAR() {
+    if (!m_isstream) close();
+}
 
 bool ReaderOSCAR::skip(const int n)
 {
@@ -55,17 +57,17 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
     const size_t       max_buffer_size = 512*512;
     char               buf[max_buffer_size];
     const char                 *cursor   = buf;
-
     evt.clear();
     m_vertices.clear();
     evt.set_run_info(run_info());
 
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
-cursor = buf;
+        cursor = buf;
         if ( strlen(buf) == 0 ) continue;
+        if ( strncmp(buf, "\r", 1) == 0 ) continue;
         // Check for ReaderOSCAR header/footer
-        if ( strncmp(buf, "# ", 2) == 0 ) {
+        if ( strncmp(buf, "#", 1) == 0 ) {
             if ( strncmp(buf, "# OSC1999A", 10) == 0 ) {
                 HEPMC3_WARNING("ReaderOSCAR: So far OSCAR format is not supported. Will close the input after processing the header.")
                 m_header.clear();
@@ -75,28 +77,34 @@ cursor = buf;
             continue;
         }
         if ( strncmp(buf, "0 0 ", 4) == 0 ) {
-            
-            if ( !(cursor = strchr(cursor+3, ' ')) ) return false;
+            cursor = strchr(cursor+3, ' ');
             evt.set_event_number(atoi(cursor));
-            if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
+            cursor = strchr(cursor+1, ' ');
             double impact_parameter = atof(cursor);
-            printf("--->%s\n",cursor);
             evt.add_attribute("impact_parameter", std::make_shared<DoubleAttribute>(impact_parameter));
             end_event();
-
-            
+            evt.set_run_info(run_info());
             if (m_vertices.empty()) continue;
+            for ( auto v: m_vertices)
+            {
+            evt.add_vertex(v);
+            
+    for (auto p:       v->particles_in())   evt.add_beam_particle(p);    
+for (auto p: v->particles_out()) p->set_status(1);    
+            
+            }
+            /*
             auto v= m_vertices.front();
             evt.add_vertex(v);
             evt.add_beam_particle(v->particles_in()[0]);
             evt.add_beam_particle(v->particles_in()[1]);
-            printf("-->%i %i\n",evt.vertices().size(),evt.particles().size());
             for (auto p: v->particles_out()) p->set_status(1);
-            Print::content(evt);
+            */
+            evt.weights() = std::vector<double>(1,1);
             break;
         }
         int nin = atoi(cursor);
-        if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
+        cursor = strchr(cursor+1, ' ');
         int nout = atoi(cursor);
         m_interaction.clear();
         m_interaction.push_back(std::string(buf));
@@ -111,14 +119,26 @@ cursor = buf;
 
 
 GenParticlePtr ReaderOSCAR::parse_particle(const std::string& s) {
-char buf[512];
+    char buf[512];
     sprintf(buf,"%s\n",s.c_str());
-    const char                 *cursor   = buf;
-    int nin = atoi(cursor);
+    const char  *cursor   = buf;
+    int id = atoi(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
     int pdg = atoi(cursor);
-    GenParticlePtr p = std::make_shared<GenParticle>();
-    p->set_pid(pdg);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    double px= atof(cursor);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    double py= atof(cursor);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    double pz= atof(cursor);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    double p0= atof(cursor);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    double m= atof(cursor);
+
+    GenParticlePtr p = std::make_shared<GenParticle>(FourVector(px,py,pz,p0),pdg);
+    p->set_generated_mass(m);
     return p;
 }
 
@@ -126,11 +146,10 @@ void ReaderOSCAR::parse_interaction() {
     GenVertexPtr v = std::make_shared<GenVertex>();
     char buf[512];
     sprintf(buf,"%s\n",m_interaction.at(0).c_str());
-    const char                 *cursor   = buf;
+    const char  *cursor   = buf;
     int nin = atoi(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return;
     int nout = atoi(cursor);
-  //  printf("%i %i %i\n", nin, nout, m_interaction.size());
     for (int i=1; i<nin+1; i++ ) v->add_particle_in(parse_particle(m_interaction.at(i)));
     for (int i=nin+1; i<nout+nin+1; i++ ) v->add_particle_out(parse_particle(m_interaction.at(i)));
     m_vertices.push_back(v);
@@ -142,13 +161,21 @@ void ReaderOSCAR::end_event() {
 }
 void ReaderOSCAR::parse_header() {
     if (m_header.empty()) return;
-    if (m_header.size() > 2 && m_header[2].length() > 2) {
-        struct GenRunInfo::ToolInfo generator = {m_header[2].substr(2), "0", std::string("Used generator")};
-        run_info()->tools().push_back(generator);
+    for (auto &s: m_header) s.erase( std::remove(s.begin(), s.end(), '\r'), s.end() );
+    if (m_header.size() > 2 && m_header[1].length() > 2) {
+        struct GenRunInfo::ToolInfo generator = {m_header[1].substr(2), "0", std::string("Used generator")};
+        auto ri = run_info();
+        ri->tools().push_back(generator);
+        std::vector<std::string> weightnames;
+        weightnames.push_back("Default");
+        ri->set_weight_names(weightnames);
+        set_run_info(ri);
     }
 }
 
-bool ReaderOSCAR::failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+bool ReaderOSCAR::failed() {
+    return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate();
+}
 
 void ReaderOSCAR::close() {
     if ( !m_file.is_open()) return;

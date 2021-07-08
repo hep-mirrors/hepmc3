@@ -8,6 +8,7 @@
 #include "HepMC3/WriterAscii.h"
 #include "HepMC3/ReaderOSCAR.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
+#include "HepMC3/Print.h"
 #include "HepMC3TestUtils.h"
 using namespace HepMC3;
 int main()
