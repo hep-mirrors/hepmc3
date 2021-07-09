@@ -59,6 +59,8 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
     const char                 *cursor   = buf;
     evt.clear();
     m_vertices.clear();
+    m_prod.clear();
+    m_prod2.clear();
     evt.set_run_info(run_info());
 
     while (!failed()) {
@@ -69,7 +71,7 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
         // Check for ReaderOSCAR header/footer
         if ( strncmp(buf, "#", 1) == 0 ) {
             if ( strncmp(buf, "# OSC1999A", 10) == 0 ) {
-                HEPMC3_WARNING("ReaderOSCAR: So far OSCAR format is not supported. Will close the input after processing the header.")
+                HEPMC3_WARNING("ReaderOSCAR: So far OSCAR format is not fully supported. ")
                 m_header.clear();
             } else {
                 m_header.push_back(std::string(buf));
@@ -85,21 +87,47 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
             end_event();
             evt.set_run_info(run_info());
             if (m_vertices.empty()) continue;
-            for ( auto v: m_vertices)
-            {
-            evt.add_vertex(v);
-            
-    for (auto p:       v->particles_in())   evt.add_beam_particle(p);    
-for (auto p: v->particles_out()) p->set_status(1);    
-            
+            for ( auto v: m_vertices) {
+                evt.add_vertex(v);
             }
-            /*
-            auto v= m_vertices.front();
-            evt.add_vertex(v);
-            evt.add_beam_particle(v->particles_in()[0]);
-            evt.add_beam_particle(v->particles_in()[1]);
-            for (auto p: v->particles_out()) p->set_status(1);
-            */
+
+            for (auto& pp: m_prod)
+            {
+                auto& history = pp.second;
+                std::sort(std::begin(history),
+                          std::end(history),
+                [](std::pair<GenParticlePtr,FourVector> a, std::pair<GenParticlePtr,FourVector> b) {
+                    if (a.first->end_vertex() == b.first->production_vertex() && a.first->end_vertex() ) return false;
+                    if (b.first->end_vertex() == a.first->production_vertex() && b.first->end_vertex() ) return true;
+                    return a.second.t() > b.second.t();
+                });
+            }
+            for (auto& pp: m_prod) {
+                auto& history = pp.second;
+                bool  stablep = (history.front().first->end_vertex()==nullptr);
+                if (stablep )history.front().first->set_status(1);
+                for (int i=1*stablep; i<history.size()-1; i+=2) {
+                    auto t= history.at(i).first;
+                    auto n= history.at(i+1).first;
+                    if (n->production_vertex()&&!n->end_vertex()) {
+                        auto v= t->end_vertex();
+                        v->remove_particle_in(t);
+                        evt.remove_particle(t);
+                        v->add_particle_in(n);
+                    }
+                    if (!n->production_vertex())
+                    {
+                        n->set_status(4);
+                        evt.add_beam_particle(n);
+                    }
+                }
+                auto sp= history.back().first;
+                if (sp->production_vertex()&&sp->production_vertex()->id()==0) {
+                    sp->set_status(4);
+                    evt.add_beam_particle(sp);
+                }
+            }
+
             evt.weights() = std::vector<double>(1,1);
             break;
         }
@@ -136,9 +164,18 @@ GenParticlePtr ReaderOSCAR::parse_particle(const std::string& s) {
     double p0= atof(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
     double m= atof(cursor);
-
-    GenParticlePtr p = std::make_shared<GenParticle>(FourVector(px,py,pz,p0),pdg);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    double x= atof(cursor);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    double y= atof(cursor);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    double z= atof(cursor);
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
+    double t= atof(cursor);
+    GenParticlePtr p = std::make_shared<GenParticle>(FourVector(px,py,pz,p0),pdg,3);
     p->set_generated_mass(m);
+    m_prod[id].push_back(std::pair<GenParticlePtr,FourVector>(p,FourVector(x,y,z,t)));
+    m_prod2[p] = std::pair<int,FourVector>(id,FourVector(x,y,z,t));
     return p;
 }
 
@@ -153,6 +190,14 @@ void ReaderOSCAR::parse_interaction() {
     for (int i=1; i<nin+1; i++ ) v->add_particle_in(parse_particle(m_interaction.at(i)));
     for (int i=nin+1; i<nout+nin+1; i++ ) v->add_particle_out(parse_particle(m_interaction.at(i)));
     m_vertices.push_back(v);
+    std::vector< std::pair<int,FourVector> > vin;
+    for (auto p: v->particles_out()) vin.push_back(m_prod2[p]);
+    std::sort(std::begin(vin),
+              std::end(vin),
+    [](std::pair<int,FourVector> a, std::pair<int,FourVector> b) {
+        return a.second.t() > b.second.t();
+    });
+    v->set_position(vin.front().second);
 }
 void ReaderOSCAR::end_event() {
     parse_header();

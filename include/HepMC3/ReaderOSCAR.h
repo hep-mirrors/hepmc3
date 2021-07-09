@@ -68,6 +68,8 @@ private:
     std::vector<std::string> m_interaction; ///< header lines 
     std::vector<GenVertexPtr> m_vertices;
     GenParticlePtr parse_particle(const std::string& s);
+    std::map<int, std::vector<std::pair<GenParticlePtr,FourVector> > > m_prod;
+    std::map<GenParticlePtr, std::pair<int,FourVector> > m_prod2;
 };
 
 
