@@ -1,3 +1,6 @@
+  --------------------------  pre-HepMC3.2.5 ----------------------
+2021-07-09 Andrii Verbytskyi for HepMC
+         * Remove outdated interfaces to MCEGs
   --------------------------  HepMC3.2.4 --------------------------
 2021-07-06 Andrii Verbytskyi for HepMC
          * Minor fixes to the CMake configuration of examples
