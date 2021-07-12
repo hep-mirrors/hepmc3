@@ -26,7 +26,6 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
     else
     {
         set_run_info(std::make_shared<GenRunInfo>());
-        set_run_info(std::make_shared<GenRunInfo>());
         hepevtbuffer = (char*)(new struct HEPEVT());
         HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
     }

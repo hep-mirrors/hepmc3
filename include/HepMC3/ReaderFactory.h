@@ -34,7 +34,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 {
     std::string libHepMC3rootIO="libHepMC3rootIO.so.3";
     #if defined(__darwin__) || defined(__APPLE__)
-    libHepMC3rootIO="libHepMC3rootIO.dydl";
+    libHepMC3rootIO="libHepMC3rootIO.dylib";
     #endif
     #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
     libHepMC3rootIO="HepMC3rootIO.dll";

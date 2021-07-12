@@ -15,7 +15,7 @@
 #include <intrin.h>
 #include <windows.h>
 #endif
-#if defined(__linux__) || defined(__darwin__)
+#if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
 #include <dlfcn.h>
 #endif
 #include <cstring>
@@ -37,7 +37,7 @@ WriterPlugin::WriterPlugin(std::ostream & stream, const std::string &libname, co
     m_writer = (Writer*)(newWriter(stream, run));
 #endif
 
-#if defined(__linux__) || defined(__darwin__)
+#if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
     dll_handle = nullptr;
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_writer=nullptr; return;  }
@@ -59,7 +59,7 @@ WriterPlugin::WriterPlugin(const std::string& filename, const std::string &libna
     m_writer = (Writer*)(newWriter(filename, run));
 #endif
 
-#if defined(__linux__) || defined(__darwin__)
+#if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
     dll_handle = nullptr;
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_writer = nullptr; return;  }
@@ -78,7 +78,7 @@ WriterPlugin::~WriterPlugin() {
         FreeLibrary((HINSTANCE)dll_handle);
     }
 #endif
-#if defined(__linux__) || defined(__darwin__)
+#if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
     if (dll_handle) {
         dlclose(dll_handle);
         dll_handle = nullptr;
