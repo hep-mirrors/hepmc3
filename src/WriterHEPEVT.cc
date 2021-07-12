@@ -17,14 +17,16 @@ namespace HepMC3
 {
 
 
-WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_file(filename), m_stream(&m_file), m_events_count(0)
+WriterHEPEVT::WriterHEPEVT(const std::string &filename,
+                std::shared_ptr<GenRunInfo> run): m_file(filename), m_stream(&m_file), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     hepevtbuffer = (char*)(new struct HEPEVT());
     HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
 }
 
-WriterHEPEVT::WriterHEPEVT(std::ostream& stream): m_file(), m_stream(&stream), m_events_count(0)
+WriterHEPEVT::WriterHEPEVT(std::ostream& stream,
+                std::shared_ptr<GenRunInfo> run): m_file(), m_stream(&stream), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     hepevtbuffer = (char*)(new struct HEPEVT());

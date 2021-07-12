@@ -33,10 +33,12 @@ public:
     /** @brief Default constructor
      *  @warning If file exists, it will be overwritten
      */
-    WriterHEPEVT(const std::string &filename);
+    WriterHEPEVT(const std::string &filename,
+                std::shared_ptr<GenRunInfo> run= nullptr);
 
     /// @brief Constructor from ostream
-    WriterHEPEVT(std::ostream& stream);
+    WriterHEPEVT(std::ostream& stream,
+                std::shared_ptr<GenRunInfo> run = nullptr);
 //
 // Functions
 //
