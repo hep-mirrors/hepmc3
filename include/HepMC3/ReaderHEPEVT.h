@@ -67,7 +67,6 @@ public:
     /** @brief Get stream error state */
     bool failed()  override;
 
-public:
     char* hepevtbuffer; //!< Pointer to HEPEVT Fortran common block/C struct
 private:
     std::ifstream m_file; //!< Input file
