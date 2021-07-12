@@ -1,4 +1,6 @@
   --------------------------  pre-HepMC3.2.5 ----------------------
+2021-07-12 Andrii Verbytskyi for HepMC
+         * Added MT reader
 2021-07-09 Andrii Verbytskyi for HepMC
          * Remove outdated interfaces to MCEGs
   --------------------------  HepMC3.2.4 --------------------------
