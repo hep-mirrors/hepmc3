@@ -35,7 +35,7 @@ public:
     /** @brief Default constructor */
     ReaderAsciiHepMC2(const std::string& filename);
 
-    /// The ctor to read from stdin
+    /// The ctor to read from stream
     ReaderAsciiHepMC2(std::istream &);
 
     /// @brief Destructor
@@ -126,7 +126,7 @@ private:
 //
 private:
     std::ifstream m_file; //!< Input file
-    std::istream* m_stream; ///< For ctor when reading from stdin
+    std::istream* m_stream; ///< For ctor when reading from stream
     bool m_isstream; ///< toggles usage of m_file or m_stream
 
     std::vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache
