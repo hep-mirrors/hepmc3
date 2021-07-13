@@ -18,7 +18,7 @@ namespace HepMC3
 
 
 WriterHEPEVT::WriterHEPEVT(const std::string &filename,
-                std::shared_ptr<GenRunInfo> run): m_file(filename), m_stream(&m_file), m_events_count(0)
+                           std::shared_ptr<GenRunInfo> run): m_file(filename), m_stream(&m_file), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     hepevtbuffer = (char*)(new struct HEPEVT());
@@ -26,7 +26,7 @@ WriterHEPEVT::WriterHEPEVT(const std::string &filename,
 }
 
 WriterHEPEVT::WriterHEPEVT(std::ostream& stream,
-                std::shared_ptr<GenRunInfo> run): m_file(), m_stream(&stream), m_events_count(0)
+                           std::shared_ptr<GenRunInfo> run): m_file(), m_stream(&stream), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     hepevtbuffer = (char*)(new struct HEPEVT());

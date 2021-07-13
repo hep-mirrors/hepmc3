@@ -23,10 +23,10 @@ namespace HepMC3
 class ReaderPlugin : public Reader
 {
 public:
-/** @brief Constructor  to read from stream*/
-ReaderPlugin(std::istream & stream,const std::string &libname, const std::string &newreader);
-/** @brief Constructor to read from file*/
-ReaderPlugin(const std::string& filename,const std::string &libname, const std::string &newreader);
+    /** @brief Constructor  to read from stream*/
+    ReaderPlugin(std::istream & stream,const std::string &libname, const std::string &newreader);
+    /** @brief Constructor to read from file*/
+    ReaderPlugin(const std::string& filename,const std::string &libname, const std::string &newreader);
     /** @brief Reading event */
     bool read_event(GenEvent& ev)  override {if (!m_reader) return false; return m_reader->read_event(ev);};
     /** @brief Close */
@@ -34,10 +34,10 @@ ReaderPlugin(const std::string& filename,const std::string &libname, const std::
     /** @brief State */
     bool failed() override {if (!m_reader) return true; return m_reader->failed();};
     /** @brief Destructor */
-~ReaderPlugin()  override;
+    ~ReaderPlugin()  override;
 private:
-  Reader* m_reader; ///< The actual reader
-  void*  dll_handle; ///< library handler
- };
+    Reader* m_reader; ///< The actual reader
+    void*  dll_handle; ///< library handler
+};
 }
 #endif

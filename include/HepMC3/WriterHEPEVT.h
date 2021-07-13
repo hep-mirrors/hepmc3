@@ -34,11 +34,11 @@ public:
      *  @warning If file exists, it will be overwritten
      */
     WriterHEPEVT(const std::string &filename,
-                std::shared_ptr<GenRunInfo> run= nullptr);
+                 std::shared_ptr<GenRunInfo> run= nullptr);
 
     /// @brief Constructor from ostream
     WriterHEPEVT(std::ostream& stream,
-                std::shared_ptr<GenRunInfo> run = nullptr);
+                 std::shared_ptr<GenRunInfo> run = nullptr);
 //
 // Functions
 //

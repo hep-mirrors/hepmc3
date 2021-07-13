@@ -37,7 +37,7 @@ class ReaderHEPEVT : public Reader
 public:
     /** @brief Default constructor */
     ReaderHEPEVT(const std::string &filename);
-    /// The ctor to read from stdin
+    /// The ctor to read from stream
     ReaderHEPEVT(std::istream &);
 //
 // Functions
@@ -70,7 +70,7 @@ public:
     char* hepevtbuffer; //!< Pointer to HEPEVT Fortran common block/C struct
 private:
     std::ifstream m_file; //!< Input file
-    std::istream* m_stream; //!< For ctor when reading from stdin
+    std::istream* m_stream; //!< For ctor when reading from stream
     bool m_isstream; //!< toggles usage of m_file or m_stream
 };
 
