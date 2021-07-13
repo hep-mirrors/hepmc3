@@ -53,6 +53,18 @@
 #include "cmdline.h"
 using namespace HepMC3;
 enum formats {autodetect, hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, gz, uproot, plugin, none};
+
+template <class T>
+std::shared_ptr<Reader> get_input_file(const char* name,const bool input_is_stdin){
+  std::string n(name);
+  return (input_is_stdin?std::make_shared<T>(std::cin):std::make_shared<T>(n));
+}
+template <class T>
+std::shared_ptr<Writer> get_output_file(const char* name){
+  std::string n(name);
+  return std::make_shared<T>(n);
+}
+
 int main(int argc, char** argv)
 {
     gengetopt_args_info ai;
@@ -106,7 +118,7 @@ int main(int argc, char** argv)
     switch (format_map.at(std::string(ai.input_format_arg)))
     {
     case autodetect:
-        input_file=(input_is_stdin?deduce_reader(std::cin):deduce_reader(ai.inputs[0]));
+        input_file = (input_is_stdin?deduce_reader(std::cin):deduce_reader(ai.inputs[0]));
         if (!input_file)
         {
         input_is_stdin?printf("Input format  detection for std input has failed\n"):printf("Input format  detection for file %s has failed\n",ai.inputs[0]);
@@ -114,20 +126,20 @@ int main(int argc, char** argv)
         }
         break;
     case hepmc2:
-        input_file=(input_is_stdin?std::make_shared<ReaderAsciiHepMC2>(std::cin):std::make_shared<ReaderAsciiHepMC2>(ai.inputs[0]));
+        input_file = get_input_file<ReaderAsciiHepMC2>(ai.inputs[0],input_is_stdin);
         break;
     case hepmc3:
-        input_file=(input_is_stdin?std::make_shared<ReaderAscii>(std::cin):std::make_shared<ReaderAscii>(ai.inputs[0]));
+        input_file = get_input_file<ReaderAscii>(ai.inputs[0],input_is_stdin);
         break;
     case hpe:
-        input_file=(input_is_stdin?std::make_shared<ReaderHEPEVT>(std::cin):std::make_shared<ReaderHEPEVT>(ai.inputs[0]));
+        input_file = get_input_file<ReaderHEPEVT>(ai.inputs[0],input_is_stdin);
         break;
     case lhef:
-        input_file=(input_is_stdin?std::make_shared<ReaderLHEF>(std::cin):std::make_shared<ReaderLHEF>(ai.inputs[0]));
+        input_file = get_input_file<ReaderLHEF>(ai.inputs[0],input_is_stdin);
         break;
     case gz:
 #ifdef HEPMCCONVERT_EXTENSION_GZ
-        input_file=std::make_shared<ReaderGZ>(ai.inputs[0]);
+        input_file = std::make_shared<ReaderGZ>(ai.inputs[0]);
         break;
 #else
         printf("Input format %s  is not supported\n",ai.input_format_arg);
@@ -172,17 +184,17 @@ int main(int argc, char** argv)
     switch (format_map.at(std::string(ai.output_format_arg)))
     {
     case hepmc2:
-        output_file=std::make_shared<WriterAsciiHepMC2>(ai.inputs[1]);
+        output_file = get_output_file<WriterAsciiHepMC2>(ai.inputs[1]);
         break;
     case hepmc3:
-        output_file=std::make_shared<WriterAscii>(ai.inputs[1]);
+        output_file = get_output_file<WriterAscii>(ai.inputs[1]);
         break;
     case hpe:
-        output_file=std::make_shared<WriterHEPEVT>(ai.inputs[1]);
+        output_file = get_output_file<WriterHEPEVT>(ai.inputs[1]);
         break;
     case root:
 #ifdef HEPMC3_ROOTIO
-        output_file=std::make_shared<WriterRoot>(ai.inputs[1]);
+        output_file = std::make_shared<WriterRoot>(ai.inputs[1]);
         break;
 #else
         printf("Output format %s  is not supported\n",ai.output_format_arg);
@@ -190,7 +202,7 @@ int main(int argc, char** argv)
 #endif
     case treeroot:
 #ifdef HEPMC3_ROOTIO
-        output_file=std::make_shared<WriterRootTree>(ai.inputs[1]);
+        output_file = std::make_shared<WriterRootTree>(ai.inputs[1]);
         break;
 #else
         printf("Output format %s  is not supported\n",ai.output_format_arg);

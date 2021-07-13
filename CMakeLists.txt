@@ -336,13 +336,14 @@ if (ASTYLE)
     src/*cc
     rootIO/src/*cc
     search/src/*cc
+    include/HepMC3/Reader*h
+    include/HepMC3/Writer*h
     examples/*/src/*cc
     examples/*/include/*h
     test/*cc
     test/*h
     interfaces/*/include/*.h
     interfaces/*/include/*/*.h
-    interfaces/*/src/*.cxx
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()
@@ -360,11 +361,11 @@ if(CPPCHECK)
       src/*.cc
       search/src/*.cc
       rootIO/src/*.cc
+      include/HepMC3/Reader*h
+      include/HepMC3/Writer*h
       examples/*/src/*cc
       examples/*/include/*h
       interfaces/*/include/*h
-      interfaces/*/src/*cxx
-      interfaces/*/src/*cc
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()

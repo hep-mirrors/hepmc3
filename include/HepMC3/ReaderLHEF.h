@@ -36,9 +36,6 @@ class ReaderLHEF : public Reader
 public:
     /// The ctor to read from stream
     ReaderLHEF(std::istream &);
-private:
-    void init();                       ///< Init helper
-public:
     /** @brief Constructor */
     ReaderLHEF(const std::string& filename);
     /// @brief skip events
@@ -52,6 +49,7 @@ public:
     /** @brief Destructor */
     ~ReaderLHEF() ;
 private:
+    void init();                       ///< Init helper
     std::shared_ptr<LHEF::Reader> m_reader;            ///< The actual reader
     std::shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
     int m_neve;                         ///< Event counter

@@ -52,19 +52,19 @@ public:
     /// Set options
     void set_options(const std::map<std::string, std::string>& options)
     {
-    m_options=options;
+        m_options=options;
     }
     /// Set options
     std::map<std::string, std::string> get_options() const
     {
-    return m_options;
+        return m_options;
     }
 protected:
     /// Set the global GenRunInfo object.
     void set_run_info(std::shared_ptr<GenRunInfo> run) {
         m_run_info = run;
     }
-        /// options
+    /// options
     std::map<std::string, std::string> m_options;
 private:
     /// The global GenRunInfo object.
