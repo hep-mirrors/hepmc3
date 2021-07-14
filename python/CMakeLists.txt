@@ -160,19 +160,19 @@ if(ROOT_FOUND)
   configure_file("pyHepMC3.rootIO.egg-info.in" "pyHepMC3.rootIO.egg-info" IMMEDIATE @ONLY)
 endif()
 
-set(autoBN       src/pyHepMC3.cpp src/pyHepMC3_0.cpp src/pyHepMC3_1.cpp
-                 src/pyHepMC3_2.cpp src/pyHepMC3_3.cpp src/pyHepMC3_4.cpp
-                 src/pyHepMC3_5.cpp src/pyHepMC3_6.cpp src/pyHepMC3_7.cpp
-                 src/pyHepMC3_8.cpp src/pyHepMC3_9.cpp src/pyHepMC3_10.cpp
-                 src/pyHepMC3_11.cpp src/pyHepMC3_12.cpp src/pyHepMC3_13.cpp
-                 src/pyHepMC3_14.cpp src/pyHepMC3_15.cpp src/pyHepMC3_16.cpp
-                 src/pyHepMC3_17.cpp src/pyHepMC3_18.cpp
+set(autoBN       ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_0.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_1.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_2.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_3.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_4.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_5.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_6.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_7.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_8.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_9.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_10.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_11.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_12.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_13.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_14.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_15.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_16.cpp
+                 ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_17.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_18.cpp
 )
-set(autoBNrootIO src/pyHepMC3rootIO.cpp src/pyHepMC3rootIO_0.cpp src/pyHepMC3rootIO_1.cpp src/pyHepMC3rootIO_2.cpp)
-set(autoBNsearch src/pyHepMC3search.cpp src/pyHepMC3search_0.cpp src/pyHepMC3search_1.cpp)
-set(BN       ${autoBN}       src/binders.cpp)
-set(BNrootIO ${autoBNrootIO} src/root_binders.cpp)
-set(BNsearch ${autoBNsearch} src/search_binders.cpp)
+set(autoBNrootIO ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3rootIO.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3rootIO_0.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3rootIO_1.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3rootIO_2.cpp)
+set(autoBNsearch ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3search.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3search_0.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3search_1.cpp)
+set(BN       ${autoBN}       ${CMAKE_CURRENT_SOURCE_DIR}/src/binders.cpp)
+set(BNrootIO ${autoBNrootIO} ${CMAKE_CURRENT_SOURCE_DIR}/src/root_binders.cpp)
+set(BNsearch ${autoBNsearch} ${CMAKE_CURRENT_SOURCE_DIR}/src/search_binders.cpp)
 if (RERUN_BINDER)
   find_program (BINDER binder HINTS $ENV{HOME}/bin /usr/bin)
   if(BINDER)
@@ -181,11 +181,11 @@ if (RERUN_BINDER)
     configure_file("all_includes.hpp.in" "all_includes.hpp" IMMEDIATE @ONLY)
     add_custom_command(
       OUTPUT  ${autoBN}
-      DEPENDS all_includes.hpp src/pyHepMC3.binder
+      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/all_includes.hpp src/pyHepMC3.binder
       COMMAND ${BINDER} --flat --max-file-size=20000
                         --root-module pyHepMC3
                         --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-                        --config src/pyHepMC3.binder   all_includes.hpp
+                        --config src/pyHepMC3.binder   ${CMAKE_CURRENT_BINARY_DIR}/all_includes.hpp
                         --  -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
       VERBATIM
@@ -194,11 +194,11 @@ if (RERUN_BINDER)
       configure_file("root_includes.hpp.in" "root_includes.hpp" IMMEDIATE @ONLY)
       add_custom_command(
         OUTPUT  ${autoBNrootIO}
-        DEPENDS root_includes.hpp src/pyHepMC3rootIO.binder
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/root_includes.hpp src/pyHepMC3rootIO.binder
         COMMAND ${BINDER} --flat --max-file-size=5000
                           --root-module pyHepMC3rootIO
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-                          --config src/pyHepMC3rootIO.binder   root_includes.hpp
+                          --config src/pyHepMC3rootIO.binder   ${CMAKE_CURRENT_BINARY_DIR}/root_includes.hpp
                           --  -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM
@@ -208,11 +208,11 @@ if (RERUN_BINDER)
       configure_file("search_includes.hpp.in" "search_includes.hpp" IMMEDIATE @ONLY)
       add_custom_command(
         OUTPUT  ${autoBNsearch}
-        DEPENDS search_includes.hpp src/pyHepMC3search.binder
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/search_includes.hpp src/pyHepMC3search.binder
         COMMAND ${BINDER} --flat --max-file-size=5000
                           --root-module pyHepMC3search
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-                          --config src/pyHepMC3search.binder   search_includes.hpp
+                          --config src/pyHepMC3search.binder   ${CMAKE_CURRENT_BINARY_DIR}/search_includes.hpp
                           -- -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM)

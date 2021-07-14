@@ -34,10 +34,13 @@ public:
      *  @warning If file exists, it will be overwritten
      */
     WriterHEPEVT(const std::string &filename,
-                 std::shared_ptr<GenRunInfo> run= nullptr);
+                 std::shared_ptr<GenRunInfo> run = nullptr);
 
     /// @brief Constructor from ostream
     WriterHEPEVT(std::ostream& stream,
+                 std::shared_ptr<GenRunInfo> run = nullptr);
+    /// @brief Constructor from temp ostream
+    WriterHEPEVT(std::shared_ptr<std::ostream> s_stream,
                  std::shared_ptr<GenRunInfo> run = nullptr);
 //
 // Functions
@@ -50,7 +53,7 @@ public:
      *  @param[in] iflong Format of record
      */
 
-    virtual void write_hepevt_particle( int index, bool iflong=true );
+    virtual void write_hepevt_particle( int index, bool iflong = true );
     /** @brief Write event header to file
      *
      */
@@ -79,6 +82,7 @@ public:
 
 protected:
     std::ofstream m_file; //!< Output file
+    std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
     char* hepevtbuffer;   //!< Pointer to HEPEVT Fortran common block/C struct
     int   m_events_count; //!< Events count. Needed to generate unique object name
