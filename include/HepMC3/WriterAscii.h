@@ -33,6 +33,9 @@ public:
     /// @brief Constructor from ostream
     WriterAscii(std::ostream& stream,
                 std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
+    /// @brief Constructor from temp ostream
+    WriterAscii(std::shared_ptr<std::ostream> s_stream,
+                std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
 
     /// @brief Destructor
     ~WriterAscii();
@@ -113,6 +116,7 @@ private:
 private:
 
     std::ofstream m_file; //!< Output file
+    std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
 
     int m_precision; //!< Output precision

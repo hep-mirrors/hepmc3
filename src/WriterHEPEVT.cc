@@ -33,6 +33,14 @@ WriterHEPEVT::WriterHEPEVT(std::ostream& stream,
     HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
 }
 
+WriterHEPEVT::WriterHEPEVT(std::shared_ptr<std::ostream> s_stream,
+                           std::shared_ptr<GenRunInfo> run): m_file(), m_shared_stream(s_stream), m_stream(s_stream.get()), m_events_count(0)
+{
+    HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
+    hepevtbuffer = (char*)(new struct HEPEVT());
+    HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
+}
+
 void WriterHEPEVT::write_hepevt_particle(int index, bool iflong)
 {
     char buf[512];//Note: the format is fixed, so no reason for complicatied tratment

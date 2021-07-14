@@ -39,6 +39,14 @@ ReaderAscii::ReaderAscii(std::istream & stream)
 }
 
 
+ReaderAscii::ReaderAscii(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
+{
+    if ( !m_stream->good() ) {
+        HEPMC3_ERROR("ReaderAscii: could not open input stream ")
+    }
+    set_run_info(std::make_shared<GenRunInfo>());
+}
 
 ReaderAscii::~ReaderAscii() { if (!m_isstream) close(); }
 

@@ -23,7 +23,7 @@
 namespace HepMC3 {
 
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
-    m_file(filename), m_stream(0), m_isstream(false) {
+    m_file(filename), m_stream(nullptr), m_isstream(false) {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input file: " << filename )
     }
@@ -40,6 +40,16 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
     set_run_info(std::make_shared<GenRunInfo>());
     m_event_ghost = new GenEvent();
 }
+
+ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
+{
+    if ( !m_stream->good() ) {
+        HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input stream ")
+    }
+    set_run_info(std::make_shared<GenRunInfo>());
+}
+
 
 ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr; } if (!m_isstream) close(); }
 

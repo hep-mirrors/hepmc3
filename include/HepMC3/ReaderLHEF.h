@@ -38,6 +38,8 @@ public:
     ReaderLHEF(std::istream &);
     /** @brief Constructor */
     ReaderLHEF(const std::string& filename);
+    /// The ctor to read from temp stream
+    ReaderLHEF(std::shared_ptr<std::istream> s_stream);
     /// @brief skip events
     bool skip(const int)  override;
     /** @brief Reading event */
@@ -50,6 +52,7 @@ public:
     ~ReaderLHEF() ;
 private:
     void init();                       ///< Init helper
+    std::shared_ptr<std::istream> m_shared_stream; ///< Holds temporary stream
     std::shared_ptr<LHEF::Reader> m_reader;            ///< The actual reader
     std::shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
     int m_neve;                         ///< Event counter

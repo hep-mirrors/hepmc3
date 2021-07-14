@@ -38,6 +38,9 @@ public:
     /// The ctor to read from stream
     ReaderAsciiHepMC2(std::istream &);
 
+    /// The ctor to read from temp stream
+    ReaderAsciiHepMC2(std::shared_ptr<std::istream> s_stream);
+
     /// @brief Destructor
     ~ReaderAsciiHepMC2();
 //
@@ -126,6 +129,7 @@ private:
 //
 private:
     std::ifstream m_file; //!< Input file
+    std::shared_ptr<std::istream> m_shared_stream; ///< For ctor when reading from temp stream
     std::istream* m_stream; ///< For ctor when reading from stream
     bool m_isstream; ///< toggles usage of m_file or m_stream
 

@@ -1,4 +1,6 @@
   --------------------------  pre-HepMC3.2.5 ----------------------
+2021-07-14 Andrii Verbytskyi for HepMC
+         * Added Reader/Write interfaces with smart pointers
 2021-07-12 Andrii Verbytskyi for HepMC
          * Fixed #ifdefs for non-Linux system to allow the usage of REader/Writer plugins.
          * Added MT reader
