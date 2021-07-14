@@ -54,20 +54,17 @@ public:
     /// @brief Close file stream
     void close()  override;
 
-
+private:
+    GenParticlePtr parse_particle(const std::string& s);
     void parse_header();
     void end_event();
-    void parse_interaction();
-
-private:
+    void parse_interaction(GenEvent &evt,const std::vector<std::string>& interaction);
 
     std::ifstream m_file; //!< Input file
     std::istream* m_stream; ///< For ctor when reading from stdin
     bool m_isstream; ///< toggles usage of m_file or m_stream
-    std::vector<std::string> m_header; ///< header lines 
-    std::vector<std::string> m_interaction; ///< header lines 
+    std::vector<std::string> m_header; ///< header lines
     std::vector<GenVertexPtr> m_vertices;
-    GenParticlePtr parse_particle(const std::string& s);
     std::map<int, std::vector<std::pair<GenParticlePtr,FourVector> > > m_prod;
     std::map<GenParticlePtr, std::pair<int,FourVector> > m_prod2;
 };
