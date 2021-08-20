@@ -25,6 +25,7 @@ from pyHepMC3TestUtils import COMPARE_ASCII_FILES
 from pyHepMC3 import HepMC3 as hm
 from pyHepMC3 import std as std
 
+
 def test_Attribute():
     # build the graph, which will look like
     #                       p7                   #
@@ -47,7 +48,7 @@ def test_Attribute():
     evt.add_attribute("signal_process_id", hm.IntAttribute(20))
     x1 = hm.VectorIntAttribute()
     evt.add_attribute("somevector1", x1)
-    x2 = hm.VectorDoubleAttribute(std.vector_double([1.0,2.0,3.0,4.0]))
+    x2 = hm.VectorDoubleAttribute(std.vector_double([1.0, 2.0, 3.0, 4.0]))
     evt.add_attribute("somevector2", x2)
     v1 = hm.GenVertex()
     evt.add_vertex(v1)
