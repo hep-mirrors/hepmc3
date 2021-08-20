@@ -505,7 +505,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
         test_IO1
         test_Boost
         test_Print
-#        test_Polarization
+        test_Polarization
         test_Pythonization_docs
         test_Pythonization_FourVector
         test_Pythonization_GenEvent
