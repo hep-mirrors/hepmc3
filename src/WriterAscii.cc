@@ -200,9 +200,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
             if ( v->particles_in().size() > 1 || !v->data().is_zero() ) parent_object = v->id();
             // No, use particle as parent object
             // Add check for attributes of this vertex
-            else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in()[0]->id();
-            // Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
-            if (alreadywritten.find(v->id()) == alreadywritten.end() && parent_object < 0)
+            else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in().front()->id();
+            else if ( v->particles_in().size() == 0 ) HEPMC3_DEBUG(30, "WriterAscii::write_event - found a vertex without incoming particles: " << v->id());
+            // Usage of map instead of simple counter helps to deal with events with random ids of vertices.
+            if (alreadywritten.count(v->id()) == 0 && parent_object < 0)
             { write_vertex(v); alreadywritten[v->id()] = true; }
         }
 
