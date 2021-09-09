@@ -13,7 +13,7 @@
 using namespace HepMC3;
 int main()
 {
-    ReaderOSCAR inputA("inputIO11.oscar1999");
+    ReaderOSCAR inputA("inputIO11.oscar1999A");
     if(inputA.failed()) return 1;
     WriterAscii       outputA("frominputIO11.hepmc");
     if(outputA.failed()) return 2;
