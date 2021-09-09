@@ -2,18 +2,6 @@
 # garren@fnal.gov, Oct. 2010
 # andrii.verbytskyi@mpp.mpg.gov, Nov. 2018
 #
-# In this example we will place the following event into HepMC "by hand"
-#
-#     name status pdg_id  parent Px       Py    Pz       Energy      Mass
-#  1  !p+!    3   2212    0,0    0.000    0.000 7000.000 7000.000    0.938
-#  2  !p+!    3   2212    0,0    0.000    0.000-7000.000 7000.000    0.938
-# =========================================================================
-#  3  !d!     3      1    1,1    0.750   -1.569   32.191   32.238    0.000
-#  4  !u~!    3     -2    2,2   -3.047  -19.000  -54.629   57.920    0.000
-#  5  !W-!    3    -24    1,2    1.517   -20.68  -20.605   85.925   80.799
-#  6  !gamma! 1     22    1,2   -3.813    0.113   -1.833    4.233    0.000
-#  7  !d!     1      1    5,5   -2.445   28.816    6.082   29.552    0.010
-#  8  !u~!    1     -2    5,5    3.962  -49.498  -26.687   56.373    0.006
 
 from pyHepMC3TestUtils import update_path, python_label
 import sys
@@ -28,10 +16,11 @@ from pyHepMC3 import HepMC3 as hm
 def test_Polarization():
     xout1 = hm.WriterAscii(python_label() + "testPolarization1.dat")
     xout2 = hm.WriterAscii(python_label() + "testPolarization2.dat")
-    xout4 = hm.WriterAsciiHepMC2(python_label() + "testPolarization4.out")
-    xout5 = hm.WriterAscii(python_label() + "testPolarization5.out")
+    xout4 = hm.WriterAsciiHepMC2(python_label() + "testPolarization4.dat")
+    xout5 = hm.WriterAscii(python_label() + "testPolarization5.dat")
 
-    # build the graph, which will look like
+    # Build the graph, which will look like
+    # Please note this is not physically meaningful event.
     #                       p7                   #
     # p1                   /                     #
     #   \v1__p3      p5---v4                     #
@@ -50,6 +39,7 @@ def test_Polarization():
     evt = hm.GenEvent(hm.Units.GEV, hm.Units.MM)
     evt.set_event_number(1)
     evt.add_attribute("signal_process_id", hm.IntAttribute(20))
+
     v1 = hm.GenVertex()
     evt.add_vertex(v1)
     p1 = hm.GenParticle(hm.FourVector(0, 0, 7000, 7000), 2212, 3)
@@ -58,6 +48,7 @@ def test_Polarization():
     p1.add_attribute("flow1", hm.IntAttribute(231))
     p1.add_attribute("theta", hm.DoubleAttribute(random.random() * math.pi))
     p1.add_attribute("phi", hm.DoubleAttribute(random.random() * math.pi * 2))
+    v1.add_particle_in(p1)
 
     v2 = hm.GenVertex()
     evt.add_vertex(v2)
@@ -68,7 +59,7 @@ def test_Polarization():
     p2.add_attribute("phi", hm.DoubleAttribute(random.random() * math.pi * 2))
     v2.add_particle_in(p2)
 
-    p3 = hm.GenParticle(hm.FourVector(0.750, -1.569, 32.191, 32.238), 1, 3)
+    p3 = hm.GenParticle(hm.FourVector(0.751, -1.569, 32.191, 32.238), 1, 3)
     evt.add_particle(p3)
     p3.add_attribute("flow1", hm.IntAttribute(231))
     p3.add_attribute("theta", hm.DoubleAttribute(random.random() * math.pi))
@@ -109,7 +100,8 @@ def test_Polarization():
     v4.add_particle_out(p8)
 
     evt.add_attribute("signal_process_vertex", hm.IntAttribute(v3.id()))
-    # the event is complete, we now print it out
+    evt.set_beam_particles(p1,p2)
+    # The event is complete, we now print it out
     hm.Print.content(evt)
     hm.Print.listing(evt, 8)
     print(hm.version())
@@ -141,8 +133,56 @@ def test_Polarization():
     evt.clear()
 
     assert (
-        COMPARE_ASCII_FILES(python_label() + "testPolarization1.dat", python_label() + "testPolarization5.out") == 0
+        COMPARE_ASCII_FILES(python_label() + "testPolarization1.dat", python_label() + "testPolarization5.dat") == 0
     ) and (COMPARE_ASCII_FILES(python_label() + "testPolarization1.dat", python_label() + "testPolarization2.dat") != 0)
+
+    inputA1 = hm.ReaderAscii(python_label() + "testPolarization1.dat")
+    if inputA1.failed():
+        return 1
+    while not inputA1.failed():
+        evt = hm.GenEvent()
+        inputA1.read_event(evt)
+        if inputA1.failed():
+            print("End of file reached. Exit.\n")
+            break
+        evt.clear()
+    inputA1.close()
+    inputA2 = hm.ReaderAscii(python_label() + "testPolarization2.dat")
+    if inputA2.failed():
+        return 2
+    while not inputA2.failed():
+        evt = hm.GenEvent()
+        inputA2.read_event(evt)
+        if inputA2.failed():
+            print("End of file reached. Exit.\n")
+            break
+        evt.clear()
+    inputA2.close()
+
+    inputA4 = hm.ReaderAsciiHepMC2(python_label() + "testPolarization4.dat")
+    if inputA4.failed():
+        return 4
+    while not inputA4.failed():
+        evt = hm.GenEvent()
+        inputA4.read_event(evt)
+        if inputA4.failed():
+            print("End of file reached. Exit.\n")
+            break
+        evt.clear()
+    inputA4.close()
+
+    inputA5 = hm.ReaderAscii(python_label() + "testPolarization5.dat")
+    if inputA5.failed():
+        return 4
+    while not inputA5.failed():
+        evt = hm.GenEvent()
+        inputA5.read_event(evt)
+        if inputA5.failed():
+            print("End of file reached. Exit.\n")
+            break
+        evt.clear()
+    inputA5.close()
+
     return 0
 
 

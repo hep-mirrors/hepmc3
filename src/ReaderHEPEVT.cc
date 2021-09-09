@@ -45,6 +45,21 @@ ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
     }
 }
 
+ReaderHEPEVT::ReaderHEPEVT(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
+{
+    if ( !m_stream->good() ) {
+        HEPMC3_ERROR("ReaderHEPEVT: could not open input stream  ")
+    }
+    else
+    {
+        set_run_info(std::make_shared<GenRunInfo>());
+        hepevtbuffer = (char*)(new struct HEPEVT());
+        HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
+    }
+}
+
+
 bool ReaderHEPEVT::skip(const int n)
 {
     const size_t       max_buffer_size = 512*512;

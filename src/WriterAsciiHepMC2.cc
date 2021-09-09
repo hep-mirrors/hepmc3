@@ -39,8 +39,8 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, std::shared_pt
     }
     else
     {
-        m_file << "HepMC::Version " << version() << std::endl;
-        m_file << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
+        const std::string header = "HepMC::Version " + version() + "\nHepMC::IO_GenEvent-START_EVENT_LISTING\n";
+        m_file.write(header.data(), header.length());
     }
     m_float_printf_specifier = " %." + std::to_string(m_precision) + "e";
 }
@@ -57,8 +57,26 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, std::shared_ptr<GenRu
     HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);
     if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
-    (*m_stream) << "HepMC::Version " << version() << std::endl;
-    (*m_stream) << "HepMC::IO_GenEvent-START_EVENT_LISTING" << std::endl;
+    const std::string header = "HepMC::Version " + version() + "\nHepMC::IO_GenEvent-START_EVENT_LISTING\n";
+    m_stream->write(header.data(), header.length());
+    m_float_printf_specifier = " %." + std::to_string(m_precision) + "e";
+}
+
+WriterAsciiHepMC2::WriterAsciiHepMC2(std::shared_ptr<std::ostream> s_stream, std::shared_ptr<GenRunInfo> run)
+    : m_file(),
+      m_shared_stream(s_stream),
+      m_stream(s_stream.get()),
+      m_precision(16),
+      m_buffer(nullptr),
+      m_cursor(nullptr),
+      m_buffer_size(256*1024),
+      m_particle_counter(0)
+{
+    HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
+    set_run_info(run);
+    if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
+    const std::string header = "HepMC::Version " + version() + "\nHepMC::IO_GenEvent-START_EVENT_LISTING\n";
+    m_stream->write(header.data(), header.length());
     m_float_printf_specifier = " %." + std::to_string(m_precision) + "e";
 }
 
@@ -431,7 +449,8 @@ void WriterAsciiHepMC2::close()
     std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     forced_flush();
-    (*m_stream) << "HepMC::IO_GenEvent-END_EVENT_LISTING" << std::endl << std::endl;
+    const std::string footer("HepMC::IO_GenEvent-END_EVENT_LISTING\n\n");
+    if (m_stream) m_stream->write(footer.data(),footer.length());
     if (ofs) ofs->close();
 }
 bool WriterAsciiHepMC2::failed() { return (bool)m_file.rdstate(); }

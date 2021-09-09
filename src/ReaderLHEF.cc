@@ -22,6 +22,13 @@ ReaderLHEF::ReaderLHEF(std::istream & stream)
     init();
 }
 
+ReaderLHEF::ReaderLHEF(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream)
+{
+    m_reader = std::make_shared<LHEF::Reader>(*(m_shared_stream.get()));
+    init();
+}
+
 bool ReaderLHEF::skip(const int n)
 {
     GenEvent evt;

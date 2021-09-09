@@ -23,7 +23,7 @@
 namespace HepMC3 {
 
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
-    m_file(filename), m_stream(0), m_isstream(false) {
+    m_file(filename), m_stream(nullptr), m_isstream(false) {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input file: " << filename )
     }
@@ -40,6 +40,16 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
     set_run_info(std::make_shared<GenRunInfo>());
     m_event_ghost = new GenEvent();
 }
+
+ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
+{
+    if ( !m_stream->good() ) {
+        HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input stream ")
+    }
+    set_run_info(std::make_shared<GenRunInfo>());
+}
+
 
 ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr; } if (!m_isstream) close(); }
 
@@ -222,7 +232,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Remove vertices with no incoming particles or no outgoing particles
     for (unsigned int i = 0; i < m_vertex_cache.size(); ++i) {
         if ( m_vertex_cache[i]->particles_in().size() == 0 ) {
-            HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - found a vertex without incoming particles: " << m_vertex_cache[i]->id());
+            HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - found a vertex without incoming particles: " << m_vertex_cache[i]->id() );
             //Sometimes the root vertex has no incoming particles.  Here we try to save the event.
             std::vector<GenParticlePtr> beams;
             for (auto p: m_vertex_cache[i]->particles_out()) if (p->status() == 4 && !(p->end_vertex())) beams.push_back(p);
@@ -232,11 +242,14 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
                 m_vertex_cache[i]->remove_particle_out(p);
                 HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - moved particle with status=4 from the outgoing to the incoming particles of vertex: " << m_vertex_cache[i]->id());
             }
-            if (beams.size() == 0) m_vertex_cache[i] = nullptr;
+            if (beams.size() == 0) {
+                HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - removed vertex without incoming particles: " << m_vertex_cache[i]->id() );
+                m_vertex_cache[i] = nullptr;
+            }
         }
         else if ( m_vertex_cache[i]->particles_out().size() == 0 ) {
-            HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - found a vertex without outgoing particles: " << m_vertex_cache[i]->id());
             m_vertex_cache[i] = nullptr;
+            HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - removed vertex without outgoing particles: " << m_vertex_cache[i]->id());
         }
     }
 
@@ -472,7 +485,7 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
 
     m_vertex_cache_ghost.push_back(data_ghost);
 
-    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: V: " << -(int)m_vertex_cache.size() << " (old barcode" << barcode << ") " << num_particles_out << " particles)")
+    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: V: " << -(int)m_vertex_cache.size() << " (old barcode " << barcode << ") " << num_particles_out << " particles)")
 
     return num_particles_out;
 }

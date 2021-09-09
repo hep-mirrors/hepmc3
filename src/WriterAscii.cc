@@ -33,8 +33,8 @@ WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("WriterAscii: could not open output file: " << filename)
     } else {
-        m_file << "HepMC::Version " << version() << std::endl;
-        m_file << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
+        const std::string header = "HepMC::Version " + version() + "\nHepMC::Asciiv3-START_EVENT_LISTING\n";
+        m_file.write(header.data(), header.length());
         if ( run_info() ) write_run_info();
     }
     m_float_printf_specifier = " %." + std::to_string(m_precision) + "e";
@@ -58,8 +58,8 @@ WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
       m_buffer_size(256*1024)
 {
     set_run_info(run);
-    (*m_stream) << "HepMC::Version " << version() << std::endl;
-    (*m_stream) << "HepMC::Asciiv3-START_EVENT_LISTING" << std::endl;
+    const std::string header = "HepMC::Version " + version() + "\nHepMC::Asciiv3-START_EVENT_LISTING\n";
+    m_stream->write(header.data(), header.length());
     if ( run_info() ) write_run_info();
     m_float_printf_specifier = " %." + std::to_string(m_precision) + "e";
     m_particle_printf_specifier = "P %i %i %i"
@@ -72,6 +72,29 @@ WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
     m_vertex_long_printf_specifier = "V %i %i [%s] @"+ m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + "\n";
 }
 
+WriterAscii::WriterAscii(std::shared_ptr<std::ostream> s_stream, std::shared_ptr<GenRunInfo> run)
+    : m_file(),
+      m_shared_stream(s_stream),
+      m_stream(s_stream.get()),
+      m_precision(16),
+      m_buffer(nullptr),
+      m_cursor(nullptr),
+      m_buffer_size(256*1024)
+{
+    set_run_info(run);
+    const std::string header = "HepMC::Version " + version() + "\nHepMC::Asciiv3-START_EVENT_LISTING\n";
+    m_stream->write(header.data(), header.length());
+    if ( run_info() ) write_run_info();
+    m_float_printf_specifier = " %." + std::to_string(m_precision) + "e";
+    m_particle_printf_specifier = "P %i %i %i"
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier
+                                  + m_float_printf_specifier + " %i\n";
+    m_vertex_short_printf_specifier = "V %i %i [%s]\n";
+    m_vertex_long_printf_specifier = "V %i %i [%s] @"+ m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + m_float_printf_specifier + "\n";
+}
 
 WriterAscii::~WriterAscii() {
     close();
@@ -177,9 +200,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
             if ( v->particles_in().size() > 1 || !v->data().is_zero() ) parent_object = v->id();
             // No, use particle as parent object
             // Add check for attributes of this vertex
-            else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in()[0]->id();
-            // Usage of map instead of simple countewr helps to deal with events with random ids of vertices.
-            if (alreadywritten.find(v->id()) == alreadywritten.end() && parent_object < 0)
+            else if ( v->particles_in().size() == 1 )                   parent_object = v->particles_in().front()->id();
+            else if ( v->particles_in().size() == 0 ) HEPMC3_DEBUG(30, "WriterAscii::write_event - found a vertex without incoming particles: " << v->id());
+            // Usage of map instead of simple counter helps to deal with events with random ids of vertices.
+            if (alreadywritten.count(v->id()) == 0 && parent_object < 0)
             { write_vertex(v); alreadywritten[v->id()] = true; }
         }
 
@@ -339,7 +363,8 @@ void WriterAscii::close() {
     std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     forced_flush();
-    (*m_stream) << "HepMC::Asciiv3-END_EVENT_LISTING" << std::endl << std::endl;
+    const std::string footer("HepMC::Asciiv3-END_EVENT_LISTING\n\n");
+    if (m_stream) m_stream->write(footer.data(),footer.length());
     if (ofs) ofs->close();
 }
 bool WriterAscii::failed() { return (bool)m_file.rdstate(); }

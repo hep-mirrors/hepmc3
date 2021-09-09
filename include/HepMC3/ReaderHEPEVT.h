@@ -39,6 +39,8 @@ public:
     ReaderHEPEVT(const std::string &filename);
     /// The ctor to read from stream
     ReaderHEPEVT(std::istream &);
+    /// The ctor to read from temp stream
+    ReaderHEPEVT(std::shared_ptr<std::istream> s_stream);
 //
 // Functions
 //
@@ -70,6 +72,7 @@ public:
     char* hepevtbuffer; //!< Pointer to HEPEVT Fortran common block/C struct
 private:
     std::ifstream m_file; //!< Input file
+    std::shared_ptr<std::istream> m_shared_stream; //!< For ctor when reading from temp stream
     std::istream* m_stream; //!< For ctor when reading from stream
     bool m_isstream; //!< toggles usage of m_file or m_stream
 };
