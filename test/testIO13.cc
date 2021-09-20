@@ -35,7 +35,7 @@ int main()
 
     ReaderAscii inputB("frominputIO13.hepmc");
     if(inputB.failed()) return 3;
-    WriterOSCAR1997*       outputB = nullptr;
+    std::shared_ptr<WriterOSCAR1997>       outputB;
     while( !inputB.failed() )
     {
         GenEvent evt(Units::GEV,Units::MM);
@@ -44,7 +44,7 @@ int main()
             printf("End of file reached. Exit.\n");
             break;
         }
-        if (!outputB)     outputB = new WriterOSCAR1997("fromfrominputIO13.oscar1997A", evt.run_info());
+        if (!outputB)     outputB = std::make_shared<WriterOSCAR1997>("fromfrominputIO13.oscar1997A", evt.run_info());
         if(outputB->failed()) return 4;
         outputB->write_event(evt);
         evt.clear();
