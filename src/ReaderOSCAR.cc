@@ -49,6 +49,22 @@ bool ReaderOSCAR::skip(const int n)
     return true;
 }
 
+inline void filter_spaces(char* actual_input) {
+    const char* input = actual_input;
+    char* output = actual_input;
+//std::unique_copy (input, input + strlen(input) + 1, output, [](const char a, const char b){ return (a == ' ') && (b == ' ');});
+//printf("->%s<-\n",output);
+    ssize_t j = 0;
+    ssize_t l = strlen(input);
+    if (!l) return;
+    for (ssize_t i = 1; i < l; i++) {
+        if ( !std::isspace(input[i]) || !std::isspace(output[j]))
+        { j++; output[j] = input[i]; }
+    }
+    output[j++] = '\0';
+//printf("->%s<-\n",output);
+}
+
 bool ReaderOSCAR::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
     const size_t       max_buffer_size = 512*512;
@@ -61,6 +77,7 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
     evt.set_run_info(run_info());
     bool footer = false;
 
+
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
         cursor = buf;
@@ -69,9 +86,9 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
         // Check for ReaderOSCAR header/footer
         if ( strncmp(buf, "#", 1) == 0 ) {
             if ( strncmp(buf, "# OSC1999A", 10) == 0 ) {
-                HEPMC3_WARNING("ReaderOSCAR: So far OSCAR format is not fully supported. ")
+                HEPMC3_WARNING("ReaderOSCAR: So far OSCAR1999A format is not fully supported. ")
                 m_header.clear();
-            } else {
+            } else  {
                 if  ( strncmp(buf, "# End of event:", 15) == 0 ) footer =  true;
                 m_header.push_back(std::string(buf));
 
@@ -161,6 +178,7 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
         interaction.push_back(std::string(buf));
         for (int i = 0; i< nin + nout; i++ ) {
             m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
+            filter_spaces(buf);
             interaction.push_back(std::string(buf));
         }
         parse_interaction(evt,interaction);
@@ -175,37 +193,26 @@ GenParticlePtr ReaderOSCAR::parse_particle(const std::string& s) {
     while (cursor && *cursor == ' ') cursor++;
     int id = atoi(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     int pdg = atoi(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     int wft = atoi(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     double px = atof(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     double py = atof(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     double pz = atof(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     double p0 = atof(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     double m = atof(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     double x = atof(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     double y = atof(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     double z = atof(cursor);
     if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    while (cursor && *cursor == ' ') cursor++;
     double t = atof(cursor);
     GenParticlePtr p = std::make_shared<GenParticle>(FourVector(px,py,pz,p0),pdg,3);
     p->set_generated_mass(m);
