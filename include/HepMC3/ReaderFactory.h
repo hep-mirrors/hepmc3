@@ -16,7 +16,7 @@
 #include "HepMC3/ReaderHEPEVT.h"
 #include "HepMC3/ReaderLHEF.h"
 #include "HepMC3/ReaderPlugin.h"
-#include "HepMC3/ReaderOSCAR.h"
+#include "HepMC3/ReaderOSCAR1999.h"
 #include "HepMC3/ReaderOSCAR1997.h"
 
 namespace HepMC3 {
@@ -114,7 +114,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
             return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR1997(filename)));
         HEPMC3_DEBUG(0, "Attempt ReaderOSCAR for " << filename);
         if ( strncmp(head.at(0).c_str(), "# OSCAR1999A", 10) == 0)
-            return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR(filename)));
+            return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR1999(filename)));
         HEPMC3_DEBUG(0, "Attempt ReaderHEPEVT for " << filename);
         std::stringstream st_e(head.at(0).c_str());
         char attr = ' ';
@@ -185,7 +185,7 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
     if ( strncmp(head.at(0).c_str(), "# OSC1999A", 10) == 0)
     {
         HEPMC3_DEBUG(0, "Attempt ReaderOSCAR");
-        return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR(stream)));
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR1999(stream)));
     }
     if ( strncmp(head.at(0).c_str(), "<LesHouchesEvents", 17) == 0)
     {

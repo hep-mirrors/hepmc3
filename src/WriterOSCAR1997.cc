@@ -50,8 +50,12 @@ WriterOSCAR1997::WriterOSCAR1997(std::shared_ptr<std::ostream> s_stream,
 }
 
 std::string WriterOSCAR1997::format_run_info() const {
-    const std::string content = run_info()->attribute<StringAttribute>("content") ?
-                                run_info()->attribute<StringAttribute>("content")->value() : "unknown";
+    std::string content = run_info()->attribute<StringAttribute>("content") ?
+                          run_info()->attribute<StringAttribute>("content")->value() : "unknown";
+    if ( content != "final_id_p_x" ) {
+        HEPMC3_WARNING("WriterOSCAR1997 supports only final_id_p_x content type.");
+        content = "final_id_p_x";
+    }
     const std::string generator_name = run_info()->tools().size()? run_info()->tools().front().name : "Unknown";
     const std::string generator_version = run_info()->tools().size()? run_info()->tools().front().version : "0.0.0";
     const std::string reaction = run_info()->attribute<StringAttribute>("reaction") ?

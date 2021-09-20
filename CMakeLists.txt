@@ -198,7 +198,7 @@ set( hepmc3core_sources
   ${PROJECT_SOURCE_DIR}/src/GenPdfInfo.cc
   ${PROJECT_SOURCE_DIR}/src/HEPEVT_Wrapper.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderAscii.cc
-  ${PROJECT_SOURCE_DIR}/src/ReaderOSCAR.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderOSCAR1999.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderOSCAR1997.cc
   ${PROJECT_SOURCE_DIR}/src/WriterOSCAR1997.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderHEPEVT.cc

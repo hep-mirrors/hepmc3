@@ -98,37 +98,40 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
             top->add_particle_out(in);
             evt.add_vertex(v);
             n_particles_parsed++;
-            if (n_particles_parsed >= n_particles_expected)  return true;
+            if (n_particles_parsed >= n_particles_expected) {
+                evt.weights() = std::vector<double>(1,1);
+                return true;
+            }
             continue;
         }
 
         if ( strncmp(buf, "OSC1997A", 8) == 0 ) {
-            HEPMC3_WARNING("ReaderOSCAR1997: So far OSCAR1997 format is not fully supported. ")
             m_header.clear();
             continue;
         }
         if (m_header.size() < 2) { m_header.push_back(std::string(buf)); continue;}
         else if (m_header.size() == 2) {
-
-            std::string toparse = m_header.at(1);
-            size_t reaction_b = toparse.find_first_of("(");
-            size_t reaction_e = toparse.find_last_of(")")+1;
-            std::string reaction = toparse.substr(reaction_b,reaction_e-reaction_b);
-            toparse.erase(reaction_b,reaction_e-reaction_b);
-            std::vector<std::string> parsed;
-            while (toparse.size()>0)
-            {
-                toparse.erase(0,toparse.find_first_not_of(" "));
-                parsed.push_back(toparse.substr(0,toparse.find_first_of(" ")));
-                toparse.erase(0,parsed.back().size());
-            }
-            struct GenRunInfo::ToolInfo generator= {parsed.at(0),parsed.at(1),std::string("")};
-            run_info()->tools().push_back(generator);
-            run_info()->add_attribute("reaction", std::make_shared<StringAttribute>(reaction));
             run_info()->add_attribute("content", std::make_shared<StringAttribute>(m_header.at(0)));
-            if (parsed.size() > 2) run_info()->add_attribute("reference_frame", std::make_shared<StringAttribute>(parsed.at(2)));
-            if (parsed.size() > 3) run_info()->add_attribute("beam_energy", std::make_shared<DoubleAttribute>(std::strtof(parsed.at(3).c_str(),NULL)));
-            if (parsed.size() > 4) run_info()->add_attribute("test_particles_per_nuclon", std::make_shared<IntAttribute>(std::atoi(parsed.at(4).c_str())));
+            std::string toparse1 = m_header.at(1);
+            size_t reaction_b = toparse1.find_first_of("(");
+            size_t reaction_e = toparse1.find_last_of(")")+1;
+            if (reaction_e > reaction_b +1) {
+                std::string reaction = toparse1.substr(reaction_b,reaction_e-reaction_b);
+                toparse1.erase(reaction_b,reaction_e-reaction_b);
+                std::vector<std::string> parsed1;
+                while (toparse1.size()>0)
+                {
+                    toparse1.erase(0,toparse1.find_first_not_of(" -"));
+                    parsed1.push_back(toparse1.substr(0,toparse1.find_first_of(" -")));
+                    toparse1.erase(0,parsed1.back().size());
+                }
+                struct GenRunInfo::ToolInfo generator = {parsed1.size()>1?parsed1.at(0):"Unknown", parsed1.size()>2?parsed1.at(1):"0.0.0", std::string("Used generator")};
+                run_info()->tools().push_back(generator);
+                run_info()->add_attribute("reaction", std::make_shared<StringAttribute>(reaction));
+                if (parsed1.size() > 2) run_info()->add_attribute("reference_frame", std::make_shared<StringAttribute>(parsed1.at(2)));
+                if (parsed1.size() > 3) run_info()->add_attribute("beam_energy", std::make_shared<DoubleAttribute>(std::strtof(parsed1.at(3).c_str(),NULL)));
+                if (parsed1.size() > 4) run_info()->add_attribute("test_particles_per_nuclon", std::make_shared<IntAttribute>(std::atoi(parsed1.at(4).c_str())));
+            }
             std::vector<std::string> weightnames;
             weightnames.push_back("Default");
             run_info()->set_weight_names(weightnames);

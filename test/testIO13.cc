@@ -35,7 +35,7 @@ int main()
 
     ReaderAscii inputB("frominputIO13.hepmc");
     if(inputB.failed()) return 3;
-    std::shared_ptr<WriterOSCAR1997>       outputB;
+    std::shared_ptr<WriterOSCAR1997>       outputB = nullptr;
     while( !inputB.failed() )
     {
         GenEvent evt(Units::GEV,Units::MM);

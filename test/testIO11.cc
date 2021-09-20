@@ -6,14 +6,15 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/WriterAscii.h"
-#include "HepMC3/ReaderOSCAR.h"
+#include "HepMC3/ReaderOSCAR1999.h"
+#include "HepMC3/WriterOSCAR1997.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
 #include "HepMC3/Print.h"
 #include "HepMC3TestUtils.h"
 using namespace HepMC3;
 int main()
 {
-    ReaderOSCAR inputA("inputIO11.oscar1999A");
+    ReaderOSCAR1999 inputA("inputIO11.oscar1999A");
     if(inputA.failed()) return 1;
     WriterAscii       outputA("frominputIO11.hepmc");
     if(outputA.failed()) return 2;
@@ -34,8 +35,7 @@ int main()
 
     ReaderAscii inputB("frominputIO11.hepmc");
     if(inputB.failed()) return 3;
-//    WriterAsciiHepMC2       outputB("fromfrominputIO1.hepmc");
-//    if(outputB.failed()) return 4;
+    std::shared_ptr<WriterOSCAR1997>       outputB = nullptr;
     while( !inputB.failed() )
     {
         GenEvent evt(Units::GEV,Units::MM);
@@ -44,10 +44,12 @@ int main()
             printf("End of file reached. Exit.\n");
             break;
         }
-//        outputB.write_event(evt);
+        if (!outputB)     outputB = std::make_shared<WriterOSCAR1997>("fromfrominputIO11.oscar1997A", evt.run_info());
+        if(outputB->failed()) return 4;
+        outputB->write_event(evt);
         evt.clear();
     }
     inputB.close();
-//    outputB.close();
+    outputB->close();
     return 0;
 }

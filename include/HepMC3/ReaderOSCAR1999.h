@@ -3,13 +3,13 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef HEPMC3_READEROSCAR_H
-#define HEPMC3_READEROSCAR_H
+#ifndef HEPMC3_READEROSCAR1999_H
+#define HEPMC3_READEROSCAR1999_H
 ///
-/// @file  ReaderOSCAR.h
-/// @brief Definition of class \b ReaderOSCAR
+/// @file  ReaderOSCAR1999.h
+/// @brief Definition of class \b ReaderOSCAR1999
 ///
-/// @class HepMC3::ReaderOSCAR
+/// @class HepMC3::ReaderOSCAR1999
 /// @brief GenEvent I/O parsing for structured text files
 ///
 /// @ingroup IO
@@ -26,15 +26,15 @@
 namespace HepMC3 {
 
 
-class ReaderOSCAR : public Reader {
+class ReaderOSCAR1999 : public Reader {
 public:
 
     /// @brief Constructor
-    ReaderOSCAR(const std::string& filename);
+    ReaderOSCAR1999(const std::string& filename);
     /// The ctor to read from stdin
-    ReaderOSCAR(std::istream &);
+    ReaderOSCAR1999(std::istream &);
     /// @brief Destructor
-    ~ReaderOSCAR();
+    ~ReaderOSCAR1999();
 
     /// @brief skip events
     bool skip(const int)  override;

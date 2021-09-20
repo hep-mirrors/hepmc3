@@ -4,14 +4,14 @@
 // Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 //
 ///
-/// @file ReaderOSCAR.cc
-/// @brief Implementation of \b class ReaderOSCAR
+/// @file ReaderOSCAR1999.cc
+/// @brief Implementation of \b class ReaderOSCAR1999
 ///
 #include <cstring>
 #include <sstream>
 #include <cassert>
 
-#include "HepMC3/ReaderOSCAR.h"
+#include "HepMC3/ReaderOSCAR1999.h"
 
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
@@ -22,29 +22,29 @@
 namespace HepMC3 {
 
 
-ReaderOSCAR::ReaderOSCAR(const std::string &filename)
+ReaderOSCAR1999::ReaderOSCAR1999(const std::string &filename)
     : m_file(filename), m_stream(0), m_isstream(false)
 {
     if ( !m_file.is_open() ) {
-        HEPMC3_ERROR("ReaderOSCAR: could not open input file: " << filename)
+        HEPMC3_ERROR("ReaderOSCAR1999: could not open input file: " << filename)
     }
     set_run_info(std::make_shared<GenRunInfo>());
 }
 
-ReaderOSCAR::ReaderOSCAR(std::istream & stream)
+ReaderOSCAR1999::ReaderOSCAR1999(std::istream & stream)
     : m_stream(&stream), m_isstream(true)
 {
     if ( !m_stream->good() ) {
-        HEPMC3_ERROR("ReaderOSCAR: could not open input stream ")
+        HEPMC3_ERROR("ReaderOSCAR1999: could not open input stream ")
     }
     set_run_info(std::make_shared<GenRunInfo>());
 }
 
-ReaderOSCAR::~ReaderOSCAR() {
+ReaderOSCAR1999::~ReaderOSCAR1999() {
     if (!m_isstream) close();
 }
 
-bool ReaderOSCAR::skip(const int n)
+bool ReaderOSCAR1999::skip(const int n)
 {
     return true;
 }
@@ -52,8 +52,6 @@ bool ReaderOSCAR::skip(const int n)
 inline void filter_spaces(char* actual_input) {
     const char* input = actual_input;
     char* output = actual_input;
-//std::unique_copy (input, input + strlen(input) + 1, output, [](const char a, const char b){ return (a == ' ') && (b == ' ');});
-//printf("->%s<-\n",output);
     ssize_t j = 0;
     ssize_t l = strlen(input);
     if (!l) return;
@@ -65,7 +63,7 @@ inline void filter_spaces(char* actual_input) {
     output[j] = '\0';
 }
 
-bool ReaderOSCAR::read_event(GenEvent &evt) {
+bool ReaderOSCAR1999::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
     const size_t       max_buffer_size = 512*512;
     char               buf[max_buffer_size];
@@ -84,10 +82,10 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
         cursor = buf;
         if ( strlen(buf) == 0 && footer) continue;
         if ( strncmp(buf, "\r", 1) == 0 ) continue;
-        // Check for ReaderOSCAR header/footer
+        // Check for ReaderOSCAR1999 header/footer
         if ( strncmp(buf, "#", 1) == 0 ) {
             if ( strncmp(buf, "# OSC1999A", 10) == 0 ) {
-                HEPMC3_WARNING("ReaderOSCAR: So far OSCAR1999A format is not fully supported. ")
+                HEPMC3_WARNING("ReaderOSCAR1999: So far OSCAR1999A format is not fully supported. ")
                 m_header.clear();
             } else  {
                 if  ( strncmp(buf, "# End of event:", 15) == 0 ) footer =  true;
@@ -187,7 +185,7 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
     return true;
 }
 
-GenParticlePtr ReaderOSCAR::parse_particle(const std::string& s) {
+GenParticlePtr ReaderOSCAR1999::parse_particle(const std::string& s) {
     char buf[512];
     sprintf(buf, "%s\n", s.c_str());
     const char  *cursor = buf;
@@ -222,7 +220,7 @@ GenParticlePtr ReaderOSCAR::parse_particle(const std::string& s) {
     return p;
 }
 
-void ReaderOSCAR::parse_interaction(GenEvent &evt,const std::vector<std::string>& interaction) {
+void ReaderOSCAR1999::parse_interaction(GenEvent &evt,const std::vector<std::string>& interaction) {
     GenVertexPtr v = std::make_shared<GenVertex>();
     char buf[512];
     sprintf(buf, "%s\n", interaction.at(0).c_str());
@@ -258,29 +256,62 @@ void ReaderOSCAR::parse_interaction(GenEvent &evt,const std::vector<std::string>
     v->add_attribute("proc_type", std::make_shared<IntAttribute>(proc_type));
 }
 
-void ReaderOSCAR::end_event() {
+void ReaderOSCAR1999::end_event() {
     parse_header();
 }
 
-void ReaderOSCAR::parse_header() {
+void ReaderOSCAR1999::parse_header() {
     if (m_header.empty()) return;
     for (auto &s: m_header) s.erase( std::remove(s.begin(), s.end(), '\r'), s.end() );
-    if (m_header.size() > 2 && m_header[1].length() > 2) {
-        struct GenRunInfo::ToolInfo generator = {m_header[1].substr(2), "0", std::string("Used generator")};
-        auto ri = run_info();
-        ri->tools().push_back(generator);
+    if (m_header.size() > 2&& m_header.at(0).length() > 2 && m_header.at(1).length() > 2) {
+        run_info()->add_attribute("content", std::make_shared<StringAttribute>(m_header.at(0).substr(2)));
+
+        std::string toparse1 = m_header.at(1);
+        toparse1[0]=' ';
+        std::vector<std::string> parsed1;
+        while (toparse1.size()>0)
+        {
+            toparse1.erase(0,toparse1.find_first_not_of(" -"));
+            parsed1.push_back(toparse1.substr(0,toparse1.find_first_of(" -")));
+            toparse1.erase(0,parsed1.back().size());
+        }
+
+        struct GenRunInfo::ToolInfo generator = {parsed1.size()>1?parsed1.at(0):"Unknown", parsed1.size()>2?parsed1.at(1):"0.0.0", std::string("Used generator")};
+        run_info()->tools().push_back(generator);
+
+        std::string toparse2 = m_header.at(2);
+        toparse2[0]=' ';
+        size_t reaction_b = toparse2.find_first_of("(");
+        size_t reaction_e = toparse2.find_last_of(")")+1;
+
+
+        if (reaction_e > reaction_b + 1) {
+            std::string reaction = toparse2.substr(reaction_b,reaction_e-reaction_b);
+            toparse2.erase(reaction_b,reaction_e-reaction_b);
+            std::vector<std::string> parsed2;
+            while (toparse2.size()>0)
+            {
+                toparse2.erase(0,toparse2.find_first_not_of(" "));
+                parsed2.push_back(toparse2.substr(0,toparse2.find_first_of(" ")));
+                toparse2.erase(0,parsed2.back().size());
+            }
+            run_info()->add_attribute("reaction", std::make_shared<StringAttribute>(reaction));
+            if (parsed2.size() > 0) run_info()->add_attribute("reference_frame", std::make_shared<StringAttribute>(parsed2.at(0)));
+            if (parsed2.size() > 1) run_info()->add_attribute("beam_energy", std::make_shared<DoubleAttribute>(std::strtof(parsed2.at(1).c_str(),NULL)));
+            if (parsed2.size() > 2) run_info()->add_attribute("test_particles_per_nuclon", std::make_shared<IntAttribute>(std::atoi(parsed2.at(2).c_str())));
+        }
+
         std::vector<std::string> weightnames;
         weightnames.push_back("Default");
-        ri->set_weight_names(weightnames);
-        set_run_info(ri);
+        run_info()->set_weight_names(weightnames);
     }
 }
 
-bool ReaderOSCAR::failed() {
+bool ReaderOSCAR1999::failed() {
     return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate();
 }
 
-void ReaderOSCAR::close() {
+void ReaderOSCAR1999::close() {
     if ( !m_file.is_open()) return;
     m_file.close();
 }
