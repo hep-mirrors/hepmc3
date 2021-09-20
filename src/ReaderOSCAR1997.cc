@@ -10,15 +10,14 @@
 #include <cstring>
 #include <sstream>
 #include <cassert>
-#include <regex>
-
-#include "HepMC3/ReaderOSCAR1997.h"
 
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Units.h"
 #include "HepMC3/Print.h"
+#include "HepMC3/ReaderOSCAR1997.h"
+
 
 namespace HepMC3 {
 
@@ -60,7 +59,8 @@ inline void filter_spaces(char* actual_input) {
         if ( !std::isspace(input[i]) || !std::isspace(output[j]))
         { j++; output[j] = input[i]; }
     }
-    output[j++] = '\0';
+    j++;
+    output[j] = '\0';
 }
 bool ReaderOSCAR1997::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
@@ -68,16 +68,17 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
     char               buf[max_buffer_size];
     const char                 *cursor   = buf;
     evt.clear();
+    evt.set_units(Units::GEV,Units::MM);//Fixed units?
     evt.set_run_info(run_info());
     bool event_header = false;
     int n_particles_expected = 0;
     int n_particles_parsed = 0;
     GenVertexPtr top = std::make_shared<GenVertex>();
-    				GenParticlePtr b =std::make_shared<GenParticle>();
-				evt.add_particle(b);
-				top->add_particle_in(b);
-				evt.add_vertex(top);
-				evt.add_beam_particle(b);
+    GenParticlePtr b =std::make_shared<GenParticle>();
+    evt.add_particle(b);
+    top->add_particle_in(b);
+    evt.add_vertex(top);
+    evt.add_beam_particle(b);
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
         cursor = buf;
@@ -97,10 +98,7 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
             top->add_particle_out(in);
             evt.add_vertex(v);
             n_particles_parsed++;
-            if (n_particles_parsed >= n_particles_expected) {
-
-				 return true;
-            }
+            if (n_particles_parsed >= n_particles_expected)  return true;
             continue;
         }
 
@@ -124,45 +122,37 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
                 parsed.push_back(toparse.substr(0,toparse.find_first_of(" ")));
                 toparse.erase(0,parsed.back().size());
             }
-            printf("%s  %s %s  %s  %f  %i\n",parsed.at(0).c_str(),parsed.at(1).c_str(), reaction.c_str(),
-                   parsed.at(2).c_str(), std::strtof(parsed.at(3).c_str(),NULL), std::atoi(parsed.at(4).c_str()));
-    struct GenRunInfo::ToolInfo generator={parsed.at(0),parsed.at(1),std::string("")};
-    run_info()->tools().push_back(generator);
- 
+            struct GenRunInfo::ToolInfo generator= {parsed.at(0),parsed.at(1),std::string("")};
+            run_info()->tools().push_back(generator);
+            run_info()->add_attribute("reaction", std::make_shared<StringAttribute>(reaction));
+            run_info()->add_attribute("content", std::make_shared<StringAttribute>(m_header.at(0)));
+            if (parsed.size() > 2) run_info()->add_attribute("reference_frame", std::make_shared<StringAttribute>(parsed.at(2)));
+            if (parsed.size() > 3) run_info()->add_attribute("beam_energy", std::make_shared<DoubleAttribute>(std::strtof(parsed.at(3).c_str(),NULL)));
+            if (parsed.size() > 4) run_info()->add_attribute("test_particles_per_nuclon", std::make_shared<IntAttribute>(std::atoi(parsed.at(4).c_str())));
+            std::vector<std::string> weightnames;
+            weightnames.push_back("Default");
+            run_info()->set_weight_names(weightnames);
         }
         if (!event_header) {
             while (cursor && *cursor == ' ') cursor++;
             evt.set_event_number(atoi(cursor));
             cursor = strchr(cursor+1, ' ');
             while (cursor && *cursor == ' ') cursor++;
-            //cursor = strchr(cursor+1, ' ');
             n_particles_expected= atoi(cursor);
-           // printf("--->%s<-->%i \n",buf,n_particles_expected);
             while (cursor && *cursor == ' ') cursor++;
             cursor = strchr(cursor+1, ' ');
             double impact_parameter = atof(cursor);
             evt.add_attribute("impact_parameter", std::make_shared<DoubleAttribute>(impact_parameter));
+            while (cursor && *cursor == ' ') cursor++;
+            cursor = strchr(cursor+1, ' ');
+            double rotation = atof(cursor);
+            evt.add_attribute("rotation", std::make_shared<DoubleAttribute>(rotation));
             event_header=true;
             evt.add_vertex(top);
         }
     }
 
     return true;
-}
-
-
-void ReaderOSCAR1997::parse_header() {
-    if (m_header.empty()) return;
-    for (auto &s: m_header) s.erase( std::remove(s.begin(), s.end(), '\r'), s.end() );
-    if (m_header.size() > 2 && m_header[1].length() > 2) {
-        struct GenRunInfo::ToolInfo generator = {m_header[1].substr(2), "0", std::string("Used generator")};
-        auto ri = run_info();
-        ri->tools().push_back(generator);
-        std::vector<std::string> weightnames;
-        weightnames.push_back("Default");
-        ri->set_weight_names(weightnames);
-        set_run_info(ri);
-    }
 }
 
 bool ReaderOSCAR1997::failed() {

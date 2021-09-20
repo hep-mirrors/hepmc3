@@ -61,8 +61,8 @@ inline void filter_spaces(char* actual_input) {
         if ( !std::isspace(input[i]) || !std::isspace(output[j]))
         { j++; output[j] = input[i]; }
     }
-    output[j++] = '\0';
-//printf("->%s<-\n",output);
+    j++;
+    output[j] = '\0';
 }
 
 bool ReaderOSCAR::read_event(GenEvent &evt) {
@@ -74,6 +74,7 @@ bool ReaderOSCAR::read_event(GenEvent &evt) {
     m_vertices.clear();
     m_prod.clear();
     m_prod2.clear();
+    evt.set_units(Units::GEV,Units::MM);//Fixed units?
     evt.set_run_info(run_info());
     bool footer = false;
 

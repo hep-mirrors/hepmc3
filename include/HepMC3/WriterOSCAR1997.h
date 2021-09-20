@@ -60,6 +60,7 @@ public:
     bool failed()  override;
 
 protected:
+    std::string format_run_info() const;
     std::ofstream m_file; //!< Output file
     std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
