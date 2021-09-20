@@ -35,8 +35,7 @@ int main()
 
     ReaderAscii inputB("frominputIO13.hepmc");
     if(inputB.failed()) return 3;
-    WriterOSCAR1997*       outputB = nullptr;//("fromfrominputIO13.oscar1997A");
-   // if(outputB.failed()) return 4;
+    WriterOSCAR1997*       outputB = nullptr;
     while( !inputB.failed() )
     {
         GenEvent evt(Units::GEV,Units::MM);
