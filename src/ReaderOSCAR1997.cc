@@ -99,7 +99,6 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
             evt.add_vertex(v);
             n_particles_parsed++;
             if (n_particles_parsed >= n_particles_expected) {
-                evt.weights() = std::vector<double>(1,1);
                 return true;
             }
             continue;
@@ -137,6 +136,8 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
             run_info()->set_weight_names(weightnames);
         }
         if (!event_header) {
+            GenHeavyIonPtr  hi = std::make_shared<GenHeavyIon>();
+            GenCrossSectionPtr cs = std::make_shared<GenCrossSection>();
             while (cursor && *cursor == ' ') cursor++;
             evt.set_event_number(atoi(cursor));
             cursor = strchr(cursor+1, ' ');
@@ -145,12 +146,16 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
             while (cursor && *cursor == ' ') cursor++;
             cursor = strchr(cursor+1, ' ');
             double impact_parameter = atof(cursor);
-            evt.add_attribute("impact_parameter", std::make_shared<DoubleAttribute>(impact_parameter));
+            hi->impact_parameter = impact_parameter;
             while (cursor && *cursor == ' ') cursor++;
             cursor = strchr(cursor+1, ' ');
-            double rotation = atof(cursor);
-            evt.add_attribute("rotation", std::make_shared<DoubleAttribute>(rotation));
+            double event_plane_angle = atof(cursor);
+            hi->event_plane_angle=event_plane_angle;
             event_header=true;
+            cs->set_cross_section(1.0,1.0);
+            evt.set_cross_section(cs);
+            evt.set_heavy_ion(hi);
+            evt.weights() = std::vector<double>(1,1);
             evt.add_vertex(top);
         }
     }

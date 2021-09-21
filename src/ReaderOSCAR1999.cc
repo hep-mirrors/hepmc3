@@ -103,7 +103,14 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
                 while (cursor && *cursor == ' ') cursor++;
                 cursor = strchr(cursor+1, ' ');
                 double impact_parameter = atof(cursor);
-                evt.add_attribute("impact_parameter", std::make_shared<DoubleAttribute>(impact_parameter));
+                auto  hi = std::make_shared<HepMC3::GenHeavyIon>();
+                auto cs = std::make_shared<HepMC3::GenCrossSection>();
+                hi->impact_parameter = impact_parameter;
+                cs->set_cross_section(1.0,1.0);
+                cs->set_cross_section(1.0,1.0);
+                evt.set_cross_section(cs);
+                evt.set_heavy_ion(hi);
+                evt.weights() = std::vector<double>(1,1);
             }
             end_event();
             evt.set_run_info(run_info());
@@ -164,7 +171,6 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
                 }
             }
 
-            evt.weights() = std::vector<double>(1,1);
             break;
         }
         if ( strlen(buf) == 0 ) continue;

@@ -83,10 +83,9 @@ void WriterOSCAR1997::write_event(const GenEvent &evt)
 
     char buf[512*512];//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor = &(buf[0]);
-    auto a_rotation = evt.attribute<DoubleAttribute>("rotation");
-    auto a_impact_parameter = evt.attribute<DoubleAttribute>("impact_parameter");
-    double v_impact_parameter = a_impact_parameter? a_impact_parameter->value() : 0.0;
-    double v_rotation = a_rotation? a_rotation->value() : 0.0;
+    auto hi = evt.heavy_ion();
+    double v_impact_parameter = hi? hi->impact_parameter : 0.0;
+    double v_rotation = hi? hi->event_plane_angle : 0.0;
     cursor += sprintf(cursor,"%10i  %10i  %8.3f  %8.3f\n", evt.event_number(), n_final, v_impact_parameter, v_rotation);
     unsigned long length = cursor - &(buf[0]);
     m_stream->write(buf, length);
