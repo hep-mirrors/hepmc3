@@ -48,19 +48,18 @@ bool ReaderOSCAR1999::skip(const int n)
 {
     return true;
 }
-
-inline void filter_spaces(char* actual_input) {
-    const char* input = actual_input;
-    char* output = actual_input;
-    ssize_t j = 0;
-    ssize_t l = strlen(input);
-    if (!l) return;
-    for (ssize_t i = 1; i < l; i++) {
-        if ( !std::isspace(input[i]) || !std::isspace(output[j]))
-        { j++; output[j] = input[i]; }
+inline std::vector<std::string> tokenize_string(const std::string& str, const std::string& delimiters )
+{
+    std::vector<std::string> tokens;
+    std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+    std::string::size_type pos     = str.find_first_of(delimiters, lastPos);
+    while (std::string::npos != pos || std::string::npos != lastPos)
+    {
+        tokens.push_back(str.substr(lastPos, pos - lastPos));
+        lastPos = str.find_first_not_of(delimiters, pos);
+        pos = str.find_first_of(delimiters, lastPos);
     }
-    j++;
-    output[j] = '\0';
+    return tokens;
 }
 
 bool ReaderOSCAR1999::read_event(GenEvent &evt) {
@@ -75,7 +74,6 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
     evt.set_units(Units::GEV,Units::MM);//Fixed units?
     evt.set_run_info(run_info());
     bool footer = false;
-
 
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
@@ -94,83 +92,59 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
             }
             continue;
         }
-        if (  (strlen(buf) != 0 && ( strncmp(buf, "0 0 ", 4) == 0 ||strncmp(buf, "      0        0", 16) == 0) ) || ( strlen(buf) == 0 && !footer) ) {
-
-            if (footer && strlen(buf) != 0 ) {
-                while (cursor && *cursor == ' ') cursor++;
-                cursor = strchr(cursor+1, ' ');
-                evt.set_event_number(atoi(cursor));
-                while (cursor && *cursor == ' ') cursor++;
-                cursor = strchr(cursor+1, ' ');
-                double impact_parameter = atof(cursor);
-                auto  hi = std::make_shared<HepMC3::GenHeavyIon>();
-                auto cs = std::make_shared<HepMC3::GenCrossSection>();
-                hi->impact_parameter = impact_parameter;
-                cs->set_cross_section(1.0,1.0);
-                cs->set_cross_section(1.0,1.0);
-                evt.set_cross_section(cs);
-                evt.set_heavy_ion(hi);
-                evt.weights() = std::vector<double>(1,1);
-            }
-            end_event();
-            evt.set_run_info(run_info());
-            std::vector<GenParticlePtr> toremove;
-            for ( auto vvv: m_vertices) {
-                if (vvv->particles_in().empty()) {
-                    for (auto ppp: vvv->particles_out()) {
-                        toremove.push_back(ppp);
-                    }
+        if (  (strlen(buf) != 0 && ( strncmp(buf, "0 0 ", 4) == 0 ||strncmp(buf, "      0        0", 16) == 0) ) ) {
+            std::string st(buf);
+            std::vector<std::string> endline = tokenize_string(st, " ");
+            parse_header();
+            // This should be the end of event
+            if (endline.size() > 1) {
+                if (endline.size() > 2) evt.set_event_number(atoi(endline.at(2).c_str()));
+                if (endline.size() > 3)
+                {
+                    GenHeavyIonPtr  hi = std::make_shared<GenHeavyIon>();
+                    hi->set(-1, -1, -1, -1, -1, -1,
+                            -1, -1, -1,
+                            -1.0, -1.0, -1.0, -1.0, -1.0, -1.0);
+                    hi->impact_parameter = std::strtof(endline.at(3).c_str(),nullptr);
+                    evt.set_heavy_ion(hi);
                 }
-                else evt.add_vertex(vvv);
             }
-            for (auto ppp: toremove) {
-                if (ppp->production_vertex()) ppp->production_vertex()->remove_particle_out(ppp);
-                evt.add_particle(ppp);
-                evt.add_beam_particle(ppp);
-
-            }
+            auto cs = std::make_shared<GenCrossSection>();
+            cs->set_cross_section(1.0,1.0);
+            evt.set_cross_section(cs);
+            evt.weights() = std::vector<double>(1,1);
+            evt.set_run_info(run_info());
 
             for (auto& pp: m_prod)
             {
                 auto& history = pp.second;
-                std::sort(std::begin(history), std::end(history),
-                [](const std::pair<GenParticlePtr,FourVector>& a, const std::pair<GenParticlePtr,FourVector>& b) {
-                    if (a.first->end_vertex() == b.first->production_vertex() && a.first->end_vertex() ) return false;
-                    if (b.first->end_vertex() == a.first->production_vertex() && b.first->end_vertex() ) return true;
-                    if (a.first->production_vertex() &&  !b.first->production_vertex() ) return true;
-                    if (b.first->production_vertex() &&  !a.first->production_vertex() ) return false;
-                    return a.second.t() > b.second.t();
-                });
-            }
-            for (auto& pp: m_prod) {
-                auto& history = pp.second;
-                bool  stablep = (history.front().first->end_vertex() == nullptr);
-                if (stablep) history.front().first->set_status(1);
-                for (int i = 1*stablep; i<history.size()-1; i += 2 ) {
+                if (history.size() == 1) {
+                    if (!history.at(0).first->production_vertex()) evt.add_beam_particle(history.at(0).first);
+                }
+                for (int i = 0; i < history.size()-1; i += 2 )
+                {
                     auto t = history.at(i).first;
                     auto n = history.at(i+1).first;
-                    if (n->production_vertex()&&!n->end_vertex()) {
-                        auto v = t->end_vertex();
-
-                        evt.remove_particle(t);
-                        if (v) {
-                            v->remove_particle_in(t);
-                            v->add_particle_in(n);
-                        }
-                    }
-                    if (!n->production_vertex())
+                    auto pv_t = t->production_vertex();
+                    auto ev_t = t->end_vertex();
+                    auto pv_n = n->production_vertex();
+                    auto ev_n = n->end_vertex();
+                    if (pv_t && !ev_t  && ev_n)
                     {
-                        n->set_status(4);
-                        evt.add_beam_particle(n);
+                        ev_n->add_particle_in(t);
+                        ev_n->remove_particle_in(n);
+                        evt.remove_particle(n);
                     }
-                }
-                auto sp = history.back().first;
-                if ( sp->production_vertex() && sp->production_vertex()->id() == 0) {
-                    sp->set_status(4);
-                    evt.add_beam_particle(sp);
                 }
             }
-
+            std::vector<GenVertexPtr> vtoremove;
+            for (auto v: evt.vertices()) if (!v->particles_in().size() || !v->particles_out().size()) vtoremove.push_back(v);
+            for (auto v: vtoremove) {
+                evt.remove_vertex(v);
+            }
+            std::vector<GenParticlePtr> ptoremove;
+            for (auto p: evt.particles()) if (!p->production_vertex() && !p->end_vertex() && p->status() != 4) ptoremove.push_back(p);
+            for (auto p: ptoremove) evt.remove_particle(p);
             break;
         }
         if ( strlen(buf) == 0 ) continue;
@@ -181,9 +155,12 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
         int nout = atoi(cursor);
         std::vector<std::string> interaction; ///< header lines
         interaction.push_back(std::string(buf));
-        for (int i = 0; i< nin + nout; i++ ) {
+        for (int i = 0; i < nin + nout; i++ ) {
             m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
-            filter_spaces(buf);
+            if ( strlen(buf) == 0 ) {
+                HEPMC3_ERROR("ReaderOSCAR1999: event parsing failed. Returning empty event")
+                HEPMC3_DEBUG(1, "Parsing failed after line:" << std::endl << interaction.back().c_str())
+            }
             interaction.push_back(std::string(buf));
         }
         parse_interaction(evt,interaction);
@@ -192,33 +169,19 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
 }
 
 GenParticlePtr ReaderOSCAR1999::parse_particle(const std::string& s) {
-    char buf[512];
-    sprintf(buf, "%s\n", s.c_str());
-    const char  *cursor = buf;
-    while (cursor && *cursor == ' ') cursor++;
-    int id = atoi(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    int pdg = atoi(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    int wft = atoi(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    double px = atof(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    double py = atof(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    double pz = atof(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    double p0 = atof(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    double m = atof(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    double x = atof(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    double y = atof(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    double z = atof(cursor);
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return nullptr;
-    double t = atof(cursor);
+    std::vector<std::string> particle_tokens = tokenize_string(s, " ");
+    int id = atoi(particle_tokens.at(0).c_str());
+    int pdg = atoi(particle_tokens.at(1).c_str());
+    int wft = atoi(particle_tokens.at(2).c_str());
+    double px = atof(particle_tokens.at(3).c_str());
+    double py = atof(particle_tokens.at(4).c_str());
+    double pz = atof(particle_tokens.at(5).c_str());
+    double p0 = atof(particle_tokens.at(6).c_str());
+    double m = atof(particle_tokens.at(7).c_str());
+    double x = atof(particle_tokens.at(8).c_str());
+    double y = atof(particle_tokens.at(9).c_str());
+    double z = atof(particle_tokens.at(10).c_str());
+    double t = atof(particle_tokens.at(11).c_str());
     GenParticlePtr p = std::make_shared<GenParticle>(FourVector(px,py,pz,p0),pdg,3);
     p->set_generated_mass(m);
     m_prod[id].push_back(std::pair<GenParticlePtr,FourVector>(p,FourVector(x,y,z,t)));
@@ -227,23 +190,21 @@ GenParticlePtr ReaderOSCAR1999::parse_particle(const std::string& s) {
 }
 
 void ReaderOSCAR1999::parse_interaction(GenEvent &evt,const std::vector<std::string>& interaction) {
-    GenVertexPtr v = std::make_shared<GenVertex>();
-    char buf[512];
-    sprintf(buf, "%s\n", interaction.at(0).c_str());
-    const char  *cursor   = buf;
-    while (cursor && *cursor == ' ') cursor++;
-    int nin = atoi(cursor);
-    if ( !(cursor = strchr(cursor + 1, ' ')) ) return;
-    int nout = atoi(cursor);
-    cursor = strchr(cursor + 1, ' ');
-    double density = atof(cursor);
-    cursor = strchr(cursor + 1, ' ');
-    double tot_weight = atof(cursor);
-    cursor = strchr(cursor + 1, ' ');
-    double part_weight = atof(cursor);
-    cursor = strchr(cursor + 1, ' ');
-    int proc_type = atoi(cursor);
 
+//OSCAR1999A is implemented inconsistently across the generators.
+//UrqMD has three versions, the input the interaction and the output
+//->      0       24        1     0.971     0.000<-
+// UrQd amnual page 33
+//->          2        2        1        1   1.577  0.2611E+01  0.4212E+02  0.1035E+02  0.1221E+00<-
+// UrQd amnual page 27
+//->      32        0<-
+// Not documented
+//SMASH has only interaction format
+//->2 2    0.0000000   45.2577226   21.0598335     1<-
+    std::vector<std::string> interaction_header_tokens = tokenize_string(interaction.at(0), " ");
+    int nin = atoi(interaction_header_tokens.at(0).c_str());
+    int nout = atoi(interaction_header_tokens.at(1).c_str());
+    GenVertexPtr v = std::make_shared<GenVertex>();
     for (int i = 1; i < nin + 1; i++ ) v->add_particle_in(parse_particle(interaction.at(i)));
     assert(nout + nin + 1 == interaction.size());
     for (int i = nin + 1; i < nout + nin + 1; i++ ) v->add_particle_out(parse_particle(interaction.at(i)));
@@ -255,15 +216,58 @@ void ReaderOSCAR1999::parse_interaction(GenEvent &evt,const std::vector<std::str
         return a.second.t() > b.second.t();
     });
     if (!vin.empty()) v->set_position(vin.front().second);
-    evt.add_vertex(v);
-    v->add_attribute("density", std::make_shared<DoubleAttribute>(density));
-    v->add_attribute("tot_weight", std::make_shared<DoubleAttribute>(tot_weight));
-    v->add_attribute("part_weight", std::make_shared<DoubleAttribute>(part_weight));
-    v->add_attribute("proc_type", std::make_shared<IntAttribute>(proc_type));
-}
+    if (nin == 0 && nout != 0 ) {
+        auto particles_out = v->particles_out();
+        for (auto p: particles_out)
+        {
+            v->remove_particle_out(p);
+            p->set_status(4);
+            evt.add_beam_particle(p);
+        }
+        if (interaction_header_tokens.size() == 5 )
+        {
+            evt.set_event_number(atoi(interaction_header_tokens.at(2).c_str()));
+            GenHeavyIonPtr  hi = std::make_shared<GenHeavyIon>();
+            hi->set(-1, -1, -1, -1, -1, -1,
+                    -1, -1, -1,
+                    -1.0, -1.0, -1.0, -1.0, -1.0, -1.0);
+            hi->impact_parameter = std::strtof(interaction_header_tokens.at(3).c_str(),nullptr);
+            hi->event_plane_angle = std::strtof(interaction_header_tokens.at(4).c_str(),nullptr); //NOT DOCUMENTED IN MANUALS!!!
+            evt.set_heavy_ion(hi);
+        }
+    }
 
-void ReaderOSCAR1999::end_event() {
-    parse_header();
+    if (nin != 0 && nout == 0 ) {
+        auto particles_final = v->particles_in();
+        for (auto p: particles_final)
+        {
+            v->remove_particle_in(p);
+            p->set_status(1);
+            evt.add_particle(p);
+        }
+    }
+
+    if (nin !=0 && nout !=0 )
+    {
+        evt.add_vertex(v);
+        if (interaction_header_tokens.size() == 9 )
+        {
+            v->add_attribute("process_type", std::make_shared<IntAttribute>(atoi(interaction_header_tokens.at(2).c_str())));
+            //v->add_attribute("collision_counter", std::make_shared<IntAttribute>(std::strtol(tokens.at(3))));//
+            v->add_attribute("collision_time", std::make_shared<DoubleAttribute>(std::strtof(interaction_header_tokens.at(4).c_str(),nullptr)));
+            v->add_attribute("cms", std::make_shared<DoubleAttribute>(std::strtof(interaction_header_tokens.at(5).c_str(),nullptr)));
+            v->add_attribute("total_cross_section", std::make_shared<DoubleAttribute>(std::strtof(interaction_header_tokens.at(6).c_str(),nullptr)));
+            v->add_attribute("partial_cross_section", std::make_shared<DoubleAttribute>(std::strtof(interaction_header_tokens.at(7).c_str(),nullptr)));
+            v->add_attribute("baryon_density", std::make_shared<DoubleAttribute>(std::strtof(interaction_header_tokens.at(8).c_str(),nullptr)));
+        }
+        if (interaction_header_tokens.size() == 6 )
+        {
+            v->add_attribute("baryon_density", std::make_shared<DoubleAttribute>(std::strtof(interaction_header_tokens.at(2).c_str(),nullptr)));
+            v->add_attribute("total_weight", std::make_shared<DoubleAttribute>(std::strtof(interaction_header_tokens.at(3).c_str(),nullptr)));
+            v->add_attribute("partial_weight", std::make_shared<DoubleAttribute>(std::strtof(interaction_header_tokens.at(4).c_str(),nullptr)));
+            v->add_attribute("process_type", std::make_shared<IntAttribute>(atoi(interaction_header_tokens.at(5).c_str())));
+        }
+    }
 }
 
 void ReaderOSCAR1999::parse_header() {
@@ -271,42 +275,22 @@ void ReaderOSCAR1999::parse_header() {
     for (auto &s: m_header) s.erase( std::remove(s.begin(), s.end(), '\r'), s.end() );
     if (m_header.size() > 2&& m_header.at(0).length() > 2 && m_header.at(1).length() > 2) {
         run_info()->add_attribute("content", std::make_shared<StringAttribute>(m_header.at(0).substr(2)));
-
         std::string toparse1 = m_header.at(1);
-        toparse1[0]=' ';
-        std::vector<std::string> parsed1;
-        while (toparse1.size()>0)
-        {
-            toparse1.erase(0,toparse1.find_first_not_of(" -"));
-            parsed1.push_back(toparse1.substr(0,toparse1.find_first_of(" -")));
-            toparse1.erase(0,parsed1.back().size());
-        }
-
-        struct GenRunInfo::ToolInfo generator = {parsed1.size()>1?parsed1.at(0):"Unknown", parsed1.size()>2?parsed1.at(1):"0.0.0", std::string("Used generator")};
+        std::vector<std::string> parsed1 = tokenize_string(toparse1, " -#"); // treat "generator-version" same as "generator version"
+        struct GenRunInfo::ToolInfo generator = {parsed1.size()>0?parsed1.at(0):"Unknown", parsed1.size()>1?parsed1.at(1):"0.0.0", std::string("Used generator")};
         run_info()->tools().push_back(generator);
-
         std::string toparse2 = m_header.at(2);
-        toparse2[0]=' ';
         size_t reaction_b = toparse2.find_first_of("(");
         size_t reaction_e = toparse2.find_last_of(")")+1;
-
-
         if (reaction_e > reaction_b + 1) {
             std::string reaction = toparse2.substr(reaction_b,reaction_e-reaction_b);
             toparse2.erase(reaction_b,reaction_e-reaction_b);
-            std::vector<std::string> parsed2;
-            while (toparse2.size()>0)
-            {
-                toparse2.erase(0,toparse2.find_first_not_of(" "));
-                parsed2.push_back(toparse2.substr(0,toparse2.find_first_of(" ")));
-                toparse2.erase(0,parsed2.back().size());
-            }
+            std::vector<std::string> parsed2 = tokenize_string(toparse2, " #");
             run_info()->add_attribute("reaction", std::make_shared<StringAttribute>(reaction));
             if (parsed2.size() > 0) run_info()->add_attribute("reference_frame", std::make_shared<StringAttribute>(parsed2.at(0)));
             if (parsed2.size() > 1) run_info()->add_attribute("beam_energy", std::make_shared<DoubleAttribute>(std::strtof(parsed2.at(1).c_str(),NULL)));
             if (parsed2.size() > 2) run_info()->add_attribute("test_particles_per_nuclon", std::make_shared<IntAttribute>(std::atoi(parsed2.at(2).c_str())));
         }
-
         std::vector<std::string> weightnames;
         weightnames.push_back("Default");
         run_info()->set_weight_names(weightnames);

@@ -112,7 +112,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         HEPMC3_DEBUG(0, "Attempt ReaderOSCAR1997 for " << filename);
         if ( strncmp(head.at(0).c_str(), "OSC1997A", 8) == 0)
             return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR1997(filename)));
-        HEPMC3_DEBUG(0, "Attempt ReaderOSCAR for " << filename);
+        HEPMC3_DEBUG(0, "Attempt ReaderOSCAR1999 for " << filename);
         if ( strncmp(head.at(0).c_str(), "# OSCAR1999A", 10) == 0)
             return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR1999(filename)));
         HEPMC3_DEBUG(0, "Attempt ReaderHEPEVT for " << filename);
@@ -184,7 +184,7 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
     }
     if ( strncmp(head.at(0).c_str(), "# OSC1999A", 10) == 0)
     {
-        HEPMC3_DEBUG(0, "Attempt ReaderOSCAR");
+        HEPMC3_DEBUG(0, "Attempt ReaderOSCAR1999");
         return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR1999(stream)));
     }
     if ( strncmp(head.at(0).c_str(), "<LesHouchesEvents", 17) == 0)

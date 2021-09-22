@@ -62,6 +62,19 @@ inline void filter_spaces(char* actual_input) {
     j++;
     output[j] = '\0';
 }
+inline std::vector<std::string> tokenize_string(const std::string& str, const std::string& delimiters )
+{
+    std::vector<std::string> tokens;
+    std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+    std::string::size_type pos     = str.find_first_of(delimiters, lastPos);
+    while (std::string::npos != pos || std::string::npos != lastPos)
+    {
+        tokens.push_back(str.substr(lastPos, pos - lastPos));
+        lastPos = str.find_first_not_of(delimiters, pos);
+        pos = str.find_first_of(delimiters, lastPos);
+    }
+    return tokens;
+}
 bool ReaderOSCAR1997::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
     const size_t       max_buffer_size = 512*512;
@@ -117,13 +130,7 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
             if (reaction_e > reaction_b +1) {
                 std::string reaction = toparse1.substr(reaction_b,reaction_e-reaction_b);
                 toparse1.erase(reaction_b,reaction_e-reaction_b);
-                std::vector<std::string> parsed1;
-                while (toparse1.size()>0)
-                {
-                    toparse1.erase(0,toparse1.find_first_not_of(" -"));
-                    parsed1.push_back(toparse1.substr(0,toparse1.find_first_of(" -")));
-                    toparse1.erase(0,parsed1.back().size());
-                }
+                std::vector<std::string> parsed1 = tokenize_string(toparse1, "- ");
                 struct GenRunInfo::ToolInfo generator = {parsed1.size()>1?parsed1.at(0):"Unknown", parsed1.size()>2?parsed1.at(1):"0.0.0", std::string("Used generator")};
                 run_info()->tools().push_back(generator);
                 run_info()->add_attribute("reaction", std::make_shared<StringAttribute>(reaction));
@@ -137,6 +144,9 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
         }
         if (!event_header) {
             GenHeavyIonPtr  hi = std::make_shared<GenHeavyIon>();
+            hi->set(-1, -1, -1, -1, -1, -1,
+                    -1, -1, -1,
+                    -1.0, -1.0, -1.0, -1.0, -1.0, -1.0);
             GenCrossSectionPtr cs = std::make_shared<GenCrossSection>();
             while (cursor && *cursor == ' ') cursor++;
             evt.set_event_number(atoi(cursor));
