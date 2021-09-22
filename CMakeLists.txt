@@ -200,6 +200,7 @@ set( hepmc3core_sources
   ${PROJECT_SOURCE_DIR}/src/ReaderAscii.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderOSCAR1999.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderOSCAR1997.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderOSCAR2013.cc
   ${PROJECT_SOURCE_DIR}/src/WriterOSCAR1997.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderHEPEVT.cc
   ${PROJECT_SOURCE_DIR}/src/WriterAscii.cc

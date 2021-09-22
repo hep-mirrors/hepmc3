@@ -101,6 +101,7 @@ set( HepMC_tests
         testIO11
         testIO12
         testIO13
+        testIO14
         testReaderFactory1
         testSingleVertexHepMC2
          )
