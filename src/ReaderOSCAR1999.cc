@@ -204,6 +204,7 @@ void ReaderOSCAR1999::parse_interaction(GenEvent &evt,const std::vector<std::str
     std::vector<std::string> interaction_header_tokens = tokenize_string(interaction.at(0), " ");
     int nin = atoi(interaction_header_tokens.at(0).c_str());
     int nout = atoi(interaction_header_tokens.at(1).c_str());
+    printf("%i %i\n",nin,nout);
     GenVertexPtr v = std::make_shared<GenVertex>();
     for (int i = 1; i < nin + 1; i++ ) v->add_particle_in(parse_particle(interaction.at(i)));
     assert(nout + nin + 1 == interaction.size());
