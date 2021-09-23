@@ -87,9 +87,13 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
     int n_particles_expected = 0;
     int n_particles_parsed = 0;
     GenVertexPtr top = std::make_shared<GenVertex>();
-    GenParticlePtr b =std::make_shared<GenParticle>();
-    evt.add_beam_particle(b);
-    top->add_particle_in(b);
+// We add two particles, despite it is actually not needed.
+    GenParticlePtr b1 =std::make_shared<GenParticle>();
+    evt.add_beam_particle(b1);
+    top->add_particle_in(b1);
+    GenParticlePtr b2 =std::make_shared<GenParticle>();
+    evt.add_beam_particle(b2);
+    top->add_particle_in(b2);
     evt.add_vertex(top);
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
@@ -142,13 +146,14 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
             file_header_parsed = true;
         }
         int i[4];
-        double d[9];
-        sscanf(buf,"%i %lf %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", i, d, d+1, d+2, d+3, d+4, d+5, d+6,  d+7,  d+8, i+1, i+2, i+3);
-        GenParticlePtr in = std::make_shared<GenParticle>(FourVector(d[0], d[1], d[2], d[3]),i[1],3);
-        GenParticlePtr out = std::make_shared<GenParticle>(FourVector(d[0], d[1], d[2], d[3]),i[1],1);
-        in->set_generated_mass(d[4]);
-        out->set_generated_mass(d[4]);
-        GenVertexPtr v = std::make_shared<GenVertex>(FourVector(d[5], d[6],  d[7],  d[8]));
+        double d[8];
+        sscanf(buf,"%i %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", i, d, d+1, d+2, d+3, d+4, d+5, d+6,  d+7, i+1, i+2, i+3);
+        double e = std::sqrt(d[0]*d[0] + d[1]*d[1] + d[2]*d[2] +d[3]*d[3]);
+        GenParticlePtr in = std::make_shared<GenParticle>(FourVector(d[0], d[1], d[2], e),i[1],3);
+        GenParticlePtr out = std::make_shared<GenParticle>(FourVector(d[0], d[1], d[2], e),i[1],1);
+        in->set_generated_mass(d[3]);
+        out->set_generated_mass(d[3]);
+        GenVertexPtr v = std::make_shared<GenVertex>(FourVector(d[4], d[5],  d[6],  d[7]));
         v->add_particle_in(in);
         v->add_particle_out(out);
         top->add_particle_out(in);
