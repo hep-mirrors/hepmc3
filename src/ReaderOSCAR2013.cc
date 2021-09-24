@@ -66,7 +66,6 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
     const size_t       max_buffer_size = 512*512;
     char               buf[max_buffer_size];
-    const char                 *cursor   = buf;
     evt.clear();
     m_vertices.clear();
     m_prod.clear();
@@ -79,9 +78,9 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
 
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
-        cursor = buf;
         if ( strlen(buf) == 0 ) continue;
-        if ( strncmp(buf, "#", 1) == 0 && strncmp(buf, "# interaction", 13) !=0  ) {
+        if ( strncmp(buf, "\r", 1) == 0 ) continue;
+        if ( strncmp(buf, "#", 1) == 0 && strncmp(buf, "# interaction", 13) != 0  ) {
             std::vector<std::string> parsed = tokenize_string(std::string(buf), " #");
             if (parsed.size() == 14 ) {
                 if ( parsed.at(0) == "!OSCAR2013" && parsed.at(1) == "particle_lists" ) m_OSCARType = 1;
@@ -98,13 +97,15 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                 evt.add_beam_particle(b2);
                 top->add_particle_in(b2);
                 evt.add_vertex(top);
-
                 evt.set_event_number(atoi(parsed.at(1).c_str()));
                 n_particles_expected = atoi(parsed.at(3).c_str());
                 continue;
             }
             if (parsed.size() == 8 && ( m_OSCARType == 1 || m_OSCARType == 2 )) {
                 //end of event!
+                std::vector<std::string> weightnames;
+                weightnames.push_back("Default");
+                run_info()->set_weight_names(weightnames);
                 GenHeavyIonPtr  hi = std::make_shared<GenHeavyIon>();
                 hi->set(-1, -1, -1, -1, -1, -1,
                         -1, -1, -1,
@@ -167,9 +168,6 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                     std::vector<std::string> parsed1 = tokenize_string(m_header.at(1), "- #");
                     struct GenRunInfo::ToolInfo generator = {parsed1.size()>0?parsed1.at(0):"Unknown", parsed1.size()>1?parsed1.at(1):"0.0.0", std::string("Used generator")};
                     run_info()->tools().push_back(generator);
-                    std::vector<std::string> weightnames;
-                    weightnames.push_back("Default");
-                    run_info()->set_weight_names(weightnames);
                     file_header_parsed = true;
                 }
                 continue;
@@ -179,14 +177,14 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
 
         if (m_OSCARType == 1) {
             int i[4];
-            double d[8];
-            sscanf(buf,"%i %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", i, d, d+1, d+2, d+3, d+4, d+5, d+6,  d+7, i+1, i+2, i+3);
-            double e = std::sqrt(d[0]*d[0] + d[1]*d[1] + d[2]*d[2] +d[3]*d[3]);
-            GenParticlePtr in = std::make_shared<GenParticle>(FourVector(d[0], d[1], d[2], e),i[1],3);
-            GenParticlePtr out = std::make_shared<GenParticle>(FourVector(d[0], d[1], d[2], e),i[1],1);
-            in->set_generated_mass(d[3]);
-            out->set_generated_mass(d[3]);
-            GenVertexPtr v = std::make_shared<GenVertex>(FourVector(d[4], d[5],  d[6],  d[7]));
+            double d[9];
+            //#!OSCAR2013 particle_lists t x y z mass p0 px py pz pdg ID charge
+            sscanf(buf,"%i %lf %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", i, d, d+1, d+2, d+3, d+4, d+5, d+6,  d+7, d+8,  i+1, i+2, i+3);
+            GenParticlePtr in = std::make_shared<GenParticle>(FourVector(d[6], d[7], d[8], d[5]),i[1],3);
+            GenParticlePtr out = std::make_shared<GenParticle>(FourVector(d[6], d[7], d[8], d[5]),i[1],1);
+            in->set_generated_mass(d[4]);
+            out->set_generated_mass(d[4]);
+            GenVertexPtr v = std::make_shared<GenVertex>(FourVector(d[1], d[2],  d[3],  d[0]));
             v->add_particle_in(in);
             v->add_particle_out(out);
             top->add_particle_out(in);
@@ -202,13 +200,13 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                 std::vector<std::string> interaction_header_tokens = tokenize_string(std::string(buf), " #");
                 int nin = atoi (  interaction_header_tokens.at(2).c_str());
                 int nout = atoi (  interaction_header_tokens.at(4).c_str());
-                GenVertexPtr v = std::make_shared<GenVertex>();//FourVector(d[1], d[2],  d[3],  d[0]));
+                GenVertexPtr v = std::make_shared<GenVertex>();
 
                 for (int j = 0; j < nin + nout; j++ ) {
                     m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
                     if ( strlen(buf) == 0 ) {
                         HEPMC3_ERROR("ReaderOSCAR2013: event parsing failed. Returning empty event")
-                        HEPMC3_DEBUG(1, "Parsing failed at line:" << std::endl << buf)
+                        return false;
                     }
                     int i[3];
                     double d[9];

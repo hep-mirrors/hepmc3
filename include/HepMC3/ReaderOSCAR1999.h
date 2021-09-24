@@ -56,9 +56,7 @@ public:
 
 private:
     int m_OSCARType;// { unknown,   final_id_p_x, full_event_history };
-    GenParticlePtr parse_particle(const std::string& s);
-    void parse_header();
-    void parse_interaction(GenEvent &evt,const std::vector<std::string>& interaction);
+    bool parse_header();
 
     std::ifstream m_file; //!< Input file
     std::istream* m_stream; ///< For ctor when reading from stdin
@@ -66,7 +64,6 @@ private:
     std::vector<std::string> m_header; ///< header lines
     std::vector<GenVertexPtr> m_vertices;
     std::map<int, std::vector<std::pair<GenParticlePtr,FourVector> > > m_prod;
-    std::map<GenParticlePtr, std::pair<int,FourVector> > m_prod2;
 };
 
 
