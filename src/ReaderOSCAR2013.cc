@@ -49,19 +49,6 @@ bool ReaderOSCAR2013::skip(const int n)
     return true;
 }
 
-inline void filter_spaces(char* actual_input) {
-    const char* input = actual_input;
-    char* output = actual_input;
-    ssize_t j = 0;
-    ssize_t l = strlen(input);
-    if (!l) return;
-    for (ssize_t i = 1; i < l; i++) {
-        if ( !std::isspace(input[i]) || !std::isspace(output[j]))
-        { j++; output[j] = input[i]; }
-    }
-    j++;
-    output[j] = '\0';
-}
 inline std::vector<std::string> tokenize_string(const std::string& str, const std::string& delimiters )
 {
     std::vector<std::string> tokens;
