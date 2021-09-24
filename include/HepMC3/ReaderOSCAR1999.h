@@ -55,6 +55,7 @@ public:
     void close()  override;
 
 private:
+    int m_OSCARType;// { unknown,   final_id_p_x, full_event_history };
     GenParticlePtr parse_particle(const std::string& s);
     void parse_header();
     void parse_interaction(GenEvent &evt,const std::vector<std::string>& interaction);

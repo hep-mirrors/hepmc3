@@ -55,10 +55,15 @@ public:
     void close()  override;
 
 private:
+    int m_OSCARType;// { unknown,   final_id_p_x, full_event_history };
     std::ifstream m_file; //!< Input file
     std::istream* m_stream; ///< For ctor when reading from stdin
     bool m_isstream; ///< toggles usage of m_file or m_stream
     std::vector<std::string> m_header; ///< header lines
+
+    std::vector<GenVertexPtr> m_vertices;
+    std::map<int, std::vector<std::pair<GenParticlePtr,FourVector> > > m_prod;
+
 };
 
 

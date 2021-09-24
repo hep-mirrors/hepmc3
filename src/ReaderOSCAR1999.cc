@@ -23,7 +23,7 @@ namespace HepMC3 {
 
 
 ReaderOSCAR1999::ReaderOSCAR1999(const std::string &filename)
-    : m_file(filename), m_stream(0), m_isstream(false)
+    : m_file(filename), m_stream(0), m_isstream(false), m_OSCARType(0)
 {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderOSCAR1999: could not open input file: " << filename)
@@ -32,7 +32,7 @@ ReaderOSCAR1999::ReaderOSCAR1999(const std::string &filename)
 }
 
 ReaderOSCAR1999::ReaderOSCAR1999(std::istream & stream)
-    : m_stream(&stream), m_isstream(true)
+    : m_stream(&stream), m_isstream(true), m_OSCARType(0)
 {
     if ( !m_stream->good() ) {
         HEPMC3_ERROR("ReaderOSCAR1999: could not open input stream ")
@@ -85,11 +85,12 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
             if ( strncmp(buf, "# OSC1999A", 10) == 0 ) {
                 HEPMC3_WARNING("ReaderOSCAR1999: So far OSCAR1999A format is not fully supported. ")
                 m_header.clear();
-            } else  {
-                if  ( strncmp(buf, "# End of event:", 15) == 0 ) footer =  true;
-                m_header.push_back(std::string(buf));
-
+                continue;
             }
+            if  ( strncmp(buf, "# End of event:", 15) == 0 ) footer =  true;
+            if (  strncmp(buf, "# final_id_p_x", 14) == 0 ) m_OSCARType = 1;
+            if (  strncmp(buf, "# full_event_history", 20) == 0 ) m_OSCARType = 2;
+            m_header.push_back(std::string(buf));
             continue;
         }
         if (  (strlen(buf) != 0 && ( strncmp(buf, "0 0 ", 4) == 0 ||strncmp(buf, "      0        0", 16) == 0) ) ) {
@@ -170,7 +171,7 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
 
 GenParticlePtr ReaderOSCAR1999::parse_particle(const std::string& s) {
     std::vector<std::string> particle_tokens = tokenize_string(s, " ");
-    int id = atoi(particle_tokens.at(0).c_str());
+    int id = atoi(particle_tokens.at(0).c_str()); // this will not be used for
     int pdg = atoi(particle_tokens.at(1).c_str());
     int wft = atoi(particle_tokens.at(2).c_str());
     double px = atof(particle_tokens.at(3).c_str());
