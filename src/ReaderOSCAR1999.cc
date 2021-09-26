@@ -11,13 +11,13 @@
 #include <sstream>
 #include <cassert>
 
-#include "HepMC3/ReaderOSCAR1999.h"
-
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Units.h"
 #include "HepMC3/Print.h"
+#include "HepMC3/ReaderOSCAR1999.h"
+
 
 namespace HepMC3 {
 
@@ -48,6 +48,7 @@ bool ReaderOSCAR1999::skip(const int n)
 {
     return true;
 }
+
 inline std::vector<std::string> tokenize_string(const std::string& str, const std::string& delimiters )
 {
     std::vector<std::string> tokens;
@@ -78,17 +79,17 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
 
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
-        if ( strlen(buf) == 0) continue;
+        if ( strlen(buf) == 0 ) continue;
         if ( strncmp(buf, "\r", 1) == 0 ) continue;
         // Check for ReaderOSCAR1999 header/footer
         if ( strncmp(buf, "#", 1) == 0 ) {
-            if ( strncmp(buf, "# OSC1999A", 10) == 0 ) {
-                HEPMC3_WARNING("ReaderOSCAR1999: So far OSCAR1999A format is not fully supported. ")
-                m_header.clear();
-                continue;
+            std::vector<std::string> parsed = tokenize_string(std::string(buf), " #");
+            if (parsed.size() == 1 ) {
+                if ( parsed.at(0) == "OSC1999A" ) { m_header.clear(); continue;}
+                if ( parsed.at(0) == "final_id_p_x" ) m_OSCARType = 1;
+                if ( parsed.at(0) == "full_event_history" ) m_OSCARType = 2;
+
             }
-            if ( strncmp(buf, "# final_id_p_x", 14) == 0 ) m_OSCARType = 1;
-            if ( strncmp(buf, "# full_event_history", 20) == 0 ) m_OSCARType = 2;
             m_header.push_back(std::string(buf));
             if (!file_header_parsed) file_header_parsed = parse_header();
             continue;
@@ -98,8 +99,7 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
         if (interaction_header_tokens.at(0) == "0" && interaction_header_tokens.at(1) == "0") {
             // This should be the end of event
             if (interaction_header_tokens.size() > 2) evt.set_event_number(atoi(interaction_header_tokens.at(2).c_str()));
-            if (interaction_header_tokens.size() > 3)
-            {
+            if (interaction_header_tokens.size() > 3) {
                 GenHeavyIonPtr  hi = std::make_shared<GenHeavyIon>();
                 hi->set(-1, -1, -1, -1, -1, -1,
                         -1, -1, -1,
@@ -110,7 +110,7 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
             std::vector<std::string> weightnames;
             weightnames.push_back("Default");
             run_info()->set_weight_names(weightnames);
-            auto cs = std::make_shared<GenCrossSection>();
+            GenCrossSectionPtr cs = std::make_shared<GenCrossSection>();
             cs->set_cross_section(1.0,1.0);
             evt.set_cross_section(cs);
             evt.weights() = std::vector<double>(1,1);
@@ -120,7 +120,6 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
                 evt.add_vertex(top);
                 if (n_particles_parsed != n_particles_expected) HEPMC3_ERROR("ReaderOSCAR1999: wrong number of particles parsed"<<n_particles_parsed << "vs expected "<< n_particles_expected);
             }
-
 
             if (m_OSCARType == 2) {
                 for (auto& pp: m_prod)
@@ -156,6 +155,7 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
             }
             break;
         }
+
         if (m_OSCARType == 1) {
             // SWAPPED??????
             int nin = atoi(interaction_header_tokens.at(1).c_str());
@@ -279,7 +279,6 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
     }
     return true;
 }
-
 
 bool ReaderOSCAR1999::parse_header() {
     if (m_header.size() < 3) return false;
