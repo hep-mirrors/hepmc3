@@ -20,6 +20,14 @@
 #include "HepMC3/ReaderPlugin.h"
 #include "HepMC3/ReaderFactory.h"
 
+#include "HepMC3/ReaderOSCAR1997.h"
+#include "HepMC3/ReaderOSCAR1999.h"
+#include "HepMC3/ReaderOSCAR2013.h"
+#include "HepMC3/WriterOSCAR1997.h"
+#include "HepMC3/WriterOSCAR1999.h"
+#include "HepMC3/WriterOSCAR2013.h"
+
+
 #ifdef HEPMC3_ROOTIO
 #include "HepMC3/ReaderRoot.h"
 #include "HepMC3/WriterRoot.h"
@@ -52,7 +60,7 @@
 
 #include "cmdline.h"
 using namespace HepMC3;
-enum formats {autodetect, hepmc2, hepmc3, hpe ,root, treeroot ,treerootopal, hpezeus, lhef, dump, dot, gz, uproot, plugin, none};
+enum formats {autodetect, hepmc2, hepmc3, hpe ,root, treeroot, treerootopal, hpezeus, lhef, dump, dot, gz, uproot, plugin, oscar1997, oscar1999, oscar2013, none};
 
 template <class T>
 std::shared_ptr<Reader> get_input_file(const char* name,const bool input_is_stdin){
@@ -91,6 +99,9 @@ int main(int argc, char** argv)
     format_map.insert(std::pair<std::string,formats> ( "gz", gz ));
     format_map.insert(std::pair<std::string,formats> ( "uproot", uproot ));
     format_map.insert(std::pair<std::string,formats> ( "plugin", plugin ));
+    format_map.insert(std::pair<std::string,formats> ( "oscar1997", oscar1997 ));
+    format_map.insert(std::pair<std::string,formats> ( "oscar1999", oscar1999 ));
+    format_map.insert(std::pair<std::string,formats> ( "oscar2013", oscar2013 ));
     format_map.insert(std::pair<std::string,formats> ( "none", none ));
     std::map<std::string, std::string> options;
     for (size_t i=0; i<ai.extensions_given; i++)
@@ -107,7 +118,6 @@ int main(int argc, char** argv)
     long int  print_each_events_parsed = ai.print_every_events_parsed_arg;
         std::string InputPluginLibrary;
         std::string InputPluginName;
-
         std::string OutputPluginLibrary;
         std::string OutputPluginName;
 
@@ -136,6 +146,15 @@ int main(int argc, char** argv)
         break;
     case lhef:
         input_file = get_input_file<ReaderLHEF>(ai.inputs[0],input_is_stdin);
+        break;
+    case oscar1997:
+        input_file = get_input_file<ReaderOSCAR1997>(ai.inputs[0],input_is_stdin);
+        break;
+    case oscar1999:
+        input_file = get_input_file<ReaderOSCAR1999>(ai.inputs[0],input_is_stdin);
+        break;
+    case oscar2013:
+        input_file = get_input_file<ReaderOSCAR2013>(ai.inputs[0],input_is_stdin);
         break;
     case gz:
 #ifdef HEPMCCONVERT_EXTENSION_GZ
@@ -191,6 +210,15 @@ int main(int argc, char** argv)
         break;
     case hpe:
         output_file = get_output_file<WriterHEPEVT>(ai.inputs[1]);
+        break;
+    case oscar1997:
+        output_file = get_output_file<WriterOSCAR1997>(ai.inputs[1]);
+        break;
+    case oscar1999:
+        output_file = get_output_file<WriterOSCAR1999>(ai.inputs[1]);
+        break;
+    case oscar2013:
+        output_file = get_output_file<WriterOSCAR2013>(ai.inputs[1]);
         break;
     case root:
 #ifdef HEPMC3_ROOTIO

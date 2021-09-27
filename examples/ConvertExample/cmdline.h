@@ -31,7 +31,7 @@ extern "C" {
 
 #ifndef CMDLINE_PARSER_VERSION
 /** @brief the program version */
-#define CMDLINE_PARSER_VERSION "3.2.3"
+#define CMDLINE_PARSER_VERSION "3.2.5"
 #endif
 
 /** @brief Where the command line options are stored */
@@ -61,7 +61,7 @@ struct gengetopt_args_info
   long print_every_events_parsed_arg;	/**< @brief Frequency of parsing information printouts (default='100').  */
   char * print_every_events_parsed_orig;	/**< @brief Frequency of parsing information printouts original value given at command line.  */
   const char *print_every_events_parsed_help; /**< @brief Frequency of parsing information printouts help description.  */
-
+  
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int input_format_given ;	/**< @brief Whether input-format was given.  */
   unsigned int output_format_given ;	/**< @brief Whether output-format was given.  */
@@ -160,7 +160,7 @@ void cmdline_parser_print_help(void);
 void cmdline_parser_print_version(void);
 
 /**
- * Initializes all the fields a cmdline_parser_params structure
+ * Initializes all the fields a cmdline_parser_params structure 
  * to their default values
  * @param params the structure to initialize
  */
