@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_WRITEROSCAR2013_H
 #define HEPMC3_WRITEROSCAR2013_H
@@ -60,12 +60,12 @@ public:
     bool failed()  override;
 
 protected:
-    std::string format_run_info() const;
+    std::string format_run_info() const; //!< prints the file header
     std::ofstream m_file; //!< Output file
     std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
-    mutable std::map<int,int> m_pdg_to_charge;
-    int charge(const int) const;
+    mutable std::map<int,int> m_pdg_to_charge; //! a map to store the calculated particle charges
+    int charge(const int) const; //!< calculates the charge of particle
 };
 
 } // namespace HepMC3

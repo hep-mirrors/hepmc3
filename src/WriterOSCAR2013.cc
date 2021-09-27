@@ -50,20 +50,14 @@ WriterOSCAR2013::WriterOSCAR2013(std::shared_ptr<std::ostream> s_stream,
 }
 
 std::string WriterOSCAR2013::format_run_info() const {
-    std::string content = run_info()->attribute<StringAttribute>("content") ?
-                          run_info()->attribute<StringAttribute>("content")->value() : "unknown";
-    if ( content != "final_id_p_x" ) {
-        HEPMC3_WARNING("WriterOSCAR2013 supports only final_id_p_x content type.");
-        content = "final_id_p_x";
-    }
     const std::string generator_name = run_info()->tools().size()? run_info()->tools().front().name : "Unknown";
     const std::string generator_version = run_info()->tools().size()? run_info()->tools().front().version : "0.0.0";
     char buf[512];
-    sprintf(buf,"%s\n%s\n# %.100s-%.100s\n",
-            "#!OSCAR2013 particle_lists t x y z mass p0 px py pz pdg ID charge",
-            "# Units: fm fm fm fm GeV GeV GeV GeV GeV none none e",
-            generator_name.c_str(), generator_version.c_str()
-           );
+    snprintf(buf,512,"%s\n%s\n# %.100s-%.100s\n",
+             "#!OSCAR2013 particle_lists t x y z mass p0 px py pz pdg ID charge",
+             "# Units: fm fm fm fm GeV GeV GeV GeV GeV none none e",
+             generator_name.c_str(), generator_version.c_str()
+            );
 
     const std::string header(buf);
     return header;
@@ -73,7 +67,6 @@ void WriterOSCAR2013::write_event(const GenEvent &evt)
     auto allparticles = evt.particles();
     int n_final = 0;
     for (auto part: allparticles) if (!part->end_vertex()) n_final++;
-
     char buf[512*512];//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor = &(buf[0]);
     auto hi = evt.heavy_ion();
@@ -83,15 +76,17 @@ void WriterOSCAR2013::write_event(const GenEvent &evt)
     unsigned long length = cursor - &(buf[0]);
     m_stream->write(buf, length);
     cursor = &(buf[0]);
+    const double to_fm = (evt.length_unit() == Units::MM) ? 1e+12 : 1e+13;
+    const double to_gev = (evt.momentum_unit() == Units::GEV) ? 1 : 1e-3;
     int counter = 0;
     for (auto part: allparticles) {
         if (part->end_vertex()) continue;
         FourVector p = part->momentum();
         FourVector v = part->production_vertex() ? part->production_vertex()->position() : evt.event_pos();
-        //    "#!OSCAR2013 particle_lists t x y z mass p0 px py pz pdg ID charge",
+        /// The format is t x y z mass p0 px py pz pdg ID charge
         cursor += sprintf(cursor, "%.0f %6.4f %6.4f %6.4f %3.3f %9.9f %9.9f %9.10f %9.9f %i %i %i\n",
-                          v.t(), v.x(), v.y(), v.z(),
-                          part->generated_mass(), p.e(), p.px(), p.py(), p.pz(),
+                          to_fm*v.t(), to_fm*v.x(), to_fm*v.y(), to_fm*v.z(),
+                          to_gev*part->generated_mass(), to_gev*p.e(), to_gev*p.px(), to_gev*p.py(), to_gev*p.pz(),
                           part->pdg_id(), part->id(),  charge(part->pdg_id())
                          );
         counter++;
@@ -101,8 +96,8 @@ void WriterOSCAR2013::write_event(const GenEvent &evt)
             cursor = &(buf[0]);
         }
     }
-    //# event 0 end 0 impact   1.049 scattering_projectile_target yes
-    cursor += sprintf(cursor,"# event %i end 0 impact  %6.3f scattering_projectile_target yes\n", evt.event_number(),  v_impact_parameter);
+    /// End of event. Note: scattering_projectile_target is not known.
+    cursor += sprintf(cursor,"# event %i end 0 impact  %6.3f scattering_projectile_target yes\n", evt.event_number(), v_impact_parameter);
     length = cursor - &(buf[0]);
     m_stream->write(buf, length);
 }
@@ -112,11 +107,20 @@ int WriterOSCAR2013::charge(const int pdg) const {
         return  m_pdg_to_charge.at(pdg);
     } else {
         int res = -999;
-        if (pdg == 2212) { res = 1; m_pdg_to_charge[pdg] = res;}
-        if (pdg == 2112) { res = 0; m_pdg_to_charge[pdg] = res;}
-        if (pdg == 211) { res = 1; m_pdg_to_charge[pdg] = res;}
-        if (pdg == -211) { res = -1; m_pdg_to_charge[pdg] = res;}
-        if (pdg == 111) { res = 0; m_pdg_to_charge[pdg] = res;}
+        switch (pdg) {
+        case 2212:
+        { res = 1; m_pdg_to_charge[pdg] = res; break;}
+        case  2112:
+        { res = 0; m_pdg_to_charge[pdg] = res; break;}
+        case  211:
+        { res = 1; m_pdg_to_charge[pdg] = res; break;}
+        case  -211:
+        { res = -1; m_pdg_to_charge[pdg] = res; break;}
+        case  111:
+        { res = 0; m_pdg_to_charge[pdg] = res; break;}
+        default:
+        {}
+        }
         return res;
     }
 }

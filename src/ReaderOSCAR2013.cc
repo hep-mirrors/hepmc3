@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file ReaderOSCAR2013.cc
@@ -46,7 +46,8 @@ ReaderOSCAR2013::~ReaderOSCAR2013() {
 
 bool ReaderOSCAR2013::skip(const int n)
 {
-    return true;
+    /// So far this is not implemented
+    return false;
 }
 
 inline std::vector<std::string> tokenize_string(const std::string& str, const std::string& delimiters )
@@ -70,32 +71,33 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
     evt.clear();
     m_vertices.clear();
     m_prod.clear();
-    evt.set_units(Units::GEV,Units::MM);//Fixed units?
     evt.set_run_info(run_info());
     bool file_header_parsed = false;
     int n_particles_expected = 0;
     int n_particles_parsed = 0;
     GenVertexPtr top = std::make_shared<GenVertex>();
-
+    /// OSCAR has fixed units fm/GEV, right?
+    const double from_fm = (evt.length_unit() == Units::MM) ? 1e-12 : 1e-13;
+    const double from_gev = (evt.momentum_unit() == Units::GEV) ? 1 : 1e+3;
     while (!failed()) {
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
         if ( strlen(buf) == 0 ) continue;
         if ( strncmp(buf, "\r", 1) == 0 ) continue;
-        // Check for ReaderOSCAR1999 header/footer
+        /// Check for ReaderOSCAR1999 header/footer
         if ( strncmp(buf, "#", 1) == 0 && strncmp(buf, "# interaction", 13) != 0 ) {
-            std::vector<std::string> parsed = tokenize_string(std::string(buf), " #");
+            std::vector<std::string> parsed = tokenize_string(std::string(buf), " #\r\n");
             if (parsed.size() == 14 ) {
                 if ( parsed.at(0) == "!OSCAR2013" && parsed.at(1) == "particle_lists" ) m_OSCARType = 1;
                 if ( parsed.at(0) == "!OSCAR2013" && parsed.at(1) == "full_event_history" ) m_OSCARType = 2;
                 continue;
             }
             if (parsed.size() == 4 &&  m_OSCARType == 1 ) {
-                //start of event!
-                // We add two particles, despite it is actually not needed.
-                GenParticlePtr b1 =std::make_shared<GenParticle>();
+                /// Start of event
+                /// Add dummy particles as beams
+                GenParticlePtr b1 = std::make_shared<GenParticle>();
                 evt.add_beam_particle(b1);
                 top->add_particle_in(b1);
-                GenParticlePtr b2 =std::make_shared<GenParticle>();
+                GenParticlePtr b2 = std::make_shared<GenParticle>();
                 evt.add_beam_particle(b2);
                 top->add_particle_in(b2);
                 evt.add_vertex(top);
@@ -104,7 +106,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                 continue;
             }
             if (parsed.size() == 8 && ( m_OSCARType == 1 || m_OSCARType == 2 )) {
-                //end of event!
+                /// End of event
                 GenHeavyIonPtr  hi = std::make_shared<GenHeavyIon>();
                 hi->set(-1, -1, -1, -1, -1, -1,
                         -1, -1, -1,
@@ -121,10 +123,12 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                 evt.weights() = std::vector<double>(1,1);
 
                 if ( m_OSCARType == 1 ) {
+                    /// Add the interaction vertex to the event.
                     evt.add_vertex(top);
                     if (n_particles_parsed != n_particles_expected) HEPMC3_ERROR("ReaderOSCAR2013: wrong number of particles parsed"<<n_particles_parsed << "vs expected "<< n_particles_expected);
                 }
                 if (m_OSCARType == 2) {
+                    /// Manipulate with history and remove duplicated particles, i.e. those that recorded as "in" and "out"
                     for (auto& pp: m_prod)
                     {
                         auto& history = pp.second;
@@ -165,7 +169,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                 m_header.push_back(std::string(buf));
                 if (m_header.size() == 2 && !file_header_parsed) {
                     run_info()->add_attribute("units", std::make_shared<StringAttribute>(m_header.at(0)));
-                    std::vector<std::string> parsed1 = tokenize_string(m_header.at(1), "- #");
+                    std::vector<std::string> parsed1 = tokenize_string(m_header.at(1), "- #\r\n");
                     struct GenRunInfo::ToolInfo generator = {parsed1.size()>0?parsed1.at(0):"Unknown", parsed1.size()>1?parsed1.at(1):"0.0.0", std::string("Used generator")};
                     run_info()->tools().push_back(generator);
                     file_header_parsed = true;
@@ -178,13 +182,16 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
         if (m_OSCARType == 1) {
             int i[4];
             double d[8];
-            //#!OSCAR2013 particle_lists t x y z mass p0 px py pz pdg ID charge
-            sscanf(buf,"%i %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", i, d, d+1, d+2, d+3, d+4, d+5, d+6,  d+7,  i+1, i+2, i+3);
-            GenParticlePtr in = std::make_shared<GenParticle>(FourVector(d[5], d[6], d[7], d[4]),i[1],3);
-            GenParticlePtr out = std::make_shared<GenParticle>(FourVector(d[5], d[6], d[7], d[4]),i[1],1);
-            in->set_generated_mass(d[3]);
-            out->set_generated_mass(d[3]);
-            GenVertexPtr v = std::make_shared<GenVertex>(FourVector(d[0], d[1],  d[2],  i[0]));
+            /// The expected format is
+            /// t x y z mass p0 px py pz pdg ID charge
+            sscanf(buf,"%i %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", i, d, d+1, d+2, d+3, d+4, d+5, d+6,  d+7, i+1, i+2, i+3);
+            /// Create two particles. One for the final state and the other to connect the "interaction" vertex with the "final" vertex
+            GenParticlePtr in = std::make_shared<GenParticle>(FourVector(from_gev*d[5], from_gev*d[6], from_gev*d[7], from_gev*d[4]), i[1], 3);
+            GenParticlePtr out = std::make_shared<GenParticle>(FourVector(from_gev*d[5], from_gev*d[6], from_gev*d[7], from_gev*d[4]), i[1], 1);
+            in->set_generated_mass(from_gev*d[3]);
+            out->set_generated_mass(from_gev*d[3]);
+            /// Create "final" vertex
+            GenVertexPtr v = std::make_shared<GenVertex>(FourVector(from_fm*d[0], from_fm*d[1], from_fm*d[2], from_fm*i[0]));
             v->add_particle_in(in);
             v->add_particle_out(out);
             top->add_particle_out(in);
@@ -197,8 +204,9 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
         if (m_OSCARType == 2) {
             if ( strncmp(buf, "#", 1) == 0 )
             {
-                //# interaction in 2 out 2 rho    0.0000000 weight     46.76038 partial   17.8799439 type     3
-                std::vector<std::string> interaction_header_tokens = tokenize_string(std::string(buf), " #");
+                /// The expected contect is interaction string in a form
+                ///# interaction in 2 out 2 rho    0.0000000 weight     46.76038 partial   17.8799439 type     3
+                std::vector<std::string> interaction_header_tokens = tokenize_string(std::string(buf), " #\r\n");
                 int nin = atoi (  interaction_header_tokens.at(2).c_str());
                 int nout = atoi (  interaction_header_tokens.at(4).c_str());
                 GenVertexPtr v = std::make_shared<GenVertex>();
@@ -211,11 +219,12 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                     }
                     int i[3];
                     double d[9];
-                    // #!OSCAR2013 particle_lists t x y z mass p0 px py pz pdg ID charge
-                    sscanf(buf,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", d, d+1, d+2, d+3, d+4, d+5, d+6,  d+7, d+8,  i, i+1, i+2);
-                    GenParticlePtr p = std::make_shared<GenParticle>(FourVector(d[6], d[7], d[8], d[5]),i[0],3);
-                    p->set_generated_mass(d[4]);
-                    FourVector fv(d[1], d[2],  d[3],  d[0]);
+                    ///  The expected content is particle in a form
+                    ///  t x y z mass p0 px py pz pdg ID charge
+                    sscanf(buf,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", d, d+1, d+2, d+3, d+4, d+5, d+6, d+7, d+8, i, i+1, i+2);
+                    GenParticlePtr p = std::make_shared<GenParticle>(FourVector(from_gev*d[6], from_gev*d[7], from_gev*d[8], from_gev*d[5]), i[0], 3);
+                    p->set_generated_mass(from_gev*d[4]);
+                    FourVector fv(from_fm*d[1], from_fm*d[2], from_fm*d[3], from_fm*d[0]);
                     m_prod[i[1]].push_back(std::pair<GenParticlePtr,FourVector>(p,fv));
 
                     if (!j && nin ) v->set_position(fv);
@@ -223,6 +232,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                     else { v->add_particle_out(p); }
                 }
                 m_vertices.push_back(v);
+                /// The initial vertex with beam particles
                 if (nin == 0 && nout != 0 ) {
                     auto particles_out = v->particles_out();
                     for (auto p: particles_out)
@@ -233,6 +243,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                     }
 
                 }
+                /// A normal vertex
                 if (nin !=0 && nout !=0 )
                 {
                     evt.add_vertex(v);
@@ -244,6 +255,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                     }
 
                 }
+                /// A fake vertex for final state particles
                 if (nin != 0 && nout == 0 ) {
                     auto particles_final = v->particles_in();
                     for (auto p: particles_final)

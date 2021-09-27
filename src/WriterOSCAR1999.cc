@@ -50,25 +50,19 @@ WriterOSCAR1999::WriterOSCAR1999(std::shared_ptr<std::ostream> s_stream,
 }
 
 std::string WriterOSCAR1999::format_run_info() const {
-    std::string content = run_info()->attribute<StringAttribute>("content") ?
-                          run_info()->attribute<StringAttribute>("content")->value() : "unknown";
-    if ( content != "final_id_p_x" ) {
-        HEPMC3_WARNING("WriterOSCAR1999 supports only final_id_p_x content type.");
-        content = "final_id_p_x";
-    }
     const std::string generator_name = run_info()->tools().size()? run_info()->tools().front().name : "Unknown";
     const std::string generator_version = run_info()->tools().size()? run_info()->tools().front().version : "0.0.0";
     char buf[512];
-    sprintf(buf,"%s\n%s\n# %s %s\n%s\n%s\n%s\n%s\n%s\n",
-            "# OSC1999A",
-            "# final_id_p_x",
-            generator_name.c_str(), generator_version.c_str(),
-            "# Block format:",
-            "# nin nout event_number",
-            "# id pdg 0 px py pz p0 mass x y z t",
-            "# End of event: 0 0 event_number impact_parameter",
-            "#"
-           );
+    snprintf(buf, 512, "%s\n%s\n# %s %s\n%s\n%s\n%s\n%s\n%s\n",
+             "# OSC1999A",
+             "# final_id_p_x",
+             generator_name.c_str(), generator_version.c_str(),
+             "# Block format:",
+             "# nin nout event_number",
+             "# id pdg 0 px py pz p0 mass x y z t",
+             "# End of event: 0 0 event_number impact_parameter",
+             "#"
+            );
     const std::string header(buf);
     return header;
 }
@@ -88,24 +82,25 @@ void WriterOSCAR1999::write_event(const GenEvent &evt)
     m_stream->write(buf, length);
     cursor = &(buf[0]);
     int counter = 0;
+    const double to_fm = (evt.length_unit() == Units::MM) ? 1e+12 : 1e+13;
+    const double to_gev = (evt.momentum_unit() == Units::GEV) ? 1 : 1e-3;
     for (auto part: allparticles) {
         if (part->end_vertex()) continue;
         if (part->status() == 4) continue;
         if (part->pdg_id() == 0) continue;
         FourVector p = part->momentum();
         FourVector v = part->production_vertex() ? part->production_vertex()->position() : evt.event_pos();
-        /* Exact reproduction
-                std::stringstream nozeros2;
-                nozeros2 <<       counter<< " " <<part->pdg_id() <<" 0 " <<
-                                  p.px()<< " " <<p.py()<<" " << p.pz()<<" " << p.e()<<" " << part->generated_mass()<<" " <<
-                                  v.x()<< " " <<v.y()<< " " <<v.z()<< " " <<int(v.t());
-                cursor += sprintf(cursor, "%s\n",nozeros2.str().c_str());
-        */
+        /// Exact reproduction of the SMASH output
+        ///        std::stringstream nozeros2;
+        ///        nozeros2 <<       counter<< " " <<part->pdg_id() <<" 0 " <<
+        ///                          p.px()<< " " <<p.py()<<" " << p.pz()<<" " << p.e()<<" " << part->generated_mass()<<" " <<
+        ///                          v.x()<< " " <<v.y()<< " " <<v.z()<< " " <<int(v.t());
+        ///        cursor += sprintf(cursor, "%s\n",nozeros2.str().c_str());
 
-        cursor += sprintf(cursor, "%i %i 0 %f %f %f %f %f %f %f %f %i\n",
-                          counter, part->pdg_id(),
-                          p.px(), p.py(), p.pz(), p.e(), part->generated_mass(),
-                          v.x(), v.y(), v.z(), int(v.t()));
+        cursor += snprintf(cursor, 512, "%i %i 0 %f %f %f %f %f %f %f %f %i\n",
+                           counter, part->pdg_id(),
+                           to_gev*p.px(), to_gev*p.py(), to_gev*p.pz(), to_gev*p.e(), to_gev*part->generated_mass(),
+                           to_fm*v.x(), to_fm*v.y(), to_fm*v.z(), int(to_fm*v.t()));
 
         counter++;
         if (counter%100 == 0) {
@@ -114,7 +109,9 @@ void WriterOSCAR1999::write_event(const GenEvent &evt)
             cursor = &(buf[0]);
         }
     }
-    cursor += sprintf(cursor,"0 0 %i %7.3f\n", evt.event_number(),v_impact_parameter);
+    /// End of event
+    /// What are the units of impact parameter?
+    cursor += sprintf(cursor,"0 0 %i %7.3f\n", evt.event_number(), v_impact_parameter);
     length = cursor - &(buf[0]);
     m_stream->write(buf, length);
 }

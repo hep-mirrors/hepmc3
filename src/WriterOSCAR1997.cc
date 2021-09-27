@@ -50,12 +50,6 @@ WriterOSCAR1997::WriterOSCAR1997(std::shared_ptr<std::ostream> s_stream,
 }
 
 std::string WriterOSCAR1997::format_run_info() const {
-    std::string content = run_info()->attribute<StringAttribute>("content") ?
-                          run_info()->attribute<StringAttribute>("content")->value() : "unknown";
-    if ( content != "final_id_p_x" ) {
-        HEPMC3_WARNING("WriterOSCAR1997 supports only final_id_p_x content type.");
-        content = "final_id_p_x";
-    }
     const std::string generator_name = run_info()->tools().size()? run_info()->tools().front().name : "Unknown";
     const std::string generator_version = run_info()->tools().size()? run_info()->tools().front().version : "0.0.0";
     const std::string reaction = run_info()->attribute<StringAttribute>("reaction") ?
@@ -67,10 +61,10 @@ std::string WriterOSCAR1997::format_run_info() const {
     const int test_particles_per_nuclon = run_info()->attribute<IntAttribute>("test_particles_per_nuclon") ?
                                           run_info()->attribute<IntAttribute>("test_particles_per_nuclon")->value() : 0;
     char buf[512];
-    sprintf(buf,"%-12s\n%s\n%8s  %-8s  %.100s  %4s  %10.4E  %8i\n", "OSC1997A",
-            content.c_str(), generator_name.c_str(), generator_version.c_str(),
-            reaction.c_str(), reference_frame.c_str(),
-            beam_energy, test_particles_per_nuclon);
+    snprintf(buf, 512, "%-12s\n%s\n%8s  %-8s  %.100s  %4s  %10.4E  %8i\n", "OSC1997A",
+             "final_id_p_x", generator_name.c_str(), generator_version.c_str(),
+             reaction.c_str(), reference_frame.c_str(),
+             beam_energy, test_particles_per_nuclon);
 
     const std::string header(buf);
     return header;
@@ -86,19 +80,21 @@ void WriterOSCAR1997::write_event(const GenEvent &evt)
     auto hi = evt.heavy_ion();
     double v_impact_parameter = hi? hi->impact_parameter : 0.0;
     double v_rotation = hi? hi->event_plane_angle : 0.0;
-    cursor += sprintf(cursor,"%10i  %10i  %8.3f  %8.3f\n", evt.event_number(), n_final, v_impact_parameter, v_rotation);
+    cursor += snprintf(cursor, 512, "%10i  %10i  %8.3f  %8.3f\n", evt.event_number(), n_final, v_impact_parameter, v_rotation);
     unsigned long length = cursor - &(buf[0]);
     m_stream->write(buf, length);
     cursor = &(buf[0]);
     int counter = 0;
+    const double to_fm = (evt.length_unit() == Units::MM) ? 1e+12 : 1e+13;
+    const double to_gev = (evt.momentum_unit() == Units::GEV) ? 1 : 1e-3;
     for (auto part: allparticles) {
         if (part->end_vertex()) continue;
         FourVector p = part->momentum();
         FourVector v = part->production_vertex() ? part->production_vertex()->position() : evt.event_pos();
-        cursor += sprintf(cursor, "%10i  %10i  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E\n",
-                          counter+1, part->pdg_id(),
-                          p.px(), p.py(), p.pz(), p.e(), part->generated_mass(),
-                          v.x(), v.y(), v.z(), v.t());
+        cursor += snprintf(cursor, 512, "%10i  %10i  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E  % 12.6E\n",
+                           counter + 1, part->pdg_id(),
+                           to_gev*p.px(), to_gev*p.py(), to_gev*p.pz(), to_gev*p.e(), to_gev*part->generated_mass(),
+                           to_fm*v.x(), to_fm*v.y(), to_fm*v.z(), to_fm*v.t());
         counter++;
         if (counter%100 == 0) {
             length = cursor - &(buf[0]);

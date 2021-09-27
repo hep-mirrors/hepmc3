@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READEROSCAR1997_H
 #define HEPMC3_READEROSCAR1997_H
@@ -43,8 +43,6 @@ public:
     ///
     /// @param[out] evt Event to be filled
     bool read_event(GenEvent& evt)  override;
-
-    /// @todo No-arg version returning GenEvent?
 
     /// @brief Return status of the stream
     bool failed()  override;
