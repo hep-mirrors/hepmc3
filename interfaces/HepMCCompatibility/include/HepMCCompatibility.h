@@ -4,7 +4,7 @@
 // Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
 ///
 /// @file HepMCCompatibility.h
-/// @brief Implementation of compatibility layer (in-memory conversion functions) between HePMC2 and HepMC3
+/// @brief Implementation of compatibility layer (in-memory conversion functions) between HepMC2 and HepMC3
 ///
 #ifndef HEPMCCOMPATIBILITY_H
 #define HEPMCCOMPATIBILITY_H
