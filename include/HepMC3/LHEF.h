@@ -1629,7 +1629,7 @@ class HEPRUP : public TagBase {
 public:
 
   /** @name Standard constructors and destructors. */
-  //@{
+  /// @{
   /**
    * Default constructor.
    */
@@ -1740,7 +1740,7 @@ public:
 
   }
 
-  //@}
+  /// @}
 
 public:
 
@@ -2119,7 +2119,7 @@ class HEPEUP : public TagBase {
 public:
 
   /** @name Standard constructors and destructors. */
-  //@{
+  /// @{
   /**
    * Default constructor.
    */
@@ -2188,7 +2188,7 @@ public:
   ~HEPEUP() {
     clear();
   };
-  //@}
+  /// @}
 
 public:
 

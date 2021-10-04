@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /// @file GenVertex.h
 /// @brief Definition of \b class GenVertex
@@ -30,7 +30,7 @@ class GenVertex : public std::enable_shared_from_this<GenVertex> {
 public:
 
     /// @name Constructors
-    //@{
+    /// @{
 
     /// Default constructor
     GenVertex( const FourVector& position = FourVector::ZERO_VECTOR() );
@@ -38,12 +38,12 @@ public:
     /// Constructor based on vertex data
     GenVertex( const GenVertexData& data );
 
-    //@}
+    /// @}
 
 public:
 
     /// @name Accessors
-    //@{
+    /// @{
 
     /// Get parent event
     GenEvent* parent_event() { return m_event; }
@@ -122,7 +122,7 @@ public:
     std::string attribute_as_string(const std::string& name) const;
 
     /// @name Deprecated functionality
-    //@{
+    /// @{
 
 
     /// Add incoming particle by raw pointer
@@ -134,13 +134,13 @@ public:
     void add_particle_out( GenParticle *p ) { add_particle_out( GenParticlePtr(p) ); }
 
 
-    //@}
+    /// @}
 
 
 private:
 
     /// @name Fields
-    //@{
+    /// @{
     GenEvent       *m_event;  //!< Parent event
     int             m_id;     //!< Vertex id
     GenVertexData   m_data;   //!< Vertex data
@@ -148,7 +148,7 @@ private:
     std::vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
 
     std::vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
-    //@}
+    /// @}
 
 };
 

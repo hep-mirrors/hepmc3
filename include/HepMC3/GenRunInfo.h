@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenRunInfo.h
@@ -126,7 +126,7 @@ public:
 #endif // __CINT__
 
     /// @name Methods to fill GenRunInfoData and to read it back
-    //@{
+    /// @{
 
     /// @brief Fill GenRunInfoData object
     void write_data(GenRunInfoData &data) const;
@@ -137,13 +137,13 @@ public:
 #ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
-    //@}
+    /// @}
 #endif
 
 private:
 
     /// @name Fields
-    //@{
+    /// @{
 
 #if !defined(__CINT__)
 
@@ -161,7 +161,7 @@ private:
 
     /// @brief Mutex lock for the m_attibutes map.
     mutable std::recursive_mutex m_lock_attributes;
-    //@}
+    /// @}
 
 #endif // __CINT__
 };
