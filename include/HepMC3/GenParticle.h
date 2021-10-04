@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_GENPARTICLE_H
 #define HEPMC3_GENPARTICLE_H
@@ -125,7 +125,7 @@ public:
 
 
     /// @name Deprecated functionality
-    //@{
+    /// @{
 
     /// @brief Get PDG ID
     /// @deprecated Use pid() instead
@@ -136,7 +136,7 @@ public:
     void set_pdg_id(const int& pidin) { set_pid(pidin); }
 
 
-    //@}
+    /// @}
 //
 // Fields
 //
