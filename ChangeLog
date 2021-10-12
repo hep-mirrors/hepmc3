@@ -1,4 +1,6 @@
   --------------------------  pre-HepMC3.2.5 ----------------------
+2021-10-17 Andrii Verbytskyi for HepMC
+         * Fixes to Pythia8ToHepMC3.py by Ahmed Hussein
 2021-07-14 Andrii Verbytskyi for HepMC
          * Added Reader/Write interfaces with smart pointers
 2021-07-12 Andrii Verbytskyi for HepMC
