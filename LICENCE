@@ -1,7 +1,7 @@
 This software is released under Version 3 of the GNU Public Licence (see ./COPYING) or any later version.
 
 
-The code in the directories ./examples, ./docs and ./interfaces are released under BSD "3-clause" license (see ./COPYINGDOCS).
+The code in the directories ./examples, ./cmake, ./docs and ./interfaces are released under BSD "3-clause" license (see ./COPYINGDOCS).
 
 Copyright (C) 2014-2021 HepMC3 Authors
 
