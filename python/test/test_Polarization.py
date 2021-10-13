@@ -23,12 +23,12 @@ def test_Polarization():
     # Please note this is not physically meaningful event.
     #                       p7                   #
     # p1                   /                     #
-    #   \v1__p3      p5---v4                     #
+    #   \v1__p2      p5---v4                     #
     #         \_v3_/       \                     #
     #         /    \        p8                   #
     #    v2__p4     \                            #
     #   /            p6                          #
-    # p2                                         #
+    # p3                                         #
     #
     # define a flow pattern as  p1 . p3 . p6
     #                       and p2 . p4 . p5
