@@ -1,5 +1,5 @@
-# Translated into python from testPolarization.cc
-# garren@fnal.gov, Oct. 2010
+# Translated into python using testPolarization.cc (garren@fnal.gov, Oct. 2010) as an example
+#
 # andrii.verbytskyi@mpp.mpg.gov, Nov. 2018
 #
 
@@ -23,7 +23,7 @@ def test_Polarization():
     # Please note this is not physically meaningful event.
     #                       p7                   #
     # p1                   /                     #
-    #   \v1__p2      p5---v4                     #
+    #   \v1__p3      p5---v4                     #
     #         \_v3_/       \                     #
     #         /    \        p8                   #
     #    v2__p4     \                            #

@@ -1,20 +1,7 @@
-# Translated into python from testPolarization.cc
-# garren@fnal.gov, Oct. 2010
+# Translated into python using testPolarization.cc (garren@fnal.gov, Oct. 2010) as an example
+#
 # andrii.verbytskyi@mpp.mpg.gov, Nov. 2018
 #
-# In this example we will place the following event into HepMC "by hand"
-#
-#     name status pdg_id  parent Px       Py    Pz       Energy      Mass
-#  1  !p+!    3   2212    0,0    0.000    0.000 7000.000 7000.000    0.938
-#  2  !p+!    3   2212    0,0    0.000    0.000-7000.000 7000.000    0.938
-# =========================================================================
-#  3  !d!     3      1    1,1    0.750   -1.569   32.191   32.238    0.000
-#  4  !u~!    3     -2    2,2   -3.047  -19.000  -54.629   57.920    0.000
-#  5  !W-!    3    -24    1,2    1.517   -20.68  -20.605   85.925   80.799
-#  6  !gamma! 1     22    1,2   -3.813    0.113   -1.833    4.233    0.000
-#  7  !d!     1      1    5,5   -2.445   28.816    6.082   29.552    0.010
-#  8  !u~!    1     -2    5,5    3.962  -49.498  -26.687   56.373    0.006
-
 from pyHepMC3TestUtils import update_path, python_label, fuse_equal
 import sys
 
@@ -27,20 +14,6 @@ from pyHepMC3 import std as std
 
 
 def test_Attribute():
-    # build the graph, which will look like
-    #                       p7                   #
-    # p1                   /                     #
-    #   \v1__p3      p5---v4                     #
-    #         \_v3_/       \                     #
-    #         /    \        p8                   #
-    #    v2__p4     \                            #
-    #   /            p6                          #
-    # p2                                         #
-    #
-    # define a flow pattern as  p1 . p3 . p6
-    #                       and p2 . p4 . p5
-    #
-
     # First create the event container, with Signal Process 20, event number 1
     #
     evt = hm.GenEvent(hm.Units.GEV, hm.Units.MM)
