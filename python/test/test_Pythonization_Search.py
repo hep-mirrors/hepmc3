@@ -22,10 +22,6 @@ def test_Pythonization_Search():
             print("End of file reached. Exit.\n")
             break
         v = evt.vertices()[2]
-        #        va=hmsearch.ancestor_vertices(v)
-        #        pa=hmsearch.ancestor_particles(v)
-        #        print(v," has vertex   ancestors ",va)
-        #        print(v," has particle ancestors ",pa)
         evt.clear()
     inputA.close()
     return 0
