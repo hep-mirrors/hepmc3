@@ -1,6 +1,6 @@
 # Translated into python using testPolarization.cc (garren@fnal.gov, Oct. 2010) as an example
 #
-# andrii.verbytskyi@mpp.mpg.gov, Nov. 2018
+# andrii.verbytskyi@mpp.mpg.org, Nov. 2018
 #
 from pyHepMC3TestUtils import update_path, python_label, fuse_equal
 import sys

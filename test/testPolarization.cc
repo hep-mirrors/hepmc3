@@ -2,7 +2,7 @@
 // testPolarization.cc
 //
 // garren@fnal.gov, Oct. 2010
-// andrii.verbytskyi@mpp.mpg.gov, Nov. 2018 translated into HepMC3
+// andrii.verbytskyi@mpp.mpg.org, Nov. 2018 translated into HepMC3
 //////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
