@@ -106,8 +106,8 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         snprintf(buf,6,"%s",head.at(0).c_str());
         Compression det = detect_compression_type(buf, buf + 6);
         if ( det != Compression::plaintext ) {
-          HEPMC3_DEBUG(0, "Detected supported compression " << std::to_string(det));
-          return deduce_reader(std::shared_ptr< std::istream >(new ifstream(filename.c_str())));
+            HEPMC3_DEBUG(0, "Detected supported compression " << std::to_string(det));
+            return deduce_reader(std::shared_ptr< std::istream >(new ifstream(filename.c_str())));
         }
 #endif
         HEPMC3_DEBUG(0, "Attempt ReaderAscii for " << filename);
