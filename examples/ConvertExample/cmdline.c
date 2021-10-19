@@ -64,14 +64,9 @@ cmdline_parser_internal (int argc, char **argv, struct gengetopt_args_info *args
 static int
 cmdline_parser_required2 (struct gengetopt_args_info *args_info, const char *prog_name, const char *additional_error);
 
-<<<<<<< HEAD
 const char *cmdline_parser_input_format_values[] = {"hepmc2", "auto", "hepmc3", "hpe", "root", "treeroot", "lhef", "gz", "uproot", "plugin", "oscar1997", "oscar1999", "oscar2013", 0}; /*< Possible values for input-format. */
 const char *cmdline_parser_output_format_values[] = {"hepmc2", "hepmc3", "hpe", "root", "treeroot", "treerootopal", "hpezeus", "dump", "plugin", "dot", "none", "oscar1997", "oscar1999", "oscar2013", 0}; /*< Possible values for output-format. */
-=======
-const char *cmdline_parser_input_format_values[] = {"hepmc2", "auto", "hepmc3", "hpe", "root", "treeroot", "lhef", "uproot", "plugin", 0}; /*< Possible values for input-format. */
-const char *cmdline_parser_output_format_values[] = {"hepmc2", "hepmc3", "hpe", "root", "treeroot", "treerootopal", "hpezeus", "dump", "plugin", "dot", "none", 0}; /*< Possible values for output-format. */
 const char *cmdline_parser_compressed_output_values[] = {"z", "lzma", "bz2", "plaintext", 0}; /*< Possible values for compressed-output. */
->>>>>>> origin/master
 
 static char *
 gengetopt_strdup (const char *s);
@@ -1680,8 +1675,6 @@ cmdline_parser_internal (
               goto failure;
           
           }
-<<<<<<< HEAD
-=======
           /* Assume compressed input for expicitely specified formats. Requires linkage with zlib/lzma/bz2..  */
           else if (strcmp (long_options[option_index].name, "compressed-input") == 0)
           {
@@ -1708,7 +1701,6 @@ cmdline_parser_internal (
               goto failure;
           
           }
->>>>>>> origin/master
           
           break;
         case '?':	/* Invalid option.  */
