@@ -142,7 +142,7 @@ debian-salsa:
     - cat /etc/issue
     - yum -y install  cmake make binutils sed gawk grep
     - yum -y install  doxygen 
-    - yum -y install  valgrind HepMC HepMC-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root
+    - yum -y install  valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root
     - yum -y install  glibc-debuginfo --enablerepo=*debug*
 ########################################################################
 .pythoninstall: &pythoninstall
@@ -307,7 +307,14 @@ Fedora25-clang:
     - *fixrootcmake
   script:
     - *clangexport
-    - *fullbuild
+#Bad lzma
+    - export
+    - mkdir build
+    - cd build
+    - cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DHEPMC3_ENABLE_ROOTIO:BOOL=ON -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+    - make -j $(nproc) install
 ########################################################################
 Fedora25-gcc:
   image: fedora:25
@@ -319,7 +326,14 @@ Fedora25-gcc:
     - *fixrootcmake
   script:
     - *gccexport
-    - *fullbuild
+#Bad lzma
+    - export
+    - mkdir build
+    - cd build
+    - cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DHEPMC3_ENABLE_ROOTIO:BOOL=ON -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+    - make -j $(nproc) install
 ########################################################################
 Fedora24-clang:
   image: fedora:24
@@ -331,7 +345,14 @@ Fedora24-clang:
     - *fixrootcmake
   script:
     - *clangexport
-    - *fullbuild
+#Bad lzma
+    - export
+    - mkdir build
+    - cd build
+    - cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DHEPMC3_ENABLE_ROOTIO:BOOL=ON -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+    - make -j $(nproc) install
 ########################################################################
 Fedora24-gcc:
   image: fedora:24
@@ -343,7 +364,14 @@ Fedora24-gcc:
     - *fixrootcmake
   script:
     - *gccexport
-    - *fullbuild
+#Bad lzma
+    - export
+    - mkdir build
+    - cd build
+    - cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DHEPMC3_ENABLE_ROOTIO:BOOL=ON -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON
+    - make -j $(nproc)
+    - ctest --output-on-failure 
+    - make -j $(nproc) install
 ########################################################################
 Fedora23-clang-noroot-nopython:
   image: fedora:23
@@ -355,10 +383,11 @@ Fedora23-clang-noroot-nopython:
 #We have ROOT5 here
   script:
     - export
+#Bad lzma
     - mkdir build
     - cd build
     - *clangexport
-    - cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON 
+    - cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON 
     - make -j $(nproc)
     - ctest --output-on-failure
     - make -j $(nproc) install 
@@ -373,10 +402,11 @@ Fedora23-gcc-noroot-nopython:
 #We have ROOT5 here
   script:
     - export
+#Bad lzma
     - mkdir build
     - cd build
     - *gccexport
-    - cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON 
+    - cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON 
     - make -j $(nproc)
     - ctest --output-on-failure 
     - make -j $(nproc) install

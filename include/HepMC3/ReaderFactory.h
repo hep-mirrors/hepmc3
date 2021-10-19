@@ -16,12 +16,14 @@
 #include "HepMC3/ReaderHEPEVT.h"
 #include "HepMC3/ReaderLHEF.h"
 #include "HepMC3/ReaderPlugin.h"
+#include "HepMC3/CompressedIO.h"
 
 namespace HepMC3 {
 
 
 std::shared_ptr<Reader> deduce_reader(std::istream &stream);
 
+std::shared_ptr<Reader> deduce_reader(std::shared_ptr<std::istream> stream);
 
 /**
  * @brief This function deduces the type of input file based on the name/URL
@@ -51,9 +53,9 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
     {
         struct stat   buffer;
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
-        if (!(stat (filename.c_str(), &buffer)==0))
+        if (!(stat (filename.c_str(), &buffer) == 0))
 #else
-        if (!(stat (filename.c_str(), &buffer)==0 && (S_ISFIFO(buffer.st_mode) || S_ISREG(buffer.st_mode) || S_ISLNK(buffer.st_mode))))
+        if (!(stat (filename.c_str(), &buffer) == 0 && (S_ISFIFO(buffer.st_mode) || S_ISREG(buffer.st_mode) || S_ISLNK(buffer.st_mode))))
 #endif
         {
             HEPMC3_ERROR("deduce_reader: file " << filename << " does not exist or is not a regular file/FIFO/link");
@@ -98,6 +100,16 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         return   std::make_shared<ReaderPlugin>(filename,libHepMC3rootIO,std::string("newReaderRootTreefile"));
     if (!remote)
     {
+#if HEPMC3_USE_COMPRESSION
+        HEPMC3_DEBUG(0, "Attempt ReaderGZ for " << filename);
+        char buf[6];
+        snprintf(buf,6,"%s",head.at(0).c_str());
+        Compression det = detect_compression_type(buf, buf + 6);
+        if ( det != Compression::plaintext ) {
+          HEPMC3_DEBUG(0, "Detected supported compression " << std::to_string(det));
+          return deduce_reader(std::shared_ptr< std::istream >(new ifstream(filename.c_str())));
+        }
+#endif
         HEPMC3_DEBUG(0, "Attempt ReaderAscii for " << filename);
         if ( strncmp(head.at(0).c_str(),"HepMC::Version",14) == 0 && strncmp(head.at(1).c_str(), "HepMC::Asciiv3", 14) == 0 )
             return std::shared_ptr<Reader>((Reader*) ( new ReaderAscii(filename)));
@@ -114,7 +126,7 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         int m_i,m_p;
         while (true)
         {
-            if (!(st_e>>attr)) {
+            if (!(st_e >> attr)) {
                 HEPEVT=false;
                 break;
             }
@@ -143,7 +155,7 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
     while ( (back < 200 && backnonempty < 100) && stream) {
         char c = stream.get();
         back++;
-        if (c=='\n') {
+        if (c == '\n') {
             if (head.back().length() != 0) head.push_back("");
         } else {
             head.back() += c;
@@ -182,7 +194,72 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
     int m_i, m_p;
     while (true)
     {
-        if (!(st_e>>attr)) {
+        if (!(st_e >> attr)) {
+            HEPEVT = false;
+            break;
+        }
+        if (attr == ' ') continue;
+        if (attr != 'E') {
+            HEPEVT = false;
+            break;
+        }
+        HEPEVT = static_cast<bool>(st_e >> m_i >> m_p);
+        break;
+    }
+    if (HEPEVT) return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(stream)));
+    HEPMC3_DEBUG(0, "deduce_reader: all attempts failed");
+    return std::shared_ptr<Reader>(nullptr);
+}
+/** @brief This function will deduce the type of input stream based on its content and will return appropriate Reader*/
+std::shared_ptr<Reader> deduce_reader(std::shared_ptr<std::istream> stream)
+{
+    std::vector<std::string> head;
+    head.push_back("");
+    size_t back = 0;
+    size_t backnonempty = 0;
+    while ( (back < 200 && backnonempty < 100) && stream) {
+        char c = stream->get();
+        back++;
+        if (c == '\n') {
+            if (head.back().length() != 0) head.push_back("");
+        } else {
+            head.back() += c;
+            backnonempty++;
+        }
+    }
+    if (!stream)
+    {
+        HEPMC3_WARNING("Input stream is too short or invalid.");
+        return std::shared_ptr<Reader>(nullptr);
+    }
+
+    for (size_t i = 0; i < back; i++)  stream->unget();
+
+    if ( strncmp(head.at(0).c_str(), "HepMC::Version", 14) == 0 && strncmp(head.at(1).c_str(), "HepMC::Asciiv3", 14) == 0 )
+    {
+        HEPMC3_DEBUG(0, "Attempt ReaderAscii");
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderAscii(stream)));
+    }
+
+    if ( strncmp(head.at(0).c_str(), "HepMC::Version",14) == 0 && strncmp(head.at(1).c_str(), "HepMC::IO_GenEvent", 18) == 0 )
+    {
+        HEPMC3_DEBUG(0, "Attempt ReaderAsciiHepMC2");
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderAsciiHepMC2(stream)));
+    }
+
+    if ( strncmp(head.at(0).c_str(), "<LesHouchesEvents", 17) == 0)
+    {
+        HEPMC3_DEBUG(0, "Attempt ReaderLHEF");
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderLHEF(stream)));
+    }
+    HEPMC3_DEBUG(0, "Attempt ReaderHEPEVT");
+    std::stringstream st_e(head.at(0).c_str());
+    char attr = ' ';
+    bool HEPEVT = true;
+    int m_i,m_p;
+    while (true)
+    {
+        if (!(st_e >> attr)) {
             HEPEVT = false;
             break;
         }
