@@ -2,7 +2,7 @@
 // testPolarization.cc
 //
 // garren@fnal.gov, Oct. 2010
-// andrii.verbytskyi@mpp.mpg.gov, Nov. 2018
+// andrii.verbytskyi@mpp.mpg.org, Nov. 2018 translated into HepMC3
 //////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
@@ -65,18 +65,18 @@ int main()
     evt.set_event_number(1);
     evt.add_attribute("signal_process_id", std::make_shared<IntAttribute>(20));
     // create vertex 1
-    GenVertexPtr v1=std::make_shared<GenVertex>();
+    GenVertexPtr v1 = std::make_shared<GenVertex>();
     evt.add_vertex( v1 );
-    GenParticlePtr p1=std::make_shared<GenParticle>( FourVector(0,0,7000,7000),2212, 3 );
+    GenParticlePtr p1 = std::make_shared<GenParticle>( FourVector(0, 0, 7000, 7000), 2212, 3 );
     evt.add_particle( p1 );
     p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
     p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
     p1->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     p1->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
 
-    GenVertexPtr v2=std::make_shared<GenVertex>();
+    GenVertexPtr v2 = std::make_shared<GenVertex>();
     evt.add_vertex( v2 );
-    GenParticlePtr p2=std::make_shared<GenParticle>(  FourVector(0,0,-7000,7000),2212, 3 );
+    GenParticlePtr p2 = std::make_shared<GenParticle>(  FourVector(0, 0, -7000, 7000), 2212, 3 );
     evt.add_particle( p2 );
     p2->add_attribute("flow1", std::make_shared<IntAttribute>(243));
     p2->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
@@ -84,13 +84,13 @@ int main()
     v2->add_particle_in( p2 );
     //
     // create the outgoing particles of v1 and v2
-    GenParticlePtr p3=std::make_shared<GenParticle>( FourVector(.750,-1.569,32.191,32.238),1, 3 );
+    GenParticlePtr p3 = std::make_shared<GenParticle>( FourVector(.750, -1.569, 32.191, 32.238),1, 3 );
     evt.add_particle( p3 );
     p3->add_attribute("flow1", std::make_shared<IntAttribute>(231));
     p3->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     p3->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
     v1->add_particle_out( p3 );
-    GenParticlePtr p4=std::make_shared<GenParticle>( FourVector(-3.047,-19.,-54.629,57.920),-2, 3 );
+    GenParticlePtr p4 = std::make_shared<GenParticle>( FourVector(-3.047, -19., -54.629, 57.920),-2, 3 );
     evt.add_particle( p4 );
     p4->add_attribute("flow1", std::make_shared<IntAttribute>(243));
     p4->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
@@ -98,17 +98,17 @@ int main()
     v2->add_particle_out( p4 );
     //
     // create v3
-    GenVertexPtr v3=std::make_shared<GenVertex>();
+    GenVertexPtr v3 = std::make_shared<GenVertex>();
     evt.add_vertex( v3 );
     v3->add_particle_in( p3 );
     v3->add_particle_in( p4 );
-    GenParticlePtr p6=std::make_shared<GenParticle>(  FourVector(-3.813,0.113,-1.833,4.233 ),22, 1 );
+    GenParticlePtr p6 = std::make_shared<GenParticle>(  FourVector(-3.813, 0.113, -1.833, 4.233 ), 22, 1 );
     evt.add_particle( p6 );
     p6->add_attribute("flow1", std::make_shared<IntAttribute>(231));
     p6->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     p6->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
     v3->add_particle_out( p6 );
-    GenParticlePtr p5=std::make_shared<GenParticle>( FourVector(1.517,-20.68,-20.605,85.925),-24, 3 );
+    GenParticlePtr p5 = std::make_shared<GenParticle>( FourVector(1.517, -20.68, -20.605, 85.925), -24, 3 );
     evt.add_particle( p5 );
     p5->add_attribute("flow1", std::make_shared<IntAttribute>(243));
     p5->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
@@ -116,13 +116,13 @@ int main()
     v3->add_particle_out( p5 );
     //
     // create v4
-    GenVertexPtr v4=std::make_shared<GenVertex>(FourVector(0.12,-0.3,0.05,0.004));
+    GenVertexPtr v4 = std::make_shared<GenVertex>(FourVector(0.12, -0.3, 0.05,  0.004));
     evt.add_vertex( v4 );
     v4->add_particle_in( p5 );
-    GenParticlePtr p7(new GenParticle( FourVector(-2.445,28.816,6.082,29.552), 1,1 ));
+    GenParticlePtr p7(new GenParticle( FourVector(-2.445, 28.816, 6.082, 29.552), 1,1 ));
     evt.add_particle( p7 );
     v4->add_particle_out( p7 );
-    GenParticlePtr p8(new GenParticle( FourVector(3.962,-49.498,-26.687,56.373), -2,1 ));
+    GenParticlePtr p8(new GenParticle( FourVector(3.962, -49.498, -26.687, 56.373), -2,1 ));
     evt.add_particle( p8 );
     v4->add_particle_out( p8 );
     //
@@ -161,7 +161,7 @@ int main()
     // contained in those vertices
     evt.clear();
 
-    bool passed=((COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization5.out")==0)&&(COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization2.dat")!=0));
+    bool passed = ((COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization5.out") == 0)&&(COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization2.dat") != 0));
     if (!passed) return 1;
     return 0;
 }

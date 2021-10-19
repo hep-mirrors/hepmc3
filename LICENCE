@@ -8,11 +8,11 @@ Copyright (C) 2014-2021 HepMC3 Authors
 
 The third party codes are distributed under their own licenses.
 
-# examples/ConvertExample/lgpl-2.1.txt from https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt
-# Type: LGPL 2.1 or later 
-# Copyright: 2001  Deepak Bandyopadhyay, Lutz Kettner 
-./examples/ConvertExample/src/gzstream.C
-./examples/ConvertExample/include/gzstream.h
+# ./include/HepMC3/bxzstr/LICENSE from  https://www.mozilla.org/en-US/MPL/2.0/
+# Copyright: 2020  Matei David Tommi Mäklin
+# Type: Mozilla Public License Version 2.0
+ ./include/HepMC3/bxzstr/*
+
 
 # http://www.thep.lu.se/~torbjorn/Pythia.html 
 # Copyright: 2010 Torbjorn Sjostrand et al. 
