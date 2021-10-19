@@ -61,6 +61,11 @@ struct gengetopt_args_info
   long print_every_events_parsed_arg;	/**< @brief Frequency of parsing information printouts (default='100').  */
   char * print_every_events_parsed_orig;	/**< @brief Frequency of parsing information printouts original value given at command line.  */
   const char *print_every_events_parsed_help; /**< @brief Frequency of parsing information printouts help description.  */
+  int compressed_input_flag;	/**< @brief Assume compressed input for expicitely specified formats. Requires linkage with zlib/lzma/bz2. (default=off).  */
+  const char *compressed_input_help; /**< @brief Assume compressed input for expicitely specified formats. Requires linkage with zlib/lzma/bz2. help description.  */
+  char * compressed_output_arg;	/**< @brief Write compressed output for expicitely specified formats. Requires linkage with zlib/lzma/bz2. (default='plaintext').  */
+  char * compressed_output_orig;	/**< @brief Write compressed output for expicitely specified formats. Requires linkage with zlib/lzma/bz2. original value given at command line.  */
+  const char *compressed_output_help; /**< @brief Write compressed output for expicitely specified formats. Requires linkage with zlib/lzma/bz2. help description.  */
   
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int input_format_given ;	/**< @brief Whether input-format was given.  */
@@ -70,6 +75,8 @@ struct gengetopt_args_info
   unsigned int first_event_number_given ;	/**< @brief Whether first-event-number was given.  */
   unsigned int last_event_number_given ;	/**< @brief Whether last-event-number was given.  */
   unsigned int print_every_events_parsed_given ;	/**< @brief Whether print-every-events-parsed was given.  */
+  unsigned int compressed_input_given ;	/**< @brief Whether compressed-input was given.  */
+  unsigned int compressed_output_given ;	/**< @brief Whether compressed-output was given.  */
 
   char **inputs ; /**< @brief unnamed options (options without names) */
   unsigned inputs_num ; /**< @brief unnamed options number */
@@ -198,6 +205,7 @@ int cmdline_parser_required (struct gengetopt_args_info *args_info,
 
 extern const char *cmdline_parser_input_format_values[];  /**< @brief Possible values for input-format. */
 extern const char *cmdline_parser_output_format_values[];  /**< @brief Possible values for output-format. */
+extern const char *cmdline_parser_compressed_output_values[];  /**< @brief Possible values for compressed-output. */
 
 
 #ifdef __cplusplus

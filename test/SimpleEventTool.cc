@@ -14,8 +14,8 @@ int SimpleEventTool::process(GenEvent &hepmc) {
     momentum_e1.setPz( -2);
     momentum_e2.setPz(3.5);
 
-    momentum_e1.setE(sqrt(momentum_e1.pz()*momentum_e1.pz()+ele_mass_sqr));
-    momentum_e2.setE(sqrt(momentum_e2.pz()*momentum_e2.pz()+ele_mass_sqr));
+    momentum_e1.setE(std::sqrt(momentum_e1.pz()*momentum_e1.pz() + ele_mass_sqr));
+    momentum_e2.setE(std::sqrt(momentum_e2.pz()*momentum_e2.pz() + ele_mass_sqr));
 
     FourVector momentum_tau1(+1.38605041e+00,+1.38605041e+00,+7.50000000e-01,+2.75000005e+00);
     FourVector momentum_tau2(-1.38605041e+00,-1.38605041e+00,+7.50000000e-01,+2.75000005e+00);

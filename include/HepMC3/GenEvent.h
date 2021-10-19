@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenEvent.h
@@ -63,7 +63,7 @@ public:
     GenEvent& operator=(const GenEvent&);
 
     /// @name Particle and vertex access
-    //@{
+    /// @{
 
     /// @brief Get list of particles (const)
     const std::vector<ConstGenParticlePtr>& particles() const;
@@ -76,11 +76,11 @@ public:
     /// @brief Get/set list of vertices (non-const)
     const std::vector<GenVertexPtr>& vertices() { return m_vertices; }
 
-    //@}
+    /// @}
 
 
     /// @name Event weights
-    //@{
+    /// @{
 
     /// Get event weight values as a vector
     const std::vector<double>& weights() const { return m_weights; }
@@ -115,11 +115,11 @@ public:
         return weightnames;
     }
 
-    //@}
+    /// @}
 
 
     /// @name Auxiliary info and event metadata
-    //@{
+    /// @{
 
     /// @brief Get a pointer to the the GenRunInfo object.
     std::shared_ptr<GenRunInfo> run_info() const {
@@ -166,11 +166,11 @@ public:
     /// @brief Set cross-section information
     void set_cross_section(GenCrossSectionPtr cs) { add_attribute("GenCrossSection",cs); }
 
-    //@}
+    /// @}
 
 
     /// @name Event position
-    //@{
+    /// @{
 
     /// Vertex representing the overall event position
     const FourVector& event_pos() const;
@@ -197,11 +197,11 @@ public:
     /// @brief Change sign of @a axis
     bool reflect(const int axis);
 
-    //@}
+    /// @}
 
 
     /// @name Additional attributes
-    //@{
+    /// @{
     /// @brief Add event attribute to event
     ///
     /// This will overwrite existing attribute if an attribute
@@ -240,11 +240,11 @@ public:
         return m_attributes;
     }
 
-    //@}
+    /// @}
 
 
     /// @name Particle and vertex modification
-    //@{
+    /// @{
 
     /// @brief Add particle
     void add_particle( GenParticlePtr p );
@@ -290,10 +290,10 @@ public:
     /// @brief Remove contents of this event
     void clear();
 
-    //@}
+    /// @}
 
     /// @name Deprecated functionality
-    //@{
+    /// @{
 
     /// @brief Add particle by raw pointer
     /// @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
@@ -314,13 +314,13 @@ public:
     void add_beam_particle(GenParticlePtr p1);
 
 
-    //@}
+    /// @}
 
 #endif // __CINT__
 
 
     /// @name Methods to fill GenEventData and to read it back
-    //@{
+    /// @{
 
     /// @brief Fill GenEventData object
     void write_data(GenEventData &data) const;
@@ -331,13 +331,13 @@ public:
 #ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
-    //@}
+    /// @}
 #endif
 
 private:
 
     /// @name Fields
-    //@{
+    /// @{
 
 #if !defined(__CINT__)
 
@@ -378,7 +378,7 @@ private:
     mutable std::recursive_mutex m_lock_attributes;
 #endif // __CINT__
 
-    //@}
+    /// @}
 
 };
 

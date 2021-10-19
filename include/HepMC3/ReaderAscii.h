@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERASCII_H
 #define HEPMC3_READERASCII_H
@@ -62,7 +62,7 @@ private:
     std::string unescape(const std::string& s);
 
     /// @name Read helpers
-    //@{
+    /// @{
 
     /// @brief Parse event
     ///
@@ -150,7 +150,7 @@ private:
     /// tools being used.
     /// @param[in] buf Line of text that needs to be parsed
     bool parse_tool(const char *buf);
-    //@}
+    /// @}
 
 
 private:

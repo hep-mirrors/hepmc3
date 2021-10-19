@@ -41,10 +41,13 @@ const char *gengetopt_args_info_help[] = {
   "      --first-event-number=LONG Lowest allowed event number\n                                  (default=`-100000000')",
   "      --last-event-number=LONG  Highest allowed event number\n                                  (default=`100000000')",
   "      --print-every-events-parsed=LONG\n                                Frequency of parsing information printouts\n                                  (default=`100')",
+  "      --compressed-input        Assume compressed input for expicitely\n                                  specified formats. Requires linkage with\n                                  zlib/lzma/bz2.  (default=off)",
+  "      --compressed-output=STRING\n                                Write compressed output for expicitely\n                                  specified formats. Requires linkage with\n                                  zlib/lzma/bz2.  (possible values=\"z\",\n                                  \"lzma\", \"bz2\", \"plaintext\"\n                                  default=`plaintext')",
     0
 };
 
 typedef enum {ARG_NO
+  , ARG_FLAG
   , ARG_STRING
   , ARG_LONG
 } cmdline_parser_arg_type;
@@ -61,8 +64,14 @@ cmdline_parser_internal (int argc, char **argv, struct gengetopt_args_info *args
 static int
 cmdline_parser_required2 (struct gengetopt_args_info *args_info, const char *prog_name, const char *additional_error);
 
+<<<<<<< HEAD
 const char *cmdline_parser_input_format_values[] = {"hepmc2", "auto", "hepmc3", "hpe", "root", "treeroot", "lhef", "gz", "uproot", "plugin", "oscar1997", "oscar1999", "oscar2013", 0}; /*< Possible values for input-format. */
 const char *cmdline_parser_output_format_values[] = {"hepmc2", "hepmc3", "hpe", "root", "treeroot", "treerootopal", "hpezeus", "dump", "plugin", "dot", "none", "oscar1997", "oscar1999", "oscar2013", 0}; /*< Possible values for output-format. */
+=======
+const char *cmdline_parser_input_format_values[] = {"hepmc2", "auto", "hepmc3", "hpe", "root", "treeroot", "lhef", "uproot", "plugin", 0}; /*< Possible values for input-format. */
+const char *cmdline_parser_output_format_values[] = {"hepmc2", "hepmc3", "hpe", "root", "treeroot", "treerootopal", "hpezeus", "dump", "plugin", "dot", "none", 0}; /*< Possible values for output-format. */
+const char *cmdline_parser_compressed_output_values[] = {"z", "lzma", "bz2", "plaintext", 0}; /*< Possible values for compressed-output. */
+>>>>>>> origin/master
 
 static char *
 gengetopt_strdup (const char *s);
@@ -78,6 +87,8 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->first_event_number_given = 0 ;
   args_info->last_event_number_given = 0 ;
   args_info->print_every_events_parsed_given = 0 ;
+  args_info->compressed_input_given = 0 ;
+  args_info->compressed_output_given = 0 ;
 }
 
 static
@@ -98,6 +109,9 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->last_event_number_orig = NULL;
   args_info->print_every_events_parsed_arg = 100;
   args_info->print_every_events_parsed_orig = NULL;
+  args_info->compressed_input_flag = 0;
+  args_info->compressed_output_arg = gengetopt_strdup ("plaintext");
+  args_info->compressed_output_orig = NULL;
   
 }
 
@@ -116,6 +130,8 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->first_event_number_help = gengetopt_args_info_help[5] ;
   args_info->last_event_number_help = gengetopt_args_info_help[6] ;
   args_info->print_every_events_parsed_help = gengetopt_args_info_help[7] ;
+  args_info->compressed_input_help = gengetopt_args_info_help[8] ;
+  args_info->compressed_output_help = gengetopt_args_info_help[9] ;
   
 }
 
@@ -262,6 +278,8 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
   free_string_field (&(args_info->first_event_number_orig));
   free_string_field (&(args_info->last_event_number_orig));
   free_string_field (&(args_info->print_every_events_parsed_orig));
+  free_string_field (&(args_info->compressed_output_arg));
+  free_string_field (&(args_info->compressed_output_orig));
   
   
   for (i = 0; i < args_info->inputs_num; ++i)
@@ -361,6 +379,10 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "last-event-number", args_info->last_event_number_orig, 0);
   if (args_info->print_every_events_parsed_given)
     write_into_file(outfile, "print-every-events-parsed", args_info->print_every_events_parsed_orig, 0);
+  if (args_info->compressed_input_given)
+    write_into_file(outfile, "compressed-input", 0, 0 );
+  if (args_info->compressed_output_given)
+    write_into_file(outfile, "compressed-output", args_info->compressed_output_orig, cmdline_parser_compressed_output_values);
   
 
   i = EXIT_SUCCESS;
@@ -1302,6 +1324,9 @@ int update_arg(void *field, char **orig_field,
     val = possible_values[found];
 
   switch(arg_type) {
+  case ARG_FLAG:
+    *((int *)field) = !*((int *)field);
+    break;
   case ARG_LONG:
     if (val) *((long *)field) = (long)strtol (val, &stop_char, 0);
     break;
@@ -1332,6 +1357,7 @@ int update_arg(void *field, char **orig_field,
   /* store the original value */
   switch(arg_type) {
   case ARG_NO:
+  case ARG_FLAG:
     break;
   default:
     if (value && orig_field) {
@@ -1537,6 +1563,8 @@ cmdline_parser_internal (
         { "first-event-number",	1, NULL, 0 },
         { "last-event-number",	1, NULL, 0 },
         { "print-every-events-parsed",	1, NULL, 0 },
+        { "compressed-input",	0, NULL, 0 },
+        { "compressed-output",	1, NULL, 0 },
         { 0,  0, 0, 0 }
       };
 
@@ -1652,6 +1680,35 @@ cmdline_parser_internal (
               goto failure;
           
           }
+<<<<<<< HEAD
+=======
+          /* Assume compressed input for expicitely specified formats. Requires linkage with zlib/lzma/bz2..  */
+          else if (strcmp (long_options[option_index].name, "compressed-input") == 0)
+          {
+          
+          
+            if (update_arg((void *)&(args_info->compressed_input_flag), 0, &(args_info->compressed_input_given),
+                &(local_args_info.compressed_input_given), optarg, 0, 0, ARG_FLAG,
+                check_ambiguity, override, 1, 0, "compressed-input", '-',
+                additional_error))
+              goto failure;
+          
+          }
+          /* Write compressed output for expicitely specified formats. Requires linkage with zlib/lzma/bz2..  */
+          else if (strcmp (long_options[option_index].name, "compressed-output") == 0)
+          {
+          
+          
+            if (update_arg( (void *)&(args_info->compressed_output_arg), 
+                 &(args_info->compressed_output_orig), &(args_info->compressed_output_given),
+                &(local_args_info.compressed_output_given), optarg, cmdline_parser_compressed_output_values, "plaintext", ARG_STRING,
+                check_ambiguity, override, 0, 0,
+                "compressed-output", '-',
+                additional_error))
+              goto failure;
+          
+          }
+>>>>>>> origin/master
           
           break;
         case '?':	/* Invalid option.  */

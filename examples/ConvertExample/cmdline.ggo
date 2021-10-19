@@ -11,3 +11,5 @@ option "events-limit" - "Limit of events to read from input" optional long defau
 option "first-event-number" -       "Lowest allowed event number" optional long default="-100000000"
 option "last-event-number" -        "Highest allowed event number" optional long default="100000000"
 option "print-every-events-parsed" - "Frequency of parsing information printouts" optional long default="100"
+option "compressed-input"        - "Assume compressed input for expicitely specified formats. Requires linkage with zlib/lzma/bz2."        flag       off
+option "compressed-output"        - "Write compressed output for expicitely specified formats. Requires linkage with zlib/lzma/bz2."  string optional values="z", "lzma", "bz2", "plaintext" default="plaintext" 
