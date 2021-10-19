@@ -1,6 +1,6 @@
-# Translated into python from testPolarization.cc
-# garren@fnal.gov, Oct. 2010
-# andrii.verbytskyi@mpp.mpg.gov, Nov. 2018
+# Translated into python using testPolarization.cc (garren@fnal.gov, Oct. 2010) as an example
+#
+# andrii.verbytskyi@mpp.mpg.org, Nov. 2018
 #
 
 from pyHepMC3TestUtils import update_path, python_label
@@ -28,7 +28,7 @@ def test_Polarization():
     #         /    \        p8                   #
     #    v2__p4     \                            #
     #   /            p6                          #
-    # p2                                         #
+    # p3                                         #
     #
     # define a flow pattern as  p1 . p3 . p6
     #                       and p2 . p4 . p5

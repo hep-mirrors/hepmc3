@@ -1,10 +1,13 @@
   --------------------------  pre-HepMC3.2.5 ----------------------
+2021-10-16 Andrii Verbytskyi for HepMC
+         * Fixes to documentation of some examples thanks to Rakesh Naik for report.
+         * Removal of unused codes and comments
 2021-10-17 Andrii Verbytskyi for HepMC
          * Fixes to Pythia8ToHepMC3.py by Ahmed Hussein
 2021-07-14 Andrii Verbytskyi for HepMC
          * Added Reader/Write interfaces with smart pointers
 2021-07-12 Andrii Verbytskyi for HepMC
-         * Fixed #ifdefs for non-Linux system to allow the usage of REader/Writer plugins.
+         * Fixed #ifdefs for non-Linux system to allow the usage of Reader/Writer plugins.
          * Added MT reader
 2021-07-09 Andrii Verbytskyi for HepMC
          * Remove outdated interfaces to MCEGs
