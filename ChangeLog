@@ -1,11 +1,57 @@
+  --------------------------  pre-HepMC3.2.5 ----------------------
+2021-10-16 Andrii Verbytskyi for HepMC
+         * Fixes to documentation of some examples thanks to Rakesh Naik for report.
+         * Removal of unused codes and comments
+2021-10-17 Andrii Verbytskyi for HepMC
+         * Fixes to Pythia8ToHepMC3.py by Ahmed Hussein
+2021-07-14 Andrii Verbytskyi for HepMC
+         * Added Reader/Write interfaces with smart pointers
+2021-07-12 Andrii Verbytskyi for HepMC
+         * Fixed #ifdefs for non-Linux system to allow the usage of Reader/Writer plugins.
+         * Added MT reader
+2021-07-09 Andrii Verbytskyi for HepMC
+         * Remove outdated interfaces to MCEGs
+  --------------------------  HepMC3.2.4 --------------------------
+2021-07-06 Andrii Verbytskyi for HepMC
+         * Minor fixes to the CMake configuration of examples
+2021-06-29 Andrii Verbytskyi for HepMC
+         * Minor fixes in Pythia6 interface.
+2021-06-22 Andrii Verbytskyi for HepMC
+         * Bugfix for HI output in WiterAsciiHepMC2.
+2021-06-16 Andrii Verbytskyi for HepMC
+         * Speed optimizations for ReaderAsciiHepMC2.
+2021-06-08 Andrii Verbytskyi for HepMC
+         * Deprecate Pythia8, MC-TESTER, Taoulapp and Photospp interfaces, as these were picked-up by the upstream.
+2021-06-04 Andrii Verbytskyi for HepMC
+         * Bugfix: avoid cretion of empty attributes in ReaderAsciiHepMC2. Thanks to Pavel Demin for a hint.
+2021-06-03 Andrii Verbytskyi for HepMC
+         * Removal of trailing empty lines by Mattias Ellert.
+2021-05-28 Andrii Verbytskyi for HepMC
+         * Multiple fixes to style and printf by Mattias Ellert.
+2021-05-26 Andrii Verbytskyi for HepMC
+         * Fix WriterAscii* to avoid problems with memory tests on aarch64. Thanks to Mattias Ellert for reporting.
+2021-05-08 Andrii Verbytskyi for HepMC
+         * Fix buffer overflow in WritterAscii/WriterAsciiHepMC2. Thanks for Fabian Klimpel for help with debug.
+2021-03-24 Andrii Verbytskyi for HepMC
+         * Enable reading of multiple run info objects from ASCII files.
+         * Fixes to the tests.
+2021-03-24 Andrii Verbytskyi for HepMC
+         * Drop cmake2 support
+         * Update cmake so the c++ standard is deduced from the ROOT configuration if ROOT is used. Otherwise c++11 is used.
+         * Fix a bug in GenCrossSection: acces to non-existing vector element in to_string() function. Happened for incomplete objects.
+         * Fixed formating.
+         * Added compiler flags to reduce the amount of warnings.
+         * Fixed a bug in Tauola test, which was not reading proper config.
+         * Streamlined cmake for PGI.
+         * Fixed some tests to make them return non 0 in case of problems.
+         * Updated CI.
 2021-03-10  Andy Buckley  <andy.buckley@cern.ch>
          * Reduce debug-printout verbosity in ReaderFactory format autodetection.
-  --------------------------  HepMC3.2.4-pre --------------------------
 2021-03-05 Andrii Verbytskyi for HepMC
          * Added uproot-based reader to examples.
          * Fixed cmake configuration to allow multiple Python versions.
          * Fixes of compilation warnings by Mattias Ellert.
-  --------------------------  HepMC3.2.3-pre --------------------------
+  --------------------------  HepMC3.2.3 --------------------------
 2020-11-08 Andrii Verbytskyi for HepMC
          * Documentation and copyright years were updated.
          * Python bindings were regenerated with binder 1.1.0 and the pybind11 copy updated to 2.6.0.

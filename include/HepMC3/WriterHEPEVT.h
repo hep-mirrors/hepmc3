@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_WRITERHEPEVT_H
 #define HEPMC3_WRITERHEPEVT_H
@@ -33,10 +33,15 @@ public:
     /** @brief Default constructor
      *  @warning If file exists, it will be overwritten
      */
-    WriterHEPEVT(const std::string &filename);
+    WriterHEPEVT(const std::string &filename,
+                 std::shared_ptr<GenRunInfo> run = nullptr);
 
     /// @brief Constructor from ostream
-    WriterHEPEVT(std::ostream& stream);
+    WriterHEPEVT(std::ostream& stream,
+                 std::shared_ptr<GenRunInfo> run = nullptr);
+    /// @brief Constructor from temp ostream
+    WriterHEPEVT(std::shared_ptr<std::ostream> s_stream,
+                 std::shared_ptr<GenRunInfo> run = nullptr);
 //
 // Functions
 //
@@ -48,7 +53,7 @@ public:
      *  @param[in] iflong Format of record
      */
 
-    virtual void write_hepevt_particle( int index, bool iflong=true );
+    virtual void write_hepevt_particle( int index, bool iflong = true );
     /** @brief Write event header to file
      *
      */
@@ -65,18 +70,19 @@ public:
 
     /** @brief Get stream error state flag */
     bool failed()  override;
-    /** @brief  set flag if vertex positions are available. 
-     *  Effectively this adds or removes key "vertices_positions_are_absent" 
+    /** @brief  set flag if vertex positions are available.
+     *  Effectively this adds or removes key "vertices_positions_are_absent"
      *  to/from the m_options.*/
     void set_vertices_positions_present(bool iflong);
 
-    /** @brief  get flag if vertex positions are available. 
-     * The flag is deduced from m_options. If the m_options have the key 
+    /** @brief  get flag if vertex positions are available.
+     * The flag is deduced from m_options. If the m_options have the key
      * "vertices_positions_are_absent" the result if false. True otherwise. */
     bool get_vertices_positions_present() const;
 
 protected:
     std::ofstream m_file; //!< Output file
+    std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
     char* hepevtbuffer;   //!< Pointer to HEPEVT Fortran common block/C struct
     int   m_events_count; //!< Events count. Needed to generate unique object name

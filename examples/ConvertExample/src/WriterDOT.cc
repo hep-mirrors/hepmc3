@@ -1,7 +1,7 @@
 #include "WriterDOT.h"
 namespace HepMC3
 {
-WriterDOT::WriterDOT(const std::string &filename,std::shared_ptr<GenRunInfo> run): m_file(filename),
+WriterDOT::WriterDOT(const std::string &filename,std::shared_ptr<GenRunInfo> /*run*/): m_file(filename),
     m_stream(&m_file),
     m_style(0),
     m_buffer(nullptr),
@@ -13,7 +13,7 @@ WriterDOT::WriterDOT(const std::string &filename,std::shared_ptr<GenRunInfo> run
     }
 }
 
-WriterDOT::WriterDOT(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
+WriterDOT::WriterDOT(std::ostream &stream, std::shared_ptr<GenRunInfo> /*run*/)
     : m_file(),
       m_stream(&stream),
       m_style(0),
@@ -40,7 +40,7 @@ bool is_parton(const int& pd )
         &&(pd%1000/100==1||pd%1000/100==2||pd%1000/100==3||pd%1000/100==4)
         &&(pd%100==1||pd%100==3)
     )
-        parton=true;
+        parton = true;
     return parton;
 }
 void WriterDOT::write_event(const GenEvent &evt)
@@ -51,11 +51,11 @@ void WriterDOT::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, "digraph graphname%d {\n",evt.event_number());
     m_cursor += sprintf(m_cursor, "v0[label=\"Machine\"];\n");
     for(auto v: evt.vertices() ) {
-        if (m_style!=0)
+        if (m_style != 0)
         {
-            if (m_style==1) //paint decay and fragmentation vertices in green
+            if (m_style == 1) //paint decay and fragmentation vertices in green
             {
-                if (v->status()==2) m_cursor += sprintf(m_cursor, "node [color=\"green\"];\n");
+                if (v->status() == 2) m_cursor += sprintf(m_cursor, "node [color=\"green\"];\n");
                 else  m_cursor += sprintf(m_cursor, "node [color=\"black\"];\n");
             }
         }
@@ -72,9 +72,9 @@ void WriterDOT::write_event(const GenEvent &evt)
     for(auto v: evt.vertices() ) {
         for(auto p: v->particles_out() ) {
             {
-                if (m_style!=0)
+                if (m_style != 0)
                 {
-                    if (m_style==1) //paint suspected partons and 81/82 in red
+                    if (m_style == 1) //paint suspected partons and 81/82 in red
                     {
                         if (is_parton(std::abs(p->pid()))&&p->status()!=1) m_cursor += sprintf(m_cursor, "edge [color=\"red\"];\n");
                         else        m_cursor +=sprintf(m_cursor, "edge [color=\"black\"];\n");
@@ -83,12 +83,12 @@ void WriterDOT::write_event(const GenEvent &evt)
                 if (!p->end_vertex())
                 {
                     m_cursor += sprintf(m_cursor, "node [shape=point];\n");
-                    m_cursor += sprintf(m_cursor, "v%d -> o%d [label=\"%d(%d)\"];\n", -v->id(),p->id(),p->id(),p->pid());
+                    m_cursor += sprintf(m_cursor, "v%d -> o%d [label=\"%d(%d)\"];\n", -v->id(), p->id(), p->id(), p->pid());
                     flush();
                     continue;
                 }
                 m_cursor += sprintf(m_cursor, "node [shape=ellipse];\n");
-                m_cursor += sprintf(m_cursor, "v%d -> v%d [label=\"%d(%d)\"];\n", -v->id(),-p->end_vertex()->id(),p->id(),p->pid());
+                m_cursor += sprintf(m_cursor, "v%d -> v%d [label=\"%d(%d)\"];\n", -v->id(), -p->end_vertex()->id(), p->id(), p->pid());
                 flush();
             }
         }
@@ -99,7 +99,7 @@ void WriterDOT::write_event(const GenEvent &evt)
 }
 void WriterDOT::allocate_buffer() {
     if ( m_buffer ) return;
-    while( m_buffer==nullptr && m_buffer_size >= 256 ) {
+    while( m_buffer == nullptr && m_buffer_size >= 256 ) {
         try {
             m_buffer = new char[ m_buffer_size ]();
         }     catch (const std::bad_alloc& e) {
@@ -119,15 +119,12 @@ inline void WriterDOT::flush() {
     // The maximum size of single add to the buffer (other than by
     // using WriterDOT::write) is 32 bytes. This is a safe value as
     // we will not allow precision larger than 24 anyway
-    unsigned long length = m_cursor - m_buffer;
-    if ( m_buffer_size - length < 32 ) {
-        // m_file.write( m_buffer, length );
-        m_stream->write( m_buffer, length );
+    if ( m_buffer + m_buffer_size < m_cursor + 256 ) {
+        m_stream->write( m_buffer, m_cursor - m_buffer );
         m_cursor = m_buffer;
     }
 }
 inline void WriterDOT::forced_flush() {
-    // m_file.write( m_buffer, m_cursor-m_buffer );
     m_stream->write( m_buffer, m_cursor - m_buffer );
     m_cursor = m_buffer;
 }

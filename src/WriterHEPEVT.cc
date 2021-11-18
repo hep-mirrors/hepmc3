@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file WriterHEPEVT.cc
@@ -17,14 +17,24 @@ namespace HepMC3
 {
 
 
-WriterHEPEVT::WriterHEPEVT(const std::string &filename): m_file(filename), m_stream(&m_file), m_events_count(0)
+WriterHEPEVT::WriterHEPEVT(const std::string &filename,
+                           std::shared_ptr<GenRunInfo> run): m_file(filename), m_stream(&m_file), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     hepevtbuffer = (char*)(new struct HEPEVT());
     HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
 }
 
-WriterHEPEVT::WriterHEPEVT(std::ostream& stream): m_file(), m_stream(&stream), m_events_count(0)
+WriterHEPEVT::WriterHEPEVT(std::ostream& stream,
+                           std::shared_ptr<GenRunInfo> run): m_file(), m_stream(&stream), m_events_count(0)
+{
+    HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
+    hepevtbuffer = (char*)(new struct HEPEVT());
+    HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
+}
+
+WriterHEPEVT::WriterHEPEVT(std::shared_ptr<std::ostream> s_stream,
+                           std::shared_ptr<GenRunInfo> run): m_file(), m_shared_stream(s_stream), m_stream(s_stream.get()), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     hepevtbuffer = (char*)(new struct HEPEVT());

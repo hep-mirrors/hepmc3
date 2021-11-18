@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenRunInfo.cc
@@ -87,7 +87,7 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
     // Attributes
     for (unsigned int i = 0; i < data.attribute_name.size(); ++i) {
         add_attribute(data.attribute_name[i],
-                       std::make_shared<StringAttribute>(data.attribute_string[i]));
+                      std::make_shared<StringAttribute>(data.attribute_string[i]));
     }
 
     // Tools

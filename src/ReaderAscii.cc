@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file ReaderAscii.cc
@@ -29,8 +29,6 @@ ReaderAscii::ReaderAscii(const std::string &filename)
     set_run_info(std::make_shared<GenRunInfo>());
 }
 
-
-// Ctor for reading from stdin
 ReaderAscii::ReaderAscii(std::istream & stream)
     : m_stream(&stream), m_isstream(true)
 {
@@ -41,6 +39,14 @@ ReaderAscii::ReaderAscii(std::istream & stream)
 }
 
 
+ReaderAscii::ReaderAscii(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
+{
+    if ( !m_stream->good() ) {
+        HEPMC3_ERROR("ReaderAscii: could not open input stream ")
+    }
+    set_run_info(std::make_shared<GenRunInfo>());
+}
 
 ReaderAscii::~ReaderAscii() { if (!m_isstream) close(); }
 
@@ -48,12 +54,32 @@ bool ReaderAscii::skip(const int n)
 {
     const size_t       max_buffer_size = 512*512;
     char               buf[max_buffer_size];
+    bool               event_context    = false;
+    bool               run_info_context    = false;
     int nn = n;
     while (!failed()) {
         char  peek;
         if ( (!m_file.is_open()) && (!m_isstream) ) return false;
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
-        if ( peek == 'E' ) nn--;
+        if ( peek == 'E' ) { event_context = true; nn--; }
+        //We have to read each run info.
+        if ( !event_context && ( peek == 'W' || peek == 'A' || peek == 'T' ) ) {
+            m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
+            if (!run_info_context) {
+                set_run_info(std::make_shared<GenRunInfo>());
+                run_info_context = true;
+            }
+            if ( peek == 'W' ) {
+                parse_weight_names(buf);
+            }
+            if ( peek == 'T' ) {
+                parse_tool(buf);
+            }
+            if ( peek == 'A' ) {
+                parse_run_attribute(buf);
+            }
+        }
+        if ( event_context && ( peek == 'V' || peek == 'P' ) ) event_context=false;
         if (nn < 0) return true;
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
     }
@@ -67,7 +93,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     char               peek;
     const size_t       max_buffer_size = 512*512;
     char               buf[max_buffer_size];
-    bool               parsed_event_header    = false;
+    bool               event_context    = false;
+    bool               parsed_weights    = false;
+    bool               parsed_particles_or_vertices    = false;
+    bool               run_info_context    = false;
     bool               is_parsing_successful  = true;
     std::pair<int, int> vertices_and_particles(0, 0);
 
@@ -91,7 +120,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 std::cout << buf << std::endl;
                 m_isstream ? m_stream->clear(std::ios::eofbit) : m_file.clear(std::ios::eofbit);
             }
-            if (parsed_event_header) {
+            if (event_context) {
                 is_parsing_successful = true;
                 break;
             }
@@ -105,32 +134,59 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 is_parsing_successful = false;
             } else {
                 is_parsing_successful = true;
-                parsed_event_header   = true;
+                event_context   = true;
+                parsed_weights = false;
+                parsed_particles_or_vertices = false;
             }
+            run_info_context   = false;
             break;
         case 'V':
             is_parsing_successful = parse_vertex_information(evt, buf);
+            parsed_particles_or_vertices =  true;
             break;
         case 'P':
             is_parsing_successful = parse_particle_information(evt, buf);
+            parsed_particles_or_vertices =  true;
             break;
         case 'W':
-            if ( parsed_event_header )
+            if ( event_context ) {
                 is_parsing_successful = parse_weight_values(evt, buf);
-            else
+                parsed_weights=true;
+            } else {
+                if ( !run_info_context ) {
+                    set_run_info(std::make_shared<GenRunInfo>());
+                    evt.set_run_info(run_info());
+                }
+                run_info_context = true;
                 is_parsing_successful = parse_weight_names(buf);
+            }
             break;
         case 'U':
             is_parsing_successful = parse_units(evt, buf);
             break;
         case 'T':
-            is_parsing_successful = parse_tool(buf);
+            if ( event_context ) {
+                //We ignore T in the event context
+            } else {
+                if ( !run_info_context ) {
+                    set_run_info(std::make_shared<GenRunInfo>());
+                    evt.set_run_info(run_info());
+                }
+                run_info_context = true;
+                is_parsing_successful = parse_tool(buf);
+            }
             break;
         case 'A':
-            if ( parsed_event_header )
+            if ( event_context ) {
                 is_parsing_successful = parse_attribute(evt, buf);
-            else
+            } else {
+                if ( !run_info_context ) {
+                    set_run_info(std::make_shared<GenRunInfo>());
+                    evt.set_run_info(run_info());
+                }
+                run_info_context = true;
                 is_parsing_successful = parse_run_attribute(buf);
+            }
             break;
         default:
             HEPMC3_WARNING("ReaderAscii: skipping unrecognised prefix: " << buf[0])
@@ -140,9 +196,21 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         if ( !is_parsing_successful ) break;
 
-        // Check for next event
+        // Check for next event or run info
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
-        if ( parsed_event_header && peek == 'E' ) break;
+        //End of event. The next entry is event.
+        if ( event_context &&  peek == 'E' ) break;
+
+        //End of event. The next entry is run info which starts from weight name.
+        if ( event_context &&  peek == 'W' && parsed_weights  ) break;
+
+        //End of event. The next entry is run info which starts from attribute.
+        if ( event_context &&  peek == 'A' && parsed_particles_or_vertices  ) break;
+
+        //End of event. The next entry is run info which starts from tool.
+        if ( event_context &&  peek == 'T' ) break;
+
+
     }
 
 
@@ -312,11 +380,13 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
 
         // add incoming particle to the vertex
         if (particle_in > 0) {
-//Particles are always ordered, so id==position in event.
-            if (particle_in <= highest_id)
+            //Particles are always ordered, so id==position in event.
+            if (particle_in <= highest_id) {
                 data->add_particle_in(evt.particles()[particle_in-1]);
-//If the particle has not been red yet, we store its id to add the particle later.
-            else m_forward_mothers[data].insert(particle_in);
+            } else {
+                //If the particle has not been red yet, we store its id to add the particle later.
+                m_forward_mothers[data].insert(particle_in);
+            }
         }
 
         // check for next particle or end of particle list
@@ -349,7 +419,7 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
     HEPMC3_DEBUG(10, "ReaderAscii: V: " << id << " with  "<< data->particles_in().size() << " particles)")
 
     evt.add_vertex(data);
-//Restore vertex id, as it is used to build connections inside event.
+    //Restore vertex id, as it is used to build connections inside event.
     data->set_id(id);
 
     return true;
@@ -388,7 +458,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 
         vertex->add_particle_out(data);
         evt.add_vertex(vertex);
-//ID of this vertex is not explicitely set in the input. We set it to zero to prevent overlap with other ids. It will be restored later.
+        //ID of this vertex is not explicitely set in the input. We set it to zero to prevent overlap with other ids. It will be restored later.
         vertex->set_id(0);
     }
     // Parent object is vertex
@@ -396,12 +466,12 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
     {
         //Vertices are not always ordered, e.g. when one reads HepMC2 event, so we check their ids.
         bool found = false;
-        for (auto v: evt.vertices()) if (v->id() == mother_id) {v->add_particle_out(data); found=true; break; }
+        for (auto v: evt.vertices()) if (v->id() == mother_id) {v->add_particle_out(data); found = true; break; }
         if (!found)
         {
-//This should happen  in case of unordered event.
-//      WARNING("ReaderAscii: Unordered event, id of mother vertex  is out of range of known ids:   " <<mother_id<<" evt.vertices().size()="<<evt.vertices().size() )
-//Save the mother id to reconnect later.
+            //This should happen  in case of unordered event.
+            //      WARNING("ReaderAscii: Unordered event, id of mother vertex  is out of range of known ids:   " <<mother_id<<" evt.vertices().size()="<<evt.vertices().size() )
+            //Save the mother id to reconnect later.
             m_forward_daughters[data] = mother_id;
         }
     }

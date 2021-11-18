@@ -16,7 +16,7 @@ class Pythia8ToHepMC3:
 
     # The recommended method to convert Pythia events into HepMC ones
     def fill_next_event1(self, pythia, evt, ievnum):
-        return self.fill_next_event(pythia.event, evt, ievnum, pythia.info, pythia.settings)
+        return self.fill_next_event(pythia.event, evt, ievnum, pythia.infoPython(), pythia.settings)
 
     # Alternative method to convert Pythia events into HepMC ones
     def fill_next_event(self, pyev, evt, ievnum, pyinfo, pyset):

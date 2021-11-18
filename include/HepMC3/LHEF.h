@@ -100,7 +100,7 @@ struct XMLTag {
    * Convenient alias for npos.
    */
   static const pos_t end = std::string::npos;
-  
+
   /**
    * Default constructor.
    */
@@ -226,7 +226,7 @@ struct XMLTag {
     if ( leftover ) *leftover += str.substr(curr, begin - curr);
       }
       if ( begin == end || begin > str.length() - 3 || str[begin + 1] == '/' )
-    return tags; 
+    return tags;
 
       pos_t close = str.find(">", curr);
       if ( close == end ) return tags;
@@ -358,7 +358,7 @@ struct TagBase {
    * Main constructor stores the attributes and contents of a tag.
    */
   TagBase(const AttributeMap & attr, std::string conts = std::string()): attributes(attr), contents(conts) {}
- 
+
   /**
    * Find an attribute named \a n and set the double variable \a v to
    * the corresponding value. Remove the correspondig attribute from
@@ -523,12 +523,12 @@ struct XSecInfo : public TagBase {
     : TagBase(tag.attr, tag.contents), neve(-1), ntries(-1),
       totxsec(0.0), xsecerr(0.0), maxweight(1.0), meanweight(1.0),
       negweights(false), varweights(false) {
-    if ( !getattr("neve", neve) ) 
+    if ( !getattr("neve", neve) )
       throw std::runtime_error("Found xsecinfo tag without neve attribute "
                    "in Les Houches Event File.");
     ntries = neve;
     getattr("ntries", ntries);
-    if ( !getattr("totxsec", totxsec) ) 
+    if ( !getattr("totxsec", totxsec) )
       throw std::runtime_error("Found xsecinfo tag without totxsec "
                    "attribute in Les Houches Event File.");
     getattr("xsecerr", xsecerr);
@@ -546,7 +546,7 @@ struct XSecInfo : public TagBase {
   void print(std::ostream & file) const {
     file << "<xsecinfo" << oattr("neve", neve)
          << oattr("totxsec", totxsec);
-    if ( maxweight != 1.0 ) 
+    if ( maxweight != 1.0 )
       file << oattr("maxweight", maxweight)
            << oattr("meanweight", meanweight);
     if ( ntries > neve ) file << oattr("ntries", ntries);
@@ -626,7 +626,7 @@ struct EventFile : public TagBase {
    */
   EventFile(const XMLTag & tag)
     : TagBase(tag.attr, tag.contents), filename(""), neve(-1), ntries(-1) {
-    if ( !getattr("name", filename) ) 
+    if ( !getattr("name", filename) )
       throw std::runtime_error("Found eventfile tag without name attribute "
                    "in Les Houches Event File.");
     getattr("neve", neve);
@@ -650,7 +650,7 @@ struct EventFile : public TagBase {
    * The name of the file.
    */
   std::string filename;
-  
+
   /**
    * The number of events.
    */
@@ -839,7 +839,7 @@ struct Cut : public TagBase {
     return p[3] < 0.0? -std::numeric_limits<double>::max():
       std::numeric_limits<double>::max();
   }
-    
+
   /**
    * Return the true rapidity of a particle with momentum \a p.
    */
@@ -853,7 +853,7 @@ struct Cut : public TagBase {
     return p[3] < 0.0? -std::numeric_limits<double>::max():
       std::numeric_limits<double>::max();
   }
-    
+
   /**
    * Return the delta-R of a particle pair with momenta \a p1 and \a p2.
    */
@@ -1069,7 +1069,7 @@ struct WeightInfo : public TagBase {
    */
   void print(std::ostream & file) const {
 
-    if ( isrwgt ) 
+    if ( isrwgt )
       file << "<weight" << oattr("id", name);
     else
       file << "<weightinfo" << oattr("name", name);
@@ -1335,7 +1335,7 @@ struct Scale : public TagBase {
         while ( pis >> rec ) recoilers.insert(rec);
       }
     }
-    
+
     std::string eattr;
     if ( getattr("etype", eattr) ) {
       if ( eattr == "QCD" ) eattr = "-5 -4  -3 -2 -1 1 2 3 4 5 21";
@@ -1346,7 +1346,7 @@ struct Scale : public TagBase {
     }
     std::istringstream cis(tag.contents);
     cis >> scale;
-    
+
   }
 
   /**
@@ -1393,7 +1393,7 @@ struct Scale : public TagBase {
    */
   int emitter;
 
-  /** 
+  /**
    * The set of recoilers for which this scale applies.
    */
   std::set<int> recoilers;
@@ -1407,7 +1407,7 @@ struct Scale : public TagBase {
    * The actual scale given.
    */
   double scale;
-  
+
 };
 
 /**
@@ -1443,7 +1443,7 @@ struct Scales : public TagBase {
       if ( getattr(pttag.str(), sc) )
         scales.push_back(Scale("start", i + 1, sc));
     }
-    
+
   }
 
   /**
@@ -1531,7 +1531,7 @@ struct Scales : public TagBase {
    * The list of special scales.
    */
   std::vector<Scale> scales;
-  
+
 };
 
 /**
@@ -1629,7 +1629,7 @@ class HEPRUP : public TagBase {
 public:
 
   /** @name Standard constructors and destructors. */
-  //@{
+  /// @{
   /**
    * Default constructor.
    */
@@ -1645,7 +1645,7 @@ public:
   /**
    * Assignment operator.
    */
-  HEPRUP & operator=(const HEPRUP & x) = default;
+  HEPRUP & operator=(const HEPRUP & /*x*/) = default;
 
   /**
    * Construct from a given init tag.
@@ -1655,7 +1655,7 @@ public:
       dprec(std::numeric_limits<double>::digits10) {
 
     std::vector<XMLTag*> tags = tagin.tags;
- 
+
     // The first (anonymous) tag should just be the init block.
     std::istringstream iss(tags[0]->contents);
     if ( !( iss >> IDBMUP.first >> IDBMUP.second >> EBMUP.first >> EBMUP.second
@@ -1685,7 +1685,7 @@ public:
                           weightinfo));
       if ( tag.tags[j]->name == "weight" )
         weightinfo.push_back(WeightInfo(*tag.tags[j]));
-      
+
     }
       }
       if ( tag.name == "weightinfo" ) {
@@ -1712,7 +1712,7 @@ public:
       else if ( tag.name == "cutsinfo" ) {
     for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
       XMLTag & ctag = *tag.tags[j];
-      
+
       if ( ctag.name == "ptype" ) {
         std::string tname = ctag.attr["name"];
         long id;
@@ -1740,7 +1740,7 @@ public:
 
   }
 
-  //@}
+  /// @}
 
 public:
 
@@ -1801,7 +1801,7 @@ public:
 
     if ( cuts.size() > 0 ) {
       file << "<cutsinfo>" << std::endl;
-    
+
       for ( std::map<std::string, std::set<long> >::const_iterator ptit =
           ptypes.begin(); ptit !=  ptypes.end(); ++ptit ) {
     file << "<ptype" << oattr("name", ptit->first) << ">";
@@ -1857,7 +1857,7 @@ public:
   }
 
   /**
-   * Clear all information. 
+   * Clear all information.
    */
   void clear() {
     procinfo.clear();
@@ -1904,7 +1904,7 @@ public:
    * @return the number of weights (including the nominial one).
    */
   int nWeights() const {
-    return weightmap.size() + 1;    
+    return weightmap.size() + 1;
   }
 
   /**
@@ -1928,8 +1928,8 @@ public:
     if ( it != xsecinfos.end() ) return it->second;
     else return noinfo;
   }
-    
-  
+
+
 public:
 
   /**
@@ -2119,7 +2119,7 @@ class HEPEUP : public TagBase {
 public:
 
   /** @name Standard constructors and destructors. */
-  //@{
+  /// @{
   /**
    * Default constructor.
    */
@@ -2188,7 +2188,7 @@ public:
   ~HEPEUP() {
     clear();
   };
-  //@}
+  /// @}
 
 public:
 
@@ -2216,7 +2216,7 @@ public:
       return;
     } else
       getattr("ntries", ntries);
-      
+
 
 
     // The event information should be in the first (anonymous) tag
@@ -2239,7 +2239,7 @@ public:
     junk.clear();
     std::string ss;
     while ( getline(iss, ss) ) junk += ss + '\n';
-    
+
     scales = Scales(SCALUP, NUP);
     pdfinfo = PDFInfo(SCALUP);
     namedweights.clear();
@@ -2247,7 +2247,7 @@ public:
     weights.resize(heprup->nWeights(),
            std::make_pair(XWGTUP, (WeightInfo*)(0)));
     weights.front().first = XWGTUP;
-    for ( int i = 1, N = weights.size(); i < N; ++i ) 
+    for ( int i = 1, N = weights.size(); i < N; ++i )
       weights[i].second =  &heprup->weightinfo[i - 1];
 
     for ( int i = 1, N = tags.size(); i < N; ++i ) {
@@ -2259,7 +2259,7 @@ public:
     weights.resize(heprup->nWeights(),
                std::make_pair(XWGTUP, (WeightInfo*)(0)));
     weights.front().first = XWGTUP;
-    for ( int ii = 1, NN = weights.size(); ii < NN; ++ii ) 
+    for ( int ii = 1, NN = weights.size(); ii < NN; ++ii )
       weights[ii].second =  &heprup->weightinfo[ii - 1];
     double w = 0.0;
     int iii = 0;
@@ -2383,17 +2383,17 @@ public:
       namedweights[i].print(file);
     }
     if ( iswgt ) file << "</rwgt>\n";
-    
+
     if ( !clustering.empty() ) {
       file << "<clustering>" << std::endl;
       for ( int i = 0, N = clustering.size(); i < N; ++i )
         clustering[i].print(file);
-      file << "</clustering>" << std::endl;    
+      file << "</clustering>" << std::endl;
     }
 
     pdfinfo.print(file);
     scales.print(file);
-    
+
     file << hashline(junk) << "</event>\n";
 
   }
@@ -2663,7 +2663,7 @@ public:
    * Saved information about pdfs if different in a selected weight.
    */
   std::pair<int,int> PDFSUPsave;
-  
+
 
   /**
    * Contents of the scales tag
@@ -2854,7 +2854,7 @@ private:
     XMLTag::deleteAll(tags);
 
     if ( !heprup.eventfiles.empty() ) openeventfile(0);
- 
+
   }
 
 public:
@@ -2862,7 +2862,7 @@ public:
   /**
    * Read an event from the file and store it in the hepeup
    * object. Optional comment lines are stored i the eventComments
-   * member variable. 
+   * member variable.
    * @return true if the read sas successful.
    */
   bool readEvent() {
@@ -2918,7 +2918,7 @@ public:
       openeventfile(curreventfile);
       return readEvent();
     }
- 
+
     XMLTag::deleteAll(tags);
     return false;
 
@@ -2977,7 +2977,7 @@ protected:
    * The original stream from where we read the init block.
    */
   std::istream * initfile;
-  
+
   /**
    * A separate stream for reading multi-file runs.
    */
@@ -3046,7 +3046,7 @@ public:
    * The directory from where we are reading files.
    */
   std::string dirpath;
-  
+
 private:
 
   /**
@@ -3201,7 +3201,7 @@ public:
     currfileevent = 0;
     return true;
   }
-    
+
 
   /**
    * Write out an optional header block followed by the standard init
@@ -3251,7 +3251,7 @@ public:
     ++lastevent;
     ++currfileevent;
   }
-      
+
 protected:
 
   /**
@@ -3270,7 +3270,7 @@ protected:
    * The original stream from where we read the init block.
    */
   std::ostream * initfile;
-  
+
   /**
    * A separate stream for reading multi-file runs.
    */
@@ -3296,7 +3296,7 @@ protected:
    * The directory from where we are reading files.
    */
   std::string dirpath;
-  
+
 public:
   /**
    * The standard init information.
@@ -3350,9 +3350,9 @@ private:
 
 /* \example LHEFCat.cc This is a main function which simply reads a
     Les Houches Event File from the standard input and writes it again
-    to the standard output. 
+    to the standard output.
     This file can be downloaded from
-    <A HREF="http://www.thep.lu.se/~leif/LHEF/LHEFCat.cc">here</A>. 
+    <A HREF="http://www.thep.lu.se/~leif/LHEF/LHEFCat.cc">here</A>.
     There are also two sample event files,
     <A HREF="http://www.thep.lu.se/~leif/LHEF/ttV_unweighted_events.lhe">ttV_unweighted_events.lhe</A> and <A HREF="http://www.thep.lu.se/~leif/LHEF/testlhef3.lhe">testlhef3.lhe</A>
     to try it on.

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_HEPEVT_WRAPPER_H
 #define HEPMC3_HEPEVT_WRAPPER_H
@@ -88,8 +88,10 @@ namespace HepMC3
 #endif
 
 #ifdef NO_DECLSPEC_hepevtptr
+/** @brief This is a pointer to HEPEVT common block */
 extern struct HEPEVT*  hepevtptr;
 #else
+/** @brief This is a pointer to HEPEVT common block */
 DECLSPEC_hepevtptr  extern struct HEPEVT*  hepevtptr;
 #endif
 
@@ -190,7 +192,7 @@ inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr
 /*
 inline bool HEPEVT_Wrapper::check_hepevt_consistency()
 {
-    
+
     printf("HEPEVT_Wrapper::check_hepevt_consistency is not implemented!\n");
     return true;
 }

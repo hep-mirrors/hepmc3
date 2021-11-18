@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderAsciiHepMC2.cc
@@ -23,14 +23,14 @@
 namespace HepMC3 {
 
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
-    m_file(filename), m_stream(0), m_isstream(false) {
+    m_file(filename), m_stream(nullptr), m_isstream(false) {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input file: " << filename )
     }
     set_run_info(std::make_shared<GenRunInfo>());
     m_event_ghost = new GenEvent();
 }
-// Ctor for reading from stdin
+
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
     : m_stream(&stream), m_isstream(true)
 {
@@ -40,6 +40,16 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
     set_run_info(std::make_shared<GenRunInfo>());
     m_event_ghost = new GenEvent();
 }
+
+ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
+{
+    if ( !m_stream->good() ) {
+        HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input stream ")
+    }
+    set_run_info(std::make_shared<GenRunInfo>());
+}
+
 
 ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr; } if (!m_isstream) close(); }
 
@@ -64,7 +74,6 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
     char               peek;
     const size_t  max_buffer_size = 512*512;
-    const size_t  max_weights_size = 256;
     char          buf[max_buffer_size];
     bool          parsed_event_header            = false;
     bool          is_parsing_successful          = true;
@@ -83,6 +92,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     m_particle_cache.clear();
     m_end_vertex_barcodes.clear();
     m_particle_cache_ghost.clear();
+    m_vertex_cache_ghost.clear();
     //
     // Parse event, vertex and particle information
     //
@@ -114,8 +124,11 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
                 vertices_count = parsing_result;
                 m_vertex_cache.reserve(vertices_count);
                 m_particle_cache.reserve(vertices_count*3);
+                m_vertex_cache_ghost.reserve(vertices_count);
+                m_particle_cache_ghost.reserve(vertices_count*3);
                 m_vertex_barcodes.reserve(vertices_count);
                 m_end_vertex_barcodes.reserve(vertices_count*3);
+                evt.reserve(vertices_count,vertices_count*3);
                 is_parsing_successful = true;
             }
             parsed_event_header = true;
@@ -219,8 +232,8 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Remove vertices with no incoming particles or no outgoing particles
     for (unsigned int i = 0; i < m_vertex_cache.size(); ++i) {
         if ( m_vertex_cache[i]->particles_in().size() == 0 ) {
-            HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - found a vertex without incoming particles: " << m_vertex_cache[i]->id());
-//Sometimes the root vertex has no incoming particles.  Here we try to save the event.
+            HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - found a vertex without incoming particles: " << m_vertex_cache[i]->id() );
+            //Sometimes the root vertex has no incoming particles.  Here we try to save the event.
             std::vector<GenParticlePtr> beams;
             for (auto p: m_vertex_cache[i]->particles_out()) if (p->status() == 4 && !(p->end_vertex())) beams.push_back(p);
             for (auto p: beams)
@@ -229,11 +242,14 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
                 m_vertex_cache[i]->remove_particle_out(p);
                 HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - moved particle with status=4 from the outgoing to the incoming particles of vertex: " << m_vertex_cache[i]->id());
             }
-            if (beams.size() == 0) m_vertex_cache[i] = nullptr;
+            if (beams.size() == 0) {
+                HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - removed vertex without incoming particles: " << m_vertex_cache[i]->id() );
+                m_vertex_cache[i] = nullptr;
+            }
         }
         else if ( m_vertex_cache[i]->particles_out().size() == 0 ) {
-            HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - found a vertex without outgoing particles: " << m_vertex_cache[i]->id());
             m_vertex_cache[i] = nullptr;
+            HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - removed vertex without outgoing particles: " << m_vertex_cache[i]->id());
         }
     }
 
@@ -243,40 +259,57 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Add whole event tree in topological order
     evt.add_tree(m_particle_cache);
 
-    for (unsigned int i = 0; i < m_particle_cache.size(); ++i) {
-        if (m_particle_cache_ghost[i]->attribute_names().size())
-        {
-            std::shared_ptr<DoubleAttribute> phi = m_particle_cache_ghost[i]->attribute<DoubleAttribute>("phi");
-            if (phi) m_particle_cache[i]->add_attribute("phi", phi);
-            std::shared_ptr<DoubleAttribute> theta = m_particle_cache_ghost[i]->attribute<DoubleAttribute>("theta");
-            if (theta) m_particle_cache[i]->add_attribute("theta", theta);
-            if (m_options.find("particle_flows_are_separated") != m_options.end())
-            {
-                std::shared_ptr<IntAttribute> flow1 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow1");
-                if (flow1) m_particle_cache[i]->add_attribute("flow1", flow1);
-                std::shared_ptr<IntAttribute> flow2 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow2");
-                if (flow2) m_particle_cache[i]->add_attribute("flow2", flow2);
-                std::shared_ptr<IntAttribute> flow3 = m_particle_cache_ghost[i]->attribute<IntAttribute>("flow3");
-                if (flow3) m_particle_cache[i]->add_attribute("flow3", flow3);
-            }
-            else
-            {
-                std::shared_ptr<VectorIntAttribute> flows = m_particle_cache_ghost[i]->attribute<VectorIntAttribute>("flows");
-                if (flows)  m_particle_cache[i]->add_attribute("flows", flows);
-            }
+    if (m_options.find("event_random_states_are_separated") != m_options.end())
+    {
+        std::shared_ptr<VectorLongIntAttribute> random_states_a = evt.attribute<VectorLongIntAttribute>("random_states");
+        if (random_states_a) {
+            std::vector<long int> random_states_v = random_states_a->value();
+            for (size_t i = 0; i < random_states_v.size(); ++i )
+                evt.add_attribute("random_states" + std::to_string((long long unsigned int)i), std::make_shared<IntAttribute>(random_states_v[i]));
+            evt.remove_attribute("random_states");
+        }
+
+    }
+
+    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > > cached_attributes = m_event_ghost->attributes();
+    if (cached_attributes.find("flows") != cached_attributes.end()) {
+        std::map<int, std::shared_ptr<Attribute> > flows = cached_attributes.at("flows");
+        if (m_options.find("particle_flows_are_separated") == m_options.end()) {
+            for (auto f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("flows", f.second);
+        } else  {
+            for (auto f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {
+                    std::shared_ptr<VectorIntAttribute>  casted = std::dynamic_pointer_cast<VectorIntAttribute>(f.second);
+                    if (!casted) continue;//Should not happen
+                    std::vector<int> this_p_flow = casted->value();
+                    for (size_t i = 0; i<this_p_flow.size(); i++) m_particle_cache[f.first-1]->add_attribute("flow" + std::to_string(i + 1), std::make_shared<IntAttribute>(this_p_flow[i]));
+                }
         }
     }
 
-    for (unsigned int i = 0; i < m_vertex_cache.size(); ++i)
-        if (m_vertex_cache_ghost[i]->attribute_names().size())
-        {
-            for (size_t ii = 0; ii < max_weights_size; ii++)
-            {
-                std::shared_ptr<DoubleAttribute> rs = m_vertex_cache_ghost[i]->attribute<DoubleAttribute>("weight"+std::to_string((long long unsigned int)ii));
-                if (!rs) break;
-                m_vertex_cache[i]->add_attribute("weight"+std::to_string((long long unsigned int)ii), rs);
-            }
+    if (cached_attributes.find("phi") != cached_attributes.end()) {
+        std::map<int, std::shared_ptr<Attribute> > phi = cached_attributes.at("phi");
+        for (auto f: phi) if (f.first > 0 &&f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("phi", f.second);
+    }
+
+    if (cached_attributes.find("theta") != cached_attributes.end()) {
+        std::map<int, std::shared_ptr<Attribute> > theta = cached_attributes.at("theta");
+        for (auto f: theta) if (f.first > 0 && f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("theta", f.second);
+    }
+
+    if (cached_attributes.find("weights") != cached_attributes.end()) {
+        std::map<int, std::shared_ptr<Attribute> > weights = cached_attributes.at("weights");
+        if (m_options.find("vertex_weights_are_separated") == m_options.end()) {
+            for (auto f: weights) if (f.first < 0 && f.first >= -(int)m_vertex_cache.size())  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);
+        } else {
+            for (auto f: weights) if (f.first < 0 && f.first >= -(int)m_vertex_cache.size()) {
+                    std::shared_ptr<VectorDoubleAttribute>  casted = std::dynamic_pointer_cast<VectorDoubleAttribute>(f.second);
+                    if (!casted) continue;//Should not happen
+                    std::vector<double> this_v_weight = casted->value();
+                    for (size_t i = 0; i < this_v_weight.size(); i++) m_particle_cache[-f.first-1]->add_attribute("weight"+std::to_string(i), std::make_shared<DoubleAttribute>(this_v_weight[i]));
+                }
         }
+    }
+
     std::shared_ptr<IntAttribute> signal_process_vertex_barcode = evt.attribute<IntAttribute>("signal_process_vertex");
     if (signal_process_vertex_barcode) {
         int signal_process_vertex_barcode_value = signal_process_vertex_barcode->value();
@@ -297,7 +330,6 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
 int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     const char          *cursor             = buf;
-    int                  event_no           = 0;
     int                  vertices_count     = 0;
     int                  random_states_size = 0;
     int                  weights_size       = 0;
@@ -306,38 +338,31 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
 
     // event number
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    event_no = atoi(cursor);
-    evt.set_event_number(event_no);
+    evt.set_event_number(atoi(cursor));
 
     //mpi
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    std::shared_ptr<IntAttribute> mpi = std::make_shared<IntAttribute>(atoi(cursor));
-    evt.add_attribute("mpi", mpi);
+    evt.add_attribute("mpi", std::make_shared<IntAttribute>(atoi(cursor)));
 
     //event scale
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    std::shared_ptr<DoubleAttribute> event_scale = std::make_shared<DoubleAttribute>(atof(cursor));
-    evt.add_attribute("event_scale", event_scale);
+    evt.add_attribute("event_scale", std::make_shared<DoubleAttribute>(atof(cursor)));
 
     //alpha_qcd
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    std::shared_ptr<DoubleAttribute> alphaQCD = std::make_shared<DoubleAttribute>(atof(cursor));
-    evt.add_attribute("alphaQCD", alphaQCD);
+    evt.add_attribute("alphaQCD", std::make_shared<DoubleAttribute>(atof(cursor)));
 
     //alpha_qed
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    std::shared_ptr<DoubleAttribute> alphaQED = std::make_shared<DoubleAttribute>(atof(cursor));
-    evt.add_attribute("alphaQED", alphaQED);
+    evt.add_attribute("alphaQED", std::make_shared<DoubleAttribute>(atof(cursor)));
 
     //signal_process_id
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    std::shared_ptr<IntAttribute> signal_process_id = std::make_shared<IntAttribute>(atoi(cursor));
-    evt.add_attribute("signal_process_id", signal_process_id);
+    evt.add_attribute("signal_process_id", std::make_shared<IntAttribute>(atoi(cursor)));
 
     //signal_process_vertex
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    std::shared_ptr<IntAttribute> signal_process_vertex = std::make_shared<IntAttribute>(atoi(cursor));
-    evt.add_attribute("signal_process_vertex", signal_process_vertex);
+    evt.add_attribute("signal_process_vertex", std::make_shared<IntAttribute>(atoi(cursor)));
 
     // num_vertices
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
@@ -358,15 +383,9 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
         random_states[i] = atoi(cursor);
     }
-    if (m_options.find("event_random_states_are_separated") != m_options.end())
-    {
-        evt.add_attribute("random_states", std::make_shared<VectorLongIntAttribute>(random_states));
-    }
-    else
-    {
-        for ( int i = 0; i < random_states_size; ++i )
-            evt.add_attribute("random_states"+std::to_string((long long unsigned int)i), std::make_shared<IntAttribute>(random_states[i]));
-    }
+
+    if (random_states.size()) evt.add_attribute("random_states", std::make_shared<VectorLongIntAttribute>(random_states));
+
     // weights
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
     weights_size = atoi(cursor);
@@ -379,7 +398,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
 
     evt.weights() = weights;
 
-    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: E: " << event_no << " (" << vertices_count << "V, " << weights_size << "W, " << random_states_size << "RS)")
+    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: E: " << evt.event_number() << " (" << vertices_count << "V, " << weights_size << "W, " << random_states_size << "RS)")
 
     return vertices_count;
 }
@@ -407,7 +426,6 @@ bool ReaderAsciiHepMC2::parse_units(GenEvent &evt, const char *buf) {
 int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     GenVertexPtr  data = std::make_shared<GenVertex>();
     GenVertexPtr  data_ghost = std::make_shared<GenVertex>();
-    FourVector    position;
     const char   *cursor            = buf;
     int           barcode           = 0;
     int           num_particles_out = 0;
@@ -423,20 +441,20 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
 
     // x
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    position.setX(atof(cursor));
+    double X(atof(cursor));
 
     // y
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    position.setY(atof(cursor));
+    double Y(atof(cursor));
 
     // z
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    position.setZ(atof(cursor));
+    double Z(atof(cursor));
 
     // t
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    position.setT(atof(cursor));
-    data->set_position(position);
+    double T(atof(cursor));
+    data->set_position(FourVector(X,Y,Z,T));
 
     // SKIPPED: num_orphans_in
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
@@ -446,7 +464,6 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     num_particles_out = atoi(cursor);
 
     //  weights
-
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
     weights_size = atoi(cursor);
     weights.resize(weights_size);
@@ -463,19 +480,12 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     m_vertex_barcodes.push_back(barcode);
 
     m_event_ghost->add_vertex(data_ghost);
-    if (m_options.find("vertex_weights_are_separated") != m_options.end())
-    {
-        for ( int i = 0; i < weights_size; ++i )
-            data_ghost->add_attribute("weight"+std::to_string((long long unsigned int)i), std::make_shared<DoubleAttribute>(weights[i]));
-    }
-    else
-    {
-        data_ghost->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(weights));
-        data_ghost->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(weights));
-    }
+
+    if (weights.size()) data_ghost->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(weights));
+
     m_vertex_cache_ghost.push_back(data_ghost);
 
-    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: V: " << -(int)m_vertex_cache.size() << " (old barcode" << barcode << ") " << num_particles_out << " particles)")
+    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: V: " << -(int)m_vertex_cache.size() << " (old barcode " << barcode << ") " << num_particles_out << " particles)")
 
     return num_particles_out;
 }
@@ -484,7 +494,6 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     GenParticlePtr  data = std::make_shared<GenParticle>();
     GenParticlePtr  data_ghost = std::make_shared<GenParticle>();
     m_event_ghost->add_particle(data_ghost);
-    FourVector      momentum;
     const char     *cursor  = buf;
     int             end_vtx = 0;
 
@@ -497,20 +506,20 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
 
     // px
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    momentum.setPx(atof(cursor));
+    double Px(atof(cursor));
 
     // py
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    momentum.setPy(atof(cursor));
+    double Py(atof(cursor));
 
     // pz
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    momentum.setPz(atof(cursor));
+    double Pz(atof(cursor));
 
     // pe
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    momentum.setE(atof(cursor));
-    data->set_momentum(momentum);
+    double E(atof(cursor));
+    data->set_momentum(FourVector(Px,Py,Pz,E));
 
     // m
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
@@ -522,13 +531,13 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
 
     //theta
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    std::shared_ptr<DoubleAttribute> theta = std::make_shared<DoubleAttribute>(atof(cursor));
-    if (theta->value() != 0.0) data_ghost->add_attribute("theta", theta);
+    double theta_v = atof(cursor);
+    if (theta_v != 0.0) data_ghost->add_attribute("theta", std::make_shared<DoubleAttribute>(theta_v));
 
     //phi
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    std::shared_ptr<DoubleAttribute> phi = std::make_shared<DoubleAttribute>(atof(cursor));
-    if (phi->value() != 0.0) data_ghost->add_attribute("phi", phi);
+    double phi_v = atof(cursor);
+    if (phi_v != 0.0) data_ghost->add_attribute("phi", std::make_shared<DoubleAttribute>(phi_v));
 
     // end_vtx_code
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
@@ -547,17 +556,13 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
         int flowvalue = atoi(cursor);
         flows[flowindex] = flowvalue;
     }
-    if (m_options.find("particle_flows_are_separated") == m_options.end())
+    if (flowsize)
     {
         std::vector<int> vectorflows;
         for (auto f: flows) vectorflows.push_back(f.second);
         data_ghost->add_attribute("flows", std::make_shared<VectorIntAttribute>(vectorflows));
     }
-    else
-    {
-        for (auto f: flows)   data_ghost->add_attribute("flow"+std::to_string((long long int)f.first), std::make_shared<IntAttribute>(f.second));
-    }
-// Set prod_vtx link
+    // Set prod_vtx link
     if ( end_vtx == m_vertex_barcodes.back() ) {
         m_vertex_cache.back()->add_particle_in(data);
         end_vtx = 0;

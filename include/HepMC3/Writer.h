@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_WRITER_H
 #define HEPMC3_WRITER_H
@@ -27,7 +27,7 @@ public:
 
     ///Constructor
     Writer() {}
-    
+
     /// Virtual destructor
     virtual ~Writer() {}
 
@@ -49,29 +49,29 @@ public:
     }
 
 ///deleted copy constructor
-    Writer(const Writer&) = delete; 
+    Writer(const Writer&) = delete;
 ///deleted copy assignment operator
-    Writer& operator = (const Writer &) = delete;            
+    Writer& operator = (const Writer &) = delete;
     /// Set options
     void set_options(const std::map<std::string, std::string>& options)
     {
-    m_options=options;
+        m_options=options;
     }
     /// Set options
     std::map<std::string, std::string> get_options() const
     {
-    return m_options;
+        return m_options;
     }
 protected:
 
     /// options
     std::map<std::string, std::string> m_options;
-   
+
 private:
 
     /// The global GenRunInfo object.
     std::shared_ptr<GenRunInfo> m_run_info;
- 
+
 };
 
 

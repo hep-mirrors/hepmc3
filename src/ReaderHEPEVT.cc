@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderHEPEVT.cc
@@ -26,7 +26,6 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
     else
     {
         set_run_info(std::make_shared<GenRunInfo>());
-        set_run_info(std::make_shared<GenRunInfo>());
         hepevtbuffer = (char*)(new struct HEPEVT());
         HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
     }
@@ -45,6 +44,21 @@ ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
         HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
     }
 }
+
+ReaderHEPEVT::ReaderHEPEVT(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
+{
+    if ( !m_stream->good() ) {
+        HEPMC3_ERROR("ReaderHEPEVT: could not open input stream  ")
+    }
+    else
+    {
+        set_run_info(std::make_shared<GenRunInfo>());
+        hepevtbuffer = (char*)(new struct HEPEVT());
+        HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
+    }
+}
+
 
 bool ReaderHEPEVT::skip(const int n)
 {

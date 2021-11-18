@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @example class_example_read.cc
@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
 
         if( events_parsed == 0 ) {
             std::cout << "First event: " << std::endl;
-	    Print::listing(*(myevent->GetEvent()));
+            Print::listing(*(myevent->GetEvent()));
         }
 
         if( run_info ) {

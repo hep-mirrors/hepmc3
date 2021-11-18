@@ -18,7 +18,11 @@
 #else
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
+#ifdef HEPMC3_USE_INTERFACE_FROM_PYTHIA8
+#include "Pythia8Plugins/HepMC3.h"
+#else
 #include "Pythia8ToHepMC3.h"
+#endif
 #endif
 
 #include "ValidationTool.h"

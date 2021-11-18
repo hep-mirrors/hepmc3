@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERLHEF_H
 #define HEPMC3_READERLHEF_H
@@ -36,11 +36,10 @@ class ReaderLHEF : public Reader
 public:
     /// The ctor to read from stream
     ReaderLHEF(std::istream &);
-private:
-    void init();                       ///< Init helper
-public:
     /** @brief Constructor */
     ReaderLHEF(const std::string& filename);
+    /// The ctor to read from temp stream
+    ReaderLHEF(std::shared_ptr<std::istream> s_stream);
     /// @brief skip events
     bool skip(const int)  override;
     /** @brief Reading event */
@@ -52,6 +51,8 @@ public:
     /** @brief Destructor */
     ~ReaderLHEF() ;
 private:
+    void init();                       ///< Init helper
+    std::shared_ptr<std::istream> m_shared_stream; ///< Holds temporary stream
     std::shared_ptr<LHEF::Reader> m_reader;            ///< The actual reader
     std::shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
     int m_neve;                         ///< Event counter

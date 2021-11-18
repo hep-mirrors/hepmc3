@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file Relatives.h
@@ -52,15 +52,19 @@ using Descendants = RelativesInterface<Recursive<_children> >;
  */
 class Relatives {
 public:
+    /// @brief Operator
     virtual std::vector<GenParticlePtr> operator()(GenParticlePtr input) const = 0;
+    /// @brief Operator
     virtual std::vector<ConstGenParticlePtr> operator()(ConstGenParticlePtr input) const = 0;
+    /// @brief Operator
     virtual std::vector<GenParticlePtr> operator()(GenVertexPtr input) const = 0;
+    /// @brief Operator
     virtual std::vector<ConstGenParticlePtr> operator()(ConstGenVertexPtr input) const = 0;
 
-    static const Parents PARENTS;
-    static const Children CHILDREN;
-    static thread_local const Ancestors ANCESTORS;
-    static thread_local const Descendants DESCENDANTS;
+    static const Parents PARENTS;  ///< Parents
+    static const Children CHILDREN;  ///< Children
+    static thread_local const Ancestors ANCESTORS;  ///< Ancestors
+    static thread_local const Descendants DESCENDANTS;  ///< Descendants
 };
 
 /** @brief wrap a templated class that implements Relatives
@@ -76,9 +80,13 @@ public:
     //RelativesInterface(Relative_type relatives): _internal(relatives){}
     constexpr RelativesInterface() {}
 
+    /// @brief Operator
     GenParticles_type<GenParticlePtr> operator()(GenParticlePtr input) const override {return _internal(input);}
+    /// @brief Operator
     GenParticles_type<ConstGenParticlePtr> operator()(ConstGenParticlePtr input) const override {return _internal(input);}
+    /// @brief Operator
     GenParticles_type<GenVertexPtr> operator()(GenVertexPtr input) const override {return _internal(input);}
+    /// @brief Operator
     GenParticles_type<ConstGenVertexPtr> operator()(ConstGenVertexPtr input) const override {return _internal(input);}
 
 private:
@@ -88,6 +96,7 @@ private:
 template<typename Relation_type>
 class Recursive {
 public:
+    /// @brief Operator
     template<typename GenObject_type>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const {
         for (auto obj: m_checkedObjects) {
@@ -98,9 +107,11 @@ public:
     }
 
 private:
+    /// @brief recursive
     template<typename GenObject_type, typename dummy>
     GenParticles_type<GenObject_type> _recursive(GenObject_type input) const;
 
+    /// @brief recursive
     GenParticles_type<GenVertexPtr> _recursive(GenVertexPtr input) const {
         GenParticles_type <GenVertexPtr> results;
         if ( !input ) return results;
@@ -121,6 +132,7 @@ private:
         return results;
     }
 
+    /// @brief recursive
     GenParticles_type<ConstGenVertexPtr> _recursive(ConstGenVertexPtr input) const {
         GenParticles_type <ConstGenVertexPtr> results;
         if ( !input ) return results;
@@ -141,9 +153,11 @@ private:
         return results;
     }
 
+    /** @brief  recursive */
     GenParticles_type<GenParticlePtr> _recursive(GenParticlePtr input) const {
         return _recursive(m_applyRelation.vertex(input));
     }
+    /** @brief  recursive */
     GenParticles_type<ConstGenParticlePtr> _recursive(ConstGenParticlePtr input) const {
         return _recursive(m_applyRelation.vertex(input));
     }
@@ -152,22 +166,26 @@ private:
     /** @brief  hasID */
     class hasId {
     public:
+        /// @brief destructor
         virtual ~hasId() {}
+        /// @brief id
         virtual int id() const = 0;
     };
     /** @brief  iDinterface */
     template<typename ID_type>
     class idInterface : public hasId {
     public:
+        /** @brief  idInterface */
         constexpr idInterface(ID_type genObject): m_object(genObject) {}
+        /** @brief  id */
         int id() const override {return m_object->id();}
 
     private:
-        ID_type m_object;
+        ID_type m_object;  ///< id of object
     };
 
-    Relation_type m_applyRelation;
-    mutable std::vector<hasId*> m_checkedObjects;
+    Relation_type m_applyRelation;   ///< applyRelation
+    mutable std::vector<hasId*> m_checkedObjects; ///< Checked objects
 };
 
 /** @brief Provides operator to find the parent particles of a Vertex or Particle
@@ -176,15 +194,19 @@ private:
  */
 class _parents {
 public:
+    /** @brief  operator */
     template<typename GenObject_type, typename dummy>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
 
+    /** @brief  operator */
     template<typename GenObject_type, typename std::enable_if<std::is_same<GenVertex, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return input->particles_in();}
 
+    /** @brief  operator */
     template<typename GenObject_type, typename std::enable_if<std::is_same<GenParticle, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return (*this)(vertex(input));}
 
+    /** @brief  vertex */
     template<typename GenObject_type>
     GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->production_vertex();}
 };
@@ -195,15 +217,19 @@ public:
  */
 class _children {
 public:
+    /// @brief operator
     template<typename GenObject_type, typename dummy>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
 
+    /// @brief operator
     template<typename GenObject_type, typename std::enable_if<std::is_same<GenVertex, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return input->particles_out();}
 
+    /// @brief operator
     template<typename GenObject_type, typename std::enable_if<std::is_same<GenParticle, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
     GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return (*this)(vertex(input));}
 
+    /// @brief operator
     template<typename GenObject_type>
     GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->end_vertex();}
 };

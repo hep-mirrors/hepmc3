@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_PRINT_H
 #define HEPMC3_PRINT_H
@@ -119,7 +119,7 @@ public:
         std::cout<<std::endl;
     }
 ///deleted copy assignment operator
-    Print& operator = (const Print &) = delete;            
+    Print& operator = (const Print &) = delete;
 
 private:
     /// @brief Helper function for printing a vertex in listing format

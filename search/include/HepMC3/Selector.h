@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file Selector.h
@@ -59,17 +59,17 @@ public:
 /** @brief  Destructor */
     virtual ~Selector() {};
 
-    virtual Filter operator > (int value) const = 0;
-    virtual Filter operator > (double value) const = 0;
+    virtual Filter operator > (int value) const = 0;        ///< Operator >
+    virtual Filter operator > (double value) const = 0;     ///< Operator >
 
-    virtual Filter operator >= (int value) const = 0;
-    virtual Filter operator >= (double value) const = 0;
+    virtual Filter operator >= (int value) const = 0;       ///< Operator >=
+    virtual Filter operator >= (double value) const = 0;    ///< Operator >=
 
-    virtual Filter operator < (int value) const = 0;
-    virtual Filter operator < (double value) const = 0;
+    virtual Filter operator < (int value) const = 0;        ///< Operator <
+    virtual Filter operator < (double value) const = 0;     ///< Operator <
 
-    virtual Filter operator <= (int value) const = 0;
-    virtual Filter operator <= (double value) const = 0;
+    virtual Filter operator <= (int value) const = 0;       ///< Operator <=
+    virtual Filter operator <= (double value) const = 0;    ///< Operator <=
 
     virtual Filter operator == (int value) const = 0;      ///< Equality
     virtual Filter operator == (double value) const = 0;      ///< Equality
@@ -77,63 +77,77 @@ public:
     virtual Filter operator != (int value) const = 0;      ///< NonEquality
     virtual Filter operator != (double value) const = 0;      ///< NonEquality
 
-    virtual ConstSelectorPtr abs() const = 0;
-    static AttributeFeature ATTRIBUTE(const std::string &name);
+    virtual ConstSelectorPtr abs() const = 0;    ///< abs function
+    static AttributeFeature ATTRIBUTE(const std::string &name);  ///< ATTRIBUTE function
 };
 /** @brief  SelectorWrapper */
 template<typename Feature_type>
 class SelectorWrapper : public Selector {
 public:
+    /// @brief Constructor
     SelectorWrapper(typename Feature<Feature_type>::Evaluator_type functor): m_internal(functor) {}
 
+    /// @brief Operator >
     Filter operator > (int value) const override {
         return m_internal > value;
     }
 
+    /// @brief Operator >
     Filter operator > (double value) const override {
         return m_internal > value;
     }
 
+    /// @brief Operator >=
     Filter operator >= (int value) const override {
         return m_internal >= value;
     }
 
+    /// @brief Operator >=
     Filter operator >= (double value) const override {
         return m_internal >= value;
     }
 
+    /// @brief Operator <
     Filter operator < (int value) const override {
         return m_internal < value;
     }
 
+    /// @brief Operator <
     Filter operator < (double value) const override {
         return m_internal < value;
     }
 
+    /// @brief Operator <=
     Filter operator <= (int value) const override {
         return m_internal <= value;
     }
 
+    /// @brief Operator <=
     Filter operator <= (double value) const override {
         return m_internal <= value;
     }
 
+    /// @brief Operator ==
     Filter operator == (int value) const override {
         return m_internal == value;
     }
 
+    /// @brief Operator ==
     Filter operator == (double value) const override {
         return m_internal == value;
     }
 
+    /// @brief Operator !=
     Filter operator != (int value) const override {
         return m_internal != value;
     }
 
+    /// @brief Operator !=
     Filter operator != (double value) const override {
         return m_internal != value;
     }
 
+    /// @brief Function abs
     ConstSelectorPtr abs() const override {
         SelectorWrapper<Feature_type> *copy = new SelectorWrapper<Feature_type>(*this);
         copy->m_internal = m_internal.abs();

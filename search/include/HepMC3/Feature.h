@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file Feature.h
@@ -58,7 +58,9 @@ namespace HepMC3 {
 template<typename Feature_type>
 class GenericFeature {
 public:
+    /// @brief evaluator type
     using Evaluator_type = std::function<Feature_type(ConstGenParticlePtr)>;
+    /// @brief shared pointer for evaluator type
     using EvaluatorPtr   =  std::shared_ptr<Evaluator_type>;
 
     /// @brief access the underlying feature value
@@ -114,9 +116,9 @@ protected:
     /// Hide the copy constructor
     GenericFeature(const GenericFeature &copy) : m_internal(copy.m_internal) {}
 
-    // internal copy of func for evaluation
-    // on the heap so will persist in resulting Filters even if
-    // parent Feature object was destroyed
+    /// @brief internal copy of func for evaluation
+    /// on the heap so will persist in resulting Filters even if
+    /// parent Feature object was destroyed
     EvaluatorPtr m_internal;
 };
 
@@ -171,9 +173,12 @@ public:
     using GenericFeature<Feature_type>::operator ==;
     using GenericFeature<Feature_type>::operator !=;
 
+    /// @brief  Feature
     Feature(Evaluator_type functor) : GenericFeature<Feature_type>(functor) {}
+    /// @brief  Copy
     Feature(const Feature &copy) : GenericFeature<Feature_type>(copy) {}
 
+    /// @brief  Abs function
     Feature<Feature_type> abs() const {
         EvaluatorPtr functor = m_internal;
         Evaluator_type absfunctor = [functor](ConstGenParticlePtr p)->Feature_type{return ::abs((*functor)(p));};
@@ -212,25 +217,31 @@ public:
 
     using GenericFeature<Feature_type>::m_internal;
 
+    /// @brief  Feature
     Feature(Evaluator_type functor) : GenericFeature<Feature_type>(functor) {}
+    /// @brief  Feature
     Feature(const Feature &copy) : GenericFeature<Feature_type>(copy) {}
 
+    /// @brief abs function
     Feature<Feature_type> abs() const {
         EvaluatorPtr functor = m_internal;
         Evaluator_type absfunctor = [functor](ConstGenParticlePtr p)->Feature_type{return ::abs((*functor)(p));};
         return Feature<Feature_type>(absfunctor);
     }
 
+    /// @brief greater operator
     Filter operator > (double value) const {
         EvaluatorPtr functor = m_internal;
         return [value, functor](ConstGenParticlePtr input)->bool{return (*functor)(input) >  value;};
     }
 
+    /// @brief less operator
     Filter operator < (double value) const {
         EvaluatorPtr functor = m_internal;
         return [value, functor](ConstGenParticlePtr input)->bool{return (*functor)(input) <  value;};
     }
 
+    /// @brief equal operator
     Filter operator == (double value) const {
         EvaluatorPtr functor = m_internal;
         return [value, functor](ConstGenParticlePtr input)->bool{
@@ -239,10 +250,13 @@ public:
         };
     }
 
+    /// @brief greater or equal operator
     Filter operator >= (double value) const { return !( (*this) < value );}
 
+    /// @brief less or equal operator
     Filter operator <= (double value) const { return !( (*this) > value );}
 
+    /// @brief not equal operator
     Filter operator != (double value) const {
         return !( (*this) == value );
     }
@@ -271,9 +285,12 @@ public:
 
     using GenericFeature<Feature_type>::m_internal;
 
+    /// @brief Feature
     Feature(Evaluator_type functor) : GenericFeature<Feature_type>(functor) {}
+    /// @brief Copy
     Feature(const Feature &copy) : GenericFeature<Feature_type>(copy) {}
 
+    /// @brief abs function
     Feature<Feature_type> abs() const {
         EvaluatorPtr functor = m_internal;
         Evaluator_type absfunctor = [functor](ConstGenParticlePtr p)->Feature_type{return std::abs((*functor)(p));};

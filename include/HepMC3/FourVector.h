@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_FOURVECTOR_H
 #define HEPMC3_FOURVECTOR_H
@@ -10,6 +10,7 @@
  *  @brief Definition of \b class FourVector
  */
 #include <cmath>
+#include <limits>
 #ifndef M_PI
 /** @brief Definition of PI. Needed on some platforms */
 #define M_PI 3.14159265358979323846264338327950288
@@ -47,7 +48,7 @@ public:
 
 
     /// @name Component accessors
-    //@{
+    /// @{
 
     /** @brief Set all FourVector fields, in order x,y,z,t */
     void set(double x1, double x2, double x3, double x4) {
@@ -58,7 +59,7 @@ public:
     }
 
     /// set component of position/displacement
-    void set_component(const int i, const double x)   
+    void set_component(const int i, const double x)
     {
     if (i==0) {m_v1=x; return; }
     if (i==1) {m_v2=x; return; }
@@ -133,11 +134,11 @@ public:
     /// @deprecated Prefer the HepMC-style set_y() function
     void setE(double ee) { set_e(ee);    }
 
-    //@}
+    /// @}
 
 
     /// @name Computed properties
-    //@{
+    /// @{
 
     /// Squared magnitude of (x, y, z) 3-vector
     double length2()  const { return x()*x() + y()*y() + z()*z(); }
@@ -169,12 +170,10 @@ public:
     double phi() const { return std::atan2( y(), x() ); }
     /// Polar angle w.r.t. z direction
     double theta() const {  return std::atan2( perp(), z() ); }
-    // /// Cosine of polar angle w.r.t. z direction
-    // double costheta() const {  return z() / p3mod(); }
     /// Pseudorapidity
-    double eta() const  { return 0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) ); }
+    double eta() const  { return ( p3mod() == 0.0 ) ? 0.0: (0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) )); }
     /// Rapidity
-    double rap() const {   return 0.5*std::log( (e() + pz()) / (e() - pz()) ); }
+    double rap() const {   return ( e() == 0.0 ) ? 0.0: (0.5*std::log( (e() + pz()) / (e() - pz()) )); }
     /// Absolute pseudorapidity
     double abs_eta() const { return std::abs( eta() ); }
     /// Absolute rapidity
@@ -184,11 +183,11 @@ public:
     /// @deprecated Prefer 'only one way to do it', and we don't have equivalent long names for e.g. pid, phi or eta
     double pseudoRapidity() const { return eta(); }
 
-    //@}
+    /// @}
 
 
     /// @name Comparisons to another FourVector
-    //@{
+    /// @{
 
     /// Check if the length of this vertex is zero
     bool is_zero() const { return x() == 0 && y() == 0 && z() == 0 && t() == 0; }
@@ -228,11 +227,11 @@ public:
         return std::sqrt( delta_r2_rap(v) );
     }
 
-    //@}
+    /// @}
 
 
     /// @name Operators
-    //@{
+    /// @{
 
     /// Equality
     bool operator==(const FourVector& rhs) const {
@@ -287,7 +286,7 @@ public:
         setT(t()/rhs);
     }
 
-    //@}
+    /// @}
 
 
     /// Static null FourVector = (0,0,0,0)
@@ -308,7 +307,7 @@ private:
 
 
 /// @name Unbound vector comparison functions
-//@{
+/// @{
 
 /// Signed azimuthal angle separation in [-pi, pi] between vecs @c a and @c b
 inline double delta_phi(const FourVector &a, const FourVector &b) { return b.delta_phi(a); }
@@ -331,7 +330,7 @@ inline double delta_r2_rap(const FourVector &a, const FourVector &b) { return b.
 /// R_rap-distance separation dR = sqrt(dphi^2 + drap^2) between vecs @c a and @c b
 inline double delta_r_rap(const FourVector &a, const FourVector &b) { return b.delta_r_rap(a); }
 
-//@}
+/// @}
 
 
 } // namespace HepMC3

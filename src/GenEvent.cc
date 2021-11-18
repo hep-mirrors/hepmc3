@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenEvent.cc
@@ -375,8 +375,8 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
 
     HEPMC3_DEBUG_CODE_BLOCK(
         HEPMC3_DEBUG(6, "GenEvent - particles sorted: "
-                      << this->particles().size() << ", max deque size: "
-                      << max_deque_size << ", iterations: " << sorting_loop_count)
+                     << this->particles().size() << ", max deque size: "
+                     << max_deque_size << ", iterations: " << sorting_loop_count)
     )
     return;
 }
@@ -690,7 +690,7 @@ void GenEvent::write_data(GenEventData& data) const {
 void GenEvent::read_data(const GenEventData &data) {
     this->clear();
     this->set_event_number(data.event_number);
-//Note: set_units checks the current unit of event, i.e. applicable only for fully constructed event.
+    //Note: set_units checks the current unit of event, i.e. applicable only for fully constructed event.
     m_momentum_unit = data.momentum_unit;
     m_length_unit = data.length_unit;
     this->shift_position_to(data.event_pos);
@@ -737,8 +737,8 @@ void GenEvent::read_data(const GenEventData &data) {
     // Read attributes
     for (unsigned int i = 0; i < data.attribute_id.size(); ++i) {
         add_attribute(data.attribute_name[i],
-                       std::make_shared<StringAttribute>(data.attribute_string[i]),
-                       data.attribute_id[i]);
+                      std::make_shared<StringAttribute>(data.attribute_string[i]),
+                      data.attribute_id[i]);
     }
 }
 
@@ -774,7 +774,7 @@ void GenEvent::add_beam_particle(GenParticlePtr p1) {
             return;
         }
     if (p1->production_vertex())  p1->production_vertex()->remove_particle_out(p1);
-//Particle w/o production vertex is added to root vertex.
+    //Particle w/o production vertex is added to root vertex.
     add_particle(p1);
     p1->set_status(4);
     return;

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenEvent.h
@@ -63,7 +63,7 @@ public:
     GenEvent& operator=(const GenEvent&);
 
     /// @name Particle and vertex access
-    //@{
+    /// @{
 
     /// @brief Get list of particles (const)
     const std::vector<ConstGenParticlePtr>& particles() const;
@@ -76,7 +76,7 @@ public:
     /// @brief Get/set list of vertices (non-const)
     const std::vector<GenVertexPtr>& vertices() { return m_vertices; }
 
-    //@}
+    /// @}
 
 
     /// @name Particle and vertex access
@@ -92,7 +92,7 @@ public:
     //@}
 
     /// @name Event weights
-    //@{
+    /// @{
 
     /// Get event weight values as a vector
     const std::vector<double>& weights() const { return m_weights; }
@@ -100,21 +100,22 @@ public:
     std::vector<double>& weights() { return m_weights; }
     /// Get event weight accessed by index (or the canonical/first one if there is no argument)
     /// @note It's the user's responsibility to ensure that the given index exists!
-    double weight(const unsigned long& index=0) const { return weights().at(index); }
+    double weight(const unsigned long& index=0) const { if ( index < weights().size() ) return weights().at(index); else  throw std::runtime_error("GenEvent::weight(const unsigned long&): weight index outside of range"); return 0.0; }
     /// Get event weight accessed by weight name
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
     double weight(const std::string& name) const {
-        if (!run_info()) throw std::runtime_error("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
+        if (!run_info()) throw std::runtime_error("GenEvent::weight(const std::string&): named access to event weights requires the event to have a GenRunInfo");
         return weight(run_info()->weight_index(name));
     }
     /// Get event weight accessed by weight name
     /// @note Requires there to be an attached GenRunInfo, otherwise will throw an exception
     /// @note It's the user's responsibility to ensure that the given name exists!
     double& weight(const std::string& name) {
-        if (!run_info()) throw std::runtime_error("GenEvent::weight(str): named access to event weights requires the event to have a GenRunInfo");
-        int pos=run_info()->weight_index(name);
-        if (pos<0) throw std::runtime_error("GenEvent::weight(str): no weight with given name in this run");
+        if (!run_info()) throw std::runtime_error("GenEvent::weight(const std::string&): named access to event weights requires the event to have a GenRunInfo");
+        int pos = run_info()->weight_index(name);
+        if ( pos < 0 ) throw std::runtime_error("GenEvent::weight(const std::string&): no weight with given name in this run");
+        if ( pos >= int(m_weights.size())) throw std::runtime_error("GenEvent::weight(const std::string&): weight index outside of range");
         return m_weights[pos];
     }
     /// Get event weight names, if there are some
@@ -126,11 +127,11 @@ public:
         return weightnames;
     }
 
-    //@}
+    /// @}
 
 
     /// @name Auxiliary info and event metadata
-    //@{
+    /// @{
 
     /// @brief Get a pointer to the the GenRunInfo object.
     std::shared_ptr<GenRunInfo> run_info() const {
@@ -177,11 +178,11 @@ public:
     /// @brief Set cross-section information
     void set_cross_section(GenCrossSectionPtr cs) { add_attribute("GenCrossSection",cs); }
 
-    //@}
+    /// @}
 
 
     /// @name Event position
-    //@{
+    /// @{
 
     /// Vertex representing the overall event position
     const FourVector& event_pos() const;
@@ -208,18 +209,18 @@ public:
     /// @brief Change sign of @a axis
     bool reflect(const int axis);
 
-    //@}
+    /// @}
 
 
     /// @name Additional attributes
-    //@{
+    /// @{
     /// @brief Add event attribute to event
     ///
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0) {
         ///Disallow empty strings
-        if (name.length()==0) return;     
+        if (name.length()==0) return;
         if (!att)  return;
         std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
         if (m_attributes.count(name)==0) m_attributes[name]=std::map<int, std::shared_ptr<Attribute> >();
@@ -251,11 +252,11 @@ public:
         return m_attributes;
     }
 
-    //@}
+    /// @}
 
 
     /// @name Particle and vertex modification
-    //@{
+    /// @{
 
     /// @brief Add particle
     void add_particle( GenParticlePtr p );
@@ -301,10 +302,10 @@ public:
     /// @brief Remove contents of this event
     void clear();
 
-    //@}
+    /// @}
 
     /// @name Deprecated functionality
-    //@{
+    /// @{
 
     /// @brief Add particle by raw pointer
     /// @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
@@ -325,13 +326,13 @@ public:
     void add_beam_particle(GenParticlePtr p1);
 
 
-    //@}
+    /// @}
 
 #endif // __CINT__
 
 
     /// @name Methods to fill GenEventData and to read it back
-    //@{
+    /// @{
 
     /// @brief Fill GenEventData object
     void write_data(GenEventData &data) const;
@@ -342,13 +343,13 @@ public:
 #ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
-    //@}
+    /// @}
 #endif
 
 private:
 
     /// @name Fields
-    //@{
+    /// @{
 
 #if !defined(__CINT__)
 
@@ -389,7 +390,7 @@ private:
     mutable std::recursive_mutex m_lock_attributes;
 #endif // __CINT__
 
-    //@}
+    /// @}
 
 };
 

@@ -15,7 +15,7 @@
 
 namespace HepMC3
 {
-
+/** @brief  ReaderuprootTree */
 class ReaderuprootTree : public Reader
 {
 public:

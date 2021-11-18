@@ -16,8 +16,8 @@ int COMPARE_ASCII_FILES(const std::string& f1,const std::string& f2)
     int j1,j2;
     j1 = 0;
     j2 = 0;
-    std::cout <<"Run comparison"<< "\n";
-    while((!file1.eof())&&(!file2.eof()))
+    std::cout << "Run comparison" << "\n";
+    while((!file1.eof()) && (!file2.eof()))
     {
         for (;;) {
             j1++;
@@ -32,7 +32,7 @@ int COMPARE_ASCII_FILES(const std::string& f1,const std::string& f2)
 
         if(string1.compare(string2) != 0)
         {
-            std::cout << j1<<"/"<<j2 << "-th strings are not equal" << f1<<f2<<"\n";
+            std::cout << j1 << "/" << j2 << "-th strings are not equal " << f1 << " " << f2 << "\n";
             std::cout << "   ->" << string1 << "<-\n";
             std::cout << "   ->" << string2 << "<-\n";
             return 1;
