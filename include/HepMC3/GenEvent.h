@@ -207,12 +207,21 @@ public:
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0);
+    void add_attributea(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0);
     
     /// @brief Add multiple attributes to event
     ///
     /// This will overwrite existing attributes if attributes
     /// with the same names are present
     void add_attributes(const std::vector<std::string> &names, const std::vector<std::shared_ptr<Attribute> > &atts,  const std::vector<int>& ids);
+
+    /// @brief Add multiple attributes to event
+    ///
+    /// This will overwrite existing attributes if attributes
+    /// with the same names are present
+    void add_attributes(const std::string& name, const std::vector<std::shared_ptr<Attribute> > &atts,  const std::vector<int>& ids);
+    void add_attributes(const std::string& name, const std::vector<std::pair<int, std::shared_ptr<Attribute> > > &atts);
+
 
 
     /// @brief Remove attribute

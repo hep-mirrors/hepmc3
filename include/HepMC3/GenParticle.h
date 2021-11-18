@@ -109,6 +109,7 @@ public:
      *  parent_event(). @return false if there is no parent_event();
      */
     bool add_attribute(const std::string& name, std::shared_ptr<Attribute> att);
+    bool add_attributea(const std::string& name, std::shared_ptr<Attribute> att);
 
     /// @brief Get list of names of attributes assigned to this particle
     std::vector<std::string> attribute_names() const;
