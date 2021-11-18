@@ -73,6 +73,11 @@ public:
         return m_weight_indices.find(name) !=  m_weight_indices.end();
     }
 
+    /// @brief Returns a copy of indices map.
+    std::map<std::string, int> weight_indices() const {
+        return m_weight_indices;
+    }
+
     /// @brief Return the index corresponding to a weight name.
     /// @return -1 if name was not found
     int weight_index(const std::string& name) const {
@@ -194,6 +199,15 @@ std::shared_ptr<T> GenRunInfo::attribute(const std::string &name) const {
     }
     else return std::dynamic_pointer_cast<T>(i->second);
 }
+
+/*
+/// @brief Returns a copy of indices map.
+template<typename T> std::map<std::string, T> weight_indices() const {
+        std::map<std::string, T> ret;
+        ret.insert(m_weight_indices.begin(),m_weight_indices.end());
+        return ret;
+}
+*/
 
 #endif // __CINT__
 
