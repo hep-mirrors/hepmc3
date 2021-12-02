@@ -162,7 +162,8 @@ private:
 
 
     /** @brief Store attributes global to the run being written/read. */
-    std::map< std::string, std::shared_ptr<Attribute> > m_global_attributes;
+    std::map< std::string, std::vector<std::pair<int, std::shared_ptr<Attribute> > > > m_global_attributes;
+
 
     /** @brief Temp storage for  outgoing particle ids */
     std::map<GenVertexPtr, std::set<int> >  m_forward_mothers;

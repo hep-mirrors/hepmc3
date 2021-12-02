@@ -104,6 +104,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     evt.set_run_info(run_info());
     m_forward_daughters.clear();
     m_forward_mothers.clear();
+    m_global_attributes.clear();
     //
     // Parse event, vertex and particle information
     //
@@ -137,7 +138,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 event_context   = true;
                 parsed_weights = false;
                 parsed_particles_or_vertices = false;
-            }
+             }
             run_info_context   = false;
             break;
         case 'V':
@@ -266,7 +267,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     auto it = diff.rbegin();
     //Set available ids to vertices sequentially.
     for (auto v: evt.vertices()) if (v->id() == 0) { v->set_id(*it); it++;}
-
+    for (auto nameatt: m_global_attributes) evt.add_attributes(nameatt.first, nameatt.second);
     return true;
 }
 
@@ -533,8 +534,14 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     std::shared_ptr<Attribute> att =
         std::make_shared<StringAttribute>(StringAttribute(unescape(cursor)));
 
-    evt.add_attribute(std::string(name), att, id);
+    if (id == 0) {
+      evt.add_attribute(std::string(name), att, id);
+    return true;
+    }
 
+    if (!m_global_attributes.count(name)) m_global_attributes[name] 
+      = std::vector<std::pair<int, std::shared_ptr<Attribute> > > ();
+    m_global_attributes[name].push_back(std::pair<int, std::shared_ptr<Attribute> > (id,att));
     return true;
 }
 
