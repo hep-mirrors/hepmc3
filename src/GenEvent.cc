@@ -872,7 +872,7 @@ void GenEvent::add_attributes(const std::string& name, const std::vector<std::sh
 
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
-    auto tmap = m_attributes[name];
+    auto& tmap = m_attributes[name];
     const int particles_size = int(m_particles.size());
     const int vertices_size = int(m_vertices.size());
     for (size_t i = 0; i < N; i++) {
@@ -893,7 +893,7 @@ void GenEvent::add_attributes(const std::string& name, const std::vector<std::pa
     if (!atts.size()) return;
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
-    auto tmap = m_attributes[name];
+    auto& tmap = m_attributes[name];
     const int particles_size = int(m_particles.size());
     const int vertices_size = int(m_vertices.size());
     for (auto att: atts) {
