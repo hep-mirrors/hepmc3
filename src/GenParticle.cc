@@ -97,12 +97,6 @@ bool GenParticle::add_attribute(const std::string& name, std::shared_ptr<Attribu
     return true;
 }
 
-bool GenParticle::add_attributea(const std::string& name, std::shared_ptr<Attribute> att) {
-    if ( !parent_event() ) return false;
-    parent_event()->add_attributea(name, att, id());
-    return true;
-}
-
 std::vector<std::string> GenParticle::attribute_names() const {
     if ( parent_event() ) return parent_event()->attribute_names(id());
 

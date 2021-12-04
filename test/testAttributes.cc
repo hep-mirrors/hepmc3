@@ -44,42 +44,6 @@ GenEvent generate1() {
     return evt;
 }
 
-GenEvent generate4() {
-    GenEvent evt;
-    std::shared_ptr<GenRunInfo> run = std::make_shared<GenRunInfo>();
-    evt.set_run_info(run);
-    GenParticlePtr b1 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr b2 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
-    GenParticlePtr b3 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
-    GenVertexPtr v1 = std::make_shared<GenVertex>();
-    v1->add_particle_in (b1);
-    v1->add_particle_in(b2);
-    v1->add_particle_out(b3);
-    evt.add_vertex(v1);
-    for (size_t z= 0; z < 12; z++) {
-        auto particles = evt.particles();
-        for (auto p: particles) {
-            if (p->end_vertex()) continue;
-            GenParticlePtr p1 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
-            GenParticlePtr p2 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
-            GenVertexPtr v = std::make_shared<GenVertex>();
-            v->add_particle_in (p);
-            v->add_particle_out(p1);
-            v->add_particle_out(p2);
-            evt.add_vertex(v);
-            v->add_attributea("barcode",std::make_shared<HepMC3::IntAttribute>(-20));
-            p1->add_attributea("phi",std::make_shared<HepMC3::DoubleAttribute>(0.1));
-            p1->add_attributea("theta",std::make_shared<HepMC3::DoubleAttribute>(0.1));
-            p1->add_attributea("barcode",std::make_shared<HepMC3::IntAttribute>(10));
-            p2->add_attributea("phi",std::make_shared<HepMC3::DoubleAttribute>(0.1));
-            p2->add_attributea("theta",std::make_shared<HepMC3::DoubleAttribute>(0.1));
-            p2->add_attributea("barcode",std::make_shared<HepMC3::IntAttribute>(10));
-        }
-    }
-    return evt;
-}
-
-
 
 
 
@@ -198,7 +162,7 @@ GenEvent generate3() {
     return evt;
 }
 
-GenEvent generate5() {
+GenEvent generate4() {
     GenEvent evt;
     std::shared_ptr<GenRunInfo> run = std::make_shared<GenRunInfo>();
     evt.set_run_info(run);
@@ -246,7 +210,7 @@ GenEvent generate5() {
 typedef std::chrono::high_resolution_clock Clock;
 int main()
 {
-int N= 100;
+    int N = 100;
     auto rawstart1= Clock::now();
     for (int i = 0; i < N; i++) generate1();
     auto now1 = Clock::now();
@@ -269,17 +233,11 @@ int N= 100;
     for (int i = 0; i < N; i++) generate4();
     auto now4 = Clock::now();
 
-    auto rawstart5 = Clock::now();
-
-    for (int i = 0; i < N; i++) generate5();
-    auto now5 = Clock::now();
-
 
     std::cout<< std::chrono::duration_cast<std::chrono::nanoseconds>(now1-rawstart1).count() << " "
              << std::chrono::duration_cast<std::chrono::nanoseconds>(now2-rawstart2).count() << " "
              << std::chrono::duration_cast<std::chrono::nanoseconds>(now3-rawstart3).count() << " "
-             << std::chrono::duration_cast<std::chrono::nanoseconds>(now4-rawstart4).count() << " "
-             << std::chrono::duration_cast<std::chrono::nanoseconds>(now5-rawstart5).count() <<
+             << std::chrono::duration_cast<std::chrono::nanoseconds>(now4-rawstart4).count() <<
              std::endl;
 
     return 0;

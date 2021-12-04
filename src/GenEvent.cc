@@ -817,20 +817,6 @@ void GenEvent::add_attribute(const std::string &name, const std::shared_ptr<Attr
         att->m_vertex = vertices()[-id - 1];
 }
 
-void GenEvent::add_attributea(const std::string &name, const std::shared_ptr<Attribute> &att, const int& id ) {
-    ///Disallow empty strings
-    if (name.length() == 0) return;
-    if (!att)  return;
-    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
-    m_attributes[name][id] = att;
-    att->m_event = this;
-    if ( id > 0 && id <= int(m_particles.size()) )
-        att->m_particle = m_particles[id - 1];
-    if ( id < 0 && -id <= int(m_vertices.size()) )
-        att->m_vertex = m_vertices[-id - 1];
-}
-
 
 void GenEvent::add_attributes(const std::vector<std::string> &names, const std::vector<std::shared_ptr<Attribute> > &atts, const std::vector<int>& ids) {
     size_t N = names.size();
@@ -868,7 +854,6 @@ void GenEvent::add_attributes(const std::string& name, const std::vector<std::sh
     size_t N = ids.size();
     if(!N) return;
     if ( N != atts.size()) return;
-
 
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();

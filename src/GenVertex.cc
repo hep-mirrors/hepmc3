@@ -122,12 +122,6 @@ bool GenVertex::add_attribute(const std::string& name, std::shared_ptr<Attribute
     parent_event()->add_attribute(name, att, id());
     return true;
 }
-bool GenVertex::add_attributea(const std::string& name, std::shared_ptr<Attribute> att) {
-    if ( !parent_event() ) return false;
-    parent_event()->add_attributea(name, att, id());
-    return true;
-}
-
 
 void GenVertex::remove_attribute(const std::string& name) {
     if ( parent_event() ) parent_event()->remove_attribute(name, id());

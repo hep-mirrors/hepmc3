@@ -275,7 +275,9 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if (cached_attributes.count("flows")) {
         std::map<int, std::shared_ptr<Attribute> > flows = cached_attributes.at("flows");
         if (m_options.count("particle_flows_are_separated") == 0) {
-            for (auto f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("flows", f.second);
+            std::vector<std::pair<int, std::shared_ptr<Attribute> > > flowsv;
+            for (auto f: flows) flowsv.push_back(std::pair<int, std::shared_ptr<Attribute> >(m_particle_cache[f.first-1]->id(), f.second) );
+            evt.add_attributes("flows", flowsv);
         } else  {
             for (auto f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {
                     std::shared_ptr<VectorIntAttribute>  casted = std::dynamic_pointer_cast<VectorIntAttribute>(f.second);
@@ -287,19 +289,25 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     }
 
     if (cached_attributes.count("phi")) {
-        std::map<int, std::shared_ptr<Attribute> > phi = cached_attributes.at("phi");
-        for (auto f: phi) if (f.first > 0 &&f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("phi", f.second);
+        std::map<int, std::shared_ptr<Attribute> >& phi = cached_attributes["phi"];
+        std::vector<std::pair<int, std::shared_ptr<Attribute> > > phiv;
+        for (auto f: phi) phiv.push_back(std::pair<int, std::shared_ptr<Attribute> >(m_particle_cache[f.first-1]->id(), f.second) );
+        evt.add_attributes("phi", phiv);
     }
 
     if (cached_attributes.count("theta")) {
-        std::map<int, std::shared_ptr<Attribute> > theta = cached_attributes.at("theta");
-        for (auto f: theta) if (f.first > 0 && f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("theta", f.second);
+        std::map<int, std::shared_ptr<Attribute> >& theta = cached_attributes["theta"];
+        std::vector<std::pair<int, std::shared_ptr<Attribute> > > thetav;
+        for (auto f: theta) thetav.push_back(std::pair<int, std::shared_ptr<Attribute> >(m_particle_cache[f.first-1]->id(), f.second) );
+        evt.add_attributes("theta", thetav);    
     }
 
     if (cached_attributes.count("weights")) {
         std::map<int, std::shared_ptr<Attribute> > weights = cached_attributes.at("weights");
         if (m_options.count("vertex_weights_are_separated") == 0) {
-            for (auto f: weights) if (f.first < 0 && f.first >= -(int)m_vertex_cache.size())  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);
+        std::vector<std::pair<int, std::shared_ptr<Attribute> > > weightsv;
+        for (auto f: weights) weightsv.push_back(std::pair<int, std::shared_ptr<Attribute> >(m_vertex_cache[-f.first-1]->id(), f.second) );
+        evt.add_attributes("weights", weightsv);    
         } else {
             for (auto f: weights) if (f.first < 0 && f.first >= -(int)m_vertex_cache.size()) {
                     std::shared_ptr<VectorDoubleAttribute>  casted = std::dynamic_pointer_cast<VectorDoubleAttribute>(f.second);

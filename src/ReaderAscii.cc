@@ -254,6 +254,9 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 v->add_particle_out(p.first);
     for ( auto v : m_forward_mothers )  for ( auto idpm : v.second )  v.first->add_particle_in(evt.particles()[idpm-1]);
 
+    // Set attributes to particles and vertices
+    for (auto nameatt: m_global_attributes) evt.add_attributes(nameatt.first, nameatt.second);
+
     /* restore ids of vertices using a bank of available ids*/
     std::vector<int> all_ids;
     std::vector<int> filled_ids;
@@ -267,7 +270,6 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     auto it = diff.rbegin();
     //Set available ids to vertices sequentially.
     for (auto v: evt.vertices()) if (v->id() == 0) { v->set_id(*it); it++;}
-    for (auto nameatt: m_global_attributes) evt.add_attributes(nameatt.first, nameatt.second);
     return true;
 }
 
