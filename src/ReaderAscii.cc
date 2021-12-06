@@ -253,7 +253,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         for (auto v: evt.vertices())
             if (p.second == v->id())
                 v->add_particle_out(p.first);
-    for ( auto v : m_forward_mothers )  for ( auto idpm : v.second )  v.first->add_particle_in(evt.particles()[idpm-1]);
+    std::vector<GenParticlePtr> particles_in_event = evt.particles();
+    for ( auto v : m_forward_mothers )  for ( auto idpm : v.second )  v.first->add_particle_in(particles_in_event[idpm-1]);
 
     // Set attributes to particles and vertices
     for (auto nameatt: m_global_attributes) evt.add_attributes(nameatt.first, nameatt.second);
@@ -261,6 +262,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     /* restore ids of vertices using a bank of available ids*/
     std::vector<int> all_ids;
     std::vector<int> filled_ids;
+    all_ids.reserve(vertices_and_particles.first);
+    filled_ids.reserve(vertices_and_particles.first);
     std::vector<int> diff;
     for (auto v: evt.vertices()) if (v->id() != 0) filled_ids.push_back(v->id());
     for (int i = -((long)evt.vertices().size()); i < 0; i++) all_ids.push_back(i);

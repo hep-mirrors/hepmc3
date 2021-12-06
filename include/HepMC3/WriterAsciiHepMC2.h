@@ -127,6 +127,12 @@ private:
     unsigned long m_buffer_size; //!< Buffer size
     unsigned long m_particle_counter; //!< Used to set bar codes
     std::string m_float_printf_specifier; //!< the specifier of printf used for floats
+    std::map<int, std::shared_ptr<Attribute> > m_phi;//!< Storage for particle phi
+    std::map<int, std::shared_ptr<Attribute> > m_theta;//!< Storage for particle theta
+    std::map<int, std::shared_ptr<Attribute> > m_flows;//!< Storage for particle flows
+    std::map<int, std::shared_ptr<Attribute> > m_weights;//!< Storage for vertex weights
+
+
 };
 
 

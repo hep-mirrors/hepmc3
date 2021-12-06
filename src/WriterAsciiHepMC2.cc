@@ -101,14 +101,19 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
 
     if ( !run_info() ) set_run_info(evt.run_info());
     if ( evt.run_info() && run_info() != evt.run_info() ) set_run_info(evt.run_info());
-
-
+    
+    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > > all_attributes = evt.attributes(); 
     std::shared_ptr<DoubleAttribute> A_event_scale = evt.attribute<DoubleAttribute>("event_scale");
     std::shared_ptr<DoubleAttribute> A_alphaQED = evt.attribute<DoubleAttribute>("alphaQED");
     std::shared_ptr<DoubleAttribute> A_alphaQCD = evt.attribute<DoubleAttribute>("alphaQCD");
     std::shared_ptr<IntAttribute> A_signal_process_id = evt.attribute<IntAttribute>("signal_process_id");
     std::shared_ptr<IntAttribute> A_mpi = evt.attribute<IntAttribute>("mpi");
     std::shared_ptr<IntAttribute> A_signal_process_vertex = evt.attribute<IntAttribute>("signal_process_vertex");
+    m_phi.clear(); if (all_attributes.count("phi")) m_phi = all_attributes.at("phi"); 
+    m_theta.clear(); if (all_attributes.count("theta")) m_theta = all_attributes.at("theta"); 
+    m_flows.clear(); if (all_attributes.count("flows")) m_flows = all_attributes.at("flows"); 
+    m_weights.clear(); if (all_attributes.count("weights")) m_weights = all_attributes.at("weigths"); 
+
 
     double event_scale = A_event_scale?(A_event_scale->value()):0.0;
     double alphaQED = A_alphaQED?(A_alphaQED->value()):0.0;
@@ -307,7 +312,7 @@ std::string WriterAsciiHepMC2::escape(const std::string& s) const
 void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
 {
     std::vector<double> weights;
-    std::shared_ptr<VectorDoubleAttribute> weights_a = v->attribute<VectorDoubleAttribute>("weights");
+    std::shared_ptr<VectorDoubleAttribute> weights_a = ( m_weights.count(v->id()) ) ? std::dynamic_pointer_cast<VectorDoubleAttribute>(m_weights.at(v->id())) : nullptr;
     if (weights_a) {
         weights = weights_a->value();
     } else {
@@ -391,15 +396,15 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
         if (p->end_vertex()->id() != 0)
             ev = p->end_vertex()->id();
 
-    std::shared_ptr<DoubleAttribute> A_theta = p->attribute<DoubleAttribute>("theta");
-    std:: shared_ptr<DoubleAttribute> A_phi = p->attribute<DoubleAttribute>("phi");
+    std::shared_ptr<DoubleAttribute> A_theta = ( m_theta.count(p->id()) ) ? std::dynamic_pointer_cast<DoubleAttribute>(m_theta.at(p->id())) : nullptr;
+    std:: shared_ptr<DoubleAttribute> A_phi = ( m_phi.count(p->id()) ) ? std::dynamic_pointer_cast<DoubleAttribute>(m_phi.at(p->id())) : nullptr;
     if (A_theta) m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), A_theta->value());
     else m_cursor += sprintf(m_cursor, " 0");
     if (A_phi) m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), A_phi->value());
     else m_cursor += sprintf(m_cursor, " 0");
     m_cursor += sprintf(m_cursor, " %i", ev);
     flush();
-    std::shared_ptr<VectorIntAttribute> A_flows = p->attribute<VectorIntAttribute>("flows");
+    std::shared_ptr<VectorIntAttribute> A_flows = ( m_flows.count(p->id()) ) ? std::dynamic_pointer_cast<VectorIntAttribute>(m_flows.at(p->id())) : nullptr;
     if (A_flows)
     {
         std::vector<int> flowsv = A_flows->value();
