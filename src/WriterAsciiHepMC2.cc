@@ -103,30 +103,59 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     if ( evt.run_info() && run_info() != evt.run_info() ) set_run_info(evt.run_info());
     
     std::map< std::string, std::map<int, std::shared_ptr<Attribute> > > all_attributes = evt.attributes(); 
+ /*
     std::shared_ptr<DoubleAttribute> A_event_scale = evt.attribute<DoubleAttribute>("event_scale");
     std::shared_ptr<DoubleAttribute> A_alphaQED = evt.attribute<DoubleAttribute>("alphaQED");
     std::shared_ptr<DoubleAttribute> A_alphaQCD = evt.attribute<DoubleAttribute>("alphaQCD");
     std::shared_ptr<IntAttribute> A_signal_process_id = evt.attribute<IntAttribute>("signal_process_id");
     std::shared_ptr<IntAttribute> A_mpi = evt.attribute<IntAttribute>("mpi");
     std::shared_ptr<IntAttribute> A_signal_process_vertex = evt.attribute<IntAttribute>("signal_process_vertex");
+*/
     m_phi.clear(); if (all_attributes.count("phi")) m_phi = all_attributes.at("phi"); 
     m_theta.clear(); if (all_attributes.count("theta")) m_theta = all_attributes.at("theta"); 
     m_flows.clear(); if (all_attributes.count("flows")) m_flows = all_attributes.at("flows"); 
     m_weights.clear(); if (all_attributes.count("weights")) m_weights = all_attributes.at("weigths"); 
 
 
-    double event_scale = A_event_scale?(A_event_scale->value()):0.0;
-    double alphaQED = A_alphaQED?(A_alphaQED->value()):0.0;
-    double alphaQCD = A_alphaQCD?(A_alphaQCD->value()):0.0;
-    int signal_process_id = A_signal_process_id?(A_signal_process_id->value()):0;
-    int mpi = A_mpi?(A_mpi->value()):0;
-    int signal_process_vertex = A_signal_process_vertex?(A_signal_process_vertex->value()):0;
+    double event_scale = (all_attributes.count("event_scale")&&all_attributes.at("event_scale").count(0)&&all_attributes.at("event_scale").at(0))
+                         ?std::dynamic_pointer_cast<DoubleAttribute>(all_attributes.at("event_scale").at(0))->value()
+                         :0.0;
+    double alphaQED = (all_attributes.count("alphaQED")&&all_attributes.at("alphaQED").count(0)&&all_attributes.at("alphaQED").at(0))
+                         ?std::dynamic_pointer_cast<DoubleAttribute>(all_attributes.at("alphaQED").at(0))->value()
+                         :0.0;
+    double alphaQCD = (all_attributes.count("alphaQCD")&&all_attributes.at("alphaQCD").count(0)&&all_attributes.at("alphaQCD").at(0))
+                         ?std::dynamic_pointer_cast<DoubleAttribute>(all_attributes.at("alphaQCD").at(0))->value()
+                         :0.0;
+    int mpi = (all_attributes.count("mpi")&&all_attributes.at("mpi").count(0)&&all_attributes.at("mpi").at(0))
+                         ?std::dynamic_pointer_cast<IntAttribute>(all_attributes.at("mpi").at(0))->value()
+                         :0.0;
+    int signal_process_id = (all_attributes.count("signal_process_id")&&all_attributes.at("signal_process_id").count(0)&&all_attributes.at("signal_process_id").at(0))
+                         ?std::dynamic_pointer_cast<IntAttribute>(all_attributes.at("signal_process_id").at(0))->value()
+                         :0;
+    int signal_process_vertex = (all_attributes.count("signal_process_vertex")&&all_attributes.at("signal_process_vertex").count(0)&&all_attributes.at("signal_process_vertex").at(0))
+                         ?std::dynamic_pointer_cast<IntAttribute>(all_attributes.at("signal_process_vertex").at(0))->value()
+                         :0;
 
-    std::vector<long> m_random_states;
-    std::shared_ptr<VectorLongIntAttribute> random_states_a = evt.attribute<VectorLongIntAttribute>("random_states");
-    if (random_states_a) {
-        m_random_states = random_states_a->value();
-    } else {
+    //double alphaQCD = A_alphaQCD?(A_alphaQCD->value()):0.0;
+    //int signal_process_id = A_signal_process_id?(A_signal_process_id->value()):0;
+    //int mpi = A_mpi?(A_mpi->value()):0;
+    //int signal_process_vertex = A_signal_process_vertex?(A_signal_process_vertex->value()):0;
+
+    //double event_scale = A_event_scale?(A_event_scale->value()):0.0;
+    //double alphaQED = A_alphaQED?(A_alphaQED->value()):0.0;
+    //double alphaQCD = A_alphaQCD?(A_alphaQCD->value()):0.0;
+    //int signal_process_id = A_signal_process_id?(A_signal_process_id->value()):0;
+    //int mpi = A_mpi?(A_mpi->value()):0;
+    //int signal_process_vertex = A_signal_process_vertex?(A_signal_process_vertex->value()):0;
+
+    std::vector<long> m_random_states = (all_attributes.count("random_states")&&all_attributes.at("random_states").count(0)&&all_attributes.at("random_states").at(0))
+                         ?std::dynamic_pointer_cast<VectorLongIntAttribute>(all_attributes.at("random_states").at(0))->value()
+                         :std::vector<long>();
+    
+    //std::shared_ptr<VectorLongIntAttribute> random_states_a = evt.attribute<VectorLongIntAttribute>("random_states");
+    
+    
+    if (!m_random_states.size()) {
         m_random_states.reserve(100);
         for (int i = 0; i < 100; i++)
         {
@@ -199,13 +228,18 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     // Write units
     m_cursor += sprintf(m_cursor, "U %s %s\n", Units::name(evt.momentum_unit()).c_str(), Units::name(evt.length_unit()).c_str());
     flush();
-    std::shared_ptr<GenCrossSection> cs = evt.attribute<GenCrossSection>("GenCrossSection");
+    std::shared_ptr<GenCrossSection> cs = (all_attributes.count("GenCrossSection")&&all_attributes.at("GenCrossSection").count(0))
+                                          ? std::dynamic_pointer_cast<GenCrossSection>(all_attributes.at("GenCrossSection").at(0))
+                                          :nullptr;
+    
     if (cs) {
         m_cursor += sprintf(m_cursor, ("C" + m_float_printf_specifier + m_float_printf_specifier + "\n").c_str(), cs->xsec(), cs->xsec_err() );
         flush();
     }
 
-    std::shared_ptr<GenHeavyIon> hi = evt.attribute<GenHeavyIon>("GenHeavyIon");
+    std::shared_ptr<GenHeavyIon> hi = (all_attributes.count("GenHeavyIon")&&all_attributes.at("GenHeavyIon").count(0))
+                                          ? std::dynamic_pointer_cast<GenHeavyIon>(all_attributes.at("GenHeavyIon").at(0))
+                                          :nullptr;
     if (hi) {
         m_cursor += sprintf(m_cursor, "H %i %i %i %i %i %i %i %i %i %e %e %e %e\n",
                             hi->Ncoll_hard,
@@ -224,7 +258,9 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         flush();
     }
 
-    std::shared_ptr<GenPdfInfo> pi = evt.attribute<GenPdfInfo>("GenPdfInfo");
+    std::shared_ptr<GenPdfInfo> pi = (all_attributes.count("GenPdfInfo")&&all_attributes.at("GenPdfInfo").count(0))
+                                          ? std::dynamic_pointer_cast<GenPdfInfo>(all_attributes.at("GenPdfInfo").at(0))
+                                          :nullptr;
     if (pi) {
         std::string st;
         // We use it here because the HepMC3 GenPdfInfo has the same format as in HepMC2 IO_GenEvent and get error handeling for free.
