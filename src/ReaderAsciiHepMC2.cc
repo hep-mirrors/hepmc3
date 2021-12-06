@@ -128,7 +128,8 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
                 m_particle_cache_ghost.reserve(vertices_count*3);
                 m_vertex_barcodes.reserve(vertices_count);
                 m_end_vertex_barcodes.reserve(vertices_count*3);
-                evt.reserve(vertices_count,vertices_count*3);
+                // Here we make a trick: reserve for this event the vertices_count*3 or the number of particles in the prev. event. 
+                evt.reserve(vertices_count, m_particle_cache_ghost.capacity());
                 is_parsing_successful = true;
             }
             parsed_event_header = true;

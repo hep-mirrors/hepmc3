@@ -138,6 +138,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 event_context   = true;
                 parsed_weights = false;
                 parsed_particles_or_vertices = false;
+                evt.reserve(vertices_and_particles.first,vertices_and_particles.second);
              }
             run_info_context   = false;
             break;
