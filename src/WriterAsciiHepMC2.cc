@@ -312,9 +312,8 @@ std::string WriterAsciiHepMC2::escape(const std::string& s) const
 void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
 {
     std::vector<double> weights;
-    std::shared_ptr<VectorDoubleAttribute> weights_a = ( m_weights.count(v->id()) ) ? std::dynamic_pointer_cast<VectorDoubleAttribute>(m_weights.at(v->id())) : nullptr;
-    if (weights_a) {
-        weights = weights_a->value();
+    if (m_weights.count(v->id()) && m_weights.at(v->id())) {
+        weights = std::dynamic_pointer_cast<VectorDoubleAttribute>(m_weights.at(v->id()))->value();
     } else {
         weights.reserve(100);
         for (int i = 0; i < 100; i++)
@@ -395,19 +394,15 @@ void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field
     if (p->end_vertex())
         if (p->end_vertex()->id() != 0)
             ev = p->end_vertex()->id();
-
-    std::shared_ptr<DoubleAttribute> A_theta = ( m_theta.count(p->id()) ) ? std::dynamic_pointer_cast<DoubleAttribute>(m_theta.at(p->id())) : nullptr;
-    std:: shared_ptr<DoubleAttribute> A_phi = ( m_phi.count(p->id()) ) ? std::dynamic_pointer_cast<DoubleAttribute>(m_phi.at(p->id())) : nullptr;
-    if (A_theta) m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), A_theta->value());
+    if ( m_theta.count(p->id()) && m_theta.at(p->id()) ) m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), (std::dynamic_pointer_cast<DoubleAttribute>(m_theta.at(p->id())))->value());
     else m_cursor += sprintf(m_cursor, " 0");
-    if (A_phi) m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), A_phi->value());
+    if (m_phi.count(p->id()) && m_phi.at(p->id())  ) m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), (std::dynamic_pointer_cast<DoubleAttribute>(m_phi.at(p->id())))->value());
     else m_cursor += sprintf(m_cursor, " 0");
     m_cursor += sprintf(m_cursor, " %i", ev);
     flush();
-    std::shared_ptr<VectorIntAttribute> A_flows = ( m_flows.count(p->id()) ) ? std::dynamic_pointer_cast<VectorIntAttribute>(m_flows.at(p->id())) : nullptr;
-    if (A_flows)
+    if (m_flows.count(p->id()))
     {
-        std::vector<int> flowsv = A_flows->value();
+        std::vector<int> flowsv =  std::dynamic_pointer_cast<VectorIntAttribute>(m_flows.at(p->id()))->value();
         std::string flowss = " " + std::to_string(flowsv.size());
         for (size_t k = 0; k < flowsv.size(); k++) { flowss += ( " " + std::to_string(k+1) + " " + std::to_string(flowsv.at(k))); }
         flowss += "\n";
