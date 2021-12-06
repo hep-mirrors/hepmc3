@@ -396,17 +396,16 @@ private:
 template<class T>
 std::shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 =
-        m_attributes.find(name);
-    if ( i1 == m_attributes.end() ) {
+
+    if ( !m_attributes.count(name) ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute<T>(name);
         }
         return std::shared_ptr<T>();
     }
-
+    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
+    if (!i1->second.count(id)) return std::shared_ptr<T>();
     std::map<int, std::shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
-    if (i2 == i1->second.end() ) return std::shared_ptr<T>();
 
     if (!i2->second->is_parsed() ) {
 

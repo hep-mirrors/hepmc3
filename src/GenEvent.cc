@@ -783,18 +783,18 @@ void GenEvent::add_beam_particle(GenParticlePtr p1) {
 
 std::string GenEvent::attribute_as_string(const std::string &name, const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 =
-        m_attributes.find(name);
-    if ( i1 == m_attributes.end() ) {
+    if ( !m_attributes.count(i1) ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute_as_string(name);
         }
         return std::string();
     }
+    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
 
+    if (!i1->second.count(i2 ) ) return std::string();
+    
     std::map<int, std::shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
-    if (i2 == i1->second.end() ) return std::string();
-
+    
     if ( !i2->second ) return std::string();
 
     std::string ret;
