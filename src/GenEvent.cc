@@ -803,4 +803,96 @@ std::string GenEvent::attribute_as_string(const std::string &name, const int& id
     return ret;
 }
 
+void GenEvent::add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att, const int& id ) {
+    ///Disallow empty strings
+    if (name.length() == 0) return;
+    if (!att)  return;
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    if (m_attributes.find(name) == m_attributes.end()) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+    m_attributes[name][id] = att;
+    att->m_event = this;
+    if ( id > 0 && id <= int(particles().size()) )
+        att->m_particle = particles()[id - 1];
+    if ( id < 0 && -id <= int(vertices().size()) )
+        att->m_vertex = vertices()[-id - 1];
+}
+
+
+void GenEvent::add_attributes(const std::vector<std::string> &names, const std::vector<std::shared_ptr<Attribute> > &atts, const std::vector<int>& ids) {
+    size_t N = names.size();
+    if ( N == 0 ) return;
+    if (N != atts.size()) return;
+    if (N != ids.size()) return;
+
+    std::vector<std::string> unames = names;
+    vector<std::string>::iterator ip;
+    ip = std::unique(unames.begin(), unames.end());
+    unames.resize(std::distance(unames.begin(), ip));
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    for (auto name: unames)
+        if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+
+    const int particles_size = int(m_particles.size());
+    const int vertices_size = int(m_vertices.size());
+    for (size_t i = 0; i < N; i++) {
+        ///Disallow empty strings
+        if (names.at(i).length() == 0) continue;
+        if (!atts[i])  continue;
+        m_attributes[names.at(i)][ids.at(i)] = atts[i];
+        atts[i]->m_event = this;
+        if ( ids.at(i) > 0 && ids.at(i) <= particles_size )
+        { atts[i]->m_particle = m_particles[ids.at(i) - 1]; }
+        else {
+            if ( ids.at(i) < 0 && -ids.at(i) <= vertices_size )
+                atts[i]->m_vertex = m_vertices[-ids.at(i) - 1];
+        }
+    }
+}
+
+void GenEvent::add_attributes(const std::string& name, const std::vector<std::shared_ptr<Attribute> > &atts, const std::vector<int>& ids) {
+    if (name.length() == 0) return;
+    size_t N = ids.size();
+    if(!N) return;
+    if ( N != atts.size()) return;
+
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    if (m_attributes.find(name) == m_attributes.end()) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+    auto& tmap = m_attributes[name];
+    const int particles_size = int(m_particles.size());
+    const int vertices_size = int(m_vertices.size());
+    for (size_t i = 0; i < N; i++) {
+        ///Disallow empty strings
+        if (!atts[i])  continue;
+        tmap[ids.at(i)] = atts[i];
+        atts[i]->m_event = this;
+        if ( ids.at(i) > 0 && ids.at(i) <= particles_size )
+        { atts[i]->m_particle = m_particles[ids.at(i) - 1]; }
+        else {
+            if ( ids.at(i) < 0 && -ids.at(i) <= vertices_size )
+                atts[i]->m_vertex = m_vertices[-ids.at(i) - 1];
+        }
+    }
+}
+void GenEvent::add_attributes(const std::string& name, const std::vector<std::pair<int, std::shared_ptr<Attribute> > > &atts) {
+    if (name.length() == 0) return;
+    if (!atts.size()) return;
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    if (m_attributes.find(name) == m_attributes.end()) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+    auto& tmap = m_attributes[name];
+    const int particles_size = int(m_particles.size());
+    const int vertices_size = int(m_vertices.size());
+    for (auto att: atts) {
+        ///Disallow empty strings
+        if (!att.second)  continue;
+        tmap.insert(att);
+        att.second->m_event = this;
+        if ( att.first > 0 && att.first <= particles_size )
+        { att.second->m_particle = m_particles[att.first - 1]; }
+        else {
+            if ( att.first < 0 && -att.first <= vertices_size )
+                att.second->m_vertex = m_vertices[-att.first - 1];
+        }
+    }
+}
+
 } // namespace HepMC3
