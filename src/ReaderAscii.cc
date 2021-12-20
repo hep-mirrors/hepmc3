@@ -274,6 +274,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     auto it = diff.rbegin();
     //Set available ids to vertices sequentially.
     for (auto v: evt.vertices()) if (v->id() == 0) { v->set_id(*it); it++;}
+
     return true;
 }
 

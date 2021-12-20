@@ -70,7 +70,7 @@ public:
 
     /// @brief Check if a weight name is present.
     bool has_weight(const std::string& name) const {
-        return m_weight_indices.count(name) !=  0;
+        return m_weight_indices.find(name) !=  m_weight_indices.end();
     }
 
     /// @brief Returns a copy of indices map.
@@ -180,8 +180,10 @@ private:
 template<class T>
 std::shared_ptr<T> GenRunInfo::attribute(const std::string &name) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    if ( !m_attributes.count(name) ) return std::shared_ptr<T>();
-    std::map< std::string, std::shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
+    std::map< std::string, std::shared_ptr<Attribute> >::iterator i =
+        m_attributes.find(name);
+    if ( i == m_attributes.end() ) return std::shared_ptr<T>();
+
     if ( !i->second->is_parsed() ) {
 
         std::shared_ptr<T> att = std::make_shared<T>();
