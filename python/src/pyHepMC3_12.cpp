@@ -373,7 +373,7 @@ void bind_pyHepMC3_12(std::function< pybind11::module &(std::string const &names
 	}
 	{ // HepMC3::WriterAsciiHepMC2 file:HepMC3/WriterAsciiHepMC2.h line:26
 		pybind11::class_<HepMC3::WriterAsciiHepMC2, std::shared_ptr<HepMC3::WriterAsciiHepMC2>, PyCallBack_HepMC3_WriterAsciiHepMC2, HepMC3::Writer> cl(M("HepMC3"), "WriterAsciiHepMC2", "");
-		cl.def( pybind11::init( [](const class std::basic_string<char> & a0){ return new HepMC3::WriterAsciiHepMC2(a0); }, [](const class std::basic_string<char> & a0){ return new PyCallBack_HepMC3_WriterAsciiHepMC2(a0); } ), "doc");
+		cl.def( pybind11::init( [](const std::string & a0){ return new HepMC3::WriterAsciiHepMC2(a0); }, [](const std::string & a0){ return new PyCallBack_HepMC3_WriterAsciiHepMC2(a0); } ), "doc");
 		cl.def( pybind11::init<const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("run") );
 
 		cl.def("write_event", (void (HepMC3::WriterAsciiHepMC2::*)(const class HepMC3::GenEvent &)) &HepMC3::WriterAsciiHepMC2::write_event, "Write event to file\n\n \n Event to be serialized\n\nC++: HepMC3::WriterAsciiHepMC2::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("evt"));
@@ -394,7 +394,8 @@ void bind_pyHepMC3_12(std::function< pybind11::module &(std::string const &names
 	}
 	{ // HepMC3::WriterHEPEVT file:HepMC3/WriterHEPEVT.h line:27
 		pybind11::class_<HepMC3::WriterHEPEVT, std::shared_ptr<HepMC3::WriterHEPEVT>, PyCallBack_HepMC3_WriterHEPEVT, HepMC3::Writer> cl(M("HepMC3"), "WriterHEPEVT", "");
-		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
+		cl.def( pybind11::init( [](const std::string & a0){ return new HepMC3::WriterHEPEVT(a0); }, [](const std::string & a0){ return new PyCallBack_HepMC3_WriterHEPEVT(a0); } ), "doc");
+		cl.def( pybind11::init<const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("run") );
 
 		cl.def("write_hepevt_particle", [](HepMC3::WriterHEPEVT &o, int const & a0) -> void { return o.write_hepevt_particle(a0); }, "", pybind11::arg("index"));
 		cl.def("write_hepevt_particle", (void (HepMC3::WriterHEPEVT::*)(int, bool)) &HepMC3::WriterHEPEVT::write_hepevt_particle, "Write particle to file\n\n  \n Particle to be serialized\n  \n\n Format of record\n\nC++: HepMC3::WriterHEPEVT::write_hepevt_particle(int, bool) --> void", pybind11::arg("index"), pybind11::arg("iflong"));
@@ -402,15 +403,15 @@ void bind_pyHepMC3_12(std::function< pybind11::module &(std::string const &names
 		cl.def("write_event", (void (HepMC3::WriterHEPEVT::*)(const class HepMC3::GenEvent &)) &HepMC3::WriterHEPEVT::write_event, "Write event to file\n\n  \n Event to be serialized\n\nC++: HepMC3::WriterHEPEVT::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("evt"));
 		cl.def("close", (void (HepMC3::WriterHEPEVT::*)()) &HepMC3::WriterHEPEVT::close, "Close file stream \n\nC++: HepMC3::WriterHEPEVT::close() --> void");
 		cl.def("failed", (bool (HepMC3::WriterHEPEVT::*)()) &HepMC3::WriterHEPEVT::failed, "Get stream error state flag \n\nC++: HepMC3::WriterHEPEVT::failed() --> bool");
-		cl.def("set_vertices_positions_present", (void (HepMC3::WriterHEPEVT::*)(bool)) &HepMC3::WriterHEPEVT::set_vertices_positions_present, "set flag if vertex positions are available. \n  Effectively this adds or removes key \"vertices_positions_are_absent\" \n  to/from the m_options.\n\nC++: HepMC3::WriterHEPEVT::set_vertices_positions_present(bool) --> void", pybind11::arg("iflong"));
-		cl.def("get_vertices_positions_present", (bool (HepMC3::WriterHEPEVT::*)() const) &HepMC3::WriterHEPEVT::get_vertices_positions_present, "get flag if vertex positions are available. \n The flag is deduced from m_options. If the m_options have the key \n \"vertices_positions_are_absent\" the result if false. True otherwise. \n\nC++: HepMC3::WriterHEPEVT::get_vertices_positions_present() const --> bool");
+		cl.def("set_vertices_positions_present", (void (HepMC3::WriterHEPEVT::*)(bool)) &HepMC3::WriterHEPEVT::set_vertices_positions_present, "set flag if vertex positions are available.\n  Effectively this adds or removes key \"vertices_positions_are_absent\"\n  to/from the m_options.\n\nC++: HepMC3::WriterHEPEVT::set_vertices_positions_present(bool) --> void", pybind11::arg("iflong"));
+		cl.def("get_vertices_positions_present", (bool (HepMC3::WriterHEPEVT::*)() const) &HepMC3::WriterHEPEVT::get_vertices_positions_present, "get flag if vertex positions are available.\n The flag is deduced from m_options. If the m_options have the key\n \"vertices_positions_are_absent\" the result if false. True otherwise. \n\nC++: HepMC3::WriterHEPEVT::get_vertices_positions_present() const --> bool");
 	}
 	{ // HepMC3::ReaderHEPEVT file:HepMC3/ReaderHEPEVT.h line:32
 		pybind11::class_<HepMC3::ReaderHEPEVT, std::shared_ptr<HepMC3::ReaderHEPEVT>, PyCallBack_HepMC3_ReaderHEPEVT, HepMC3::Reader> cl(M("HepMC3"), "ReaderHEPEVT", "");
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
 		cl.def("read_hepevt_event_header", (bool (HepMC3::ReaderHEPEVT::*)()) &HepMC3::ReaderHEPEVT::read_hepevt_event_header, "Find and read event header line  from file\n\n    \n\nC++: HepMC3::ReaderHEPEVT::read_hepevt_event_header() --> bool");
-		cl.def("read_hepevt_particle", (bool (HepMC3::ReaderHEPEVT::*)(int)) &HepMC3::ReaderHEPEVT::read_hepevt_particle, "read particle from file\n\n \n Particle id\n \n\n Event style\n\nC++: HepMC3::ReaderHEPEVT::read_hepevt_particle(int) --> bool", pybind11::arg("i"));
+		cl.def("read_hepevt_particle", (bool (HepMC3::ReaderHEPEVT::*)(int)) &HepMC3::ReaderHEPEVT::read_hepevt_particle, "read particle from file\n\n \n Particle id\n\nC++: HepMC3::ReaderHEPEVT::read_hepevt_particle(int) --> bool", pybind11::arg("i"));
 		cl.def("skip", (bool (HepMC3::ReaderHEPEVT::*)(const int)) &HepMC3::ReaderHEPEVT::skip, "skip events\n\nC++: HepMC3::ReaderHEPEVT::skip(const int) --> bool", pybind11::arg(""));
 		cl.def("read_event", (bool (HepMC3::ReaderHEPEVT::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderHEPEVT::read_event, "Read event from file\n\nC++: HepMC3::ReaderHEPEVT::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
 		cl.def("close", (void (HepMC3::ReaderHEPEVT::*)()) &HepMC3::ReaderHEPEVT::close, "Close file stream \n\nC++: HepMC3::ReaderHEPEVT::close() --> void");

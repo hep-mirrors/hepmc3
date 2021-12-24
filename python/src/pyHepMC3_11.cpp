@@ -88,7 +88,7 @@ void bind_pyHepMC3_11(std::function< pybind11::module &(std::string const &names
 {
 	{ // HepMC3::WriterAscii file:HepMC3/WriterAscii.h line:25
 		pybind11::class_<HepMC3::WriterAscii, std::shared_ptr<HepMC3::WriterAscii>, PyCallBack_HepMC3_WriterAscii, HepMC3::Writer> cl(M("HepMC3"), "WriterAscii", "");
-		cl.def( pybind11::init( [](const class std::basic_string<char> & a0){ return new HepMC3::WriterAscii(a0); }, [](const class std::basic_string<char> & a0){ return new PyCallBack_HepMC3_WriterAscii(a0); } ), "doc");
+		cl.def( pybind11::init( [](const std::string & a0){ return new HepMC3::WriterAscii(a0); }, [](const std::string & a0){ return new PyCallBack_HepMC3_WriterAscii(a0); } ), "doc");
 		cl.def( pybind11::init<const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("run") );
 
 		cl.def("write_event", (void (HepMC3::WriterAscii::*)(const class HepMC3::GenEvent &)) &HepMC3::WriterAscii::write_event, "Write event to file\n\n \n Event to be serialized\n\nC++: HepMC3::WriterAscii::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("evt"));
