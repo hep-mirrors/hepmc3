@@ -186,7 +186,7 @@ if (RERUN_BINDER)
                         --root-module pyHepMC3
                         --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
                         --config src/pyHepMC3.binder   ${CMAKE_CURRENT_BINARY_DIR}/all_includes.hpp
-                        --  -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
+                        --  -std=c++${HEPMC3_CXX_STANDARD} -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
       VERBATIM
     )
@@ -199,7 +199,7 @@ if (RERUN_BINDER)
                           --root-module pyHepMC3rootIO
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
                           --config src/pyHepMC3rootIO.binder   ${CMAKE_CURRENT_BINARY_DIR}/root_includes.hpp
-                          --  -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
+                          --  -std=c++${HEPMC3_CXX_STANDARD} -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS}
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM
       )
@@ -213,7 +213,7 @@ if (RERUN_BINDER)
                           --root-module pyHepMC3search
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
                           --config src/pyHepMC3search.binder   ${CMAKE_CURRENT_BINARY_DIR}/search_includes.hpp
-                          -- -std=c++11 -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
+                          -- -std=c++${HEPMC3_CXX_STANDARD} -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS}
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM)
     endif()

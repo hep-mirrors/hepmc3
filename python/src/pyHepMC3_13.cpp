@@ -10,6 +10,7 @@
 #include <HepMC3/HEPEVT_Wrapper.h>
 #include <functional>
 #include <ios>
+#include <iterator>
 #include <map>
 #include <memory>
 #include <ostream>
@@ -39,7 +40,7 @@
 
 void bind_pyHepMC3_13(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::HEPEVT_Wrapper file:HepMC3/HEPEVT_Wrapper.h line:96
+	{ // HepMC3::HEPEVT_Wrapper file:HepMC3/HEPEVT_Wrapper.h line:98
 		pybind11::class_<HepMC3::HEPEVT_Wrapper, std::shared_ptr<HepMC3::HEPEVT_Wrapper>> cl(M("HepMC3"), "HEPEVT_Wrapper", "");
 		cl.def( pybind11::init( [](){ return new HepMC3::HEPEVT_Wrapper(); } ) );
 		cl.def_static("zero_everything", (void (*)()) &HepMC3::HEPEVT_Wrapper::zero_everything, "Set all entries in HEPEVT to zero \n\nC++: HepMC3::HEPEVT_Wrapper::zero_everything() --> void");

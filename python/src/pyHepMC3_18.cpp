@@ -43,7 +43,7 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// HepMC3::ReaderLHEF file:HepMC3/ReaderLHEF.h line:35
+// HepMC3::ReaderLHEF file:HepMC3/ReaderLHEF.h line:34
 struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 	using HepMC3::ReaderLHEF::ReaderLHEF;
 
@@ -206,7 +206,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 
 void bind_pyHepMC3_18(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::ReaderLHEF file:HepMC3/ReaderLHEF.h line:35
+	{ // HepMC3::ReaderLHEF file:HepMC3/ReaderLHEF.h line:34
 		pybind11::class_<HepMC3::ReaderLHEF, std::shared_ptr<HepMC3::ReaderLHEF>, PyCallBack_HepMC3_ReaderLHEF, HepMC3::Reader> cl(M("HepMC3"), "ReaderLHEF", "");
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
@@ -225,7 +225,7 @@ void bind_pyHepMC3_18(std::function< pybind11::module &(std::string const &names
 	}
 	{ // HepMC3::WriterPlugin file:HepMC3/WriterPlugin.h line:23
 		pybind11::class_<HepMC3::WriterPlugin, std::shared_ptr<HepMC3::WriterPlugin>, PyCallBack_HepMC3_WriterPlugin, HepMC3::Writer> cl(M("HepMC3"), "WriterPlugin", "");
-		cl.def( pybind11::init( [](const class std::basic_string<char> & a0, const class std::basic_string<char> & a1, const class std::basic_string<char> & a2){ return new HepMC3::WriterPlugin(a0, a1, a2); }, [](const class std::basic_string<char> & a0, const class std::basic_string<char> & a1, const class std::basic_string<char> & a2){ return new PyCallBack_HepMC3_WriterPlugin(a0, a1, a2); } ), "doc");
+		cl.def( pybind11::init( [](const std::string & a0, const std::string & a1, const std::string & a2){ return new HepMC3::WriterPlugin(a0, a1, a2); }, [](const std::string & a0, const std::string & a1, const std::string & a2){ return new PyCallBack_HepMC3_WriterPlugin(a0, a1, a2); } ), "doc");
 		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("libname"), pybind11::arg("newwriter"), pybind11::arg("run") );
 
 		cl.def("write_event", (void (HepMC3::WriterPlugin::*)(const class HepMC3::GenEvent &)) &HepMC3::WriterPlugin::write_event, "Reading event \n\nC++: HepMC3::WriterPlugin::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("ev"));
