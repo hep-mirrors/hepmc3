@@ -40,10 +40,6 @@
 
 +binder HepMC3::Print binder::print_binder
 
-+add_on_binder HepMC3::HEPEVT_Wrapper  binder::custom_HEPEVT_Wrapper_binder
--function HepMC3::HEPEVT_Wrapper::print_hepevt_particle
--function HepMC3::HEPEVT_Wrapper::print_hepevt
-
 +add_on_binder HepMC3::GenEvent  binder::custom_GenEvent_binder
 -function HepMC3::GenEvent::attribute
 

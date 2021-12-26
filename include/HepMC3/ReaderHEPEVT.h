@@ -24,7 +24,7 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenRunInfo.h"
 #include "HepMC3/Data/GenEventData.h"
-
+#include "HepMC3/HEPEVT_Templated_Wrapper.h"
 
 namespace HepMC3
 {
@@ -75,6 +75,7 @@ private:
     std::shared_ptr<std::istream> m_shared_stream; //!< For ctor when reading from temp stream
     std::istream* m_stream; //!< For ctor when reading from stream
     bool m_isstream; //!< toggles usage of m_file or m_stream
+    HEPEVT_Templated_Wrapper<100000> m_hepevt_interface; ///! Templated HEPEVT interface
 };
 
 } // namespace HepMC3

@@ -16,11 +16,11 @@
  *  @ingroup IO
  *
  */
+#include <fstream>
 #include "HepMC3/Writer.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Data/GenEventData.h"
-
-#include <fstream>
+#include "HepMC3/HEPEVT_Templated_Wrapper.h"
 namespace HepMC3
 {
 
@@ -86,6 +86,7 @@ protected:
     std::ostream* m_stream; //!< Output stream
     char* hepevtbuffer;   //!< Pointer to HEPEVT Fortran common block/C struct
     int   m_events_count; //!< Events count. Needed to generate unique object name
+    HEPEVT_Templated_Wrapper<100000> m_hepevt_interface; ///! Templated HEPEVT interface
 };
 
 } // namespace HepMC3
