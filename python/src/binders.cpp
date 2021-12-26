@@ -2,19 +2,6 @@
 #include <HepMC3/Print.h>
 namespace binder {
 
-
-
-
-void custom_HEPEVT_Wrapper_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper, std::shared_ptr<HepMC3::HEPEVT_Wrapper>> cl)
-{
-		cl.def_static("print_hepevt", []() -> void { return HepMC3::HEPEVT_Wrapper::print_hepevt(); }, "");
-		//cl.def_static("print_hepevt", (void (*)(std::ostream &)) &HepMC3::HEPEVT_Wrapper::print_hepevt, "Print information from HEPEVT common block \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt(std::ostream &) --> void", pybind11::arg("ostr"));
-		cl.def_static("print_hepevt", [](pybind11::object  & a1) -> void {  std::stringstream b;  HepMC3::HEPEVT_Wrapper::print_hepevt(b); a1.attr("write")(pybind11::str(b.str().c_str())); }, "Print information from HEPEVT common block \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt(std::ostream &) --> void", pybind11::arg("ostr"));
-		cl.def_static("print_hepevt_particle", [](int const & a0) -> void { return HepMC3::HEPEVT_Wrapper::print_hepevt_particle(a0); }, "", pybind11::arg("index"));
-		//cl.def_static("print_hepevt_particle", (void (*)(int, std::ostream &)) &HepMC3::HEPEVT_Wrapper::print_hepevt_particle, "Print particle information \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt_particle(int, std::ostream &) --> void", pybind11::arg("index"), pybind11::arg("ostr"));
-		cl.def_static("print_hepevt_particle", [](int a0, pybind11::object  & a1) -> void {  std::stringstream b;  HepMC3::HEPEVT_Wrapper::print_hepevt_particle(a0,b); a1.attr("write")(pybind11::str(b.str().c_str())); }, "Print particle information \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt_particle(int, std::ostream &) --> void", pybind11::arg("index"), pybind11::arg("ostr"));
-}
-
 void custom_GenParticle_binder(pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl)
 {
     cl.def("attribute", (std::string (HepMC3::GenParticle::*)(const std::string &) const) &HepMC3::GenParticle::attribute_as_string, "Get attribute of any type as string\n\nC++: HepMC3::GenParticle::attribute_as_string(const std::string &) const --> std::string", pybind11::arg("name"));
