@@ -82,7 +82,7 @@ public:
     /// @name Particle and vertex access
     //@{
     ///Particles size, HepMC2 compatiility
-    inline int particles_size() const { return m_particles.size(); } 
+    inline int particles_size() const { return m_particles.size(); }
     ///Particles empty, HepMC2 compatiility
     inline bool particles_empty() const { return m_particles.empty(); }
     ///Vertices size, HepMC2 compatiility
@@ -219,7 +219,7 @@ public:
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0);
-    
+
     /// @brief Add multiple attributes to event
     ///
     /// This will overwrite existing attributes if attributes

@@ -5,7 +5,7 @@
 //
 /**
  *  @file HEPEVT_Wrapper.cc
- *  @brief Implementation of sorting functions used to convert HEPEVT block
+ *  @brief Implementation of helper functions used to manipulate with HEPEVT block
  */
 #include <algorithm>
 #include <set>
@@ -84,6 +84,5 @@ void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexP
     pathl[v] = p;
     return;
 }
-
 
 }
