@@ -27,8 +27,8 @@ namespace HepMC3
 {
 /** @struct HEPEVT
  *  @brief  C structure representing Fortran common block HEPEVT
- * T. Sjöstrand et al., "A proposed standard event record", 
- *  in `Z physics at LEP 1', eds. G. Altarelli, R. Kleiss and C. Verzegnassi, 
+ * T. Sjöstrand et al., "A proposed standard event record",
+ *  in `Z physics at LEP 1', eds. G. Altarelli, R. Kleiss and C. Verzegnassi,
  * Geneva, Switzerland, September 4-5, 1989, CERN 89-08 (Geneva, 1989), Vol. 3, p. 327
  * Disk representation is given by Fortran WRITE/READ format.
  */
@@ -43,7 +43,7 @@ struct HEPEVT_Templated
     int        jdahep[NMXHEP][2];  //!< Pointer to position of 1nd and 2nd (or last!) daughter
     momentum_t phep  [NMXHEP][5];  //!< Momentum: px, py, pz, e, m
     momentum_t vhep  [NMXHEP][4];  //!< Time-space position: x, y, z, t
-};  
+};
 
 template <int NMXHEP, typename momentum_t=double>
 class HEPEVT_Templated_Wrapper
@@ -54,63 +54,63 @@ class HEPEVT_Templated_Wrapper
 //
 public:
     /** @brief Print information from HEPEVT common block */
-     void print_hepevt( std::ostream& ostr = std::cout );
+    void print_hepevt( std::ostream& ostr = std::cout );
 
     /** @brief Print particle information */
-     void print_hepevt_particle( int index, std::ostream& ostr = std::cout );
+    void print_hepevt_particle( int index, std::ostream& ostr = std::cout );
 
     /** @brief Set all entries in HEPEVT to zero */
-     void zero_everything();
+    void zero_everything();
     /** @brief Convert GenEvent to HEPEVT*/
-     bool GenEvent_to_HEPEVT( const GenEvent* evt );
+    bool GenEvent_to_HEPEVT( const GenEvent* evt );
     /** @brief Convert HEPEVT to GenEvent*/
-     bool HEPEVT_to_GenEvent( GenEvent* evt );
+    bool HEPEVT_to_GenEvent( GenEvent* evt );
     /** @brief Tries to fix list of daughters */
-     bool fix_daughters();
+    bool fix_daughters();
 
     //!< Fortran common block HEPEVT
-     struct HEPEVT_Templated<NMXHEP,momentum_t>* m_hepevtptr;
+    struct HEPEVT_Templated<NMXHEP,momentum_t>* m_hepevtptr;
 private:
-     //!< Some m_internal_storage storage. Optional. 
-     std::shared_ptr<struct HEPEVT_Templated<NMXHEP,momentum_t> > m_internal_storage;
-      
+    //!< Some m_internal_storage storage. Optional.
+    std::shared_ptr<struct HEPEVT_Templated<NMXHEP,momentum_t> > m_internal_storage;
+
 //
 // Accessors
 //
 public:
-     void allocate_internal_storage(); ///!< Allocates m_internal_storage storage in smart pointer to hold HEPEVT of fixed size
-     void set_hepevt_address(char *c) { m_hepevtptr=(struct HEPEVT_Templated<NMXHEP,momentum_t>*)c;          } //!< Set Fortran block address
-     int    max_number_entries()      { return NMXHEP;                              } //!< Block size
-     int    event_number()            { return m_hepevtptr->nevhep;             } //!< Get event number
-     int    number_entries()          { return m_hepevtptr->nhep;               } //!< Get number of entries
-     int    status(const int& index )       { return m_hepevtptr->isthep[index-1];    } //!< Get status code
-     int    id(const int& index )           { return m_hepevtptr->idhep[index-1];     } //!< Get PDG particle id
-     int    first_parent(const int& index ) { return m_hepevtptr->jmohep[index-1][0]; } //!< Get index of 1st mother
-     int    last_parent(const int& index )  { return m_hepevtptr->jmohep[index-1][1]; } //!< Get index of last mother
-     int    first_child(const int& index )  { return m_hepevtptr->jdahep[index-1][0]; } //!< Get index of 1st daughter
-     int    last_child(const int& index )   { return m_hepevtptr->jdahep[index-1][1]; } //!< Get index of last daughter
-     double px(const int& index )           { return m_hepevtptr->phep[index-1][0];   } //!< Get X momentum
-     double py(const int& index )           { return m_hepevtptr->phep[index-1][1];   } //!< Get Y momentum
-     double pz(const int& index )           { return m_hepevtptr->phep[index-1][2];   } //!< Get Z momentum
-     double e(const int& index )            { return m_hepevtptr->phep[index-1][3];   } //!< Get Energy
-     double m(const int& index )            { return m_hepevtptr->phep[index-1][4];   } //!< Get generated mass
-     double x(const int& index )            { return m_hepevtptr->vhep[index-1][0];   } //!< Get X Production vertex
-     double y(const int& index )            { return m_hepevtptr->vhep[index-1][1];   } //!< Get Y Production vertex
-     double z(const int& index )            { return m_hepevtptr->vhep[index-1][2];   } //!< Get Z Production vertex
-     double t(const int& index )            { return m_hepevtptr->vhep[index-1][3];   } //!< Get production time
-     int    number_parents(const int& index );                                   //!< Get number of parents
-     int    number_children(const int& index );                                  //!< Get number of children from the range of daughters
-     int    number_children_exact(const int& index );                            //!< Get number of children by counting
+    void allocate_internal_storage(); ///!< Allocates m_internal_storage storage in smart pointer to hold HEPEVT of fixed size
+    void set_hepevt_address(char *c) { m_hepevtptr=(struct HEPEVT_Templated<NMXHEP,momentum_t>*)c;          } //!< Set Fortran block address
+    int    max_number_entries()      { return NMXHEP;                              } //!< Block size
+    int    event_number()            { return m_hepevtptr->nevhep;             } //!< Get event number
+    int    number_entries()          { return m_hepevtptr->nhep;               } //!< Get number of entries
+    int    status(const int& index )       { return m_hepevtptr->isthep[index-1];    } //!< Get status code
+    int    id(const int& index )           { return m_hepevtptr->idhep[index-1];     } //!< Get PDG particle id
+    int    first_parent(const int& index ) { return m_hepevtptr->jmohep[index-1][0]; } //!< Get index of 1st mother
+    int    last_parent(const int& index )  { return m_hepevtptr->jmohep[index-1][1]; } //!< Get index of last mother
+    int    first_child(const int& index )  { return m_hepevtptr->jdahep[index-1][0]; } //!< Get index of 1st daughter
+    int    last_child(const int& index )   { return m_hepevtptr->jdahep[index-1][1]; } //!< Get index of last daughter
+    double px(const int& index )           { return m_hepevtptr->phep[index-1][0];   } //!< Get X momentum
+    double py(const int& index )           { return m_hepevtptr->phep[index-1][1];   } //!< Get Y momentum
+    double pz(const int& index )           { return m_hepevtptr->phep[index-1][2];   } //!< Get Z momentum
+    double e(const int& index )            { return m_hepevtptr->phep[index-1][3];   } //!< Get Energy
+    double m(const int& index )            { return m_hepevtptr->phep[index-1][4];   } //!< Get generated mass
+    double x(const int& index )            { return m_hepevtptr->vhep[index-1][0];   } //!< Get X Production vertex
+    double y(const int& index )            { return m_hepevtptr->vhep[index-1][1];   } //!< Get Y Production vertex
+    double z(const int& index )            { return m_hepevtptr->vhep[index-1][2];   } //!< Get Z Production vertex
+    double t(const int& index )            { return m_hepevtptr->vhep[index-1][3];   } //!< Get production time
+    int    number_parents(const int& index );                                   //!< Get number of parents
+    int    number_children(const int& index );                                  //!< Get number of children from the range of daughters
+    int    number_children_exact(const int& index );                            //!< Get number of children by counting
 
-     void set_event_number( const int& evtno )       { m_hepevtptr->nevhep = evtno;         } //!< Set event number
-     void set_number_entries( const int& noentries ) { m_hepevtptr->nhep = noentries;       } //!< Set number of entries
-     void set_status( const int& index, const int& status ) { m_hepevtptr->isthep[index-1] = status; } //!< Set status code
-     void set_id(const int& index, const int& id )         { m_hepevtptr->idhep[index-1] = id;      } //!< Set PDG particle id
-     void set_parents( const int& index, const int& firstparent, const int& lastparent );              //!< Set parents
-     void set_children( const int& index, const int& firstchild, const int& lastchild );               //!< Set children
-     void set_momentum( const int& index, const double& px, const double& py, const double& pz, const double& e );   //!< Set 4-momentum
-     void set_mass( const int& index, double mass );                                     //!< Set mass
-     void set_position( const int& index, const double& x, const double& y, const double& z, const double& t );      //!< Set position in time-space
+    void set_event_number( const int& evtno )       { m_hepevtptr->nevhep = evtno;         } //!< Set event number
+    void set_number_entries( const int& noentries ) { m_hepevtptr->nhep = noentries;       } //!< Set number of entries
+    void set_status( const int& index, const int& status ) { m_hepevtptr->isthep[index-1] = status; } //!< Set status code
+    void set_id(const int& index, const int& id )         { m_hepevtptr->idhep[index-1] = id;      } //!< Set PDG particle id
+    void set_parents( const int& index, const int& firstparent, const int& lastparent );              //!< Set parents
+    void set_children( const int& index, const int& firstchild, const int& lastchild );               //!< Set children
+    void set_momentum( const int& index, const double& px, const double& py, const double& pz, const double& e );   //!< Set 4-momentum
+    void set_mass( const int& index, double mass );                                     //!< Set mass
+    void set_position( const int& index, const double& x, const double& y, const double& z, const double& t );      //!< Set position in time-space
 };
 
 //
