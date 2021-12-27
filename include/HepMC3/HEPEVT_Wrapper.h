@@ -11,7 +11,7 @@
  *
  *  @class HepMC3::HEPEVT_Wrapper
  *  @brief An interface to HEPEVT common block implemented in a traditional way.
- *         When possible this implementation should be avoided and the templated 
+ *         When possible this implementation should be avoided and the templated
  *         version should be used instead.
  *
  *  @note This header file does not include HEPEVT definition, only declaration.
@@ -117,7 +117,7 @@ public:
 
     /** @brief Check for problems with HEPEVT common block */
 //!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
-/*    static bool check_hepevt_consistency( std::ostream& ostr = std::cout ); */
+    /*    static bool check_hepevt_consistency( std::ostream& ostr = std::cout ); */
 
     /** @brief Set all entries in HEPEVT to zero */
     static void zero_everything();

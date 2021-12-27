@@ -337,6 +337,7 @@ if (ASTYLE)
     search/src/*cc
     include/HepMC3/Reader*h
     include/HepMC3/Writer*h
+    include/HepMC3/*HEPEVT*h
     examples/*/src/*cc
     examples/*/include/*h
     test/*cc
@@ -362,6 +363,7 @@ if(CPPCHECK)
       rootIO/src/*.cc
       include/HepMC3/Reader*h
       include/HepMC3/Writer*h
+      include/HepMC3/HEPEVT*h
       examples/*/src/*cc
       examples/*/include/*h
       interfaces/*/include/*h
