@@ -7,7 +7,7 @@
 #define HEPEVT_HELPERS_H
 /**
  *  @file HEPEVT_Helpers.h
- *  @brief Sorting functions used to convert HEPEVT block
+ *  @brief Helper functions used to manipulate with HEPEVT block
  *
  */
 #include <algorithm>

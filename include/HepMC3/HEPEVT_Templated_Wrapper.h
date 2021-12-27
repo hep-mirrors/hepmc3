@@ -45,7 +45,7 @@ struct HEPEVT_Templated
     momentum_t vhep  [NMXHEP][4];  //!< Time-space position: x, y, z, t
 };
 
-template <int NMXHEP, typename momentum_t=double>
+template <int max_particles, typename momentum_type = double>
 class HEPEVT_Templated_Wrapper
 {
 
@@ -55,10 +55,8 @@ class HEPEVT_Templated_Wrapper
 public:
     /** @brief Print information from HEPEVT common block */
     void print_hepevt( std::ostream& ostr = std::cout );
-
     /** @brief Print particle information */
     void print_hepevt_particle( int index, std::ostream& ostr = std::cout );
-
     /** @brief Set all entries in HEPEVT to zero */
     void zero_everything();
     /** @brief Convert GenEvent to HEPEVT*/
@@ -67,20 +65,18 @@ public:
     bool HEPEVT_to_GenEvent( GenEvent* evt );
     /** @brief Tries to fix list of daughters */
     bool fix_daughters();
-
     //!< Fortran common block HEPEVT
-    struct HEPEVT_Templated<NMXHEP,momentum_t>* m_hepevtptr;
+    struct HEPEVT_Templated<max_particles, momentum_type>* m_hepevtptr;
 private:
     //!< Some m_internal_storage storage. Optional.
-    std::shared_ptr<struct HEPEVT_Templated<NMXHEP,momentum_t> > m_internal_storage;
-
+    std::shared_ptr<struct HEPEVT_Templated<max_particles, momentum_type> > m_internal_storage;
 //
 // Accessors
 //
 public:
     void allocate_internal_storage(); ///!< Allocates m_internal_storage storage in smart pointer to hold HEPEVT of fixed size
-    void set_hepevt_address(char *c) { m_hepevtptr=(struct HEPEVT_Templated<NMXHEP,momentum_t>*)c;          } //!< Set Fortran block address
-    int    max_number_entries()      { return NMXHEP;                              } //!< Block size
+    void set_hepevt_address(char *c) { m_hepevtptr = (struct HEPEVT_Templated<max_particles, momentum_type>*)c;          } //!< Set Fortran block address
+    int    max_number_entries()      { return max_particles;                              } //!< Block size
     int    event_number()            { return m_hepevtptr->nevhep;             } //!< Get event number
     int    number_entries()          { return m_hepevtptr->nhep;               } //!< Get number of entries
     int    status(const int& index )       { return m_hepevtptr->isthep[index-1];    } //!< Get status code
@@ -101,7 +97,6 @@ public:
     int    number_parents(const int& index );                                   //!< Get number of parents
     int    number_children(const int& index );                                  //!< Get number of children from the range of daughters
     int    number_children_exact(const int& index );                            //!< Get number of children by counting
-
     void set_event_number( const int& evtno )       { m_hepevtptr->nevhep = evtno;         } //!< Set event number
     void set_number_entries( const int& noentries ) { m_hepevtptr->nhep = noentries;       } //!< Set number of entries
     void set_status( const int& index, const int& status ) { m_hepevtptr->isthep[index-1] = status; } //!< Set status code
@@ -116,8 +111,8 @@ public:
 //
 // inline definitions
 //
-template <int NMXHEP, typename momentum_t>
-inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::print_hepevt( std::ostream& ostr )
+template <int max_particles, typename momentum_type>
+inline void HEPEVT_Templated_Wrapper<max_particles, momentum_type>::print_hepevt( std::ostream& ostr )
 {
     ostr << " Event No.: " << m_hepevtptr->nevhep << std::endl;
     ostr << "  Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M." << std::endl;
@@ -126,10 +121,10 @@ inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::print_hepevt( std::ostr
         print_hepevt_particle( i, ostr );
     }
 }
-template <int NMXHEP, typename momentum_t>
-inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::print_hepevt_particle( int index, std::ostream& ostr )
+template <int max_particles, typename momentum_type>
+inline void HEPEVT_Templated_Wrapper<max_particles, momentum_type>::print_hepevt_particle( int index, std::ostream& ostr )
 {
-    char buf[255];//Note: the format is fixed, so no reason for complicatied tratment
+    char buf[255];//Note: the format is fixed, so no reason for complicated treatment
 
     sprintf(buf, "%5i %6i", index, m_hepevtptr->idhep[index-1]);
     ostr << buf;
@@ -137,38 +132,37 @@ inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::print_hepevt_particle( 
     ostr << buf;
     sprintf(buf, "%4i - %4i ", m_hepevtptr->jdahep[index-1][0], m_hepevtptr->jdahep[index-1][1]);
     ostr << buf;
-    // print the rest of particle info
     sprintf(buf, "%8.2f %8.2f %8.2f %8.2f %8.2f", m_hepevtptr->phep[index-1][0], m_hepevtptr->phep[index-1][1], m_hepevtptr->phep[index-1][2], m_hepevtptr->phep[index-1][3], m_hepevtptr->phep[index-1][4]);
     ostr << buf << std::endl;
 }
 
-template <int NMXHEP, typename momentum_t>
-inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::allocate_internal_storage()
+template <int max_particles, typename momentum_type>
+inline void HEPEVT_Templated_Wrapper<max_particles, momentum_type>::allocate_internal_storage()
 {
-    m_internal_storage = std::make_shared<struct HEPEVT_Templated<NMXHEP,momentum_t>>();
+    m_internal_storage = std::make_shared<struct HEPEVT_Templated<max_particles, momentum_type>>();
     m_hepevtptr = m_internal_storage.get();
 }
 
-template <int NMXHEP, typename momentum_t>
-inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::zero_everything()
+template <int max_particles, typename momentum_type>
+inline void HEPEVT_Templated_Wrapper<max_particles, momentum_type>::zero_everything()
 {
-    memset(m_hepevtptr, 0, sizeof(struct HEPEVT_Templated<NMXHEP,momentum_t>));
+    memset(m_hepevtptr, 0, sizeof(struct HEPEVT_Templated<max_particles, momentum_type>));
 }
 
-template <int NMXHEP, typename momentum_t>
-inline int HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::number_parents( const int& index )
+template <int max_particles, typename momentum_type>
+inline int HEPEVT_Templated_Wrapper<max_particles, momentum_type>::number_parents( const int& index )
 {
     return (m_hepevtptr->jmohep[index-1][0]) ? (m_hepevtptr->jmohep[index-1][1]) ? m_hepevtptr->jmohep[index-1][1]-m_hepevtptr->jmohep[index-1][0] : 1 : 0;
 }
 
-template <int NMXHEP, typename momentum_t>
-inline int HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::number_children( const int& index )
+template <int max_particles, typename momentum_type>
+inline int HEPEVT_Templated_Wrapper<max_particles, momentum_type>::number_children( const int& index )
 {
     return (m_hepevtptr->jdahep[index-1][0]) ? (m_hepevtptr->jdahep[index-1][1]) ? m_hepevtptr->jdahep[index-1][1]-m_hepevtptr->jdahep[index-1][0] : 1 : 0;
 }
 
-template <int NMXHEP, typename momentum_t>
-inline int HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::number_children_exact( const int& index )
+template <int max_particles, typename momentum_type>
+inline int HEPEVT_Templated_Wrapper<max_particles, momentum_type>::number_children_exact( const int& index )
 {
     int nc = 0;
     for ( int i = 1; i <= m_hepevtptr->nhep; ++i )
@@ -176,33 +170,37 @@ inline int HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::number_children_exact( c
     return nc;
 }
 
-template <int NMXHEP, typename momentum_t>
-inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::set_parents( const int& index,  const int& firstparent, const int&lastparent )
+template <int max_particles, typename momentum_type>
+inline void HEPEVT_Templated_Wrapper<max_particles, momentum_type>::set_parents( const int& index,  const int& firstparent, const int&lastparent )
 {
     m_hepevtptr->jmohep[index-1][0] = firstparent;
     m_hepevtptr->jmohep[index-1][1] = lastparent;
 }
-template <int NMXHEP, typename momentum_t>
-inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::set_children(  const int& index,  const int&  firstchild,  const int& lastchild )
+
+template <int max_particles, typename momentum_type>
+inline void HEPEVT_Templated_Wrapper<max_particles, momentum_type>::set_children(  const int& index,  const int&  firstchild,  const int& lastchild )
 {
     m_hepevtptr->jdahep[index-1][0] = firstchild;
     m_hepevtptr->jdahep[index-1][1] = lastchild;
 }
-template <int NMXHEP, typename momentum_t>
-inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::set_momentum( const int& index, const double& px, const double& py, const double& pz, const double& e )
+
+template <int max_particles, typename momentum_type>
+inline void HEPEVT_Templated_Wrapper<max_particles, momentum_type>::set_momentum( const int& index, const double& px, const double& py, const double& pz, const double& e )
 {
     m_hepevtptr->phep[index-1][0] = px;
     m_hepevtptr->phep[index-1][1] = py;
     m_hepevtptr->phep[index-1][2] = pz;
     m_hepevtptr->phep[index-1][3] = e;
 }
-template <int NMXHEP, typename momentum_t>
-inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::set_mass( const int& index, double mass )
+
+template <int max_particles, typename momentum_type>
+inline void HEPEVT_Templated_Wrapper<max_particles, momentum_type>::set_mass( const int& index, double mass )
 {
     m_hepevtptr->phep[index-1][4] = mass;
 }
-template <int NMXHEP, typename momentum_t>
-inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::set_position( const int& index, const double& x, const double& y, const double& z, const double& t )
+
+template <int max_particles, typename momentum_type>
+inline void HEPEVT_Templated_Wrapper<max_particles, momentum_type>::set_position( const int& index, const double& x, const double& y, const double& z, const double& t )
 {
     m_hepevtptr->vhep[index-1][0] = x;
     m_hepevtptr->vhep[index-1][1] = y;
@@ -210,29 +208,27 @@ inline void HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::set_position( const int
     m_hepevtptr->vhep[index-1][3] = t;
 }
 
-
-template <int NMXHEP, typename momentum_t>
-inline bool HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::fix_daughters()
+template <int max_particles, typename momentum_type>
+inline bool HEPEVT_Templated_Wrapper<max_particles, momentum_type>::fix_daughters()
 {
     /*AV The function should be called  for a record that has correct particle ordering and mother ids.
     As a result it produces a record with ranges where the daughters can be found.
     Not every particle in the range will be a daughter. It is true only for proper events.
     The return tells if the record was fixed succesfully.
     */
-
     for ( int i = 1; i <= number_entries(); i++ )
         for ( int k=1; k <= number_entries(); k++ ) if (i != k)
                 if ((first_parent(k) <= i) && (i <= last_parent(k)))
                     set_children(i, (first_child(i) == 0 ? k : std::min(first_child(i), k)), (last_child(i) == 0 ? k : std::max(last_child(i), k)));
     bool is_fixed = true;
-    for ( int i=1; i <= number_entries(); i++ )
-        is_fixed=(is_fixed && (number_children_exact(i) == number_children(i)));
+    for ( int i = 1; i <= number_entries(); i++ )
+        is_fixed = (is_fixed && (number_children_exact(i) == number_children(i)));
     return is_fixed;
 }
 
 
-template <int NMXHEP, typename momentum_t>
-bool HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::HEPEVT_to_GenEvent(GenEvent* evt)
+template <int max_particles, typename momentum_type>
+bool HEPEVT_Templated_Wrapper<max_particles,momentum_type>::HEPEVT_to_GenEvent(GenEvent* evt)
 {
     if ( !evt ) { std::cerr << "IO_HEPEVT::fill_next_event error  - passed null event." << std::endl; return false;}
     evt->set_event_number(event_number());
@@ -300,8 +296,8 @@ bool HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::HEPEVT_to_GenEvent(GenEvent* e
     return true;
 }
 
-template <int NMXHEP, typename momentum_t>
-bool HEPEVT_Templated_Wrapper<NMXHEP,momentum_t>::GenEvent_to_HEPEVT(const GenEvent* evt)
+template <int max_particles, typename momentum_type>
+bool HEPEVT_Templated_Wrapper<max_particles,momentum_type>::GenEvent_to_HEPEVT(const GenEvent* evt)
 {
     /// This writes an event out to the HEPEVT common block. The daughters
     /// field is NOT filled, because it is possible to contruct graphs

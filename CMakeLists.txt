@@ -338,6 +338,8 @@ if (ASTYLE)
     include/HepMC3/Reader*h
     include/HepMC3/Writer*h
     include/HepMC3/*HEPEVT*h
+    include/HepMC3/Gen*h
+    include/HepMC3/Com*h
     examples/*/src/*cc
     examples/*/include/*h
     test/*cc
@@ -364,6 +366,8 @@ if(CPPCHECK)
       include/HepMC3/Reader*h
       include/HepMC3/Writer*h
       include/HepMC3/HEPEVT*h
+      include/HepMC3/Gen*h
+      include/HepMC3/Com*h
       examples/*/src/*cc
       examples/*/include/*h
       interfaces/*/include/*h

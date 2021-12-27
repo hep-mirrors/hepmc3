@@ -64,8 +64,6 @@ struct HEPEVT
     momentum_t vhep  [NMXHEP][4];  //!< Time-space position: x, y, z, t
 };                               //!< Fortran common block HEPEVT
 
-
-
 #include <iostream>
 #include <cstdio>
 #include <set>
@@ -111,14 +109,8 @@ class HEPEVT_Wrapper
 public:
     /** @brief Print information from HEPEVT common block */
     static void print_hepevt( std::ostream& ostr = std::cout );
-
     /** @brief Print particle information */
     static void print_hepevt_particle( int index, std::ostream& ostr = std::cout );
-
-    /** @brief Check for problems with HEPEVT common block */
-//!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
-    /*    static bool check_hepevt_consistency( std::ostream& ostr = std::cout ); */
-
     /** @brief Set all entries in HEPEVT to zero */
     static void zero_everything();
 #ifndef HEPEVT_WRAPPER_HEADER_ONLY
@@ -155,7 +147,6 @@ public:
     static int    number_parents(const int& index );                                   //!< Get number of parents
     static int    number_children(const int& index );                                  //!< Get number of children from the range of daughters
     static int    number_children_exact(const int& index );                            //!< Get number of children by counting
-
     static void set_event_number( const int& evtno )       { hepevtptr->nevhep = evtno;         } //!< Set event number
     static void set_number_entries( const int& noentries ) { hepevtptr->nhep = noentries;       } //!< Set number of entries
     static void set_status( const int& index, const int& status ) { hepevtptr->isthep[index-1] = status; } //!< Set status code
@@ -174,7 +165,7 @@ inline void HEPEVT_Wrapper::print_hepevt( std::ostream& ostr )
 {
     ostr << " Event No.: " << hepevtptr->nevhep << std::endl;
     ostr<< "  Nr   Type   Parent(s)  Daughter(s)      Px       Py       Pz       E    Inv. M." << std::endl;
-    for ( int i=1; i<=hepevtptr->nhep; ++i )
+    for ( int i = 1; i <= hepevtptr->nhep; ++i )
     {
         HEPEVT_Wrapper::print_hepevt_particle( i, ostr );
     }
@@ -182,7 +173,7 @@ inline void HEPEVT_Wrapper::print_hepevt( std::ostream& ostr )
 
 inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr )
 {
-    char buf[255];//Note: the format is fixed, so no reason for complicatied tratment
+    char buf[255];//Note: the format is fixed, so no reason for complicated treatment
 
     sprintf(buf,"%5i %6i",index,hepevtptr->idhep[index-1]);
     ostr << buf;
@@ -190,20 +181,9 @@ inline void HEPEVT_Wrapper::print_hepevt_particle( int index, std::ostream& ostr
     ostr << buf;
     sprintf(buf,"%4i - %4i ",hepevtptr->jdahep[index-1][0],hepevtptr->jdahep[index-1][1]);
     ostr << buf;
-    // print the rest of particle info
     sprintf(buf,"%8.2f %8.2f %8.2f %8.2f %8.2f",hepevtptr->phep[index-1][0],hepevtptr->phep[index-1][1],hepevtptr->phep[index-1][2],hepevtptr->phep[index-1][3],hepevtptr->phep[index-1][4]);
     ostr << buf << std::endl;
 }
-
-//!< @todo HEPEVT_Wrapper::check_hepevt_consistency is not implemented!
-/*
-inline bool HEPEVT_Wrapper::check_hepevt_consistency()
-{
-
-    printf("HEPEVT_Wrapper::check_hepevt_consistency is not implemented!\n");
-    return true;
-}
-*/
 
 inline void HEPEVT_Wrapper::zero_everything()
 {
@@ -223,12 +203,10 @@ inline int HEPEVT_Wrapper::number_children( const int& index )
 inline int HEPEVT_Wrapper::number_children_exact( const int& index )
 {
     int nc=0;
-    for ( int i=1; i<=hepevtptr->nhep; ++i )
-        if (((hepevtptr->jmohep[i-1][0]<=index&&hepevtptr->jmohep[i-1][1]>=index))||(hepevtptr->jmohep[i-1][0]==index)||(hepevtptr->jmohep[i-1][1]==index)) nc++;
+    for ( int i = 1; i <= hepevtptr->nhep; ++i )
+        if (((hepevtptr->jmohep[i-1][0] <= index && hepevtptr->jmohep[i-1][1]>=index))||(hepevtptr->jmohep[i-1][0]==index)||(hepevtptr->jmohep[i-1][1]==index)) nc++;
     return nc;
 }
-
-
 
 inline void HEPEVT_Wrapper::set_parents( const int& index,  const int& firstparent, const int&lastparent )
 {
@@ -263,8 +241,6 @@ inline void HEPEVT_Wrapper::set_position(  const int& index, const double& x, co
     hepevtptr->vhep[index-1][3] = t;
 }
 
-
-
 inline bool HEPEVT_Wrapper::fix_daughters()
 {
     /*AV The function should be called  for a record that has correct particle ordering and mother ids.
@@ -272,14 +248,13 @@ inline bool HEPEVT_Wrapper::fix_daughters()
     Not every particle in the range will be a daughter. It is true only for proper events.
     The return tells if the record was fixed succesfully.
     */
-
-    for ( int i=1; i<=HEPEVT_Wrapper::number_entries(); i++ )
-        for ( int k=1; k<=HEPEVT_Wrapper::number_entries(); k++ ) if (i!=k)
-                if ((HEPEVT_Wrapper::first_parent(k)<=i)&&(i<=HEPEVT_Wrapper::last_parent(k)))
+    for ( int i = 1; i <= HEPEVT_Wrapper::number_entries(); i++ )
+        for ( int k = 1; k <= HEPEVT_Wrapper::number_entries(); k++ ) if (i!=k)
+                if ((HEPEVT_Wrapper::first_parent(k) <= i) && (i <= HEPEVT_Wrapper::last_parent(k)))
                     HEPEVT_Wrapper::set_children(i,(HEPEVT_Wrapper::first_child(i)==0?k:std::min(HEPEVT_Wrapper::first_child(i),k)),(HEPEVT_Wrapper::last_child(i)==0?k:std::max(HEPEVT_Wrapper::last_child(i),k)));
-    bool is_fixed=true;
-    for ( int i=1; i<=HEPEVT_Wrapper::number_entries(); i++ )
-        is_fixed=(is_fixed&&(HEPEVT_Wrapper::number_children_exact(i)==HEPEVT_Wrapper::number_children(i)));
+    bool is_fixed = true;
+    for ( int i = 1; i <= HEPEVT_Wrapper::number_entries(); i++ )
+        is_fixed = (is_fixed && (HEPEVT_Wrapper::number_children_exact(i)==HEPEVT_Wrapper::number_children(i)));
     return is_fixed;
 }
 
