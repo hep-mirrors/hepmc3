@@ -48,9 +48,9 @@ public:
     static bool fix_daughters();
 private:
     /** @brief  Fortran common block HEPEVT */
-    static std::shared_ptr<struct HEPEVT_Pointers<double> >  m_hepevtptr;
+    HEPMC3_EXPORT_API static std::shared_ptr<struct HEPEVT_Pointers<double> >  m_hepevtptr;
     /** @brief Block size */
-    static int m_max_particles;
+    HEPMC3_EXPORT_API static int m_max_particles;
 //
 // Accessors
 //

@@ -87,16 +87,14 @@ void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexP
     return;
 }
 
-
-struct HEPEVT*  HEPEVT_Wrapper::hepevtptr = nullptr;
-
-std::shared_ptr<struct HEPEVT_Pointers<double> >  HEPEVT_Wrapper_Runtime_Static::m_hepevtptr = nullptr;
-int HEPEVT_Wrapper_Runtime_Static::m_max_particles = 0;
+HEPMC3_EXPORT_API struct HEPEVT*  HEPEVT_Wrapper::hepevtptr = nullptr;
+HEPMC3_EXPORT_API std::shared_ptr<struct HEPEVT_Pointers<double> >  HEPEVT_Wrapper_Runtime_Static::m_hepevtptr = nullptr;
+HEPMC3_EXPORT_API int HEPEVT_Wrapper_Runtime_Static::m_max_particles = 0;
 
 
 void HEPEVT_Wrapper_Runtime::set_hepevt_address(char *c) {
     m_hepevtptr = std::make_shared<struct HEPEVT_Pointers<double> >();
-    char* x=c;
+    char* x = c;
     m_hepevtptr->nevhep = (int*)x;
     x += sizeof(int);
     m_hepevtptr->nhep = (int*)(x);
@@ -166,7 +164,6 @@ int HEPEVT_Wrapper_Runtime::number_children( const int index )  const
     return (m_hepevtptr->jdahep[2*(index-1)]) ? (m_hepevtptr->jdahep[2*(index-1)+1]) ? m_hepevtptr->jdahep[2*(index-1)+1]-m_hepevtptr->jdahep[2*(index-1)] : 1 : 0;
 }
 
-
 int HEPEVT_Wrapper_Runtime::number_children_exact( const int index )  const
 {
     int nc = 0;
@@ -176,13 +173,11 @@ int HEPEVT_Wrapper_Runtime::number_children_exact( const int index )  const
     return nc;
 }
 
-
 void HEPEVT_Wrapper_Runtime::set_parents( const int index,  const int firstparent, const int lastparent )
 {
     m_hepevtptr->jmohep[2*(index-1)] = firstparent;
     m_hepevtptr->jmohep[2*(index-1)+1] = lastparent;
 }
-
 
 void HEPEVT_Wrapper_Runtime::set_children(  const int index,  const int  firstchild,  const int lastchild )
 {

@@ -10,6 +10,15 @@
  *  @brief Helper functions used to manipulate with HEPEVT block
  *
  */
+#if defined(WIN32)&&(!defined(HEPMC3_NO_EXPORTS))
+#if defined(HepMC3_EXPORTS)
+#define HEPMC3_EXPORT_API __declspec(dllexport)
+#else
+#define HEPMC3_EXPORT_API __declspec(dllimport)
+#endif
+#else
+#define HEPMC3_EXPORT_API
+#endif
 #include <algorithm>
 #include <map>
 
