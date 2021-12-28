@@ -32,7 +32,7 @@ public:
         m_zstr = std::shared_ptr< std::istream >(new ifstream(filename.c_str()));
         m_reader = std::make_shared<T>(*(m_zstr.get()));
     }
-    /// The ctor to read from stdin
+    /// @brief The ctor to read from stdin
     ReaderGZ(std::istream & is) {
         m_zstr = std::shared_ptr< std::istream >(new istream(is));
         m_reader = std::make_shared<T>(*(m_zstr.get()));

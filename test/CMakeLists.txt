@@ -23,7 +23,7 @@ macro( hepmc_root_test testname )
   ADD_EXECUTABLE(${testname} ${${testname}_source}  ${ARGN} )
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../rootIO/include/)
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../rootIO/include/ )
   target_link_libraries(${testname} PRIVATE HepMC3 HepMC3rootIO)
 
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )

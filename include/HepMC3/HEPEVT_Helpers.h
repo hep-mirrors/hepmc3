@@ -224,7 +224,7 @@ bool GenEvent_to_HEPEVT_nonstatic(const GenEvent* evt, T* A)
 }
 
 
-
+/** @brief  Converts  HEPEVT into GenEvent. */
 template <class T>
 bool HEPEVT_to_GenEvent_static(GenEvent* evt)
 {
@@ -296,6 +296,7 @@ bool HEPEVT_to_GenEvent_static(GenEvent* evt)
     return true;
 }
 
+/** @brief  Converts GenEvent into HEPEVT. */
 template <class T>
 bool GenEvent_to_HEPEVT_static(const GenEvent* evt)
 {

@@ -11,8 +11,9 @@ void WriterHEPEVTZEUS::write_hepevt_event_header()
     unsigned long length = cursor - &(buf[0]);
     m_stream->write( buf, length );
 }
-void WriterHEPEVTZEUS::write_hepevt_particle( int index)
+void WriterHEPEVTZEUS::write_hepevt_particle( int index, bool iflong)
 {
+    if (!iflong) printf("INFO: the parameter is ignored as HEPEVTZEUS always uses long format\n");
     char buf[512];//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor = &(buf[0]);
     cursor += sprintf(cursor,"% 12i% 8i", m_hepevt_interface.status(index), m_hepevt_interface.id(index));

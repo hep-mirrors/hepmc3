@@ -162,7 +162,7 @@ if (COMPILER_SUPPORTS_-Wno-strict-aliasing)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
 endif()
 #Workarounds for nvc++
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC")
     set(CMAKE_CXX_EXTENSIONS ON)
     #Workaround for pybind11 templates
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
@@ -300,7 +300,12 @@ if(HEPMC3_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 if (HEPMC3_INSTALL_EXAMPLES)
-  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  FILES_MATCHING PATTERN "*"   PATTERN "*CMakeFiles*" EXCLUDE    PATTERN "Makefile" EXCLUDE  PATTERN "*cmake_install.cmake*" EXCLUDE  PATTERN "*libAnalysis*" EXCLUDE )
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  
+          FILES_MATCHING PATTERN "*"   
+          PATTERN "*CMakeFiles*" EXCLUDE  
+          PATTERN "Makefile" EXCLUDE  
+          PATTERN "*cmake_install.cmake*" EXCLUDE  
+          PATTERN "*libAnalysis*" EXCLUDE )
 endif()
 
 if(HEPMC3_BUILD_DOCS)
