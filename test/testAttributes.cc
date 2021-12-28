@@ -210,7 +210,7 @@ GenEvent generate4() {
 typedef std::chrono::high_resolution_clock Clock;
 int main()
 {
-    int N = 100;
+    int N = 10;
     auto rawstart1= Clock::now();
     for (int i = 0; i < N; i++) generate1();
     auto now1 = Clock::now();

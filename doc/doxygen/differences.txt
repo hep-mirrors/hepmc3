@@ -66,7 +66,7 @@
     ###########################################################################
     @subsection io Changes to the I/O handling
     ###########################################################################
-    Multiple file formats are supported. The implementation of reading  and wrining
+    Multiple file formats are supported. The implementation of reading  and writing
     is separated in HepMC3. All the reading operations are performed in
     "reader" objects inherited from HepMC::Reader and the writing operations in the "writer"
     objects inherited from HePMC::Writer. Therefore it is to use the desired headers explicitly, as needed.
@@ -101,6 +101,11 @@
     when reading files with multiple headers. The ASCII files with multiple headers ( e.g. obtained with
     cat 1.hepmc 2.hepmc > 12.hepmc) will be processed by the readers only till the
     first occurrence of END_EVENT_LISTING.
+    
+    In addition to the standard readers, starting for the version 3.2.5 HepMC3 provides as set of
+    templated readers/writers to handle the zip-,lzma-,bz2-compressed files (ReaderGZ and WriterGZ) and to perform multithread
+    reading (ReaderMT). 
+    
     ###########################################################################
     @subsection memory Memory managed by shared pointers
     ###########################################################################
@@ -254,7 +259,7 @@
     generator, and to our knowledge the only active use-case is an abuse of it to
     provide more ints in which to encode provenance information. As this is now done
     via attributes, there is no case for Flow's continued existence. No backward
-    compatibility Flow class is provided since this usage is extremely localised in
+    compatibility Flow class is provided since this usage is extremely localized in
     one piece of user code and migration to the newer scheme should be simple.
 
     ###########################################################################
@@ -426,7 +431,7 @@
         double phi
     @endcode
 
-    The presence of cycles in the event structure is indecated with an attribute
+    The presence of cycles in the event structure is indicated with an attribute
     @code{.cpp}
         int cycles
     @endcode

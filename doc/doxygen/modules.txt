@@ -24,7 +24,7 @@
     Please note that all required libraries/dlls should be loadable.
     See examples for details.
 
-    In some cases the fine tuning of the Reader/Writer classes behaviour can be done using a
+    In some cases the fine tuning of the Reader/Writer classes behavior can be done using a
     map of string "options"
 
     @code{.cpp}
@@ -40,9 +40,9 @@
       "vertex_weights_are_separated"
       "particle_flows_are_separated"
      regulate if the corresponding information from IO_GenEvent would be stored into multiple attributes as
-     individual numbers, i.e. "separated" or as a single std::vector. The former behaviour is used if
+     individual numbers, i.e. "separated" or as a single std::vector. The former behavior is used if
      the corresponding option name is present in the list of options, regardless of the option value.
-     The later behaviour is the default one.
+     The later behavior is the default one.
 
     The option for WriterAscii and WriterAsciiHepMC2
 
@@ -50,7 +50,7 @@
 
      specifies the float printf specifier used for the output format of the floats.
      Two first characters from the  option value are used.
-     The default behaviour is equivalend to setting this option to "e" and results in the output formatted as
+     The default behavior is equivalent to setting this option to "e" and results in the output formatted as
      " %.*e". To save the disk space one can use the "g" option, e.g.
     @code{.cpp}
     WriterAscii       outputA("someoutput.hepmc");

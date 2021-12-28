@@ -21,9 +21,9 @@ public:
     /** @brief Constructor */
     WriterHEPEVTZEUS(const std::string &filename);
     /** @brief Write the header */
-    void write_hepevt_event_header();
+    void write_hepevt_event_header() override;
     /** @brief Write particles */
-    void write_hepevt_particle( int index);
+    void write_hepevt_particle( int index, bool iflong = true )  override;
 };
 }
 #endif
