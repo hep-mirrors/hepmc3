@@ -34,7 +34,9 @@ class HEPEVT_Wrapper_Template
 // Functions
 //
 public:
+    /** @brief Default constructor */
     HEPEVT_Wrapper_Template() { m_hepevtptr=nullptr;};
+    /** @brief Default destructor */
     ~HEPEVT_Wrapper_Template() {};
     /** @brief Print information from HEPEVT common block */
     void print_hepevt( std::ostream& ostr = std::cout )  const;
@@ -48,10 +50,10 @@ public:
     bool HEPEVT_to_GenEvent( GenEvent* evt )  const { return HEPEVT_to_GenEvent_nonstatic(evt, this);};
     /** @brief Tries to fix list of daughters */
     bool fix_daughters();
-    //!< Fortran common block HEPEVT
+    /** @brief  Fortran common block HEPEVT */
     struct HEPEVT_Templated<max_particles, momentum_type>* m_hepevtptr;
 private:
-    //!< Some m_internal_storage storage. Optional.
+    /** @brief  Internalstorage storage. Optional.*/
     std::shared_ptr<struct HEPEVT_Templated<max_particles, momentum_type> > m_internal_storage;
 //
 // Accessors

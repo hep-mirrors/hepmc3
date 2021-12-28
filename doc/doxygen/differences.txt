@@ -247,7 +247,7 @@
     a particle or vertex is removed from the event, id's of other particles
     or vertices may change.
     ###########################################################################
-    @subsection flow  Flow is not a clas on its own (it is an attribute).
+    @subsection flow  Flow is not a class on its own (it is an attribute).
     ###########################################################################
 
     The Flow class has been removed, since it was unused by any widespread event
@@ -434,7 +434,33 @@
      Note that attributes belong to the event, therefore these can be set only for particles and vertices
      that belong to a GenEvent object.
 
+    ###########################################################################
+    @subsection hepevt Interface to HEPEVT block
+    ###########################################################################
+    The most recent versions of HepMC3 has multiple implementations of the interfaces to HEPEVT Fortran common 
+    block. These are 
+
+    include/HepMC3/HEPEVT_Wrapper.h -- the default implementation. The size of common block is defined in 
+    compile time via appropriate #define. The block can hold float/double precision momenta. 
+    This implementation is not compiled into any library. All functions and variables are static,
+    so only one instance of the interface can exists.
+
+    include/HepMC3/HEPEVT_Wrapper_Runtime.h -- The size of common block is defined in runtime. 
+    The block can be held in the object. Multiple instances can exists.
+    The interface is compiled into the library. This interface is also available in Python.
+
+    include/HepMC3/HEPEVT_Wrapper_Runtime_Static.h -- The size of common block is defined in runtime. 
+    All functions and variables are static,
+    so only one instance of the interface can exists. The interface is compiled into the library.
+
+    include/HepMC3/HEPEVT_Wrapper_Template.h --  The size of common block is defined in compile 
+    time as a parameter of template. The block can hold float/double precision momenta. 
+    The block can be held in the object. Multiple instances can exists.
+
+    @endcode
+    
+        
     <hr>
 
- Last update 08 Nov 2020
+ Last update 28 Dec 2021
 */

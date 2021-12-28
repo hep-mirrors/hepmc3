@@ -76,7 +76,7 @@ struct pair_GenVertexPtr_int_greater
 void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexPtr, int>& pathl);
 
 
-
+/** @brief  Converts HEPEVT into GenEvent. */
 template <class T>
 bool HEPEVT_to_GenEvent_nonstatic(GenEvent* evt, T* A)
 {
@@ -147,7 +147,7 @@ bool HEPEVT_to_GenEvent_nonstatic(GenEvent* evt, T* A)
 
     return true;
 }
-
+/** @brief  Converts GenEvent into HEPEVT. */
 template <class T>
 bool GenEvent_to_HEPEVT_nonstatic(const GenEvent* evt, T* A)
 {

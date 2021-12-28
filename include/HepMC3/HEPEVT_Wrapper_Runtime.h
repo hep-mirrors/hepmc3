@@ -32,9 +32,10 @@ class HEPEVT_Wrapper_Runtime
 // Functions
 //
 public:
+    /** @brief Default constructor */
     HEPEVT_Wrapper_Runtime() {m_max_particles=0; m_hepevtptr=nullptr;};
+    /** @brief Default destructor */
     ~HEPEVT_Wrapper_Runtime() {};
-
     /** @brief Print information from HEPEVT common block */
     void print_hepevt( std::ostream& ostr = std::cout ) const;
     /** @brief Print particle information */
@@ -48,9 +49,11 @@ public:
     /** @brief Tries to fix list of daughters */
     bool fix_daughters();
 private:
-    //!< Fortran common block HEPEVT
+    /** @brief  Fortran common block HEPEVT */
     std::shared_ptr<struct HEPEVT_Pointers<double> >  m_hepevtptr;
+    /** @brief Block size */
     int m_max_particles;
+    /** @brief  Internalstorage storage. Optional.*/
     std::vector<char> m_internal_storage;
 //
 // Accessors
