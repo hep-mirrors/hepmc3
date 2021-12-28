@@ -113,6 +113,7 @@ set( HepMC_tests
         testReaderFactory1
         testSingleVertexHepMC2
         testAttributes
+        testHEPEVTWrapper1
          )
 
 set( HepMC_root_tests

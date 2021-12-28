@@ -67,7 +67,7 @@ extern "C" {
 
 
 #else
-#include "HepMC3/HEPEVT_Templated_Wrapper.h"
+#include "HepMC3/HEPEVT_Wrapper_Template.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Writer.h"
 #include "HepMC3/WriterHEPEVT.h"
@@ -83,7 +83,7 @@ using namespace HepMC3;
 #define PYTHIA6HEPEVTSIZE 10000
 #endif
 /** The conversion interface, templated version */
-HEPEVT_Templated_Wrapper<PYTHIA6HEPEVTSIZE> hepmc3_gInterface;
+HEPEVT_Wrapper_Template<PYTHIA6HEPEVTSIZE> hepmc3_gInterface;
 /** Storage for the output objects (Writers)*/
 std::map<int, std::pair<std::shared_ptr<Writer>, GenEvent*> > hepmc3_gWriters;
 /** Storage for the GenRunInfo objects associated with the outputs */

@@ -1,6 +1,15 @@
 #include "binders.h"
 #include <HepMC3/Print.h>
+
 namespace binder {
+
+void custom_HEPEVT_Wrapper_Runtime_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper_Runtime, std::shared_ptr<HepMC3::HEPEVT_Wrapper_Runtime>> cl)
+{
+		cl.def("print_hepevt",[](HepMC3::HEPEVT_Wrapper_Runtime const &o) -> void { o.print_hepevt();  }, "");
+		cl.def("print_hepevt_particle",[](HepMC3::HEPEVT_Wrapper_Runtime const &o,int const & a0) -> void { o.print_hepevt_particle(a0);  }, "");
+}
+
+
 
 void custom_GenParticle_binder(pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl)
 {

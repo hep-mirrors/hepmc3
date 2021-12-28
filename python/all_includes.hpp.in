@@ -41,5 +41,7 @@
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/WriterPlugin.h>
 
 
+#include <@HEPMC3_INCLUDE_DIR@HepMC3/HEPEVT_Wrapper_Runtime.h>
+
 #include <memory>
 
