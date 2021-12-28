@@ -88,7 +88,7 @@ class HEPEVT_Wrapper
 //
 public:
     /** @brief Pointer to HEPEVT common block */
-    static struct HEPEVT*  hepevtptr;
+    HEPMC3_EXPORT_API static struct HEPEVT*  hepevtptr;
     /** @brief Print information from HEPEVT common block */
     static void print_hepevt( std::ostream& ostr = std::cout );
     /** @brief Print particle information */

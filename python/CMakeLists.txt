@@ -77,15 +77,15 @@ if (USE_INSTALLED_HEPMC3)
     endif()
   endif()
 #Workarounds for nvc++
-  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC")
       set(CMAKE_CXX_EXTENSIONS ON)
       #Workaround for pybind11 templates
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
   endif()
 #Workarounds for VS
-  if (MSVC)
+  if (MSVC OR ${CMAKE_CXX_COMPILER_ID} MATCHES "MSVC" )
 #Memory problem and false positive warnings.
-    set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/D _CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
+    set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/D_CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
     foreach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
       CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
       if(COMPILER_SUPPORTS_${fl})
@@ -133,7 +133,7 @@ if (${CMAKE_CXX_COMPILER_ID} MATCHES "Sun*")
 endif()
 
 #Workaround for nvc++ for this particular code
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC")
     message(STATUS "HepMC3 python: WARNING: you are using PGI/NVidia compiller that is not officially supported by pybind11.\
  The optimization and debug for the python modules will be disabled.")
     string(REPLACE "-g"    ""  CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
