@@ -87,6 +87,7 @@ class HEPEVT_Wrapper
 // Functions
 //
 public:
+    /** @brief Pointer to HEPEVT common block */
     static struct HEPEVT*  hepevtptr;
     /** @brief Print information from HEPEVT common block */
     static void print_hepevt( std::ostream& ostr = std::cout );

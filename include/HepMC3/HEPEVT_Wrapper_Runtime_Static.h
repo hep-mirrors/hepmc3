@@ -47,8 +47,9 @@ public:
     /** @brief Tries to fix list of daughters */
     static bool fix_daughters();
 private:
-    //!< Fortran common block HEPEVT
+    /** @brief  Fortran common block HEPEVT */
     static std::shared_ptr<struct HEPEVT_Pointers<double> >  m_hepevtptr;
+    /** @brief Block size */
     static int m_max_particles;
 //
 // Accessors

@@ -1,4 +1,8 @@
   --------------------------  pre-HepMC3.2.5 ----------------------
+2021-12-28 Andrii Verbytskyi for HepMC
+         * New interfaces for HEPEVT and update of python interface
+         * (Implemented earlier) More functions in GenEvent to deal with attributes
+         * (Implemented earlier) Implemented Complessed I/O with zip, lzma and bz2 via bxzst library
 2021-10-16 Andrii Verbytskyi for HepMC
          * Fixes to documentation of some examples thanks to Rakesh Naik for report.
          * Removal of unused codes and comments
