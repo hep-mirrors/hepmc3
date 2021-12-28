@@ -8,8 +8,10 @@
 #include <HepMC3/GenVertex.h>
 #include <HepMC3/GenEvent.h>
 #include <HepMC3/LHEF.h>
+#include <HepMC3/HEPEVT_Wrapper_Runtime.h>
 #include <pybind11/pybind11.h>
 namespace binder {
+void custom_HEPEVT_Wrapper_Runtime_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper_Runtime, std::shared_ptr<HepMC3::HEPEVT_Wrapper_Runtime>> cl);
 void custom_GenEvent_binder(pybind11::class_<HepMC3::GenEvent, std::shared_ptr<HepMC3::GenEvent>> cl);
 void custom_GenParticle_binder(pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl);
 void custom_GenVertex_binder(pybind11::class_<HepMC3::GenVertex, std::shared_ptr<HepMC3::GenVertex>> cl);
