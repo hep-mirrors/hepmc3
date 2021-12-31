@@ -17,6 +17,11 @@ def python_label():
 
 
 def update_path():
+    try:
+     os.add_dll_directory(os.path.abspath(os.path.join(os.pardir, python_label())))
+     os.add_dll_directory(os.getcwd())
+    except:
+     pass
     return [os.path.abspath(os.path.join(os.pardir, python_label()))] + [os.getcwd()] + sys.path
 
 

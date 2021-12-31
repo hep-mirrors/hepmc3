@@ -52,6 +52,9 @@ using Descendants = RelativesInterface<Recursive<_children> >;
  */
 class Relatives {
 public:
+#ifdef _MSVC
+#pragma message("This class might have linkage problems in MSVC.")
+#endif
     /// @brief Operator
     virtual std::vector<GenParticlePtr> operator()(GenParticlePtr input) const = 0;
     /// @brief Operator
@@ -63,7 +66,10 @@ public:
 
     static const Parents PARENTS;  ///< Parents
     static const Children CHILDREN;  ///< Children
+/// The thread_local will not work with VS, see https://docs.microsoft.com/en-us/cpp/error-messages/compiler-errors-1/compiler-error-c2492?redirectedfrom=MSDN&view=msvc-170
+/// Dropping the thread_local is not what was intended initially.
     static thread_local const Ancestors ANCESTORS;  ///< Ancestors
+    //static thread_local const RelativesInterface<Recursive<_parents> > ANCESTORS;  ///< Ancestors
     static thread_local const Descendants DESCENDANTS;  ///< Descendants
 };
 
