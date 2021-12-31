@@ -113,9 +113,10 @@ set( HepMC_tests
         testReaderFactory1
         testSingleVertexHepMC2
         testAttributes
-        testHEPEVTWrapper1
          )
-
+if (NOT MSVC) 
+list( APPEND HepMC_tests testHEPEVTWrapper1)
+endif()
 set( HepMC_root_tests
         testIO2
         testIO4

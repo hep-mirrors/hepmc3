@@ -5,9 +5,11 @@
 // Part of code was adopted from Pythia8-HepMC interface by Mikhail Kirsanov.
 #ifndef Pythia8_Pythia8ToHepMC3_H
 #define Pythia8_Pythia8ToHepMC3_H
-
+#ifdef _MSVC
+#pragma message("HepMC3 interface is available in the latest versions of Pythia8, see https://pythia.org. This interface will be removed in the future HepMC3 versions.")
+#else
 #warning "HepMC3 interface is available in the latest versions of Pythia8, see https://pythia.org. This interface will be removed in the future HepMC3 versions."
-
+#endif
 #include <vector>
 #include "Pythia8/Pythia.h"
 #include "HepMC3/GenVertex.h"
