@@ -1,4 +1,7 @@
   --------------------------  pre-HepMC3.2.5 ----------------------
+2022-01-02 Andrii Verbytskyi for HepMC
+         * Added implementation for Relatives class that works in Windows.
+         * (Implemented earlier) Improved MSYS2 support
 2021-12-28 Andrii Verbytskyi for HepMC
          * New interfaces for HEPEVT and update of python interface
          * (Implemented earlier) More functions in GenEvent to deal with attributes

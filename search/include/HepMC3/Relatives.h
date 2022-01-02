@@ -9,10 +9,55 @@
 ///
 #ifndef HEPMC3_RELATIVES_H
 #define HEPMC3_RELATIVES_H
+#if defined(WIN32)&&(!defined(HEPMC3search_NO_Relatives_EXPORTS))
+#ifdef HepMC3search_EXPORTS
+#define HEPMC3search_Relatives_EXPORT_API  __declspec(dllexport)
+#else
+#define HEPMC3search_Relatives_EXPORT_API  __declspec(dllimport)
+#endif
+#else
+#define HEPMC3search_Relatives_EXPORT_API
+#endif
+
 
 #include <vector>
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
+namespace HepMC3 {
+std::vector<HepMC3::GenParticlePtr>      children_particles(HepMC3::GenVertexPtr O);   ///< Return children particles
+std::vector<HepMC3::ConstGenParticlePtr> children_particles(HepMC3::ConstGenVertexPtr O); ///< Return children particles
+std::vector<HepMC3::GenVertexPtr>        children_vertices(HepMC3::GenParticlePtr O); ///< Return children vertices
+std::vector<HepMC3::ConstGenVertexPtr>   children_vertices(HepMC3::ConstGenParticlePtr O); ///< Return children vertices
+std::vector<HepMC3::GenParticlePtr>      grandchildren_particles(HepMC3::GenParticlePtr O);  ///< Return grandchildren particles
+std::vector<HepMC3::ConstGenParticlePtr> grandchildren_particles(HepMC3::ConstGenParticlePtr O);  ///< Return grandchildren particles
+std::vector<HepMC3::GenVertexPtr>        grandchildren_vertices(HepMC3::GenVertexPtr O);   ///< Return grandchildren vertices
+std::vector<HepMC3::ConstGenVertexPtr>   grandchildren_vertices(HepMC3::ConstGenVertexPtr O); ///< Return grandchildren vertices
+std::vector<HepMC3::GenParticlePtr>      parent_particles(HepMC3::GenVertexPtr O);  ///< Return parent particles
+std::vector<HepMC3::ConstGenParticlePtr> parent_particles(HepMC3::ConstGenVertexPtr O);   ///< Return parent particles
+std::vector<HepMC3::GenVertexPtr>        parent_vertices(HepMC3::GenParticlePtr O);   ///< Return parent vertices
+std::vector<HepMC3::ConstGenVertexPtr>   parent_vertices(HepMC3::ConstGenParticlePtr O);    ///< Return parent vertices
+std::vector<HepMC3::GenParticlePtr>      grandparent_particles(HepMC3::GenParticlePtr O);    ///< Return grandparent particles
+std::vector<HepMC3::ConstGenParticlePtr> grandparent_particles(HepMC3::ConstGenParticlePtr O);     ///< Return grandparent particles
+std::vector<HepMC3::GenVertexPtr>        grandparent_vertices(HepMC3::GenVertexPtr O);      ///< Return grandparent vertices
+std::vector<HepMC3::ConstGenVertexPtr>   grandparent_vertices(HepMC3::ConstGenVertexPtr O);       ///< Return grandparent vertices
+std::vector<HepMC3::ConstGenParticlePtr> descendant_particles(HepMC3::ConstGenVertexPtr obj);       ///< Return descendant particles
+std::vector<HepMC3::GenParticlePtr>      descendant_particles(HepMC3::GenVertexPtr obj);       ///< Return descendant particles
+std::vector<HepMC3::ConstGenParticlePtr> descendant_particles(HepMC3::ConstGenParticlePtr obj);       ///< Return descendant particles
+std::vector<HepMC3::GenParticlePtr>      descendant_particles(HepMC3::GenParticlePtr obj);       ///< Return descendant particles
+std::vector<HepMC3::ConstGenVertexPtr>   descendant_vertices(HepMC3::ConstGenParticlePtr obj);       ///< Return descendant vertices
+std::vector<HepMC3::GenVertexPtr>        descendant_vertices(HepMC3::GenParticlePtr obj);       ///< Return descendant vertices
+std::vector<HepMC3::ConstGenVertexPtr>   descendant_vertices(HepMC3::ConstGenVertexPtr obj);       ///< Return descendant vertices
+std::vector<HepMC3::GenVertexPtr>        descendant_vertices(HepMC3::GenVertexPtr obj);       ///< Return descendant vertices
+std::vector<HepMC3::ConstGenParticlePtr> ancestor_particles(HepMC3::ConstGenVertexPtr obj);       ///< Return ancestor particles
+std::vector<HepMC3::GenParticlePtr>      ancestor_particles(HepMC3::GenVertexPtr obj);      ///< Return ancestor particles
+std::vector<HepMC3::ConstGenParticlePtr> ancestor_particles(HepMC3::ConstGenParticlePtr obj);      ///< Return ancestor particles
+std::vector<HepMC3::GenParticlePtr>      ancestor_particles(HepMC3::GenParticlePtr obj);      ///< Return ancestor particles
+std::vector<HepMC3::ConstGenVertexPtr>   ancestor_vertices(HepMC3::ConstGenParticlePtr obj);      ///< Return ancestor vertices
+std::vector<HepMC3::GenVertexPtr>        ancestor_vertices(HepMC3::GenParticlePtr obj);      ///< Return ancestor vertices
+std::vector<HepMC3::ConstGenVertexPtr>   ancestor_vertices(HepMC3::ConstGenVertexPtr obj);      ///< Return ancestor vertices
+std::vector<HepMC3::GenVertexPtr>        ancestor_vertices(HepMC3::GenVertexPtr obj);      ///< Return ancestor vertices
+}
+
 
 
 namespace HepMC3 {
@@ -24,11 +69,95 @@ class RelativesInterface;
 template<typename T>
 class Recursive;
 
-// forward declare _parents class
-class _parents;
-// forward declare _children class
-class _children;
+/** @brief Provides operator to find the parent particles of a Vertex or Particle
+ *
+ * Note you would usually not instantiate this directly, but wrap it in a RelativesInterface
+ */
+class _parents {
+public:
+    /** @brief  operator */
+    template<typename GenObject_type, typename dummy>
+    GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
 
+    /** @brief  operator */
+    template<typename GenObject_type, typename std::enable_if<std::is_same<GenVertex, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
+    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return input->particles_in();}
+
+    /** @brief  operator */
+    template<typename GenObject_type, typename std::enable_if<std::is_same<GenParticle, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
+    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return (*this)(vertex(input));}
+
+    /** @brief  vertex */
+    template<typename GenObject_type>
+    GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->production_vertex();}
+};
+
+/** @brief Provides operator to find the child particles of a Vertex or Particle
+ *
+ * Note you would usually not instantiate this directly, but wrap it in a RelativesInterface
+ */
+class _children {
+public:
+    /// @brief operator
+    template<typename GenObject_type, typename dummy>
+    GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
+
+    /// @brief operator
+    template<typename GenObject_type, typename std::enable_if<std::is_same<GenVertex, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
+    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return input->particles_out();}
+
+    /// @brief operator
+    template<typename GenObject_type, typename std::enable_if<std::is_same<GenParticle, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
+    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return (*this)(vertex(input));}
+
+    /// @brief operator
+    template<typename GenObject_type>
+    GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->end_vertex();}
+};
+#ifdef _MSC_VER
+/// The thread_local will not work with DLLs, so the replacement should be thread-safe
+class SearchParents {
+public:
+ std::vector<ConstGenParticlePtr> operator()(ConstGenVertexPtr input) { return parent_particles(input);}
+ std::vector<GenParticlePtr> operator()(GenVertexPtr input) { return parent_particles(input);}
+ std::vector<ConstGenParticlePtr> operator()(ConstGenParticlePtr input) { return grandparent_particles(input);}
+ std::vector<GenParticlePtr> operator()(GenParticlePtr input) { return grandparent_particles(input);}
+};
+
+class SearchChildren {
+public:
+ std::vector<ConstGenParticlePtr> operator()(ConstGenVertexPtr input)const  { return children_particles(input);}
+ std::vector<GenParticlePtr> operator()(GenVertexPtr input)const  { return children_particles(input);}
+ std::vector<ConstGenParticlePtr> operator()(ConstGenParticlePtr input)const  { return grandchildren_particles(input);}
+ std::vector<GenParticlePtr> operator()(GenParticlePtr input)const  { return grandchildren_particles(input);}
+};
+
+class SearchAncestors {
+public:
+ std::vector<ConstGenParticlePtr> operator()(ConstGenVertexPtr input) const { return ancestor_particles(input);}
+ std::vector<GenParticlePtr> operator()(GenVertexPtr input)const  { return ancestor_particles(input);}
+ std::vector<ConstGenParticlePtr> operator()(ConstGenParticlePtr input)const  { return ancestor_particles(input);}
+ std::vector<GenParticlePtr> operator()(GenParticlePtr input)const  { return ancestor_particles(input);}
+};
+
+class SearchDescendants {
+public:
+ std::vector<ConstGenParticlePtr> operator()(ConstGenVertexPtr input)const  { return descendant_particles(input);}
+ std::vector<GenParticlePtr> operator()(GenVertexPtr input)const  { return descendant_particles(input);}
+ std::vector<ConstGenParticlePtr> operator()(ConstGenParticlePtr input)const  { return descendant_particles(input);}
+ std::vector<GenParticlePtr> operator()(GenParticlePtr input) const { return descendant_particles(input);}
+};
+
+/// alias 
+using Parents  = SearchParents;
+/// alias 
+using Children = SearchChildren;
+/// Ancestors
+using Ancestors = SearchAncestors;
+/// Descendants
+using Descendants = SearchDescendants;
+
+#else
 /// alias of _parents wrapped in the Relatives interface
 using Parents  = RelativesInterface<_parents>;
 /// alias of _children wrapped in the Relatives interface
@@ -37,7 +166,7 @@ using Children = RelativesInterface<_children>;
 using Ancestors = RelativesInterface<Recursive<_parents> >;
 /// Descendants is an alias to Recursion applied to the _children and wrapped in the Relatives interface
 using Descendants = RelativesInterface<Recursive<_children> >;
-
+#endif
 /** @brief  Define a common interface that all Relatives objects will satisfy
  *         Relatives provides an operator to get the relatives of a range of different
  *         GenObject types.  The following are examples
@@ -52,9 +181,6 @@ using Descendants = RelativesInterface<Recursive<_children> >;
  */
 class Relatives {
 public:
-#ifdef _MSVC
-#pragma message("This class might have linkage problems in MSVC.")
-#endif
     /// @brief Operator
     virtual std::vector<GenParticlePtr> operator()(GenParticlePtr input) const = 0;
     /// @brief Operator
@@ -64,13 +190,20 @@ public:
     /// @brief Operator
     virtual std::vector<ConstGenParticlePtr> operator()(ConstGenVertexPtr input) const = 0;
 
-    static const Parents PARENTS;  ///< Parents
-    static const Children CHILDREN;  ///< Children
+#ifdef _MSC_VER
 /// The thread_local will not work with VS, see https://docs.microsoft.com/en-us/cpp/error-messages/compiler-errors-1/compiler-error-c2492?redirectedfrom=MSDN&view=msvc-170
-/// Dropping the thread_local is not what was intended initially.
-    static thread_local const Ancestors ANCESTORS;  ///< Ancestors
-    //static thread_local const RelativesInterface<Recursive<_parents> > ANCESTORS;  ///< Ancestors
-    static thread_local const Descendants DESCENDANTS;  ///< Descendants
+/// Dropping the thread_local is not what was intended initially, so instead an implementation with free functions should be used.
+    HEPMC3search_Relatives_EXPORT_API static const Parents PARENTS;  ///< Parents
+    HEPMC3search_Relatives_EXPORT_API static const Children CHILDREN;  ///< Children
+    HEPMC3search_Relatives_EXPORT_API static const Ancestors ANCESTORS;  ///< Ancestors
+    HEPMC3search_Relatives_EXPORT_API static const Descendants DESCENDANTS;  ///< Descendants
+#else
+    HEPMC3search_Relatives_EXPORT_API static const Parents PARENTS;  ///< Parents
+    HEPMC3search_Relatives_EXPORT_API static const Children CHILDREN;  ///< Children
+    HEPMC3search_Relatives_EXPORT_API static thread_local const Ancestors ANCESTORS;  ///< Ancestors
+    HEPMC3search_Relatives_EXPORT_API static thread_local const Descendants DESCENDANTS;  ///< Descendants
+#endif
+
 };
 
 /** @brief wrap a templated class that implements Relatives
@@ -194,90 +327,6 @@ private:
     mutable std::vector<hasId*> m_checkedObjects; ///< Checked objects
 };
 
-/** @brief Provides operator to find the parent particles of a Vertex or Particle
- *
- * Note you would usually not instantiate this directly, but wrap it in a RelativesInterface
- */
-class _parents {
-public:
-    /** @brief  operator */
-    template<typename GenObject_type, typename dummy>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
-
-    /** @brief  operator */
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenVertex, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return input->particles_in();}
-
-    /** @brief  operator */
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenParticle, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return (*this)(vertex(input));}
-
-    /** @brief  vertex */
-    template<typename GenObject_type>
-    GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->production_vertex();}
-};
-
-/** @brief Provides operator to find the child particles of a Vertex or Particle
- *
- * Note you would usually not instantiate this directly, but wrap it in a RelativesInterface
- */
-class _children {
-public:
-    /// @brief operator
-    template<typename GenObject_type, typename dummy>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const;
-
-    /// @brief operator
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenVertex, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return input->particles_out();}
-
-    /// @brief operator
-    template<typename GenObject_type, typename std::enable_if<std::is_same<GenParticle, typename std::remove_const<typename GenObject_type::element_type>::type>::value, int*>::type = nullptr>
-    GenParticles_type<GenObject_type> operator()(GenObject_type input) const {return (*this)(vertex(input));}
-
-    /// @brief operator
-    template<typename GenObject_type>
-    GenVertex_type<GenObject_type> vertex(GenObject_type input) const {return input->end_vertex();}
-};
-
 }
-
-
-namespace HepMC3 {
-
-std::vector<HepMC3::GenParticlePtr>      children_particles(HepMC3::GenVertexPtr O);   ///< Return children particles
-std::vector<HepMC3::ConstGenParticlePtr> children_particles(HepMC3::ConstGenVertexPtr O); ///< Return children particles
-std::vector<HepMC3::GenVertexPtr>        children_vertices(HepMC3::GenParticlePtr O); ///< Return children vertices
-std::vector<HepMC3::ConstGenVertexPtr>   children_vertices(HepMC3::ConstGenParticlePtr O); ///< Return children vertices
-std::vector<HepMC3::GenParticlePtr>      grandchildren_particles(HepMC3::GenParticlePtr O);  ///< Return grandchildren particles
-std::vector<HepMC3::ConstGenParticlePtr> grandchildren_particles(HepMC3::ConstGenParticlePtr O);  ///< Return grandchildren particles
-std::vector<HepMC3::GenVertexPtr>        grandchildren_vertices(HepMC3::GenVertexPtr O);   ///< Return grandchildren vertices
-std::vector<HepMC3::ConstGenVertexPtr>   grandchildren_vertices(HepMC3::ConstGenVertexPtr O); ///< Return grandchildren vertices
-std::vector<HepMC3::GenParticlePtr>      parent_particles(HepMC3::GenVertexPtr O);  ///< Return parent particles
-std::vector<HepMC3::ConstGenParticlePtr> parent_particles(HepMC3::ConstGenVertexPtr O);   ///< Return parent particles
-std::vector<HepMC3::GenVertexPtr>        parent_vertices(HepMC3::GenParticlePtr O);   ///< Return parent vertices
-std::vector<HepMC3::ConstGenVertexPtr>   parent_vertices(HepMC3::ConstGenParticlePtr O);    ///< Return parent vertices
-std::vector<HepMC3::GenParticlePtr>      grandparent_particles(HepMC3::GenParticlePtr O);    ///< Return grandparent particles
-std::vector<HepMC3::ConstGenParticlePtr> grandparent_particles(HepMC3::ConstGenParticlePtr O);     ///< Return grandparent particles
-std::vector<HepMC3::GenVertexPtr>        grandparent_vertices(HepMC3::GenVertexPtr O);      ///< Return grandparent vertices
-std::vector<HepMC3::ConstGenVertexPtr>   grandparent_vertices(HepMC3::ConstGenVertexPtr O);       ///< Return grandparent vertices
-std::vector<HepMC3::ConstGenParticlePtr> descendant_particles(HepMC3::ConstGenVertexPtr obj);       ///< Return descendant particles
-std::vector<HepMC3::GenParticlePtr>      descendant_particles(HepMC3::GenVertexPtr obj);       ///< Return descendant particles
-std::vector<HepMC3::ConstGenParticlePtr> descendant_particles(HepMC3::ConstGenParticlePtr obj);       ///< Return descendant particles
-std::vector<HepMC3::GenParticlePtr>      descendant_particles(HepMC3::GenParticlePtr obj);       ///< Return descendant particles
-std::vector<HepMC3::ConstGenVertexPtr>   descendant_vertices(HepMC3::ConstGenParticlePtr obj);       ///< Return descendant vertices
-std::vector<HepMC3::GenVertexPtr>        descendant_vertices(HepMC3::GenParticlePtr obj);       ///< Return descendant vertices
-std::vector<HepMC3::ConstGenVertexPtr>   descendant_vertices(HepMC3::ConstGenVertexPtr obj);       ///< Return descendant vertices
-std::vector<HepMC3::GenVertexPtr>        descendant_vertices(HepMC3::GenVertexPtr obj);       ///< Return descendant vertices
-std::vector<HepMC3::ConstGenParticlePtr> ancestor_particles(HepMC3::ConstGenVertexPtr obj);       ///< Return ancestor particles
-std::vector<HepMC3::GenParticlePtr>      ancestor_particles(HepMC3::GenVertexPtr obj);      ///< Return ancestor particles
-std::vector<HepMC3::ConstGenParticlePtr> ancestor_particles(HepMC3::ConstGenParticlePtr obj);      ///< Return ancestor particles
-std::vector<HepMC3::GenParticlePtr>      ancestor_particles(HepMC3::GenParticlePtr obj);      ///< Return ancestor particles
-std::vector<HepMC3::ConstGenVertexPtr>   ancestor_vertices(HepMC3::ConstGenParticlePtr obj);      ///< Return ancestor vertices
-std::vector<HepMC3::GenVertexPtr>        ancestor_vertices(HepMC3::GenParticlePtr obj);      ///< Return ancestor vertices
-std::vector<HepMC3::ConstGenVertexPtr>   ancestor_vertices(HepMC3::ConstGenVertexPtr obj);      ///< Return ancestor vertices
-std::vector<HepMC3::GenVertexPtr>        ancestor_vertices(HepMC3::GenVertexPtr obj);      ///< Return ancestor vertices
-}
-
 #endif
 

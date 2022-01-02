@@ -20,7 +20,7 @@ install(TARGETS HepMC3search DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT searc
 if (HEPMC3_BUILD_STATIC_LIBS)
   add_library(HepMC3search_static STATIC  ${hepmc3search_sources})
   target_include_directories(HepMC3search_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
-  target_compile_definitions(HepMC3search_static PRIVATE NO_DECLSPEC_StandardSelector)
+  target_compile_definitions(HepMC3search_static PRIVATE HEPMC3search_NO_StandardSelector_EXPORTS HEPMC3search_NO_Relatives_EXPORTS)
     set_target_properties(HepMC3search_static PROPERTIES OUTPUT_NAME HepMC3search-static
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>

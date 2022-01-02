@@ -113,10 +113,8 @@ set( HepMC_tests
         testReaderFactory1
         testSingleVertexHepMC2
         testAttributes
+        testHEPEVTWrapper1
          )
-if (NOT MSVC) 
-list( APPEND HepMC_tests testHEPEVTWrapper1)
-endif()
 set( HepMC_root_tests
         testIO2
         testIO4
@@ -125,16 +123,22 @@ set( HepMC_root_tests
         testRootTree300
         )
 
+set( HepMC_search_tests
+
+        )
 
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
 if ("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
   set(THREADS_PREFER_PTHREAD_FLAG ON)
   find_package(Threads)
 endif()
-if("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI"))
+if("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI") AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC"))
   message(STATUS "HepMC3 test: Threads library found.  Thread safety tests enabled")
   list( APPEND HepMC_tests "testThreads1" )
   list( APPEND HepMC_tests "testIO10" )
+  if (HEPMC3_ENABLE_SEARCH)
+    list( APPEND HepMC_search_tests "testThreadssearch" )
+  endif()
 else()
   message(STATUS "HepMC3 test: No threads library found or disabled for compiller with ID ${CMAKE_CXX_COMPILER_ID}. Thread safety tests are disabled")
 endif()
@@ -168,15 +172,30 @@ foreach ( test ${HepMC_tests} )
   set_tests_properties(${test} PROPERTIES TIMEOUT 2000)  #Relevant for testLoops
 endforeach ( test ${HepMC_tests} )
 
+if(HEPMC3_ENABLE_SEARCH )
+  foreach ( test ${HepMC_search_tests} )
+    hepmc_test( ${test} )
+  target_link_libraries(${test} PRIVATE HepMC3search)
+  target_include_directories(${test} BEFORE PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/../search/include)
+  endforeach ( test ${HepMC_search_tests} )
+  
+endif()
+
 ## Treatment of special needs in the HepMC tests
-if(Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI"))
+if(Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI") AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC") )
   if(THREADS_HAVE_PTHREAD_ARG)
     target_compile_options(testThreads1 PUBLIC "-pthread")
     target_compile_options(testIO10 PUBLIC "-pthread")
+    if (HEPMC3_ENABLE_SEARCH)
+     target_compile_options(testThreadssearch PUBLIC "-pthread")
+    endif()    
   endif()
   if(CMAKE_THREAD_LIBS_INIT)
     target_link_libraries(testThreads1 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
     target_link_libraries(testIO10 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
+    if (HEPMC3_ENABLE_SEARCH)
+     target_link_libraries(testThreadssearch PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
+    endif() 
   endif()
 endif()
 foreach ( ctest ${compress_tests} )
@@ -244,11 +263,7 @@ else()
 endif()
 
 if ("Photospp" IN_LIST HEPMC3_TEST_PACKAGES_LIST  AND Pythia8_FOUND)
-  if (HEPMC3_USE_INTERFACE_FROM_PHOTOSPP)
    find_package(Photospp COMPONENTS HEPMC2 HEPMC3)
-  else()
-   find_package(Photospp COMPONENTS HEPMC2)
-  endif()
 endif()
 if(NOT Photospp_FOUND)
   message(STATUS "HepMC3 test: Photospp package not found or disabled. Please check if PHOTOSPP_ROOT_DIR is set properly.")
@@ -264,11 +279,7 @@ else()
 endif()
 
 if ("Tauolapp" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND Pythia8_FOUND)
-  if (HEPMC3_USE_INTERFACE_FROM_TAUOLAPP)
-   find_package(Tauolapp COMPONENTS HEPMC2 HEPMC3)
-  else()
-   find_package(Tauolapp COMPONENTS HEPMC2)
-  endif()
+  find_package(Tauolapp COMPONENTS HEPMC2 HEPMC3)
 endif()
 if(NOT Tauolapp_FOUND)
   message(STATUS "HepMC3 test: Tauolapp package not found or disabled. Please check if TAUOLA_ROOT_DIR is set properly.")
