@@ -1,6 +1,20 @@
   --------------------------  pre-HepMC3.2.5 ----------------------
+2022-01-02 Andrii Verbytskyi for HepMC
+         * Added implementation for Relatives class that works in Windows.
+         * (Implemented earlier) Improved MSYS2 support
+2021-12-28 Andrii Verbytskyi for HepMC
+         * New interfaces for HEPEVT and update of python interface
+         * (Implemented earlier) More functions in GenEvent to deal with attributes
+         * (Implemented earlier) Implemented Complessed I/O with zip, lzma and bz2 via bxzst library
+2021-10-16 Andrii Verbytskyi for HepMC
+         * Fixes to documentation of some examples thanks to Rakesh Naik for report.
+         * Removal of unused codes and comments
+2021-10-17 Andrii Verbytskyi for HepMC
+         * Fixes to Pythia8ToHepMC3.py by Ahmed Hussein
+2021-07-14 Andrii Verbytskyi for HepMC
+         * Added Reader/Write interfaces with smart pointers
 2021-07-12 Andrii Verbytskyi for HepMC
-         * Fixed #ifdefs for non-Linux system to allow the usage of REader/Writer plugins.
+         * Fixed #ifdefs for non-Linux system to allow the usage of Reader/Writer plugins.
          * Added MT reader
 2021-07-09 Andrii Verbytskyi for HepMC
          * Remove outdated interfaces to MCEGs

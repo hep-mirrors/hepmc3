@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_WRITERASCIIHEPMC2_H
 #define HEPMC3_WRITERASCIIHEPMC2_H
@@ -35,6 +35,10 @@ public:
     /// @brief Constructor from ostream
     WriterAsciiHepMC2(std::ostream& stream,
                       std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
+    /// @brief Constructor from temp ostream
+    WriterAsciiHepMC2(std::shared_ptr<std::ostream> s_stream,
+                      std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
+
     /// @brief Destructor
     ~WriterAsciiHepMC2();
 
@@ -62,7 +66,7 @@ public:
 private:
 
     /// @name Buffer management
-    //@{
+    /// @{
 
     /// @brief Attempts to allocate buffer of the chosen size
     ///
@@ -88,11 +92,11 @@ private:
     /// Inline function forcing flush to the output stream
     void forced_flush();
 
-    //@}
+    /// @}
 
 
     /// @name Write helpers
-    //@{
+    /// @{
 
     /// @brief Inline function for writing strings
     ///
@@ -110,11 +114,12 @@ private:
     /// Helper routine for writing single particle to file
     void write_particle(ConstGenParticlePtr p, int second_field);
 
-    //@}
+    /// @}
 
 private:
 
     std::ofstream m_file; //!< Output file
+    std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
     int m_precision; //!< Output precision
     char* m_buffer;  //!< Stream buffer

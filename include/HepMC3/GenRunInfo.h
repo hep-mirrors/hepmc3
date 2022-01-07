@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenRunInfo.h
@@ -73,6 +73,11 @@ public:
         return m_weight_indices.find(name) !=  m_weight_indices.end();
     }
 
+    /// @brief Returns a copy of indices map.
+    std::map<std::string, int> weight_indices() const {
+        return m_weight_indices;
+    }
+
     /// @brief Return the index corresponding to a weight name.
     /// @return -1 if name was not found
     int weight_index(const std::string& name) const {
@@ -126,7 +131,7 @@ public:
 #endif // __CINT__
 
     /// @name Methods to fill GenRunInfoData and to read it back
-    //@{
+    /// @{
 
     /// @brief Fill GenRunInfoData object
     void write_data(GenRunInfoData &data) const;
@@ -137,13 +142,13 @@ public:
 #ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
-    //@}
+    /// @}
 #endif
 
 private:
 
     /// @name Fields
-    //@{
+    /// @{
 
 #if !defined(__CINT__)
 
@@ -161,7 +166,7 @@ private:
 
     /// @brief Mutex lock for the m_attibutes map.
     mutable std::recursive_mutex m_lock_attributes;
-    //@}
+    /// @}
 
 #endif // __CINT__
 };
@@ -194,6 +199,15 @@ std::shared_ptr<T> GenRunInfo::attribute(const std::string &name) const {
     }
     else return std::dynamic_pointer_cast<T>(i->second);
 }
+
+/*
+/// @brief Returns a copy of indices map.
+template<typename T> std::map<std::string, T> weight_indices() const {
+        std::map<std::string, T> ret;
+        ret.insert(m_weight_indices.begin(),m_weight_indices.end());
+        return ret;
+}
+*/
 
 #endif // __CINT__
 

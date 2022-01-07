@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file Errors.h
@@ -18,7 +18,7 @@ namespace HepMC3 {
 
 
 /// @name Printing macros
-//@{
+/// @{
 
 /** @brief Macro for printing error messages */
 #define HEPMC3_ERROR(MESSAGE)   if ( Setup::print_errors() )   { std::cerr << "ERROR::" << MESSAGE << std::endl; }
@@ -41,7 +41,7 @@ namespace HepMC3 {
 
 #endif
 
-//@}
+/// @}
 
 } // namespace HepMC3
 

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderLHEF.cc
@@ -19,6 +19,13 @@ ReaderLHEF::ReaderLHEF(const std::string& filename)
 ReaderLHEF::ReaderLHEF(std::istream & stream)
 {
     m_reader = std::make_shared<LHEF::Reader>(stream);
+    init();
+}
+
+ReaderLHEF::ReaderLHEF(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream)
+{
+    m_reader = std::make_shared<LHEF::Reader>(*(m_shared_stream.get()));
     init();
 }
 

@@ -36,7 +36,7 @@
 struct PyCallBack_HepMC3_HEPRUPAttribute : public HepMC3::HEPRUPAttribute {
 	using HepMC3::HEPRUPAttribute::HEPRUPAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override {
+	bool from_string(const std::string & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPRUPAttribute *>(this), "from_string");
 		if (overload) {
@@ -49,7 +49,7 @@ struct PyCallBack_HepMC3_HEPRUPAttribute : public HepMC3::HEPRUPAttribute {
 		}
 		return HEPRUPAttribute::from_string(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override {
+	bool to_string(std::string & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPRUPAttribute *>(this), "to_string");
 		if (overload) {
@@ -94,7 +94,7 @@ struct PyCallBack_HepMC3_HEPRUPAttribute : public HepMC3::HEPRUPAttribute {
 struct PyCallBack_HepMC3_HEPEUPAttribute : public HepMC3::HEPEUPAttribute {
 	using HepMC3::HEPEUPAttribute::HEPEUPAttribute;
 
-	bool from_string(const class std::basic_string<char> & a0) override {
+	bool from_string(const std::string & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPEUPAttribute *>(this), "from_string");
 		if (overload) {
@@ -133,7 +133,7 @@ struct PyCallBack_HepMC3_HEPEUPAttribute : public HepMC3::HEPEUPAttribute {
 		}
 		return HEPEUPAttribute::init(a0);
 	}
-	bool to_string(class std::basic_string<char> & a0) const override {
+	bool to_string(std::string & a0) const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPEUPAttribute *>(this), "to_string");
 		if (overload) {

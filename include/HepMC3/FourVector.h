@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_FOURVECTOR_H
 #define HEPMC3_FOURVECTOR_H
@@ -48,7 +48,7 @@ public:
 
 
     /// @name Component accessors
-    //@{
+    /// @{
 
     /** @brief Set all FourVector fields, in order x,y,z,t */
     void set(double x1, double x2, double x3, double x4) {
@@ -134,16 +134,18 @@ public:
     /// @deprecated Prefer the HepMC-style set_y() function
     void setE(double ee) { set_e(ee);    }
 
-    //@}
+    /// @}
 
 
     /// @name Computed properties
-    //@{
+    /// @{
 
     /// Squared magnitude of (x, y, z) 3-vector
     double length2()  const { return x()*x() + y()*y() + z()*z(); }
     /// Magnitude of spatial (x, y, z) 3-vector
     double length()  const { return std::sqrt(length2()); }
+    /// Magnitude of spatial (x, y, z) 3-vector, for HepMC2 compatibility
+    double rho()    const { return length(); }
     /// Squared magnitude of (x, y) vector
     double perp2()      const { return  x()*x() + y()*y(); }
     /// Magnitude of (x, y) vector
@@ -181,11 +183,11 @@ public:
     /// @deprecated Prefer 'only one way to do it', and we don't have equivalent long names for e.g. pid, phi or eta
     double pseudoRapidity() const { return eta(); }
 
-    //@}
+    /// @}
 
 
     /// @name Comparisons to another FourVector
-    //@{
+    /// @{
 
     /// Check if the length of this vertex is zero
     bool is_zero() const { return x() == 0 && y() == 0 && z() == 0 && t() == 0; }
@@ -225,11 +227,11 @@ public:
         return std::sqrt( delta_r2_rap(v) );
     }
 
-    //@}
+    /// @}
 
 
     /// @name Operators
-    //@{
+    /// @{
 
     /// Equality
     bool operator==(const FourVector& rhs) const {
@@ -284,7 +286,7 @@ public:
         setT(t()/rhs);
     }
 
-    //@}
+    /// @}
 
 
     /// Static null FourVector = (0,0,0,0)
@@ -305,7 +307,7 @@ private:
 
 
 /// @name Unbound vector comparison functions
-//@{
+/// @{
 
 /// Signed azimuthal angle separation in [-pi, pi] between vecs @c a and @c b
 inline double delta_phi(const FourVector &a, const FourVector &b) { return b.delta_phi(a); }
@@ -328,7 +330,7 @@ inline double delta_r2_rap(const FourVector &a, const FourVector &b) { return b.
 /// R_rap-distance separation dR = sqrt(dphi^2 + drap^2) between vecs @c a and @c b
 inline double delta_r_rap(const FourVector &a, const FourVector &b) { return b.delta_r_rap(a); }
 
-//@}
+/// @}
 
 
 } // namespace HepMC3

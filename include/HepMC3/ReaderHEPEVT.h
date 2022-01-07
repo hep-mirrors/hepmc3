@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERHEPEVT_H
 #define HEPMC3_READERHEPEVT_H
@@ -24,7 +24,7 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenRunInfo.h"
 #include "HepMC3/Data/GenEventData.h"
-
+#include "HepMC3/HEPEVT_Wrapper_Template.h"
 
 namespace HepMC3
 {
@@ -37,8 +37,10 @@ class ReaderHEPEVT : public Reader
 public:
     /** @brief Default constructor */
     ReaderHEPEVT(const std::string &filename);
-    /// The ctor to read from stdin
+    /// The ctor to read from stream
     ReaderHEPEVT(std::istream &);
+    /// The ctor to read from temp stream
+    ReaderHEPEVT(std::shared_ptr<std::istream> s_stream);
 //
 // Functions
 //
@@ -67,12 +69,13 @@ public:
     /** @brief Get stream error state */
     bool failed()  override;
 
-public:
     char* hepevtbuffer; //!< Pointer to HEPEVT Fortran common block/C struct
 private:
     std::ifstream m_file; //!< Input file
-    std::istream* m_stream; //!< For ctor when reading from stdin
+    std::shared_ptr<std::istream> m_shared_stream; //!< For ctor when reading from temp stream
+    std::istream* m_stream; //!< For ctor when reading from stream
     bool m_isstream; //!< toggles usage of m_file or m_stream
+    HEPEVT_Wrapper_Template<100000> m_hepevt_interface; //!< Templated HEPEVT interface
 };
 
 } // namespace HepMC3

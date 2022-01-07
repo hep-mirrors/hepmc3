@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file Selector.h
@@ -160,42 +160,28 @@ private:
 /** @brief ConstSelectorPtr abs*/
 ConstSelectorPtr abs(const Selector &input);
 
-#ifndef NO_DECLSPEC_StandardSelector
-#ifdef WIN32
+#if defined(WIN32) && !defined(HEPMC3search_NO_StandardSelector_EXPORTS)
 #ifdef HepMC3search_EXPORTS
-#define DECLSPEC_StandardSelector __declspec(dllexport)
+#define HEPMC3search_StandardSelector_EXPORT_API __declspec(dllexport)
 #else
-#define DECLSPEC_StandardSelector  __declspec(dllimport)
+#define HEPMC3search_StandardSelector_EXPORT_API  __declspec(dllimport)
 #endif
 #else
-#define NO_DECLSPEC_StandardSelector
-#endif
+#define HEPMC3search_StandardSelector_EXPORT_API
 #endif
 
 /** @brief  StandardSelector */
 class StandardSelector: public Selector {
 public:
-#ifdef NO_DECLSPEC_StandardSelector
-    static const SelectorWrapper<int>    STATUS;   ///< Status
-    static const SelectorWrapper<int>    PDG_ID;   ///< PDG ID
-    static const SelectorWrapper<double>  PT;       ///< Transverse momentum
-    static const SelectorWrapper<double>  ENERGY;   ///< Energy
-    static const SelectorWrapper<double>  RAPIDITY; ///< Rapidity
-    static const SelectorWrapper<double>  ETA;      ///< Pseudorapidity
-    static const SelectorWrapper<double>  PHI;      ///< Azimuthal angle
-    static const SelectorWrapper<double>  ET;       ///< Transverse energy
-    static const SelectorWrapper<double>  MASS;     ///< Mass
-#else
-    static const SelectorWrapper<int>   DECLSPEC_StandardSelector STATUS;   ///< Status
-    static const SelectorWrapper<int>   DECLSPEC_StandardSelector PDG_ID;   ///< PDG ID
-    static const SelectorWrapper<double> DECLSPEC_StandardSelector PT;       ///< Transverse momentum
-    static const SelectorWrapper<double> DECLSPEC_StandardSelector ENERGY;   ///< Energy
-    static const SelectorWrapper<double> DECLSPEC_StandardSelector RAPIDITY; ///< Rapidity
-    static const SelectorWrapper<double> DECLSPEC_StandardSelector ETA;      ///< Pseudorapidity
-    static const SelectorWrapper<double> DECLSPEC_StandardSelector PHI;      ///< Azimuthal angle
-    static const SelectorWrapper<double> DECLSPEC_StandardSelector ET;       ///< Transverse energy
-    static const SelectorWrapper<double> DECLSPEC_StandardSelector MASS;     ///< Mass
-#endif
+    HEPMC3search_StandardSelector_EXPORT_API static const SelectorWrapper<int>    STATUS;   ///< Status
+    HEPMC3search_StandardSelector_EXPORT_API static const SelectorWrapper<int>    PDG_ID;   ///< PDG ID
+    HEPMC3search_StandardSelector_EXPORT_API static const SelectorWrapper<double>  PT;       ///< Transverse momentum
+    HEPMC3search_StandardSelector_EXPORT_API static const SelectorWrapper<double>  ENERGY;   ///< Energy
+    HEPMC3search_StandardSelector_EXPORT_API static const SelectorWrapper<double>  RAPIDITY; ///< Rapidity
+    HEPMC3search_StandardSelector_EXPORT_API static const SelectorWrapper<double>  ETA;      ///< Pseudorapidity
+    HEPMC3search_StandardSelector_EXPORT_API static const SelectorWrapper<double>  PHI;      ///< Azimuthal angle
+    HEPMC3search_StandardSelector_EXPORT_API static const SelectorWrapper<double>  ET;       ///< Transverse energy
+    HEPMC3search_StandardSelector_EXPORT_API static const SelectorWrapper<double>  MASS;     ///< Mass
 };
 
 }

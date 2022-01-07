@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READER_ASCII_HEPMC2_H
 #define HEPMC3_READER_ASCII_HEPMC2_H
@@ -35,15 +35,18 @@ public:
     /** @brief Default constructor */
     ReaderAsciiHepMC2(const std::string& filename);
 
-    /// The ctor to read from stdin
+    /// The ctor to read from stream
     ReaderAsciiHepMC2(std::istream &);
+
+    /// The ctor to read from temp stream
+    ReaderAsciiHepMC2(std::shared_ptr<std::istream> s_stream);
 
     /// @brief Destructor
     ~ReaderAsciiHepMC2();
 //
 // Functions
 //
-public:
+
     /// @brief skip events
     bool skip(const int)  override;
 
@@ -126,7 +129,8 @@ private:
 //
 private:
     std::ifstream m_file; //!< Input file
-    std::istream* m_stream; ///< For ctor when reading from stdin
+    std::shared_ptr<std::istream> m_shared_stream; ///< For ctor when reading from temp stream
+    std::istream* m_stream; ///< For ctor when reading from stream
     bool m_isstream; ///< toggles usage of m_file or m_stream
 
     std::vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache

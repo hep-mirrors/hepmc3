@@ -1,19 +1,15 @@
 #include "binders.h"
 #include <HepMC3/Print.h>
+
 namespace binder {
 
-
-
-
-void custom_HEPEVT_Wrapper_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper, std::shared_ptr<HepMC3::HEPEVT_Wrapper>> cl)
+void custom_HEPEVT_Wrapper_Runtime_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper_Runtime, std::shared_ptr<HepMC3::HEPEVT_Wrapper_Runtime>> cl)
 {
-		cl.def_static("print_hepevt", []() -> void { return HepMC3::HEPEVT_Wrapper::print_hepevt(); }, "");
-		//cl.def_static("print_hepevt", (void (*)(std::ostream &)) &HepMC3::HEPEVT_Wrapper::print_hepevt, "Print information from HEPEVT common block \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt(std::ostream &) --> void", pybind11::arg("ostr"));
-		cl.def_static("print_hepevt", [](pybind11::object  & a1) -> void {  std::stringstream b;  HepMC3::HEPEVT_Wrapper::print_hepevt(b); a1.attr("write")(pybind11::str(b.str().c_str())); }, "Print information from HEPEVT common block \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt(std::ostream &) --> void", pybind11::arg("ostr"));
-		cl.def_static("print_hepevt_particle", [](int const & a0) -> void { return HepMC3::HEPEVT_Wrapper::print_hepevt_particle(a0); }, "", pybind11::arg("index"));
-		//cl.def_static("print_hepevt_particle", (void (*)(int, std::ostream &)) &HepMC3::HEPEVT_Wrapper::print_hepevt_particle, "Print particle information \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt_particle(int, std::ostream &) --> void", pybind11::arg("index"), pybind11::arg("ostr"));
-		cl.def_static("print_hepevt_particle", [](int a0, pybind11::object  & a1) -> void {  std::stringstream b;  HepMC3::HEPEVT_Wrapper::print_hepevt_particle(a0,b); a1.attr("write")(pybind11::str(b.str().c_str())); }, "Print particle information \n\nC++: HepMC3::HEPEVT_Wrapper::print_hepevt_particle(int, std::ostream &) --> void", pybind11::arg("index"), pybind11::arg("ostr"));
+		cl.def("print_hepevt",[](HepMC3::HEPEVT_Wrapper_Runtime const &o) -> void { o.print_hepevt();  }, "");
+		cl.def("print_hepevt_particle",[](HepMC3::HEPEVT_Wrapper_Runtime const &o,int const & a0) -> void { o.print_hepevt_particle(a0);  }, "");
 }
+
+
 
 void custom_GenParticle_binder(pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl)
 {
@@ -149,5 +145,4 @@ void	print_binder(pybind11::module &M)
 	}
 
 } // namespace binder
-
 

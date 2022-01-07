@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenEvent.h
@@ -63,7 +63,7 @@ public:
     GenEvent& operator=(const GenEvent&);
 
     /// @name Particle and vertex access
-    //@{
+    /// @{
 
     /// @brief Get list of particles (const)
     const std::vector<ConstGenParticlePtr>& particles() const;
@@ -76,11 +76,23 @@ public:
     /// @brief Get/set list of vertices (non-const)
     const std::vector<GenVertexPtr>& vertices() { return m_vertices; }
 
+    /// @}
+
+
+    /// @name Particle and vertex access
+    //@{
+    ///Particles size, HepMC2 compatiility
+    inline int particles_size() const { return m_particles.size(); }
+    ///Particles empty, HepMC2 compatiility
+    inline bool particles_empty() const { return m_particles.empty(); }
+    ///Vertices size, HepMC2 compatiility
+    inline int vertices_size() const { return m_vertices.size(); }
+    ///Vertices empty, HepMC2 compatiility
+    inline bool vertices_empty() const { return m_vertices.empty(); }
     //@}
 
-
     /// @name Event weights
-    //@{
+    /// @{
 
     /// Get event weight values as a vector
     const std::vector<double>& weights() const { return m_weights; }
@@ -115,11 +127,11 @@ public:
         return weightnames;
     }
 
-    //@}
+    /// @}
 
 
     /// @name Auxiliary info and event metadata
-    //@{
+    /// @{
 
     /// @brief Get a pointer to the the GenRunInfo object.
     std::shared_ptr<GenRunInfo> run_info() const {
@@ -166,11 +178,11 @@ public:
     /// @brief Set cross-section information
     void set_cross_section(GenCrossSectionPtr cs) { add_attribute("GenCrossSection",cs); }
 
-    //@}
+    /// @}
 
 
     /// @name Event position
-    //@{
+    /// @{
 
     /// Vertex representing the overall event position
     const FourVector& event_pos() const;
@@ -197,28 +209,35 @@ public:
     /// @brief Change sign of @a axis
     bool reflect(const int axis);
 
-    //@}
+    /// @}
 
 
     /// @name Additional attributes
-    //@{
+    /// @{
     /// @brief Add event attribute to event
     ///
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
-    void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0) {
-        ///Disallow empty strings
-        if (name.length()==0) return;
-        if (!att)  return;
-        std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-        if (m_attributes.count(name)==0) m_attributes[name]=std::map<int, std::shared_ptr<Attribute> >();
-        m_attributes[name][id] = att;
-        att->m_event = this;
-        if ( id > 0 && id <= int(particles().size()) )
-            att->m_particle = particles()[id - 1];
-        if ( id < 0 && -id <= int(vertices().size()) )
-            att->m_vertex = vertices()[-id - 1];
-    }
+    void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0);
+
+    /// @brief Add multiple attributes to event
+    ///
+    /// This will overwrite existing attributes if attributes
+    /// with the same names are present
+    void add_attributes(const std::vector<std::string> &names, const std::vector<std::shared_ptr<Attribute> > &atts,  const std::vector<int>& ids);
+
+    /// @brief Add multiple attributes to event
+    ///
+    /// This will overwrite existing attributes if attributes
+    /// with the same names are present
+    void add_attributes(const std::string& name, const std::vector<std::shared_ptr<Attribute> > &atts,  const std::vector<int>& ids);
+
+    /// @brief Add multiple attributes to event
+    ///
+    /// This will overwrite existing attributes if attributes
+    /// with the same names are present
+    void add_attributes(const std::string& name, const std::vector<std::pair<int, std::shared_ptr<Attribute> > > &atts);
+
 
     /// @brief Remove attribute
     void remove_attribute(const std::string &name,  const int& id = 0);
@@ -240,11 +259,11 @@ public:
         return m_attributes;
     }
 
-    //@}
+    /// @}
 
 
     /// @name Particle and vertex modification
-    //@{
+    /// @{
 
     /// @brief Add particle
     void add_particle( GenParticlePtr p );
@@ -290,10 +309,10 @@ public:
     /// @brief Remove contents of this event
     void clear();
 
-    //@}
+    /// @}
 
     /// @name Deprecated functionality
-    //@{
+    /// @{
 
     /// @brief Add particle by raw pointer
     /// @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
@@ -314,13 +333,13 @@ public:
     void add_beam_particle(GenParticlePtr p1);
 
 
-    //@}
+    /// @}
 
 #endif // __CINT__
 
 
     /// @name Methods to fill GenEventData and to read it back
-    //@{
+    /// @{
 
     /// @brief Fill GenEventData object
     void write_data(GenEventData &data) const;
@@ -331,13 +350,13 @@ public:
 #ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
-    //@}
+    /// @}
 #endif
 
 private:
 
     /// @name Fields
-    //@{
+    /// @{
 
 #if !defined(__CINT__)
 
@@ -378,7 +397,7 @@ private:
     mutable std::recursive_mutex m_lock_attributes;
 #endif // __CINT__
 
-    //@}
+    /// @}
 
 };
 

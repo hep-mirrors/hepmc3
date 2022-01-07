@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_WRITERHEPEVT_H
 #define HEPMC3_WRITERHEPEVT_H
@@ -16,11 +16,11 @@
  *  @ingroup IO
  *
  */
+#include <fstream>
 #include "HepMC3/Writer.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Data/GenEventData.h"
-
-#include <fstream>
+#include "HepMC3/HEPEVT_Wrapper_Template.h"
 namespace HepMC3
 {
 
@@ -33,10 +33,15 @@ public:
     /** @brief Default constructor
      *  @warning If file exists, it will be overwritten
      */
-    WriterHEPEVT(const std::string &filename);
+    WriterHEPEVT(const std::string &filename,
+                 std::shared_ptr<GenRunInfo> run = nullptr);
 
     /// @brief Constructor from ostream
-    WriterHEPEVT(std::ostream& stream);
+    WriterHEPEVT(std::ostream& stream,
+                 std::shared_ptr<GenRunInfo> run = nullptr);
+    /// @brief Constructor from temp ostream
+    WriterHEPEVT(std::shared_ptr<std::ostream> s_stream,
+                 std::shared_ptr<GenRunInfo> run = nullptr);
 //
 // Functions
 //
@@ -48,7 +53,7 @@ public:
      *  @param[in] iflong Format of record
      */
 
-    virtual void write_hepevt_particle( int index, bool iflong=true );
+    virtual void write_hepevt_particle( int index, bool iflong = true );
     /** @brief Write event header to file
      *
      */
@@ -77,9 +82,11 @@ public:
 
 protected:
     std::ofstream m_file; //!< Output file
+    std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
     char* hepevtbuffer;   //!< Pointer to HEPEVT Fortran common block/C struct
     int   m_events_count; //!< Events count. Needed to generate unique object name
+    HEPEVT_Wrapper_Template<100000> m_hepevt_interface; //!< Templated HEPEVT interface
 };
 
 } // namespace HepMC3

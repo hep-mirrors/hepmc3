@@ -6,18 +6,24 @@ def python_label():
     v = sys.version_info
     impl = ""
     try:
-      pypyv = sys.pypy_version_info
-      impl = "pypy"
-      print(pypyv)
+        pypyv = sys.pypy_version_info
+        impl = "pypy"
+        print(pypyv)
     except:
-      pass
-    a = str(impl)+str(v[0]) + "." + str(v[1]) + "." + str(v[2])
+        pass
+    a = str(impl) + str(v[0]) + "." + str(v[1]) + "." + str(v[2])
     print(a)
     return a
 
 
 def update_path():
-    return  [os.path.abspath(os.path.join(os.pardir, python_label()))] + [os.getcwd()] + sys.path
+    try:
+     os.add_dll_directory(os.path.abspath(os.path.join(os.pardir, python_label())))
+     os.add_dll_directory(os.getcwd())
+    except:
+     pass
+    return [os.path.abspath(os.path.join(os.pardir, python_label()))] + [os.getcwd()] + sys.path
+
 
 def COMPARE_ASCII_FILES(f1, f2):
     file1 = open(f1)

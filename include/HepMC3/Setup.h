@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /// @file Setup.h
 /// @brief Definition of \b class Setup
@@ -30,7 +30,7 @@ class Setup {
 public:
 
     /// @name Accessors
-    //@{
+    /// @{
 
     /// Get error messages printing flag
     static bool print_errors();
@@ -46,17 +46,17 @@ public:
     static int  debug_level();
     /// Set debug level
     static void set_debug_level(const int level);
-    //@}
+    /// @}
 
     /// @name Static constants
-    //@{
+    /// @{
     /// Default maxUlps for AlmostEqual2sComplement function (double precision)
     static const unsigned int DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS;
 
     /// Default threshold for comparing double variables
     static const double DOUBLE_EPSILON;
 
-    //@}
+    /// @}
 
 
 private:

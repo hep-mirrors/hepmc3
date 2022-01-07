@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderHEPEVT.cc
@@ -9,10 +9,7 @@
  *
  */
 #include <sstream>
-
 #include "HepMC3/ReaderHEPEVT.h"
-#include "HepMC3/HEPEVT_Wrapper.h"
-
 
 namespace HepMC3
 {
@@ -26,8 +23,8 @@ ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
     else
     {
         set_run_info(std::make_shared<GenRunInfo>());
-        hepevtbuffer = (char*)(new struct HEPEVT());
-        HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
+        m_hepevt_interface.allocate_internal_storage();
+
     }
 }
 
@@ -40,10 +37,23 @@ ReaderHEPEVT::ReaderHEPEVT(std::istream & stream)
     else
     {
         set_run_info(std::make_shared<GenRunInfo>());
-        hepevtbuffer = (char*)(new struct HEPEVT());
-        HEPEVT_Wrapper::set_hepevt_address(hepevtbuffer);
+        m_hepevt_interface.allocate_internal_storage();
     }
 }
+
+ReaderHEPEVT::ReaderHEPEVT(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
+{
+    if ( !m_stream->good() ) {
+        HEPMC3_ERROR("ReaderHEPEVT: could not open input stream  ")
+    }
+    else
+    {
+        set_run_info(std::make_shared<GenRunInfo>());
+        m_hepevt_interface.allocate_internal_storage();
+    }
+}
+
 
 bool ReaderHEPEVT::skip(const int n)
 {
@@ -87,8 +97,8 @@ bool ReaderHEPEVT::read_hepevt_event_header()
             }
         }
     }
-    HEPEVT_Wrapper::set_event_number(m_i);
-    HEPEVT_Wrapper::set_number_entries(m_p);
+    m_hepevt_interface.set_event_number(m_i);
+    m_hepevt_interface.set_number_entries(m_p);
     return eventline;
 }
 
@@ -127,27 +137,27 @@ bool ReaderHEPEVT::read_hepevt_particle(int i)
         fltcodes2[2] = 0;
         fltcodes2[3] = 0;
     }
-    HEPEVT_Wrapper::set_status(i, intcodes[0]);
-    HEPEVT_Wrapper::set_id(i, intcodes[1]);
-    HEPEVT_Wrapper::set_parents(i, intcodes[2], std::max(intcodes[2], intcodes[3]));/* Pythia writes second mother 0*/
-    HEPEVT_Wrapper::set_children(i, intcodes[4], intcodes[5]);
-    HEPEVT_Wrapper::set_momentum(i, fltcodes1[0], fltcodes1[1], fltcodes1[2], fltcodes1[3]);
-    HEPEVT_Wrapper::set_mass(i, fltcodes1[4]);
-    HEPEVT_Wrapper::set_position(i, fltcodes2[0], fltcodes2[1], fltcodes2[2], fltcodes2[3]);
+    m_hepevt_interface.set_status(i, intcodes[0]);
+    m_hepevt_interface.set_id(i, intcodes[1]);
+    m_hepevt_interface.set_parents(i, intcodes[2], std::max(intcodes[2], intcodes[3]));/* Pythia writes second mother 0*/
+    m_hepevt_interface.set_children(i, intcodes[4], intcodes[5]);
+    m_hepevt_interface.set_momentum(i, fltcodes1[0], fltcodes1[1], fltcodes1[2], fltcodes1[3]);
+    m_hepevt_interface.set_mass(i, fltcodes1[4]);
+    m_hepevt_interface.set_position(i, fltcodes2[0], fltcodes2[1], fltcodes2[2], fltcodes2[3]);
     return true;
 }
 
 bool ReaderHEPEVT::read_event(GenEvent& evt)
 {
     evt.clear();
-    HEPEVT_Wrapper::zero_everything();
+    m_hepevt_interface.zero_everything();
     bool fileok = read_hepevt_event_header();
-    for (int i = 1; (i <= HEPEVT_Wrapper::number_entries()) && fileok; i++)
+    for (int i = 1; (i <= m_hepevt_interface.number_entries()) && fileok; i++)
         fileok = read_hepevt_particle(i);
     bool result = false;
     if (fileok)
     {
-        result = HEPEVT_Wrapper::HEPEVT_to_GenEvent(&evt);
+        result = m_hepevt_interface.HEPEVT_to_GenEvent(&evt);
         std::shared_ptr<GenRunInfo> g = std::make_shared<GenRunInfo>();
         std::vector<std::string> weightnames;
         weightnames.push_back("0");
@@ -166,7 +176,6 @@ bool ReaderHEPEVT::read_event(GenEvent& evt)
 
 void ReaderHEPEVT::close()
 {
-    if (hepevtbuffer) delete hepevtbuffer;
     if ( !m_file.is_open()) return;
     m_file.close();
 }

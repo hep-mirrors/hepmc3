@@ -14,7 +14,6 @@
 #include <pybind11/stl_bind.h>
 #include <map>
 
-#include <HepMC3/HEPEVT_Wrapper.h>
 #include <HepMC3/GenEvent.h>
 #include <HepMC3/LHEF.h>
 
