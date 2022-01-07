@@ -83,7 +83,9 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'weps1'//char(0))
       HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'weps2'//char(0))
       NEVHEP=-123456
-      HEPMC3STATUS=HepMC3_set_hepevt_address(NEVHEPL)
+      HEPMC3STATUS=HepMC3_set_hepevt_address(NEVHEP)
+C...Or one can set the pointer to some predefined block size      
+C      HEPMC3STATUS=HepMC3_set_hepevt_address(NEVHEPL)
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C-----------------------------------------------------------------
 
@@ -109,25 +111,27 @@ C...List first few events.
 C...Write output
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
           CALL PYHEPC(1)
-          NEVHEPL=IEV
-          NHEPL=NHEP
-           DO 500 J=1,NHEP
-          ISTHEPL(J)=ISTHEP(J)
-          IDHEPL(J)=IDHEP(J)
-          JMOHEPL(1,J)=JMOHEP(1,J)
-          JMOHEPL(2,J)=JMOHEP(2,J)
-          JDAHEPL(1,J)=JDAHEP(1,J)
-          JDAHEPL(2,J)=JDAHEP(2,J)
-          PHEPL(1,J)=PHEP(1,J)
-          PHEPL(2,J)=PHEP(2,J)
-          PHEPL(3,J)=PHEP(3,J)
-          PHEPL(4,J)=PHEP(4,J)
-          PHEPL(5,J)=PHEP(5,J)
-          VHEPL(1,J)=VHEP(1,J)
-          VHEPL(2,J)=VHEP(2,J)
-          VHEPL(3,J)=VHEP(3,J)
-          VHEPL(4,J)=VHEP(4,J)
-  500     CONTINUE
+          NEVHEP=IEV
+C...One can copy to some predefined block size
+C          NEVHEPL=NEVHEP
+C          NHEPL=NHEP
+C           DO 500 J=1,NHEP
+C          ISTHEPL(J)=ISTHEP(J)
+C          IDHEPL(J)=IDHEP(J)
+C          JMOHEPL(1,J)=JMOHEP(1,J)
+C          JMOHEPL(2,J)=JMOHEP(2,J)
+C          JDAHEPL(1,J)=JDAHEP(1,J)
+C          JDAHEPL(2,J)=JDAHEP(2,J)
+C          PHEPL(1,J)=PHEP(1,J)
+C          PHEPL(2,J)=PHEP(2,J)
+C          PHEPL(3,J)=PHEP(3,J)
+C          PHEPL(4,J)=PHEP(4,J)
+C          PHEPL(5,J)=PHEP(5,J)
+C          VHEPL(1,J)=VHEP(1,J)
+C          VHEPL(2,J)=VHEP(2,J)
+C          VHEPL(3,J)=VHEP(3,J)
+C          VHEPL(4,J)=VHEP(4,J)
+C  500     CONTINUE
           HEPMC3STATUS=HepMC3_convert_event(OUTID(ICA))
 C...Note: no explicit XS uncertainty
           HEPMC3STATUS=HepMC3_set_cross_section(OUTID(ICA),

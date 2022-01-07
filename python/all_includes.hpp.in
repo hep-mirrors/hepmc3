@@ -31,7 +31,6 @@
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderAsciiHepMC2.h>
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/WriterHEPEVT.h>
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderHEPEVT.h>
-#include <@HEPMC3_INCLUDE_DIR@HepMC3/HEPEVT_Wrapper.h>
 
 
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/LHEF.h>
@@ -41,6 +40,8 @@
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderPlugin.h>
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/WriterPlugin.h>
 
+
+#include <@HEPMC3_INCLUDE_DIR@HepMC3/HEPEVT_Wrapper_Runtime.h>
 
 #include <memory>
 

@@ -42,7 +42,7 @@ Les Houches workshop on TeV Colliders 2015 <a href=""></a>.
 As the methods for combining MEGs and EGs has advanced since the first
 accord, from the tree-level merging methods and NLO matching at the
 turn of the millennium, to the multi-jet (N)NLO matching and merging
-methods being perfeted to day, the LHEF format has developed and a lot
+methods being perfected to day, the LHEF format has developed and a lot
 of optional information can be passed beyond the original common block
 structures. In the following all features included will be described,
 also those that were added a bit prematurely and later became
@@ -53,7 +53,7 @@ deprecated.
 The LHEF format is based on XML, but has some oddities that goes
 beyond pure XML. As the name indicates, XML is extensible, and anyone
 writing a LHEF file can add whatever information she or he wants,
-however the following basic stucture must be observed.
+however the following basic structure must be observed.
 
 @code
 <LesHouchesEvents version="3.0">

@@ -162,15 +162,15 @@ if (COMPILER_SUPPORTS_-Wno-strict-aliasing)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
 endif()
 #Workarounds for nvc++
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
+  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC")
     set(CMAKE_CXX_EXTENSIONS ON)
     #Workaround for pybind11 templates
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
 endif()
 #Workarounds for VS
-if (MSVC)
+if (MSVC OR ${CMAKE_CXX_COMPILER_ID} MATCHES "MSVC" )
 #Memory problem and false positive warnings.
-  set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/D _CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
+  set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/D_CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
   foreach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
     CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
     if(COMPILER_SUPPORTS_${fl})
@@ -234,7 +234,7 @@ install(TARGETS HepMC3 DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 if (HEPMC3_BUILD_STATIC_LIBS)
   add_library(HepMC3_static STATIC  ${hepmc3core_sources})
   target_include_directories(HepMC3_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
-  target_compile_definitions(HepMC3_static PRIVATE NO_DECLSPEC_hepevtptr)
+  target_compile_definitions(HepMC3_static PRIVATE HEPMC3_NO_EXPORTS)
   set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
@@ -306,7 +306,12 @@ if(HEPMC3_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 if (HEPMC3_INSTALL_EXAMPLES)
-  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  FILES_MATCHING PATTERN "*"   PATTERN "*CMakeFiles*" EXCLUDE    PATTERN "Makefile" EXCLUDE  PATTERN "*cmake_install.cmake*" EXCLUDE  PATTERN "*libAnalysis*" EXCLUDE )
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  
+          FILES_MATCHING PATTERN "*"   
+          PATTERN "*CMakeFiles*" EXCLUDE  
+          PATTERN "Makefile" EXCLUDE  
+          PATTERN "*cmake_install.cmake*" EXCLUDE  
+          PATTERN "*libAnalysis*" EXCLUDE )
 endif()
 
 if(HEPMC3_BUILD_DOCS)
@@ -343,6 +348,9 @@ if (ASTYLE)
     search/src/*cc
     include/HepMC3/Reader*h
     include/HepMC3/Writer*h
+    include/HepMC3/*HEPEVT*h
+    include/HepMC3/Gen*h
+    include/HepMC3/Com*h
     examples/*/src/*cc
     examples/*/include/*h
     test/*cc
@@ -368,6 +376,9 @@ if(CPPCHECK)
       rootIO/src/*.cc
       include/HepMC3/Reader*h
       include/HepMC3/Writer*h
+      include/HepMC3/HEPEVT*h
+      include/HepMC3/Gen*h
+      include/HepMC3/Com*h
       examples/*/src/*cc
       examples/*/include/*h
       interfaces/*/include/*h

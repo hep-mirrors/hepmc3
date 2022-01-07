@@ -43,7 +43,7 @@ void bind_pyHepMC3_16(std::function< pybind11::module &(std::string const &names
 		cl.def_readwrite("curreventfile", &LHEF::Reader::curreventfile);
 		cl.def_readwrite("currfileevent", &LHEF::Reader::currfileevent);
 		cl.def_readwrite("dirpath", &LHEF::Reader::dirpath);
-		cl.def("readEvent", (bool (LHEF::Reader::*)()) &LHEF::Reader::readEvent, "Read an event from the file and store it in the hepeup\n object. Optional comment lines are stored i the eventComments\n member variable. \n \n\n true if the read sas successful.\n\nC++: LHEF::Reader::readEvent() --> bool");
+		cl.def("readEvent", (bool (LHEF::Reader::*)()) &LHEF::Reader::readEvent, "Read an event from the file and store it in the hepeup\n object. Optional comment lines are stored i the eventComments\n member variable.\n \n\n true if the read sas successful.\n\nC++: LHEF::Reader::readEvent() --> bool");
 		cl.def("openeventfile", (void (LHEF::Reader::*)(int)) &LHEF::Reader::openeventfile, "Open the efentfile with index ifile. If another eventfile is\n being read, its remaining contents is discarded. This is a noop\n if current read session is not a multi-file run.\n\nC++: LHEF::Reader::openeventfile(int) --> void", pybind11::arg("ifile"));
 	}
 	{ // LHEF::Writer file:HepMC3/LHEF.h line:3090
