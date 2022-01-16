@@ -5,6 +5,22 @@
 //
 #ifndef Pythia6_Pythia6ToHepMC3_H
 #define Pythia6_Pythia6ToHepMC3_H
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
+#define  hepmc3_delete_writer_ HEPMC3_DELETE_WRITER
+#define  hepmc3_convert_event_ HEPMC3_CONVERT_EVENT
+#define  hepmc3_clear_event_ HEPMC3_CLEAR_EVENT
+#define  hepmc3_write_event_ HEPMC3_WRITE_EVENT
+#define  hepmc3_set_cross_section_ HEPMC3_SET_CROSS_SECTION
+#define  hepmc3_set_pdf_info_ HEPMC3_SET_PDF_INFO
+#define  hepmc3_set_event_number_ HEPMC3_SET_EVENT_NUMBER
+#define  hepmc3_set_hepevt_address_ HEPMC3_SET_HEPEVT_ADDRESS
+#define  hepmc3_set_attribute_int_ HEPMC3_SET_ATTRIBUTE_INT
+#define  hepmc3_set_attribute_double_ HEPMC3_SET_ATTRIBUTE_DOUBLE
+#define  hepmc3_new_writer_ HEPMC3_NEW_WRITER
+#define  hepmc3_new_weight_ HEPMC3_NEW_WEIGHT
+#define  hepmc3_set_weight_by_index_ HEPMC3_SET_WEIGHT_BY_INDEX
+#define  hepmc3_set_weight_by_name_ HEPMC3_SET_WEIGHT_BY_NAME
+#endif
 #ifdef  DUMMYPYTHIA6TOHEPMC3
 extern "C" {
 
@@ -203,7 +219,7 @@ extern "C" {
     {
         std::string libHepMC3rootIO="libHepMC3rootIO.so";
 #ifdef __darwin__
-        libHepMC3rootIO="libHepMC3rootIO.dydl";
+        libHepMC3rootIO="libHepMC3rootIO.dylib";
 #endif
 #ifdef WIN32
         libHepMC3rootIO="HepMC3rootIO.dll";
