@@ -1,4 +1,4 @@
-  --------------------------  pre-HepMC3.2.5 ----------------------
+  --------------------------  HepMC3.2.5 ----------------------
 2022-01-02 Andrii Verbytskyi for HepMC
          * Added implementation for Relatives class that works in Windows.
          * (Implemented earlier) Improved MSYS2 support
