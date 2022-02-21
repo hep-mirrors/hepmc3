@@ -4,7 +4,7 @@ C...Toy task: compare multiplicity distribution with matrix elements
 C...and with parton showers (using same fragmentation parameters).
 C...This code contains modifications for HepMC3 examples
 C-----------------------------------------------------------------
-
+      PROGRAM MAIN
 C...Preamble: declarations.
 
 C...All real arithmetic in double precision.
@@ -74,18 +74,18 @@ C...Book histograms.
       CALL PYBOOK(2,'charged multiplicity PS',100,-0.5D0,99.5D0)
 C...Create output writers
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      OUTID(1)=HepMC3_new_writer(0,1,'ME.hepmc'//char(0))
-      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'Default'//char(0))
-      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'weme1'//char(0))
-      HEPMC3STATUS=HepMC3_new_weight(OUTID(1),'weme2'//char(0))
-      OUTID(2)=HepMC3_new_writer(0,1,'PS.hepmc'//char(0))
-      HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'Default'//char(0))
-      HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'weps1'//char(0))
-      HEPMC3STATUS=HepMC3_new_weight(OUTID(2),'weps2'//char(0))
+      OUTID(1)=hepmc3_new_writer(0,1,'ME.hepmc'//char(0))
+      HEPMC3STATUS=hepmc3_new_weight(OUTID(1),'Default'//char(0))
+      HEPMC3STATUS=hepmc3_new_weight(OUTID(1),'weme1'//char(0))
+      HEPMC3STATUS=hepmc3_new_weight(OUTID(1),'weme2'//char(0))
+      OUTID(2)=hepmc3_new_writer(0,1,'PS.hepmc'//char(0))
+      HEPMC3STATUS=hepmc3_new_weight(OUTID(2),'Default'//char(0))
+      HEPMC3STATUS=hepmc3_new_weight(OUTID(2),'weps1'//char(0))
+      HEPMC3STATUS=hepmc3_new_weight(OUTID(2),'weps2'//char(0))
       NEVHEP=-123456
-      HEPMC3STATUS=HepMC3_set_hepevt_address(NEVHEP)
+      HEPMC3STATUS=hepmc3_set_hepevt_address(NEVHEP)
 C...Or one can set the pointer to some predefined block size      
-C      HEPMC3STATUS=HepMC3_set_hepevt_address(NEVHEPL)
+C      HEPMC3STATUS=hepmc3_set_hepevt_address(NEVHEPL)
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C-----------------------------------------------------------------
 
@@ -132,45 +132,45 @@ C          VHEPL(2,J)=VHEP(2,J)
 C          VHEPL(3,J)=VHEP(3,J)
 C          VHEPL(4,J)=VHEP(4,J)
 C  500     CONTINUE
-          HEPMC3STATUS=HepMC3_convert_event(OUTID(ICA))
+          HEPMC3STATUS=hepmc3_convert_event(OUTID(ICA))
 C...Note: no explicit XS uncertainty
-          HEPMC3STATUS=HepMC3_set_cross_section(OUTID(ICA),
+          HEPMC3STATUS=hepmc3_set_cross_section(OUTID(ICA),
      &    1.0E9*XSEC(0,3),
      &    1.0E9*XSEC(0,3)/sqrt(1.0*NGEN(0,3)),
      &    NGEN(0,3),0)
-          HEPMC3STATUS=HepMC3_set_pdf_info(OUTID(ICA),
+          HEPMC3STATUS=hepmc3_set_pdf_info(OUTID(ICA),
      &    MSTI(15),MSTI(16),PARI(33),PARI(34),PARI(23),
      &    MSTP(51),MSTP(52))
 C...The values below are not always meaningful
-          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID(ICA),-1,
+          HEPMC3STATUS=hepmc3_set_attribute_int(OUTID(ICA),-1,
      &   'mpi'//char(0))
-          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID(ICA),MSUB(1),
+          HEPMC3STATUS=hepmc3_set_attribute_int(OUTID(ICA),MSUB(1),
      &   'signal_process_id'//char(0))
-          HEPMC3STATUS=HepMC3_set_attribute_int(OUTID(ICA),MRPY(1),
+          HEPMC3STATUS=hepmc3_set_attribute_int(OUTID(ICA),MRPY(1),
      &   'random_states1'//char(0))
-          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID(ICA),-1.0D0,
+          HEPMC3STATUS=hepmc3_set_attribute_double(OUTID(ICA),-1.0D0,
      &   'alphaEM'//char(0))
-          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID(ICA),-1.0D0,
+          HEPMC3STATUS=hepmc3_set_attribute_double(OUTID(ICA),-1.0D0,
      &   'alphaQCD'//char(0))
-          HEPMC3STATUS=HepMC3_set_attribute_double(OUTID(ICA),q2pdfeval,
+          HEPMC3STATUS=hepmc3_set_attribute_double(OUTID(ICA),q2pdfeval,
      &   'event_scale'//char(0))
-          HEPMC3STATUS=HepMC3_set_weight_by_index(OUTID(ICA),1.0D0,0)
+          HEPMC3STATUS=hepmc3_set_weight_by_index(OUTID(ICA),1.0D0,0)
           if (ICA.eq.1) then
-          HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(1),
+          HEPMC3STATUS=hepmc3_set_weight_by_name(OUTID(1),
      &    1.1111D0,'weme1'//char(0))
-          HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(1),
+          HEPMC3STATUS=hepmc3_set_weight_by_name(OUTID(1),
      &    1.2222D0,'weme2'//char(0))
           endif
           if (ICA.eq.2) then
-          HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(2),
+          HEPMC3STATUS=hepmc3_set_weight_by_name(OUTID(2),
      &    1.5555D0,'weps1'//char(0))
-          HEPMC3STATUS=HepMC3_set_weight_by_name(OUTID(2),
+          HEPMC3STATUS=hepmc3_set_weight_by_name(OUTID(2),
      &    1.6666D0,'weps2'//char(0))
           endif
 
 C Note there should be PDF ids
-          HEPMC3STATUS=HepMC3_write_event(OUTID(ICA))
-          HEPMC3STATUS=HepMC3_clear_event(OUTID(ICA))
+          HEPMC3STATUS=hepmc3_write_event(OUTID(ICA))
+          HEPMC3STATUS=hepmc3_clear_event(OUTID(ICA))
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C...Extract and fill event properties.
           CALL PYEDIT(3)
@@ -182,8 +182,8 @@ C...End outer loop.
   300 CONTINUE
 C...Delete output writers
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
-      HEPMC3STATUS=HepMC3_delete_writer(OUTID(1))
-      HEPMC3STATUS=HepMC3_delete_writer(OUTID(2))
+      HEPMC3STATUS=hepmc3_delete_writer(OUTID(1))
+      HEPMC3STATUS=hepmc3_delete_writer(OUTID(2))
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C-----------------------------------------------------------------
 

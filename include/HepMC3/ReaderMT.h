@@ -26,9 +26,9 @@ namespace HepMC3 {
 template <class T, size_t m_number_of_threads>  class ReaderMT : public Reader
 {
 private:
-    bool m_go_try_cache;
-    std::vector< std::shared_ptr<T> > m_readers;
-    std::vector< std::pair<GenEvent, bool> > m_events;
+    bool m_go_try_cache; //!< Flag to trigger using the cached event
+    std::vector< std::shared_ptr<T> > m_readers; //!< Vector of all active readers
+    std::vector< std::pair<GenEvent, bool> > m_events; //!< Vector of events
     std::vector< std::thread > m_threads;
     static void read_function(std::pair<GenEvent,bool>& e, std::shared_ptr<T> r)
     {

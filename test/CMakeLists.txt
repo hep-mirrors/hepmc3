@@ -23,7 +23,7 @@ macro( hepmc_root_test testname )
   ADD_EXECUTABLE(${testname} ${${testname}_source}  ${ARGN} )
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../rootIO/include/)
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../rootIO/include/ )
   target_link_libraries(${testname} PRIVATE HepMC3 HepMC3rootIO)
 
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
@@ -113,8 +113,8 @@ set( HepMC_tests
         testReaderFactory1
         testSingleVertexHepMC2
         testAttributes
+        testHEPEVTWrapper1
          )
-
 set( HepMC_root_tests
         testIO2
         testIO4
@@ -123,16 +123,22 @@ set( HepMC_root_tests
         testRootTree300
         )
 
+set( HepMC_search_tests
+
+        )
 
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
 if ("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
   set(THREADS_PREFER_PTHREAD_FLAG ON)
   find_package(Threads)
 endif()
-if("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI"))
+if("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI") AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC"))
   message(STATUS "HepMC3 test: Threads library found.  Thread safety tests enabled")
   list( APPEND HepMC_tests "testThreads1" )
   list( APPEND HepMC_tests "testIO10" )
+  if (HEPMC3_ENABLE_SEARCH)
+    list( APPEND HepMC_search_tests "testThreadssearch" )
+  endif()
 else()
   message(STATUS "HepMC3 test: No threads library found or disabled for compiller with ID ${CMAKE_CXX_COMPILER_ID}. Thread safety tests are disabled")
 endif()
@@ -166,17 +172,56 @@ foreach ( test ${HepMC_tests} )
   set_tests_properties(${test} PROPERTIES TIMEOUT 2000)  #Relevant for testLoops
 endforeach ( test ${HepMC_tests} )
 
+if(HEPMC3_ENABLE_SEARCH )
+  foreach ( test ${HepMC_search_tests} )
+    hepmc_test( ${test} )
+  target_link_libraries(${test} PRIVATE HepMC3search)
+  target_include_directories(${test} BEFORE PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/../search/include)
+  endforeach ( test ${HepMC_search_tests} )
+  
+endif()
+
 ## Treatment of special needs in the HepMC tests
-if(Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI"))
+if(Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI") AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC") )
   if(THREADS_HAVE_PTHREAD_ARG)
     target_compile_options(testThreads1 PUBLIC "-pthread")
     target_compile_options(testIO10 PUBLIC "-pthread")
+    if (HEPMC3_ENABLE_SEARCH)
+     target_compile_options(testThreadssearch PUBLIC "-pthread")
+    endif()    
   endif()
   if(CMAKE_THREAD_LIBS_INIT)
     target_link_libraries(testThreads1 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
     target_link_libraries(testIO10 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
+    if (HEPMC3_ENABLE_SEARCH)
+     target_link_libraries(testThreadssearch PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
+    endif() 
   endif()
 endif()
+if (WIN32)
+  if ("zlib" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND ZLIB_FOUND)
+     get_filename_component(z ${ZLIB_LIBRARIES} DIRECTORY)
+     find_file(zdll NAME zlib.dll PATHS ${z} ${z}/../bin/)
+     if (zdll)
+       file(COPY ${zdll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+     endif()
+   endif()
+   if ("lzma" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND LIBLZMA_FOUND)
+     get_filename_component(l ${LIBLZMA_LIBRARIES} DIRECTORY)
+     find_file(lzmadll NAME lzma.dll PATHS ${l} ${l}/../bin/)
+     if (lzmadll)
+       file(COPY ${lzmadll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+     endif()
+   endif()
+   if ("bzip2" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND BZIP2_FOUND)
+     get_filename_component(b ${BZIP2_LIBRARIES} DIRECTORY)
+     find_file(bz2dll NAME libbz2.dll PATHS ${b} ${b}/../bin/)
+     if (bz2dll)
+       file(COPY ${bz2dll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+     endif()
+   endif()
+endif()
+
 foreach ( ctest ${compress_tests} )
   if ("zlib" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND ZLIB_FOUND)
     target_compile_options(${ctest} PUBLIC "-DHEPMC3_USE_COMPRESSION")
@@ -242,11 +287,7 @@ else()
 endif()
 
 if ("Photospp" IN_LIST HEPMC3_TEST_PACKAGES_LIST  AND Pythia8_FOUND)
-  if (HEPMC3_USE_INTERFACE_FROM_PHOTOSPP)
    find_package(Photospp COMPONENTS HEPMC2 HEPMC3)
-  else()
-   find_package(Photospp COMPONENTS HEPMC2)
-  endif()
 endif()
 if(NOT Photospp_FOUND)
   message(STATUS "HepMC3 test: Photospp package not found or disabled. Please check if PHOTOSPP_ROOT_DIR is set properly.")
@@ -262,11 +303,7 @@ else()
 endif()
 
 if ("Tauolapp" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND Pythia8_FOUND)
-  if (HEPMC3_USE_INTERFACE_FROM_TAUOLAPP)
-   find_package(Tauolapp COMPONENTS HEPMC2 HEPMC3)
-  else()
-   find_package(Tauolapp COMPONENTS HEPMC2)
-  endif()
+  find_package(Tauolapp COMPONENTS HEPMC2 HEPMC3)
 endif()
 if(NOT Tauolapp_FOUND)
   message(STATUS "HepMC3 test: Tauolapp package not found or disabled. Please check if TAUOLA_ROOT_DIR is set properly.")
