@@ -137,9 +137,9 @@ void HEPEVT_Wrapper_Template<max_particles, momentum_type>::copy_to_internal_sto
     m_internal_storage = std::make_shared<struct HEPEVT_Templated<max_particles, momentum_type>>();
     m_hepevtptr = m_internal_storage.get();
     char* x = c;
-    m_hepevtptr->nevhep=(int)(*x);
+    m_hepevtptr->nevhep = *((int*)x);
     x += sizeof(int);
-    m_hepevtptr->nhep=(int)(*x);
+    m_hepevtptr->nhep = *((int*)x);
     x += sizeof(int);
     memcpy(m_hepevtptr->isthep, x, N*sizeof(int));
     x += sizeof(int)*N;
