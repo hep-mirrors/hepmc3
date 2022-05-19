@@ -59,7 +59,7 @@ The following commands will install the HepMC3 in the corresponding systems:
     brew tap davidchall/hep
     brew install hepmc3
     ```
-    The package does not include ROOT interface.
+    The package optionally includes ROOT interface.
 
    - Windows
     The precompilled HepMC3 packages are available in for Windows and other platforms also in PyPi.
@@ -166,12 +166,8 @@ The full explanation  for the installation options is given below.
   Additional flags control the location installation of Photos, Tauola MC-TESTER, HepMC2
   and Pythia8  that are used for tests. Please note that some examples are disabled  on Windows.
 
-  For tests and for development purposes  HepMC3 uses extra packages, e.g. ZLIB, GrpahViz, binder.
-  On Windows, most extra packages (e.g. ZLIB) have no default location, therefore
-  one should specify their location manually, e.g.
-```
-cmake CMakeLists.txt -DZLIB_ROOT=C:\lib -DZLIB_INCLUDE_DIR=C:\include
-```
+  For tests and for development purposes  HepMC3 uses extra packages, e.g. GrpahViz, binder.
+  On Windows, most extra packages have no default location.
 
 
 6. In order to build and run tests put
