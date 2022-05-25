@@ -142,15 +142,19 @@ debian-salsa:
     - cat /etc/issue
     - yum -y install  cmake make binutils sed gawk grep
     - yum -y install  doxygen 
-    - yum -y install  valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root
-    - yum -y install  glibc-debuginfo --enablerepo=*debug*
+    - yum -y install  valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root --skip-broken
+#    - yum -y install  glibc-debuginfo --enablerepo=*debug*
 ########################################################################
 .pythoninstall: &pythoninstall
     -  yum -y install  python3 python3-devel python2 python2-devel 
+########################################################################
+.python3install: &python3install
+    - yum -y install  python3 python3-devel
+########################################################################
 .pythonupdate: &pythonupdate
     - dnf -y install python3-dnf-plugin* --allowerasing --skip-broken
-    -  dnf -y copr enable @python/python3.11 
-    -  yum -y update  python3 python3-devel python2 python2-devel --enablerepo=*update* --allowerasing --skip-broken
+    - dnf -y copr enable @python/python3.11 
+    - yum -y update  python3 python3-devel python2 python2-devel --enablerepo=*update* --allowerasing --skip-broken
 ########################################################################
 .pypyinstall: &pypyinstall
     -  yum -y install   pypy pypy-devel 
@@ -491,9 +495,9 @@ CentOS7-clang:
     - ctest --output-on-failure 
     - make -j $(nproc) install
 ########################################################################
-CentOS8-gcc:
+CentOS8s-gcc:
   extends: .CentOS
-  image: centos:8
+  image: quay.io/centos/centos:stream8
   before_script:
     - set -x
     - uname -a 
@@ -512,9 +516,9 @@ CentOS8-gcc:
     - *fullbuild
 ########################################################################
 
-CentOS8-clang:
+CentOS8s-clang:
   extends: .CentOS
-  image: centos:8
+  image: quay.io/centos/centos:stream8
   before_script:
     - set -x
     - uname -a 
@@ -528,6 +532,46 @@ CentOS8-clang:
     - *commoninstall
     - *clanginstall
     - *pythoninstall 
+  script:
+    - *clangexport
+    - *fullbuild
+########################################################################
+########################################################################
+CentOS9s-gcc:
+  extends: .CentOS
+  image: quay.io/centos/centos:stream9
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+    - yum -y install epel-release libarchive
+    - dnf -y install 'dnf-command(config-manager)'
+    - dnf config-manager --set-enabled crb  
+    - dnf config-manager --set-enabled epel-testing    
+    - yum -y install json-devel
+    - *commoninstall
+    - *clanginstall
+    - *python3install 
+  script:
+    - *gccexport
+    - *fullbuild
+########################################################################
+
+CentOS9s-clang:
+  extends: .CentOS
+  image: quay.io/centos/centos:stream9
+  before_script:
+    - set -x
+    - uname -a 
+    - cat /etc/issue
+    - yum -y install epel-release libarchive
+    - dnf -y install 'dnf-command(config-manager)'
+    - dnf config-manager --set-enabled crb  
+    - dnf config-manager --set-enabled epel-testing
+    - yum -y install json-devel 
+    - *commoninstall
+    - *clanginstall
+    - *python3install 
   script:
     - *clangexport
     - *fullbuild
