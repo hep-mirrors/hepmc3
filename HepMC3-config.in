@@ -5,10 +5,12 @@
 ## @configure_input@
 #The line below assures at least some relocation.
 if [ "$(uname)" == "Darwin" ]; then
-PACKAGE_PREFIX_DIR=$(dirname $(dirname $(greadlink -f $0)))
+PACKAGE_BIN_DIR=$(dirname $(greadlink -f $0))
 else
-PACKAGE_PREFIX_DIR=$(dirname $(dirname $(readlink -f $0)))
+PACKAGE_BIN_DIR=$(dirname $(readlink -f $0))
 fi
+PACKAGE_PREFIX_DIR=$(dirname ${PACKAGE_BIN_DIR})
+
 tmp=$(echo $* | egrep -- '--\<help\>|-\<h\>')
 if test $# -eq 0 || test -n "$tmp"; then
     echo "@PROJECT_NAME@-config: configuration tool for the @PROJECT_NAME@ library"

@@ -210,12 +210,12 @@ set( hepmc3core_sources
   ${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
 )
 
-#We need to export all symbols on WIn to build .lib files
+#We need to export all symbols on Win to build .lib files
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_library(HepMC3 SHARED ${hepmc3core_sources})
 target_include_directories(HepMC3 PUBLIC ${PROJECT_SOURCE_DIR}/include)
-set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3
+set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 3
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
