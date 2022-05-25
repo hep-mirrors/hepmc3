@@ -107,7 +107,6 @@ debian-salsa:
     - rm .gitlab-ci.yml
 #    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.2.0/HepMC3-3.2.0.tar.gz
     - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/master/HepMC3-master.tar.gz
-    - mv HepMC3-master.tar.gz  ../hepmc3_3.2.2.orig.tar.gz
 #    - wget https://gitlab.cern.ch/hepmc/HepMC3/-/archive/3.2.0/HepMC3-3.2.0.tar.gz
 #    - mv HepMC3-3.2.0.tar.gz  ../hepmc3_3.2.0.orig.tar.gz
     - debuild -us -uc
@@ -469,9 +468,7 @@ CentOS7-gcc:
     - make -j $(nproc)
     - ctest --output-on-failure
     - make -j $(nproc) install
-
 ########################################################################
-
 CentOS7-clang:
   extends: .CentOS
   image: centos:7
@@ -508,6 +505,7 @@ CentOS8s-gcc:
     - dnf config-manager --set-enabled appstream  
     - dnf config-manager --set-enabled epel-testing    
     - yum -y install json-devel
+    - rpm -i http://ftp.tu-chemnitz.de/pub/linux/centos/8-stream/BaseOS/x86_64/os/Packages/zlib-devel-1.2.11-17.el8.x86_64.rpm --nodeps
     - *commoninstall
     - *clanginstall
     - *pythoninstall 
@@ -515,7 +513,6 @@ CentOS8s-gcc:
     - *gccexport
     - *fullbuild
 ########################################################################
-
 CentOS8s-clang:
   extends: .CentOS
   image: quay.io/centos/centos:stream8
@@ -529,13 +526,13 @@ CentOS8s-clang:
     - dnf config-manager --set-enabled appstream  
     - dnf config-manager --set-enabled epel-testing
     - yum -y install json-devel 
+    - rpm -i http://ftp.tu-chemnitz.de/pub/linux/centos/8-stream/BaseOS/x86_64/os/Packages/zlib-devel-1.2.11-17.el8.x86_64.rpm --nodeps
     - *commoninstall
     - *clanginstall
     - *pythoninstall 
   script:
     - *clangexport
     - *fullbuild
-########################################################################
 ########################################################################
 CentOS9s-gcc:
   extends: .CentOS
@@ -556,7 +553,6 @@ CentOS9s-gcc:
     - *gccexport
     - *fullbuild
 ########################################################################
-
 CentOS9s-clang:
   extends: .CentOS
   image: quay.io/centos/centos:stream9

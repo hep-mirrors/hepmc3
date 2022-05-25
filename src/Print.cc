@@ -111,7 +111,7 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
         if ( !att.second->to_string(st) ) {
             HEPMC3_WARNING("Print::listing: problem serializing attribute: " << att.first)
         }
-        else { os << att.first << " " << att.second->to_string(st);}
+        else { os << att.first << " " << st;}
         os << std::endl;
     }
 
