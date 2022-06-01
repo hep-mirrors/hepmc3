@@ -29,7 +29,10 @@ macro( hepmc_root_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${testname} )
-  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}")
+  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}"
+  ENVIRONMENT "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{LD_LIBRARY_PATH}"
+  ENVIRONMENT "DYLD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{DYLD_LIBRARY_PATH}"
+  )
   file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   string(REPLACE "test" "" ${testname} name)
@@ -114,6 +117,7 @@ set( HepMC_tests
         testSingleVertexHepMC2
         testAttributes
         testHEPEVTWrapper1
+
          )
 set( HepMC_root_tests
         testIO2
