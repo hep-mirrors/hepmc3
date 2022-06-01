@@ -33,8 +33,17 @@ public:
     void close() override { if (!m_reader) return; m_reader->close(); };
     /** @brief State */
     bool failed() override {if (!m_reader) return true; return m_reader->failed();};
+    /** @brief Get the global GenRunInfo object. */
+    std::shared_ptr<GenRunInfo> run_info() const { return m_reader?m_reader->run_info():nullptr; }
+    /** @brief  Set options */
+    void set_options(const std::map<std::string, std::string>& options)  override { if (!m_reader) return; else m_reader->set_options(options); }
+    /** @brief  Get options  */
+    std::map<std::string, std::string> get_options()  const  override { return m_reader?m_reader->get_options(): std::map<std::string, std::string>();  }
     /** @brief Destructor */
     ~ReaderPlugin()  override;
+//protected:
+    /// Set the global GenRunInfo object.
+    void set_run_info(std::shared_ptr<GenRunInfo> run) override { if (!m_reader) return; else m_reader->set_run_info(run); }
 private:
     Reader* m_reader; ///< The actual reader
     void*  dll_handle; ///< library handler

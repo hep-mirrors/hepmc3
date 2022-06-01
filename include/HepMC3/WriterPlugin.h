@@ -36,6 +36,14 @@ public:
     void close() override { if (!m_writer) return; m_writer->close();};
     /** @brief State */
     bool failed() override {if (!m_writer) return true; return m_writer->failed();};
+    /** @brief Get the global GenRunInfo object. */
+    std::shared_ptr<GenRunInfo> run_info() const { return m_writer?m_writer->run_info():nullptr; }
+    /** @brief  Set options */
+    void set_options(const std::map<std::string, std::string>& options)  override { if (!m_writer) return; else m_writer->set_options(options); }
+    /** @brief  Get options  */
+    std::map<std::string, std::string> get_options()  const  override { return m_writer?m_writer->get_options(): std::map<std::string, std::string>();  }
+    /// Set the global GenRunInfo object.
+    void set_run_info(std::shared_ptr<GenRunInfo> run) override { if (!m_writer) return; else m_writer->set_run_info(run); }
     /** @brief Destructor */
     ~WriterPlugin()  override;
 private:

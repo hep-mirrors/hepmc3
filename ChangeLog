@@ -1,3 +1,8 @@
+  --------------------------  HepMC3.2.6-pre ----------------------
+2022-05-25 Andrii Verbytskyi for HepMC
+         * Update pybind11 headers to fix python 3.11. Reported by by Mattias Ellert.
+         * License update.
+         * Make the R/W plugins transparent - the set/get functions call the handled object
   --------------------------  HepMC3.2.5 ----------------------
 2022-01-02 Andrii Verbytskyi for HepMC
          * Added implementation for Relatives class that works in Windows.
