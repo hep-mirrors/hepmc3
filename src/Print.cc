@@ -36,12 +36,14 @@ void Print::content(std::ostream& os, const GenEvent &event) {
     os << "GenParticlePtr (" << event.particles().size() << ")" << std::endl;
 
     for (ConstGenParticlePtr p: event.particles()) {
-        Print::line(p, true);
+        Print::line(os, p, true);
+        os << std::endl;
     }
 
     os << "GenVertexPtr (" << event.vertices().size() << ")" << std::endl;
     for ( ConstGenVertexPtr v: event.vertices() ) {
-        Print::line(v, true);
+        Print::line(os, v, true);
+        os << std::endl;
     }
 
     os << "-----------------------------" << std::endl;
