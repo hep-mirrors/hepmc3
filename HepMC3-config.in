@@ -59,10 +59,10 @@ tmp=$( echo "$*" | egrep -- '--\<static\>')
 if test -n "$tmp"; then
 
 tmp=$( echo "$*" | egrep -- '--\<ldflags|libs\>')
-OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3_static.a"
+OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3-static.a"
 
 tmp=$( echo "$*" | egrep -- '--\<search\>')
-test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3search_static.a"
+test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3search-static.a"
 
 else
 
