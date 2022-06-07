@@ -182,7 +182,6 @@ if(HEPMC3_ENABLE_SEARCH )
   target_link_libraries(${test} PRIVATE HepMC3search)
   target_include_directories(${test} BEFORE PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/../search/include)
   endforeach ( test ${HepMC_search_tests} )
-  
 endif()
 
 ## Treatment of special needs in the HepMC tests
@@ -253,7 +252,6 @@ if(HEPMC3_ENABLE_ROOTIO AND (NOT WIN32) )
   endforeach ( test ${HepMC_root_tests} )
   target_link_libraries(testIO4 PRIVATE ${ROOT_Hist_LIBRARY})
 endif()
-
 
 
 set( libMCEG_sources ValidationControl.cc   SimpleEventTool.cc OutputValidationTool.cc)
