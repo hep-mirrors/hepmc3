@@ -88,15 +88,19 @@ action might result in a fully functional installation.
 
 ```
   wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.2.tar.gz
-  tar -xzf HepMC3-3.2.2.tar.gz
+  tar -xzf HepMC3-3.2.6.tar.gz
   mkdir hepmc3-build
   cd hepmc3-build
-  cmake -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=OFF  \
-      -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=2.7  \
-      -DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF -DHEPMC3_BUILD_DOCS:BOOL=OFF  \
-      -DCMAKE_INSTALL_PREFIX=../hepmc3-install   \
-      -DHEPMC3_Python_SITEARCH27=../hepmc3-install/lib/python2.7/site-packages \
-      ../HepMC3-3.2.2
+  cmake -DCMAKE_INSTALL_PREFIX=../hepmc3-install   \
+        -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF            \
+        -DHEPMC3_ENABLE_TEST:BOOL=OFF              \
+        -DHEPMC3_INSTALL_INTERFACES:BOOL=ON        \
+        -DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF        \
+        -DHEPMC3_BUILD_DOCS:BOOL=OFF     \
+        -DHEPMC3_ENABLE_PYTHON:BOOL=ON   \
+        -DHEPMC3_PYTHON_VERSIONS=2.7     \
+        -DHEPMC3_Python_SITEARCH27=../hepmc3-install/lib/python2.7/site-packages \
+        ../HepMC3-3.2.6
   make
   make install
 ```
@@ -112,7 +116,7 @@ The full explanation  for the installation options is given below.
   or b) download the tarball with wget or any other tool
   ```
   wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.2.tar.gz
-  tar -xzf HepMC3-3.2.2.tar.gz
+  tar -xzf HepMC3-3.2.6.tar.gz
   ```
 
 
@@ -130,7 +134,7 @@ The full explanation  for the installation options is given below.
   ```
   or b)
   ```
-  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3-3.2.2
+  cmake -DHEPMC3_ENABLE_ROOTIO=OFF -DCMAKE_INSTALL_PREFIX=../hepmc3-install ../HepMC3-3.2.6
   ```
 
   To disable compilation of the search engine (enabled by default) add
@@ -315,7 +319,7 @@ and run CMake, e.g.
 ```
 mkdir -p myexamples
 cd myexamples
-cp -r /usr/share/doc/HepMC3-3.2.2/examples ./
+cp -r /usr/share/doc/HepMC3-3.2.6/examples ./
 cd examples
 cmake -DUSE_INSTALLED_HEPMC3=ON CMakeLists.txt
 make
@@ -480,14 +484,6 @@ The files
 ./examples/ConvertExample/include/WriterRootTreeOPAL.h
 ```
 contain an implementation of output format that can be used together with data from the OPAL experiment.
-
-The files
-```
-./examples/ConvertExample/include/ReaderGZ.h
-./examples/ConvertExample/src/gzstream.C
-./examples/ConvertExample/include/gzstream.h
-```
-implement an example of compressed input handling.
 
 The files
 ```

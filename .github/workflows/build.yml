@@ -42,6 +42,7 @@ jobs:
       run:  |
         cmake -S. -B BUILD -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
         cmake --build BUILD 
+        cmake --install BUILD         
         cd BUILD
         ctest . 
   nativewin:
@@ -71,6 +72,7 @@ jobs:
         run:  |
           cmake -S. -B BUILD -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
           cmake --build BUILD 
+          cmake --install BUILD 
           chdir BUILD
           ctest . -C Debug
 
@@ -102,11 +104,15 @@ jobs:
           mingw-w64-${{matrix.env}}-python-setuptools
           mingw-w64-${{matrix.env}}-cmake
           mingw-w64-${{matrix.env}}-make
+          mingw-w64-${{matrix.env}}-doxygen
     - uses: actions/checkout@v2
     - name: Build
+#Fix here examples
       run:  |
         cmake -S. -B BUILD -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=OFF -DHEPMC3_PYTHON_VERSIONS=3
         cmake --build BUILD 
-        cd BUILD
-        ctest .
+        cmake --install BUILD 
+#        cd BUILD
+#        ctest .
+
 

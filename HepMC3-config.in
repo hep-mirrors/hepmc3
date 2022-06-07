@@ -33,6 +33,7 @@ if test $# -eq 0 || test -n "$tmp"; then
     echo "  --search            : returns a '-L/-l' string for insertion into LIBS or LIBADD with search support"
     echo "  --static            : returns a string for insertion into LIBS or LIBADD"
     echo
+    echo "  --features          : returns the list of enabled features in this HepMC3 build"
     echo "  --version           : returns the @PROJECT_NAME@ release version number"
     exit 0
 fi
@@ -76,6 +77,9 @@ fi
 
 tmp=$( echo "$*" | egrep -- '--\<rootIO\>')
 test -n "$tmp" && OUT="$OUT -L@PACKAGE_HEPMC3_ROOTIO_INSTALL_LIBDIR@ @HEPMC3_ROOTIO_LIBRARY@"
+
+tmp=$( echo "$*" | egrep -- '--\<features\>')
+test -n "$tmp" && OUT="$OUT @HEPMC3_FEATURES@"
 
 tmp=$( echo "$*" | egrep -- '--\<version\>')
 test -n "$tmp" && echo @PROJECT_VERSION@ && exit 0

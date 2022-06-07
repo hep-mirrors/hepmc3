@@ -83,6 +83,59 @@ struct PyCallBack_HepMC3_Writer : public HepMC3::Writer {
 		}
 		pybind11::pybind11_fail("Tried to call pure virtual function \"Writer::close\"");
 	}
+	void set_run_info(class std::shared_ptr<class HepMC3::GenRunInfo> a0) override {
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Writer *>(this), "set_run_info");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::override_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return Writer::set_run_info(a0);
+	}
+	class std::shared_ptr<class HepMC3::GenRunInfo> run_info() const override {
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Writer *>(this), "run_info");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>();
+			if (pybind11::detail::cast_is_temporary_value_reference<class std::shared_ptr<class HepMC3::GenRunInfo>>::value) {
+				static pybind11::detail::override_caster_t<class std::shared_ptr<class HepMC3::GenRunInfo>> caster;
+				return pybind11::detail::cast_ref<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o));
+		}
+		return Writer::run_info();
+	}
+	void set_options(const class std::map<std::string, std::string > & a0) override {
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Writer *>(this), "set_options");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
+				static pybind11::detail::override_caster_t<void> caster;
+				return pybind11::detail::cast_ref<void>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<void>(std::move(o));
+		}
+		return Writer::set_options(a0);
+	}
+	using _binder_ret_0 = class std::map<std::string, std::string >;
+	_binder_ret_0 get_options() const override {
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Writer *>(this), "get_options");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>();
+			if (pybind11::detail::cast_is_temporary_value_reference<_binder_ret_0>::value) {
+				static pybind11::detail::override_caster_t<_binder_ret_0> caster;
+				return pybind11::detail::cast_ref<_binder_ret_0>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<_binder_ret_0>(std::move(o));
+		}
+		return Writer::get_options();
+	}
 };
 
 void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namespace_) > &M)
