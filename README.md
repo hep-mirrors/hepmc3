@@ -87,12 +87,13 @@ instalation that can be copied and pasted into a Unix terminal. In some cases th
 action might result in a fully functional installation.
 
 ```
-  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.2.tar.gz
+  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.6.tar.gz
   tar -xzf HepMC3-3.2.6.tar.gz
   mkdir hepmc3-build
   cd hepmc3-build
   cmake -DCMAKE_INSTALL_PREFIX=../hepmc3-install   \
         -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF            \
+        -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF        \
         -DHEPMC3_ENABLE_TEST:BOOL=OFF              \
         -DHEPMC3_INSTALL_INTERFACES:BOOL=ON        \
         -DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF        \
@@ -115,7 +116,7 @@ The full explanation  for the installation options is given below.
   ```
   or b) download the tarball with wget or any other tool
   ```
-  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.2.tar.gz
+  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.2.6.tar.gz
   tar -xzf HepMC3-3.2.6.tar.gz
   ```
 
@@ -297,6 +298,14 @@ To use the interfaces and tests shipped with HepMC3, one can set the following o
 -DHEPMC3_USE_INTERFACE_FROM_PYTHIA8:BOOL=OFF
 ```
 
+12.
+
+ In order to build with PROTOBUFIO put the following flags
+```
+-DHEPMC3_ENABLE_PROTOBUF=ON 
+```
+Adjustment of LD_LIBRARY_PATH might be needed.
+
 
 # Installation troubleshooting
 
@@ -376,6 +385,7 @@ and automatically generated binding sources
 ```
 python/src/pyHepMC3*.cpp
 python/src/pyHepMC3rootIO*.cpp
+python/src/pyHepMC3protobufIO*.cpp
 python/src/pyHepMC3search*.cpp
 ```
 
@@ -384,6 +394,7 @@ The automatically sources were generated using the binder configurations
 ```
 python/src/pyHepMC3.binder
 python/src/pyHepMC3rootIO.binder
+python/src/pyHepMC3protobufIO.binder
 python/src/pyHepMC3search.binder
 ```
 
@@ -400,8 +411,10 @@ The directory contain the files that are used to build a Python package and inst
 python/src/__init__.py
 python/src/search/__init__.py
 python/src/rootIO/__init__.py
+python/src/protobufIO/__init__.py
 pyHepMC3.egg-info.in
 pyHepMC3.rootIO.egg-info.in
+pyHepMC3.protobufIO.egg-info.in
 pyHepMC3.search.egg-info.in
 ```
 

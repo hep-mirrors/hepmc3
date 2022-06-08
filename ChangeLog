@@ -1,4 +1,6 @@
   --------------------------  HepMC3.2.6-pre ----------------------
+2022-06-07 Luke Pickering for HepMC
+         * Adds a protobuf-based HepMC3::Reader/Writer
 2022-05-25 Andrii Verbytskyi for HepMC
          * Update pybind11 headers to fix python 3.11. Reported by by Mattias Ellert.
          * License update.

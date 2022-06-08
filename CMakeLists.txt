@@ -24,6 +24,7 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 option(HEPMC3_ENABLE_SEARCH      "Enables building of search library" ON)
 option(HEPMC3_ENABLE_ROOTIO      "Enables building with ROOT O/I." ON)
+option(HEPMC3_ENABLE_PROTOBUFIO  "Enables building with protobuf O/I." OFF)
 option(HEPMC3_ENABLE_PYTHON      "Enables building of Python  bindings, master switch" ON)
 option(HEPMC3_BUILD_DOCS         "Enables building of documentation" OFF)
 option(HEPMC3_BUILD_EXAMPLES     "Enables building of examples." OFF)
@@ -43,6 +44,7 @@ endif()
 
 message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}")
+message(STATUS "HepMC3: HEPMC3_ENABLE_PROTOBUFIO     ${HEPMC3_ENABLE_PROTOBUFIO}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_PYTHON         ${HEPMC3_ENABLE_PYTHON}")
 message(STATUS "HepMC3: HEPMC3_PYTHON_VERSIONS       ${HEPMC3_PYTHON_VERSIONS}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_TEST           ${HEPMC3_ENABLE_TEST}")
@@ -154,6 +156,17 @@ if(HEPMC3_ENABLE_ROOTIO)
     set(HEPMC3_ENABLE_ROOTIO OFF)
   endif()
 endif()
+
+if(HEPMC3_ENABLE_PROTOBUFIO)
+  set(HEPMC3_PROTOBUFIO_LIBRARY "-lHepMC3protobufIO" )
+  find_package(Protobuf 2.4 REQUIRED)
+
+  if(Protobuf_PROTOC_EXECUTABLE STREQUAL "Protobuf_PROTOC_EXECUTABLE-NOTFOUND" OR NOT EXISTS ${Protobuf_PROTOC_EXECUTABLE})
+    message(FATAL_ERROR "Found libprotobuf, but cannot find proto compiler, protoc, which is required.")
+  endif()
+  add_definitions(-DHEPMC3_PROTOBUFIO)
+endif()
+
 
 #Workarounds for gcc/clang
 set(CMAKE_CXX_STANDARD ${HEPMC3_CXX_STANDARD})
@@ -274,6 +287,12 @@ if(ROOT_FOUND)
    list(APPEND HEPMC3_FEATURES "rootIO")
 endif()
 
+if(Protobuf_FOUND)
+  add_subdirectory(protobufIO)
+  list(APPEND HEPMC3_FEATURES "protobufIO")
+  list(APPEND HEPMC3_FEATURES "protobufIO${Protobuf_VERSION}")
+endif()
+
 # Add the examples subdirectories
 if(HEPMC3_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
@@ -358,6 +377,7 @@ if (ASTYLE)
     COMMAND ${ASTYLE}  --keep-one-line-blocks
     src/*cc
     rootIO/src/*cc
+    protobufIO/src/*cc
     search/src/*cc
     include/HepMC3/Reader*h
     include/HepMC3/Writer*h
@@ -387,6 +407,7 @@ if(CPPCHECK)
       src/*.cc
       search/src/*.cc
       rootIO/src/*.cc
+      protobufIO/src/*.cc
       include/HepMC3/Reader*h
       include/HepMC3/Writer*h
       include/HepMC3/HEPEVT*h
@@ -442,5 +463,9 @@ if(ROOT_FOUND)
   if (HEPMC3_ENABLE_PYTHON)
     list(APPEND CPACK_COMPONENTS_ALL   pythonrootIO)
   endif()
+endif()
+
+if(Protobuf_FOUND)
+  list(APPEND CPACK_COMPONENTS_ALL protobufIOdevel protobufIOlibs)
 endif()
 INCLUDE(CPack)
