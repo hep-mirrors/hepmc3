@@ -39,12 +39,16 @@ jobs:
       with:
           python-version: "${{ matrix.python-version }}"
     - name: Build
-      run:  |
-        cmake -S. -B BUILD -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
-        cmake --build BUILD 
-        cmake --install BUILD         
-        cd BUILD
-        ctest . 
+      run: |
+        ls
+#      run:  |
+#        brew install protobuf
+#        brew install doxygen
+#        cmake -S. -B BUILD -DCMAKE_INSTALL_PREFIX=./INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
+#        cmake --build BUILD 
+#        cmake --install BUILD         
+#        cd BUILD
+#        ctest . 
   nativewin:
     if: "contains(github.event.head_commit.message, 'github')"
     name: "${{ matrix.config.name }} ${{ matrix.python-version }}"
@@ -68,9 +72,25 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "${{ matrix.python-version }}"
+      - name: Set up Protobuf
+#          curl.exe --output protoc-21.1-win64.zip --url https://github.com/protocolbuffers/protobuf/releases/download/v21.1/protoc-21.1-win64.zip
+        run:  |
+          Invoke-WebRequest -Uri https://github.com/protocolbuffers/protobuf/releases/download/v3.19.4/protoc-3.19.4-win64.zip -OutFile protoc-3.19.4-win64.zip
+          dir 
+          Expand-Archive -Path protoc-3.19.4-win64.zip -DestinationPath C:\output
+          dir   C:\output 
+          dir   C:\output\bin 
+          vcpkg install protobuf:x64-windows
+          dir   C:\vcpkg\packages\protobuf_x64-windows 
+          dir   C:\vcpkg\packages\protobuf_x64-windows\lib 
+          dir   C:\vcpkg\packages\protobuf_x64-windows\bin 
+          dir   C:\vcpkg\packages\protobuf_x64-windows\include 
+          copy  C:\output\bin\protoc.exe C:\vcpkg\packages\protobuf_x64-windows\bin 
+          vcpkg list
+          dir   C:\vcpkg\packages\protobuf_x64-windows\bin 
       - name: Build
         run:  |
-          cmake -S. -B BUILD -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
+          cmake -S. -B BUILD -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DProtobuf_PROTOC_EXECUTABLE=C:\vcpkg\packages\protobuf_x64-windows\bin\protoc.exe  -DProtobuf_INCLUDE_DIR=C:\vcpkg\packages\protobuf_x64-windows\include -DProtobuf_LIBRARY=C:\vcpkg\packages\protobuf_x64-windows\lib\libprotobuf.lib -DCMAKE_INSTALL_PREFIX=C:\INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF  -DHEPMC3_BUILD_EXAMPLES:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
           cmake --build BUILD 
           cmake --install BUILD 
           chdir BUILD
@@ -104,12 +124,13 @@ jobs:
           mingw-w64-${{matrix.env}}-python-setuptools
           mingw-w64-${{matrix.env}}-cmake
           mingw-w64-${{matrix.env}}-make
+          mingw-w64-${{matrix.env}}-protobuf
           mingw-w64-${{matrix.env}}-doxygen
     - uses: actions/checkout@v2
     - name: Build
 #Fix here examples
       run:  |
-        cmake -S. -B BUILD -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=OFF -DHEPMC3_PYTHON_VERSIONS=3
+        cmake -S. -B BUILD -DCMAKE_INSTALL_PREFIX=./INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF  -DHEPMC3_BUILD_EXAMPLES:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=OFF -DHEPMC3_PYTHON_VERSIONS=3
         cmake --build BUILD 
         cmake --install BUILD 
 #        cd BUILD

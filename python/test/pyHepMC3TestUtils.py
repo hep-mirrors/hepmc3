@@ -48,7 +48,6 @@ def COMPARE_ASCII_FILES(f1, f2):
     file2.close()
     return 0
 
-
 def fuse_equal(a, b, rtol=0.00001, atol=0.000001):
     if abs(1.0 * a - 1.0 * b) < atol:
         return True

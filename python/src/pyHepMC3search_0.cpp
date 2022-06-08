@@ -39,11 +39,11 @@ void bind_pyHepMC3search_0(std::function< pybind11::module &(std::string const &
 		cl.def("__eq__", (class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)> (HepMC3::AttributeFeature::*)(std::string) const) &HepMC3::AttributeFeature::operator==, "equality operator\n\nC++: HepMC3::AttributeFeature::operator==(std::string) const --> class std::function<bool (class std::shared_ptr<const class HepMC3::GenParticle>)>", pybind11::arg("rhs"));
 		cl.def("assign", (class HepMC3::AttributeFeature & (HepMC3::AttributeFeature::*)(const class HepMC3::AttributeFeature &)) &HepMC3::AttributeFeature::operator=, "C++: HepMC3::AttributeFeature::operator=(const class HepMC3::AttributeFeature &) --> class HepMC3::AttributeFeature &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::Relatives file:HepMC3/Relatives.h line:53
+	{ // HepMC3::_parents file:HepMC3/Relatives.h line:76
 		pybind11::class_<HepMC3::_parents, std::shared_ptr<HepMC3::_parents>> cl(M("HepMC3"), "_parents", "Provides operator to find the parent particles of a Vertex or Particle\n\n Note you would usually not instantiate this directly, but wrap it in a RelativesInterface");
 		cl.def( pybind11::init( [](){ return new HepMC3::_parents(); } ) );
 	}
-	{ // HepMC3::_children file:HepMC3/Relatives.h line:218
+	{ // HepMC3::_children file:HepMC3/Relatives.h line:99
 		pybind11::class_<HepMC3::_children, std::shared_ptr<HepMC3::_children>> cl(M("HepMC3"), "_children", "Provides operator to find the child particles of a Vertex or Particle\n\n Note you would usually not instantiate this directly, but wrap it in a RelativesInterface");
 		cl.def( pybind11::init( [](){ return new HepMC3::_children(); } ) );
 	}

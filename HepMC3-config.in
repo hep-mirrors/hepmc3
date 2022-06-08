@@ -30,6 +30,7 @@ if test $# -eq 0 || test -n "$tmp"; then
     echo "  --cflags|--cppflags : returns a '-I' string for insertion into CPPFLAGS or CXXFLAGS"
     echo "  --ldflags|--libs    : returns a '-L/-l' string for insertion into LIBS or LIBADD"
     echo "  --rootIO            : returns a '-L/-l' string for insertion into LIBS or LIBADD with rootIO support"
+    echo "  --protobufIO        : returns a '-L/-l' string for insertion into LIBS or LIBADD with protobufIO support"
     echo "  --search            : returns a '-L/-l' string for insertion into LIBS or LIBADD with search support"
     echo "  --static            : returns a string for insertion into LIBS or LIBADD"
     echo
@@ -65,6 +66,9 @@ OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3-static.a"
 tmp=$( echo "$*" | egrep -- '--\<search\>')
 test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3search-static.a"
 
+tmp=$( echo "$*" | egrep -- '--\<protobufIO\>')
+test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3protobufIO_static.a"
+
 else
 
 tmp=$( echo "$*" | egrep -- '--\<ldflags|libs\>')
@@ -72,6 +76,9 @@ test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3"
 
 tmp=$( echo "$*" | egrep -- '--\<search\>')
 test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3search"
+
+tmp=$( echo "$*" | egrep -- '--\<protobufIO\>')
+test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3protobufIO"
 
 fi
 
