@@ -39,29 +39,20 @@ public:
     virtual void close() = 0;
 
     /// Set the global GenRunInfo object.
-    void set_run_info(std::shared_ptr<GenRunInfo> run) {
-        m_run_info = run;
-    }
+    virtual void set_run_info(std::shared_ptr<GenRunInfo> run) { m_run_info = run; }
 
     /// Get the global GenRunInfo object.
-    std::shared_ptr<GenRunInfo> run_info() const {
-        return m_run_info;
-    }
+    virtual std::shared_ptr<GenRunInfo> run_info() const { return m_run_info; }
 
 ///deleted copy constructor
     Writer(const Writer&) = delete;
 ///deleted copy assignment operator
     Writer& operator = (const Writer &) = delete;
     /// Set options
-    void set_options(const std::map<std::string, std::string>& options)
-    {
-        m_options=options;
-    }
+    virtual void set_options(const std::map<std::string, std::string>& options) { m_options = options; }
     /// Set options
-    std::map<std::string, std::string> get_options() const
-    {
-        return m_options;
-    }
+    virtual std::map<std::string, std::string> get_options() const { return m_options; }
+
 protected:
 
     /// options

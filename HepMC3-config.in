@@ -5,10 +5,12 @@
 ## @configure_input@
 #The line below assures at least some relocation.
 if [ "$(uname)" == "Darwin" ]; then
-PACKAGE_PREFIX_DIR=$(dirname $(dirname $(greadlink -f $0)))
+PACKAGE_BIN_DIR=$(dirname $(greadlink -f $0))
 else
-PACKAGE_PREFIX_DIR=$(dirname $(dirname $(readlink -f $0)))
+PACKAGE_BIN_DIR=$(dirname $(readlink -f $0))
 fi
+PACKAGE_PREFIX_DIR=$(dirname ${PACKAGE_BIN_DIR})
+
 tmp=$(echo $* | egrep -- '--\<help\>|-\<h\>')
 if test $# -eq 0 || test -n "$tmp"; then
     echo "@PROJECT_NAME@-config: configuration tool for the @PROJECT_NAME@ library"
@@ -28,9 +30,11 @@ if test $# -eq 0 || test -n "$tmp"; then
     echo "  --cflags|--cppflags : returns a '-I' string for insertion into CPPFLAGS or CXXFLAGS"
     echo "  --ldflags|--libs    : returns a '-L/-l' string for insertion into LIBS or LIBADD"
     echo "  --rootIO            : returns a '-L/-l' string for insertion into LIBS or LIBADD with rootIO support"
+    echo "  --protobufIO        : returns a '-L/-l' string for insertion into LIBS or LIBADD with protobufIO support"
     echo "  --search            : returns a '-L/-l' string for insertion into LIBS or LIBADD with search support"
     echo "  --static            : returns a string for insertion into LIBS or LIBADD"
     echo
+    echo "  --features          : returns the list of enabled features in this HepMC3 build"
     echo "  --version           : returns the @PROJECT_NAME@ release version number"
     exit 0
 fi
@@ -57,10 +61,13 @@ tmp=$( echo "$*" | egrep -- '--\<static\>')
 if test -n "$tmp"; then
 
 tmp=$( echo "$*" | egrep -- '--\<ldflags|libs\>')
-OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3_static.a"
+OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3-static.a"
 
 tmp=$( echo "$*" | egrep -- '--\<search\>')
-test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3search_static.a"
+test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3search-static.a"
+
+tmp=$( echo "$*" | egrep -- '--\<protobufIO\>')
+test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3protobufIO_static.a"
 
 else
 
@@ -70,10 +77,16 @@ test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3"
 tmp=$( echo "$*" | egrep -- '--\<search\>')
 test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3search"
 
+tmp=$( echo "$*" | egrep -- '--\<protobufIO\>')
+test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3protobufIO"
+
 fi
 
 tmp=$( echo "$*" | egrep -- '--\<rootIO\>')
 test -n "$tmp" && OUT="$OUT -L@PACKAGE_HEPMC3_ROOTIO_INSTALL_LIBDIR@ @HEPMC3_ROOTIO_LIBRARY@"
+
+tmp=$( echo "$*" | egrep -- '--\<features\>')
+test -n "$tmp" && OUT="$OUT @HEPMC3_FEATURES@"
 
 tmp=$( echo "$*" | egrep -- '--\<version\>')
 test -n "$tmp" && echo @PROJECT_VERSION@ && exit 0

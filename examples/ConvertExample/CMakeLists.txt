@@ -49,6 +49,13 @@ if(ROOT_FOUND)
   # create environment scripts
   set(basic_libdir "${basic_libdir}:${ROOT_LIBRARY_DIR}")
 endif()
+if(Protobuf_FOUND)
+  list(APPEND basic_includes ${PROJECT_SOURCE_DIR}/protobufIO/include  ${Protobuf_INCLUDE_DIRS})
+  list(APPEND basic_libraries ${Protobuf_LIBRARIES} ${HEPMC3_PROTOBUFIO_LIB})
+  # create environment scripts
+  set(basic_libdir "${basic_libdir}:${Protobuf_LIBRARY_DIR}")
+endif()
+
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.8")
 ########################################################################

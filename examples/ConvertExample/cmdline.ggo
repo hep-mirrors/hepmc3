@@ -4,8 +4,8 @@ purpose "Convert between different file formats of Monte Carlo event record.
 Example:
         convert_example -i hepmc2 -o treeroot input.hepmc output.root
 "
-option "input-format" i "Input format" string required values= "hepmc2", "auto", "hepmc3", "hpe", "root", "treeroot", "lhef" ,  "uproot", "plugin"
-option "output-format" o "Output format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot", "treerootopal", "hpezeus", "dump","plugin", "dot", "none"
+option "input-format" i "Input format" string required values= "hepmc2", "auto", "hepmc3", "hpe", "root", "treeroot", "lhef" ,  "uproot", "plugin", "proto"
+option "output-format" o "Output format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot", "treerootopal", "hpezeus", "dump","plugin", "dot", "none", "proto"
 option "extensions" e "Extensions, in a form extension=value, could be passed to readers/writers" multiple optional string
 option "events-limit" - "Limit of events to read from input" optional long default="100000000"
 option "first-event-number" -       "Lowest allowed event number" optional long default="-100000000"

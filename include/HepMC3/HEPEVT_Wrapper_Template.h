@@ -59,8 +59,8 @@ private:
 // Accessors
 //
 public:
-    void   allocate_internal_storage(); ///!< Allocates m_internal_storage storage in smart pointer to hold HEPEVT of fixed size
-    void   copy_to_internal_storage(char *c, int N); ///!< Copies the content of foreight common block into the internal storage
+    void   allocate_internal_storage(); //!< Allocates m_internal_storage storage in smart pointer to hold HEPEVT of fixed size
+    void   copy_to_internal_storage( char *c, int N ); //!< Copies the content of foreign common block into the internal storage
     void   set_max_number_entries( unsigned int size ) { if (size != max_particles) printf("This implementation does not support change of the block size.\n"); assert(size == max_particles); }//!< Set block size
     void   set_hepevt_address(char *c) { m_hepevtptr = (struct HEPEVT_Templated<max_particles, momentum_type>*)c;          } //!< Set Fortran block address
     int    max_number_entries()   const    { return max_particles;                              } //!< Block size
@@ -137,9 +137,9 @@ void HEPEVT_Wrapper_Template<max_particles, momentum_type>::copy_to_internal_sto
     m_internal_storage = std::make_shared<struct HEPEVT_Templated<max_particles, momentum_type>>();
     m_hepevtptr = m_internal_storage.get();
     char* x = c;
-    m_hepevtptr->nevhep=(int)(*x);
+    m_hepevtptr->nevhep = *((int*)x);
     x += sizeof(int);
-    m_hepevtptr->nhep=(int)(*x);
+    m_hepevtptr->nhep = *((int*)x);
     x += sizeof(int);
     memcpy(m_hepevtptr->isthep, x, N*sizeof(int));
     x += sizeof(int)*N;

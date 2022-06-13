@@ -30,6 +30,10 @@
 #include "HepMC3/ReaderGZ.h"
 #include "HepMC3/WriterGZ.h"
 #endif
+#ifdef HEPMC3_PROTOBUFIO
+#include "HepMC3/Readerprotobuf.h"
+#include "HepMC3/Writerprotobuf.h"
+#endif
 
 /* Extension example*/
 #ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
@@ -53,7 +57,7 @@
 
 #include "cmdline.h"
 using namespace HepMC3;
-enum formats {autodetect, hepmc2, hepmc3, hpe,root, treeroot, treerootopal, hpezeus, lhef, dump, dot, uproot, plugin, none};
+enum formats {autodetect, hepmc2, hepmc3, hpe,root, treeroot, treerootopal, hpezeus, lhef, dump, dot, uproot, plugin, none, proto};
 
 template <class T>
 std::shared_ptr<Reader> get_input_file(const char* name, const bool input_is_stdin, const bool use_compression) {
@@ -103,6 +107,7 @@ int main(int argc, char** argv)
     format_map.insert(std::pair<std::string,formats> ( "uproot", uproot ));
     format_map.insert(std::pair<std::string,formats> ( "plugin", plugin ));
     format_map.insert(std::pair<std::string,formats> ( "none", none ));
+    format_map.insert(std::pair<std::string,formats> ( "proto", proto ));
     std::map<std::string, std::string> options;
     for (size_t i=0; i<ai.extensions_given; i++)
     {
@@ -172,6 +177,14 @@ int main(int argc, char** argv)
         printf("Input format %s  is not supported\n", ai.input_format_arg);
         exit(2);
 #endif
+    case proto:
+#ifdef HEPMC3_PROTOBUFIO
+        input_file = std::make_shared<Readerprotobuf>(ai.inputs[0]);
+        break;
+#else
+        printf("Input format %s  is not supported\n", ai.input_format_arg);
+        exit(2);
+#endif
     case plugin:
         if (options.find("InputPluginLibrary") == options.end())         {
             printf("InputPluginLibrary option required\n");
@@ -209,6 +222,14 @@ int main(int argc, char** argv)
     case root:
 #ifdef HEPMC3_ROOTIO
         output_file = std::make_shared<WriterRoot>(ai.inputs[1]);
+        break;
+#else
+        printf("Output format %s  is not supported\n", ai.output_format_arg);
+        exit(2);
+#endif
+    case proto:
+#ifdef HEPMC3_PROTOBUFIO
+        output_file = std::make_shared<Writerprotobuf>(ai.inputs[1]);
         break;
 #else
         printf("Output format %s  is not supported\n", ai.output_format_arg);

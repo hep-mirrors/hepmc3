@@ -7,7 +7,6 @@
 #include <HepMC3/GenParticle.h>
 #include <HepMC3/GenVertex.h>
 #include <HepMC3/LHEF.h>
-//#include <bits/stl_uninitialized.h>
 #include <functional>
 #include <ios>
 #include <iterator>

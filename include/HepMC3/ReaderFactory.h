@@ -41,6 +41,15 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
     libHepMC3rootIO = "HepMC3rootIO.dll";
 #endif
+
+    std::string libHepMC3protobufIO = "libHepMC3protobufIO.so.3";
+#if defined(__darwin__) || defined(__APPLE__)
+    libHepMC3protobufIO = "libHepMC3protobufIO.dylib";
+#endif
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
+    libHepMC3protobufIO = "HepMC3protobufIO.dll";
+#endif
+
     bool remote = false;
     bool pipe = false;
     if (filename.find("http://") != std::string::npos)    remote = true;
@@ -100,6 +109,9 @@ std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         return   std::make_shared<ReaderPlugin>(filename,libHepMC3rootIO,std::string("newReaderRootTreefile"));
     if (!remote)
     {
+        HEPMC3_DEBUG(0, "deduce_reader: Attempt ProtobufIO for " << filename);
+        if ( strncmp(head.at(0).c_str(),"hmpb",4) == 0 )
+            return std::make_shared<ReaderPlugin>(filename,libHepMC3protobufIO,std::string("newReaderprotobuffile"));
 #if HEPMC3_USE_COMPRESSION
         HEPMC3_DEBUG(0, "Attempt ReaderGZ for " << filename);
         char buf[6];
@@ -170,6 +182,19 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
 
     for (size_t i = 0; i < back; i++)  stream.unget();
 
+    if ( strncmp(head.at(0).c_str(),"hmpb",4) == 0 )
+    {
+        std::string libHepMC3protobufIO = "libHepMC3protobufIO.so.3";
+#if defined(__darwin__) || defined(__APPLE__)
+        libHepMC3protobufIO = "libHepMC3protobufIO.dylib";
+#endif
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
+        libHepMC3protobufIO = "HepMC3protobufIO.dll";
+#endif
+
+        return std::make_shared<ReaderPlugin>(stream,libHepMC3protobufIO,std::string("newReaderprotobufstream"));
+    }
+
     if ( strncmp(head.at(0).c_str(), "HepMC::Version", 14) == 0 && strncmp(head.at(1).c_str(), "HepMC::Asciiv3", 14) == 0 )
     {
         HEPMC3_DEBUG(0, "Attempt ReaderAscii");
@@ -234,6 +259,19 @@ std::shared_ptr<Reader> deduce_reader(std::shared_ptr<std::istream> stream)
     }
 
     for (size_t i = 0; i < back; i++)  stream->unget();
+
+    if ( strncmp(head.at(0).c_str(),"hmpb",4) == 0 )
+    {
+        std::string libHepMC3protobufIO = "libHepMC3protobufIO.so.3";
+#if defined(__darwin__) || defined(__APPLE__)
+        libHepMC3protobufIO = "libHepMC3protobufIO.dylib";
+#endif
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
+        libHepMC3protobufIO = "HepMC3protobufIO.dll";
+#endif
+
+        return std::make_shared<ReaderPlugin>(*stream,libHepMC3protobufIO,std::string("newReaderprotobufstream"));
+    }
 
     if ( strncmp(head.at(0).c_str(), "HepMC::Version", 14) == 0 && strncmp(head.at(1).c_str(), "HepMC::Asciiv3", 14) == 0 )
     {

@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3)
-set(PROJECT_VERSION 3.02.05)
-SET(HEPMC3_VERSION 3.02.05)
+set(PROJECT_VERSION 3.02.06)
+SET(HEPMC3_VERSION 3.02.06)
 SET(HEPMC3_VERSION_MAJOR  3)
 SET(HEPMC3_VERSION_MINOR  2)
-SET(HEPMC3_VERSION_PATCH  5)
+SET(HEPMC3_VERSION_PATCH  6)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 #This module respects HFS, e.g. defines lib or lib64 when it is needed.
@@ -24,6 +24,7 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 option(HEPMC3_ENABLE_SEARCH      "Enables building of search library" ON)
 option(HEPMC3_ENABLE_ROOTIO      "Enables building with ROOT O/I." ON)
+option(HEPMC3_ENABLE_PROTOBUFIO  "Enables building with protobuf O/I." OFF)
 option(HEPMC3_ENABLE_PYTHON      "Enables building of Python  bindings, master switch" ON)
 option(HEPMC3_BUILD_DOCS         "Enables building of documentation" OFF)
 option(HEPMC3_BUILD_EXAMPLES     "Enables building of examples." OFF)
@@ -40,8 +41,10 @@ if (NOT HEPMC3_ROOTIO_INSTALL_LIBDIR)
   set(HEPMC3_ROOTIO_INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
 endif()
 
+
 message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}")
+message(STATUS "HepMC3: HEPMC3_ENABLE_PROTOBUFIO     ${HEPMC3_ENABLE_PROTOBUFIO}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_PYTHON         ${HEPMC3_ENABLE_PYTHON}")
 message(STATUS "HepMC3: HEPMC3_PYTHON_VERSIONS       ${HEPMC3_PYTHON_VERSIONS}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_TEST           ${HEPMC3_ENABLE_TEST}")
@@ -98,6 +101,7 @@ include(CheckCXXCompilerFlag)
 if (NOT HEPMC3_CXX_STANDARD)
   set(HEPMC3_CXX_STANDARD 11)
 endif()
+set(HEPMC3_FEATURES "")
 if(HEPMC3_ENABLE_ROOTIO)
   set (ROOT_FIND_COMPONENTS Core RIO Tree)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
@@ -153,6 +157,17 @@ if(HEPMC3_ENABLE_ROOTIO)
   endif()
 endif()
 
+if(HEPMC3_ENABLE_PROTOBUFIO)
+  set(HEPMC3_PROTOBUFIO_LIBRARY "-lHepMC3protobufIO" )
+  find_package(Protobuf 2.4 REQUIRED)
+
+  if(Protobuf_PROTOC_EXECUTABLE STREQUAL "Protobuf_PROTOC_EXECUTABLE-NOTFOUND" OR NOT EXISTS ${Protobuf_PROTOC_EXECUTABLE})
+    message(FATAL_ERROR "Found libprotobuf, but cannot find proto compiler, protoc, which is required.")
+  endif()
+  add_definitions(-DHEPMC3_PROTOBUFIO)
+endif()
+
+
 #Workarounds for gcc/clang
 set(CMAKE_CXX_STANDARD ${HEPMC3_CXX_STANDARD})
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -161,8 +176,12 @@ CHECK_CXX_COMPILER_FLAG("-Wno-strict-aliasing" COMPILER_SUPPORTS_-Wno-strict-ali
 if (COMPILER_SUPPORTS_-Wno-strict-aliasing)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
 endif()
+#Workarounds for Intel
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "Intel")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -diag-disable=2196")
+endif()
 #Workarounds for nvc++
-  if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC")
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC")
     set(CMAKE_CXX_EXTENSIONS ON)
     #Workaround for pybind11 templates
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
@@ -170,7 +189,7 @@ endif()
 #Workarounds for VS
 if (MSVC OR ${CMAKE_CXX_COMPILER_ID} MATCHES "MSVC" )
 #Memory problem and false positive warnings.
-  set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/D_CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477")
+  set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/D_CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477" "/wd4251")
   foreach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
     CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
     if(COMPILER_SUPPORTS_${fl})
@@ -210,12 +229,12 @@ set( hepmc3core_sources
   ${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
 )
 
-#We need to export all symbols on WIn to build .lib files
+#We need to export all symbols on Win to build .lib files
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_library(HepMC3 SHARED ${hepmc3core_sources})
 target_include_directories(HepMC3 PUBLIC ${PROJECT_SOURCE_DIR}/include)
-set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3  SOVERSION 3
+set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 3
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
@@ -242,12 +261,77 @@ endif()
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
 
+########################################################################
+## Optional packages
+########################################################################
+set(INTERFACES_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/interfaces)
+
+#Search engine
+if(HEPMC3_ENABLE_SEARCH)
+  add_subdirectory(search)
+  list(APPEND HEPMC3_FEATURES "search")
+endif()
+
+#Interfaces for some MCEGs
+if (HEPMC3_INSTALL_INTERFACES)
+  install(DIRECTORY interfaces/ DESTINATION ${INTERFACES_INSTALL_DIR} COMPONENT devel)
+  list(APPEND HEPMC3_FEATURES "interfaces")
+  list(APPEND HEPMC3_FEATURES "interfaceshepmc2")
+  list(APPEND HEPMC3_FEATURES "interfacespythia6")
+  list(APPEND HEPMC3_FEATURES "interfacespythia8")
+endif()
+
+# ROOT support
+if(ROOT_FOUND)
+   add_subdirectory(rootIO)
+   list(APPEND HEPMC3_FEATURES "rootIO")
+endif()
+
+if(Protobuf_FOUND)
+  add_subdirectory(protobufIO)
+  list(APPEND HEPMC3_FEATURES "protobufIO")
+  list(APPEND HEPMC3_FEATURES "protobufIO${Protobuf_VERSION}")
+endif()
+
+# Add the examples subdirectories
+if(HEPMC3_BUILD_EXAMPLES)
+  set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
+  add_subdirectory(examples)
+endif()
+if (HEPMC3_INSTALL_EXAMPLES)
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  
+          FILES_MATCHING PATTERN "*"   
+          PATTERN "*CMakeFiles*" EXCLUDE  
+          PATTERN "Makefile" EXCLUDE  
+          PATTERN "*cmake_install.cmake*" EXCLUDE  
+          PATTERN "*libAnalysis*" EXCLUDE )
+  list(APPEND HEPMC3_FEATURES "examples")
+endif()
+
+if(HEPMC3_BUILD_DOCS)
+  add_subdirectory(doc)
+  list(APPEND HEPMC3_FEATURES "doc")
+endif()
+
+#test suite
+if(HEPMC3_ENABLE_TEST)
+  ENABLE_TESTING()
+  add_subdirectory(test)
+endif()
+
+#Python bindings
+if(HEPMC3_ENABLE_PYTHON)
+  add_subdirectory(python)
+  list(APPEND HEPMC3_FEATURES "python")
+endif()
+
+STRING(REPLACE ";" " " HEPMC3_FEATURES "${HEPMC3_FEATURES}")
+
 # Generate config CMake files to be used by other projects
 #
 
 include(CMakePackageConfigHelpers)
 
-set(INTERFACES_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/interfaces)
 set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/cmake)
 
 configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in
@@ -258,7 +342,8 @@ configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in
             HEPMC3_ROOTIO_INSTALL_LIBDIR
             INTERFACES_INSTALL_DIR)
 
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake COMPATIBILITY SameMajorVersion VERSION ${PROJECT_VERSION})
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake 
+  COMPATIBILITY SameMajorVersion VERSION ${PROJECT_VERSION})
 
 configure_package_config_file(HepMC3-config.in
   ${CMAKE_CURRENT_BINARY_DIR}/outputs/bin/HepMC3-config
@@ -276,53 +361,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/bin/HepMC3-config
         DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
-########################################################################
-## Optional packages
-########################################################################
-#Search engine
-if(HEPMC3_ENABLE_SEARCH)
-  add_subdirectory(search)
-endif()
-
-#Interfaces for some MCEGs
-if (HEPMC3_INSTALL_INTERFACES)
-  install(DIRECTORY interfaces/ DESTINATION ${INTERFACES_INSTALL_DIR} COMPONENT devel)
-endif()
-
-# ROOT support
-if(ROOT_FOUND)
-   add_subdirectory(rootIO)
-endif()
-
-# Add the examples subdirectories
-if(HEPMC3_BUILD_EXAMPLES)
-  set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
-  add_subdirectory(examples)
-endif()
-if (HEPMC3_INSTALL_EXAMPLES)
-  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  
-          FILES_MATCHING PATTERN "*"   
-          PATTERN "*CMakeFiles*" EXCLUDE  
-          PATTERN "Makefile" EXCLUDE  
-          PATTERN "*cmake_install.cmake*" EXCLUDE  
-          PATTERN "*libAnalysis*" EXCLUDE )
-endif()
-
-if(HEPMC3_BUILD_DOCS)
-  add_subdirectory(doc)
-endif()
-
-#test suite
-if(HEPMC3_ENABLE_TEST)
-  ENABLE_TESTING()
-  add_subdirectory(test)
-endif()
-
-#Python bindings
-if(HEPMC3_ENABLE_PYTHON)
-  add_subdirectory(python)
-endif()
-
 # uninstall target
 if(NOT TARGET uninstall)
     configure_file(
@@ -339,6 +377,7 @@ if (ASTYLE)
     COMMAND ${ASTYLE}  --keep-one-line-blocks
     src/*cc
     rootIO/src/*cc
+    protobufIO/src/*cc
     search/src/*cc
     include/HepMC3/Reader*h
     include/HepMC3/Writer*h
@@ -368,6 +407,7 @@ if(CPPCHECK)
       src/*.cc
       search/src/*.cc
       rootIO/src/*.cc
+      protobufIO/src/*.cc
       include/HepMC3/Reader*h
       include/HepMC3/Writer*h
       include/HepMC3/HEPEVT*h
@@ -391,7 +431,7 @@ set(CPACK_PACKAGE_VENDOR "HepMC3 Developers")
 set(CPACK_PACKAGE_VERSION 3)
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 2)
-set(CPACK_PACKAGE_VERSION_PATCH 5)
+set(CPACK_PACKAGE_VERSION_PATCH 6)
 set(CPACK_PACKAGE_RELEASE 0)
 set(CPACK_PACKAGE_FILE_NAME "HepMC3")
 set(CPACK_PACKAGE_DESCRIPTION "Event record library for high energy physics Monte Carlo")
@@ -423,5 +463,9 @@ if(ROOT_FOUND)
   if (HEPMC3_ENABLE_PYTHON)
     list(APPEND CPACK_COMPONENTS_ALL   pythonrootIO)
   endif()
+endif()
+
+if(Protobuf_FOUND)
+  list(APPEND CPACK_COMPONENTS_ALL protobufIOdevel protobufIOlibs)
 endif()
 INCLUDE(CPack)

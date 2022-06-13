@@ -87,7 +87,7 @@ void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexP
     return;
 }
 
-HEPMC3_EXPORT_API struct HEPEVT*  HEPEVT_Wrapper::hepevtptr = nullptr;
+HEPMC3_EXPORT_API struct HEPEVT*  hepevtptr = nullptr;
 HEPMC3_EXPORT_API std::shared_ptr<struct HEPEVT_Pointers<double> >  HEPEVT_Wrapper_Runtime_Static::m_hepevtptr = nullptr;
 HEPMC3_EXPORT_API int HEPEVT_Wrapper_Runtime_Static::m_max_particles = 0;
 

@@ -31,11 +31,11 @@ public:
     /// @param[in] evt Event to be serialized
     void write_event(const GenEvent &evt);
     /// @brief Return status of the stream
-    bool failed() {
+    bool failed() override {
         return (bool)m_file.rdstate();
     }
     /// @brief Close file stream
-    void close();
+    void close() override;
     /// @brief Close file stream
     void set_style(const int& istyle) {
         m_style=istyle;
