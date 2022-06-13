@@ -49,5 +49,5 @@ int main() {
   }
 
   reader->close();
-  exit(0);
+  return 0;
 }

@@ -34,7 +34,7 @@ public:
     /** @brief State */
     bool failed() override {if (!m_reader) return true; return m_reader->failed();};
     /** @brief Get the global GenRunInfo object. */
-    std::shared_ptr<GenRunInfo> run_info() const { return m_reader?m_reader->run_info():nullptr; }
+    std::shared_ptr<GenRunInfo> run_info() const  override  { return m_reader?m_reader->run_info():nullptr; }
     /** @brief  Set options */
     void set_options(const std::map<std::string, std::string>& options)  override { if (!m_reader) return; else m_reader->set_options(options); }
     /** @brief  Get options  */
