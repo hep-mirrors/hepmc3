@@ -106,7 +106,7 @@ int main()
     if( !istr )
     {
         std::cerr << "testMass: cannot open " << std::endl;
-        exit(1);
+        return 1;
     }
     ReaderAsciiHepMC2 xin(istr);
     if (xin.failed()) return 1;
