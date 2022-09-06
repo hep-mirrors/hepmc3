@@ -35,23 +35,13 @@
 
     @subsection hepmc3_releases HepMC3 releases
     <a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>
-      - <a href="releases/HepMC3-3.2.5.tar.gz">HepMC-3.2.5.tar.gz</a> HepMC3-3.2.5 <b> XX.Jan.2022</b>
-      - <a href="releases/HepMC3-3.2.4.tar.gz">HepMC-3.2.4.tar.gz</a> HepMC3-3.2.4 <b> 07.Jul.2021</b>
+      - <a href="releases/HepMC3-3.2.5.tar.gz">HepMC-3.2.5.tar.gz</a> HepMC3-3.2.5 <b> 22.Feb.2022</b>
+      - <a href="releases/HepMC3-3.2.4.tar.gz">HepMC-3.2.4.tar.gz</a> HepMC3-3.2.4 <b> 07.Jul.2021</b>  
       - <a href="releases/HepMC3-3.2.3.tar.gz">HepMC-3.2.3.tar.gz</a> HepMC3-3.2.3 <b> 14.Dec.2020</b>
       - <a href="releases/HepMC3-3.2.2.tar.gz">HepMC-3.2.2.tar.gz</a> HepMC3-3.2.2 <b> 10.Jun.2020</b>
       - <a href="releases/HepMC3-3.2.1.tar.gz">HepMC-3.2.1.tar.gz</a> HepMC3-3.2.1 <b> 17.Mar.2020</b>
       - <a href="releases/HepMC3-3.2.0.tar.gz">HepMC-3.2.0.tar.gz</a> HepMC3-3.2.0 <b> 27.Nov.2019</b>
       - <a href="releases/HepMC3-3.1.2.tar.gz">HepMC-3.1.2.tar.gz</a> HepMC3-3.1.2 <b> 23.Aug.2019</b>
-      - <a href="releases/HepMC3-3.1.1.tar.gz">HepMC-3.1.1.tar.gz</a> HepMC3-3.1.1 <b> 29.Mar.2019</b>
-      - <a href="releases/HepMC3-3.1.0.tar.gz">HepMC-3.1.0.tar.gz</a> HepMC3-3.1.0 <b> 08.Feb.2019</b>
-      - <a href="releases/hepmc3.0.0.tgz">hepmc3.0.0.tgz</a> HepMC3-3.0.0 <b> 20.Mar.2017</b>
-      - <a href="releases/hepmc3-beta2.0.tgz">hepmc3-beta2.0.tgz</a> HepMC3-beta2.0 <b> 25.Apr.2016</b>
-      - <a href="releases/hepmc3-beta1.0.tgz">hepmc3-beta1.0.tgz</a> HepMC3-beta1.0 <b> 13.Jan.2016</b>
-      - <a href="releases/hepmc3-alpha5.tgz">hepmc3-alpha5.tgz</a> HepMC3-alpha5 <b> 29.Apr.2015</b>
-      - <a href="releases/hepmc3-alpha4.tgz">hepmc3-alpha4.tgz</a> HepMC3-alpha4 <b> 7.Apr.2015</b>
-      - <a href="releases/hepmc3-alpha3.tgz">hepmc3-alpha3.tgz</a> HepMC3-alpha3 <b>10.Mar.2015</b>
-      - <a href="releases/hepmc3-alpha2.tgz">hepmc3-alpha2.tgz</a> HepMC3-alpha2 <b>15.Dec.2014</b>
-      - <a href="releases/hepmc3-alpha1.tgz">hepmc3-alpha1.tgz</a> First alpha release of HepMC3 <b>6.Nov.2014</b>
 
     @subsection hepmc2_releases HepMC2 releases
     <a href="https://gitlab.cern.ch/hepmc/HepMC/blob/master/ChangeLog">ChangeLog</a>
@@ -90,6 +80,5 @@
 
     <hr>
 
- Last update 27 Oct 2020
 */
 

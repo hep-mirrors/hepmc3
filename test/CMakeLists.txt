@@ -29,13 +29,37 @@ macro( hepmc_root_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${testname} )
-  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}")
+  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}"
+  ENVIRONMENT "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{LD_LIBRARY_PATH}"
+  ENVIRONMENT "DYLD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{DYLD_LIBRARY_PATH}"
+  )
   file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   string(REPLACE "test" "" ${testname} name)
   file(GLOB INPUT${name}  "${CMAKE_CURRENT_SOURCE_DIR}/input${name}*" )
   file(COPY ${INPUT${name}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endmacro( hepmc_root_test )
+
+
+macro( hepmc_protobuf_test testname )
+  message( STATUS "HepMC3 test: building protobuf test ${testname} " )
+  find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+  ADD_EXECUTABLE(${testname} ${${testname}_source}  ${ARGN} )
+  target_include_directories(${testname} BEFORE
+  PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/ ${CMAKE_CURRENT_SOURCE_DIR}/../protobufIO/include/ )
+  target_link_libraries(${testname} PRIVATE HepMC3 HepMC3protobufIO)
+
+  set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
+  set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
+  add_test( ${testname} ${testname} )
+  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}")
+  file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
+  file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  string(REPLACE "test" "" ${testname} name)
+  file(GLOB INPUT${name}  "${CMAKE_CURRENT_SOURCE_DIR}/input${name}*" )
+  file(COPY ${INPUT${name}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+endmacro( hepmc_protobuf_test )
 
 
 set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
@@ -120,6 +144,7 @@ set( HepMC_tests
         testSingleVertexHepMC2
         testAttributes
         testHEPEVTWrapper1
+
          )
 set( HepMC_root_tests
         testIO2
@@ -132,6 +157,22 @@ set( HepMC_root_tests
 set( HepMC_search_tests
 
         )
+if (WIN32)
+  set( HepMC_protobuf_tests )
+else()
+  set( HepMC_protobuf_tests
+        testIO20
+        testIO21
+        testIO22
+        testIO23
+        testIO24
+        testIO25
+        testIO26
+        testIO27
+        testIO28
+        testIO29
+        )
+endif()
 
 set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
 if ("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
@@ -184,8 +225,16 @@ if(HEPMC3_ENABLE_SEARCH )
   target_link_libraries(${test} PRIVATE HepMC3search)
   target_include_directories(${test} BEFORE PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/../search/include)
   endforeach ( test ${HepMC_search_tests} )
-  
 endif()
+
+if(HEPMC3_ENABLE_PROTOBUFIO )
+  foreach ( test ${HepMC_protobuf_tests} )
+    hepmc_protobuf_test( ${test} )
+  target_link_libraries(${test} PRIVATE HepMC3protobufIO)
+  target_include_directories(${test} BEFORE PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/../protobufIO/include)
+  endforeach ( test ${HepMC_protobuf_tests} )
+endif()
+
 
 ## Treatment of special needs in the HepMC tests
 if(Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI") AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC") )
@@ -204,6 +253,30 @@ if(Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI") AND NOT (${CMA
     endif() 
   endif()
 endif()
+if (WIN32)
+  if ("zlib" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND ZLIB_FOUND)
+     get_filename_component(z ${ZLIB_LIBRARIES} DIRECTORY)
+     find_file(zdll NAME zlib.dll PATHS ${z} ${z}/../bin/)
+     if (zdll)
+       file(COPY ${zdll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+     endif()
+   endif()
+   if ("lzma" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND LIBLZMA_FOUND)
+     get_filename_component(l ${LIBLZMA_LIBRARIES} DIRECTORY)
+     find_file(lzmadll NAME lzma.dll PATHS ${l} ${l}/../bin/)
+     if (lzmadll)
+       file(COPY ${lzmadll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+     endif()
+   endif()
+   if ("bzip2" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND BZIP2_FOUND)
+     get_filename_component(b ${BZIP2_LIBRARIES} DIRECTORY)
+     find_file(bz2dll NAME libbz2.dll PATHS ${b} ${b}/../bin/)
+     if (bz2dll)
+       file(COPY ${bz2dll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+     endif()
+   endif()
+endif()
+
 foreach ( ctest ${compress_tests} )
   if ("zlib" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND ZLIB_FOUND)
     target_compile_options(${ctest} PUBLIC "-DHEPMC3_USE_COMPRESSION")
@@ -233,7 +306,6 @@ if(HEPMC3_ENABLE_ROOTIO AND (NOT WIN32) )
 endif()
 
 
-
 set( libMCEG_sources ValidationControl.cc   SimpleEventTool.cc OutputValidationTool.cc)
 set( libMCEG_sources_HEPMC3  )
 set( libMCEG_link_libraries_HEPMC2  )
@@ -254,7 +326,7 @@ else()
   list( APPEND libMCEG_sources    "PythiaValidationTool.cc" )
   list( APPEND libMCEG_link_libraries_HEPMC2  "${PYTHIA8_LIBRARIES}")
   list( APPEND libMCEG_link_libraries_HEPMC3  "${PYTHIA8_LIBRARIES}")
-  if (Pythia8_VERSION VERSION_GREATER "8.300")
+  if (PYTHIA8_VERSION VERSION_GREATER "8.300")
     list( APPEND libMCEG_compile_definitions  "-DHEPMC3_USE_INTERFACE_FROM_PYTHIA8")
   else()
     message(STATUS "HepMC3 test: WARNING: Will use deprecated built-in HepMC3 interface for Pythia8.")
@@ -473,6 +545,9 @@ endmacro(add_memcheck_test)
 
 if(MEMORYCHECK_COMMAND)
   set( HepMC_memcheck_tests ${HepMC_tests} )
+  if(HEPMC3_ENABLE_PROTOBUFIO )
+    set( HepMC_memcheck_tests ${HepMC_memcheck_tests} ${HepMC_protobuf_tests} )
+  endif()
   list(REMOVE_ITEM HepMC_memcheck_tests testFourVector )
 #The story behind is complicated. It seems that on some platforms valgind dislikes the comparison of infinities.
   foreach ( test ${HepMC_memcheck_tests} )

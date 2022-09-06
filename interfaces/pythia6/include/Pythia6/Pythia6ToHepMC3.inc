@@ -15,21 +15,21 @@ C...block directly.
 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C...Glue functions
-      INTEGER HepMC3_new_writer,HepMC3_delete_writer
-      INTEGER HepMC3_set_hepevt_address
-      INTEGER HepMC3_convert_event,HepMC3_write_event,HepMC3_clear_event
-      INTEGER HepMC3_set_attribute_int,HepMC3_set_attribute_double
-      INTEGER HepMC3_set_pdf_info,HepMC3_set_cross_section
-      INTEGER HepMC3_new_weight
-      INTEGER HepMC3_set_weight_by_index
-      INTEGER HepMC3_set_weight_by_name
-      EXTERNAL HepMC3_new_writer,HepMC3_delete_writer
-      EXTERNAL HepMC3_set_hepevt_address
-      EXTERNAL HepMC3_convert_event,HepMC3_write_event
-      EXTERNAL HepMC3_clear_event
-      EXTERNAL HepMC3_set_attribute_int,HepMC3_set_attribute_double
-      EXTERNAL HepMC3_set_pdf_info,HepMC3_set_cross_section
-      EXTERNAL HepMC3_new_weight
-      EXTERNAL HepMC3_set_weight_by_index
-      EXTERNAL HepMC3_set_weight_by_name
+      INTEGER hepmc3_new_writer,hepmc3_delete_writer
+      INTEGER hepmc3_set_hepevt_address
+      INTEGER hepmc3_convert_event,hepmc3_write_event,hepmc3_clear_event
+      INTEGER hepmc3_set_attribute_int,hepmc3_set_attribute_double
+      INTEGER hepmc3_set_pdf_info,hepmc3_set_cross_section
+      INTEGER hepmc3_new_weight
+      INTEGER hepmc3_set_weight_by_index
+      INTEGER hepmc3_set_weight_by_name
+      EXTERNAL hepmc3_new_writer,hepmc3_delete_writer
+      EXTERNAL hepmc3_set_hepevt_address
+      EXTERNAL hepmc3_convert_event,hepmc3_write_event
+      EXTERNAL hepmc3_clear_event
+      EXTERNAL hepmc3_set_attribute_int,hepmc3_set_attribute_double
+      EXTERNAL hepmc3_set_pdf_info,hepmc3_set_cross_section
+      EXTERNAL hepmc3_new_weight
+      EXTERNAL hepmc3_set_weight_by_index
+      EXTERNAL hepmc3_set_weight_by_name
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC

@@ -30,9 +30,17 @@
 #include <iostream>
 using  namespace HepMC3;
 
-extern "C" void simple_tau_hepevt_event_(); //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
-extern "C" void phodmp_();                  //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
+#define FC_PHODMP PHODMP
+#define FC_SIMPLE_TAU_HEPEVT_EVENT SIMPLE_TAU_HEPEVT_EVENT
+#else
+#define FC_PHODMP phodmp_
+#define FC_SIMPLE_TAU_HEPEVT_EVENT simple_tau_hepevt_event_
+#endif
+extern "C"  void FC_SIMPLE_TAU_HEPEVT_EVENT(); //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
+extern "C" void FC_PHODMP();                  //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
 extern "C" struct HEPEVT hepevt_;                   //!< Forward declaration of fortran block pointer
+
 
 /** @brief Add single particle to HEPEVT event */
 void add_particle(int id, int status, double px, double py, double pz, double e, double m,
@@ -98,10 +106,10 @@ int main() {
 
     HEPEVT_Wrapper::set_hepevt_address((char*)(&hepevt_));
 
-    simple_tau_hepevt_event_();
+    FC_SIMPLE_TAU_HEPEVT_EVENT();
 
     std::cout << std::endl << "FORTRAN PRINTOUT" << std::endl << std::endl;
-    phodmp_();
+    FC_PHODMP();
 
     std::cout << std::endl << "C++ PRINTOUT"     << std::endl << std::endl;
     HEPEVT_Wrapper::print_hepevt();
@@ -112,7 +120,7 @@ int main() {
     simple_tau_hepevt_event_cpp();
 
     std::cout << std::endl << "FORTRAN PRINTOUT" << std::endl << std::endl;
-    phodmp_();
+    FC_PHODMP();
 
     std::cout << std::endl << "C++ PRINTOUT" << std::endl << std::endl;
     HEPEVT_Wrapper::print_hepevt();

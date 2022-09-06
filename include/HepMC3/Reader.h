@@ -40,31 +40,23 @@ public:
     /** @brief Close file and/or stream */
     virtual void close()=0;
 
-    /// Get the global GenRunInfo object.
-    std::shared_ptr<GenRunInfo> run_info() const {
-        return m_run_info;
-    }
+    /** @brief Get the global GenRunInfo object. */
+    virtual std::shared_ptr<GenRunInfo> run_info() const { return m_run_info; }
 
 ///deleted copy constructor
     Reader(const Reader&) = delete;
 ///deleted copy assignment operator
     Reader& operator = (const Reader &) = delete;
-    /// Set options
-    void set_options(const std::map<std::string, std::string>& options)
-    {
-        m_options=options;
-    }
-    /// Set options
-    std::map<std::string, std::string> get_options() const
-    {
-        return m_options;
-    }
-protected:
+    /** @brief  Set options */
+    virtual void set_options(const std::map<std::string, std::string>& options) { m_options = options; }
+    /** @brief  Get options  */
+    virtual std::map<std::string, std::string> get_options() const { return m_options; }
+//protected:
     /// Set the global GenRunInfo object.
-    void set_run_info(std::shared_ptr<GenRunInfo> run) {
-        m_run_info = run;
-    }
-    /// options
+    virtual void set_run_info(std::shared_ptr<GenRunInfo> run) { m_run_info = run; }
+
+protected:
+    /// Options
     std::map<std::string, std::string> m_options;
 private:
     /// The global GenRunInfo object.

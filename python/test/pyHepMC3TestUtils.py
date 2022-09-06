@@ -20,6 +20,12 @@ def update_path():
     try:
      os.add_dll_directory(os.path.abspath(os.path.join(os.pardir, python_label())))
      os.add_dll_directory(os.getcwd())
+     for val in str(os.getenv("PATH")).split(',:;'):
+       os.add_dll_directory(os.path.abspath(val))
+     for val in str(os.getenv("LD_LIBRARY_PATH")).split(',:;'):
+       os.add_dll_directory(os.path.abspath(val))
+     for val in str(os.getenv("DYLD_LIBRARY_PATH")).split(',:;'):
+       os.add_dll_directory(os.path.abspath(val))
     except:
      pass
     return [os.path.abspath(os.path.join(os.pardir, python_label()))] + [os.getcwd()] + sys.path
@@ -47,7 +53,6 @@ def COMPARE_ASCII_FILES(f1, f2):
     file1.close()
     file2.close()
     return 0
-
 
 def fuse_equal(a, b, rtol=0.00001, atol=0.000001):
     if abs(1.0 * a - 1.0 * b) < atol:

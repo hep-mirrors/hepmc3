@@ -59,8 +59,8 @@ private:
 // Accessors
 //
 public:
-    void   allocate_internal_storage(); ///!< Allocates m_internal_storage storage in smart pointer to hold HEPEVT of fixed size
-    void   copy_to_internal_storage(char *c, int N); ///!< Copies the content of foreight common block into the internal storage
+    void   allocate_internal_storage(); //!< Allocates m_internal_storage storage in smart pointer to hold HEPEVT of fixed size
+    void   copy_to_internal_storage( char *c, int N ); //!< Copies the content of foreign common block into the internal storage
     void   set_max_number_entries( unsigned int size ) { m_max_particles = size; }//!< Set block size
     void   set_hepevt_address(char *c); //!< Set Fortran block address
     int    max_number_entries()  const     { return m_max_particles;                              } //!< Block size

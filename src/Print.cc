@@ -36,12 +36,14 @@ void Print::content(std::ostream& os, const GenEvent &event) {
     os << "GenParticlePtr (" << event.particles().size() << ")" << std::endl;
 
     for (ConstGenParticlePtr p: event.particles()) {
-        Print::line(p, true);
+        Print::line(os, p, true);
+        os << std::endl;
     }
 
     os << "GenVertexPtr (" << event.vertices().size() << ")" << std::endl;
     for ( ConstGenVertexPtr v: event.vertices() ) {
-        Print::line(v, true);
+        Print::line(os, v, true);
+        os << std::endl;
     }
 
     os << "-----------------------------" << std::endl;
@@ -111,7 +113,7 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
         if ( !att.second->to_string(st) ) {
             HEPMC3_WARNING("Print::listing: problem serializing attribute: " << att.first)
         }
-        else { os << att.first << " " << att.second->to_string(st);}
+        else { os << att.first << " " << st;}
         os << std::endl;
     }
 

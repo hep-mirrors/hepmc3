@@ -77,6 +77,8 @@ struct HEPEVT
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/HEPEVT_Helpers.h"
 #endif
+/** @brief Pointer to HEPEVT common block */
+HEPMC3_EXPORT_API  struct HEPEVT*  hepevtptr;
 
 namespace HepMC3
 {
@@ -87,8 +89,7 @@ class HEPEVT_Wrapper
 // Functions
 //
 public:
-    /** @brief Pointer to HEPEVT common block */
-    HEPMC3_EXPORT_API static struct HEPEVT*  hepevtptr;
+
     /** @brief Print information from HEPEVT common block */
     static void print_hepevt( std::ostream& ostr = std::cout );
     /** @brief Print particle information */
