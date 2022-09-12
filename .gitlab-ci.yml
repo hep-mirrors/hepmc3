@@ -152,7 +152,8 @@ debian-salsa:
     - uname -a 
     - cat /etc/issue
     - yum -y install  cmake make binutils sed gawk grep
-    - yum -y install  doxygen 
+    - yum -y install  doxygen
+    - yum -y update --exclude=kern*
     - yum -y install  valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root
 #    - yum -y install  glibc-debuginfo --enablerepo=*debug*
 ########################################################################
