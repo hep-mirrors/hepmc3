@@ -335,7 +335,8 @@ make
 ```
 Please note that in case the HepMC3 installation is not system-wide,
 CMake will require an additional flag  `-DHepMC3_DIR=/where/you/have/it` to point to the HepMC3 installation directory.
-
+The examples use multiple parts of HepMC3, therefore to use all of them a full installation of HepMC3 
+(i.e. including ROOT MC event generator interfaces is needed).
 
 # Source package structure
 
