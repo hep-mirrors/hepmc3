@@ -2916,6 +2916,7 @@ public:
     if ( !heprup.eventfiles.empty() &&
          ++curreventfile < int(heprup.eventfiles.size()) ) {
       openeventfile(curreventfile);
+      XMLTag::deleteAll(tags);
       return readEvent();
     }
 
@@ -2989,6 +2990,14 @@ protected:
   std::string currentLine;
 
 public:
+  /**
+   *  initfile rdstate 
+   */
+   std::ios_base::iostate initfile_rdstate() const { if (initfile) return initfile->rdstate(); return std::ifstream::goodbit; }
+  /**
+   *  file rdstate 
+   */
+   std::ios_base::iostate file_rdstate() const { if (file) return file->rdstate(); return std::ifstream::goodbit; }
 
   /**
    * XML file version

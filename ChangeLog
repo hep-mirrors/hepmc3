@@ -1,5 +1,7 @@
   --------------------------  HepMC3.2.6-pre ----------------------
 2022-12-09 Andrii Verbytskyi for HepMC
+         * Fix output value of ReaderLHEF::read_event
+2022-12-09 Andrii Verbytskyi for HepMC
          * Better documentation for standalone examples
 2022-06-07 Luke Pickering for HepMC
          * Adds a protobuf-based HepMC3::Reader/Writer

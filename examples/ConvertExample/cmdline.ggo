@@ -7,6 +7,7 @@ Example:
 option "input-format" i "Input format" string required values= "hepmc2", "auto", "hepmc3", "hpe", "root", "treeroot", "lhef" ,  "uproot", "plugin", "proto"
 option "output-format" o "Output format" string required values="hepmc2", "hepmc3", "hpe" ,"root", "treeroot", "treerootopal", "hpezeus", "dump","plugin", "dot", "none", "proto"
 option "extensions" e "Extensions, in a form extension=value, could be passed to readers/writers" multiple optional string
+option "strict-read" -  "Exit in case of reading broken event." optional long default="0"
 option "events-limit" - "Limit of events to read from input" optional long default="100000000"
 option "first-event-number" -       "Lowest allowed event number" optional long default="-100000000"
 option "last-event-number" -        "Highest allowed event number" optional long default="100000000"

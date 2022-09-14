@@ -305,10 +305,15 @@ int main(int argc, char** argv)
     while( !input_file->failed() )
     {
         GenEvent evt(Units::GEV, Units::MM);
-        input_file->read_event(evt);
+        bool res_read = input_file->read_event(evt);
+        
         if( input_file->failed() )  {
             printf("End of file reached. Exit.\n");
             break;
+        }
+        if ( !res_read && ai.strict_read_arg) {
+          printf("Broken event. Exit.\n");
+          exit(3);
         }
         if (evt.event_number() < first_event_number) continue;
         if (evt.event_number() > last_event_number) continue;
@@ -318,7 +323,7 @@ int main(int argc, char** argv)
         {
             if (output_file)
             {
-                output_file->write_event(evt);
+              output_file->write_event(evt);
             }
             else
             {
