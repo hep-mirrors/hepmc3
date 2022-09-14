@@ -134,6 +134,7 @@ set( HepMC_tests
         testIO6
         testIO7
         testIO8
+        testIO11
         testIO12
         testIO13
         testIO14
