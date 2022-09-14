@@ -14,9 +14,9 @@
 using namespace HepMC3;
 int main()
 {
-    ReaderOSCAR1999 inputA("inputIO11.oscar1999A");
+    ReaderOSCAR1999 inputA("inputIO17.oscar1999A");
     if(inputA.failed()) return 1;
-    WriterAscii       outputA("frominputIO11.hepmc");
+    WriterAscii       outputA("frominputIO17.hepmc");
     if(outputA.failed()) return 2;
     while( !inputA.failed() )
     {
@@ -33,7 +33,7 @@ int main()
     outputA.close();
 
 
-    ReaderAscii inputB("frominputIO11.hepmc");
+    ReaderAscii inputB("frominputIO17.hepmc");
     if(inputB.failed()) return 3;
     std::shared_ptr<WriterOSCAR1997>       outputB = nullptr;
     while( !inputB.failed() )
@@ -44,7 +44,7 @@ int main()
             printf("End of file reached. Exit.\n");
             break;
         }
-        if (!outputB)     outputB = std::make_shared<WriterOSCAR1997>("fromfrominputIO11.oscar1997A", evt.run_info());
+        if (!outputB)     outputB = std::make_shared<WriterOSCAR1997>("fromfrominputIO17.oscar1997A", evt.run_info());
         if(outputB->failed()) return 4;
         outputB->write_event(evt);
         evt.clear();
