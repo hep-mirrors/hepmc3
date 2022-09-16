@@ -19,42 +19,65 @@ namespace HepMC3 {
 
 bool GenHeavyIon::from_string(const std::string &att) {
 #ifdef HEPMC3_NO_DEPRECATED
-    double spectator_neutrons, spectator_protons, eccentricity;
+    int spectator_neutrons, spectator_protons;
+    double eccentricity;
 #endif
     const char * buff = att.c_str();
-    int version = 0;
+    int version = -1;
     const char * data = buff;
     if (att.size() > 1 && att.at(0) == 'v' && att.at(1) == '0' ) {
         version = 0;
-        data = buff + 2;
+        data = buff + 3;
     }
     if (att.size() > 1 && att.at(0) == 'v' && att.at(1) == '1' ) {
         version = 1;
-        data = buff + 2;
+        data = buff + 3;
     }
     int nlen = 0;
     int result = -1;
+    if ( version == -1) {
+        /* The counting of characters requires C99*/
+        result = sscanf(data,"%i %i %i %i %i %i %i %i %i %lf %lf %lf %lf %lf%n",
+                        &Ncoll_hard, &Npart_proj, &Npart_targ, &Ncoll,  //%i %i %i %i
+                        &spectator_neutrons, &spectator_protons,   //%i %i
+                        &N_Nwounded_collisions,  &Nwounded_N_collisions,  //%i %i
+                        &Nwounded_Nwounded_collisions, &impact_parameter,  //%i %lf
+                        &event_plane_angle, &eccentricity, &sigma_inel_NN,  //%lf %lf %lf
+                        &centrality,        //%lf
+                        &nlen
+                       );
+
+        if (result != 14) {
+            return false;
+        }
+        return true;
+    }
     if ( version == 0) {
         /* The counting of characters requires C99*/
-        result = sscanf(data,"%i %i %i %i %i %i %i %i %i %f %f %f %f %f %f %i %i %i %i%n",
+        result = sscanf(data,"%i %i %i %i %i %i %i %i %i %lf %lf %lf %lf %lf %lf %i %i %i %i%n",
                         &Ncoll_hard, &Npart_proj, &Npart_targ, &Ncoll, //%i %i %i %i
                         &spectator_neutrons, &spectator_protons, //%i %i
-                        &N_Nwounded_collisions, &Nwounded_N_collisions, &Nwounded_Nwounded_collisions, &impact_parameter, &event_plane_angle, //%i %i %i %f %f
-                        &eccentricity, //%f
-                        &sigma_inel_NN, &centrality, &user_cent_estimate, &Nspec_proj_n, &Nspec_targ_n, &Nspec_proj_p, &Nspec_targ_p // %f %f %f %i %i %i %i
+                        &N_Nwounded_collisions, &Nwounded_N_collisions, &Nwounded_Nwounded_collisions, &impact_parameter, &event_plane_angle, //%i %i %i %lf %lf
+                        &eccentricity, //%lf
+                        &sigma_inel_NN, &centrality, &user_cent_estimate, &Nspec_proj_n, &Nspec_targ_n, &Nspec_proj_p, &Nspec_targ_p // %lf %lf %lf %i %i %i %i
                         ,&nlen
                        );
-        if (result != 19) return false;
+
+        if (result != 19) {
+            return false;
+        }
     }
     if ( version == 1) {
         /* The counting of characters requires C99*/
-        result = sscanf(data,"%i %i %i %i %i %i %f %f %f %f %f %i %i %i %i%n",
+        result = sscanf(data,"%i %i %i %i %i %i %lf %lf %lf %lf %lf %i %i %i %i%n",
                         &Ncoll_hard, &Npart_proj, &Npart_targ, &Ncoll,  //%i %i %i %i
-                        &N_Nwounded_collisions, &Nwounded_N_collisions, &Nwounded_Nwounded_collisions, &impact_parameter, &event_plane_angle, //%i %i %i %f %f
-                        &sigma_inel_NN, &centrality, &user_cent_estimate, &Nspec_proj_n, &Nspec_targ_n, &Nspec_proj_p, &Nspec_targ_p // %f %f %f %i %i %i %i
+                        &N_Nwounded_collisions, &Nwounded_N_collisions, &Nwounded_Nwounded_collisions, &impact_parameter, &event_plane_angle, //%i %i %i %lf %lf
+                        &sigma_inel_NN, &centrality, &user_cent_estimate, &Nspec_proj_n, &Nspec_targ_n, &Nspec_proj_p, &Nspec_targ_p // %lf %lf %lf %i %i %i %i
                         ,&nlen
                        );
-        if (result != 16) return false;
+        if (result != 16) {
+            return false;
+        }
     }
 
     data+=nlen;
@@ -66,7 +89,7 @@ bool GenHeavyIon::from_string(const std::string &att) {
     data+=nlen;
     for ( int i = 0; i < N; ++i )
     {
-        if (sscanf(data," %i %f%n",&ival, &dval, &nlen)!=2) return false;
+        if (sscanf(data," %i %lf%n",&ival, &dval, &nlen)!=2) return false;
         participant_plane_angles[ival]=dval;
         data+=nlen;
     }
@@ -74,7 +97,7 @@ bool GenHeavyIon::from_string(const std::string &att) {
     data+=nlen;
     for ( int i = 0; i < N; ++i )
     {
-        if (sscanf(data," %i %f%n",&ival, &dval, &nlen)!=2) return false;
+        if (sscanf(data," %i %lf%n",&ival, &dval, &nlen)!=2) return false;
         eccentricities[ival]=dval;
         data+=nlen;
     }
@@ -82,8 +105,6 @@ bool GenHeavyIon::from_string(const std::string &att) {
     return true;
 
     /*
-
-
         std::istringstream is(att);
         std::string version;
 
@@ -134,32 +155,30 @@ bool GenHeavyIon::to_string(std::string &att) const {
      **/
     const size_t isize = 12;
     const size_t fsize = 9;
-    att.reserve(3+13*isize+6*fsize+18+1+isize+(2+isize+fsize)*participant_plane_angles.size()+1+isize+(2+isize+fsize)*eccentricities.size());
+    const size_t xsize= 3+13*isize+6*fsize+18+1+isize+(2+isize+fsize)*participant_plane_angles.size()+1+isize+(2+isize+fsize)*eccentricities.size();
+    att = std::string(xsize,' ');
     char *buffpos = &att[0];
 #ifndef HEPMC3_NO_DEPRECATED
-    buffpos+=sprintf(buffpos,"%s%i %i %i %i %i %i %i %i %i %f %f %f %f %f %f %i %i %i %i",(!forceoldformat)?"v0 ":"",
+    buffpos+=sprintf(buffpos,"%s%i %i %i %i %i %i %i %i %i %lf %lf %lf %lf %lf %lf %i %i %i %i",(!forceoldformat)?"v0 ":"",
                      Ncoll_hard, Npart_proj, Npart_targ, Ncoll, //%i %i %i %i
                      spectator_neutrons, spectator_protons, //%i %i
-                     N_Nwounded_collisions, Nwounded_N_collisions, Nwounded_Nwounded_collisions, impact_parameter, event_plane_angle, //%i %i %i %f %f
-                     eccentricity, //%f
-                     sigma_inel_NN, centrality, user_cent_estimate, Nspec_proj_n, Nspec_targ_n, Nspec_proj_p, Nspec_targ_p // %f %f %f %i %i %i %i
+                     N_Nwounded_collisions, Nwounded_N_collisions, Nwounded_Nwounded_collisions, impact_parameter, event_plane_angle, //%i %i %i %lf %lf
+                     eccentricity, //%lf
+                     sigma_inel_NN, centrality, user_cent_estimate, Nspec_proj_n, Nspec_targ_n, Nspec_proj_p, Nspec_targ_p // %lf %lf %lf %i %i %i %i
                     );
 #else
-    buffpos+=sprintf(buffpos,"v1 %i %i %i %i %i %i %f %f %f %f %f %i %i %i %i",
+    buffpos+=sprintf(buffpos,"v1 %i %i %i %i %i %i %lf %lf %lf %lf %lf %i %i %i %i",
                      Ncoll_hard, Npart_proj, Npart_targ, Ncoll,  //%i %i %i %i
-                     N_Nwounded_collisions, Nwounded_N_collisions, Nwounded_Nwounded_collisions, impact_parameter, event_plane_angle, //%i %i %i %f %f
-                     sigma_inel_NN, centrality, user_cent_estimate, Nspec_proj_n, Nspec_targ_n, Nspec_proj_p, Nspec_targ_p // %f %f %f %i %i %i %i
+                     N_Nwounded_collisions, Nwounded_N_collisions, Nwounded_Nwounded_collisions, impact_parameter, event_plane_angle, //%i %i %i %lf %lf
+                     sigma_inel_NN, centrality, user_cent_estimate, Nspec_proj_n, Nspec_targ_n, Nspec_proj_p, Nspec_targ_p // %lf %lf %lf %i %i %i %i
                     );
 #endif
     buffpos+=sprintf(buffpos, " %i", participant_plane_angles.size());
-    for ( auto it: participant_plane_angles) buffpos += sprintf(buffpos, " %i %f", it.first, it.second);
+    for ( auto it: participant_plane_angles) buffpos += sprintf(buffpos, " %i %lf", it.first, it.second);
     buffpos+=sprintf(buffpos, " %i", eccentricities.size());
-    for ( auto it: eccentricities) buffpos += sprintf(buffpos, " %i %f", it.first, it.second);
+    for ( auto it: eccentricities) buffpos += sprintf(buffpos, " %i %lf", it.first, it.second);
+
     att.resize(buffpos-att.c_str());
-
-//    m_stream->write(buff, buffpos-buff);
-
-
     /*
       std::ostringstream os;
 
