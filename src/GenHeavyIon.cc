@@ -103,48 +103,6 @@ bool GenHeavyIon::from_string(const std::string &att) {
     }
 
     return true;
-
-    /*
-        std::istringstream is(att);
-        std::string version;
-
-        if ( att[0]  != 'v' ) {
-            is >> Ncoll_hard >> Npart_proj >> Npart_targ >> Ncoll
-               >> spectator_neutrons >> spectator_protons
-               >> N_Nwounded_collisions >> Nwounded_N_collisions
-               >> Nwounded_Nwounded_collisions >> impact_parameter
-               >> event_plane_angle >> eccentricity >> sigma_inel_NN
-               >> centrality;
-            return !is.fail();
-        } else
-            is >> version;
-
-
-
-        is >> Ncoll_hard >> Npart_proj >> Npart_targ >> Ncoll;
-        if ( version == "v0" ) is >> spectator_neutrons >> spectator_protons;
-        is >> N_Nwounded_collisions >> Nwounded_N_collisions
-           >> Nwounded_Nwounded_collisions >> impact_parameter
-           >> event_plane_angle;
-        if ( version == "v0" ) is >> eccentricity;
-        is >> sigma_inel_NN >> centrality;
-        if ( version != "v0" ) is >> user_cent_estimate;
-        is >> Nspec_proj_n >> Nspec_targ_n >> Nspec_proj_p >> Nspec_targ_p;
-
-        int N, ord;
-        is >> N;
-        for ( int i = 0; i < N; ++i ) {
-            is >> ord;
-            is >> participant_plane_angles[ord];
-        }
-        is >> N;
-        for ( int i = 0; i < N; ++i ) {
-            is >> ord;
-            is >> eccentricities[ord];
-        }
-
-        return !is.fail();
-    */
 }
 
 bool GenHeavyIon::to_string(std::string &att) const {
@@ -177,45 +135,7 @@ bool GenHeavyIon::to_string(std::string &att) const {
     for ( auto it: participant_plane_angles) buffpos += sprintf(buffpos, " %i %lf", it.first, it.second);
     buffpos+=sprintf(buffpos, " %i", eccentricities.size());
     for ( auto it: eccentricities) buffpos += sprintf(buffpos, " %i %lf", it.first, it.second);
-
     att.resize(buffpos-att.c_str());
-    /*
-      std::ostringstream os;
-
-    #ifndef HEPMC3_NO_DEPRECATED
-      if ( !forceoldformat ) os << "v0 ";
-    #else
-      os << "v1 ";
-    #endif
-
-      os << std::setprecision(8)
-         << Ncoll_hard << " " << Npart_proj << " "
-         << Npart_targ << " " << Ncoll << " "
-    #ifndef HEPMC3_NO_DEPRECATED
-         << spectator_neutrons << " " << spectator_protons << " "
-    #endif
-         << N_Nwounded_collisions << " " << Nwounded_N_collisions << " "
-         << Nwounded_Nwounded_collisions << " " << impact_parameter << " "
-         << event_plane_angle << " "
-    #ifndef HEPMC3_NO_DEPRECATED
-         << eccentricity << " "
-    #endif
-         << sigma_inel_NN << " " << centrality << " " << user_cent_estimate << " "
-         << Nspec_proj_n << " " << Nspec_targ_n << " "
-         << Nspec_proj_p << " " << Nspec_targ_p << " ";
-
-      os << participant_plane_angles.size();
-      for ( std::map<int, double>::const_iterator it = participant_plane_angles.begin();
-              it != participant_plane_angles.end(); ++it )
-          os << " " << it->first << " " << it->second;
-
-      os << " " << eccentricities.size();
-      for ( std::map<int, double>::const_iterator it = eccentricities.begin();
-              it != eccentricities.end(); ++it )
-          os << " " << it->first << " " << it->second;
-
-      att = os.str();
-    */
     return true;
 }
 
