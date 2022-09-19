@@ -104,6 +104,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     evt.set_run_info(run_info());
     m_forward_daughters.clear();
     m_forward_mothers.clear();
+    m_attributes_names.clear();
+    m_attributes.clear();
+    m_attributes_ids.clear();
+    
     //
     // Parse event, vertex and particle information
     //
@@ -266,6 +270,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     auto it = diff.rbegin();
     //Set available ids to vertices sequentially.
     for (auto v: evt.vertices()) if (v->id() == 0) { v->set_id(*it); it++;}
+
+    evt.add_attributes(m_attributes_names,
+     m_attributes, m_attributes_ids);
+
 
     return true;
 }
@@ -533,8 +541,10 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     std::shared_ptr<Attribute> att =
         std::make_shared<StringAttribute>(StringAttribute(unescape(cursor)));
 
-    evt.add_attribute(std::string(name), att, id);
-
+    //evt.add_attribute(std::string(name), att, id);
+    m_attributes_names.push_back(std::string(name));
+    m_attributes.push_back(att);
+    m_attributes_ids.push_back(id);
     return true;
 }
 

@@ -169,6 +169,12 @@ private:
     /** @brief Temp storage for  prod vertex ids */
     std::map<GenParticlePtr, int >  m_forward_daughters;
 
+
+    std::vector< std::string> m_attributes_names;
+    std::vector< std::shared_ptr<Attribute>> m_attributes;
+    std::vector< int > m_attributes_ids;
+
+
 };
 
 
