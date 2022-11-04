@@ -615,6 +615,8 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
         test_Units
         test_Attribute
         test_HEPEVT
+        test_Pythonization_1
+
   )
 #Workaround for nvc++ for this particular test
   if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
