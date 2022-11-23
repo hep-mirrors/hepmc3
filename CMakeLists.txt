@@ -244,10 +244,7 @@ set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 3
 # Alias for packages that include this as a sub-project but 
 # want to use the namespaced target names
 add_library(HepMC3::HepMC3 ALIAS HepMC3)
-
-if (UNIX)
-  target_link_libraries(HepMC3 PRIVATE dl)
-endif()
+target_link_libraries(HepMC3 PRIVATE ${CMAKE_DL_LIBS})
 #---Install build products---------------------------------------------------
 install(TARGETS HepMC3 EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 
@@ -263,9 +260,8 @@ if (HEPMC3_BUILD_STATIC_LIBS)
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                EXPORT_NAME HepMC3::HepMC3_static)
-  if (UNIX)
-    target_link_libraries(HepMC3_static PRIVATE dl)
-  endif()
+
+  target_link_libraries(HepMC3_static PRIVATE ${CMAKE_DL_LIBS})
 #---Install build products---------------------------------------------------
   install(TARGETS HepMC3_static EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
   # Alias for packages that include this as a sub-project but 
