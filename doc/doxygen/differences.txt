@@ -160,7 +160,7 @@
     @endcode
     one should use
     @code{.cpp}
-    for (auto p: evt->particles()) {
+    for (const auto& p: evt->particles()) {
     ...
     }
     @endcode
