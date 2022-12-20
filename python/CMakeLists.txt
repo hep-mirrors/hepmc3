@@ -6,6 +6,7 @@ SET_PROPERTY (GLOBAL PROPERTY CMAKE_ROLE "PROJECT")
 endif()
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+
 option(USE_INSTALLED_HEPMC3 "Use HepMC3 bindings as a standalone package" OFF)
 option(RERUN_BINDER "Rerun binder" OFF)
 if (USE_INSTALLED_HEPMC3)
@@ -281,6 +282,7 @@ endif()
 
 #Compilation with CPython2
 if (${ver} STREQUAL 2)
+  message(STATUS "HepMC3 python: WARNING: The support of Python2 is deprecated and might be removed in the future!")
   unset(Python2_FOUND CACHE)
   unset(Python2_VERSION CACHE)
   unset(Python2_Interpreter_FOUND CACHE)
