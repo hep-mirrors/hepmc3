@@ -79,6 +79,7 @@ class bz_stream_wrapper : public bz_stream, public stream_wrapper {
 	this->opaque = NULL;
 	if (is_input) {
 	    bz_stream::avail_in = 0;
+	    bz_stream::next_in = NULL;
 	    ret = BZ2_bzDecompressInit(this, 0, 0);
 	} else {
 	    //AV bz_stream::next_in = new char();
@@ -94,7 +95,7 @@ class bz_stream_wrapper : public bz_stream, public stream_wrapper {
 	}
     }
 
-    int decompress(const int) override {
+    int decompress(const int = 0) override {
 	ret = BZ2_bzDecompress(this);
 	if (ret != BZ_OK && ret != BZ_STREAM_END) throw bzException(ret);
 	return ret;

@@ -15,6 +15,9 @@
 #if HEPMC3_BZ2_SUPPORT
 #define BXZSTR_BZ2_SUPPORT 1
 #endif
+#if HEPMC3_ZSTD_SUPPORT
+#define BXZSTR_ZSTD_SUPPORT 1
+#endif
 #include "HepMC3/bxzstr/bxzstr.hpp"
 namespace HepMC3
 {
@@ -37,11 +40,15 @@ const  std::vector<Compression> supported_compression_types = {
 #if HEPMC3_BZ2_SUPPORT
     Compression::bz2,
 #endif
+#if HEPMC3_ZSTD_SUPPORT
+    Compression::zstd,
+#endif
 };
 std::vector<Compression> known_compression_types = {
     Compression::z,
     Compression::lzma,
-    Compression::bz2
+    Compression::bz2,
+    Compression::zstd,
 };
 }
 namespace std
@@ -54,6 +61,8 @@ string to_string(HepMC3::Compression & c) {
         return string("lzma");
     case HepMC3::Compression::bz2:
         return string("bz2");
+    case HepMC3::Compression::zstd:
+        return string("zstd");
     default:
         break;
     }
