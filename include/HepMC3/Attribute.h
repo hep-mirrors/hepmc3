@@ -191,7 +191,7 @@ private:
 
 /**
  *  @class HepMC3::LongAttribute
- *  @brief Attribute that holds an Integer implemented as an int
+ *  @brief Attribute that holds an Integer implemented as a long int
  *
  *  @ingroup attributes
  */
@@ -372,7 +372,7 @@ public:
 
 /**
  *  @class HepMC3::CharAttribute
- *  @brief Attribute that holds an Chareger implemented as an int
+ *  @brief Attribute that holds an Character implemented as an int
  *
  *  @ingroup attributes
  */
@@ -417,7 +417,7 @@ private:
 
 /**
  *  @class HepMC3::LongLongAttribute
- *  @brief Attribute that holds an Integer implemented as an int
+ *  @brief Attribute that holds an Integer implemented as a long long int
  *
  *  @ingroup attributes
  */
@@ -454,13 +454,13 @@ public:
 
 private:
 
-    long  long m_val; ///< Attribute value
+    long long m_val; ///< Attribute value
 
 };
 
 /**
  *  @class HepMC3::LongDoubleAttribute
- *  @brief Attribute that holds a real number as a double.
+ *  @brief Attribute that holds a real number as a long double.
  *
  *  @ingroup attributes
  */
@@ -630,7 +630,8 @@ public:
 private:
     unsigned long long m_val; ///< Attribute value
 };
-/**
+
+  /**
  *  @class HepMC3::BoolAttribute
  *  @brief Attribute that holds an Booleger implemented as an int
  *
@@ -675,7 +676,7 @@ private:
 
 /**
  *  @class HepMC3::VectorCharAttribute
- *  @brief Attribute that holds a vector of charegers of type  char
+ *  @brief Attribute that holds a vector of characters of type  char
  *
  *  @ingroup attributes
  */
@@ -720,7 +721,7 @@ private:
 
 /**
  *  @class HepMC3::VectorFloatAttribute
- *  @brief Attribute that holds a vector of floategers of type  float
+ *  @brief Attribute that holds a vector of real numbers of type float
  *
  *  @ingroup attributes
  */
@@ -766,7 +767,7 @@ private:
 
 /**
  *  @class HepMC3::VectorLongDoubleAttribute
- *  @brief Attribute that holds a vector of long doubleegers of type  long double
+ *  @brief Attribute that holds a vector of real numbers of type long double
  *
  *  @ingroup attributes
  */
@@ -813,7 +814,7 @@ private:
 
 /**
  *  @class HepMC3::VectorLongLongAttribute
- *  @brief Attribute that holds a vector of long longegers of type  long long
+ *  @brief Attribute that holds a vector of integers of type  long long
  *
  *  @ingroup attributes
  */
@@ -903,7 +904,7 @@ private:
 
 /**
  *  @class HepMC3::VectorULongAttribute
- *  @brief Attribute that holds a vector of unsigned longegers of type  unsigned long
+ *  @brief Attribute that holds a vector of unsigned integers of type  unsigned long
  *
  *  @ingroup attributes
  */
@@ -949,7 +950,7 @@ private:
 
 /**
  *  @class HepMC3::VectorULongLongAttribute
- *  @brief Attribute that holds a vector of unsigned long longegers of type  unsigned long long
+ *  @brief Attribute that holds a vector of integers of type  unsigned long long
  *
  *  @ingroup attributes
  */
@@ -1039,7 +1040,7 @@ private:
 
 /**
  *  @class HepMC3::VectorLongIntAttribute
- *  @brief Attribute that holds a vector of integers of type  int
+ *  @brief Attribute that holds a vector of integers of type long int
  *
  *  @ingroup attributes
  */
@@ -1084,7 +1085,7 @@ private:
 
 /**
  *  @class HepMC3::VectorDoubleAttribute
- *  @brief Attribute that holds a vector of FPs of type  double
+ *  @brief Attribute that holds a vector of real numbers of type  double
  *
  *  @ingroup attributes
  */
@@ -1130,7 +1131,7 @@ private:
 
 /**
  *  @class HepMC3::VectorStringAttribute
- *  @brief Attribute that holds a vector of FPs of type  string
+ *  @brief Attribute that holds a vector of type  string
  *
  *  @ingroup attributes
  */
