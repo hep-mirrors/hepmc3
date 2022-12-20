@@ -151,6 +151,8 @@ private:
 
 } // namespace HepMC3
 
+
+
 #include "HepMC3/GenEvent.h"
 namespace HepMC3 {
 /// @brief Get attribute of type T
