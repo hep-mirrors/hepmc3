@@ -92,3 +92,31 @@ can be commented using usual // or /* */ comments.
 3) Use @bug @todo keywords to mark problems found in the code. They go
    on separate lists in the documentation so we can keep track of them
    at any time. Remove these keywords after fixing the issue.
+
+--------------
+COMMITS AND REPOSITORY
+--------------
+
+As of end of 2022, the push requests into master are disabled.
+Please use new branch->merge request workflow.
+Don't forget to squash the commits and make sure the CI jobs are OK.
+By defult only three jobs are executed, but it makes sens to test the builds with more.
+To Do that add to the commit message "FedoraCI" to run all Fedora-based jobs and "CentOSCI" to
+run all CentOS-based jobs.
+
+
+--------------
+TODOS BEFORE RELEASE
+--------------
+
+- Check the Changelog
+- Check if there are no open issues that can be closed.
+- Update the header-only libraries pybind11 and bxzstr if possible.
+- Rerun binder to re-generate python bindings.
+- Run cppcheck/clang-tidy, e.g. "make staticcheck" for cppcheck.
+- Run code formatting, e.g. "make beauty"
+- Check the CI, runn all jobs. See above how to do that.
+- Run builds on Windows and Mac using e.g. github.
+- Update the version number in the CMakeLists, etc.
+- Request a tag.
+
