@@ -1,5 +1,5 @@
   --------------------------  HepMC3.2.6-pre ----------------------
-2022-11-20 Lucke Pickering for HepMC
+2022-11-20 Luke Pickering for HepMC
          * Modernisation of cmake
 2022-09-12 Andrii Verbytskyi for HepMC
          * Fix output value of ReaderLHEF::read_event

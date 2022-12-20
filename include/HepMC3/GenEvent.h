@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenEvent.h
@@ -70,7 +70,6 @@ public:
     /// @brief Get list of vertices (const)
     const std::vector<ConstGenVertexPtr>& vertices() const;
 
-
     /// @brief Get/set list of particles (non-const)
     const std::vector<GenParticlePtr>& particles() { return m_particles; }
     /// @brief Get/set list of vertices (non-const)
@@ -80,16 +79,17 @@ public:
 
 
     /// @name Particle and vertex access
-    //@{
-    ///Particles size, HepMC2 compatiility
+    /// @{
+    /// Particles size, HepMC2 compatibility
     inline int particles_size() const { return m_particles.size(); }
-    ///Particles empty, HepMC2 compatiility
+    /// Particles empty, HepMC2 compatibility
     inline bool particles_empty() const { return m_particles.empty(); }
-    ///Vertices size, HepMC2 compatiility
+    /// Vertices size, HepMC2 compatibility
     inline int vertices_size() const { return m_vertices.size(); }
-    ///Vertices empty, HepMC2 compatiility
+    /// Vertices empty, HepMC2 compatibility
     inline bool vertices_empty() const { return m_vertices.empty(); }
-    //@}
+    /// @}
+
 
     /// @name Event weights
     /// @{
@@ -315,10 +315,12 @@ public:
     /// @{
 
     /// @brief Add particle by raw pointer
+    ///
     /// @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
     void add_particle( GenParticle *p );
 
     /// @brief Add vertex by raw pointer
+    ///
     /// @deprecated Use GenEvent::add_vertex( const GenVertexPtr& ) instead
     void add_vertex  ( GenVertex *v );
 
