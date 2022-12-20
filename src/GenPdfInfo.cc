@@ -91,15 +91,15 @@ bool GenPdfInfo::operator!=(const GenPdfInfo& a) const {
 
 bool GenPdfInfo::is_valid() const
 {
-    if ( parton_id[0] != 0 ) return true;
-    if ( parton_id[1] != 0 ) return true;
-    if ( x[0]         != 0 ) return true;
-    if ( x[1]         != 0 ) return true;
-    if ( scale        != 0 ) return true;
-    if ( xf[0]        != 0 ) return true;
-    if ( xf[1]        != 0 ) return true;
-    if ( pdf_id[0]    != 0 ) return true;
-    if ( pdf_id[1]    != 0 ) return true;
+    if ( parton_id[0] != 0 ) { return true; }
+    if ( parton_id[1] != 0 ) { return true; }
+    if ( x[0]         != 0 ) { return true; }
+    if ( x[1]         != 0 ) { return true; }
+    if ( scale        != 0 ) { return true; }
+    if ( xf[0]        != 0 ) { return true; }
+    if ( xf[1]        != 0 ) { return true; }
+    if ( pdf_id[0]    != 0 ) { return true; }
+    if ( pdf_id[1]    != 0 ) { return true; }
 
     return false;
 }

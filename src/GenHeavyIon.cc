@@ -135,20 +135,20 @@ void GenHeavyIon::set(const int&nh, const int&np, const int&nt, const int&nc, co
 }
 
 bool GenHeavyIon::is_valid() const {
-    if ( Ncoll_hard                   != 0 ) return true;
-    if ( Npart_proj                   != 0 ) return true;
-    if ( Npart_targ                   != 0 ) return true;
-    if ( Ncoll                        != 0 ) return true;
-    if ( spectator_neutrons           != 0 ) return true;
-    if ( spectator_protons            != 0 ) return true;
-    if ( N_Nwounded_collisions        != 0 ) return true;
-    if ( Nwounded_N_collisions        != 0 ) return true;
-    if ( Nwounded_Nwounded_collisions != 0 ) return true;
-    if ( impact_parameter             != 0 ) return true;
-    if ( event_plane_angle            != 0 ) return true;
-    if ( eccentricity                 != 0 ) return true;
-    if ( sigma_inel_NN                != 0 ) return true;
-    if ( centrality                   != 0 ) return true;
+    if ( Ncoll_hard                   != 0 ) { return true; }
+    if ( Npart_proj                   != 0 ) { return true; }
+    if ( Npart_targ                   != 0 ) { return true; }
+    if ( Ncoll                        != 0 ) { return true; }
+    if ( spectator_neutrons           != 0 ) { return true; }
+    if ( spectator_protons            != 0 ) { return true; }
+    if ( N_Nwounded_collisions        != 0 ) { return true; }
+    if ( Nwounded_N_collisions        != 0 ) { return true; }
+    if ( Nwounded_Nwounded_collisions != 0 ) { return true; }
+    if ( impact_parameter             != 0 ) { return true; }
+    if ( event_plane_angle            != 0 ) { return true; }
+    if ( eccentricity                 != 0 ) { return true; }
+    if ( sigma_inel_NN                != 0 ) { return true; }
+    if ( centrality                   != 0 ) { return true; }
     return false;
 }
 

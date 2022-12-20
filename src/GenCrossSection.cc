@@ -79,8 +79,8 @@ bool GenCrossSection::to_string(std::string &att) const {
     std::ostringstream os;
 
     os << std::setprecision(8) << std::scientific
-       << (cross_sections.size()>0?cross_sections.at(0):0.0) << " "
-       << (cross_section_errors.size()>0?cross_section_errors.at(0):0.0) << " "
+       << (cross_sections.empty()?0.0:cross_sections.at(0)) << " "
+       << (cross_section_errors.empty()?0.0:cross_section_errors.at(0)) << " "
        << accepted_events << " "
        << attempted_events;
 
@@ -102,11 +102,11 @@ bool GenCrossSection::operator!=(const GenCrossSection& a) const {
 }
 
 bool GenCrossSection::is_valid() const {
-    if ( cross_sections.size()       == 0 ) return false;
-    if ( cross_section_errors.size() == 0 ) return false;
-    if ( cross_section_errors.size() != cross_sections.size() ) return false;
-    if ( cross_sections.at(0)       != 0 ) return true;
-    if ( cross_section_errors.at(0) != 0 ) return true;
+    if ( cross_sections.empty() ) { return false; }
+    if ( cross_section_errors.empty() ) { return false; }
+    if ( cross_section_errors.size() != cross_sections.size() ) { return false; }
+    if ( cross_sections.at(0)       != 0 ) { return true; }
+    if ( cross_section_errors.at(0) != 0 ) { return true; }
     return false;
 }
 

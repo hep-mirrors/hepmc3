@@ -103,16 +103,14 @@ ReaderLHEF::~ReaderLHEF() {close();}
 
 bool ReaderLHEF::read_event(GenEvent& ev)
 {
-    if (m_storage.size() > 0)
+    if (!m_storage.empty())
     {
         ev = m_storage.front();
         m_storage.pop_front();
         return true;
     }
-    //std::cout<<m_reader->initfile_rdstate()<<"    "<<m_reader->file_rdstate()<<" "<< m_storage.size()<<std::endl;
     bool read_result = m_reader->readEvent();
     if (!read_result) {
-    //std::cout<<m_reader->initfile_rdstate()<<"    "<<m_reader->file_rdstate()<<" "<< m_storage.size()<<std::endl;
       return false;
     }
     // To each GenEvent we want to add an attribute corresponding to
