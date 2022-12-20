@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenEvent.h
@@ -70,7 +70,6 @@ public:
     /// @brief Get list of vertices (const)
     const std::vector<ConstGenVertexPtr>& vertices() const;
 
-
     /// @brief Get/set list of particles (non-const)
     const std::vector<GenParticlePtr>& particles() { return m_particles; }
     /// @brief Get/set list of vertices (non-const)
@@ -80,16 +79,17 @@ public:
 
 
     /// @name Particle and vertex access
-    //@{
-    ///Particles size, HepMC2 compatiility
+    /// @{
+    /// Particles size, HepMC2 compatibility
     inline int particles_size() const { return m_particles.size(); }
-    ///Particles empty, HepMC2 compatiility
+    /// Particles empty, HepMC2 compatibility
     inline bool particles_empty() const { return m_particles.empty(); }
-    ///Vertices size, HepMC2 compatiility
+    /// Vertices size, HepMC2 compatibility
     inline int vertices_size() const { return m_vertices.size(); }
-    ///Vertices empty, HepMC2 compatiility
+    /// Vertices empty, HepMC2 compatibility
     inline bool vertices_empty() const { return m_vertices.empty(); }
-    //@}
+    /// @}
+
 
     /// @name Event weights
     /// @{
@@ -267,13 +267,23 @@ public:
 
     /// @brief Add particle
     void add_particle( GenParticlePtr p );
+    /// @brief Add particle (move)
+    ///
+    /// @note But what's the point when it's already a shared ptr? Need a version from GenParticle
+    /// directly?... but then it would need to be new-cloned to go in the shared_ptr structure
+    // void add_particle( GenParticlePtr&& p );
+    /// @brief Emplace particle, avoiding any copy (passes args to GenParticle constructor)
+    void add_particle( const FourVector& momentum=FourVector::ZERO_VECTOR(), int pid=0, int status=0 );
+    // /// @brief Emplace particle, avoiding any copy (passes particle-data arg to GenParticle constructor)
+    void add_particle( const GenParticleData& data );
 
     /// @brief Add vertex
     void add_vertex( GenVertexPtr v );
+    /// @todo !!!! Provide std::move and emplace methods for vertices, too
 
     /// @brief Remove particle from the event
     ///
-    /// This function  will remove whole sub-tree starting from this particle
+    /// This function will remove whole sub-tree starting from this particle
     /// if it is the only incoming particle of this vertex.
     /// It will also production vertex of this particle if this vertex
     /// has no more outgoing particles
@@ -283,7 +293,12 @@ public:
     ///
     /// This function follows rules of GenEvent::remove_particle to remove
     /// a list of particles from the event.
+    void remove_particles( const std::vector<GenParticlePtr>& v );
+    /// @brief Remove a set of particles (pass by value)
+    ///
+    /// @deprecated Prefer the more efficient pass-by-reference version
     void remove_particles( std::vector<GenParticlePtr> v );
+
 
     /// @brief Remove vertex from the event
     ///
@@ -299,7 +314,9 @@ public:
     ///
     /// @note Any particles on this list that do not belong to the tree
     ///       will be ignored.
-    void add_tree( const std::vector<GenParticlePtr> &particles );
+    ///
+    /// @todo Provide move-enabled version?
+    void add_tree( const std::vector<GenParticlePtr>& particles );
 
     /// @brief Reserve memory for particles and vertices
     ///
@@ -315,10 +332,12 @@ public:
     /// @{
 
     /// @brief Add particle by raw pointer
+    ///
     /// @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
     void add_particle( GenParticle *p );
 
     /// @brief Add vertex by raw pointer
+    ///
     /// @deprecated Use GenEvent::add_vertex( const GenVertexPtr& ) instead
     void add_vertex  ( GenVertex *v );
 

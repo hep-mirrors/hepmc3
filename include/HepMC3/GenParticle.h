@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_GENPARTICLE_H
 #define HEPMC3_GENPARTICLE_H
@@ -37,29 +37,25 @@ class GenParticle : public std::enable_shared_from_this<GenParticle> {
 // Constructors
 //
 public:
-    /** @brief Default constructor */
-    GenParticle( const FourVector &momentum = FourVector::ZERO_VECTOR(), int pid = 0, int status = 0 );
 
-    /** @brief Constructor based on particle data */
-    GenParticle( const GenParticleData &data );
+    /// @brief Default constructor
+    GenParticle( const FourVector& momentum=FourVector::ZERO_VECTOR(), int pid=0, int status=0 );
 
-//
-// Functions
-//
-public:
-    /** @brief Check if this particle belongs to an event */
-    bool in_event() const { return (bool)(m_event); }
+    /// @brief Constructor based on particle data
+    GenParticle( const GenParticleData& data );
 
-//
-// Accessors
-//
-public:
+    /// @brief Check if this particle belongs to an event
+    bool in_event() const { return (bool) m_event; }
 
-    GenEvent*              parent_event() { return m_event; } //!< Get parent event
-    const GenEvent*              parent_event() const { return m_event; } //!< Get parent event
-    int                    id()           const { return m_id;    } //!< Get particle id
-    const GenParticleData& data()         const { return m_data;  } //!< Get particle data
+    /// @brief Get the parent event
+    GenEvent* parent_event() { return m_event; }
+    /// @brief Get the parent event (const)
+    const GenEvent* parent_event() const { return m_event; }
 
+    /// @brief Get the particle ID number (*not* PDG ID)
+    int id() const { return m_id; }
+
+    const GenParticleData& data() const { return m_data; } //!< Get particle data
 
     ConstGenVertexPtr production_vertex() const;        //!< Get production vertex (const version)
     ConstGenVertexPtr end_vertex() const;               //!< Get end vertex (const version)
@@ -84,7 +80,7 @@ public:
     std::vector<ConstGenParticlePtr> children() const;
 
     int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
-    int   abs_pid()               const { return std::abs(pid());            } //!< Get absolute value of PDG ID
+    int   abs_pid()               const { return std::abs(pid());       } //!< Get absolute value of PDG ID
     int   status()                const { return m_data.status;         } //!< Get status code
     const FourVector& momentum()  const { return m_data.momentum;       } //!< Get momentum
     bool  is_generated_mass_set() const { return m_data.is_mass_set;    } //!< Check if generated mass is set
@@ -102,12 +98,11 @@ public:
     void set_generated_mass(double m);             //!< Set generated mass
     void unset_generated_mass();                   //!< Declare that generated mass is not set
 
-    /** @brief Add an attribute to this particle
-     *
-     *  This will overwrite existing attribute if an attribute with
-     *  the same name is present. The attribute will be stored in the
-     *  parent_event(). @return false if there is no parent_event();
-     */
+    /// @brief Add an attribute to this particle
+    ///
+    ///  This will overwrite existing attribute if an attribute with
+    ///  the same name is present. The attribute will be stored in the
+    ///  parent_event(). @return false if there is no parent_event();
     bool add_attribute(const std::string& name, std::shared_ptr<Attribute> att);
 
     /// @brief Get list of names of attributes assigned to this particle
@@ -135,13 +130,12 @@ public:
     /// @deprecated Use set_pid() instead
     void set_pdg_id(const int& pidin) { set_pid(pidin); }
 
-
     /// @}
-//
-// Fields
-//
+
+
 private:
-    GenEvent        *m_event; //!< Parent event
+
+    GenEvent*        m_event; //!< Parent event
     int              m_id;    //!< Index
     GenParticleData  m_data;  //!< Particle data
 
@@ -149,14 +143,19 @@ private:
     std::weak_ptr<GenVertex>    m_end_vertex;        //!< End vertex
 };
 
+
 } // namespace HepMC3
+
 
 #include "HepMC3/GenEvent.h"
 namespace HepMC3 {
-/// @brief Get attribute of type T
-template<class T> std::shared_ptr<T> GenParticle::attribute(const std::string& name) const {
-    return parent_event()?
-           parent_event()->attribute<T>(name, id()): std::shared_ptr<T>();
-}
+
+  /// @brief Get attribute of type T
+  template<class T> std::shared_ptr<T> GenParticle::attribute(const std::string& name) const {
+      return parent_event() ?
+        parent_event()->attribute<T>(name, id()) :
+        std::shared_ptr<T>();
+  }
+
 }
 #endif

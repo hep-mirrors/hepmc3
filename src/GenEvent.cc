@@ -54,14 +54,20 @@ void GenEvent::add_particle(GenParticlePtr p) {
     p->m_id = particles().size();
 
     // Particles without production vertex are added to the root vertex
-    if ( !p->production_vertex() )
-        m_rootvertex->add_particle_out(p);
+    if ( !p->production_vertex() ) m_rootvertex->add_particle_out(p);
+}
+
+void GenEvent::add_particle( const FourVector& momentum, int pid, int status ) {
+  add_particle(std::make_shared<GenParticle>(momentum, pid, status));
+}
+
+void GenEvent::add_particle( const GenParticleData& data ) {
+  add_particle(std::make_shared<GenParticle>(data));
 }
 
 
-GenEvent::GenEvent(const GenEvent&e) {
-    if (this != &e)
-    {
+GenEvent::GenEvent(const GenEvent& e) {
+    if (this != &e) {
         std::lock(m_lock_attributes, e.m_lock_attributes);
         std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
         std::lock_guard<std::recursive_mutex> rhs_lk(e.m_lock_attributes, std::adopt_lock);
@@ -71,17 +77,21 @@ GenEvent::GenEvent(const GenEvent&e) {
     }
 }
 
+
 GenEvent::~GenEvent() {
     for ( std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator attm = m_attributes.begin(); attm != m_attributes.end(); ++attm)
-        for ( std::map<int, std::shared_ptr<Attribute> >::iterator att = attm->second.begin(); att != attm->second.end(); ++att) if (att->second) att->second->m_event = nullptr;
+        for ( std::map<int, std::shared_ptr<Attribute> >::iterator att = attm->second.begin(); att != attm->second.end(); ++att)
+            if (att->second) att->second->m_event = nullptr;
 
-    for  ( std::vector<GenVertexPtr>::iterator v = m_vertices.begin(); v != m_vertices.end(); ++v ) if (*v)  if ((*v)->m_event == this) (*v)->m_event = nullptr;
-    for  ( std::vector<GenParticlePtr>::iterator p = m_particles.begin(); p != m_particles.end(); ++p ) if (*p)  if ((*p)->m_event == this)  (*p)->m_event = nullptr;
+    for  ( std::vector<GenVertexPtr>::iterator v = m_vertices.begin(); v != m_vertices.end(); ++v )
+        if (*v)  if ((*v)->m_event == this) (*v)->m_event = nullptr;
+    for  ( std::vector<GenParticlePtr>::iterator p = m_particles.begin(); p != m_particles.end(); ++p )
+        if (*p)  if ((*p)->m_event == this)  (*p)->m_event = nullptr;
 }
 
+
 GenEvent& GenEvent::operator=(const GenEvent& e) {
-    if (this != &e)
-    {
+    if (this != &e) {
         std::lock(m_lock_attributes, e.m_lock_attributes);
         std::lock_guard<std::recursive_mutex> lhs_lk(m_lock_attributes, std::adopt_lock);
         std::lock_guard<std::recursive_mutex> rhs_lk(e.m_lock_attributes, std::adopt_lock);

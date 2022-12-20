@@ -17,6 +17,7 @@
 namespace HepMC3 {
 
 class GenParticle;
+class GenParticleData;
 
 using GenParticlePtr = std::shared_ptr<GenParticle>;
 using ConstGenParticlePtr = std::shared_ptr<const GenParticle>;
