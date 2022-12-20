@@ -6,7 +6,6 @@ SET_PROPERTY (GLOBAL PROPERTY CMAKE_ROLE "PROJECT")
 endif()
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
-
 option(USE_INSTALLED_HEPMC3 "Use HepMC3 bindings as a standalone package" OFF)
 option(RERUN_BINDER "Rerun binder" OFF)
 if (USE_INSTALLED_HEPMC3)

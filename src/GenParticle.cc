@@ -33,8 +33,7 @@ GenParticle::GenParticle(const GenParticleData &dat):
 }
 
 double GenParticle::generated_mass() const {
-    if (m_data.is_mass_set) return m_data.mass;
-    else                   return m_data.momentum.m();
+    return m_data.is_mass_set ? m_data.mass : m_data.momentum.m();
 }
 
 void GenParticle::set_pid(int pidin) {
@@ -99,7 +98,6 @@ bool GenParticle::add_attribute(const std::string& name, std::shared_ptr<Attribu
 
 std::vector<std::string> GenParticle::attribute_names() const {
     if ( parent_event() ) return parent_event()->attribute_names(id());
-
     return std::vector<std::string>();
 }
 
