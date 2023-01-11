@@ -111,7 +111,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
     }
     bool read_result = m_reader->readEvent();
     if (!read_result) {
-      return false;
+        return false;
     }
     // To each GenEvent we want to add an attribute corresponding to
     // the HEPEUP. Also here there may be additional non-standard

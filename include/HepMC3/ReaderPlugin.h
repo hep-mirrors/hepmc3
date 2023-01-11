@@ -27,7 +27,7 @@ public:
     ReaderPlugin(std::istream & stream,const std::string &libname, const std::string &newreader);
     /** @brief Constructor to read from file*/
     ReaderPlugin(const std::string& filename,const std::string &libname, const std::string &newreader);
-    /** @brief Skip or fast forward reading of some events*/ 
+    /** @brief Skip or fast forward reading of some events*/
     bool skip(const int n) override { if (!m_reader) return false; return m_reader->skip(n); }
     /** @brief Reading event */
     bool read_event(GenEvent& ev)  override {if (!m_reader) return false; return m_reader->read_event(ev);};
