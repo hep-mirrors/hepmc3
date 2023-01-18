@@ -25,12 +25,12 @@ namespace HepMC3 {
 /// @brief Returns children of vertex, i.e. outgoing particles.
 std::vector<HepMC3::GenParticlePtr>      children(HepMC3::GenVertexPtr O) {
     if (O) return O->particles_out();
-    return  std::vector<HepMC3::GenParticlePtr>();
+    return  {};
 }
 /// @brief Returns children of const vertex, i.e. outgoing particles.
 std::vector<HepMC3::ConstGenParticlePtr> children(HepMC3::ConstGenVertexPtr O) {
     if (O) return O->particles_out();
-    return  std::vector<HepMC3::ConstGenParticlePtr>();
+    return  {};
 }
 /// @brief Returns children of particle, i.e. the end vertex.
 std::vector<HepMC3::GenVertexPtr>        children(HepMC3::GenParticlePtr O) {
@@ -47,12 +47,12 @@ std::vector<HepMC3::ConstGenVertexPtr>   children(HepMC3::ConstGenParticlePtr O)
 /// @brief Returns grandchildren of particle, i.e. the outgoing particles of the end vertex.
 std::vector<HepMC3::GenParticlePtr>      grandchildren(HepMC3::GenParticlePtr O) {
     if (O) if (O->end_vertex()) return O->end_vertex()->particles_out();
-    return std::vector<HepMC3::GenParticlePtr> ();
+    return {};
 }
 /// @brief Returns grandchildren of const particle, i.e. the outgoing particles of the end vertex.
 std::vector<HepMC3::ConstGenParticlePtr> grandchildren(HepMC3::ConstGenParticlePtr O) {
     if (O) if (O->end_vertex()) return O->end_vertex()->particles_out();
-    return std::vector<HepMC3::ConstGenParticlePtr> ();
+    return {};
 }
 /// @brief Returns grandchildren of vertex, i.e. the end vertices of the outgoing particles.
 std::vector<HepMC3::GenVertexPtr>        grandchildren(HepMC3::GenVertexPtr O) {
@@ -69,12 +69,12 @@ std::vector<HepMC3::ConstGenVertexPtr>   grandchildren(HepMC3::ConstGenVertexPtr
 /// @brief Returns parents of vertex, i.e. incoming particles.
 std::vector<HepMC3::GenParticlePtr>      parents(HepMC3::GenVertexPtr O) {
     if (O) return O->particles_in();
-    return  std::vector<GenParticlePtr>();
+    return  {};
 }
 /// @brief Returns parents of const vertex, i.e. incoming particles.
 std::vector<HepMC3::ConstGenParticlePtr> parents(HepMC3::ConstGenVertexPtr O) {
     if (O) return O->particles_in();
-    return  std::vector<HepMC3::ConstGenParticlePtr>();
+    return  {};
 }
 /// @brief Returns parents of particle, i.e. production vertex.
 std::vector<HepMC3::GenVertexPtr>        parents(HepMC3::GenParticlePtr O) {
@@ -91,12 +91,12 @@ std::vector<HepMC3::ConstGenVertexPtr>   parents(HepMC3::ConstGenParticlePtr O) 
 /// @brief Returns grandparents of particle, i.e. incoming particles of production vertex.
 std::vector<HepMC3::GenParticlePtr>      grandparents(HepMC3::GenParticlePtr O) {
     if (O) if (O->production_vertex()) return O->production_vertex()->particles_in();
-    return std::vector<HepMC3::GenParticlePtr> ();
+    return {};
 }
 /// @brief Returns grandparents of const particle, i.e. incoming particles of production vertex.
 std::vector<HepMC3::ConstGenParticlePtr> grandparents(HepMC3::ConstGenParticlePtr O) {
     if (O) if (O->production_vertex()) return O->production_vertex()->particles_in();
-    return std::vector<HepMC3::ConstGenParticlePtr> ();
+    return {};
 }
 /// @brief Returns grandparents of vertex, i.e. production vertices of incoming particles.
 std::vector<HepMC3::GenVertexPtr>        grandparents(HepMC3::GenVertexPtr O) {

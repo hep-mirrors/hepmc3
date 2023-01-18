@@ -50,8 +50,7 @@ WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo
 
 
 WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
-    : m_file(),
-      m_stream(&stream),
+    : m_stream(&stream),
       m_precision(16),
       m_buffer(nullptr),
       m_cursor(nullptr),
@@ -73,8 +72,7 @@ WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
 }
 
 WriterAscii::WriterAscii(std::shared_ptr<std::ostream> s_stream, std::shared_ptr<GenRunInfo> run)
-    : m_file(),
-      m_shared_stream(s_stream),
+    : m_shared_stream(s_stream),
       m_stream(s_stream.get()),
       m_precision(16),
       m_buffer(nullptr),

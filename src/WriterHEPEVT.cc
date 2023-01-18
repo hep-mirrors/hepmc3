@@ -17,21 +17,21 @@ namespace HepMC3
 
 
 WriterHEPEVT::WriterHEPEVT(const std::string &filename,
-                           std::shared_ptr<GenRunInfo> run): m_file(filename), m_stream(&m_file), m_events_count(0)
+                           std::shared_ptr<GenRunInfo> /*run*/): m_file(filename), m_stream(&m_file), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     m_hepevt_interface.allocate_internal_storage();
 }
 
 WriterHEPEVT::WriterHEPEVT(std::ostream& stream,
-                           std::shared_ptr<GenRunInfo> run): m_file(), m_stream(&stream), m_events_count(0)
+                           std::shared_ptr<GenRunInfo> /*run*/): m_stream(&stream), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     m_hepevt_interface.allocate_internal_storage();
 }
 
 WriterHEPEVT::WriterHEPEVT(std::shared_ptr<std::ostream> s_stream,
-                           std::shared_ptr<GenRunInfo> run): m_file(), m_shared_stream(s_stream), m_stream(s_stream.get()), m_events_count(0)
+                           std::shared_ptr<GenRunInfo> /*run*/): m_shared_stream(s_stream), m_stream(s_stream.get()), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     m_hepevt_interface.allocate_internal_storage();

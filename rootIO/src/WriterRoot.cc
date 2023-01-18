@@ -38,11 +38,12 @@ void WriterRoot::write_event(const GenEvent &evt) {
         set_run_info(evt.run_info());
         write_run_info();
     } else {
-        if ( evt.run_info() && run_info() != evt.run_info() )
+        if ( evt.run_info() && run_info() != evt.run_info() ) {
             HEPMC3_WARNING("WriterRoot::write_event: GenEvents contain "
                            "different GenRunInfo objects from - only the "
                            "first such object will be serialized.")
         }
+    }
 
     GenEventData data;
     evt.write_data(data);
@@ -77,9 +78,7 @@ void WriterRoot::close() {
 }
 
 bool WriterRoot::failed() {
-    if ( !m_file->IsOpen() ) return true;
-
-    return false;
+    return !m_file->IsOpen();
 }
 
 } // namespace HepMC3

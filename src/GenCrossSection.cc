@@ -20,7 +20,7 @@ namespace HepMC3 {
 
 
 int GenCrossSection::windx(std::string wName) const {
-    if ( !event() || !event()->run_info() ) return 0;
+    if ( !event() || !event()->run_info() ) {return 0;}
     return event()->run_info()->weight_index(wName);
 }
 
@@ -45,7 +45,7 @@ bool GenCrossSection::from_string(const std::string &att) {
     double cross_section = atof(cursor);
     cross_sections.push_back(cross_section);
 
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) {return false;}
     double cross_section_error = atof(cursor);
     cross_section_errors.push_back(cross_section_error);
 

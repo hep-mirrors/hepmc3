@@ -323,7 +323,7 @@ std::pair<int, int> ReaderAscii::parse_event_information(GenEvent &evt, const ch
 bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
     std::istringstream iss(buf + 1);
     std::vector<double> wts;
-    double w;
+    double w = 0.0;
     while (iss >> w) wts.push_back(w);
     if ( run_info() && !run_info()->weight_names().empty()
             && run_info()->weight_names().size() != wts.size() ) {

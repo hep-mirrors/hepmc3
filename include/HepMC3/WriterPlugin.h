@@ -47,8 +47,8 @@ public:
     /** @brief Destructor */
     ~WriterPlugin()  override;
 private:
-    Writer* m_writer; ///< The actual writer
-    void* dll_handle; ///< library handler
+    Writer* m_writer = nullptr; ///< The actual writer
+    void* dll_handle = nullptr; ///< library handler
 };
 }
 #endif

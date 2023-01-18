@@ -46,8 +46,8 @@ public:
     /// Set the global GenRunInfo object.
     void set_run_info(std::shared_ptr<GenRunInfo> run) override { if (!m_reader) return; else m_reader->set_run_info(run); }
 private:
-    Reader* m_reader; ///< The actual reader
-    void*  dll_handle; ///< library handler
+    Reader* m_reader = nullptr; ///< The actual reader
+    void*  dll_handle = nullptr; ///< library handler
 };
 }
 #endif

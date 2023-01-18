@@ -24,7 +24,7 @@ ReaderRootTree::ReaderRootTree(const std::string &filename):
 
 
 ReaderRootTree::ReaderRootTree(const std::string &filename, const std::string &treename, const std::string &branchname):
-    m_tree(nullptr), m_events_count(0), m_tree_name(treename.c_str()), m_branch_name(branchname.c_str())
+    m_tree(nullptr), m_events_count(0), m_tree_name(treename), m_branch_name(branchname)
 {
     m_file = TFile::Open(filename.c_str());
     if (!init()) return;

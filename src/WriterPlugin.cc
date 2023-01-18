@@ -28,7 +28,6 @@ namespace HepMC3 {
 
 WriterPlugin::WriterPlugin(std::ostream & stream, const std::string &libname, const std::string &newwriter, std::shared_ptr<GenRunInfo> run) {
 #ifdef WIN32
-    dll_handle = nullptr;
     dll_handle = LoadLibrary(libname.c_str());
     if (!dll_handle) { printf("Error  while loading library %s. Error code %i\n", libname.c_str(), GetLastError()); m_writer = nullptr; return;  }
     typedef Writer* (__stdcall *f_funci)(std::ostream & stream, shared_ptr<GenRunInfo>);
@@ -38,7 +37,6 @@ WriterPlugin::WriterPlugin(std::ostream & stream, const std::string &libname, co
 #endif
 
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
-    dll_handle = nullptr;
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_writer=nullptr; return;  }
     Writer* (*newWriter)(std::ostream & stream, std::shared_ptr<GenRunInfo>);
@@ -50,7 +48,6 @@ WriterPlugin::WriterPlugin(std::ostream & stream, const std::string &libname, co
 
 WriterPlugin::WriterPlugin(const std::string& filename, const std::string &libname, const std::string &newwriter, std::shared_ptr<GenRunInfo> run) {
 #ifdef WIN32
-    dll_handle = nullptr;
     dll_handle = LoadLibrary(libname.c_str());
     if (!dll_handle) { printf("Error  while loading library %s. Error code %i\n", libname.c_str(), GetLastError()); m_writer = nullptr; return;  }
     typedef Writer* (__stdcall *f_funci)(const std::string&, shared_ptr<GenRunInfo>);
@@ -60,7 +57,6 @@ WriterPlugin::WriterPlugin(const std::string& filename, const std::string &libna
 #endif
 
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
-    dll_handle = nullptr;
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_writer = nullptr; return;  }
     Writer* (*newWriter)(const std::string&, std::shared_ptr<GenRunInfo>);
