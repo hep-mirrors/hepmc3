@@ -118,12 +118,12 @@ bool ReaderLHEF::read_event(GenEvent& ev)
     // information outside the LHEF <event> tags, which we may want to
     // add.
     std::shared_ptr<HEPEUPAttribute> hepe = std::make_shared<HEPEUPAttribute>();
-    if ( m_reader->outsideBlock.length() )
+    if ( m_reader->outsideBlock.length() ) {
         hepe->tags =  LHEF::XMLTag::findXMLTags(m_reader->outsideBlock);
-
+    }
     hepe->hepeup = m_reader->hepeup;
     std::vector<LHEF::HEPEUP*> input;
-    if (m_reader->hepeup.subevents.size() > 0) input.insert(input.end(), hepe->hepeup.subevents.begin(), hepe->hepeup.subevents.end());
+    if (!m_reader->hepeup.subevents.empty()) { input.insert(input.end(), hepe->hepeup.subevents.begin(), hepe->hepeup.subevents.end()); }
     else { input.push_back(&m_reader->hepeup);}
     int first_group_event = m_neve;
     m_neve++;
@@ -151,18 +151,21 @@ bool ReaderLHEF::read_event(GenEvent& ev)
         {
             std::pair<int, int> vertex_index = v.first;
             GenVertexPtr          vertex = v.second;
-            for (int i = vertex_index.first-1; i < vertex_index.second; ++i)
-                if ( i >= 0 && i < (int)particles.size())
+            for (int i = vertex_index.first-1; i < vertex_index.second; ++i) {
+                if ( i >= 0 && i < (int)particles.size()) {
                     vertex->add_particle_in(particles[i]);
+                }
+            }
         }
         std::pair<int, int> vertex_index(0, 0);
         if (vertices.find(vertex_index) == vertices.end()) vertices[vertex_index] = std::make_shared<GenVertex>();
-        for (size_t i = 0; i < particles.size(); ++i)
+        for (size_t i = 0; i < particles.size(); ++i) {
             if (!particles[i]->end_vertex() && !particles[i]->production_vertex())
             {
-                if ( i < 2 ) vertices[vertex_index]->add_particle_in(particles[i]);
-                else vertices[vertex_index]->add_particle_out(particles[i]);
+                if ( i < 2 ) { vertices[vertex_index]->add_particle_in(particles[i]); }
+                else { vertices[vertex_index]->add_particle_out(particles[i]);}
             }
+        }
         for ( auto v: vertices ) evt.add_vertex(v.second);
         if (particles.size() > 1)
         {
@@ -186,7 +189,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
     return true;
 }
 /// @brief Return status of the stream
-bool ReaderLHEF::failed() { return ((m_reader->initfile_rdstate()!=std::ifstream::goodbit)||(m_reader->file_rdstate()!=std::ifstream::goodbit)) && (m_storage.size()==0); }
+bool ReaderLHEF::failed() { return ((m_reader->initfile_rdstate()!=std::ifstream::goodbit)||(m_reader->file_rdstate()!=std::ifstream::goodbit)) && (m_storage.empty()); }
 
 /// @brief Close file stream
 void ReaderLHEF::close() { }

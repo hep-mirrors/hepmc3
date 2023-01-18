@@ -21,7 +21,7 @@ namespace HepMC3 {
 
 
 ReaderAscii::ReaderAscii(const std::string &filename)
-    : m_file(filename), m_stream(0), m_isstream(false)
+    : m_file(filename), m_stream(nullptr), m_isstream(false)
 {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderAscii: could not open input file: " << filename)
@@ -52,13 +52,13 @@ ReaderAscii::~ReaderAscii() { if (!m_isstream) close(); }
 
 bool ReaderAscii::skip(const int n)
 {
-    const size_t       max_buffer_size = 512*512;
+    const size_t       max_buffer_size = 262144;
     char               buf[max_buffer_size];
     bool               event_context    = false;
     bool               run_info_context    = false;
     int nn = n;
     while (!failed()) {
-        char  peek;
+        char  peek(0);
         if ( (!m_file.is_open()) && (!m_isstream) ) return false;
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
         if ( peek == 'E' ) { event_context = true; nn--; }
@@ -90,8 +90,8 @@ bool ReaderAscii::skip(const int n)
 bool ReaderAscii::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
-    char               peek;
-    const size_t       max_buffer_size = 512*512;
+    char               peek(0);
+    const size_t       max_buffer_size = 262144;
     char               buf[max_buffer_size];
     bool               event_context    = false;
     bool               parsed_weights    = false;
@@ -247,11 +247,14 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         return false;
     }
-    for ( auto p : m_forward_daughters )
-        for (auto v: evt.vertices())
-            if (p.second == v->id())
+    for ( auto p : m_forward_daughters ) {
+        for (auto v: evt.vertices()) {
+            if (p.second == v->id()) {
                 v->add_particle_out(p.first);
-    for ( auto v : m_forward_mothers )  for ( auto idpm : v.second )  v.first->add_particle_in(evt.particles()[idpm-1]);
+            }
+        }
+    }
+    for ( auto v : m_forward_mothers )  { for ( auto idpm : v.second )  v.first->add_particle_in(evt.particles()[idpm-1]); }
 
     /* restore ids of vertices using a bank of available ids*/
     std::vector<int> all_ids;
@@ -322,11 +325,12 @@ bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
     std::vector<double> wts;
     double w;
     while (iss >> w) wts.push_back(w);
-    if ( run_info() && run_info()->weight_names().size()
-            && run_info()->weight_names().size() != wts.size() )
+    if ( run_info() && !run_info()->weight_names().empty()
+            && run_info()->weight_names().size() != wts.size() ) {
         throw std::logic_error("ReaderAscii::parse_weight_values: "
                                "The number of weights ("+std::to_string((long long int)(wts.size()))+") does not match "
                                "the  number weight names("+std::to_string((long long int)(run_info()->weight_names().size()))+") in the GenRunInfo object");
+    }
     evt.weights() = wts;
 
     return true;
@@ -462,20 +466,21 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
         vertex->set_id(0);
     }
     // Parent object is vertex
-    else if ( mother_id < 0 )
-    {
-        //Vertices are not always ordered, e.g. when one reads HepMC2 event, so we check their ids.
-        bool found = false;
-        for (auto v: evt.vertices()) if (v->id() == mother_id) {v->add_particle_out(data); found = true; break; }
-        if (!found)
+    else {
+        if ( mother_id < 0 )
         {
-            //This should happen  in case of unordered event.
-            //      WARNING("ReaderAscii: Unordered event, id of mother vertex  is out of range of known ids:   " <<mother_id<<" evt.vertices().size()="<<evt.vertices().size() )
-            //Save the mother id to reconnect later.
-            m_forward_daughters[data] = mother_id;
+            //Vertices are not always ordered, e.g. when one reads HepMC2 event, so we check their ids.
+            bool found = false;
+            for (auto v: evt.vertices()) if (v->id() == mother_id) {v->add_particle_out(data); found = true; break; }
+            if (!found)
+            {
+                //This should happen  in case of unordered event.
+                //      WARNING("ReaderAscii: Unordered event, id of mother vertex  is out of range of known ids:   " <<mother_id<<" evt.vertices().size()="<<evt.vertices().size() )
+                //Save the mother id to reconnect later.
+                m_forward_daughters[data] = mother_id;
+            }
         }
     }
-
     // pdg id
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     data->set_pid(atoi(cursor));
@@ -583,10 +588,10 @@ bool ReaderAscii::parse_tool(const char *buf) {
     ++cursor;
     std::string line = unescape(cursor);
     GenRunInfo::ToolInfo tool;
-    std::string::size_type pos = line.find("\n");
+    std::string::size_type pos = line.find('\n');
     tool.name = line.substr(0, pos);
     line = line.substr(pos + 1);
-    pos = line.find("\n");
+    pos = line.find('\n');
     tool.version = line.substr(0, pos);
     tool.description = line.substr(pos + 1);
     run_info()->tools().push_back(tool);
@@ -601,12 +606,14 @@ std::string ReaderAscii::unescape(const std::string& s) {
     for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
         if ( *it == '\\' ) {
             ++it;
-            if ( *it == '|' )
+            if ( *it == '|' ) {
                 ret += '\n';
-            else
+            }
+            else {
                 ret += *it;
+            }
         } else
-            ret += *it;
+        {ret += *it;}
     }
 
     return ret;

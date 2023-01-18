@@ -27,10 +27,11 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
             name = oss.str();
             m_weight_names[i] = name;
         }
-        if ( has_weight(name) )
+        if ( has_weight(name) ) {
             throw std::logic_error("GenRunInfo::set_weight_names: "
                                    "Duplicate weight name '" + name +
                                    "' found.");
+        }
         m_weight_indices[name] = i;
     }
 }

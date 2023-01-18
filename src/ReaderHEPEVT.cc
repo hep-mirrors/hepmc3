@@ -15,7 +15,7 @@ namespace HepMC3
 {
 
 ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
-    : m_file(filename), m_stream(0), m_isstream(false)
+    : m_file(filename), m_stream(nullptr), m_isstream(false)
 {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderHEPEVT: could not open input file: " << filename)
@@ -57,11 +57,11 @@ ReaderHEPEVT::ReaderHEPEVT(std::shared_ptr<std::istream> s_stream)
 
 bool ReaderHEPEVT::skip(const int n)
 {
-    const size_t       max_buffer_size = 512*512;
+    const size_t       max_buffer_size = 262144;
     char               buf[max_buffer_size];
     int nn = n;
     while (!failed()) {
-        char peek;
+        char peek(0);
         if ( (!m_file.is_open()) && (!m_isstream) ) { return false; }
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
         if ( peek == 'E' ) nn--;
@@ -78,7 +78,8 @@ bool ReaderHEPEVT::read_hepevt_event_header()
     const size_t       max_e_buffer_size = 512;
     char buf_e[max_e_buffer_size];
     bool eventline = false;
-    int m_i = 0, m_p = 0;
+    int m_i = 0;
+    int m_p = 0;
     while (!eventline)
     {
         m_isstream ? m_stream->getline(buf_e, max_e_buffer_size) : m_file.getline(buf_e, max_e_buffer_size);
@@ -89,8 +90,8 @@ bool ReaderHEPEVT::read_hepevt_event_header()
         while (!eventline)
         {
             if (!(st_e >> attr)) break;
-            if (attr == ' ') continue;
-            else eventline = false;
+            if (attr == ' ') { continue; }
+            else { eventline = false; }
             if (attr == 'E')
             {
                 eventline = static_cast<bool>(st_e >> m_i >> m_p);
@@ -152,8 +153,9 @@ bool ReaderHEPEVT::read_event(GenEvent& evt)
     evt.clear();
     m_hepevt_interface.zero_everything();
     bool fileok = read_hepevt_event_header();
-    for (int i = 1; (i <= m_hepevt_interface.number_entries()) && fileok; i++)
+    for (int i = 1; (i <= m_hepevt_interface.number_entries()) && fileok; i++) {
         fileok = read_hepevt_particle(i);
+    }
     bool result = false;
     if (fileok)
     {

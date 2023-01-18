@@ -78,7 +78,7 @@ void WriterHEPEVT::write_event(const GenEvent &evt)
 
 void WriterHEPEVT::close()
 {
-    std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
+    auto* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     if (ofs) ofs->close();
 }
