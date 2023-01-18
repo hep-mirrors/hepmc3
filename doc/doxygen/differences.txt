@@ -462,9 +462,6 @@
     time as a parameter of template. The block can hold float/double precision momenta. 
     The block can be held in the object. Multiple instances can exists.
 
-    @endcode
-    
-        
     <hr>
 
  Last update 28 Dec 2021
