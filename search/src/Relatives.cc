@@ -19,7 +19,7 @@ const Descendants Relatives::DESCENDANTS;
 thread_local const Ancestors   Relatives::ANCESTORS;
 thread_local const Descendants Relatives::DESCENDANTS;
 #endif
-}
+} // namespace HepMC3
 
 namespace HepMC3 {
 /// @brief Returns children of vertex, i.e. outgoing particles.

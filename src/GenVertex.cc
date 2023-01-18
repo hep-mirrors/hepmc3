@@ -81,7 +81,6 @@ void GenVertex::remove_particle_out(GenParticlePtr p) {
 
 void GenVertex::set_id(int id) {
     m_id = id;
-    return;
 }
 
 

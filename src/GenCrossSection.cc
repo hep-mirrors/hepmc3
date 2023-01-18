@@ -53,8 +53,8 @@ bool GenCrossSection::from_string(const std::string &att) {
     else
     {
         accepted_events = atoi(cursor);
-        if ( !(cursor = strchr(cursor+1, ' ')) ) attempted_events = -1;
-        else attempted_events = atoi(cursor);
+        if ( !(cursor = strchr(cursor+1, ' ')) ) { attempted_events = -1; }
+        else { attempted_events = atoi(cursor); }
     }
     size_t N = 1;
     if ( event() ) N = std::max(event()->weights().size(), N);
@@ -84,10 +84,10 @@ bool GenCrossSection::to_string(std::string &att) const {
        << accepted_events << " "
        << attempted_events;
 
-    for (size_t i = 1; i < cross_sections.size(); ++i )
+    for (size_t i = 1; i < cross_sections.size(); ++i ) {
         os << " " << cross_sections.at(i)
            << " " << (cross_section_errors.size()>i?cross_section_errors.at(i):0.0);
-
+    }
     att = os.str();
 
     return true;
