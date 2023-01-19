@@ -162,7 +162,7 @@ bool ReaderHEPEVT::read_event(GenEvent& evt)
         result = m_hepevt_interface.HEPEVT_to_GenEvent(&evt);
         std::shared_ptr<GenRunInfo> g = std::make_shared<GenRunInfo>();
         std::vector<std::string> weightnames;
-        weightnames.push_back("0");
+        weightnames.emplace_back("0");
         std::vector<double> wts;
         wts.push_back(1.0);
         g->set_weight_names(weightnames);

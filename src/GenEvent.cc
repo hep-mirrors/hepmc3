@@ -20,7 +20,7 @@ namespace HepMC3 {
 
 GenEvent::GenEvent(Units::MomentumUnit mu,
                    Units::LengthUnit lu)
-    : m_event_number(0), m_weights(std::vector<double>()), //m_weights(std::vector<double>(1, 1.0)),//Prevent from  different number of weights and names
+    : m_event_number(0), //m_weights(std::vector<double>(1, 1.0)),//Prevent from  different number of weights and names
       m_momentum_unit(mu), m_length_unit(lu),
       m_rootvertex(std::make_shared<GenVertex>()) {}
 
@@ -28,7 +28,7 @@ GenEvent::GenEvent(Units::MomentumUnit mu,
 GenEvent::GenEvent(std::shared_ptr<GenRunInfo> run,
                    Units::MomentumUnit mu,
                    Units::LengthUnit lu)
-    : m_event_number(0), m_weights(std::vector<double>()), //m_weights(std::vector<double>(1, 1.0)),//Prevent from  different number of weights and names
+    : m_event_number(0), //m_weights(std::vector<double>(1, 1.0)),//Prevent from  different number of weights and names
       m_momentum_unit(mu), m_length_unit(lu),
       m_rootvertex(std::make_shared<GenVertex>()),
       m_run_info(run) {
@@ -787,13 +787,13 @@ std::string GenEvent::attribute_as_string(const std::string &name, const int& id
         if ( id == 0 && run_info() ) {
             return run_info()->attribute_as_string(name);
         }
-        return std::string();
+        return {};
     }
 
     std::map<int, std::shared_ptr<Attribute> >::iterator i2 = i1->second.find(id);
-    if (i2 == i1->second.end() ) return std::string();
+    if (i2 == i1->second.end() ) return {};
 
-    if ( !i2->second ) return std::string();
+    if ( !i2->second ) return {};
 
     std::string ret;
     i2->second->to_string(ret);

@@ -72,7 +72,7 @@ bool ReaderAsciiHepMC2::skip(const int n)
 bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
-    char               peek;
+    char               peek = 0;
     const size_t  max_buffer_size = 262144;
     char          buf[max_buffer_size];
     bool          parsed_event_header            = false;

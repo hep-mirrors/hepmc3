@@ -133,7 +133,7 @@ std::string GenVertex::attribute_as_string(const std::string& name) const {
 std::vector<std::string> GenVertex::attribute_names() const {
     if ( parent_event() ) return parent_event()->attribute_names(id());
 
-    return std::vector<std::string>();
+    return {};
 }
 
 } // namespace HepMC3

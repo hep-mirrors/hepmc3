@@ -27,7 +27,6 @@ namespace HepMC3 {
 
 ReaderPlugin::ReaderPlugin(std::istream & stream, const std::string &libname, const std::string &newreader) {
 #ifdef WIN32
-    dll_handle = nullptr;
     dll_handle = LoadLibrary(libname.c_str());
     if (!dll_handle) { printf("Error  while loading library %s. Error code %i\n", libname.c_str(), GetLastError()); m_reader = nullptr; return;  }
     typedef Reader* (__stdcall *f_funci)(std::istream & stream);
@@ -37,7 +36,6 @@ ReaderPlugin::ReaderPlugin(std::istream & stream, const std::string &libname, co
 #endif
 
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
-    dll_handle = nullptr;
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_reader = nullptr; return;  }
     Reader* (*newReader)(std::istream & stream);
@@ -49,7 +47,6 @@ ReaderPlugin::ReaderPlugin(std::istream & stream, const std::string &libname, co
 /** @brief Constructor */
 ReaderPlugin::ReaderPlugin(const std::string& filename, const std::string &libname, const std::string &newreader) {
 #ifdef WIN32
-    dll_handle = nullptr;
     dll_handle = LoadLibrary(libname.c_str());
     if (!dll_handle) { printf("Error  while loading library %s. Error code %i\n", libname.c_str(), GetLastError()); m_reader = nullptr; return;  }
     typedef Reader* (__stdcall *f_funci)(const std::string&);
@@ -59,7 +56,6 @@ ReaderPlugin::ReaderPlugin(const std::string& filename, const std::string &libna
 #endif
 
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
-    dll_handle = nullptr;
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_reader = nullptr; return;  }
     Reader* (*newReader)(const std::string&);
