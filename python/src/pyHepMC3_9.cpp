@@ -22,8 +22,8 @@
 #include <utility>
 #include <vector>
 
-#include <pybind11/pybind11.h>
 #include <functional>
+#include <pybind11/pybind11.h>
 #include <string>
 #include <HepMC3/Version.h>
 #include <HepMC3/Reader.h>
@@ -122,7 +122,7 @@ struct PyCallBack_HepMC3_Writer : public HepMC3::Writer {
 		}
 		return Writer::set_options(a0);
 	}
-	using _binder_ret_0 = std::map<std::string, std::string >;
+	using _binder_ret_0 = class std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Writer *>(this), "get_options");
@@ -150,9 +150,9 @@ void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namesp
 		cl.def( pybind11::init<const struct HepMC3::GenParticleData &>(), pybind11::arg("data") );
 
 		cl.def( pybind11::init( [](HepMC3::GenParticle const &o){ return new HepMC3::GenParticle(o); } ) );
-		cl.def("in_event", (bool (HepMC3::GenParticle::*)() const) &HepMC3::GenParticle::in_event, "Check if this particle belongs to an event \n\nC++: HepMC3::GenParticle::in_event() const --> bool");
-		cl.def("parent_event", (class HepMC3::GenEvent * (HepMC3::GenParticle::*)()) &HepMC3::GenParticle::parent_event, "C++: HepMC3::GenParticle::parent_event() --> class HepMC3::GenEvent *", pybind11::return_value_policy::automatic);
-		cl.def("id", (int (HepMC3::GenParticle::*)() const) &HepMC3::GenParticle::id, "C++: HepMC3::GenParticle::id() const --> int");
+		cl.def("in_event", (bool (HepMC3::GenParticle::*)() const) &HepMC3::GenParticle::in_event, "Check if this particle belongs to an event\n\nC++: HepMC3::GenParticle::in_event() const --> bool");
+		cl.def("parent_event", (class HepMC3::GenEvent * (HepMC3::GenParticle::*)()) &HepMC3::GenParticle::parent_event, "Get the parent event\n\nC++: HepMC3::GenParticle::parent_event() --> class HepMC3::GenEvent *", pybind11::return_value_policy::automatic);
+		cl.def("id", (int (HepMC3::GenParticle::*)() const) &HepMC3::GenParticle::id, "Get the particle ID number (*not* PDG ID)\n\nC++: HepMC3::GenParticle::id() const --> int");
 		cl.def("data", (const struct HepMC3::GenParticleData & (HepMC3::GenParticle::*)() const) &HepMC3::GenParticle::data, "C++: HepMC3::GenParticle::data() const --> const struct HepMC3::GenParticleData &", pybind11::return_value_policy::automatic);
 		cl.def("production_vertex", (class std::shared_ptr<class HepMC3::GenVertex> (HepMC3::GenParticle::*)()) &HepMC3::GenParticle::production_vertex, "C++: HepMC3::GenParticle::production_vertex() --> class std::shared_ptr<class HepMC3::GenVertex>");
 		cl.def("end_vertex", (class std::shared_ptr<class HepMC3::GenVertex> (HepMC3::GenParticle::*)()) &HepMC3::GenParticle::end_vertex, "C++: HepMC3::GenParticle::end_vertex() --> class std::shared_ptr<class HepMC3::GenVertex>");

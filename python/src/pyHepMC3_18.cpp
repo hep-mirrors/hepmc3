@@ -27,8 +27,8 @@
 #include <utility>
 #include <vector>
 
-#include <pybind11/pybind11.h>
 #include <functional>
+#include <pybind11/pybind11.h>
 #include <string>
 #include <HepMC3/Version.h>
 #include <HepMC3/Reader.h>
@@ -114,7 +114,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 		}
 		return Reader::run_info();
 	}
-	void set_options(const std::map<std::string, std::string > & a0) override {
+	void set_options(const class std::map<std::string, std::string > & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderLHEF *>(this), "set_options");
 		if (overload) {
@@ -127,7 +127,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 		}
 		return Reader::set_options(a0);
 	}
-	using _binder_ret_0 = std::map<std::string, std::string >;
+	using _binder_ret_0 = class std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderLHEF *>(this), "get_options");
@@ -160,6 +160,19 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 	using HepMC3::ReaderPlugin::ReaderPlugin;
 
+	bool skip(const int a0) override {
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderPlugin *>(this), "skip");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::override_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return ReaderPlugin::skip(a0);
+	}
 	bool read_event(class HepMC3::GenEvent & a0) override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderPlugin *>(this), "read_event");
@@ -225,7 +238,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 		}
 		return ReaderPlugin::set_options(a0);
 	}
-	using _binder_ret_0 = std::map<std::string, std::string >;
+	using _binder_ret_0 = class std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderPlugin *>(this), "get_options");
@@ -251,19 +264,6 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 			else return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return ReaderPlugin::set_run_info(a0);
-	}
-	bool skip(const int a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderPlugin *>(this), "skip");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Reader::skip(a0);
 	}
 };
 
@@ -336,7 +336,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 		}
 		return WriterPlugin::set_options(a0);
 	}
-	using _binder_ret_0 = std::map<std::string, std::string >;
+	using _binder_ret_0 = class std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterPlugin *>(this), "get_options");
@@ -380,6 +380,7 @@ void bind_pyHepMC3_18(std::function< pybind11::module &(std::string const &names
 		pybind11::class_<HepMC3::ReaderPlugin, std::shared_ptr<HepMC3::ReaderPlugin>, PyCallBack_HepMC3_ReaderPlugin, HepMC3::Reader> cl(M("HepMC3"), "ReaderPlugin", "");
 		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &>(), pybind11::arg("filename"), pybind11::arg("libname"), pybind11::arg("newreader") );
 
+		cl.def("skip", (bool (HepMC3::ReaderPlugin::*)(const int)) &HepMC3::ReaderPlugin::skip, "Skip or fast forward reading of some events\n\nC++: HepMC3::ReaderPlugin::skip(const int) --> bool", pybind11::arg("n"));
 		cl.def("read_event", (bool (HepMC3::ReaderPlugin::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderPlugin::read_event, "Reading event \n\nC++: HepMC3::ReaderPlugin::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("ev"));
 		cl.def("close", (void (HepMC3::ReaderPlugin::*)()) &HepMC3::ReaderPlugin::close, "Close \n\nC++: HepMC3::ReaderPlugin::close() --> void");
 		cl.def("failed", (bool (HepMC3::ReaderPlugin::*)()) &HepMC3::ReaderPlugin::failed, "State \n\nC++: HepMC3::ReaderPlugin::failed() --> bool");
