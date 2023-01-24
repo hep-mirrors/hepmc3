@@ -1,8 +1,8 @@
 #include <HepMC3/Setup.h>
 #include <sstream> // __str__
 
-#include <pybind11/pybind11.h>
 #include <functional>
+#include <pybind11/pybind11.h>
 #include <string>
 #include <HepMC3/Version.h>
 #include <HepMC3/Reader.h>

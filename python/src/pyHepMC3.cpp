@@ -1,7 +1,8 @@
 #include <map>
+#include <algorithm>
+#include <functional>
 #include <memory>
 #include <stdexcept>
-#include <functional>
 #include <string>
 
 #include <pybind11/pybind11.h>
@@ -41,12 +42,21 @@ PYBIND11_MODULE(pyHepMC3, root_module) {
 
 	modules[""] = root_module;
 
+	static std::vector<std::string> const reserved_python_words {"nonlocal", "global", };
+
+	auto mangle_namespace_name(
+		[](std::string const &ns) -> std::string {
+			if ( std::find(reserved_python_words.begin(), reserved_python_words.end(), ns) == reserved_python_words.end() ) return ns;
+			else return ns+'_';
+		}
+	);
+
 	std::vector< std::pair<std::string, std::string> > sub_modules {
 		{"", "HepMC3"},
 		{"", "LHEF"},
 		{"", "std"},
 	};
-	for(auto &p : sub_modules ) modules[p.first.size() ? p.first+"::"+p.second : p.second] = modules[p.first].def_submodule(p.second.c_str(), ("Bindings for " + p.first + "::" + p.second + " namespace").c_str() );
+	for(auto &p : sub_modules ) modules[p.first.size() ? p.first+"::"+p.second : p.second] = modules[p.first].def_submodule( mangle_namespace_name(p.second).c_str(), ("Bindings for " + p.first + "::" + p.second + " namespace").c_str() );
 
 	//pybind11::class_<std::shared_ptr<void>>(M(""), "_encapsulated_data_");
 

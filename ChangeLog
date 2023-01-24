@@ -1,4 +1,6 @@
   --------------------------  HepMC3.2.6-pre ----------------------
+2023-01-24 Andrii Verbytskyi for HepMC
+         * Update python bindings
 2022-11-20 Luke Pickering for HepMC
          * Modernisation of cmake
 2022-09-12 Andrii Verbytskyi for HepMC
