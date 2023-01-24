@@ -17,7 +17,10 @@ else(CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release")
   message(STATUS "HepMC3 Build type not specified, use: ${CMAKE_BUILD_TYPE}")
 endif(CMAKE_BUILD_TYPE)
+
+if (${CMAKE_VERSION} GREATER "3.8")
 cmake_policy(SET CMP0069 NEW)
+endif()
 
 string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
@@ -428,9 +431,12 @@ endif()
 # Aliases for packages that include this as a sub-project but 
 # want to use the namespaced target names
 add_library(HepMC3::All ALIAS HepMC3All)
+if(HEPMC3_BUILD_STATIC_LIBS)
 add_library(HepMC3::All_static ALIAS HepMC3All_static)
-
 install(TARGETS HepMC3All HepMC3All_static EXPORT HepMC3Targets)
+else()
+  install(TARGETS HepMC3All EXPORT HepMC3Targets)
+endif()
 
 install(EXPORT HepMC3Targets DESTINATION ${CONFIG_INSTALL_DIR})
 
