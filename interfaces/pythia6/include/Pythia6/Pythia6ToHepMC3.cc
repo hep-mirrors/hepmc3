@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC3
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef Pythia6_Pythia6ToHepMC3_H
 #define Pythia6_Pythia6ToHepMC3_H

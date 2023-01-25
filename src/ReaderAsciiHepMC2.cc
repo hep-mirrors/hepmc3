@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderAsciiHepMC2.cc
@@ -55,15 +55,15 @@ ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->cl
 
 bool ReaderAsciiHepMC2::skip(const int n)
 {
-    const size_t       max_buffer_size = 512*512;
+    const size_t       max_buffer_size = 262144;
     char               buf[max_buffer_size];
     int nn = n;
     while (!failed()) {
-        char peek;
+        char peek(0);
         if ( (!m_file.is_open()) && (!m_isstream) ) return false;
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
         if ( peek =='E' ) nn--;
-        if (nn < 0) return true;
+        if (nn < 0) { return true; }
         m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
     }
     return true;
@@ -72,8 +72,8 @@ bool ReaderAsciiHepMC2::skip(const int n)
 bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
-    char               peek;
-    const size_t  max_buffer_size = 512*512;
+    char               peek = 0;
+    const size_t  max_buffer_size = 262144;
     char          buf[max_buffer_size];
     bool          parsed_event_header            = false;
     bool          is_parsing_successful          = true;
@@ -215,7 +215,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         HEPMC3_DEBUG(1, "Parsing failed at line:" << std::endl << buf)
         evt.clear();
         m_isstream ? m_stream->clear(std::ios::badbit) : m_file.clear(std::ios::badbit);
-        return 0;
+        return false;
     }
 
     // Restore production vertex pointers
@@ -232,7 +232,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
     // Remove vertices with no incoming particles or no outgoing particles
     for (unsigned int i = 0; i < m_vertex_cache.size(); ++i) {
-        if ( m_vertex_cache[i]->particles_in().size() == 0 ) {
+        if ( m_vertex_cache[i]->particles_in().empty() ) {
             HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - found a vertex without incoming particles: " << m_vertex_cache[i]->id() );
             //Sometimes the root vertex has no incoming particles.  Here we try to save the event.
             std::vector<GenParticlePtr> beams;
@@ -243,12 +243,12 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
                 m_vertex_cache[i]->remove_particle_out(p);
                 HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - moved particle with status=4 from the outgoing to the incoming particles of vertex: " << m_vertex_cache[i]->id());
             }
-            if (beams.size() == 0) {
+            if (beams.empty()) {
                 HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - removed vertex without incoming particles: " << m_vertex_cache[i]->id() );
                 m_vertex_cache[i] = nullptr;
             }
         }
-        else if ( m_vertex_cache[i]->particles_out().size() == 0 ) {
+        else if ( m_vertex_cache[i]->particles_out().empty() ) {
             m_vertex_cache[i] = nullptr;
             HEPMC3_DEBUG(30, "ReaderAsciiHepMC2::read_event - removed vertex without outgoing particles: " << m_vertex_cache[i]->id());
         }
@@ -265,8 +265,9 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         std::shared_ptr<VectorLongIntAttribute> random_states_a = evt.attribute<VectorLongIntAttribute>("random_states");
         if (random_states_a) {
             std::vector<long int> random_states_v = random_states_a->value();
-            for (size_t i = 0; i < random_states_v.size(); ++i )
+            for (size_t i = 0; i < random_states_v.size(); ++i ) {
                 evt.add_attribute("random_states" + std::to_string((long long unsigned int)i), std::make_shared<IntAttribute>(random_states_v[i]));
+            }
             evt.remove_attribute("random_states");
         }
 
@@ -276,14 +277,16 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if (cached_attributes.find("flows") != cached_attributes.end()) {
         std::map<int, std::shared_ptr<Attribute> > flows = cached_attributes.at("flows");
         if (m_options.find("particle_flows_are_separated") == m_options.end()) {
-            for (auto f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("flows", f.second);
+            for (auto f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {  m_particle_cache[f.first-1]->add_attribute("flows", f.second);}
         } else  {
-            for (auto f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {
+            for (auto f: flows) {
+                if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {
                     std::shared_ptr<VectorIntAttribute>  casted = std::dynamic_pointer_cast<VectorIntAttribute>(f.second);
                     if (!casted) continue;//Should not happen
                     std::vector<int> this_p_flow = casted->value();
                     for (size_t i = 0; i<this_p_flow.size(); i++) m_particle_cache[f.first-1]->add_attribute("flow" + std::to_string(i + 1), std::make_shared<IntAttribute>(this_p_flow[i]));
                 }
+            }
         }
     }
 
@@ -300,14 +303,16 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if (cached_attributes.find("weights") != cached_attributes.end()) {
         std::map<int, std::shared_ptr<Attribute> > weights = cached_attributes.at("weights");
         if (m_options.find("vertex_weights_are_separated") == m_options.end()) {
-            for (auto f: weights) if (f.first < 0 && f.first >= -(int)m_vertex_cache.size())  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);
+            for (auto f: weights) { if (f.first < 0 && f.first >= -(int)m_vertex_cache.size())  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);}
         } else {
-            for (auto f: weights) if (f.first < 0 && f.first >= -(int)m_vertex_cache.size()) {
+            for (auto f: weights) {
+                if (f.first < 0 && f.first >= -(int)m_vertex_cache.size()) {
                     std::shared_ptr<VectorDoubleAttribute>  casted = std::dynamic_pointer_cast<VectorDoubleAttribute>(f.second);
                     if (!casted) continue;//Should not happen
                     std::vector<double> this_v_weight = casted->value();
                     for (size_t i = 0; i < this_v_weight.size(); i++) m_particle_cache[-f.first-1]->add_attribute("weight"+std::to_string(i), std::make_shared<DoubleAttribute>(this_v_weight[i]));
                 }
+            }
         }
     }
 
@@ -326,7 +331,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     m_particle_cache_ghost.clear();
     m_vertex_cache_ghost.clear();
     m_event_ghost->clear();
-    return 1;
+    return true;
 }
 
 int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
@@ -385,7 +390,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
         random_states[i] = atoi(cursor);
     }
 
-    if (random_states.size()) evt.add_attribute("random_states", std::make_shared<VectorLongIntAttribute>(random_states));
+    if (!random_states.empty()) evt.add_attribute("random_states", std::make_shared<VectorLongIntAttribute>(random_states));
 
     // weights
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
@@ -482,7 +487,7 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
 
     m_event_ghost->add_vertex(data_ghost);
 
-    if (weights.size()) data_ghost->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(weights));
+    if (!weights.empty()) data_ghost->add_attribute("weights", std::make_shared<VectorDoubleAttribute>(weights));
 
     m_vertex_cache_ghost.push_back(data_ghost);
 
@@ -560,7 +565,8 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
     if (flowsize)
     {
         std::vector<int> vectorflows;
-        for (auto f: flows) vectorflows.push_back(f.second);
+        vectorflows.reserve(flows.size());
+        for (auto f: flows) { vectorflows.push_back(f.second); }
         data_ghost->add_attribute("flows", std::make_shared<VectorIntAttribute>(vectorflows));
     }
     // Set prod_vtx link
@@ -710,12 +716,12 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
     //For compatibility with original HepMC2
     bool pdfids = true;
     if ( !(cursor = strchr(cursor+1, ' ')) ) pdfids = false;
-    if (pdfids) pi->pdf_id[0] = atoi(cursor);
-    else  pi->pdf_id[0] = 0;
+    if (pdfids) {pi->pdf_id[0] = atoi(cursor);}
+    else  {pi->pdf_id[0] = 0;}
 
     if (pdfids) if ( !(cursor = strchr(cursor+1, ' ')) )  pdfids = false;
-    if (pdfids) pi->pdf_id[1] = atoi(cursor);
-    else  pi->pdf_id[1] = 0;
+    if (pdfids) { pi->pdf_id[1] = atoi(cursor);}
+    else  {pi->pdf_id[1] = 0;}
 
     evt.add_attribute("GenPdfInfo", pi);
 

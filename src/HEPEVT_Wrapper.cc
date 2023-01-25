@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file HEPEVT_Wrapper.cc
@@ -70,7 +70,8 @@ bool pair_GenVertexPtr_int_greater::operator()(const std::pair<ConstGenVertexPtr
     for (unsigned int i = 0; i < lx_mom_out.size(); i++) if (lx_mom_out[i] != rx_mom_out[i]) return  (lx_mom_out[i] < rx_mom_out[i]);
     /* The code above is usefull mainly for debug*/
 
-    return (lx.first < lx.first); /*This  is random. This should never happen*/
+    //return (lx.first < lx.first); /*This  is random. This should never happen*/
+    return false;
 }
 /** @brief Calculates the path to the top (beam) particles */
 void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexPtr, int>& pathl)
@@ -79,12 +80,11 @@ void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexP
     for (ConstGenParticlePtr pp: v->particles_in()) {
         ConstGenVertexPtr v2 = pp->production_vertex();
         if (v2 == v) continue; //LOOP! THIS SHOULD NEVER HAPPEN FOR A PROPER EVENT!
-        if (!v2) p = std::max(p, 1);
+        if (!v2) { p = std::max(p, 1); }
         else
         {if (pathl.find(v2) == pathl.end())  calculate_longest_path_to_top(v2, pathl); p = std::max(p, pathl[v2]+1);}
     }
     pathl[v] = p;
-    return;
 }
 
 HEPMC3_EXPORT_API struct HEPEVT*  hepevtptr = nullptr;
@@ -167,9 +167,10 @@ int HEPEVT_Wrapper_Runtime::number_children( const int index )  const
 int HEPEVT_Wrapper_Runtime::number_children_exact( const int index )  const
 {
     int nc = 0;
-    for ( int i = 1; i <= *(m_hepevtptr->nhep); ++i )
+    for ( int i = 1; i <= *(m_hepevtptr->nhep); ++i ) {
         if (((m_hepevtptr->jmohep[2*(i-1)] <= index && m_hepevtptr->jmohep[2*(i-1)+1] >= index)) || (m_hepevtptr->jmohep[2*(i-1)] == index) ||
                 (m_hepevtptr->jmohep[2*(index-1)+1]==index)) nc++;
+    }
     return nc;
 }
 
@@ -217,13 +218,19 @@ bool HEPEVT_Wrapper_Runtime::fix_daughters()
     Not every particle in the range will be a daughter. It is true only for proper events.
     The return tells if the record was fixed succesfully.
     */
-    for ( int i = 1; i <= number_entries(); i++ )
-        for ( int k=1; k <= number_entries(); k++ ) if (i != k)
-                if ((first_parent(k) <= i) && (i <= last_parent(k)))
+    for ( int i = 1; i <= number_entries(); i++ ) {
+        for ( int k=1; k <= number_entries(); k++ ) {
+            if (i != k) {
+                if ((first_parent(k) <= i) && (i <= last_parent(k))) {
                     set_children(i, (first_child(i) == 0 ? k : std::min(first_child(i), k)), (last_child(i) == 0 ? k : std::max(last_child(i), k)));
+                }
+            }
+        }
+    }
     bool is_fixed = true;
-    for ( int i = 1; i <= number_entries(); i++ )
+    for ( int i = 1; i <= number_entries(); i++ ) {
         is_fixed = (is_fixed && (number_children_exact(i) == number_children(i)));
+    }
     return is_fixed;
 }
 
@@ -260,4 +267,4 @@ void HEPEVT_Wrapper_Runtime::copy_to_internal_storage(char *c, int N)
     memcpy(dest, src, 4*N*sizeof(double));
 }
 
-}
+} // namespace HepMC3

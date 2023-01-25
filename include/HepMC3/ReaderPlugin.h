@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERPLUGIN_H
 #define HEPMC3_READERPLUGIN_H
@@ -27,6 +27,8 @@ public:
     ReaderPlugin(std::istream & stream,const std::string &libname, const std::string &newreader);
     /** @brief Constructor to read from file*/
     ReaderPlugin(const std::string& filename,const std::string &libname, const std::string &newreader);
+    /** @brief Skip or fast forward reading of some events*/
+    bool skip(const int n) override { if (!m_reader) return false; return m_reader->skip(n); }
     /** @brief Reading event */
     bool read_event(GenEvent& ev)  override {if (!m_reader) return false; return m_reader->read_event(ev);};
     /** @brief Close */
@@ -41,12 +43,11 @@ public:
     std::map<std::string, std::string> get_options()  const  override { return m_reader?m_reader->get_options(): std::map<std::string, std::string>();  }
     /** @brief Destructor */
     ~ReaderPlugin()  override;
-//protected:
     /// Set the global GenRunInfo object.
     void set_run_info(std::shared_ptr<GenRunInfo> run) override { if (!m_reader) return; else m_reader->set_run_info(run); }
 private:
-    Reader* m_reader; ///< The actual reader
-    void*  dll_handle; ///< library handler
+    Reader* m_reader = nullptr; ///< The actual reader
+    void*  dll_handle = nullptr; ///< library handler
 };
 }
 #endif

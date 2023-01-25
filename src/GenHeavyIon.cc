@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenHeavyIon.cc
@@ -34,7 +34,7 @@ bool GenHeavyIon::from_string(const std::string &att) {
            >> centrality;
         return !is.fail();
     } else
-        is >> version;
+    { is >> version;}
 
 
 
@@ -48,7 +48,8 @@ bool GenHeavyIon::from_string(const std::string &att) {
     if ( version != "v0" ) is >> user_cent_estimate;
     is >> Nspec_proj_n >> Nspec_targ_n >> Nspec_proj_p >> Nspec_targ_p;
 
-    int N, ord;
+    int N=0;
+    int ord=0;
     is >> N;
     for ( int i = 0; i < N; ++i ) {
         is >> ord;
@@ -90,14 +91,14 @@ bool GenHeavyIon::to_string(std::string &att) const {
 
     os << participant_plane_angles.size();
     for ( std::map<int, double>::const_iterator it = participant_plane_angles.begin();
-            it != participant_plane_angles.end(); ++it )
+            it != participant_plane_angles.end(); ++it ) {
         os << " " << it->first << " " << it->second;
-
+    }
     os << " " << eccentricities.size();
     for ( std::map<int, double>::const_iterator it = eccentricities.begin();
-            it != eccentricities.end(); ++it )
+            it != eccentricities.end(); ++it ) {
         os << " " << it->first << " " << it->second;
-
+    }
     att = os.str();
 
     return true;
@@ -135,20 +136,20 @@ void GenHeavyIon::set(const int&nh, const int&np, const int&nt, const int&nc, co
 }
 
 bool GenHeavyIon::is_valid() const {
-    if ( Ncoll_hard                   != 0 ) return true;
-    if ( Npart_proj                   != 0 ) return true;
-    if ( Npart_targ                   != 0 ) return true;
-    if ( Ncoll                        != 0 ) return true;
-    if ( spectator_neutrons           != 0 ) return true;
-    if ( spectator_protons            != 0 ) return true;
-    if ( N_Nwounded_collisions        != 0 ) return true;
-    if ( Nwounded_N_collisions        != 0 ) return true;
-    if ( Nwounded_Nwounded_collisions != 0 ) return true;
-    if ( impact_parameter             != 0 ) return true;
-    if ( event_plane_angle            != 0 ) return true;
-    if ( eccentricity                 != 0 ) return true;
-    if ( sigma_inel_NN                != 0 ) return true;
-    if ( centrality                   != 0 ) return true;
+    if ( Ncoll_hard                   != 0 ) { return true; }
+    if ( Npart_proj                   != 0 ) { return true; }
+    if ( Npart_targ                   != 0 ) { return true; }
+    if ( Ncoll                        != 0 ) { return true; }
+    if ( spectator_neutrons           != 0 ) { return true; }
+    if ( spectator_protons            != 0 ) { return true; }
+    if ( N_Nwounded_collisions        != 0 ) { return true; }
+    if ( Nwounded_N_collisions        != 0 ) { return true; }
+    if ( Nwounded_Nwounded_collisions != 0 ) { return true; }
+    if ( impact_parameter             != 0 ) { return true; }
+    if ( event_plane_angle            != 0 ) { return true; }
+    if ( eccentricity                 != 0 ) { return true; }
+    if ( sigma_inel_NN                != 0 ) { return true; }
+    if ( centrality                   != 0 ) { return true; }
     return false;
 }
 

@@ -12,8 +12,8 @@
 #include "HepMC3/Reader.h"
 #include "HepMC3/ReaderFactory.h"
 int main() {
-  std::shared_ptr<HepMC3::Reader> rdr = HepMC3::deduce_reader("inputIO20.proto");
-  if (!rdr) return 1;
-  rdr->close();
-  return 0;
+    std::shared_ptr<HepMC3::Reader> rdr = HepMC3::deduce_reader("inputIO20.proto");
+    if (!rdr) return 1;
+    rdr->close();
+    return 0;
 }

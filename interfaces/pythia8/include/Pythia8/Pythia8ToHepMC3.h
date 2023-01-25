@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 // Part of code was adopted from Pythia8-HepMC interface by Mikhail Kirsanov.
 #ifndef Pythia8_Pythia8ToHepMC3_H
 #define Pythia8_Pythia8ToHepMC3_H

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file WriterHEPEVT.cc
@@ -17,21 +17,21 @@ namespace HepMC3
 
 
 WriterHEPEVT::WriterHEPEVT(const std::string &filename,
-                           std::shared_ptr<GenRunInfo> run): m_file(filename), m_stream(&m_file), m_events_count(0)
+                           std::shared_ptr<GenRunInfo> /*run*/): m_file(filename), m_stream(&m_file), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     m_hepevt_interface.allocate_internal_storage();
 }
 
 WriterHEPEVT::WriterHEPEVT(std::ostream& stream,
-                           std::shared_ptr<GenRunInfo> run): m_file(), m_stream(&stream), m_events_count(0)
+                           std::shared_ptr<GenRunInfo> /*run*/): m_stream(&stream), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     m_hepevt_interface.allocate_internal_storage();
 }
 
 WriterHEPEVT::WriterHEPEVT(std::shared_ptr<std::ostream> s_stream,
-                           std::shared_ptr<GenRunInfo> run): m_file(), m_shared_stream(s_stream), m_stream(s_stream.get()), m_events_count(0)
+                           std::shared_ptr<GenRunInfo> /*run*/): m_shared_stream(s_stream), m_stream(s_stream.get()), m_events_count(0)
 {
     HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     m_hepevt_interface.allocate_internal_storage();
@@ -78,7 +78,7 @@ void WriterHEPEVT::write_event(const GenEvent &evt)
 
 void WriterHEPEVT::close()
 {
-    std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
+    auto* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     if (ofs) ofs->close();
 }

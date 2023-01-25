@@ -1,8 +1,8 @@
 #include <HepMC3/FourVector.h>
 #include <sstream> // __str__
 
-#include <pybind11/pybind11.h>
 #include <functional>
+#include <pybind11/pybind11.h>
 #include <string>
 #include <HepMC3/Version.h>
 #include <HepMC3/Reader.h>
@@ -86,11 +86,11 @@ void bind_pyHepMC3_1(std::function< pybind11::module &(std::string const &namesp
 		cl.def("__add__", (class HepMC3::FourVector (HepMC3::FourVector::*)(const class HepMC3::FourVector &) const) &HepMC3::FourVector::operator+, "Arithmetic operator +\n\nC++: HepMC3::FourVector::operator+(const class HepMC3::FourVector &) const --> class HepMC3::FourVector", pybind11::arg("rhs"));
 		cl.def("__sub__", (class HepMC3::FourVector (HepMC3::FourVector::*)(const class HepMC3::FourVector &) const) &HepMC3::FourVector::operator-, "Arithmetic operator -\n\nC++: HepMC3::FourVector::operator-(const class HepMC3::FourVector &) const --> class HepMC3::FourVector", pybind11::arg("rhs"));
 		cl.def("__mul__", (class HepMC3::FourVector (HepMC3::FourVector::*)(const double) const) &HepMC3::FourVector::operator*, "Arithmetic operator * by scalar\n\nC++: HepMC3::FourVector::operator*(const double) const --> class HepMC3::FourVector", pybind11::arg("rhs"));
-		cl.def("__div__", (class HepMC3::FourVector (HepMC3::FourVector::*)(const double) const) &HepMC3::FourVector::operator/, "Arithmetic operator / by scalar\n\nC++: HepMC3::FourVector::operator/(const double) const --> class HepMC3::FourVector", pybind11::arg("rhs"));
+		cl.def("__truediv__", (class HepMC3::FourVector (HepMC3::FourVector::*)(const double) const) &HepMC3::FourVector::operator/, "Arithmetic operator / by scalar\n\nC++: HepMC3::FourVector::operator/(const double) const --> class HepMC3::FourVector", pybind11::arg("rhs"));
 		cl.def("__iadd__", (void (HepMC3::FourVector::*)(const class HepMC3::FourVector &)) &HepMC3::FourVector::operator+=, "Arithmetic operator +=\n\nC++: HepMC3::FourVector::operator+=(const class HepMC3::FourVector &) --> void", pybind11::arg("rhs"));
 		cl.def("__isub__", (void (HepMC3::FourVector::*)(const class HepMC3::FourVector &)) &HepMC3::FourVector::operator-=, "Arithmetic operator -=\n\nC++: HepMC3::FourVector::operator-=(const class HepMC3::FourVector &) --> void", pybind11::arg("rhs"));
 		cl.def("__imul__", (void (HepMC3::FourVector::*)(const double)) &HepMC3::FourVector::operator*=, "Arithmetic operator *= by scalar\n\nC++: HepMC3::FourVector::operator*=(const double) --> void", pybind11::arg("rhs"));
-		cl.def("__idiv__", (void (HepMC3::FourVector::*)(const double)) &HepMC3::FourVector::operator/=, "Arithmetic operator /= by scalar\n\nC++: HepMC3::FourVector::operator/=(const double) --> void", pybind11::arg("rhs"));
+		cl.def("__itruediv__", (void (HepMC3::FourVector::*)(const double)) &HepMC3::FourVector::operator/=, "Arithmetic operator /= by scalar\n\nC++: HepMC3::FourVector::operator/=(const double) --> void", pybind11::arg("rhs"));
 		cl.def_static("ZERO_VECTOR", (const class HepMC3::FourVector & (*)()) &HepMC3::FourVector::ZERO_VECTOR, "Static null FourVector = (0,0,0,0)\n\nC++: HepMC3::FourVector::ZERO_VECTOR() --> const class HepMC3::FourVector &", pybind11::return_value_policy::automatic);
 		cl.def("assign", (class HepMC3::FourVector & (HepMC3::FourVector::*)(const class HepMC3::FourVector &)) &HepMC3::FourVector::operator=, "C++: HepMC3::FourVector::operator=(const class HepMC3::FourVector &) --> class HepMC3::FourVector &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 

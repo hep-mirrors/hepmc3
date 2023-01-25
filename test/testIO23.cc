@@ -9,8 +9,8 @@
 #include "HepMC3/Writerprotobuf.h"
 
 int main() {
-  HepMC3::Writerprotobuf wrtr(
-      "/path/to/invalid/place/erihreiuhgeihgir/test.proto");
-  if (!wrtr.failed()) return 1;
-  return 0;
+    HepMC3::Writerprotobuf wrtr(
+        "/path/to/invalid/place/erihreiuhgeihgir/test.proto");
+    if (!wrtr.failed()) return 1;
+    return 0;
 }

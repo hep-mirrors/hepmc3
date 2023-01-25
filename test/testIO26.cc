@@ -17,50 +17,50 @@
 using namespace HepMC3;
 
 int main() {
-  ReaderAsciiHepMC2 inputA("inputIO26.hepmc");
-  if (inputA.failed()) {
-    return 1;
-  }
-
-  Writerprotobuf outputA("frominputIO26.proto");
-  if (outputA.failed()) {
-    return 2;
-  }
-
-  while (!inputA.failed()) {
-    GenEvent evt_in_ASCII(Units::GEV, Units::MM);
-    inputA.read_event(evt_in_ASCII);
+    ReaderAsciiHepMC2 inputA("inputIO26.hepmc");
     if (inputA.failed()) {
-      printf("End of file reached. Exit.\n");
-      break;
+        return 1;
     }
-    outputA.write_event(evt_in_ASCII);
-  }
-  inputA.close();
-  outputA.close();
 
-  Readerprotobuf inputB("frominputIO26.proto");
-  if (inputB.failed()) {
-    return 3;
-  }
+    Writerprotobuf outputA("frominputIO26.proto");
+    if (outputA.failed()) {
+        return 2;
+    }
 
-  WriterAsciiHepMC2 outputB("fromfrominputIO26.hepmc");
-  if (outputB.failed()) {
-    return 4;
-  }
+    while (!inputA.failed()) {
+        GenEvent evt_in_ASCII(Units::GEV, Units::MM);
+        inputA.read_event(evt_in_ASCII);
+        if (inputA.failed()) {
+            printf("End of file reached. Exit.\n");
+            break;
+        }
+        outputA.write_event(evt_in_ASCII);
+    }
+    inputA.close();
+    outputA.close();
 
-  while (!inputB.failed()) {
-    GenEvent evt_in_proto(Units::GEV, Units::MM);
-    inputB.read_event(evt_in_proto);
+    Readerprotobuf inputB("frominputIO26.proto");
     if (inputB.failed()) {
-      printf("End of file reached. Exit.\n");
-      break;
+        return 3;
     }
-    outputB.write_event(evt_in_proto);
-  }
 
-  inputB.close();
-  outputB.close();
+    WriterAsciiHepMC2 outputB("fromfrominputIO26.hepmc");
+    if (outputB.failed()) {
+        return 4;
+    }
 
-  return COMPARE_ASCII_FILES("fromfrominputIO26.hepmc", "inputIO26.hepmc");
+    while (!inputB.failed()) {
+        GenEvent evt_in_proto(Units::GEV, Units::MM);
+        inputB.read_event(evt_in_proto);
+        if (inputB.failed()) {
+            printf("End of file reached. Exit.\n");
+            break;
+        }
+        outputB.write_event(evt_in_proto);
+    }
+
+    inputB.close();
+    outputB.close();
+
+    return COMPARE_ASCII_FILES("fromfrominputIO26.hepmc", "inputIO26.hepmc");
 }

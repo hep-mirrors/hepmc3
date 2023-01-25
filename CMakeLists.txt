@@ -18,6 +18,10 @@ else(CMAKE_BUILD_TYPE)
   message(STATUS "HepMC3 Build type not specified, use: ${CMAKE_BUILD_TYPE}")
 endif(CMAKE_BUILD_TYPE)
 
+if (${CMAKE_VERSION} GREATER "3.8")
+  cmake_policy(SET CMP0069 NEW)
+endif()
+
 string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 #-------------Options-------------------------------------------------------
@@ -32,6 +36,21 @@ option(HEPMC3_INSTALL_EXAMPLES   "Enables installation of examples." ON)
 option(HEPMC3_ENABLE_TEST        "Enables building of tests." OFF)
 option(HEPMC3_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces to MC tools." OFF)
 option(HEPMC3_BUILD_STATIC_LIBS  "Enables building of static libraties." ON)
+option(HEPMC3_ENABLE_CLANG_TIDY  "Enables usage of clang-tidy." OFF)
+if (HEPMC3_ENABLE_CLANG_TIDY)
+  set(checks_to_remove_1 "-cppcoreguidelines-pro-type-reinterpret-cast,-altera-id-dependent-backward-branch,-readability-function-cognitive-complexity,-fuchsia-overloaded-operator,-altera-struct-pack-align")
+  set(checks_to_remove_2 "-google-readability-casting,-cppcoreguidelines-pro-type-vararg,-hicpp-vararg,-altera-unroll-loops,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-clang-analyzer-core.NonNullParamChecker")
+  set(checks_to_remove_3 "-llvm-include-order,-fuchsia-default-arguments-calls,-llvmlibc-implementation-in-namespace,-llvmlibc-restrict-system-libc-headers,-cert-err33-c,-cppcoreguidelines-pro-type-cstyle-cast")
+  set(checks_to_remove_4 "-readability-identifier-length,-modernize-use-trailing-return-type,-cppcoreguidelines-avoid-non-const-global-variables,-llvmlibc-callee-namespace,-cppcoreguidelines-owning-memory")
+  set(checks_to_remove_5 "-bugprone-easily-swappable-parameters,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-readability-implicit-bool-conversion,-hicpp-braces-around-statements,-readability-redundant-smartptr-get")
+  set(checks_to_remove_6 "-cert-err34-c,-readability-braces-around-statements,-hicpp-use-emplace,-modernize-use-emplace,-google-default-arguments,-modernize-use-using")
+  set(checks_to_remove_7 "-performance-unnecessary-value-param,-performance-for-range-copy,-google-runtime-int,-modernize-pass-by-value,-misc-no-recursion,-modernize-loop-convert,-llvm-else-after-return,-readability-else-after-return")
+  set(checks_to_remove_8 "-cppcoreguidelines-pro-type-member-init,-hicpp-member-init,-bugprone-narrowing-conversions,-cppcoreguidelines-narrowing-conversions,-cert-err58-cpp,-fuchsia-statically-constructed-objects")
+  set(checks_to_remove_9 "-cppcoreguidelines-prefer-member-initializer,-concurrency-mt-unsafe,-readability-convert-member-functions-to-static,-bugprone-implicit-widening-of-multiplication-result,-hicpp-use-auto,-modernize-use-auto")
+  set(checks_to_remove_10 "-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-hicpp-no-array-decay,-clang-analyzer-optin.cplusplus.VirtualCall,-cppcoreguidelines-avoid-c-arrays,-hicpp-avoid-c-arrays,-modernize-avoid-c-arrays")
+  set(checks_to_remove_11 "-readability-delete-null-pointer,-cppcoreguidelines-init-variables,-clang-analyzer-core.CallAndMessage")
+  set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--checks=*,${checks_to_remove_1},${checks_to_remove_2},${checks_to_remove_3},${checks_to_remove_4},${checks_to_remove_5},${checks_to_remove_6},${checks_to_remove_7},${checks_to_remove_8},${checks_to_remove_9},${checks_to_remove_10},${checks_to_remove_11}")
+endif()
 
 if (NOT HEPMC3_PYTHON_VERSIONS)
   set(HEPMC3_PYTHON_VERSIONS "2.X,3.X")
@@ -158,7 +177,6 @@ if(HEPMC3_ENABLE_ROOTIO)
 endif()
 
 if(HEPMC3_ENABLE_PROTOBUFIO)
-  set(HEPMC3_PROTOBUFIO_LIBRARY "-lHepMC3protobufIO" )
   find_package(Protobuf 2.4 REQUIRED)
 
   if(Protobuf_PROTOC_EXECUTABLE STREQUAL "Protobuf_PROTOC_EXECUTABLE-NOTFOUND" OR NOT EXISTS ${Protobuf_PROTOC_EXECUTABLE})
@@ -233,30 +251,41 @@ set( hepmc3core_sources
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_library(HepMC3 SHARED ${hepmc3core_sources})
-target_include_directories(HepMC3 PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(HepMC3 PUBLIC 
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
 set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 3
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-if (UNIX)
-  target_link_libraries(HepMC3 PRIVATE dl)
-endif()
+                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+                                               EXPORT_NAME HepMC3::HepMC3)
+
+# Alias for packages that include this as a sub-project but 
+# want to use the namespaced target names
+add_library(HepMC3::HepMC3 ALIAS HepMC3)
+target_link_libraries(HepMC3 PRIVATE ${CMAKE_DL_LIBS})
 #---Install build products---------------------------------------------------
-install(TARGETS HepMC3 DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+install(TARGETS HepMC3 EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
 
 if (HEPMC3_BUILD_STATIC_LIBS)
   add_library(HepMC3_static STATIC  ${hepmc3core_sources})
-  target_include_directories(HepMC3_static PUBLIC ${PROJECT_SOURCE_DIR}/include)
+
+  target_include_directories(HepMC3_static PUBLIC 
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
   target_compile_definitions(HepMC3_static PRIVATE HEPMC3_NO_EXPORTS)
   set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static
                                                ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
-  if (UNIX)
-    target_link_libraries(HepMC3_static PRIVATE dl)
-  endif()
+                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+                                               EXPORT_NAME HepMC3::HepMC3_static)
+
+  target_link_libraries(HepMC3_static PRIVATE ${CMAKE_DL_LIBS})
 #---Install build products---------------------------------------------------
-  install(TARGETS HepMC3_static DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+  install(TARGETS HepMC3_static EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+  # Alias for packages that include this as a sub-project but 
+  # want to use the namespaced target names
+  add_library(HepMC3::HepMC3_static ALIAS HepMC3_static)
 endif()
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT devel)
@@ -360,6 +389,56 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Confi
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/bin/HepMC3-config
         DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT libs
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+add_library(HepMC3All INTERFACE)
+set_target_properties(HepMC3All PROPERTIES EXPORT_NAME HepMC3::All)
+
+if(HEPMC3_BUILD_STATIC_LIBS)
+  add_library(HepMC3All_static INTERFACE)
+  set_target_properties(HepMC3All_static PROPERTIES EXPORT_NAME HepMC3::All_static)
+endif()
+
+#As the libraries below depend on HepMC3 already, we don't need to add them
+#manually unless we have no optional components
+SET(HEPMC3_ALL_LIBRARY_INCLUDED FALSE)
+if (HEPMC3_ENABLE_SEARCH)
+  target_link_libraries(HepMC3All INTERFACE HepMC3search)
+  if(HEPMC3_BUILD_STATIC_LIBS)
+    target_link_libraries(HepMC3All_static INTERFACE HepMC3search_static)
+  endif()
+  SET(HEPMC3_ALL_LIBRARY_INCLUDED TRUE)
+endif()
+if(ROOT_FOUND)
+  target_link_libraries(HepMC3All INTERFACE HepMC3rootIO)
+  SET(HEPMC3_ALL_LIBRARY_INCLUDED TRUE)
+endif()
+if(Protobuf_FOUND)
+  target_link_libraries(HepMC3All INTERFACE HepMC3protobufIO)
+  if(HEPMC3_BUILD_STATIC_LIBS)
+    target_link_libraries(HepMC3All_static INTERFACE HepMC3protobufIO_static)
+  endif()
+  SET(HEPMC3_ALL_LIBRARY_INCLUDED TRUE)
+endif()
+
+if(NOT HEPMC3_ALL_LIBRARY_INCLUDED)
+  target_link_libraries(HepMC3All INTERFACE HepMC3)
+endif()
+
+if(HEPMC3_BUILD_STATIC_LIBS AND NOT HEPMC3_ALL_LIBRARY_INCLUDED)
+  target_link_libraries(HepMC3All_static INTERFACE HepMC3_static)
+endif()
+
+# Aliases for packages that include this as a sub-project but 
+# want to use the namespaced target names
+add_library(HepMC3::All ALIAS HepMC3All)
+if(HEPMC3_BUILD_STATIC_LIBS)
+  add_library(HepMC3::All_static ALIAS HepMC3All_static)
+  install(TARGETS HepMC3All HepMC3All_static EXPORT HepMC3Targets)
+else()
+  install(TARGETS HepMC3All EXPORT HepMC3Targets)
+endif()
+
+install(EXPORT HepMC3Targets DESTINATION ${CONFIG_INSTALL_DIR})
 
 # uninstall target
 if(NOT TARGET uninstall)

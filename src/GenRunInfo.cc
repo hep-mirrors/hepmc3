@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenRunInfo.cc
@@ -27,10 +27,11 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
             name = oss.str();
             m_weight_names[i] = name;
         }
-        if ( has_weight(name) )
+        if ( has_weight(name) ) {
             throw std::logic_error("GenRunInfo::set_weight_names: "
                                    "Duplicate weight name '" + name +
                                    "' found.");
+        }
         m_weight_indices[name] = i;
     }
 }
@@ -38,9 +39,9 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
 std::string GenRunInfo::attribute_as_string(const std::string &name) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     std::map< std::string, std::shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
-    if ( i == m_attributes.end() ) return std::string();
+    if ( i == m_attributes.end() ) return {};
 
-    if ( !i->second ) return std::string();
+    if ( !i->second ) return {};
 
     std::string ret;
     i->second->to_string(ret);
