@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderLHEF.cc
@@ -53,13 +53,13 @@ void ReaderLHEF::init()
     m_hepr->tags = LHEF::XMLTag::findXMLTags(m_reader->headerBlock + m_reader->initComments);
     // This code is ugly and should be replaced.
     size_t nweights = 0;
-    for (auto t1: m_hepr->tags) {
+    for (auto* t1: m_hepr->tags) {
         if (t1->name != "header") continue;
-        for (auto t2: t1->tags) {
+        for (auto* t2: t1->tags) {
             if (t2->name != "initrwgt") continue;
-            for (auto t3: t2->tags) {
+            for (auto* t3: t2->tags) {
                 if (t3->name != "weightgroup") continue;
-                for (auto t4: t3->tags) if (t4->name == "weight") nweights++;
+                for (auto* t4: t3->tags) if (t4->name == "weight") nweights++;
                 break;
             }
             break;
@@ -103,33 +103,31 @@ ReaderLHEF::~ReaderLHEF() {close();}
 
 bool ReaderLHEF::read_event(GenEvent& ev)
 {
-    if (m_storage.size() > 0)
+    if (!m_storage.empty())
     {
         ev = m_storage.front();
         m_storage.pop_front();
         return true;
     }
-    //std::cout<<m_reader->initfile_rdstate()<<"    "<<m_reader->file_rdstate()<<" "<< m_storage.size()<<std::endl;
     bool read_result = m_reader->readEvent();
     if (!read_result) {
-    //std::cout<<m_reader->initfile_rdstate()<<"    "<<m_reader->file_rdstate()<<" "<< m_storage.size()<<std::endl;
-      return false;
+        return false;
     }
     // To each GenEvent we want to add an attribute corresponding to
     // the HEPEUP. Also here there may be additional non-standard
     // information outside the LHEF <event> tags, which we may want to
     // add.
     std::shared_ptr<HEPEUPAttribute> hepe = std::make_shared<HEPEUPAttribute>();
-    if ( m_reader->outsideBlock.length() )
+    if ( m_reader->outsideBlock.length() ) {
         hepe->tags =  LHEF::XMLTag::findXMLTags(m_reader->outsideBlock);
-
+    }
     hepe->hepeup = m_reader->hepeup;
     std::vector<LHEF::HEPEUP*> input;
-    if (m_reader->hepeup.subevents.size() > 0) input.insert(input.end(), hepe->hepeup.subevents.begin(), hepe->hepeup.subevents.end());
+    if (!m_reader->hepeup.subevents.empty()) { input.insert(input.end(), hepe->hepeup.subevents.begin(), hepe->hepeup.subevents.end()); }
     else { input.push_back(&m_reader->hepeup);}
     int first_group_event = m_neve;
     m_neve++;
-    for (auto ahepeup: input)
+    for (auto* ahepeup: input)
     {
         GenEvent evt;
         evt.set_event_number(first_group_event);
@@ -153,18 +151,21 @@ bool ReaderLHEF::read_event(GenEvent& ev)
         {
             std::pair<int, int> vertex_index = v.first;
             GenVertexPtr          vertex = v.second;
-            for (int i = vertex_index.first-1; i < vertex_index.second; ++i)
-                if ( i >= 0 && i < (int)particles.size())
+            for (int i = vertex_index.first-1; i < vertex_index.second; ++i) {
+                if ( i >= 0 && i < (int)particles.size()) {
                     vertex->add_particle_in(particles[i]);
+                }
+            }
         }
         std::pair<int, int> vertex_index(0, 0);
         if (vertices.find(vertex_index) == vertices.end()) vertices[vertex_index] = std::make_shared<GenVertex>();
-        for (size_t i = 0; i < particles.size(); ++i)
+        for (size_t i = 0; i < particles.size(); ++i) {
             if (!particles[i]->end_vertex() && !particles[i]->production_vertex())
             {
-                if ( i < 2 ) vertices[vertex_index]->add_particle_in(particles[i]);
-                else vertices[vertex_index]->add_particle_out(particles[i]);
+                if ( i < 2 ) { vertices[vertex_index]->add_particle_in(particles[i]); }
+                else { vertices[vertex_index]->add_particle_out(particles[i]);}
             }
+        }
         for ( auto v: vertices ) evt.add_vertex(v.second);
         if (particles.size() > 1)
         {
@@ -188,7 +189,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
     return true;
 }
 /// @brief Return status of the stream
-bool ReaderLHEF::failed() { return ((m_reader->initfile_rdstate()!=std::ifstream::goodbit)||(m_reader->file_rdstate()!=std::ifstream::goodbit)) && (m_storage.size()==0); }
+bool ReaderLHEF::failed() { return ((m_reader->initfile_rdstate()!=std::ifstream::goodbit)||(m_reader->file_rdstate()!=std::ifstream::goodbit)) && (m_storage.empty()); }
 
 /// @brief Close file stream
 void ReaderLHEF::close() { }

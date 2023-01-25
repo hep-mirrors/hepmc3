@@ -8,7 +8,7 @@
 #include "HepMC3/Readerprotobuf.h"
 
 int main() {
-  HepMC3::Readerprotobuf rdr("nonexistant.proto");
-  if (!rdr.failed()) return 1;
-  return 0;
+    HepMC3::Readerprotobuf rdr("nonexistant.proto");
+    if (!rdr.failed()) return 1;
+    return 0;
 }

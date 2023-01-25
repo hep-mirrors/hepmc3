@@ -29,3 +29,5 @@ endif()
 if(EXISTS ${HEPMC3_PROTOBUFIO_LIB})
   list( APPEND  HEPMC3_LIBRARIES ${HEPMC3_PROTOBUFIO_LIB})
 endif()
+
+include(${CMAKE_CURRENT_LIST_DIR}/HepMC3Targets.cmake)

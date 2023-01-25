@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenVertex.cc
@@ -81,7 +81,6 @@ void GenVertex::remove_particle_out(GenParticlePtr p) {
 
 void GenVertex::set_id(int id) {
     m_id = id;
-    return;
 }
 
 
@@ -134,7 +133,7 @@ std::string GenVertex::attribute_as_string(const std::string& name) const {
 std::vector<std::string> GenVertex::attribute_names() const {
     if ( parent_event() ) return parent_event()->attribute_names(id());
 
-    return std::vector<std::string>();
+    return {};
 }
 
 } // namespace HepMC3

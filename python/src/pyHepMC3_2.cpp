@@ -1,27 +1,18 @@
 #include <HepMC3/Attribute.h>
-#include <HepMC3/Data/GenParticleData.h>
-#include <HepMC3/FourVector.h>
 #include <HepMC3/GenCrossSection.h>
-#include <HepMC3/GenEvent.h>
 #include <HepMC3/GenHeavyIon.h>
-#include <HepMC3/GenParticle.h>
 #include <HepMC3/GenVertex.h>
-#include <HepMC3/LHEF.h>
 #include <functional>
-#include <ios>
 #include <iterator>
 #include <map>
 #include <memory>
-#include <ostream>
 #include <set>
 #include <sstream> // __str__
-#include <streambuf>
 #include <string>
 #include <utility>
-#include <vector>
 
-#include <pybind11/pybind11.h>
 #include <functional>
+#include <pybind11/pybind11.h>
 #include <string>
 #include <HepMC3/Version.h>
 #include <HepMC3/Reader.h>

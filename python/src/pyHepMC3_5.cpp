@@ -12,8 +12,8 @@
 #include <utility>
 #include <vector>
 
-#include <pybind11/pybind11.h>
 #include <functional>
+#include <pybind11/pybind11.h>
 #include <string>
 #include <HepMC3/Version.h>
 #include <HepMC3/Reader.h>
@@ -146,7 +146,7 @@ struct PyCallBack_HepMC3_ULongLongAttribute : public HepMC3::ULongLongAttribute 
 	}
 };
 
-// HepMC3::BoolAttribute file:HepMC3/Attribute.h line:639
+// HepMC3::BoolAttribute file:HepMC3/Attribute.h line:640
 struct PyCallBack_HepMC3_BoolAttribute : public HepMC3::BoolAttribute {
 	using HepMC3::BoolAttribute::BoolAttribute;
 
@@ -204,7 +204,7 @@ struct PyCallBack_HepMC3_BoolAttribute : public HepMC3::BoolAttribute {
 	}
 };
 
-// HepMC3::VectorCharAttribute file:HepMC3/Attribute.h line:682
+// HepMC3::VectorCharAttribute file:HepMC3/Attribute.h line:683
 struct PyCallBack_HepMC3_VectorCharAttribute : public HepMC3::VectorCharAttribute {
 	using HepMC3::VectorCharAttribute::VectorCharAttribute;
 
@@ -262,7 +262,7 @@ struct PyCallBack_HepMC3_VectorCharAttribute : public HepMC3::VectorCharAttribut
 	}
 };
 
-// HepMC3::VectorFloatAttribute file:HepMC3/Attribute.h line:727
+// HepMC3::VectorFloatAttribute file:HepMC3/Attribute.h line:728
 struct PyCallBack_HepMC3_VectorFloatAttribute : public HepMC3::VectorFloatAttribute {
 	using HepMC3::VectorFloatAttribute::VectorFloatAttribute;
 
@@ -320,7 +320,7 @@ struct PyCallBack_HepMC3_VectorFloatAttribute : public HepMC3::VectorFloatAttrib
 	}
 };
 
-// HepMC3::VectorLongDoubleAttribute file:HepMC3/Attribute.h line:773
+// HepMC3::VectorLongDoubleAttribute file:HepMC3/Attribute.h line:774
 struct PyCallBack_HepMC3_VectorLongDoubleAttribute : public HepMC3::VectorLongDoubleAttribute {
 	using HepMC3::VectorLongDoubleAttribute::VectorLongDoubleAttribute;
 
@@ -378,7 +378,7 @@ struct PyCallBack_HepMC3_VectorLongDoubleAttribute : public HepMC3::VectorLongDo
 	}
 };
 
-// HepMC3::VectorLongLongAttribute file:HepMC3/Attribute.h line:820
+// HepMC3::VectorLongLongAttribute file:HepMC3/Attribute.h line:821
 struct PyCallBack_HepMC3_VectorLongLongAttribute : public HepMC3::VectorLongLongAttribute {
 	using HepMC3::VectorLongLongAttribute::VectorLongLongAttribute;
 
@@ -436,7 +436,7 @@ struct PyCallBack_HepMC3_VectorLongLongAttribute : public HepMC3::VectorLongLong
 	}
 };
 
-// HepMC3::VectorUIntAttribute file:HepMC3/Attribute.h line:865
+// HepMC3::VectorUIntAttribute file:HepMC3/Attribute.h line:866
 struct PyCallBack_HepMC3_VectorUIntAttribute : public HepMC3::VectorUIntAttribute {
 	using HepMC3::VectorUIntAttribute::VectorUIntAttribute;
 
@@ -494,7 +494,7 @@ struct PyCallBack_HepMC3_VectorUIntAttribute : public HepMC3::VectorUIntAttribut
 	}
 };
 
-// HepMC3::VectorULongAttribute file:HepMC3/Attribute.h line:910
+// HepMC3::VectorULongAttribute file:HepMC3/Attribute.h line:911
 struct PyCallBack_HepMC3_VectorULongAttribute : public HepMC3::VectorULongAttribute {
 	using HepMC3::VectorULongAttribute::VectorULongAttribute;
 
@@ -580,7 +580,7 @@ void bind_pyHepMC3_5(std::function< pybind11::module &(std::string const &namesp
 		cl.def("set_value", (void (HepMC3::ULongLongAttribute::*)(const unsigned long long &)) &HepMC3::ULongLongAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::ULongLongAttribute::set_value(const unsigned long long &) --> void", pybind11::arg("i"));
 		cl.def("assign", (class HepMC3::ULongLongAttribute & (HepMC3::ULongLongAttribute::*)(const class HepMC3::ULongLongAttribute &)) &HepMC3::ULongLongAttribute::operator=, "C++: HepMC3::ULongLongAttribute::operator=(const class HepMC3::ULongLongAttribute &) --> class HepMC3::ULongLongAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::BoolAttribute file:HepMC3/Attribute.h line:639
+	{ // HepMC3::BoolAttribute file:HepMC3/Attribute.h line:640
 		pybind11::class_<HepMC3::BoolAttribute, std::shared_ptr<HepMC3::BoolAttribute>, PyCallBack_HepMC3_BoolAttribute, HepMC3::Attribute> cl(M("HepMC3"), "BoolAttribute", "Attribute that holds an Booleger implemented as an int\n\n  \n\n ");
 		cl.def( pybind11::init( [](){ return new HepMC3::BoolAttribute(); }, [](){ return new PyCallBack_HepMC3_BoolAttribute(); } ) );
 		cl.def( pybind11::init<bool>(), pybind11::arg("val") );
@@ -593,8 +593,8 @@ void bind_pyHepMC3_5(std::function< pybind11::module &(std::string const &namesp
 		cl.def("set_value", (void (HepMC3::BoolAttribute::*)(const bool &)) &HepMC3::BoolAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::BoolAttribute::set_value(const bool &) --> void", pybind11::arg("i"));
 		cl.def("assign", (class HepMC3::BoolAttribute & (HepMC3::BoolAttribute::*)(const class HepMC3::BoolAttribute &)) &HepMC3::BoolAttribute::operator=, "C++: HepMC3::BoolAttribute::operator=(const class HepMC3::BoolAttribute &) --> class HepMC3::BoolAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::VectorCharAttribute file:HepMC3/Attribute.h line:682
-		pybind11::class_<HepMC3::VectorCharAttribute, std::shared_ptr<HepMC3::VectorCharAttribute>, PyCallBack_HepMC3_VectorCharAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorCharAttribute", "Attribute that holds a vector of charegers of type  char\n\n  \n\n ");
+	{ // HepMC3::VectorCharAttribute file:HepMC3/Attribute.h line:683
+		pybind11::class_<HepMC3::VectorCharAttribute, std::shared_ptr<HepMC3::VectorCharAttribute>, PyCallBack_HepMC3_VectorCharAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorCharAttribute", "Attribute that holds a vector of characters of type  char\n\n  \n\n ");
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorCharAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorCharAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<char>>(), pybind11::arg("val") );
 
@@ -606,8 +606,8 @@ void bind_pyHepMC3_5(std::function< pybind11::module &(std::string const &namesp
 		cl.def("set_value", (void (HepMC3::VectorCharAttribute::*)(const class std::vector<char> &)) &HepMC3::VectorCharAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorCharAttribute::set_value(const class std::vector<char> &) --> void", pybind11::arg("i"));
 		cl.def("assign", (class HepMC3::VectorCharAttribute & (HepMC3::VectorCharAttribute::*)(const class HepMC3::VectorCharAttribute &)) &HepMC3::VectorCharAttribute::operator=, "C++: HepMC3::VectorCharAttribute::operator=(const class HepMC3::VectorCharAttribute &) --> class HepMC3::VectorCharAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::VectorFloatAttribute file:HepMC3/Attribute.h line:727
-		pybind11::class_<HepMC3::VectorFloatAttribute, std::shared_ptr<HepMC3::VectorFloatAttribute>, PyCallBack_HepMC3_VectorFloatAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorFloatAttribute", "Attribute that holds a vector of floategers of type  float\n\n  \n\n ");
+	{ // HepMC3::VectorFloatAttribute file:HepMC3/Attribute.h line:728
+		pybind11::class_<HepMC3::VectorFloatAttribute, std::shared_ptr<HepMC3::VectorFloatAttribute>, PyCallBack_HepMC3_VectorFloatAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorFloatAttribute", "Attribute that holds a vector of real numbers of type float\n\n  \n\n ");
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorFloatAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorFloatAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<float>>(), pybind11::arg("val") );
 
@@ -619,8 +619,8 @@ void bind_pyHepMC3_5(std::function< pybind11::module &(std::string const &namesp
 		cl.def("set_value", (void (HepMC3::VectorFloatAttribute::*)(const class std::vector<float> &)) &HepMC3::VectorFloatAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorFloatAttribute::set_value(const class std::vector<float> &) --> void", pybind11::arg("i"));
 		cl.def("assign", (class HepMC3::VectorFloatAttribute & (HepMC3::VectorFloatAttribute::*)(const class HepMC3::VectorFloatAttribute &)) &HepMC3::VectorFloatAttribute::operator=, "C++: HepMC3::VectorFloatAttribute::operator=(const class HepMC3::VectorFloatAttribute &) --> class HepMC3::VectorFloatAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::VectorLongDoubleAttribute file:HepMC3/Attribute.h line:773
-		pybind11::class_<HepMC3::VectorLongDoubleAttribute, std::shared_ptr<HepMC3::VectorLongDoubleAttribute>, PyCallBack_HepMC3_VectorLongDoubleAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorLongDoubleAttribute", "Attribute that holds a vector of long doubleegers of type  long double\n\n  \n\n ");
+	{ // HepMC3::VectorLongDoubleAttribute file:HepMC3/Attribute.h line:774
+		pybind11::class_<HepMC3::VectorLongDoubleAttribute, std::shared_ptr<HepMC3::VectorLongDoubleAttribute>, PyCallBack_HepMC3_VectorLongDoubleAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorLongDoubleAttribute", "Attribute that holds a vector of real numbers of type long double\n\n  \n\n ");
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorLongDoubleAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorLongDoubleAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<long double>>(), pybind11::arg("val") );
 
@@ -632,8 +632,8 @@ void bind_pyHepMC3_5(std::function< pybind11::module &(std::string const &namesp
 		cl.def("set_value", (void (HepMC3::VectorLongDoubleAttribute::*)(const class std::vector<long double> &)) &HepMC3::VectorLongDoubleAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorLongDoubleAttribute::set_value(const class std::vector<long double> &) --> void", pybind11::arg("i"));
 		cl.def("assign", (class HepMC3::VectorLongDoubleAttribute & (HepMC3::VectorLongDoubleAttribute::*)(const class HepMC3::VectorLongDoubleAttribute &)) &HepMC3::VectorLongDoubleAttribute::operator=, "C++: HepMC3::VectorLongDoubleAttribute::operator=(const class HepMC3::VectorLongDoubleAttribute &) --> class HepMC3::VectorLongDoubleAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::VectorLongLongAttribute file:HepMC3/Attribute.h line:820
-		pybind11::class_<HepMC3::VectorLongLongAttribute, std::shared_ptr<HepMC3::VectorLongLongAttribute>, PyCallBack_HepMC3_VectorLongLongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorLongLongAttribute", "Attribute that holds a vector of long longegers of type  long long\n\n  \n\n ");
+	{ // HepMC3::VectorLongLongAttribute file:HepMC3/Attribute.h line:821
+		pybind11::class_<HepMC3::VectorLongLongAttribute, std::shared_ptr<HepMC3::VectorLongLongAttribute>, PyCallBack_HepMC3_VectorLongLongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorLongLongAttribute", "Attribute that holds a vector of integers of type  long long\n\n  \n\n ");
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorLongLongAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorLongLongAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<long long>>(), pybind11::arg("val") );
 
@@ -645,7 +645,7 @@ void bind_pyHepMC3_5(std::function< pybind11::module &(std::string const &namesp
 		cl.def("set_value", (void (HepMC3::VectorLongLongAttribute::*)(const class std::vector<long long> &)) &HepMC3::VectorLongLongAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorLongLongAttribute::set_value(const class std::vector<long long> &) --> void", pybind11::arg("i"));
 		cl.def("assign", (class HepMC3::VectorLongLongAttribute & (HepMC3::VectorLongLongAttribute::*)(const class HepMC3::VectorLongLongAttribute &)) &HepMC3::VectorLongLongAttribute::operator=, "C++: HepMC3::VectorLongLongAttribute::operator=(const class HepMC3::VectorLongLongAttribute &) --> class HepMC3::VectorLongLongAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::VectorUIntAttribute file:HepMC3/Attribute.h line:865
+	{ // HepMC3::VectorUIntAttribute file:HepMC3/Attribute.h line:866
 		pybind11::class_<HepMC3::VectorUIntAttribute, std::shared_ptr<HepMC3::VectorUIntAttribute>, PyCallBack_HepMC3_VectorUIntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorUIntAttribute", "Attribute that holds a vector of unsigned integers of type  unsigned int\n\n  \n\n ");
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorUIntAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorUIntAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<unsigned int>>(), pybind11::arg("val") );
@@ -658,8 +658,8 @@ void bind_pyHepMC3_5(std::function< pybind11::module &(std::string const &namesp
 		cl.def("set_value", (void (HepMC3::VectorUIntAttribute::*)(const class std::vector<unsigned int> &)) &HepMC3::VectorUIntAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorUIntAttribute::set_value(const class std::vector<unsigned int> &) --> void", pybind11::arg("i"));
 		cl.def("assign", (class HepMC3::VectorUIntAttribute & (HepMC3::VectorUIntAttribute::*)(const class HepMC3::VectorUIntAttribute &)) &HepMC3::VectorUIntAttribute::operator=, "C++: HepMC3::VectorUIntAttribute::operator=(const class HepMC3::VectorUIntAttribute &) --> class HepMC3::VectorUIntAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::VectorULongAttribute file:HepMC3/Attribute.h line:910
-		pybind11::class_<HepMC3::VectorULongAttribute, std::shared_ptr<HepMC3::VectorULongAttribute>, PyCallBack_HepMC3_VectorULongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorULongAttribute", "Attribute that holds a vector of unsigned longegers of type  unsigned long\n\n  \n\n ");
+	{ // HepMC3::VectorULongAttribute file:HepMC3/Attribute.h line:911
+		pybind11::class_<HepMC3::VectorULongAttribute, std::shared_ptr<HepMC3::VectorULongAttribute>, PyCallBack_HepMC3_VectorULongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorULongAttribute", "Attribute that holds a vector of unsigned integers of type  unsigned long\n\n  \n\n ");
 		cl.def( pybind11::init( [](){ return new HepMC3::VectorULongAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorULongAttribute(); } ) );
 		cl.def( pybind11::init<class std::vector<unsigned long>>(), pybind11::arg("val") );
 

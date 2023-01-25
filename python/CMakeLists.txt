@@ -170,7 +170,7 @@ if(HEPMC3_ENABLE_PROTOBUFIO)
   configure_file("pyHepMC3.protobufIO.egg-info.in" "pyHepMC3.protobufIO.egg-info" IMMEDIATE @ONLY)
 endif()
 
-set(autoBN       ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_0.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_1.cpp
+set(autoBN       ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_0.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_1.cpp 
                  ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_2.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_3.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_4.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_5.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_6.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_7.cpp
                  ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_8.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_9.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3_10.cpp
@@ -204,6 +204,7 @@ if (RERUN_BINDER)
                              -I${CMAKE_CURRENT_SOURCE_DIR}/include 
                              ${HEPMC3_INCLUDE_FLAGS} 
                              -I/usr/lib/gcc/x86_64-redhat-linux/8/include/
+                             -I/usr/lib/gcc/x86_64-redhat-linux/12/include/
       WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
       VERBATIM
     )
@@ -216,7 +217,14 @@ if (RERUN_BINDER)
                           --root-module pyHepMC3rootIO
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
                           --config src/pyHepMC3rootIO.binder   ${CMAKE_CURRENT_BINARY_DIR}/root_includes.hpp
-                          --  -std=c++${HEPMC3_CXX_STANDARD} -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I${ROOT_INCLUDE_DIRS} -I/usr/lib/gcc/x86_64-redhat-linux/8/include/
+                          --  -std=c++${HEPMC3_CXX_STANDARD} 
+                          -I. 
+                          -I${CMAKE_CURRENT_SOURCE_DIR} 
+                          -I${CMAKE_CURRENT_SOURCE_DIR}/include 
+                          ${HEPMC3_INCLUDE_FLAGS} 
+                          -I${ROOT_INCLUDE_DIRS} 
+                          -I/usr/lib/gcc/x86_64-redhat-linux/8/include/
+                          -I/usr/lib/gcc/x86_64-redhat-linux/12/include/
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM
       )
@@ -230,7 +238,13 @@ if (RERUN_BINDER)
                           --root-module pyHepMC3search
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
                           --config src/pyHepMC3search.binder   ${CMAKE_CURRENT_BINARY_DIR}/search_includes.hpp
-                          -- -std=c++${HEPMC3_CXX_STANDARD} -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_FLAGS} -I/usr/lib/gcc/x86_64-redhat-linux/8/include/
+                          -- -std=c++${HEPMC3_CXX_STANDARD} 
+                          -I. 
+                          -I${CMAKE_CURRENT_SOURCE_DIR} 
+                          -I${CMAKE_CURRENT_SOURCE_DIR}/include 
+                          ${HEPMC3_INCLUDE_FLAGS} 
+                          -I/usr/lib/gcc/x86_64-redhat-linux/8/include/
+                          -I/usr/lib/gcc/x86_64-redhat-linux/12/include/
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM)
     endif()
@@ -243,7 +257,15 @@ if (RERUN_BINDER)
                           --root-module pyHepMC3protobufIO
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
                           --config src/pyHepMC3protobufIO.binder   ${CMAKE_CURRENT_BINARY_DIR}/protobuf_includes.hpp
-                          -- -std=c++${HEPMC3_CXX_STANDARD} -I. -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_CURRENT_SOURCE_DIR}/include -I${CMAKE_CURRENT_SOURCE_DIR}/../protobufIO/include ${HEPMC3_INCLUDE_FLAGS} -I/usr/lib/gcc/x86_64-redhat-linux/8/include/ -I${CMAKE_CURRENT_BINARY_DIR}
+                          -- -std=c++${HEPMC3_CXX_STANDARD} 
+                          -I. 
+                          -I${CMAKE_CURRENT_SOURCE_DIR} 
+                          -I${CMAKE_CURRENT_SOURCE_DIR}/include 
+                          -I${CMAKE_CURRENT_SOURCE_DIR}/../protobufIO/include 
+                          ${HEPMC3_INCLUDE_FLAGS} 
+                          -I${CMAKE_CURRENT_BINARY_DIR}
+                          -I/usr/lib/gcc/x86_64-redhat-linux/8/include/ 
+                          -I/usr/lib/gcc/x86_64-redhat-linux/12/include/ 
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM)
     endif()
@@ -281,6 +303,7 @@ endif()
 
 #Compilation with CPython2
 if (${ver} STREQUAL 2)
+  message(STATUS "HepMC3 python: WARNING: The support of Python2 is deprecated and might be removed in the future!")
   unset(Python2_FOUND CACHE)
   unset(Python2_VERSION CACHE)
   unset(Python2_Interpreter_FOUND CACHE)

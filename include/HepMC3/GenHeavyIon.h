@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_HEAVYION_H
 #define HEPMC3_HEAVYION_H
@@ -226,8 +226,7 @@ public:
     /** @brief Set all fields */
     void set( const int&nh, const int&np, const int&nt, const int&nc, const int&ns, const int&nsp,
               const int&nnw=0, const int&nwn=0, const int&nwnw=0,
-              const double& im=0., const double& pl=0., const double& ec=0., const double& s=0., const double& cent=0., const double& ucent=0. );
-
+              const double& im=0., const double& pl=0., const double& ec=0., const double& s=0., const double& cent=0., const double& usrcent=0. );
     /// @brief Verify that the instance contains non-zero information.
     ///
     /// HEPMC3_DEPRECATED("Each filed now have default values meaning
