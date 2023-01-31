@@ -60,7 +60,7 @@ void ReaderLHEF::init()
             for (auto* t3: t2->tags) {
                 if (t3->name != "weightgroup") continue;
                 for (auto* t4: t3->tags) if (t4->name == "weight") nweights++;
-                break;
+                //We can have multiple weight groups
             }
             break;
         }
@@ -72,10 +72,24 @@ void ReaderLHEF::init()
     set_run_info(std::make_shared<GenRunInfo>());
     run_info()->add_attribute("HEPRUP", m_hepr);
 
-    // This is just a test to make sure we can add other attributes as
-    // well.
-    run_info()->add_attribute("NPRUP",
-                              std::make_shared<FloatAttribute>(m_hepr->heprup.NPRUP));
+    // Other attributes
+    run_info()->add_attribute("NPRUP",std::make_shared<IntAttribute>(m_hepr->heprup.NPRUP));
+    run_info()->add_attribute("XSECUP",std::make_shared<VectorDoubleAttribute>(m_hepr->heprup.XSECUP));
+    run_info()->add_attribute("XERRUP",std::make_shared<VectorDoubleAttribute>(m_hepr->heprup.XERRUP));
+    run_info()->add_attribute("LPRUP",std::make_shared<VectorIntAttribute>(m_hepr->heprup.LPRUP));
+    run_info()->add_attribute("PDFGUP1",std::make_shared<IntAttribute>(m_hepr->heprup.PDFGUP.first));
+    run_info()->add_attribute("PDFGUP2",std::make_shared<IntAttribute>(m_hepr->heprup.PDFGUP.second));
+    run_info()->add_attribute("PDFSUP1",std::make_shared<IntAttribute>(m_hepr->heprup.PDFSUP.first));
+    run_info()->add_attribute("PDFSUP2",std::make_shared<IntAttribute>(m_hepr->heprup.PDFSUP.second));
+    run_info()->add_attribute("IDBMUP1",std::make_shared<IntAttribute>(m_hepr->heprup.IDBMUP.first));
+    run_info()->add_attribute("IDBMUP2",std::make_shared<IntAttribute>(m_hepr->heprup.IDBMUP.second));
+    run_info()->add_attribute("EBMUP1",std::make_shared<DoubleAttribute>(m_hepr->heprup.EBMUP.first));
+    run_info()->add_attribute("EBMUP2",std::make_shared<DoubleAttribute>(m_hepr->heprup.EBMUP.second));
+
+
+
+
+
 
     // We want to be able to convey the different event weights to
     // HepMC. In particular we need to add the names of the weights to
@@ -83,8 +97,14 @@ void ReaderLHEF::init()
 
     std::vector<std::string> weightnames;
     for ( int i = 0, N = m_hepr->heprup.weightinfo.size(); i < N; ++i ) weightnames.push_back(m_hepr->heprup.weightNameHepMC(i));
-    if (nweights == 0) nweights=1;
-    for ( size_t i = weightnames.size(); i < nweights; ++i ) weightnames.push_back(std::to_string(i));
+    if (nweights == 0) {
+        HEPMC3_WARNING("ReaderLHEF::init: no weights in the LHEF file.")
+        nweights=1;
+    }
+    if (weightnames.empty()) {
+        HEPMC3_WARNING("ReaderLHEF::init: empty weightinfo in the LHEF file.")
+        for ( size_t i = weightnames.size(); i < nweights; ++i ) weightnames.push_back(std::to_string(i));
+    }
     run_info()->set_weight_names(weightnames);
 
     // We also want to convey the information about which generators was
@@ -166,7 +186,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
                 else { vertices[vertex_index]->add_particle_out(particles[i]);}
             }
         }
-        for ( auto v: vertices ) evt.add_vertex(v.second);
+        for ( auto v: vertices ) if (v.second->particles_out().size()||v.second->particles_in().size()) evt.add_vertex(v.second);
         if (particles.size() > 1)
         {
             particles[0]->set_status(4);
@@ -182,6 +202,31 @@ bool ReaderLHEF::read_event(GenEvent& ev)
             wts.push_back(ahepeup->weights[i].first);
         }
         evt.weights() = wts;
+        /// Cross-section
+        std::shared_ptr<GenCrossSection>  xs     = std::make_shared<GenCrossSection>();
+        xs->set_cross_section(m_hepr->heprup.XSECUP, m_hepr->heprup.XERRUP);
+        evt.add_attribute("GenCrossSection", xs);
+        /// PDF info
+        std::shared_ptr<GenPdfInfo> pi  = std::make_shared<GenPdfInfo>();
+        pi->parton_id[0] = particles[0]->pdg_id();
+        pi->parton_id[1] = particles[1]->pdg_id();
+        pi->x[0] = std::abs(particles[0]->momentum().pz()/m_hepr->heprup.EBMUP.first);
+        pi->x[1] = std::abs(particles[1]->momentum().pz()/m_hepr->heprup.EBMUP.second);
+        pi->scale = ahepeup->pdfinfo.scale;
+        pi->xf[0] = 1;
+        pi->xf[1] = 1;
+        /*
+        pi->parton_id[0] = ahepeup->pdfinfo.p1;
+        pi->parton_id[1] = ahepeup->pdfinfo.p2;
+        pi->x[0] = ahepeup->pdfinfo.x1;
+        pi->x[1] = ahepeup->pdfinfo.x2;
+        pi->scale = ahepeup->pdfinfo.scale;
+        pi->xf[0] = ahepeup->pdfinfo.xf1;
+        pi->xf[1] = ahepeup->pdfinfo.xf2;
+        */
+        pi->pdf_id[0] = m_hepr->heprup.PDFSUP.first;
+        pi->pdf_id[1] = m_hepr->heprup.PDFSUP.second;
+        evt.add_attribute("GenPdfInfo", pi);
         m_storage.push_back(evt);
     }
     ev = m_storage.front();
