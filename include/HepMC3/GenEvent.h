@@ -188,7 +188,11 @@ public:
     const FourVector& event_pos() const;
 
     /// @brief Vector of beam particles
-    std::vector<ConstGenParticlePtr> beams(const int status = 0) const;
+    std::vector<ConstGenParticlePtr> beams() const;
+
+    /// @brief Vector of beam particles
+    std::vector<ConstGenParticlePtr> beams(const int status) const;
+
 
     /// @brief Vector of beam particles
     const std::vector<GenParticlePtr> & beams();

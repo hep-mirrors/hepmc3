@@ -424,6 +424,10 @@ std::vector<ConstGenParticlePtr> GenEvent::beams(const int status) const {
     return ret;
 }
 
+std::vector<ConstGenParticlePtr> GenEvent::beams() const {
+    return std::const_pointer_cast<const GenVertex>(m_rootvertex)->particles_out();
+}
+
 
 const std::vector<GenParticlePtr> & GenEvent::beams() {
     return m_rootvertex->particles_out();
