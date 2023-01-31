@@ -8,13 +8,14 @@
  *  @brief Implementation of \b class GenEvent
  *
  */
-#include <deque>
 #include <algorithm> // sort
+#include <deque>
 
+#include "HepMC3/Data/GenEventData.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
-#include "HepMC3/Data/GenEventData.h"
+
 
 namespace HepMC3 {
 

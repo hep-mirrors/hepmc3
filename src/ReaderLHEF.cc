@@ -164,7 +164,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
             particles.push_back(std::make_shared<GenParticle>(mom, ahepeup->IDUP[i], ahepeup->ISTUP[i]));
             if ( i < 2 ) continue;
             std::pair<int, int> vertex_index(ahepeup->MOTHUP[i].first, ahepeup->MOTHUP[i].second);
-            if (vertices.find(vertex_index) == vertices.end()) vertices[vertex_index] = std::make_shared<GenVertex>();
+            if (vertices.count(vertex_index) == 0) vertices[vertex_index] = std::make_shared<GenVertex>();
             vertices[vertex_index]->add_particle_out(particles.back());
         }
         for ( auto v: vertices )
@@ -178,7 +178,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
             }
         }
         std::pair<int, int> vertex_index(0, 0);
-        if (vertices.find(vertex_index) == vertices.end()) vertices[vertex_index] = std::make_shared<GenVertex>();
+        if (vertices.count(vertex_index) == 0) vertices[vertex_index] = std::make_shared<GenVertex>();
         for (size_t i = 0; i < particles.size(); ++i) {
             if (!particles[i]->end_vertex() && !particles[i]->production_vertex())
             {
@@ -186,7 +186,11 @@ bool ReaderLHEF::read_event(GenEvent& ev)
                 else { vertices[vertex_index]->add_particle_out(particles[i]);}
             }
         }
-        for ( auto v: vertices ) if (v.second->particles_out().size()||v.second->particles_in().size()) evt.add_vertex(v.second);
+        for ( auto v: vertices ) {
+          if (!v.second->particles_out().empty() && !v.second->particles_in().empty()) {
+            evt.add_vertex(v.second);
+          }  
+        }
         if (particles.size() > 1)
         {
             particles[0]->set_status(4);

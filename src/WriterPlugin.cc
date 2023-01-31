@@ -18,10 +18,11 @@
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
 #include <dlfcn.h>
 #endif
-#include <cstring>
 #include <sstream>
-#include "HepMC3/WriterPlugin.h"
+#include <cstring>
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/WriterPlugin.h"
+
 
 
 namespace HepMC3 {

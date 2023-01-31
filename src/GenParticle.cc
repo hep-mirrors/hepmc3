@@ -8,11 +8,12 @@
  *  @brief Implementation of \b class GenParticle
  *
  */
+#include "HepMC3/Attribute.h"
+#include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
-#include "HepMC3/GenEvent.h"
 #include "HepMC3/Setup.h"
-#include "HepMC3/Attribute.h"
+
 
 namespace HepMC3 {
 

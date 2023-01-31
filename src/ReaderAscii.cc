@@ -7,6 +7,7 @@
 /// @file ReaderAscii.cc
 /// @brief Implementation of \b class ReaderAscii
 ///
+#include <array>
 #include <cstring>
 #include <sstream>
 
@@ -52,8 +53,7 @@ ReaderAscii::~ReaderAscii() { if (!m_isstream) close(); }
 
 bool ReaderAscii::skip(const int n)
 {
-    const size_t       max_buffer_size = 262144;
-    char               buf[max_buffer_size];
+    std::array<char, 262144> buf;
     bool               event_context    = false;
     bool               run_info_context    = false;
     int nn = n;
@@ -64,24 +64,24 @@ bool ReaderAscii::skip(const int n)
         if ( peek == 'E' ) { event_context = true; nn--; }
         //We have to read each run info.
         if ( !event_context && ( peek == 'W' || peek == 'A' || peek == 'T' ) ) {
-            m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
+            m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
             if (!run_info_context) {
                 set_run_info(std::make_shared<GenRunInfo>());
                 run_info_context = true;
             }
             if ( peek == 'W' ) {
-                parse_weight_names(buf);
+                parse_weight_names(buf.data());
             }
             if ( peek == 'T' ) {
-                parse_tool(buf);
+                parse_tool(buf.data());
             }
             if ( peek == 'A' ) {
-                parse_run_attribute(buf);
+                parse_run_attribute(buf.data());
             }
         }
         if ( event_context && ( peek == 'V' || peek == 'P' ) ) event_context=false;
         if (nn < 0) return true;
-        m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
+        m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
     }
     return true;
 }
@@ -91,8 +91,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
     char               peek(0);
-    const size_t       max_buffer_size = 262144;
-    char               buf[max_buffer_size];
+    std::array<char, 262144> buf;
     bool               event_context    = false;
     bool               parsed_weights    = false;
     bool               parsed_particles_or_vertices    = false;
@@ -108,16 +107,16 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     // Parse event, vertex and particle information
     //
     while (!failed()) {
-        m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
+        m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
 
-        if ( strlen(buf) == 0 ) continue;
+        if ( strlen(buf.data()) == 0 ) continue;
 
         // Check for ReaderAscii header/footer
-        if ( strncmp(buf, "HepMC", 5) == 0 ) {
-            if ( strncmp(buf, "HepMC::Version", 14) != 0 && strncmp(buf, "HepMC::Asciiv3", 14) != 0 )
+        if ( strncmp(buf.data(), "HepMC", 5) == 0 ) {
+            if ( strncmp(buf.data(), "HepMC::Version", 14) != 0 && strncmp(buf.data(), "HepMC::Asciiv3", 14) != 0 )
             {
                 HEPMC3_WARNING("ReaderAscii: found unsupported expression in header. Will close the input.")
-                std::cout << buf << std::endl;
+                std::cout << buf.data() << std::endl;
                 m_isstream ? m_stream->clear(std::ios::eofbit) : m_file.clear(std::ios::eofbit);
             }
             if (event_context) {
@@ -129,7 +128,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         switch (buf[0]) {
         case 'E':
-            vertices_and_particles = parse_event_information(evt, buf);
+            vertices_and_particles = parse_event_information(evt, buf.data());
             if (vertices_and_particles.second < 0) {
                 is_parsing_successful = false;
             } else {
@@ -141,16 +140,16 @@ bool ReaderAscii::read_event(GenEvent &evt) {
             run_info_context   = false;
             break;
         case 'V':
-            is_parsing_successful = parse_vertex_information(evt, buf);
+            is_parsing_successful = parse_vertex_information(evt, buf.data());
             parsed_particles_or_vertices =  true;
             break;
         case 'P':
-            is_parsing_successful = parse_particle_information(evt, buf);
+            is_parsing_successful = parse_particle_information(evt, buf.data());
             parsed_particles_or_vertices =  true;
             break;
         case 'W':
             if ( event_context ) {
-                is_parsing_successful = parse_weight_values(evt, buf);
+                is_parsing_successful = parse_weight_values(evt, buf.data());
                 parsed_weights=true;
             } else {
                 if ( !run_info_context ) {
@@ -158,11 +157,11 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                     evt.set_run_info(run_info());
                 }
                 run_info_context = true;
-                is_parsing_successful = parse_weight_names(buf);
+                is_parsing_successful = parse_weight_names(buf.data());
             }
             break;
         case 'U':
-            is_parsing_successful = parse_units(evt, buf);
+            is_parsing_successful = parse_units(evt, buf.data());
             break;
         case 'T':
             if ( event_context ) {
@@ -173,19 +172,19 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                     evt.set_run_info(run_info());
                 }
                 run_info_context = true;
-                is_parsing_successful = parse_tool(buf);
+                is_parsing_successful = parse_tool(buf.data());
             }
             break;
         case 'A':
             if ( event_context ) {
-                is_parsing_successful = parse_attribute(evt, buf);
+                is_parsing_successful = parse_attribute(evt, buf.data());
             } else {
                 if ( !run_info_context ) {
                     set_run_info(std::make_shared<GenRunInfo>());
                     evt.set_run_info(run_info());
                 }
                 run_info_context = true;
-                is_parsing_successful = parse_run_attribute(buf);
+                is_parsing_successful = parse_run_attribute(buf.data());
             }
             break;
         default:
@@ -240,7 +239,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     // Check if there were HEPMC3_ERRORs during parsing
     if ( !is_parsing_successful ) {
         HEPMC3_ERROR("ReaderAscii: event parsing failed. Returning empty event")
-        HEPMC3_DEBUG(1, "Parsing failed at line:" << std::endl << buf)
+        HEPMC3_DEBUG(1, "Parsing failed at line:" << std::endl << buf.data())
 
         evt.clear();
         m_isstream ? m_stream->clear(std::ios::badbit) : m_file.clear(std::ios::badbit);
@@ -521,7 +520,7 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
 bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     const char     *cursor  = buf;
     const char     *cursor2 = buf;
-    char            name[512];
+    std::array<char, 512> name;
     int             id = 0;
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
@@ -531,14 +530,14 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
     ++cursor;
 
     if ( !(cursor2 = strchr(cursor, ' ')) ) return false;
-    snprintf(name, 512, "%.*s", (int)(cursor2-cursor), cursor);
+    snprintf(name.data(), name.size(), "%.*s", (int)(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
 
     std::shared_ptr<Attribute> att =
         std::make_shared<StringAttribute>(StringAttribute(unescape(cursor)));
 
-    evt.add_attribute(std::string(name), att, id);
+    evt.add_attribute(std::string(name.data()), att, id);
 
     return true;
 }
@@ -546,20 +545,20 @@ bool ReaderAscii::parse_attribute(GenEvent &evt, const char *buf) {
 bool ReaderAscii::parse_run_attribute(const char *buf) {
     const char     *cursor  = buf;
     const char     *cursor2 = buf;
-    char            name[512];
+    std::array<char, 512> name;
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     ++cursor;
 
     if ( !(cursor2 = strchr(cursor, ' ')) ) return false;
-    snprintf(name, 512, "%.*s", (int)(cursor2-cursor), cursor);
+    snprintf(name.data(), name.size(), "%.*s", (int)(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
 
     std::shared_ptr<StringAttribute> att =
         std::make_shared<StringAttribute>(StringAttribute(unescape(cursor)));
 
-    run_info()->add_attribute(std::string(name), att);
+    run_info()->add_attribute(std::string(name.data()), att);
 
     return true;
 }

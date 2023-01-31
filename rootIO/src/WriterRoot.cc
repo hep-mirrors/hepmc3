@@ -8,6 +8,7 @@
  *  @brief Implementation of \b class WriterRoot
  *
  */
+#include <array>
 #include <cstdio>  // sprintf
 #include "HepMC3/WriterRoot.h"
 #include "HepMC3/Version.h"
@@ -48,10 +49,10 @@ void WriterRoot::write_event(const GenEvent &evt) {
     GenEventData data;
     evt.write_data(data);
 
-    char buf[16] = "";
-    sprintf(buf, "%15i", ++m_events_count);
+    std::array<char,16> buf;
+    snprintf(buf.data(), buf.size(), "%15i", ++m_events_count);
 
-    int nbytes = m_file->WriteObject(&data, buf);
+    int nbytes = m_file->WriteObject(&data, buf.data());
 
     if ( nbytes == 0 ) {
         HEPMC3_ERROR("WriterRoot: error writing event")
