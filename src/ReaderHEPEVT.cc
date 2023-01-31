@@ -8,6 +8,7 @@
  *  @brief Implementation of \b class ReaderHEPEVT
  *
  */
+#include <array>
 #include <sstream>
 #include "HepMC3/ReaderHEPEVT.h"
 
@@ -57,8 +58,7 @@ ReaderHEPEVT::ReaderHEPEVT(std::shared_ptr<std::istream> s_stream)
 
 bool ReaderHEPEVT::skip(const int n)
 {
-    const size_t       max_buffer_size = 262144;
-    char               buf[max_buffer_size];
+    std::array<char, 262144> buf;
     int nn = n;
     while (!failed()) {
         char peek(0);
@@ -66,7 +66,7 @@ bool ReaderHEPEVT::skip(const int n)
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
         if ( peek == 'E' ) nn--;
         if ( nn < 0 ) { return true; }
-        m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
+        m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
     }
     return true;
 }
@@ -75,16 +75,15 @@ bool ReaderHEPEVT::skip(const int n)
 
 bool ReaderHEPEVT::read_hepevt_event_header()
 {
-    const size_t       max_e_buffer_size = 512;
-    char buf_e[max_e_buffer_size];
+    std::array<char, 512> buf_e;
     bool eventline = false;
     int m_i = 0;
     int m_p = 0;
     while (!eventline)
     {
-        m_isstream ? m_stream->getline(buf_e, max_e_buffer_size) : m_file.getline(buf_e, max_e_buffer_size);
-        if ( strlen(buf_e) == 0 ) return false;
-        std::stringstream st_e(buf_e);
+        m_isstream ? m_stream->getline(buf_e.data(), buf_e.size()) : m_file.getline(buf_e.data(), buf_e.size());
+        if ( strlen(buf_e.data()) == 0 ) return false;
+        std::stringstream st_e(buf_e.data());
         char attr = ' ';
         eventline = false;
         while (!eventline)
@@ -106,22 +105,20 @@ bool ReaderHEPEVT::read_hepevt_event_header()
 
 bool ReaderHEPEVT::read_hepevt_particle(int i)
 {
-    const size_t       max_p_buffer_size = 512;
-    const size_t       max_v_buffer_size = 512;
-    char buf_p[max_p_buffer_size];
-    char buf_v[max_v_buffer_size];
-    int   intcodes[6];
-    double fltcodes1[5];
-    double fltcodes2[4];
-    m_isstream ? m_stream->getline(buf_p, max_p_buffer_size) : m_file.getline(buf_p, max_p_buffer_size);
-    if ( strlen(buf_p) == 0 ) return false;
+    std::array<char, 512> buf_p;
+    std::array<char, 512> buf_v;
+    std::array<int, 6>   intcodes;
+    std::array<double, 5> fltcodes1;
+    std::array<double, 5> fltcodes2;
+    m_isstream ? m_stream->getline(buf_p.data(),buf_p.size()) : m_file.getline(buf_p.data(),buf_p.size());
+    if ( strlen(buf_p.data()) == 0 ) return false;
     if (m_options.find("vertices_positions_are_absent") == m_options.end())
     {
-        m_isstream ? m_stream->getline(buf_v, max_v_buffer_size) : m_file.getline(buf_v, max_v_buffer_size);
-        if ( strlen(buf_v) == 0 ) return false;
+        m_isstream ? m_stream->getline(buf_v.data(),buf_v.size()) : m_file.getline(buf_v.data(),buf_v.size());
+        if ( strlen(buf_v.data()) == 0 ) return false;
     }
-    std::stringstream st_p(buf_p);
-    std::stringstream st_v(buf_v);
+    std::stringstream st_p(buf_p.data());
+    std::stringstream st_v(buf_v.data());
     if (m_options.find("vertices_positions_are_absent") == m_options.end())
     {
         if (!static_cast<bool>(st_p >> intcodes[0] >> intcodes[1] >> intcodes[2] >> intcodes[3] >> intcodes[4] >> intcodes[5] >> fltcodes1[0] >> fltcodes1[1] >> fltcodes1[2] >> fltcodes1[3] >> fltcodes1[4])) { HEPMC3_ERROR("ReaderHEPEVT: HEPMC3_ERROR reading particle momenta");     return false;}

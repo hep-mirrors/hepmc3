@@ -8,16 +8,16 @@
  *  @brief Implementation of \b class ReaderAsciiHepMC2
  *
  */
-#include <cstring>
+#include <array>
 #include <cstdlib>
-
-#include "HepMC3/ReaderAsciiHepMC2.h"
+#include <cstring>
 
 #include "HepMC3/GenEvent.h"
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
 #include "HepMC3/GenHeavyIon.h"
+#include "HepMC3/GenParticle.h"
 #include "HepMC3/GenPdfInfo.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/Setup.h"
 
 namespace HepMC3 {
@@ -55,8 +55,7 @@ ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->cl
 
 bool ReaderAsciiHepMC2::skip(const int n)
 {
-    const size_t       max_buffer_size = 262144;
-    char               buf[max_buffer_size];
+    std::array<char, 262144> buf;
     int nn = n;
     while (!failed()) {
         char peek(0);
@@ -64,7 +63,7 @@ bool ReaderAsciiHepMC2::skip(const int n)
         m_isstream ? peek = m_stream->peek() : peek = m_file.peek();
         if ( peek =='E' ) nn--;
         if (nn < 0) { return true; }
-        m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
+        m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
     }
     return true;
 }
@@ -73,8 +72,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
     char               peek = 0;
-    const size_t  max_buffer_size = 262144;
-    char          buf[max_buffer_size];
+    std::array<char, 262144> buf;
     bool          parsed_event_header            = false;
     bool          is_parsing_successful          = true;
     int           parsing_result                 = 0;
@@ -97,14 +95,14 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Parse event, vertex and particle information
     //
     while (!failed()) {
-        m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
-        if ( strlen(buf) == 0 ) continue;
+        m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
+        if ( strlen(buf.data()) == 0 ) continue;
         // Check for IO_GenEvent header/footer
-        if ( strncmp(buf, "HepMC", 5) == 0 ) {
-            if ( strncmp(buf, "HepMC::Version", 14) != 0 && strncmp(buf, "HepMC::IO_GenEvent", 18) != 0 )
+        if ( strncmp(buf.data(), "HepMC", 5) == 0 ) {
+            if ( strncmp(buf.data(), "HepMC::Version", 14) != 0 && strncmp(buf.data(), "HepMC::IO_GenEvent", 18) != 0 )
             {
                 HEPMC3_WARNING("ReaderAsciiHepMC2: found unsupported expression in header. Will close the input.")
-                std::cout <<buf << std::endl;
+                std::cout <<buf.data() << std::endl;
                 m_isstream ? m_stream->clear(std::ios::eofbit) : m_file.clear(std::ios::eofbit);
             }
             if (parsed_event_header) {
@@ -115,7 +113,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         }
         switch (buf[0]) {
         case 'E':
-            parsing_result = parse_event_information(evt, buf);
+            parsing_result = parse_event_information(evt, buf.data());
             if (parsing_result < 0) {
                 is_parsing_successful = false;
                 HEPMC3_ERROR("ReaderAsciiHepMC2: HEPMC3_ERROR parsing event information")
@@ -145,7 +143,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             }
             current_vertex_particles_parsed = 0;
 
-            parsing_result = parse_vertex_information(buf);
+            parsing_result = parse_vertex_information(buf.data());
 
             if (parsing_result < 0) {
                 is_parsing_successful = false;
@@ -158,7 +156,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             break;
         case 'P':
 
-            parsing_result   = parse_particle_information(buf);
+            parsing_result   = parse_particle_information(buf.data());
 
             if (parsing_result < 0) {
                 is_parsing_successful = false;
@@ -170,19 +168,19 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             }
             break;
         case 'U':
-            is_parsing_successful = parse_units(evt, buf);
+            is_parsing_successful = parse_units(evt, buf.data());
             break;
         case 'F':
-            is_parsing_successful = parse_pdf_info(evt, buf);
+            is_parsing_successful = parse_pdf_info(evt, buf.data());
             break;
         case 'H':
-            is_parsing_successful = parse_heavy_ion(evt, buf);
+            is_parsing_successful = parse_heavy_ion(evt, buf.data());
             break;
         case 'N':
-            is_parsing_successful = parse_weight_names(buf);
+            is_parsing_successful = parse_weight_names(buf.data());
             break;
         case 'C':
-            is_parsing_successful = parse_xs_info(evt, buf);
+            is_parsing_successful = parse_xs_info(evt, buf.data());
             break;
         default:
             HEPMC3_WARNING("ReaderAsciiHepMC2: skipping unrecognised prefix: " << buf[0])
@@ -212,7 +210,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
     if ( !is_parsing_successful ) {
         HEPMC3_ERROR("ReaderAsciiHepMC2: event parsing failed. Returning empty event")
-        HEPMC3_DEBUG(1, "Parsing failed at line:" << std::endl << buf)
+        HEPMC3_DEBUG(1, "Parsing failed at line:" << std::endl << buf.data())
         evt.clear();
         m_isstream ? m_stream->clear(std::ios::badbit) : m_file.clear(std::ios::badbit);
         return false;

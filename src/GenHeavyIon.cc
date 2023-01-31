@@ -8,9 +8,9 @@
  *  @brief Implementation of \b class GenHeavyIon
  *
  */
-#include <cstring> // memcmp
-#include <cstdlib> // atoi
 #include <cstdio> // sprintf
+#include <cstdlib> // atoi
+#include <cstring> // memcmp
 #include <sstream> // sprintf
 
 #include "HepMC3/GenHeavyIon.h"

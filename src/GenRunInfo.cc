@@ -10,8 +10,9 @@
  */
 #include <sstream>
 
-#include "HepMC3/GenRunInfo.h"
 #include "HepMC3/Data/GenRunInfoData.h"
+#include "HepMC3/GenRunInfo.h"
+
 
 namespace HepMC3 {
 

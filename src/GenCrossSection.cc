@@ -8,10 +8,11 @@
  *  @brief Implementation of \b class GenCrossSection
  *
  */
-#include <cstring> // memcmp
 #include <cstdlib> // atoi
-#include <sstream>
+#include <cstring> // memcmp
 #include <iomanip>
+#include <sstream>
+
 #include "HepMC3/GenCrossSection.h"
 #include "HepMC3/GenEvent.h"
 
