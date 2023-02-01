@@ -129,11 +129,11 @@ void HEPEVT_Wrapper_Runtime::print_hepevt_particle( int index, std::ostream& ost
 {
     std::array<char, 255> buf;//Note: the format is fixed, so no reason for complicated treatment
 
-    snprintf(buf.data(), buf.size(), "%5i %6i%4i - %4i  %4i - %4i %8.2f %8.2f %8.2f %8.2f %8.2f", 
-    index, m_hepevtptr->idhep[index-1],
-    m_hepevtptr->jmohep[2*(index-1)], m_hepevtptr->jmohep[2*(index-1)+1],
-    m_hepevtptr->jdahep[2*(index-1)], m_hepevtptr->jdahep[2*(index-1)+1],
-    m_hepevtptr->phep[5*(index-1)], m_hepevtptr->phep[5*(index-1)+1], m_hepevtptr->phep[5*(index-1)+2], m_hepevtptr->phep[5*(index-1)+3], m_hepevtptr->phep[5*(index-1)+4]);
+    snprintf(buf.data(), buf.size(), "%5i %6i%4i - %4i  %4i - %4i %8.2f %8.2f %8.2f %8.2f %8.2f",
+             index, m_hepevtptr->idhep[index-1],
+             m_hepevtptr->jmohep[2*(index-1)], m_hepevtptr->jmohep[2*(index-1)+1],
+             m_hepevtptr->jdahep[2*(index-1)], m_hepevtptr->jdahep[2*(index-1)+1],
+             m_hepevtptr->phep[5*(index-1)], m_hepevtptr->phep[5*(index-1)+1], m_hepevtptr->phep[5*(index-1)+2], m_hepevtptr->phep[5*(index-1)+3], m_hepevtptr->phep[5*(index-1)+4]);
     ostr << buf.data() << std::endl;
 }
 
