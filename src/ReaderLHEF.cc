@@ -187,9 +187,9 @@ bool ReaderLHEF::read_event(GenEvent& ev)
             }
         }
         for ( auto v: vertices ) {
-          if (!v.second->particles_out().empty() && !v.second->particles_in().empty()) {
-            evt.add_vertex(v.second);
-          }  
+            if (!v.second->particles_out().empty() && !v.second->particles_in().empty()) {
+                evt.add_vertex(v.second);
+            }
         }
         if (particles.size() > 1)
         {

@@ -143,9 +143,10 @@ void GenEvent::remove_particle(GenParticlePtr p) {
 
     // Remove attributes of this particle
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::vector<std::string> atts = p->attribute_names();
-    for (const std::string &s: atts) {
-        p->remove_attribute(s);
+    for (att_key_t& vt1: m_attributes) {
+        std::map<int, std::shared_ptr<Attribute> >::iterator vt2 = vt1.second.find(idx);
+        if (vt2 == vt1.second.end()) continue;
+        vt1.second.erase(vt2);
     }
 
     //
@@ -216,9 +217,10 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
     std::vector<GenVertexPtr>::iterator it = m_vertices.erase(m_vertices.begin() + idx-1);
     // Remove attributes of this vertex
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::vector<std::string> atts = v->attribute_names();
-    for (std::string s: atts) {
-        v->remove_attribute(s);
+    for (att_key_t& vt1: m_attributes) {
+        std::map<int, std::shared_ptr<Attribute> >::iterator vt2 = vt1.second.find(-idx);
+        if (vt2 == vt1.second.end()) continue;
+        vt1.second.erase(vt2);
     }
 
     //
