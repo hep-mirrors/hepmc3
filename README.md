@@ -52,6 +52,12 @@ The following commands will install the HepMC3 in the corresponding systems:
     ```
     The dependencies can vary.
 
+  - Gentoo linux
+    The package is available in the standard repository https://packages.gentoo.org/packages/sci-physics/hepmc. To install:
+    ```
+    sudo emerge --ask hepmc:3
+    ```
+
   - MacOSX
     The HepMC3 package is available in the ``homebrew-hep`` repository https://davidchall.github.io/homebrew-hep/.
     To install:
