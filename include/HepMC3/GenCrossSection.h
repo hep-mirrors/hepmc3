@@ -177,7 +177,7 @@ public:
 private:
 
     /** @brief get the weight index given a weight name. */
-    int windx(std::string wName) const;
+    int windx(const std::string& wName) const;
 
 };
 

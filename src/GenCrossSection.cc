@@ -20,7 +20,7 @@
 namespace HepMC3 {
 
 
-int GenCrossSection::windx(std::string wName) const {
+int GenCrossSection::windx(const std::string& wName) const {
     if ( !event() || !event()->run_info() ) {return 0;}
     return event()->run_info()->weight_index(wName);
 }

@@ -90,14 +90,12 @@ bool GenHeavyIon::to_string(std::string &att) const {
        << Nspec_proj_p << " " << Nspec_targ_p << " ";
 
     os << participant_plane_angles.size();
-    for ( std::map<int, double>::const_iterator it = participant_plane_angles.begin();
-            it != participant_plane_angles.end(); ++it ) {
-        os << " " << it->first << " " << it->second;
+    for (const auto& it: participant_plane_angles) {
+        os << " " << it.first << " " << it.second;
     }
     os << " " << eccentricities.size();
-    for ( std::map<int, double>::const_iterator it = eccentricities.begin();
-            it != eccentricities.end(); ++it ) {
-        os << " " << it->first << " " << it->second;
+    for (const auto& it: eccentricities) {
+        os << " " << it.first << " " << it.second;
     }
     att = os.str();
 

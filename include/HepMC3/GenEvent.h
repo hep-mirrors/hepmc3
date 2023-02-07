@@ -372,15 +372,15 @@ private:
     std::vector<GenVertexPtr> m_vertices;
 
     /// Event number
-    int m_event_number;
+    int m_event_number = 0;
 
     /// Event weights
     std::vector<double> m_weights;
 
     /// Momentum unit
-    Units::MomentumUnit m_momentum_unit;
+    Units::MomentumUnit m_momentum_unit = Units::GEV;
     /// Length unit
-    Units::LengthUnit m_length_unit;
+    Units::LengthUnit m_length_unit = Units::MM;
 
     /// The root vertex is stored outside the normal vertices list to block user access to it
     GenVertexPtr m_rootvertex;
