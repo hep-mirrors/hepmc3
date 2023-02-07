@@ -55,7 +55,7 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     data.weight_names = this->weight_names();
 
     // Attributes
-    typedef std::map<std::string, std::shared_ptr<Attribute> >::value_type att_val_t;
+    using att_val_t = std::map<std::string, std::shared_ptr<Attribute>>::value_type;
 
     for (const att_val_t& vt: m_attributes) {
         std::string att;

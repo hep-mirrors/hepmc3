@@ -69,7 +69,7 @@ public:
     /** @brief Get stream error state */
     bool failed()  override;
 
-    char* hepevtbuffer; //!< Pointer to HEPEVT Fortran common block/C struct
+    char* hepevtbuffer = nullptr; //!< Pointer to HEPEVT Fortran common block/C struct
 private:
     std::ifstream m_file; //!< Input file
     std::shared_ptr<std::istream> m_shared_stream; //!< For ctor when reading from temp stream
