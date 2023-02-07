@@ -24,38 +24,38 @@
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 namespace HepMC3 {
-std::vector<HepMC3::GenParticlePtr>      children_particles(HepMC3::GenVertexPtr O);   ///< Return children particles
-std::vector<HepMC3::ConstGenParticlePtr> children_particles(HepMC3::ConstGenVertexPtr O); ///< Return children particles
-std::vector<HepMC3::GenVertexPtr>        children_vertices(HepMC3::GenParticlePtr O); ///< Return children vertices
-std::vector<HepMC3::ConstGenVertexPtr>   children_vertices(HepMC3::ConstGenParticlePtr O); ///< Return children vertices
-std::vector<HepMC3::GenParticlePtr>      grandchildren_particles(HepMC3::GenParticlePtr O);  ///< Return grandchildren particles
-std::vector<HepMC3::ConstGenParticlePtr> grandchildren_particles(HepMC3::ConstGenParticlePtr O);  ///< Return grandchildren particles
-std::vector<HepMC3::GenVertexPtr>        grandchildren_vertices(HepMC3::GenVertexPtr O);   ///< Return grandchildren vertices
-std::vector<HepMC3::ConstGenVertexPtr>   grandchildren_vertices(HepMC3::ConstGenVertexPtr O); ///< Return grandchildren vertices
-std::vector<HepMC3::GenParticlePtr>      parent_particles(HepMC3::GenVertexPtr O);  ///< Return parent particles
-std::vector<HepMC3::ConstGenParticlePtr> parent_particles(HepMC3::ConstGenVertexPtr O);   ///< Return parent particles
-std::vector<HepMC3::GenVertexPtr>        parent_vertices(HepMC3::GenParticlePtr O);   ///< Return parent vertices
-std::vector<HepMC3::ConstGenVertexPtr>   parent_vertices(HepMC3::ConstGenParticlePtr O);    ///< Return parent vertices
-std::vector<HepMC3::GenParticlePtr>      grandparent_particles(HepMC3::GenParticlePtr O);    ///< Return grandparent particles
-std::vector<HepMC3::ConstGenParticlePtr> grandparent_particles(HepMC3::ConstGenParticlePtr O);     ///< Return grandparent particles
-std::vector<HepMC3::GenVertexPtr>        grandparent_vertices(HepMC3::GenVertexPtr O);      ///< Return grandparent vertices
-std::vector<HepMC3::ConstGenVertexPtr>   grandparent_vertices(HepMC3::ConstGenVertexPtr O);       ///< Return grandparent vertices
-std::vector<HepMC3::ConstGenParticlePtr> descendant_particles(HepMC3::ConstGenVertexPtr obj);       ///< Return descendant particles
-std::vector<HepMC3::GenParticlePtr>      descendant_particles(HepMC3::GenVertexPtr obj);       ///< Return descendant particles
-std::vector<HepMC3::ConstGenParticlePtr> descendant_particles(HepMC3::ConstGenParticlePtr obj);       ///< Return descendant particles
-std::vector<HepMC3::GenParticlePtr>      descendant_particles(HepMC3::GenParticlePtr obj);       ///< Return descendant particles
-std::vector<HepMC3::ConstGenVertexPtr>   descendant_vertices(HepMC3::ConstGenParticlePtr obj);       ///< Return descendant vertices
-std::vector<HepMC3::GenVertexPtr>        descendant_vertices(HepMC3::GenParticlePtr obj);       ///< Return descendant vertices
-std::vector<HepMC3::ConstGenVertexPtr>   descendant_vertices(HepMC3::ConstGenVertexPtr obj);       ///< Return descendant vertices
-std::vector<HepMC3::GenVertexPtr>        descendant_vertices(HepMC3::GenVertexPtr obj);       ///< Return descendant vertices
-std::vector<HepMC3::ConstGenParticlePtr> ancestor_particles(HepMC3::ConstGenVertexPtr obj);       ///< Return ancestor particles
-std::vector<HepMC3::GenParticlePtr>      ancestor_particles(HepMC3::GenVertexPtr obj);      ///< Return ancestor particles
-std::vector<HepMC3::ConstGenParticlePtr> ancestor_particles(HepMC3::ConstGenParticlePtr obj);      ///< Return ancestor particles
-std::vector<HepMC3::GenParticlePtr>      ancestor_particles(HepMC3::GenParticlePtr obj);      ///< Return ancestor particles
-std::vector<HepMC3::ConstGenVertexPtr>   ancestor_vertices(HepMC3::ConstGenParticlePtr obj);      ///< Return ancestor vertices
-std::vector<HepMC3::GenVertexPtr>        ancestor_vertices(HepMC3::GenParticlePtr obj);      ///< Return ancestor vertices
-std::vector<HepMC3::ConstGenVertexPtr>   ancestor_vertices(HepMC3::ConstGenVertexPtr obj);      ///< Return ancestor vertices
-std::vector<HepMC3::GenVertexPtr>        ancestor_vertices(HepMC3::GenVertexPtr obj);      ///< Return ancestor vertices
+std::vector<HepMC3::GenParticlePtr>      children_particles(const HepMC3::GenVertexPtr& O);   ///< Return children particles
+std::vector<HepMC3::ConstGenParticlePtr> children_particles(const HepMC3::ConstGenVertexPtr& O); ///< Return children particles
+std::vector<HepMC3::GenVertexPtr>        children_vertices(const HepMC3::GenParticlePtr& O); ///< Return children vertices
+std::vector<HepMC3::ConstGenVertexPtr>   children_vertices(const HepMC3::ConstGenParticlePtr& O); ///< Return children vertices
+std::vector<HepMC3::GenParticlePtr>      grandchildren_particles(const HepMC3::GenParticlePtr& O);  ///< Return grandchildren particles
+std::vector<HepMC3::ConstGenParticlePtr> grandchildren_particles(const HepMC3::ConstGenParticlePtr& O);  ///< Return grandchildren particles
+std::vector<HepMC3::GenVertexPtr>        grandchildren_vertices(const HepMC3::GenVertexPtr& O);   ///< Return grandchildren vertices
+std::vector<HepMC3::ConstGenVertexPtr>   grandchildren_vertices(const HepMC3::ConstGenVertexPtr& O); ///< Return grandchildren vertices
+std::vector<HepMC3::GenParticlePtr>      parent_particles(const HepMC3::GenVertexPtr& O);  ///< Return parent particles
+std::vector<HepMC3::ConstGenParticlePtr> parent_particles(const HepMC3::ConstGenVertexPtr& O);   ///< Return parent particles
+std::vector<HepMC3::GenVertexPtr>        parent_vertices(const HepMC3::GenParticlePtr& O);   ///< Return parent vertices
+std::vector<HepMC3::ConstGenVertexPtr>   parent_vertices(const HepMC3::ConstGenParticlePtr& O);    ///< Return parent vertices
+std::vector<HepMC3::GenParticlePtr>      grandparent_particles(const HepMC3::GenParticlePtr& O);    ///< Return grandparent particles
+std::vector<HepMC3::ConstGenParticlePtr> grandparent_particles(const HepMC3::ConstGenParticlePtr& O);     ///< Return grandparent particles
+std::vector<HepMC3::GenVertexPtr>        grandparent_vertices(const HepMC3::GenVertexPtr& O);      ///< Return grandparent vertices
+std::vector<HepMC3::ConstGenVertexPtr>   grandparent_vertices(const HepMC3::ConstGenVertexPtr& O);       ///< Return grandparent vertices
+std::vector<HepMC3::ConstGenParticlePtr> descendant_particles(const HepMC3::ConstGenVertexPtr& obj);       ///< Return descendant particles
+std::vector<HepMC3::GenParticlePtr>      descendant_particles(const HepMC3::GenVertexPtr& obj);       ///< Return descendant particles
+std::vector<HepMC3::ConstGenParticlePtr> descendant_particles(const HepMC3::ConstGenParticlePtr& obj);       ///< Return descendant particles
+std::vector<HepMC3::GenParticlePtr>      descendant_particles(const HepMC3::GenParticlePtr& obj);       ///< Return descendant particles
+std::vector<HepMC3::ConstGenVertexPtr>   descendant_vertices(const HepMC3::ConstGenParticlePtr& obj);       ///< Return descendant vertices
+std::vector<HepMC3::GenVertexPtr>        descendant_vertices(const HepMC3::GenParticlePtr& obj);       ///< Return descendant vertices
+std::vector<HepMC3::ConstGenVertexPtr>   descendant_vertices(const HepMC3::ConstGenVertexPtr& obj);       ///< Return descendant vertices
+std::vector<HepMC3::GenVertexPtr>        descendant_vertices(const HepMC3::GenVertexPtr& obj);       ///< Return descendant vertices
+std::vector<HepMC3::ConstGenParticlePtr> ancestor_particles(const HepMC3::ConstGenVertexPtr& obj);       ///< Return ancestor particles
+std::vector<HepMC3::GenParticlePtr>      ancestor_particles(const HepMC3::GenVertexPtr& obj);      ///< Return ancestor particles
+std::vector<HepMC3::ConstGenParticlePtr> ancestor_particles(const HepMC3::ConstGenParticlePtr& obj);      ///< Return ancestor particles
+std::vector<HepMC3::GenParticlePtr>      ancestor_particles(const HepMC3::GenParticlePtr& obj);      ///< Return ancestor particles
+std::vector<HepMC3::ConstGenVertexPtr>   ancestor_vertices(const HepMC3::ConstGenParticlePtr& obj);      ///< Return ancestor vertices
+std::vector<HepMC3::GenVertexPtr>        ancestor_vertices(const HepMC3::GenParticlePtr& obj);      ///< Return ancestor vertices
+std::vector<HepMC3::ConstGenVertexPtr>   ancestor_vertices(const HepMC3::ConstGenVertexPtr& obj);      ///< Return ancestor vertices
+std::vector<HepMC3::GenVertexPtr>        ancestor_vertices(const HepMC3::GenVertexPtr& obj);      ///< Return ancestor vertices
 }
 
 

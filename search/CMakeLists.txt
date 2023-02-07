@@ -10,7 +10,7 @@ ${PROJECT_SOURCE_DIR}/search/src/Selector.cc)
 add_library(HepMC3search SHARED ${hepmc3search_sources})
 target_link_libraries(HepMC3search  HepMC3)
 target_link_libraries(HepMC3search  HepMC3)
-set_target_properties(HepMC3search PROPERTIES OUTPUT_NAME HepMC3search   SOVERSION 4
+set_target_properties(HepMC3search PROPERTIES OUTPUT_NAME HepMC3search   SOVERSION 5
                                              ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                              LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                              RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
