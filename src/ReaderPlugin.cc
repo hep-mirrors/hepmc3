@@ -38,8 +38,8 @@ ReaderPlugin::ReaderPlugin(std::istream & stream, const std::string &libname, co
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_reader = nullptr; return;  }
-    Reader* (*newReader)(std::istream & stream);
-    newReader = (Reader* (*)(std::istream & stream))dlsym(dll_handle, newreader.c_str());
+    using f_funci = Reader *(*)(std::istream &);
+    auto newReader = (f_funci)dlsym(dll_handle, newreader.c_str());
     if (!newReader) { printf("Error  while loading function %s from  library %s: %s\n", newreader.c_str(), libname.c_str(), dlerror()); m_reader = nullptr; return;   }
     m_reader = (Reader*)(newReader(stream));
 #endif
@@ -58,8 +58,8 @@ ReaderPlugin::ReaderPlugin(const std::string& filename, const std::string &libna
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_reader = nullptr; return;  }
-    Reader* (*newReader)(const std::string&);
-    newReader = (Reader* (*)(const std::string&))dlsym(dll_handle, newreader.c_str());
+    using f_funci = Reader *(*)(const std::string&);
+    auto newReader = (f_funci)dlsym(dll_handle, newreader.c_str());
     if (!newReader) { printf("Error  while loading function %s from  library %s: %s\n", newreader.c_str(), libname.c_str(), dlerror()); m_reader = nullptr; return;   }
     m_reader = (Reader*)(newReader(filename));
 #endif

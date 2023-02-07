@@ -25,6 +25,6 @@ ConstSelectorPtr abs(const Selector &input)
     return input.abs();
 }
 
-AttributeFeature Selector::ATTRIBUTE(const std::string &name) {return AttributeFeature(name);}
+AttributeFeature Selector::ATTRIBUTE(const std::string &name) {return {name};}
 
 } // namespace HepMC3

@@ -40,8 +40,8 @@ WriterPlugin::WriterPlugin(std::ostream & stream, const std::string &libname, co
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_writer=nullptr; return;  }
-    Writer* (*newWriter)(std::ostream & stream, std::shared_ptr<GenRunInfo>);
-    newWriter = (Writer* (*)(std::ostream & stream, std::shared_ptr<GenRunInfo>))dlsym(dll_handle, newwriter.c_str());
+    using f_funci =  Writer* (*)(std::ostream & stream, std::shared_ptr<GenRunInfo>);
+    auto newWriter = (f_funci)dlsym(dll_handle, newwriter.c_str());
     if (!newWriter) { printf("Error  while loading function %s from  library %s: %s\n", newwriter.c_str(), libname.c_str(), dlerror()); m_writer = nullptr; return;   }
     m_writer = (Writer*)(newWriter(stream, run));
 #endif
@@ -60,8 +60,8 @@ WriterPlugin::WriterPlugin(const std::string& filename, const std::string &libna
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_writer = nullptr; return;  }
-    Writer* (*newWriter)(const std::string&, std::shared_ptr<GenRunInfo>);
-    newWriter = (Writer* (*)(const std::string&, std::shared_ptr<GenRunInfo>))dlsym(dll_handle, newwriter.c_str());
+    using  f_funci =  Writer* (*)(const std::string&, shared_ptr<GenRunInfo>);
+    auto newWriter = (f_funci)dlsym(dll_handle, newwriter.c_str());
     if (!newWriter) { printf("Error  while loading function %s from  library %s: %s\n", newwriter.c_str(), libname.c_str(), dlerror()); m_writer = nullptr; return;   }
     m_writer = (Writer*)(newWriter(filename, run));
 #endif
