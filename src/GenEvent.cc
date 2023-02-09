@@ -175,16 +175,9 @@ void GenEvent::remove_particle(GenParticlePtr p) {
     p->m_event = nullptr;
     p->m_id    = 0;
 }
-/** @brief Comparison of two particle by id */
-struct sort_by_id_asc {
-    /** @brief Comparison of two particle by id */
-    inline bool operator()(const GenParticlePtr& p1, const GenParticlePtr& p2) {
-        return (p1->id() > p2->id());
-    }
-};
 
 void GenEvent::remove_particles(std::vector<GenParticlePtr> v) {
-    std::sort(v.begin(), v.end(), sort_by_id_asc());
+    std::sort(v.begin(), v.end(), [](const GenParticlePtr& p1, const GenParticlePtr& p2){ return p1->id() > p2->id();});
 
     for (auto p = v.begin(); p != v.end(); ++p) {
         remove_particle(*p);
@@ -259,7 +252,7 @@ static bool visit_children(std::map<ConstGenVertexPtr, int>  &a, ConstGenVertexP
         if (p->end_vertex())
         {
             if (a[p->end_vertex()] != 0) { return true; }
-            else {a[p->end_vertex()]++;}
+            a[p->end_vertex()]++;
             if (visit_children(a, p->end_vertex())) return true;
         }
     }

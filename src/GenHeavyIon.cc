@@ -33,8 +33,8 @@ bool GenHeavyIon::from_string(const std::string &att) {
            >> event_plane_angle >> eccentricity >> sigma_inel_NN
            >> centrality;
         return !is.fail();
-    } else
-    { is >> version;}
+    }
+    is >> version;
 
 
 
