@@ -809,7 +809,7 @@ void GenEvent::add_attribute(const std::string &name, const std::shared_ptr<Attr
     if (name.length() == 0) return;
     if (!att)  return;
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    if (m_attributes.find(name) == m_attributes.end()) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+    if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
     m_attributes[name][id] = att;
     att->m_event = this;
     if ( id > 0 && id <= int(particles().size()) ) {
@@ -832,7 +832,7 @@ void GenEvent::add_attributes(const std::vector<std::string> &names, const std::
     ip = std::unique(unames.begin(), unames.end());
     unames.resize(std::distance(unames.begin(), ip));
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    for (auto name: unames) {
+    for (const auto& name: unames) {
         if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
     }
     const int particles_size = int(m_particles.size());
@@ -860,7 +860,7 @@ void GenEvent::add_attributes(const std::string& name, const std::vector<std::sh
     if ( N != atts.size()) return;
 
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    if (m_attributes.find(name) == m_attributes.end()) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+    if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
     auto& tmap = m_attributes[name];
     const int particles_size = int(m_particles.size());
     const int vertices_size = int(m_vertices.size());
@@ -882,7 +882,7 @@ void GenEvent::add_attributes(const std::string& name, const std::vector<std::pa
     if (name.length() == 0) return;
     if (atts.empty()) return;
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    if (m_attributes.find(name) == m_attributes.end()) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+    if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
     auto& tmap = m_attributes[name];
     const int particles_size = int(m_particles.size());
     const int vertices_size = int(m_vertices.size());
