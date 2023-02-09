@@ -313,10 +313,8 @@ void WriterAscii::write_run_info() {
         m_cursor += sprintf(m_cursor, "\n");
     }
 
-    for (int i = 0, N = run_info()->tools().size(); i < N; ++i) {
-        std::string out = "T " + run_info()->tools()[i].name + "\n"
-                          + run_info()->tools()[i].version + "\n"
-                          + run_info()->tools()[i].description;
+    for (const auto& tool: run_info()->tools()) {
+        std::string out = "T " + tool.name + "\n" + tool.version + "\n" + tool.description;
         write_string(escape(out));
         m_cursor += sprintf(m_cursor, "\n");
     }

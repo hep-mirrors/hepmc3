@@ -90,7 +90,7 @@ bool ReaderHEPEVT::read_hepevt_event_header()
         {
             if (!(st_e >> attr)) break;
             if (attr == ' ') { continue; }
-            else { eventline = false; }
+            eventline = false;
             if (attr == 'E')
             {
                 eventline = static_cast<bool>(st_e >> m_i >> m_p);
