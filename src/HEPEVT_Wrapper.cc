@@ -83,7 +83,7 @@ void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexP
         if (v2 == v) continue; //LOOP! THIS SHOULD NEVER HAPPEN FOR A PROPER EVENT!
         if (!v2) { p = std::max(p, 1); }
         else
-        {if (pathl.find(v2) == pathl.end())  calculate_longest_path_to_top(v2, pathl); p = std::max(p, pathl[v2]+1);}
+        {if (pathl.count(v2) == 0)  calculate_longest_path_to_top(v2, pathl); p = std::max(p, pathl[v2]+1);}
     }
     pathl[v] = p;
 }

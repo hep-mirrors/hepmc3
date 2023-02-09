@@ -92,6 +92,6 @@ bool WriterHEPEVT::failed()
 
 void WriterHEPEVT::set_vertices_positions_present(bool iflong) { if (iflong) m_options["vertices_positions_are_absent"] = ""; else m_options.erase("vertices_positions_are_absent"); }
 
-bool WriterHEPEVT::get_vertices_positions_present() const { return  (m_options.find("vertices_positions_are_absent") == m_options.end()); }
+bool WriterHEPEVT::get_vertices_positions_present() const { return  (m_options.count("vertices_positions_are_absent") == 0); }
 
 } // namespace HepMC3

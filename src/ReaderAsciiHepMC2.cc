@@ -258,7 +258,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     // Add whole event tree in topological order
     evt.add_tree(m_particle_cache);
 
-    if (m_options.find("event_random_states_are_separated") != m_options.end())
+    if (m_options.count("event_random_states_are_separated") != 0)
     {
         std::shared_ptr<VectorLongIntAttribute> random_states_a = evt.attribute<VectorLongIntAttribute>("random_states");
         if (random_states_a) {
@@ -272,9 +272,9 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     }
 
     std::map< std::string, std::map<int, std::shared_ptr<Attribute> > > cached_attributes = m_event_ghost->attributes();
-    if (cached_attributes.find("flows") != cached_attributes.end()) {
+    if (cached_attributes.count("flows") != 0) {
         std::map<int, std::shared_ptr<Attribute> > flows = cached_attributes.at("flows");
-        if (m_options.find("particle_flows_are_separated") == m_options.end()) {
+        if (m_options.count("particle_flows_are_separated") == 0) {
             for (auto f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {  m_particle_cache[f.first-1]->add_attribute("flows", f.second);}
         } else  {
             for (auto f: flows) {
@@ -288,19 +288,19 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         }
     }
 
-    if (cached_attributes.find("phi") != cached_attributes.end()) {
+    if (cached_attributes.count("phi") != 0) {
         std::map<int, std::shared_ptr<Attribute> > phi = cached_attributes.at("phi");
         for (auto f: phi) if (f.first > 0 &&f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("phi", f.second);
     }
 
-    if (cached_attributes.find("theta") != cached_attributes.end()) {
+    if (cached_attributes.count("theta") != 0) {
         std::map<int, std::shared_ptr<Attribute> > theta = cached_attributes.at("theta");
         for (auto f: theta) if (f.first > 0 && f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("theta", f.second);
     }
 
-    if (cached_attributes.find("weights") != cached_attributes.end()) {
+    if (cached_attributes.count("weights") != 0) {
         std::map<int, std::shared_ptr<Attribute> > weights = cached_attributes.at("weights");
-        if (m_options.find("vertex_weights_are_separated") == m_options.end()) {
+        if (m_options.count("vertex_weights_are_separated") == 0) {
             for (auto f: weights) { if (f.first < 0 && f.first >= -(int)m_vertex_cache.size())  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);}
         } else {
             for (auto f: weights) {
