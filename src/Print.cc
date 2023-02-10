@@ -27,21 +27,21 @@ void Print::content(std::ostream& os, const GenEvent &event) {
 
     os << "Attributes:" << std::endl;
 
-    for (auto vt1: event.attributes()) {
-        for (auto vt2: vt1.second) {
+    for (const auto& vt1: event.attributes()) {
+        for (const auto& vt2: vt1.second) {
             os << vt2.first << ": " << vt1.first << std::endl;
         }
     }
 
     os << "GenParticlePtr (" << event.particles().size() << ")" << std::endl;
 
-    for (ConstGenParticlePtr p: event.particles()) {
+    for (const ConstGenParticlePtr& p: event.particles()) {
         Print::line(os, p, true);
         os << std::endl;
     }
 
     os << "GenVertexPtr (" << event.vertices().size() << ")" << std::endl;
-    for ( ConstGenVertexPtr v: event.vertices() ) {
+    for ( const ConstGenVertexPtr& v: event.vertices() ) {
         Print::line(os, v, true);
         os << std::endl;
     }
@@ -76,7 +76,7 @@ void Print::listing(std::ostream& os, const GenEvent &event, unsigned short prec
     os << "________________________________________________________________________" << std::endl;
 
     // Print all vertices
-    for (ConstGenVertexPtr v: event.vertices()) {
+    for (const ConstGenVertexPtr& v: event.vertices()) {
         Print::listing(os, v);
     }
 
@@ -99,16 +99,16 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
 
     std::vector<std::string> names = ri.weight_names();
     os << " Names: ( ";
-    for (auto n: names) os << n;
+    for (const auto& n: names) os << n;
     os << " )" << std::endl;
 
     os << " Tools: " << std::endl;
 
-    for (auto t: ri.tools()) {
+    for (const auto& t: ri.tools()) {
         Print::line(os, t);
     }
     os << "Attributes:" << std::endl;
-    for (auto att: ri.attributes()) {
+    for (const auto& att: ri.attributes()) {
         std::string st;
         if ( !att.second->to_string(st) ) {
             HEPMC3_WARNING("Print::listing: problem serializing attribute: " << att.first)
@@ -142,7 +142,7 @@ void Print::listing(std::ostream& os, ConstGenVertexPtr v) {
     bool printed_header = false;
 
     // Print out all the incoming particles
-    for (ConstGenParticlePtr p: v->particles_in()) {
+    for (const ConstGenParticlePtr& p: v->particles_in()) {
         if ( !printed_header ) {
             os << " I: ";
             printed_header = true;
@@ -155,7 +155,7 @@ void Print::listing(std::ostream& os, ConstGenVertexPtr v) {
     printed_header = false;
 
     // Print out all the outgoing particles
-    for (ConstGenParticlePtr p: v->particles_out()) {
+    for (const ConstGenParticlePtr& p: v->particles_out()) {
         if ( !printed_header ) {
             os << " O: ";
             printed_header = true;
@@ -204,7 +204,7 @@ void Print::listing(std::ostream& os, ConstGenParticlePtr p) {
 void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
     os << "GenEvent: #" << event.event_number();
     if (attributes) {
-        for (std::string s: event.attribute_names()) {
+        for (const std::string& s: event.attribute_names()) {
             os << " " << s << "=" <<event.attribute_as_string(s);
         }
     }
@@ -213,7 +213,7 @@ void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
 void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {
     os <<"GenRunInfo: Number of tools:" << RunInfo.tools().size();
     if (attributes) {
-        for (std::string s: RunInfo.attribute_names()) {
+        for (const std::string& s: RunInfo.attribute_names()) {
             os << " " << s << "=" << RunInfo.attribute_as_string(s);
         }
     }
@@ -241,7 +241,7 @@ void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
     if (attributes)
     {
         std::vector<std::string> names     = v->attribute_names();
-        for (auto ss: names) {
+        for (const auto& ss: names) {
             os << " " << ss << "=" << (*v).attribute_as_string(ss);
         }
     }
@@ -295,8 +295,8 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
     os.flags(orig);
     os.precision(prec);
 
-    ConstGenVertexPtr prod = p->production_vertex();
-    ConstGenVertexPtr end  = p->end_vertex();
+    const ConstGenVertexPtr prod = p->production_vertex();
+    const ConstGenVertexPtr end  = p->end_vertex();
     int prod_vtx_id   = (prod) ? prod->id() : 0;
     int end_vtx_id    = (end)  ? end->id()  : 0;
 
@@ -308,7 +308,7 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
     if (attributes)
     {
         std::vector<std::string> names     = p->attribute_names();
-        for (auto ss: names) {
+        for (const auto& ss: names) {
             os << " " << ss << "=" << (*p).attribute_as_string(ss);
         }
     }

@@ -257,10 +257,13 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
     /* restore ids of vertices using a bank of available ids*/
     std::vector<int> all_ids;
+    all_ids.reserve(evt.vertices().size());
     std::vector<int> filled_ids;
+    filled_ids.reserve(evt.vertices().size());
     std::vector<int> diff;
-    for (auto v: evt.vertices()) if (v->id() != 0) filled_ids.push_back(v->id());
-    for (int i = -((long)evt.vertices().size()); i < 0; i++) all_ids.push_back(i);
+    diff.reserve(evt.vertices().size());
+    for (const auto& v: evt.vertices()) if (v->id() != 0) filled_ids.emplace_back(v->id());
+    for (int i = -((long)evt.vertices().size()); i < 0; i++) all_ids.emplace_back(i);
     std::sort(all_ids.begin(), all_ids.end());
     std::sort(filled_ids.begin(), filled_ids.end());
     //The bank of available ids is created as a difference between all range of ids and the set of used ids
@@ -323,7 +326,7 @@ bool ReaderAscii::parse_weight_values(GenEvent &evt, const char *buf) {
     std::istringstream iss(buf + 1);
     std::vector<double> wts;
     double w = 0.0;
-    while (iss >> w) wts.push_back(w);
+    while (iss >> w) wts.emplace_back(w);
     if ( run_info() && !run_info()->weight_names().empty()
             && run_info()->weight_names().size() != wts.size() ) {
         throw std::logic_error("ReaderAscii::parse_weight_values: "
@@ -573,7 +576,7 @@ bool ReaderAscii::parse_weight_names(const char *buf) {
     std::istringstream iss(unescape(cursor));
     std::vector<std::string> names;
     std::string name;
-    while (iss >> name) names.push_back(name);
+    while (iss >> name) names.emplace_back(name);
 
     run_info()->set_weight_names(names);
 
@@ -593,7 +596,7 @@ bool ReaderAscii::parse_tool(const char *buf) {
     pos = line.find('\n');
     tool.version = line.substr(0, pos);
     tool.description = line.substr(pos + 1);
-    run_info()->tools().push_back(tool);
+    run_info()->tools().emplace_back(tool);
 
     return true;
 }

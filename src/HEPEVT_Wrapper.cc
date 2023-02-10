@@ -39,33 +39,37 @@ bool pair_GenVertexPtr_int_greater::operator()(const std::pair<ConstGenVertexPtr
     if (lx.first->particles_out().size() != rx.first->particles_out().size()) return (lx.first->particles_out().size() < rx.first->particles_out().size());
     /* The code below is usefull mainly for debug. Assures strong ordering.*/
     std::vector<int> lx_id_in;
+    lx_id_in.reserve(lx.first->particles_in().size());
     std::vector<int> rx_id_in;
-    for (ConstGenParticlePtr pp: lx.first->particles_in()) lx_id_in.push_back(pp->pid());
-    for (ConstGenParticlePtr pp: rx.first->particles_in()) rx_id_in.push_back(pp->pid());
+    rx_id_in.reserve(rx.first->particles_in().size());
+    for (const ConstGenParticlePtr& pp: lx.first->particles_in()) lx_id_in.emplace_back(pp->pid());
+    for (const ConstGenParticlePtr& pp: rx.first->particles_in()) rx_id_in.emplace_back(pp->pid());
     std::sort(lx_id_in.begin(), lx_id_in.end());
     std::sort(rx_id_in.begin(), rx_id_in.end());
     for (unsigned int i = 0; i < lx_id_in.size(); i++) if (lx_id_in[i] != rx_id_in[i]) return  (lx_id_in[i] < rx_id_in[i]);
 
     std::vector<int> lx_id_out;
+    lx_id_out.reserve(lx.first->particles_out().size());
     std::vector<int> rx_id_out;
-    for (ConstGenParticlePtr pp: lx.first->particles_in()) lx_id_out.push_back(pp->pid());
-    for (ConstGenParticlePtr pp: rx.first->particles_in()) rx_id_out.push_back(pp->pid());
+    rx_id_out.reserve(rx.first->particles_out().size());
+    for (const ConstGenParticlePtr& pp: lx.first->particles_in()) lx_id_out.emplace_back(pp->pid());
+    for (const ConstGenParticlePtr& pp: rx.first->particles_in()) rx_id_out.emplace_back(pp->pid());
     std::sort(lx_id_out.begin(), lx_id_out.end());
     std::sort(rx_id_out.begin(), rx_id_out.end());
     for (unsigned int i = 0; i < lx_id_out.size(); i++) if (lx_id_out[i] != rx_id_out[i]) return  (lx_id_out[i] < rx_id_out[i]);
 
     std::vector<double> lx_mom_in;
     std::vector<double> rx_mom_in;
-    for (ConstGenParticlePtr pp: lx.first->particles_in()) lx_mom_in.push_back(pp->momentum().e());
-    for (ConstGenParticlePtr pp: rx.first->particles_in()) rx_mom_in.push_back(pp->momentum().e());
+    for (const ConstGenParticlePtr& pp: lx.first->particles_in()) lx_mom_in.emplace_back(pp->momentum().e());
+    for (const ConstGenParticlePtr& pp: rx.first->particles_in()) rx_mom_in.emplace_back(pp->momentum().e());
     std::sort(lx_mom_in.begin(), lx_mom_in.end());
     std::sort(rx_mom_in.begin(), rx_mom_in.end());
     for (unsigned int i = 0; i < lx_mom_in.size(); i++) if (lx_mom_in[i] != rx_mom_in[i]) return  (lx_mom_in[i] < rx_mom_in[i]);
 
     std::vector<double> lx_mom_out;
     std::vector<double> rx_mom_out;
-    for (ConstGenParticlePtr pp: lx.first->particles_in()) lx_mom_out.push_back(pp->momentum().e());
-    for (ConstGenParticlePtr pp: rx.first->particles_in()) rx_mom_out.push_back(pp->momentum().e());
+    for (const ConstGenParticlePtr& pp: lx.first->particles_in()) lx_mom_out.emplace_back(pp->momentum().e());
+    for (const ConstGenParticlePtr& pp: rx.first->particles_in()) rx_mom_out.emplace_back(pp->momentum().e());
     std::sort(lx_mom_out.begin(), lx_mom_out.end());
     std::sort(rx_mom_out.begin(), rx_mom_out.end());
     for (unsigned int i = 0; i < lx_mom_out.size(); i++) if (lx_mom_out[i] != rx_mom_out[i]) return  (lx_mom_out[i] < rx_mom_out[i]);
@@ -78,7 +82,7 @@ bool pair_GenVertexPtr_int_greater::operator()(const std::pair<ConstGenVertexPtr
 void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexPtr, int>& pathl)
 {
     int p = 0;
-    for (ConstGenParticlePtr pp: v->particles_in()) {
+    for (const ConstGenParticlePtr& pp: v->particles_in()) {
         ConstGenVertexPtr v2 = pp->production_vertex();
         if (v2 == v) continue; //LOOP! THIS SHOULD NEVER HAPPEN FOR A PROPER EVENT!
         if (!v2) { p = std::max(p, 1); }

@@ -39,7 +39,7 @@ void GenVertex::add_particle_in(GenParticlePtr p) {
     // Avoid duplicates
     if (std::find(particles_in().begin(), particles_in().end(), p) != particles_in().end()) return;
 
-    m_particles_in.push_back(p);
+    m_particles_in.emplace_back(p);
 
     if ( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
 
@@ -55,7 +55,7 @@ void GenVertex::add_particle_out(GenParticlePtr p) {
     // Avoid duplicates
     if (std::find(particles_out().begin(), particles_out().end(), p) != particles_out().end()) return;
 
-    m_particles_out.push_back(p);
+    m_particles_out.emplace_back(p);
 
     if ( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
 
