@@ -177,7 +177,7 @@ void GenEvent::remove_particle(GenParticlePtr p) {
 }
 
 void GenEvent::remove_particles(std::vector<GenParticlePtr> v) {
-    std::sort(v.begin(), v.end(), [](const GenParticlePtr& p1, const GenParticlePtr& p2){ return p1->id() > p2->id();});
+    std::sort(v.begin(), v.end(), [](const GenParticlePtr& p1, const GenParticlePtr& p2) { return p1->id() > p2->id();});
 
     for (auto p = v.begin(); p != v.end(); ++p) {
         remove_particle(*p);

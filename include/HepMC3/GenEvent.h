@@ -434,10 +434,10 @@ std::shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) 
 
         if ( id > 0 && id <= int(particles().size()) ) {
             att->m_particle = m_particles[id - 1];
-        }    
+        }
         if ( id < 0 && -id <= int(vertices().size()) ) {
             att->m_vertex = m_vertices[-id - 1];
-         }   
+        }
         if ( att->from_string(i2->second->unparsed_string()) &&
                 att->init() ) {
             // update map with new pointer

@@ -1,4 +1,6 @@
   --------------------------  HepMC3.2.6-pre ----------------------
+2023-02-10 Andrii Verbytskyi for HepMC
+         * The Attributes are now set to be parsed after calls to from_string or set_value
 2023-02-07 Andrii Verbytskyi for HepMC
          * API breaking changes in the search module: pass by const reference 
 2023-01-24 Andrii Verbytskyi for HepMC
