@@ -463,6 +463,7 @@ if (ASTYLE)
     include/HepMC3/*HEPEVT*h
     include/HepMC3/Gen*h
     include/HepMC3/Com*h
+    include/HepMC3/Att*h
     examples/*/src/*cc
     examples/*/include/*h
     test/*cc
