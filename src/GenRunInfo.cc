@@ -61,23 +61,23 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
         std::string att;
         vt.second->to_string(att);
 
-        data.attribute_name.  push_back(vt.first);
-        data.attribute_string.push_back(att);
+        data.attribute_name.  emplace_back(vt.first);
+        data.attribute_string.emplace_back(att);
     }
 
     // Tools
     for ( const ToolInfo &tool: this->tools() ) {
-        data.tool_name.       push_back(tool.name);
-        data.tool_version.    push_back(tool.version);
-        data.tool_description.push_back(tool.description);
+        data.tool_name.       emplace_back(tool.name);
+        data.tool_version.    emplace_back(tool.version);
+        data.tool_description.emplace_back(tool.description);
     }
 }
 
 
 std::vector<std::string> GenRunInfo::attribute_names() const {
     std::vector<std::string> results;
-    for (auto vt1: m_attributes) {
-        results.push_back(vt1.first);
+    for (const auto& vt1: m_attributes) {
+        results.emplace_back(vt1.first);
     }
     return results;
 }
@@ -99,7 +99,7 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
         ti.version     = data.tool_version[i];
         ti.description = data.tool_description[i];
 
-        this->tools().push_back(ti);
+        this->tools().emplace_back(ti);
     }
 }
 

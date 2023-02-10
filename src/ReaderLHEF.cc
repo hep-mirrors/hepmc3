@@ -96,14 +96,16 @@ void ReaderLHEF::init()
     // the GenRunInfo object.
 
     std::vector<std::string> weightnames;
-    for ( int i = 0, N = m_hepr->heprup.weightinfo.size(); i < N; ++i ) weightnames.push_back(m_hepr->heprup.weightNameHepMC(i));
+    size_t N = m_hepr->heprup.weightinfo.size();
+    weightnames.reserve(N);
+    for ( size_t i = 0; i < N; ++i ) weightnames.emplace_back(m_hepr->heprup.weightNameHepMC(i));
     if (nweights == 0) {
         HEPMC3_WARNING("ReaderLHEF::init: no weights in the LHEF file.")
         nweights=1;
     }
     if (weightnames.empty()) {
         HEPMC3_WARNING("ReaderLHEF::init: empty weightinfo in the LHEF file.")
-        for ( size_t i = weightnames.size(); i < nweights; ++i ) weightnames.push_back(std::to_string(i));
+        for ( size_t i = weightnames.size(); i < nweights; ++i ) weightnames.emplace_back(std::to_string(i));
     }
     run_info()->set_weight_names(weightnames);
 
@@ -115,7 +117,7 @@ void ReaderLHEF::init()
         tool.name =  m_hepr->heprup.generators[i].name;
         tool.version =  m_hepr->heprup.generators[i].version;
         tool.description =  m_hepr->heprup.generators[i].contents;
-        run_info()->tools().push_back(tool);
+        run_info()->tools().emplace_back(tool);
     }
 }
 /// @brief Destructor
@@ -144,7 +146,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
     hepe->hepeup = m_reader->hepeup;
     std::vector<LHEF::HEPEUP*> input;
     if (!m_reader->hepeup.subevents.empty()) { input.insert(input.end(), hepe->hepeup.subevents.begin(), hepe->hepeup.subevents.end()); }
-    else { input.push_back(&m_reader->hepeup);}
+    else { input.emplace_back(&m_reader->hepeup);}
     int first_group_event = m_neve;
     m_neve++;
     for (auto* ahepeup: input)
@@ -157,11 +159,12 @@ bool ReaderLHEF::read_event(GenEvent& ev)
         evt.add_attribute("IDPRUP", std::make_shared<LongAttribute>(ahepeup->IDPRUP));
         // Now add the Particles from the LHE event to HepMC
         std::vector<GenParticlePtr> particles;
+        particles.reserve(ahepeup->NUP);
         std::map< std::pair<int, int>, GenVertexPtr> vertices;
         for ( int i = 0; i < ahepeup->NUP; ++i )
         {
             FourVector mom((ahepeup->PUP)[i][0], (ahepeup->PUP)[i][1], (ahepeup->PUP)[i][2], (ahepeup->PUP)[i][3]);
-            particles.push_back(std::make_shared<GenParticle>(mom, ahepeup->IDUP[i], ahepeup->ISTUP[i]));
+            particles.emplace_back(std::make_shared<GenParticle>(mom, ahepeup->IDUP[i], ahepeup->ISTUP[i]));
             if ( i < 2 ) continue;
             std::pair<int, int> vertex_index(ahepeup->MOTHUP[i].first, ahepeup->MOTHUP[i].second);
             if (vertices.count(vertex_index) == 0) vertices[vertex_index] = std::make_shared<GenVertex>();
@@ -201,9 +204,11 @@ bool ReaderLHEF::read_event(GenEvent& ev)
 
 
         std::vector<double> wts;
-        for ( int i = 0, N = ahepeup->weights.size(); i < N; ++i )
+        size_t N = ahepeup->weights.size();
+        wts.reserve(N);
+        for ( size_t i = 0; i < N; ++i )
         {
-            wts.push_back(ahepeup->weights[i].first);
+            wts.emplace_back(ahepeup->weights[i].first);
         }
         evt.weights() = wts;
         /// Cross-section
@@ -231,7 +236,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
         pi->pdf_id[0] = m_hepr->heprup.PDFSUP.first;
         pi->pdf_id[1] = m_hepr->heprup.PDFSUP.second;
         evt.add_attribute("GenPdfInfo", pi);
-        m_storage.push_back(evt);
+        m_storage.emplace_back(evt);
     }
     ev = m_storage.front();
     m_storage.pop_front();

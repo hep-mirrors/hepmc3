@@ -716,7 +716,7 @@ public:
         char  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -724,7 +724,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -764,7 +764,7 @@ public:
         float  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -772,7 +772,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -812,7 +812,7 @@ public:
         long double  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -820,7 +820,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -861,7 +861,7 @@ public:
         long long  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -869,7 +869,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -908,7 +908,7 @@ public:
         unsigned int  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -916,7 +916,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -955,7 +955,7 @@ public:
         unsigned long  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -963,7 +963,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -1003,7 +1003,7 @@ public:
         unsigned long long  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -1011,7 +1011,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -1050,7 +1050,7 @@ public:
         int  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -1058,7 +1058,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -1098,7 +1098,7 @@ public:
         long int  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -1106,7 +1106,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -1145,7 +1145,7 @@ public:
         double  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
         set_is_parsed(true);
         return true;
     }
@@ -1153,7 +1153,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -1203,7 +1203,7 @@ public:
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=a;}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=a;}
         return true;
     }
 

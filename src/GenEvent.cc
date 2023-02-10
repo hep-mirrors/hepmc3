@@ -48,7 +48,7 @@ const std::vector<ConstGenVertexPtr>& GenEvent::vertices() const {
 void GenEvent::add_particle(GenParticlePtr p) {
     if ( !p || p->in_event() ) return;
 
-    m_particles.push_back(p);
+    m_particles.emplace_back(p);
 
     p->m_event = this;
     p->m_id = particles().size();
@@ -96,7 +96,7 @@ GenEvent& GenEvent::operator=(const GenEvent& e) {
 
 void GenEvent::add_vertex(GenVertexPtr v) {
     if ( !v|| v->in_event() ) return;
-    m_vertices.push_back(v);
+    m_vertices.emplace_back(v);
 
     v->m_event = this;
     v->m_id = -(int)vertices().size();
@@ -272,7 +272,7 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
             if (v) sortingv[v]=0;
             if ( !v || v->particles_in().empty()) {
                 GenVertexPtr v2 = p->end_vertex();
-                if (v2) {noinv.push_back(v2); sortingv[v2] = 0;}
+                if (v2) {noinv.emplace_back(v2); sortingv[v2] = 0;}
             }
         }
         for (GenVertexPtr v: noinv) {
@@ -295,7 +295,7 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
         const GenVertexPtr &v = p->production_vertex();
         if ( !v || v->particles_in().empty() ) {
             const GenVertexPtr &v2 = p->end_vertex();
-            if (v2) sorting.push_back(v2);
+            if (v2) sorting.emplace_back(v2);
         }
     }
 
@@ -336,7 +336,7 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
             for (auto p: v->particles_out()) {
                 GenVertexPtr v2 = p->end_vertex();
                 if ( v2 && !v2->in_event()&& find(sorting.begin(), sorting.end(), v2) == sorting.end() ) {
-                    sorting.push_back(v2);
+                    sorting.emplace_back(v2);
                 }
             }
         }
@@ -414,7 +414,7 @@ const FourVector& GenEvent::event_pos() const {
 std::vector<ConstGenParticlePtr> GenEvent::beams(const int status) const {
     if (!status) return std::const_pointer_cast<const GenVertex>(m_rootvertex)->particles_out();
     std::vector<ConstGenParticlePtr> ret;
-    for (auto p: m_rootvertex->particles_out()) if (p->status() == status) ret.push_back(p);
+    for (auto p: m_rootvertex->particles_out()) if (p->status() == status) ret.emplace_back(p);
     return ret;
 }
 
@@ -440,9 +440,9 @@ void GenEvent::shift_position_by(const FourVector & delta) {
 
 bool GenEvent::rotate(const FourVector&  delta)
 {
-    for ( auto p: m_particles)
+    for ( auto& p: m_particles)
     {
-        FourVector mom = p->momentum();
+        const FourVector& mom = p->momentum();
         long double tempX = mom.x();
         long double tempY = mom.y();
         long double tempZ = mom.z();
@@ -475,9 +475,9 @@ bool GenEvent::rotate(const FourVector&  delta)
         FourVector temp(tempX, tempY, tempZ, mom.e());
         p->set_momentum(temp);
     }
-    for (auto v: m_vertices)
+    for (auto& v: m_vertices)
     {
-        FourVector pos = v->position();
+        const FourVector& pos = v->position();
         long double tempX = pos.x();
         long double tempY = pos.y();
         long double tempZ = pos.z();
@@ -525,20 +525,20 @@ bool GenEvent::reflect(const int axis)
     switch (axis)
     {
     case 0:
-        for ( auto p: m_particles) { FourVector temp = p->momentum(); temp.setX(-p->momentum().x()); p->set_momentum(temp);}
-        for ( auto v: m_vertices)  { FourVector temp = v->position(); temp.setX(-v->position().x()); v->set_position(temp);}
+        for ( auto& p: m_particles) { FourVector temp = p->momentum(); temp.setX(-p->momentum().x()); p->set_momentum(temp);}
+        for ( auto& v: m_vertices)  { FourVector temp = v->position(); temp.setX(-v->position().x()); v->set_position(temp);}
         break;
     case 1:
-        for ( auto p: m_particles) { FourVector temp = p->momentum(); temp.setY(-p->momentum().y()); p->set_momentum(temp);}
-        for ( auto v: m_vertices)  { FourVector temp = v->position(); temp.setY(-v->position().y()); v->set_position(temp);}
+        for ( auto& p: m_particles) { FourVector temp = p->momentum(); temp.setY(-p->momentum().y()); p->set_momentum(temp);}
+        for ( auto& v: m_vertices)  { FourVector temp = v->position(); temp.setY(-v->position().y()); v->set_position(temp);}
         break;
     case 2:
-        for ( auto p: m_particles) { FourVector temp = p->momentum(); temp.setZ(-p->momentum().z()); p->set_momentum(temp);}
-        for ( auto v: m_vertices)  { FourVector temp = v->position(); temp.setZ(-v->position().z()); v->set_position(temp);}
+        for ( auto& p: m_particles) { FourVector temp = p->momentum(); temp.setZ(-p->momentum().z()); p->set_momentum(temp);}
+        for ( auto& v: m_vertices)  { FourVector temp = v->position(); temp.setZ(-v->position().z()); v->set_position(temp);}
         break;
     case 3:
-        for ( auto p: m_particles) { FourVector temp = p->momentum(); temp.setT(-p->momentum().e()); p->set_momentum(temp);}
-        for ( auto v: m_vertices)  { FourVector temp = v->position(); temp.setT(-v->position().t()); v->set_position(temp);}
+        for ( auto& p: m_particles) { FourVector temp = p->momentum(); temp.setT(-p->momentum().e()); p->set_momentum(temp);}
+        for ( auto& v: m_vertices)  { FourVector temp = v->position(); temp.setT(-v->position().t()); v->set_position(temp);}
         break;
     default:
         return false;
@@ -572,9 +572,9 @@ bool GenEvent::boost(const FourVector&  delta)
     long double deltalength = std::sqrt(deltalength2);
     long double gamma = 1.0/std::sqrt(1.0-deltalength2);
 
-    for ( auto p: m_particles)
+    for ( auto& p: m_particles)
     {
-        FourVector mom = p->momentum();
+        const FourVector& mom = p->momentum();
 
         long double tempX = mom.x();
         long double tempY = mom.y();
@@ -619,7 +619,7 @@ std::vector<std::string> GenEvent::attribute_names(const int& id) const {
 
     for (const att_key_t& vt1: m_attributes) {
         if ( vt1.second.count(id) == 1 ) {
-            results.push_back(vt1.first);
+            results.emplace_back(vt1.first);
         }
     }
 
@@ -645,22 +645,22 @@ void GenEvent::write_data(GenEventData& data) const {
     // Fill containers
     data.weights = this->weights();
 
-    for (ConstGenParticlePtr p: this->particles()) {
-        data.particles.push_back(p->data());
+    for (const ConstGenParticlePtr& p: this->particles()) {
+        data.particles.emplace_back(p->data());
     }
 
-    for (ConstGenVertexPtr v: this->vertices()) {
-        data.vertices.push_back(v->data());
+    for (const ConstGenVertexPtr& v: this->vertices()) {
+        data.vertices.emplace_back(v->data());
         int v_id = v->id();
 
-        for (ConstGenParticlePtr p: v->particles_in()) {
-            data.links1.push_back(p->id());
-            data.links2.push_back(v_id);
+        for (const ConstGenParticlePtr& p: v->particles_in()) {
+            data.links1.emplace_back(p->id());
+            data.links2.emplace_back(v_id);
         }
 
-        for (ConstGenParticlePtr p: v->particles_out()) {
-            data.links1.push_back(v_id);
-            data.links2.push_back(p->id());
+        for (const ConstGenParticlePtr& p: v->particles_out()) {
+            data.links1.emplace_back(v_id);
+            data.links2.emplace_back(p->id());
         }
     }
 
@@ -674,9 +674,9 @@ void GenEvent::write_data(GenEventData& data) const {
                 HEPMC3_WARNING("GenEvent::write_data: problem serializing attribute: " << vt1.first)
             }
             else {
-                data.attribute_id.push_back(vt2.first);
-                data.attribute_name.push_back(vt1.first);
-                data.attribute_string.push_back(st);
+                data.attribute_id.emplace_back(vt2.first);
+                data.attribute_name.emplace_back(vt1.first);
+                data.attribute_string.emplace_back(st);
             }
         }
     }
@@ -698,7 +698,7 @@ void GenEvent::read_data(const GenEventData &data) {
     for ( const GenParticleData &pd: data.particles ) {
         GenParticlePtr p = std::make_shared<GenParticle>(pd);
 
-        m_particles.push_back(p);
+        m_particles.emplace_back(p);
 
         p->m_event = this;
         p->m_id    = m_particles.size();
@@ -708,7 +708,7 @@ void GenEvent::read_data(const GenEventData &data) {
     for ( const GenVertexData &vd: data.vertices ) {
         GenVertexPtr v = std::make_shared<GenVertex>(vd);
 
-        m_vertices.push_back(v);
+        m_vertices.emplace_back(v);
 
         v->m_event = this;
         v->m_id    = -(int)m_vertices.size();

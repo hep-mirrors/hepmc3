@@ -294,10 +294,10 @@ bool HEPEVT_to_GenEvent_static(GenEvent* evt)
         std::set<int> out = it->second.second;
         used.insert(in.begin(), in.end());
         used.insert(out.begin(), out.end());
-        for (std::set<int>::iterator el = in.begin(); el != in.end(); ++el) v->add_particle_in(particles_index[*el]);
-        if (in.size() !=0 ) for (std::set<int>::iterator el = out.begin(); el != out.end(); ++el) v->add_particle_out(particles_index[*el]);
+        for (const auto&  el: in) v->add_particle_in(particles_index[el]);
+        if (in.size() !=0 ) for (const auto&  el: out) v->add_particle_out(particles_index[el]);
     }
-    for (std::set<int>::iterator el = used.begin(); el != used.end(); ++el) final_particles.push_back(particles_index[*el]);
+    for (const auto&  el: used) final_particles.emplace_back(particles_index[el]);
     /* One can put here a check on the number of particles/vertices*/
 
     evt->add_tree(final_particles);

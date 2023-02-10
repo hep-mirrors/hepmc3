@@ -31,7 +31,7 @@ WriterPlugin::WriterPlugin(std::ostream & stream, const std::string &libname, co
 #ifdef WIN32
     dll_handle = LoadLibrary(libname.c_str());
     if (!dll_handle) { printf("Error  while loading library %s. Error code %i\n", libname.c_str(), GetLastError()); m_writer = nullptr; return;  }
-    typedef Writer* (__stdcall *f_funci)(std::ostream & stream, shared_ptr<GenRunInfo>);
+    typedef Writer* (__stdcall *f_funci)(std::ostream & stream, std::shared_ptr<GenRunInfo>);
     f_funci newWriter = (f_funci)GetProcAddress((HINSTANCE)(dll_handle), newwriter.c_str());
     if (!newWriter) { printf("Error  while loading function %s from  library %s. Error code %i\n", newwriter.c_str(), libname.c_str(), GetLastError()); m_writer = nullptr; return;  }
     m_writer = (Writer*)(newWriter(stream, run));
@@ -51,7 +51,7 @@ WriterPlugin::WriterPlugin(const std::string& filename, const std::string &libna
 #ifdef WIN32
     dll_handle = LoadLibrary(libname.c_str());
     if (!dll_handle) { printf("Error  while loading library %s. Error code %i\n", libname.c_str(), GetLastError()); m_writer = nullptr; return;  }
-    typedef Writer* (__stdcall *f_funci)(const std::string&, shared_ptr<GenRunInfo>);
+    typedef Writer* (__stdcall *f_funci)(const std::string&, std::shared_ptr<GenRunInfo>);
     f_funci newWriter = (f_funci)GetProcAddress((HINSTANCE)(dll_handle), newwriter.c_str());
     if (!newWriter) { printf("Error  while loading function %s from  library %s. Error code %i\n", newwriter.c_str(), libname.c_str(), GetLastError()); m_writer = nullptr; return;  }
     m_writer = (Writer*)(newWriter(filename, run));
@@ -60,7 +60,7 @@ WriterPlugin::WriterPlugin(const std::string& filename, const std::string &libna
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_writer = nullptr; return;  }
-    using  f_funci =  Writer* (*)(const std::string&, shared_ptr<GenRunInfo>);
+    using  f_funci =  Writer* (*)(const std::string&, std::shared_ptr<GenRunInfo>);
     auto newWriter = (f_funci)dlsym(dll_handle, newwriter.c_str());
     if (!newWriter) { printf("Error  while loading function %s from  library %s: %s\n", newwriter.c_str(), libname.c_str(), dlerror()); m_writer = nullptr; return;   }
     m_writer = (Writer*)(newWriter(filename, run));
