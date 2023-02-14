@@ -15,6 +15,7 @@
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/Print.h"
+#define IGNORE_DEFAULT_WEIGHT
 #include "HepMC3TestUtils.h"
 using namespace HepMC3;
 int main()

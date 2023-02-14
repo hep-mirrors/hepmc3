@@ -34,12 +34,18 @@
     @endcode
 
     The options for ReaderAsciiHepMC2
+      "keep_single_crosssection"
+      "fill_crosssections_with_zeros"
+     Regulate if the reader will keep a single cross-section per event, just
+     in the HepMC2 style (pre-3.2.6 default behaviour) or will expand the vector of cross-sections to match
+     the number of event weights. (3.2.6+ default behaviour).
+     If "fill_crosssections_with_zeros" option is present, the vector will be expanded with zeros.
 
       "particle_flows_are_separated"
       "event_random_states_are_separated"
       "vertex_weights_are_separated"
       "particle_flows_are_separated"
-     regulate if the corresponding information from IO_GenEvent would be stored into multiple attributes as
+     Regulate if the corresponding information from IO_GenEvent would be stored into multiple attributes as
      individual numbers, i.e. "separated" or as a single std::vector. The former behavior is used if
      the corresponding option name is present in the list of options, regardless of the option value.
      The later behavior is the default one.
