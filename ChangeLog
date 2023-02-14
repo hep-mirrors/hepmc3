@@ -1,4 +1,6 @@
   --------------------------  HepMC3.2.6-pre ----------------------
+2023-02-14 Andrii Verbytskyi for HepMC
+         * Multiple optimizations inspired by clang-tidy
 2023-02-10 Andrii Verbytskyi for HepMC
          * The Attributes are now set to be parsed after calls to from_string or set_value
 2023-02-07 Andrii Verbytskyi for HepMC

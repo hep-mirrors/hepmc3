@@ -22,9 +22,6 @@
 
 namespace HepMC3 {
 
-/** Deprecated */
-using namespace std;
-
 class GenEvent;
 class Attribute;
 

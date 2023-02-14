@@ -133,14 +133,14 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     std::vector<int> beams;
     beams.reserve(2);
     int idbeam = 0;
-    for (ConstGenVertexPtr v: evt.vertices())
+    for (const ConstGenVertexPtr& v: evt.vertices())
     {
-        for (ConstGenParticlePtr p: v->particles_in())
+        for (const ConstGenParticlePtr& p: v->particles_in())
         {
             if (!p->production_vertex())                { if (p->status() == 4) beams.emplace_back(idbeam); idbeam++; }
             else {if (p->production_vertex()->id() == 0) { if (p->status() == 4) beams.emplace_back(idbeam); idbeam++; }}
         }
-        for (ConstGenParticlePtr p: v->particles_out()) { if (p->status() == 4) beams.emplace_back(idbeam); idbeam++; }
+        for (const ConstGenParticlePtr& p: v->particles_out()) { if (p->status() == 4) beams.push_back(idbeam); idbeam++; }
     }
     //
     int idbeam1 = 10000;
@@ -170,7 +170,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, " %zu", evt.weights().size());
     if ( !evt.weights().empty() )
     {
-        for (double w: evt.weights()) {
+        for (const double& w: evt.weights()) {
             m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), w);
             flush();
         }
@@ -237,12 +237,12 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
 
 
     m_particle_counter = 0;
-    for (ConstGenVertexPtr v: evt.vertices() )
+    for (const ConstGenVertexPtr& v: evt.vertices() )
     {
         int production_vertex = 0;
         production_vertex = v->id();
         write_vertex(v);
-        for (ConstGenParticlePtr p: v->particles_in())
+        for (const ConstGenParticlePtr& p: v->particles_in())
         {
             if (!p->production_vertex()) { write_particle( p, production_vertex ); }
             else
@@ -250,7 +250,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
                 if (p->production_vertex()->id() == 0) write_particle( p, production_vertex );
             }
         }
-        for (ConstGenParticlePtr p: v->particles_out()) {
+        for (const ConstGenParticlePtr& p: v->particles_out()) {
             write_particle(p, production_vertex);
         }
     }
@@ -304,7 +304,7 @@ std::string WriterAsciiHepMC2::escape(const std::string& s) const
     return ret;
 }
 
-void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
+void WriterAsciiHepMC2::write_vertex(const ConstGenVertexPtr& v)
 {
     std::vector<double> weights;
     std::shared_ptr<VectorDoubleAttribute> weights_a = v->attribute<VectorDoubleAttribute>("weights");
@@ -322,7 +322,7 @@ void WriterAsciiHepMC2::write_vertex(ConstGenVertexPtr v)
     flush();
     m_cursor += sprintf(m_cursor, "V %i %i", v->id(), v->status());
     int orph = 0;
-    for (ConstGenParticlePtr p: v->particles_in())
+    for (const ConstGenParticlePtr& p: v->particles_in())
     {
         if (!p->production_vertex()) { orph++;}
         else
@@ -373,7 +373,7 @@ inline void WriterAsciiHepMC2::forced_flush()
 
 void WriterAsciiHepMC2::write_run_info() {}
 
-void WriterAsciiHepMC2::write_particle(ConstGenParticlePtr p, int /*second_field*/)
+void WriterAsciiHepMC2::write_particle(const ConstGenParticlePtr& p, int /*second_field*/)
 {
     flush();
     m_cursor += sprintf(m_cursor, "P %i", int(10001+m_particle_counter));

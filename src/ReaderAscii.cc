@@ -246,14 +246,15 @@ bool ReaderAscii::read_event(GenEvent &evt) {
 
         return false;
     }
-    for ( auto p : m_forward_daughters ) {
-        for (auto v: evt.vertices()) {
+    for (const auto& p : m_forward_daughters )
+    {
+        for (const auto& v: evt.vertices()) {
             if (p.second == v->id()) {
                 v->add_particle_out(p.first);
             }
-        }
+         }
     }
-    for ( auto v : m_forward_mothers )  { for ( auto idpm : v.second )  v.first->add_particle_in(evt.particles()[idpm-1]); }
+    for ( const auto& v : m_forward_mothers )  for (const auto& idpm : v.second )  v.first->add_particle_in(evt.particles()[idpm-1]);
 
     /* restore ids of vertices using a bank of available ids*/
     std::vector<int> all_ids;
@@ -270,7 +271,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     std::set_difference(all_ids.begin(), all_ids.end(), filled_ids.begin(), filled_ids.end(), std::inserter(diff, diff.begin()));
     auto it = diff.rbegin();
     //Set available ids to vertices sequentially.
-    for (auto v: evt.vertices()) if (v->id() == 0) { v->set_id(*it); it++;}
+    for (const auto& v: evt.vertices()) if (v->id() == 0) { v->set_id(*it); it++;}
 
     return true;
 }

@@ -104,12 +104,12 @@ private:
     /// @brief Write vertex
     ///
     /// Helper routine for writing single vertex to file
-    void write_vertex(ConstGenVertexPtr v);
+    void write_vertex(const ConstGenVertexPtr& v);
 
     /// @brief Write particle
     ///
     /// Helper routine for writing single particle to file
-    void write_particle(ConstGenParticlePtr p, int second_field);
+    void write_particle(const ConstGenParticlePtr& p, int second_field);
 
     /// @}
 

@@ -212,6 +212,7 @@ void Print::line(std::ostream& os, const GenEvent &event, bool attributes) {
 
 void Print::line(std::ostream& os, const GenRunInfo &RunInfo, bool attributes) {
     os <<"GenRunInfo: Number of tools:" << RunInfo.tools().size();
+
     if (attributes) {
         for (const std::string& s: RunInfo.attribute_names()) {
             os << " " << s << "=" << RunInfo.attribute_as_string(s);

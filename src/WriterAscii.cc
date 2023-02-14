@@ -165,8 +165,8 @@ void WriterAscii::write_event(const GenEvent &evt) {
     }
 
     // Write attributes
-    for ( auto vt1: evt.attributes() ) {
-        for ( auto vt2: vt1.second ) {
+    for ( const auto& vt1: evt.attributes() ) {
+        for ( const auto& vt2: vt1.second ) {
             std::string st;
             bool status = vt2.second->to_string(st);
 
@@ -255,7 +255,7 @@ std::string WriterAscii::escape(const std::string& s) const {
     return ret;
 }
 
-void WriterAscii::write_vertex(ConstGenVertexPtr v) {
+void WriterAscii::write_vertex(const ConstGenVertexPtr& v) {
     flush();
     std::string vlist;
     std::vector<int> pids;
@@ -337,7 +337,7 @@ void WriterAscii::write_run_info() {
     }
 }
 
-void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
+void WriterAscii::write_particle(const ConstGenParticlePtr& p, int second_field) {
     flush();
     m_cursor += sprintf(m_cursor, m_particle_printf_specifier.c_str(), p->id(), second_field, p->pid(), p->momentum().px(), p->momentum().py(), p->momentum().pz(), p->momentum().e(), p->generated_mass(), p->status());
     flush();
