@@ -242,8 +242,8 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             //Sometimes the root vertex has no incoming particles.  Here we try to save the event.
             std::vector<GenParticlePtr> beams;
             beams.reserve(2);
-            for (auto p: m_vertex_cache[i]->particles_out()) if (p->status() == 4 && !(p->end_vertex())) beams.emplace_back(p);
-            for (auto p: beams)
+            for (const auto& p: m_vertex_cache[i]->particles_out()) if (p->status() == 4 && !(p->end_vertex())) beams.emplace_back(p);
+            for (auto& p: beams)
             {
                 m_vertex_cache[i]->add_particle_in(p);
                 m_vertex_cache[i]->remove_particle_out(p);

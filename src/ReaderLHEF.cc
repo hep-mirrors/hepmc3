@@ -170,7 +170,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
             if (vertices.count(vertex_index) == 0) vertices[vertex_index] = std::make_shared<GenVertex>();
             vertices[vertex_index]->add_particle_out(particles.back());
         }
-        for ( auto v: vertices )
+        for ( auto& v: vertices )
         {
             std::pair<int, int> vertex_index = v.first;
             GenVertexPtr          vertex = v.second;

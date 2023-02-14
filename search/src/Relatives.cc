@@ -123,7 +123,7 @@ template <class O>  std::vector<O> descendants_of_same_type(const O& obj)
             auto  temp0 = grandchildren(result[gc]);
             temp.insert(temp.end(), temp0.begin(), temp0.end());
         }
-        for (auto p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.emplace_back(p2);
+        for (const auto& p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.push_back(p2);
         if (gc >= result.size()) break;
     }
     return result;
@@ -133,10 +133,10 @@ template <class O, class R>  std::vector<R> descendants_of_other_type(const O& o
 {
     std::vector<R> localchildren = children(obj);
     std::vector<R>  result = localchildren;
-    for (auto c: localchildren)
+    for (const auto& c: localchildren)
     {
         std::vector<R> desc = descendants_of_same_type(c);
-        for (auto d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.emplace_back(d);
+        for (const auto& d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.push_back(d);
     }
     return result;
 }
@@ -153,7 +153,7 @@ template <class O>  std::vector<O> ancestors_of_same_type(const O& obj)
             auto  temp0 = grandparents(result[gc]);
             temp.insert(temp.end(), temp0.begin(), temp0.end());
         }
-        for (auto p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.emplace_back(p2);
+        for (const auto& p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.push_back(p2);
         if (gc >= result.size()) break;
     }
     return result;
@@ -163,10 +163,10 @@ template <class O, class R>  std::vector<R> ancestors_of_other_type(const O& obj
 {
     std::vector<R> localparents = parents(obj);
     std::vector<R>  result = localparents;
-    for (auto c: localparents)
+    for (const auto& c: localparents)
     {
         std::vector<R> desc = ancestors_of_same_type(c);
-        for (auto d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.emplace_back(d);
+        for (const auto& d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.push_back(d);
     }
     return result;
 }
