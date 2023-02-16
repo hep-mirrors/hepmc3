@@ -252,7 +252,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
             if (p.second == v->id()) {
                 v->add_particle_out(p.first);
             }
-         }
+        }
     }
     for ( const auto& v : m_forward_mothers )  for (const auto& idpm : v.second )  v.first->add_particle_in(evt.particles()[idpm-1]);
 

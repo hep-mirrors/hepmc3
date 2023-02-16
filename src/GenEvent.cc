@@ -161,7 +161,7 @@ void GenEvent::remove_particle(GenParticlePtr p) {
             }
         }
 
-        for ( const att_val_t& val: changed_attributes ) {
+        for ( const auto& val: changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first-1] = val.second;
         }
@@ -229,7 +229,7 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
             }
         }
 
-        for ( const att_val_t& val: changed_attributes ) {
+        for ( const auto& val: changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first+1] = val.second;
         }
@@ -260,6 +260,8 @@ static bool visit_children(std::map<ConstGenVertexPtr, int>  &a, const ConstGenV
 }
 
 void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
+    m_particles.reserve(m_particles.size() + parts.size());
+    m_vertices.reserve(m_vertices.size() + parts.size());
     std::shared_ptr<IntAttribute> existing_hc = attribute<IntAttribute>("cycles");
     bool has_cycles = false;
     std::map<GenVertexPtr, int>  sortingv;
@@ -693,31 +695,27 @@ void GenEvent::read_data(const GenEventData &data) {
 
     // Fill weights
     this->weights() = data.weights;
+    m_particles.reserve(data.particles.size());
+    m_vertices.reserve(data.vertices.size());
 
     // Fill particle information
     for ( const GenParticleData &pd: data.particles ) {
-        GenParticlePtr p = std::make_shared<GenParticle>(pd);
-
-        m_particles.emplace_back(p);
-
-        p->m_event = this;
-        p->m_id    = m_particles.size();
+        m_particles.emplace_back(std::move(std::make_shared<GenParticle>(pd)));
+        m_particles.back()->m_event = this;
+        m_particles.back()->m_id    = m_particles.size();
     }
 
     // Fill vertex information
     for ( const GenVertexData &vd: data.vertices ) {
-        GenVertexPtr v = std::make_shared<GenVertex>(vd);
-
-        m_vertices.emplace_back(v);
-
-        v->m_event = this;
-        v->m_id    = -(int)m_vertices.size();
+        m_vertices.emplace_back(std::move(std::make_shared<GenVertex>(vd)));
+        m_vertices.back()->m_event = this;
+        m_vertices.back()->m_id    = -(int)m_vertices.size();
     }
 
     // Restore links
     for (unsigned int i = 0; i < data.links1.size(); ++i) {
-        int id1 = data.links1[i];
-        int id2 = data.links2[i];
+        const int id1 = data.links1[i];
+        const int id2 = data.links2[i];
         /* @note:
         The  meaningfull combinations for (id1,id2) are:
         (+-)  --  particle has end vertex
@@ -731,10 +729,22 @@ void GenEvent::read_data(const GenEventData &data) {
     for (auto& p:  m_particles) if (!p->production_vertex()) m_rootvertex->add_particle_out(p);
 
     // Read attributes
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     for (unsigned int i = 0; i < data.attribute_id.size(); ++i) {
-        add_attribute(data.attribute_name[i],
-                      std::make_shared<StringAttribute>(data.attribute_string[i]),
-                      data.attribute_id[i]);
+        ///Disallow empty strings
+        const std::string name = data.attribute_name[i];
+        if (name.length() == 0) continue;
+        const int id = data.attribute_id[i];
+        if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+        auto att = std::make_shared<StringAttribute>(data.attribute_string[i]);
+        att->m_event = this;
+        if ( id > 0 && id <= int(m_particles.size()) ) {
+            att->m_particle = m_particles[id - 1];
+        }
+        if ( id < 0 && -id <= int(m_vertices.size()) ) {
+            att->m_vertex = m_vertices[-id - 1];
+        }
+        m_attributes[name][id] = att;
     }
 }
 
