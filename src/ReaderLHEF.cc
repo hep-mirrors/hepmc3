@@ -159,7 +159,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
         evt.add_attribute("IDPRUP", std::make_shared<LongAttribute>(ahepeup->IDPRUP));
         // Now add the Particles from the LHE event to HepMC
         std::vector<GenParticlePtr> particles;
-        particles.reserve(ahepeup->NUP);
+        if (ahepeup->NUP>0) particles.reserve(ahepeup->NUP);
         std::map< std::pair<int, int>, GenVertexPtr> vertices;
         for ( int i = 0; i < ahepeup->NUP; ++i )
         {
