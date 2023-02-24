@@ -342,7 +342,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
 int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     const char          *cursor             = buf;
-    int                  vertices_count     = 0;
+    size_t               vertices_count     = 0;
     int                  random_states_size = 0;
     int                  weights_size       = 0;
     std::vector<long>    random_states(0);
@@ -389,8 +389,11 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     //random states
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
     random_states_size = atoi(cursor);
-    random_states.resize(random_states_size);
-
+    if (random_states_size >= 0 ) {
+      random_states.resize(random_states_size);
+    } else {
+      HEPMC3_DEBUG(0, "ReaderAsciiHepMC2: E: " << evt.event_number() << " (" << vertices_count << "V, "  << random_states_size << "RS)")
+    }
     for ( int i = 0; i < random_states_size; ++i ) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
         random_states[i] = atoi(cursor);
@@ -401,8 +404,11 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     // weights
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
     weights_size = atoi(cursor);
-    weights.resize(weights_size);
-
+    if (weights_size >= 0 ) {
+      weights.resize(weights_size);
+    } else {
+      HEPMC3_DEBUG(0, "ReaderAsciiHepMC2: E: " << evt.event_number() << " (" << vertices_count << "V, " << weights_size << "WS)")
+    }
     for ( int i = 0; i < weights_size; ++i ) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
         weights[i] = atof(cursor);
