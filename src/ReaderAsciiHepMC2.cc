@@ -440,11 +440,13 @@ bool ReaderAsciiHepMC2::parse_units(GenEvent &evt, const char *buf) {
 
     // momentum
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
+    ++cursor;
     for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     Units::MomentumUnit momentum_unit = Units::momentum_unit(cursor);
 
     // length
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
+    ++cursor;
     for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     Units::LengthUnit length_unit = Units::length_unit(cursor);
 
