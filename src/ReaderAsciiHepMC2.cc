@@ -350,55 +350,55 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
 
     // event number
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     evt.set_event_number(atoi(cursor));
 
     //mpi
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     evt.add_attribute("mpi", std::make_shared<IntAttribute>(atoi(cursor)));
 
     //event scale
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     evt.add_attribute("event_scale", std::make_shared<DoubleAttribute>(atof(cursor)));
 
     //alpha_qcd
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     evt.add_attribute("alphaQCD", std::make_shared<DoubleAttribute>(atof(cursor)));
 
     //alpha_qed
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     evt.add_attribute("alphaQED", std::make_shared<DoubleAttribute>(atof(cursor)));
 
     //signal_process_id
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     evt.add_attribute("signal_process_id", std::make_shared<IntAttribute>(atoi(cursor)));
 
     //signal_process_vertex
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     evt.add_attribute("signal_process_vertex", std::make_shared<IntAttribute>(atoi(cursor)));
 
     // num_vertices
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     vertices_count = atoi(cursor);
 
     // SKIPPED: beam 1
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     
     // SKIPPED: beam 2
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     
     //random states
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     random_states_size = atoi(cursor);
     if (random_states_size >= 0 ) {
       random_states.resize(random_states_size);
@@ -407,7 +407,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     }
     for ( int i = 0; i < random_states_size; ++i ) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-        for (;;) if (*(cursor+1) == ' ') ++cursor;
+        for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
         random_states[i] = atoi(cursor);
     }
 
@@ -415,7 +415,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
 
     // weights
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     weights_size = atoi(cursor);
     if (weights_size >= 0 ) {
       weights.resize(weights_size);
@@ -424,7 +424,7 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     }
     for ( int i = 0; i < weights_size; ++i ) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-        for (;;) if (*(cursor+1) == ' ') ++cursor;
+        for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
         weights[i] = atof(cursor);
     }
 
@@ -440,12 +440,12 @@ bool ReaderAsciiHepMC2::parse_units(GenEvent &evt, const char *buf) {
 
     // momentum
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     Units::MomentumUnit momentum_unit = Units::momentum_unit(cursor);
 
     // length
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     Units::LengthUnit length_unit = Units::length_unit(cursor);
 
     evt.set_units(momentum_unit, length_unit);
@@ -465,53 +465,53 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     std::vector<double>  weights(0);
     // barcode
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     barcode = atoi(cursor);
 
     // status
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     data->set_status(atoi(cursor));
 
     // x
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double X(atof(cursor));
 
     // y
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double Y(atof(cursor));
 
     // z
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double Z(atof(cursor));
 
     // t
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double T(atof(cursor));
     data->set_position(FourVector(X,Y,Z,T));
 
     // SKIPPED: num_orphans_in
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
 
     // num_particles_out
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     num_particles_out = atoi(cursor);
 
     //  weights
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     weights_size = atoi(cursor);
     weights.resize(weights_size);
 
     for ( int i = 0; i < weights_size; ++i ) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-        for (;;) if (*(cursor+1) == ' ') ++cursor;
+        for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
         weights[i] = atof(cursor);
     }
 
@@ -541,74 +541,74 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
 
     /// @note barcode is ignored
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
 
     // id
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     data->set_pid(atoi(cursor));
 
     // px
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double Px(atof(cursor));
 
     // py
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double Py(atof(cursor));
 
     // pz
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double Pz(atof(cursor));
 
     // pe
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double E(atof(cursor));
     data->set_momentum(FourVector(Px,Py,Pz,E));
 
     // m
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     data->set_generated_mass(atof(cursor));
 
     // status
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     data->set_status(atoi(cursor));
 
     //theta
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double theta_v = atof(cursor);
     if (theta_v != 0.0) data_ghost->add_attribute("theta", std::make_shared<DoubleAttribute>(theta_v));
 
     //phi
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double phi_v = atof(cursor);
     if (phi_v != 0.0) data_ghost->add_attribute("phi", std::make_shared<DoubleAttribute>(phi_v));
 
     // end_vtx_code
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     end_vtx = atoi(cursor);
 
     //flow
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     int flowsize = atoi(cursor);
 
     std::map<int, int> flows;
     for (int i = 0; i < flowsize; i++)
     {
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-        for (;;) if (*(cursor+1) == ' ') ++cursor;
+        for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
         int  flowindex = atoi(cursor);
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
-        for (;;) if (*(cursor+1) == ' ') ++cursor;
+        for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
         int flowvalue = atoi(cursor);
         flows[flowindex] = flowvalue;
     }
@@ -642,11 +642,11 @@ bool ReaderAsciiHepMC2::parse_xs_info(GenEvent &evt, const char *buf) {
     std::shared_ptr<GenCrossSection>  xs     = std::make_shared<GenCrossSection>();
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double xs_val  = atof(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     double xs_err = atof(cursor);
     const size_t all = m_options.count("keep_single_crosssection") ? size_t{1} :
                        std::max(evt.weights().size(),size_t{1});
@@ -672,7 +672,7 @@ bool ReaderAsciiHepMC2::parse_weight_names(const char *buf) {
     if ( !run_info() ) return true;
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     w_count = atoi(cursor);
 
     if ( w_count <= 0 ) return false;
@@ -702,55 +702,55 @@ bool ReaderAsciiHepMC2::parse_heavy_ion(GenEvent &evt, const char *buf) {
     const char              *cursor = buf;
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->Ncoll_hard = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->Npart_proj = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->Npart_targ = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->Ncoll = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->spectator_neutrons = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->spectator_protons = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->N_Nwounded_collisions = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->Nwounded_N_collisions = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->Nwounded_Nwounded_collisions = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->impact_parameter = atof(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->event_plane_angle = atof(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->eccentricity = atof(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     hi->sigma_inel_NN = atof(cursor);
 
     // Not in HepMC2:
@@ -766,31 +766,31 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
     const char             *cursor = buf;
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     pi->parton_id[0] = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     pi->parton_id[1] = atoi(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     pi->x[0] = atof(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     pi->x[1] = atof(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     pi->scale = atof(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     pi->xf[0] = atof(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    for (;;) if (*(cursor+1) == ' ') ++cursor;
+    for (;;) if (*(cursor+1) == ' ') ++cursor; else break;
     pi->xf[1] = atof(cursor);
 
     //For compatibility with original HepMC2
