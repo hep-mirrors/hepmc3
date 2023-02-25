@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 
     ReaderAscii text_input(argv[1]);
 
-    TFile* fFile = new TFile(argv[2],"RECREATE");
+    auto* fFile = new TFile(argv[2],"RECREATE");
 
     int events_parsed = 0;
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
             if(evt.run_info()) {
                 GenRunInfo run_info(*evt.run_info());
 
-                MyRunClass *my_run = new MyRunClass();
+                auto *my_run = new MyRunClass();
 
                 my_run->SetRunInfo(&run_info);
 
@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
             }
         }
 
-        MyClass* myclass = new MyClass();
+        auto* myclass = new MyClass();
 
         myclass->SetEvent(&evt);
         //

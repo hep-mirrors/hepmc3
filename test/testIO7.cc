@@ -32,10 +32,11 @@ int main()
             w_values.push_back(1.0+0.1*i);
         }
         evt.run_info()->add_attribute("testrunattribute",std::make_shared<IntAttribute>(10000+n));
-        if (n%2==0)
+        if (n%2==0) {
             evt.run_info()->set_weight_names(w_names);//Try run info with names
-        else
+        } else {
             evt.run_info()->set_weight_names(std::vector<std::string>());//Try run info w/o names
+        }
         evt.weights() = w_values;
         outputA.set_run_info(nullptr);//This instructs reader to take run info from the event
         outputA.write_event(evt);

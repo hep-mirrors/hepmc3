@@ -145,9 +145,10 @@ int main()
     for (int entry=0; entry<A->fChain->GetEntries(); entry++)
     {
         A->fChain->GetEntry(entry);
-        for (int i=0; i<A->particles_; i++)
+        for (int i=0; i<A->particles_; i++) {
             if (A->particles_status[i]==1&&(std::abs(A->particles_pid[i])==211||std::abs(A->particles_pid[i])==11))
-                H1.Fill(std::sqrt(A->particles_momentum_m_v1[i]*A->particles_momentum_m_v1[i]+A->particles_momentum_m_v2[i]*A->particles_momentum_m_v2[i]) );
+            {   H1.Fill(std::sqrt(A->particles_momentum_m_v1[i]*A->particles_momentum_m_v1[i]+A->particles_momentum_m_v2[i]*A->particles_momentum_m_v2[i]) );}
+        }
     }
     delete A;
 //GenEvent
@@ -162,9 +163,11 @@ int main()
             printf("End of file reached. Exit.\n");
             break;
         }
-        for (ConstGenParticlePtr p: evt.particles())
+        for (ConstGenParticlePtr p: evt.particles()) {
             if ( std::abs(p->status()) == 1 && (std::abs(p->pdg_id()) == 211||std::abs(p->pdg_id()) == 11) )
-                H2.Fill( p->momentum().perp());
+            {   H2.Fill( p->momentum().perp());
+            }
+        }
         evt.clear();
     }
     inputA.close();

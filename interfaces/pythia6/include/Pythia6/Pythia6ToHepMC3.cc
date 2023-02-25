@@ -3,8 +3,8 @@
 // This file is part of HepMC3
 // Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
 //
-#ifndef Pythia6_Pythia6ToHepMC3_H
-#define Pythia6_Pythia6ToHepMC3_H
+#ifndef PYTHIA6_PYTHIA6TOHEPMC3_CC
+#define PYTHIA6_PYTHIA6TOHEPMC3_CC
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
 #define  hepmc3_delete_writer_ HEPMC3_DELETE_WRITER
 #define  hepmc3_convert_event_ HEPMC3_CONVERT_EVENT
@@ -92,7 +92,6 @@ extern "C" {
 #include "HepMC3/WriterPlugin.h"
 #include "HepMC3/Print.h"
 #include "HepMC3/Attribute.h"
-#include "HepMC3/GenEvent.h"
 #include "HepMC3/GenRunInfo.h"
 using namespace HepMC3;
 #ifndef PYTHIA6HEPEVTSIZE
@@ -109,7 +108,7 @@ GenEvent* hepmc3_gWriters_get_event(const int & position)
 {
     if (hepmc3_gWriters.count(position) == 0) {
         printf("Warning in %s: Writer at position %i does not exist\n", __FUNCTION__, position);
-        return NULL;
+        return nullptr;
     }
     return    hepmc3_gWriters[position].second;
 }
@@ -139,8 +138,11 @@ extern "C" {
             return 1;
         }
         hepmc3_gWriters[position].second = new GenEvent(Units::GEV, Units::MM);
-        for( int i = 1; i <= hepmc3_gInterface.number_entries(); i++ )
-            if (hepmc3_gInterface.m_hepevtptr->jmohep[i-1][1]<hepmc3_gInterface.m_hepevtptr->jmohep[i-1][0])  hepmc3_gInterface.m_hepevtptr->jmohep[i-1][1] = hepmc3_gInterface.m_hepevtptr->jmohep[i-1][0];
+        for( int i = 1; i <= hepmc3_gInterface.number_entries(); i++ ) {
+            if (hepmc3_gInterface.m_hepevtptr->jmohep[i-1][1]<hepmc3_gInterface.m_hepevtptr->jmohep[i-1][0])  {
+                hepmc3_gInterface.m_hepevtptr->jmohep[i-1][1] = hepmc3_gInterface.m_hepevtptr->jmohep[i-1][0];
+            }
+        }
         hepmc3_gInterface.HEPEVT_to_GenEvent(hepmc3_gWriters[position].second);
         if (hepmc3_gGenRunInfos.count(position)  ==  0) hepmc3_gGenRunInfos[position] = std::make_shared<GenRunInfo>();
         hepmc3_gWriters[position].second->set_run_info(hepmc3_gGenRunInfos[position]);
@@ -192,9 +194,9 @@ extern "C" {
     }
     int hepmc3_set_hepevt_address_(int* a)
     {
-      printf("Info in %s: setting /hepevt/ block adress\n", __FUNCTION__);
-      hepmc3_gInterface.set_hepevt_address((char*)a);
-      return 0;
+        printf("Info in %s: setting /hepevt/ block adress\n", __FUNCTION__);
+        hepmc3_gInterface.set_hepevt_address((char*)a);
+        return 0;
     }
     int hepmc3_set_attribute_int_(const int & position, const int & attval, const char* attname)
     {
@@ -228,8 +230,8 @@ extern "C" {
         int r_position=position;
         if (r_position == 0)
         {
-            if (hepmc3_gWriters.size() == 0) r_position = 1;
-            if (hepmc3_gWriters.size()  !=  0) r_position = hepmc3_gWriters.rend()->first+1;
+            if (!hepmc3_gWriters.empty()) r_position = 1;
+            if (!hepmc3_gWriters.empty()) r_position = hepmc3_gWriters.rend()->first+1;
         }
         if (hepmc3_gWriters.count(r_position) != 0) {
             printf("Error in %s: Writer at position %i already exists\n", __FUNCTION__, r_position);
@@ -275,7 +277,7 @@ extern "C" {
         }
         if (hepmc3_gGenRunInfos[position]->weight_index(std::string(name)) >= 0) return 0;
         std::vector<std::string> weight_names = hepmc3_gGenRunInfos[position]->weight_names();
-        weight_names.push_back(std::string(name));
+        weight_names.emplace_back(name);
         hepmc3_gWriters[position].second->weights().push_back(1.0);
         hepmc3_gGenRunInfos[position]->set_weight_names(weight_names);
         return 0;

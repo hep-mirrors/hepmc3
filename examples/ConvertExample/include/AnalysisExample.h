@@ -45,7 +45,7 @@ public:
     std::map<std::string, std::vector<double> > m_errs;  //!< Uncertainties
 private:
     std::ofstream m_file; //!< Output file
-    std::ostream* m_stream; //!< Output stream
+    std::ostream* m_stream=nullptr; //!< Output stream
 };
 }
 #endif

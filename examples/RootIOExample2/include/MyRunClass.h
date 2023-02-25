@@ -22,7 +22,7 @@ public:
     void SetInt(int);
 
     /// @brief Get someint
-    int GetInt();
+    int GetInt() const;
 
 private:
     int someint;            ///< Test int

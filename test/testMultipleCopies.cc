@@ -41,7 +41,7 @@ int main()
         //........................................EVENT LOOP
         int icount=0;
         int num_good_events=0;
-        int icnt;
+        int icnt=0;
         GenEvent evt1;
         ascii_in.read_event(evt1);
         if (ascii_in.failed()) return 3;

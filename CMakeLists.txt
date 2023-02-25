@@ -49,7 +49,7 @@ if (HEPMC3_ENABLE_CLANG_TIDY)
   set(ctor_8 "-cppcoreguidelines-pro-type-member-init,-hicpp-member-init,-bugprone-narrowing-conversions,-cppcoreguidelines-narrowing-conversions")
   set(ctor_9 "-cppcoreguidelines-prefer-member-initializer,-concurrency-mt-unsafe,-readability-convert-member-functions-to-static,-clang-analyzer-core.NonNullParamChecker")
   set(ctor_10 "-clang-analyzer-optin.cplusplus.VirtualCall,-cert-err33-c,-cert-err34-c,-cert-err58-cpp,-fuchsia-statically-constructed-objects,-misc-no-recursion")
-  set(ctor_11 "-readability-delete-null-pointer,-clang-analyzer-core.CallAndMessage,-bugprone-implicit-widening-of-multiplication-result")
+  set(ctor_11 "-readability-delete-null-pointer,-clang-analyzer-core.CallAndMessage,-bugprone-implicit-widening-of-multiplication-result,-cert-msc30-c,-cert-msc50-cpp,-clang-diagnostic-unused-command-line-argument,-google-build-using-namespace,-android-cloexec-fopen")
   set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--checks=*,${ctor_1},${ctor_2},${ctor_3},${ctor_4},${ctor_5},${ctor_6},${ctor_7},${ctor_8},${ctor_9},${ctor_10},${ctor_11}")
 endif()
 
@@ -466,11 +466,13 @@ if (ASTYLE)
     include/HepMC3/Com*h
     include/HepMC3/Att*h
     examples/*/src/*cc
+    examples/*/convert_example.cc    
     examples/*/include/*h
     test/*cc
     test/*h
     interfaces/*/include/*.h
     interfaces/*/include/*/*.h
+    interfaces/*/include/*/*.cc
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()

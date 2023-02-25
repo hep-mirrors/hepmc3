@@ -15,7 +15,7 @@ ReaderuprootTree::get_vector(PyObject * file_name, const std::string& array_name
     PyTuple_SetItem(pArgs, 2, Py_BuildValue("i", i));
     PyTuple_SetItem(pArgs, 3, Py_BuildValue("s#", desired_type.c_str(), desired_type.length()));
     PyObject *pReturn = PyObject_CallObject(pFunc, pArgs);
-    PyArrayObject *np_ret = reinterpret_cast<PyArrayObject*>(pReturn);
+    auto *np_ret = reinterpret_cast<PyArrayObject*>(pReturn);
     std::vector<T> out;
     int len0 = 0;
     if (np_ret) len0 = PyArray_SHAPE(np_ret)[0];
@@ -43,14 +43,14 @@ ReaderuprootTree::get_vector<std::string>(PyObject * file_name, const std::strin
     PyTuple_SetItem(pArgs, 3, Py_BuildValue("s#", desired_type.c_str(), desired_type.length()));
 
     PyObject *pReturn = PyObject_CallObject(pFunc, pArgs);
-    PyArrayObject *np_ret = reinterpret_cast<PyArrayObject*>(pReturn);
+    auto *np_ret = reinterpret_cast<PyArrayObject*>(pReturn);
     std::vector<std::string> out;
     int len0 = 0;
     if (np_ret) len0 = PyArray_SHAPE(np_ret)[0];
     if (len0>0) {
         int len = PyArray_SHAPE(np_ret)[1];
-        typedef wchar_t wc500[500];
-        wc500* c_out = reinterpret_cast<wc500*>(PyArray_DATA(np_ret));
+        using  wc500 = wchar_t[500];
+        auto* c_out = reinterpret_cast<wc500*>(PyArray_DATA(np_ret));
 
         for (int i = 0; i < len; i++) {
             std::wstring wa((c_out[i]));
@@ -90,15 +90,12 @@ PyObject* ReaderuprootTree::init_python_module(const std::string& code)
     if (pyValue == nullptr) {
         return nullptr;
     }
-    else
-    {
-        Py_DECREF(pyValue);
-    }
+    Py_DECREF(pyValue);
     return m_python_module;
 }
 
 ReaderuprootTree::ReaderuprootTree(const std::string &filename,const std::string &treename,const std::string &branchname):
-    m_events_count(0),m_tree_name(treename.c_str()), m_branch_name(branchname.c_str()),m_tree(nullptr)
+    m_events_count(0),m_tree_name(treename), m_branch_name(branchname),m_tree(nullptr)
 {
     if (!init(filename)) return;
 }
@@ -217,8 +214,7 @@ if (m_access_function && pFuncInitFile && pFuncInitTree && pFuncEntries) {
 bool ReaderuprootTree::skip(const int n)
 {
     m_events_count+=n;
-    if (m_events_count>m_tree_getEntries) return false;
-    return true;
+    return m_events_count <= m_tree_getEntries;
 }
 
 
@@ -236,20 +232,20 @@ bool ReaderuprootTree::read_event(GenEvent& evt)
     m_event_data->attribute_string.clear();
 
     auto event_number_v  = get_vector<int>(m_tree, "event_number");
-    if (event_number_v.size() == 0) { m_events_count++; return false;}
+    if (event_number_v.empty()) { m_events_count++; return false;}
     auto weights = get_vector<double>(m_tree, "weights");
     auto event_pos_1_v = get_vector<double>(m_tree, "event_pos/event_pos.m_v1");
-    if (event_pos_1_v.size() == 0) { m_events_count++; return false;}
+    if (event_pos_1_v.empty()) { m_events_count++; return false;}
     auto event_pos_2_v = get_vector<double>(m_tree,"event_pos/event_pos.m_v2");
-    if (event_pos_2_v.size() == 0) { m_events_count++; return false;}
+    if (event_pos_2_v.empty()) { m_events_count++; return false;}
     auto event_pos_3_v = get_vector<double>(m_tree, "event_pos/event_pos.m_v3");
-    if (event_pos_3_v.size() == 0) { m_events_count++; return false;}
+    if (event_pos_3_v.empty()) { m_events_count++; return false;}
     auto event_pos_4_v = get_vector<double>(m_tree, "event_pos/event_pos.m_v4");
-    if (event_pos_4_v.size() == 0) { m_events_count++; return false;}
+    if (event_pos_4_v.empty()) { m_events_count++; return false;}
     auto momentum_unit_v = get_vector<int>(m_tree, "momentum_unit");
-    if (momentum_unit_v.size() == 0) { m_events_count++; return false;}
+    if (momentum_unit_v.empty()) { m_events_count++; return false;}
     auto length_unit_v = get_vector<int>(m_tree, "length_unit");
-    if (length_unit_v.size() == 0) { m_events_count++; return false;}
+    if (length_unit_v.empty()) { m_events_count++; return false;}
 
     auto event_number    = event_number_v.at(0);
     auto event_pos_1     = event_pos_1_v.at(0);

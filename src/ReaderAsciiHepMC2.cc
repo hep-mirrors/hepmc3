@@ -390,9 +390,9 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
     random_states_size = atoi(cursor);
     if (random_states_size >= 0 ) {
-      random_states.resize(random_states_size);
+        random_states.resize(random_states_size);
     } else {
-      HEPMC3_DEBUG(0, "ReaderAsciiHepMC2: E: " << evt.event_number() << " (" << vertices_count << "V, "  << random_states_size << "RS)")
+        HEPMC3_DEBUG(0, "ReaderAsciiHepMC2: E: " << evt.event_number() << " (" << vertices_count << "V, "  << random_states_size << "RS)")
     }
     for ( int i = 0; i < random_states_size; ++i ) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
@@ -405,9 +405,9 @@ int ReaderAsciiHepMC2::parse_event_information(GenEvent &evt, const char *buf) {
     if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
     weights_size = atoi(cursor);
     if (weights_size >= 0 ) {
-      weights.resize(weights_size);
+        weights.resize(weights_size);
     } else {
-      HEPMC3_DEBUG(0, "ReaderAsciiHepMC2: E: " << evt.event_number() << " (" << vertices_count << "V, " << weights_size << "WS)")
+        HEPMC3_DEBUG(0, "ReaderAsciiHepMC2: E: " << evt.event_number() << " (" << vertices_count << "V, " << weights_size << "WS)")
     }
     for ( int i = 0; i < weights_size; ++i ) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;

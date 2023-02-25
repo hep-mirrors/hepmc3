@@ -14,8 +14,7 @@ WriterDOT::WriterDOT(const std::string &filename,std::shared_ptr<GenRunInfo> /*r
 }
 
 WriterDOT::WriterDOT(std::ostream &stream, std::shared_ptr<GenRunInfo> /*run*/)
-    : m_file(),
-      m_stream(&stream),
+    : m_stream(&stream),
       m_style(0),
       m_buffer(nullptr),
       m_cursor(nullptr),
@@ -24,7 +23,7 @@ WriterDOT::WriterDOT(std::ostream &stream, std::shared_ptr<GenRunInfo> /*run*/)
 
 
 void WriterDOT::close() {
-    std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
+    auto* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     forced_flush();
     if (ofs) ofs->close();
@@ -40,7 +39,7 @@ bool is_parton(const int& pd )
         &&(pd%1000/100==1||pd%1000/100==2||pd%1000/100==3||pd%1000/100==4)
         &&(pd%100==1||pd%100==3)
     )
-        parton = true;
+    { parton = true;}
     return parton;
 }
 void WriterDOT::write_event(const GenEvent &evt)
@@ -55,8 +54,8 @@ void WriterDOT::write_event(const GenEvent &evt)
         {
             if (m_style == 1) //paint decay and fragmentation vertices in green
             {
-                if (v->status() == 2) m_cursor += sprintf(m_cursor, "node [color=\"green\"];\n");
-                else  m_cursor += sprintf(m_cursor, "node [color=\"black\"];\n");
+                if (v->status() == 2) {m_cursor += sprintf(m_cursor, "node [color=\"green\"];\n");}
+                else  {m_cursor += sprintf(m_cursor, "node [color=\"black\"];\n");}
             }
         }
         m_cursor += sprintf(m_cursor, "node [shape=ellipse];\n");
@@ -76,8 +75,8 @@ void WriterDOT::write_event(const GenEvent &evt)
                 {
                     if (m_style == 1) //paint suspected partons and 81/82 in red
                     {
-                        if (is_parton(std::abs(p->pid()))&&p->status()!=1) m_cursor += sprintf(m_cursor, "edge [color=\"red\"];\n");
-                        else        m_cursor +=sprintf(m_cursor, "edge [color=\"black\"];\n");
+                        if (is_parton(std::abs(p->pid()))&&p->status()!=1) {m_cursor += sprintf(m_cursor, "edge [color=\"red\"];\n");}
+                        else      {  m_cursor +=sprintf(m_cursor, "edge [color=\"black\"];\n");}
                     }
                 }
                 if (!p->end_vertex())
