@@ -499,8 +499,8 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
     for (;;) if (*(cursor+1) == ' ') ++cursor;
 
     // num_particles_out
-    if ( !(cursor = strchr(cursor+1, ' ')) ) return -1
-    for (;;) if (*(cursor+1) == ' ') ++cursor;;
+    if ( !(cursor = strchr(cursor+1, ' ')) ) return -1;
+    for (;;) if (*(cursor+1) == ' ') ++cursor;
     num_particles_out = atoi(cursor);
 
     //  weights
