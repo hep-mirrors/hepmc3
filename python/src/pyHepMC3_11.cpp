@@ -123,7 +123,7 @@ struct PyCallBack_HepMC3_WriterAscii : public HepMC3::WriterAscii {
 		}
 		return Writer::set_options(a0);
 	}
-	using _binder_ret_0 = class std::map<std::string, std::string >;
+	using _binder_ret_0 = std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterAscii *>(this), "get_options");
