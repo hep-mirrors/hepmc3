@@ -133,6 +133,7 @@ set( HepMC_tests
         testLoops
         testDelete
         testSkip1
+        testJEWEL
         testIO1
         testIO3
         testIO6
