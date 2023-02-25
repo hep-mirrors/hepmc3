@@ -25,6 +25,7 @@
 
 #include <fstream>
 #include <cstdio>
+#include <array>
 
 ValidationControl::ValidationControl():
     m_events(0),
@@ -34,12 +35,13 @@ ValidationControl::ValidationControl():
     m_event_counter(0),
     m_status(-1),
     m_timer("processing time"),
-    m_has_input_source(0) {
+    m_has_input_source(false) {
 }
 
 ValidationControl::~ValidationControl() {
-    for (std::vector<ValidationTool *>::iterator t=m_toolchain.begin(); t!=m_toolchain.end(); ++t)
+    for (auto t=m_toolchain.begin(); t!=m_toolchain.end(); ++t) {
         delete *t;
+    }
 }
 
 void ValidationControl::read_file(const std::string &filename) {
@@ -52,47 +54,47 @@ void ValidationControl::read_file(const std::string &filename) {
         m_status = -1;
         return;
     }
-    else printf("ValidationControl: parsing config file: %s\n",filename.c_str());
+    printf("ValidationControl: parsing config file: %s\n",filename.c_str());
 
     // Parse config file
-    char buf[256];
+    std::array<char,256> buf;
     int line = 0;
 
     while(!in.eof()) {
         PARSING_STATUS status = PARSING_OK;
         ++line;
 
-        in >> buf;
+        in >> buf.data();
 
-        if( strlen(buf) < 3 || buf[0] == ' ' || buf[0] == '#' ) {
-            in.getline(buf,255);
+        if( strlen(buf.data()) < 3 || buf[0] == ' ' || buf[0] == '#' ) {
+            in.getline(buf.data(),255);
             continue;
         }
 
         // Parse event number
-        if( strncmp(buf,"EVENTS",6)==0 ) {
+        if( strncmp(buf.data(),"EVENTS",6)==0 ) {
             in>>m_events;
         }
         // Parse input source
-        else if( strncmp(buf,"INPUT",5)==0 ) {
-            in >> buf;
+        else if( strncmp(buf.data(),"INPUT",5)==0 ) {
+            in >> buf.data();
 
-            if( m_has_input_source ) status = ADDITIONAL_INPUT;
+            if( m_has_input_source ) {status = ADDITIONAL_INPUT;}
             else {
-                ValidationTool *input = NULL;
+                ValidationTool *input = nullptr;
                 // Use tool as input source
-                if( strncmp(buf,"SimpleEvent",11)==0 ) {
+                if( strncmp(buf.data(),"SimpleEvent",11)==0 ) {
                     input = new SimpleEventTool();
                 }
-                else if( strncmp(buf,"pythia8",7)==0) {
+                else if( strncmp(buf.data(),"pythia8",7)==0) {
 #ifdef PYTHIA8
-                    in >> buf;
-                    input = new PythiaValidationTool(buf);
+                    in >> buf.data();
+                    input = new PythiaValidationTool(buf.data());
 #else
                     status = UNAVAILABLE_TOOL;
 #endif
                 }
-                else status = UNRECOGNIZED_INPUT;
+                else {status = UNRECOGNIZED_INPUT;}
 
                 if(!status) {
                     m_has_input_source = true;
@@ -101,26 +103,26 @@ void ValidationControl::read_file(const std::string &filename) {
             }
         }
         // Parse tools used
-        else if( strncmp(buf,"TOOL",3)==0 ) {
-            in >> buf;
-            if     ( strncmp(buf,"output",6)==0 ) {
+        else if( strncmp(buf.data(),"TOOL",3)==0 ) {
+            in >> buf.data();
+            if     ( strncmp(buf.data(),"output",6)==0 ) {
                 m_toolchain.push_back( new OutputValidationTool(filename)   );
             }
-            else if     ( strncmp(buf,"tauola",6)==0 ) {
+            else if     ( strncmp(buf.data(),"tauola",6)==0 ) {
 #ifdef TAUOLAPP
                 m_toolchain.push_back( new TauolaValidationTool()   );
 #else
                 status = UNAVAILABLE_TOOL;
 #endif
             }
-            else if( strncmp(buf,"photos",6)==0 ) {
+            else if( strncmp(buf.data(),"photos",6)==0 ) {
 #ifdef PHOTOSPP
                 m_toolchain.push_back( new PhotosValidationTool()   );
 #else
                 status = UNAVAILABLE_TOOL;
 #endif
             }
-            else if( strncmp(buf,"mctester",8)==0 ) {
+            else if( strncmp(buf.data(),"mctester",8)==0 ) {
 #ifdef MCTESTER
                 m_toolchain.push_back( new McTesterValidationTool() );
 #else
@@ -130,24 +132,24 @@ void ValidationControl::read_file(const std::string &filename) {
             else status = UNRECOGNIZED_TOOL;
         }
         // Parse option
-        else if( strncmp(buf,"SET",3)==0 ) {
-            in >> buf;
+        else if( strncmp(buf.data(),"SET",3)==0 ) {
+            in >> buf.data();
 
-            if     ( strncmp(buf,"print_events",12)==0 ) {
-                in >> buf;
+            if     ( strncmp(buf.data(),"print_events",12)==0 ) {
+                in >> buf.data();
 
                 int events = 0;
-                if( strncmp(buf,"ALL",3)==0 ) events = -1;
-                else                          events = atoi(buf);
+                if( strncmp(buf.data(),"ALL",3)==0 ) {events = -1;}
+                else                          {events = atoi(buf.data());}
 
                 print_events(events);
             }
-            else if( strncmp(buf,"check_momentum",14)==0 ) {
-                in >> buf;
+            else if( strncmp(buf.data(),"check_momentum",14)==0 ) {
+                in >> buf.data();
 
                 int events = 0;
-                if( strncmp(buf,"ALL",3)==0 ) events = -1;
-                else                          events = atoi(buf);
+                if( strncmp(buf.data(),"ALL",3)==0 ) {events = -1;}
+                else                          {events = atoi(buf.data());}
 
                 check_momentum_for_events(events);
             }
@@ -160,37 +162,37 @@ void ValidationControl::read_file(const std::string &filename) {
 
         switch(status) {
         case  UNRECOGNIZED_COMMAND:
-            printf("skipping unrecognised command:      '%s'\n",buf);
+            printf("skipping unrecognised command:      '%s'\n",buf.data());
             break;
         case  UNRECOGNIZED_OPTION:
-            printf("skipping unrecognised option:       '%s'\n",buf);
+            printf("skipping unrecognised option:       '%s'\n",buf.data());
             break;
         case  UNRECOGNIZED_INPUT:
-            printf("skipping unrecognised input source: '%s'\n",buf);
+            printf("skipping unrecognised input source: '%s'\n",buf.data());
             break;
         case  UNRECOGNIZED_TOOL:
-            printf("skipping unrecognised tool:         '%s'\n",buf);
+            printf("skipping unrecognised tool:         '%s'\n",buf.data());
             break;
         case  UNAVAILABLE_TOOL:
-            printf("skipping unavailable tool:          '%s'\n",buf);
+            printf("skipping unavailable tool:          '%s'\n",buf.data());
             break;
         case  ADDITIONAL_INPUT:
-            printf("skipping additional input source:   '%s'\n",buf);
+            printf("skipping additional input source:   '%s'\n",buf.data());
             break;
         case  CANNOT_OPEN_FILE:
-            printf("skipping input file:                '%s'\n",buf);
+            printf("skipping input file:                '%s'\n",buf.data());
             break;
         default:
             break;
         }
 
         // Ignore rest of the line
-        in.getline(buf,255);
+        in.getline(buf.data(),255);
     }
 
     // Having input source is enough to start validation
-    if(m_has_input_source) m_status = 0;
-    else printf("ValidationControl: no valid input source\n");
+    if(m_has_input_source) {m_status = 0;}
+    else {printf("ValidationControl: no valid input source\n");}
 }
 
 bool ValidationControl::new_event() {
@@ -238,7 +240,7 @@ bool ValidationControl::new_event() {
 void ValidationControl::initialize() {
     printf("ValidationControl: initializing\n");
 
-    for (std::vector<ValidationTool *>::iterator tool=m_toolchain.begin(); tool!=m_toolchain.end(); ++tool)  (*tool)->initialize();
+    for (auto tool=m_toolchain.begin(); tool!=m_toolchain.end(); ++tool) { (*tool)->initialize();}
 }
 
 void ValidationControl::process(GenEvent &hepmc) {
@@ -246,7 +248,7 @@ void ValidationControl::process(GenEvent &hepmc) {
     m_status = 0;
 
     FourVector input_momentum;
-    for (std::vector<ValidationTool *>::iterator tool=m_toolchain.begin(); tool!=m_toolchain.end(); ++tool) {
+    for (auto tool=m_toolchain.begin(); tool!=m_toolchain.end(); ++tool) {
 
         Timer *timer = (*tool)->timer();
 
@@ -273,7 +275,7 @@ void ValidationControl::process(GenEvent &hepmc) {
             HEPMC2CODE(
                 for ( GenEvent::particle_const_iterator p = hepmc.particles_begin();
             p != hepmc.particles_end();  ++p ) {
-            if( (*p)->status() != 1 ) continue;
+            if( (*p)->status() != 1 ) { continue;}
                 FourVector m = (*p)->momentum();
                 sum.setPx( sum.px() + m.px() );
                 sum.setPy( sum.py() + m.py() );
@@ -282,7 +284,7 @@ void ValidationControl::process(GenEvent &hepmc) {
             }
 
             double momentum = input_momentum.px() + input_momentum.py() + input_momentum.pz() + input_momentum.e();
-            if( fabs(momentum) > 10e-12 ) {
+            if( std::abs(momentum) > 10e-12 ) {
             double px = input_momentum.px() - sum.px();
                 double py = input_momentum.py() - sum.py();
                 double pz = input_momentum.pz() - sum.pz();
@@ -292,15 +294,17 @@ void ValidationControl::process(GenEvent &hepmc) {
             )
 
             HEPMC3CODE(
-                for (auto p: hepmc.particles()) if( p->status() != 1 ) continue; else  sum += p->momentum();
-                        if(!input_momentum.is_zero()) delta = (input_momentum - sum).length();
-                        )
+            for (auto p: hepmc.particles()) {if( p->status() != 1 ) {continue; }  sum += p->momentum();}
+            if(!input_momentum.is_zero()) delta = (input_momentum - sum).length();
+            )
 
-                            printf("Momentum sum: %+15.8e %+15.8e %+15.8e %+15.8e (evt: %7i, %s)",sum.px(),sum.py(),sum.pz(),sum.e(),m_event_counter,(*tool)->name().c_str());
+                printf("Momentum sum: %+15.8e %+15.8e %+15.8e %+15.8e (evt: %7i, %s)",sum.px(),sum.py(),sum.pz(),sum.e(),m_event_counter,(*tool)->name().c_str());
 
-            if( delta < m_momentum_check_threshold ) printf("\n");
-            else                                     printf(" - WARNING! Difference = %+15.8e\n",delta);
-
+            if( delta < m_momentum_check_threshold ) {
+                printf("\n");
+            } else {
+                printf(" - WARNING! Difference = %+15.8e\n",delta);
+            }
             input_momentum = sum;
         }
     }
@@ -310,20 +314,20 @@ void ValidationControl::finalize() {
     printf("ValidationControl: finalizing\n");
 
     // Finalize
-    for (std::vector<ValidationTool *>::iterator t=m_toolchain.begin(); t!=m_toolchain.end(); ++t)
+    for (auto t=m_toolchain.begin(); t!=m_toolchain.end(); ++t) {
         (*t)->finalize();
-
+    }
     printf("ValidationControl: printing timers\n");
 
     // Print timers
-    for (std::vector<ValidationTool *>::iterator t=m_toolchain.begin(); t!=m_toolchain.end(); ++t)
-        if((*t)->timer()) (*t)->timer()->print();
-
+    for (auto t=m_toolchain.begin(); t!=m_toolchain.end(); ++t) {
+        if((*t)->timer()) {(*t)->timer()->print();}
+    }
 
     printf("ValidationControl: finished processing:\n");
 
     // List tools
-    for (std::vector<ValidationTool *>::iterator t=m_toolchain.begin(); t!=m_toolchain.end(); ++t)
+    for (auto t=m_toolchain.begin(); t!=m_toolchain.end(); ++t) {
         printf("  tool: %s\n",(*t)->long_name().c_str());
-
+    }
 }

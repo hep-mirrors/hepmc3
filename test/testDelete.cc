@@ -38,8 +38,9 @@ int main()
     }
     evts[i].remove_particles(evts[j].particles());
 
-    for (GenParticlePtr p: evts.at(i).particles())
+    for (GenParticlePtr p: evts.at(i).particles()) {
         evts[j].remove_particle(p);
+    }
 
     for (GenParticlePtr p: evts.at(i).particles()) {
         for (GenVertexPtr v: evts.at(j).vertices()) {

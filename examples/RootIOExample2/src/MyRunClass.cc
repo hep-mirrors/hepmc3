@@ -1,6 +1,6 @@
 #include "MyRunClass.h"
 
-MyRunClass::MyRunClass():someint(0), run(0) {}
+MyRunClass::MyRunClass():someint(0), run(nullptr) {}
 
 void MyRunClass::SetRunInfo(GenRunInfo* myrun)
 {
@@ -17,7 +17,7 @@ void MyRunClass::SetInt(int theint)
     someint = theint;
 }
 
-int MyRunClass::GetInt()
+int MyRunClass::GetInt() const
 {
     return someint;
 }

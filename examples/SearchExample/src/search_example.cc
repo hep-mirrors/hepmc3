@@ -11,7 +11,7 @@
 
 HepMC3::GenEvent* generate_event(const size_t  n,const  size_t  iterations)
 {
-    HepMC3::GenEvent* e=new HepMC3::GenEvent();
+    auto* e=new HepMC3::GenEvent();
     HepMC3::GenVertexPtr v0=std::make_shared<HepMC3::GenVertex>();
     e->add_vertex(v0);
     size_t it=0;
@@ -21,7 +21,7 @@ HepMC3::GenEvent* generate_event(const size_t  n,const  size_t  iterations)
         {
             for (auto v: e->vertices())
             {
-                if (v->particles_out().size()!=0) continue;
+                if (!v->particles_out().empty()) continue;
                 for (size_t i=0; i<n; i++) v->add_particle_out(std::make_shared<HepMC3::GenParticle>());
             }
             break;
@@ -29,7 +29,7 @@ HepMC3::GenEvent* generate_event(const size_t  n,const  size_t  iterations)
         auto vertices=e->vertices();
         for (auto v: vertices)
         {
-            if (v->particles_out().size()!=0) continue;
+            if (!v->particles_out().empty()) continue;
             for (size_t i=0; i<n; i++) v->add_particle_out(std::make_shared<HepMC3::GenParticle>());
             for (auto p: v->particles_out())
             {

@@ -18,9 +18,8 @@ AnalysisExample::AnalysisExample(const std::string &filename,std::shared_ptr<Gen
     m_errs["rapidity"]=std::vector<double>(m_bins.at("rapidity").size()-1,0.0);
 }
 
-AnalysisExample::AnalysisExample(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
-    : m_file(),
-      m_stream(&stream)
+AnalysisExample::AnalysisExample(std::ostream &stream, std::shared_ptr<GenRunInfo> /*run*/)
+    : m_stream(&stream)
 {
     m_sum_of_weights=0;
     m_sum_of_weights2=0;
@@ -48,7 +47,7 @@ void AnalysisExample::write_event(const GenEvent &evt)
 
 void AnalysisExample::close() {
     if (!m_stream) return;
-    std::ofstream* ofs = dynamic_cast<std::ofstream*>(m_stream);
+    auto* ofs = dynamic_cast<std::ofstream*>(m_stream);
     for (size_t i=1; i<m_vals["rapidity"].size()-1; i++)
     {
         double val=m_vals["rapidity"][i]/m_sum_of_weights/(m_bins["rapidity"][i+1]-m_bins["rapidity"][i]);

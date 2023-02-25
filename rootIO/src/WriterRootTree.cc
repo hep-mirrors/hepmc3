@@ -100,9 +100,7 @@ void WriterRootTree::close()
 
 bool WriterRootTree::failed()
 {
-    if ( !m_file->IsOpen() ) return true;
-
-    return false;
+    return !m_file->IsOpen();
 }
 
 } // namespace HepMC3

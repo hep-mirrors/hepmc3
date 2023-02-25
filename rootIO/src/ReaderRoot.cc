@@ -25,7 +25,7 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
 
     std::shared_ptr<GenRunInfo> ri = std::make_shared<GenRunInfo>();
 
-    GenRunInfoData *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
+    auto *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
 
     if (run) {
         ri->read_data(*run);
@@ -64,8 +64,8 @@ bool ReaderRoot::read_event(GenEvent& evt) {
         size_t geneventdata30 = strncmp(cl, "HepMC::GenEventData", 19);
         size_t geneventdata31 = strncmp(cl, "HepMC3::GenEventData", 20);
         if ( geneventdata31 == 0 || geneventdata30 == 0 ) {
-            if (geneventdata30 == 0) HEPMC3_WARNING("ReaderRoot::read_event: The object was written with HepMC3 version 3.0")
-                data = reinterpret_cast<GenEventData*>(key->ReadObj());
+            if (geneventdata30 == 0) {HEPMC3_WARNING("ReaderRoot::read_event: The object was written with HepMC3 version 3.0")}
+            data = reinterpret_cast<GenEventData*>(key->ReadObj());
             break;
         }
     }
@@ -88,9 +88,7 @@ void ReaderRoot::close() {
 }
 
 bool ReaderRoot::failed() {
-    if ( !m_file->IsOpen() ) return true;
-
-    return false;
+    return !m_file->IsOpen();
 }
 
 } // namespace HepMC3

@@ -13,8 +13,8 @@
 #include <random>
 #include <iterator>
 using namespace HepMC3;
-const int NinputCopies=4;
-const int NmaxThreads=3;
+const size_t NinputCopies=4;
+const size_t NmaxThreads=3;
 std::shared_ptr<GenEvent> generate(const int Z) {
     std::shared_ptr<GenEvent> evt = std::make_shared<GenEvent>();
     std::shared_ptr<GenRunInfo> run = std::make_shared<GenRunInfo>();
@@ -45,9 +45,10 @@ std::shared_ptr<GenEvent> generate(const int Z) {
 
 void attribute_function1(const std::vector<std::shared_ptr<GenEvent>>& evts, std::map<int,int>& res)
 {
-    for (size_t i = 0; i < evts.size(); i++)
+    for (size_t i = 0; i < evts.size(); i++) {
         res[evts.at(i)->event_number()] =
             (Relatives::DESCENDANTS(evts.at(i)->particles().at(2))).size();
+    }
 }
 
 int main()
@@ -59,20 +60,22 @@ int main()
     }
     std::random_device rd;
     std::mt19937 g(rd());
-    std::vector<std::shared_ptr<GenEvent>> thr_evts[NinputCopies];
-    for (int i=0; i<NinputCopies; i++) {
-        thr_evts[i] = evts;
+    std::vector<std::vector<std::shared_ptr<GenEvent>>> thr_evts;
+    for (size_t i=0; i<NinputCopies; i++) {
+        thr_evts.emplace_back(evts);
         std::shuffle(thr_evts[i].begin(), thr_evts[i].end(), g);
     }
-    std::map<int,int> res[NinputCopies];
+    std::vector<std::map<int,int>> res(NinputCopies);
     std::vector<std::thread> threads;
 
-    for (int i = 0; i < NinputCopies; i++)
-        threads.push_back(std::thread(attribute_function1,std::cref(thr_evts[i]), std::ref(res[i])));
-    for (auto& th : threads) th.join();
+
+    for (size_t i = 0; i < NinputCopies; i++) {
+        threads.emplace_back(std::thread(attribute_function1,std::cref(thr_evts[i]), std::ref(res[i])));
+    }
+    for (auto& th : threads) {th.join();}
     threads.clear();
 
-    for (int k = 1; k < NinputCopies; k++)
+    for (size_t k = 1; k < NinputCopies; k++)
     {
         if (!std::equal(res[k].begin(), res[k].end(), res[0].begin())) {
             return 1;

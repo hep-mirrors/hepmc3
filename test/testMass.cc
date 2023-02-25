@@ -27,7 +27,7 @@
 // define methods and classes used by this test
 #include "IsGoodEvent.h"
 using namespace HepMC3;
-bool   massInfo( const GenEvent&, std::ostream& );
+bool   massInfo( const GenEvent& /*e*/, std::ostream& /*os*/);
 
 int main()
 {
@@ -43,14 +43,18 @@ int main()
     //........................................EVENT LOOP
     int icount=0;
     int num_good_events=0;
-    double x1=0., x2=0., q=0., xf1=0., xf2=0.;
+    double x1=0.;
+    double x2=0.;
+    double  q=0.;
+    double  xf1=0.;
+    double xf2=0.;
     GenEvent evt;
     while ( !ascii_in.failed() )
     {
         bool readOK=ascii_in.read_event(evt);
         if (!readOK) return 1;
         icount++;
-        if ( icount%50==1 ) std::cout << "Processing Event Number " << icount<< " its # " << evt.event_number() << std::endl;
+        if ( icount%50==1 ) {std::cout << "Processing Event Number " << icount<< " its # " << evt.event_number() << std::endl;}
         if ( is_good_event(evt) )
         {
             if (num_good_events == 0 )
@@ -82,11 +86,12 @@ int main()
                 ion->set(23,11,12,15,3,5,0,0,0,0.0145,0.0,0.0,0.0,0.23);
             }
             std::cout << "saving Event " << evt.event_number() << std::endl;
-            if( evt.weights().size() > 0 )
+            if( !evt.weights().empty() )
             {
                 std::cout << "Weights: ";
-                for ( std::vector<double>::const_iterator w=evt.weights().begin(); w!=evt.weights().end(); ++w )
+                for ( auto w=evt.weights().begin(); w!=evt.weights().end(); ++w ) {
                     std::cout <<" "<<*w;
+                }
                 std::cout << std::endl;
             }
             ascii_out.write_event(evt);
@@ -121,11 +126,12 @@ int main()
         if (!readOK) return 1;
         ixin++;
         std::cout << "reading Event " << evt.event_number() << std::endl;
-        if( evt.weights().size() > 0 )
+        if( !evt.weights().empty() )
         {
             std::cout << "Weights: ";
-            for ( std::vector<double>::const_iterator w=evt.weights().begin(); w!=evt.weights().end(); ++w )
+            for ( auto w=evt.weights().begin(); w!=evt.weights().end(); ++w ) {
                 std::cout <<" "<<*w;
+            }
             std::cout << std::endl;
         }
         xout.write_event(evt);
