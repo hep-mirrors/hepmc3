@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #include <iostream>
 
@@ -24,14 +24,13 @@ double conversion_factor( Units::LengthUnit from, Units::LengthUnit  to )
 }
 bool neq(const double a,const double b)
 {
-    if (std::abs(a-b)<0.001*(std::abs(a)+std::abs(b)))  return false;
-    return true;
+    return std::abs(a-b) >= 0.001*(std::abs(a)+std::abs(b));
 }
 int main()
 {
 
     int err = 0;
-    double cf;
+    double cf = 0;
     GenEvent evt;
     std::cout << "Default units: " << Units::name(evt.momentum_unit())
               << " " << Units::name(evt.length_unit()) << std::endl;

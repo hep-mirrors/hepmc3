@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_GENPARTICLE_H
 #define HEPMC3_GENPARTICLE_H
@@ -21,9 +21,6 @@
 #include "HepMC3/GenVertex_fwd.h"
 
 namespace HepMC3 {
-
-/** Deprecated */
-using namespace std;
 
 class GenEvent;
 class Attribute;

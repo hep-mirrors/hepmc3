@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAscii.h"
@@ -60,7 +60,7 @@ int main()
     outputv.push_back(new WriterAsciiHepMC2("CC.hepmc2"));
     outputv.push_back(new WriterAsciiHepMC2("DD.hepmc2"));
 
-    for (size_t i=0; i<inputv.size(); i++)
+    for (size_t i=0; i<inputv.size(); i++) {
         while( !inputv.at(i)->failed() )
         {
             GenEvent evt(Units::GEV,Units::MM);
@@ -72,7 +72,8 @@ int main()
             outputv.at(i)->write_event(evt);
             evt.clear();
         }
-    for (size_t i=0; i<outputv.size(); i++) outputv.at(i)->close();
+    }
+    for (size_t i=0; i<outputv.size(); i++) {outputv.at(i)->close();}
 
     return COMPARE_ASCII_FILES("AA.hepmc2","BB.hepmc2")+COMPARE_ASCII_FILES("BB.hepmc2","DD.hepmc2");
 }

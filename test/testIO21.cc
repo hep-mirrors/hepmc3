@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 // -- Purpose: Test that a protobuf input file can be read in and matched to a
 // known event built at runtime

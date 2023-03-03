@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_FOURVECTOR_H
 #define HEPMC3_FOURVECTOR_H
@@ -43,9 +43,13 @@ public:
     FourVector(double xx, double yy, double zz, double ee)
         : m_v1(xx),     m_v2(yy),   m_v3(zz),      m_v4(ee)    {}
     /** @brief Copy constructor */
-    FourVector(const FourVector & v)
-        : m_v1(v.m_v1), m_v2(v.m_v2), m_v3(v.m_v3), m_v4(v.m_v4) {}
-
+    FourVector(const FourVector &) = default;
+    /** @brief Move constructor */
+    FourVector(FourVector && ) = default;
+    /** @brief = */
+    FourVector& operator=(const FourVector&) = default;
+    /** @brief = */
+    FourVector& operator=(FourVector&&) = default;
 
     /// @name Component accessors
     /// @{

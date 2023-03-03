@@ -1,16 +1,16 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenHeavyIon.cc
  *  @brief Implementation of \b class GenHeavyIon
  *
  */
-#include <cstring> // memcmp
-#include <cstdlib> // atoi
 #include <cstdio> // sprintf
+#include <cstdlib> // atoi
+#include <cstring> // memcmp
 #include <sstream> // sprintf
 
 #include "HepMC3/GenHeavyIon.h"
@@ -18,6 +18,7 @@
 namespace HepMC3 {
 
 bool GenHeavyIon::from_string(const std::string &att) {
+/// If HEPMC3_NO_DEPRECATED is not defined, those are member variables.
 #ifdef HEPMC3_NO_DEPRECATED
     double spectator_neutrons, spectator_protons, eccentricity;
 #endif
@@ -33,8 +34,8 @@ bool GenHeavyIon::from_string(const std::string &att) {
            >> event_plane_angle >> eccentricity >> sigma_inel_NN
            >> centrality;
         return !is.fail();
-    } else
-    { is >> version;}
+    }
+    is >> version;
 
 
 
@@ -90,14 +91,12 @@ bool GenHeavyIon::to_string(std::string &att) const {
        << Nspec_proj_p << " " << Nspec_targ_p << " ";
 
     os << participant_plane_angles.size();
-    for ( std::map<int, double>::const_iterator it = participant_plane_angles.begin();
-            it != participant_plane_angles.end(); ++it ) {
-        os << " " << it->first << " " << it->second;
+    for (const auto& it: participant_plane_angles) {
+        os << " " << it.first << " " << it.second;
     }
     os << " " << eccentricities.size();
-    for ( std::map<int, double>::const_iterator it = eccentricities.begin();
-            it != eccentricities.end(); ++it ) {
-        os << " " << it->first << " " << it->second;
+    for (const auto& it: eccentricities) {
+        os << " " << it.first << " " << it.second;
     }
     att = os.str();
 

@@ -40,10 +40,10 @@ int main(int /*argc*/, char ** /*argv*/) {
     // HepMC. In particular we need to add the names of the weights to
     // the GenRunInfo object.
     std::vector<std::string> weightnames;
-    weightnames.push_back("0"); // The first weight is always the
+    weightnames.emplace_back("0"); // The first weight is always the
                                 // default weight with name "0".
-    for ( int i = 0, N = hepr->heprup.weightinfo.size(); i < N; ++i )
-        weightnames.push_back(hepr->heprup.weightNameHepMC(i));
+    for ( int i = 0, N = hepr->heprup.weightinfo.size(); i < N; ++i ){
+        weightnames.push_back(hepr->heprup.weightNameHepMC(i));}
     runinfo->set_weight_names(weightnames);
 
     // We also want to convey the information about which generators was
@@ -68,8 +68,9 @@ int main(int /*argc*/, char ** /*argv*/) {
         // information outside the LHEF <event> tags, which we may want to
         // add.
         std::shared_ptr<HEPEUPAttribute> hepe = std::make_shared<HEPEUPAttribute>();
-        if ( reader.outsideBlock.length() )
+        if ( reader.outsideBlock.length() ){
             hepe->tags = LHEF:: XMLTag::findXMLTags(reader.outsideBlock);
+		}
         hepe->hepeup = reader.hepeup;
         GenEvent ev(runinfo, Units::GEV, Units::MM);
         ev.set_event_number(neve);
@@ -94,21 +95,22 @@ int main(int /*argc*/, char ** /*argv*/) {
             particles.push_back(std::make_shared<GenParticle>(hepe->momentum(i),hepe->hepeup.IDUP[i],hepe->hepeup.ISTUP[i]));
             if (i<2) continue;
             std::pair<int,int> vertex_index(hepe->hepeup.MOTHUP[i].first,hepe->hepeup.MOTHUP[i].second);
-            if (vertices.find(vertex_index)==vertices.end())vertices[vertex_index]=std::make_shared<GenVertex>();
+            if (vertices.find(vertex_index)==vertices.end()) {vertices[vertex_index]=std::make_shared<GenVertex>();}
             vertices[vertex_index]->add_particle_out(particles.back());
         }
         for ( auto v: vertices )
         {
             std::pair<int,int> vertex_index=v.first;
             GenVertexPtr          vertex=v.second;
-            for (int i=vertex_index.first-1; i<vertex_index.second; i++) if (i>=0&&i<(int)particles.size()) vertex->add_particle_in(particles[i]);
+            for (int i=vertex_index.first-1; i<vertex_index.second; i++) {if (i>=0&&i<(int)particles.size()) vertex->add_particle_in(particles[i]);}
         }
-        for ( auto v: vertices ) ev.add_vertex(v.second);
+        for ( auto v: vertices ) {ev.add_vertex(v.second);}
 
         // And we also want to add the weights.
         std::vector<double> wts;
-        for ( int i = 0, N = hepe->hepeup.weights.size(); i < N; ++i )
+        for ( int i = 0, N = hepe->hepeup.weights.size(); i < N; ++i ){
             wts.push_back(hepe->hepeup.weights[i].first);
+		}
         ev.weights() = wts;
 
         // Let's see if we can associate p1 and p2.
@@ -153,15 +155,15 @@ int main(int /*argc*/, char ** /*argv*/) {
 
             // Here we also keep track of the additional non-standard info
             // we found in the original LHE file.
-            for ( int i = 0, N = hepr->tags.size(); i < N; ++i )
-                if ( hepr->tags[i]->name != "init" )
+            for ( int i = 0, N = hepr->tags.size(); i < N; ++i ){
+                if ( hepr->tags[i]->name != "init" ){
                     hepr->tags[i]->print(writer.headerBlock());
-
+				}
+}
             // This is just a test that we can access other attributes
             // included in the GenRunInfo.
             hepr->heprup.NPRUP =
-                int(input.run_info()->
-                    attribute<FloatAttribute>("NPRUP")->value());
+                int(input.run_info()->attribute<FloatAttribute>("NPRUP")->value());
 
             // Then we write out the HEPRUP object.
             writer.heprup = hepr->heprup;
@@ -174,16 +176,16 @@ int main(int /*argc*/, char ** /*argv*/) {
         }
 
         // Now we can access the HEPEUP attribute of the current event.
-        std::shared_ptr<HEPEUPAttribute> hepe =
-            ev.attribute<HEPEUPAttribute>("HEPEUP");
+        std::shared_ptr<HEPEUPAttribute> hepe = ev.attribute<HEPEUPAttribute>("HEPEUP");
 
         // Again, there may be addisional non-standard information we want
         // to keep.
-        for ( int i = 0, N = hepe->tags.size(); i < N; ++i )
+        for ( int i = 0, N = hepe->tags.size(); i < N; ++i ){
             if ( hepe->tags[i]->name != "event" &&
-                 hepe->tags[i]->name != "eventgroup" )
+                 hepe->tags[i]->name != "eventgroup" ){
                 hepe->tags[i]->print(writer.eventComments());
-
+}
+}
         // This is just a test that we can access other attributes
         // included in the GenRunInfo.
         hepe->hepeup.AQCDUP =

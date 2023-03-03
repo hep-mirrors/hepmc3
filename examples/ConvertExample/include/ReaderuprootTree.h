@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef READERUPROOTTREE_H
 #define READERUPROOTTREE_H
 #include "HepMC3/GenEvent.h"
@@ -7,6 +12,7 @@
 #include "HepMC3/Data/GenEventData.h"
 #include "HepMC3/Data/GenRunInfoData.h"
 #include <iostream>
+#include <array>
 #include "HepMC3/Units.h"
 #include "HepMC3/Version.h"
 #include "Python.h"

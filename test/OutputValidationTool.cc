@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #include "OutputValidationTool.h"
 
@@ -9,7 +9,7 @@ OutputValidationTool::OutputValidationTool( const std::string &filename ):m_file
 }
 
 void OutputValidationTool::initialize() {
-    HEPMC2CODE( m_file = new IO_GenEvent((std::string("outputHepMC2")+m_filename).c_str(), std::ios::out); )
+    HEPMC2CODE( m_file = new IO_GenEvent(std::string("outputHepMC2")+m_filename, std::ios::out); )
     HEPMC3CODE( std::shared_ptr<GenRunInfo> run = std::make_shared<GenRunInfo>(); m_file = new WriterAsciiHepMC2(std::string("outputHepMC3")+m_filename,run);)
 }
 

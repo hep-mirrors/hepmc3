@@ -1,22 +1,23 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file WriterAscii.cc
 /// @brief Implementation of \b class WriterAscii
 ///
-#include <cstring>
+
 #include <algorithm>//min max for VS2017
+#include <cstring>
 
-#include "HepMC3/WriterAscii.h"
 
-#include "HepMC3/Version.h"
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
 #include "HepMC3/Units.h"
+#include "HepMC3/Version.h"
+#include "HepMC3/WriterAscii.h"
 
 namespace HepMC3 {
 
@@ -154,7 +155,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
     // Write weight values if present
     if ( !evt.weights().empty() ) {
         m_cursor += sprintf(m_cursor, "W");
-        for (auto w: evt.weights())
+        for (const auto& w: evt.weights())
         {
             m_cursor += sprintf(m_cursor, " %.*e", std::min(3*m_precision, 22), w);
             flush();
@@ -164,8 +165,8 @@ void WriterAscii::write_event(const GenEvent &evt) {
     }
 
     // Write attributes
-    for ( auto vt1: evt.attributes() ) {
-        for ( auto vt2: vt1.second ) {
+    for ( const auto& vt1: evt.attributes() ) {
+        for ( const auto& vt2: vt1.second ) {
             std::string st;
             bool status = vt2.second->to_string(st);
 
@@ -187,7 +188,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
 
     // Print particles
     std::map<int, bool> alreadywritten;
-    for (ConstGenParticlePtr p: evt.particles()) {
+    for (const ConstGenParticlePtr& p: evt.particles()) {
         // Check to see if we need to write a vertex first
         ConstGenVertexPtr v = p->production_vertex();
         int parent_object = 0;
@@ -254,15 +255,15 @@ std::string WriterAscii::escape(const std::string& s) const {
     return ret;
 }
 
-void WriterAscii::write_vertex(ConstGenVertexPtr v) {
+void WriterAscii::write_vertex(const ConstGenVertexPtr& v) {
     flush();
     std::string vlist;
     std::vector<int> pids;
     pids.reserve(v->particles_in().size());
-    for (ConstGenParticlePtr p: v->particles_in()) pids.push_back(p->id());
+    for (const ConstGenParticlePtr& p: v->particles_in()) pids.emplace_back(p->id());
     //We order pids to be able to compare ascii files
     std::sort(pids.begin(), pids.end());
-    for (auto p: pids) vlist.append( std::to_string(p).append(",") );
+    for (const auto& p: pids) vlist.append( std::to_string(p).append(",") );
     if ( !pids.empty() ) vlist.pop_back();
     const FourVector &pos = v->position();
     if ( !pos.is_zero() ) {
@@ -312,16 +313,14 @@ void WriterAscii::write_run_info() {
         m_cursor += sprintf(m_cursor, "\n");
     }
 
-    for (int i = 0, N = run_info()->tools().size(); i < N; ++i) {
-        std::string out = "T " + run_info()->tools()[i].name + "\n"
-                          + run_info()->tools()[i].version + "\n"
-                          + run_info()->tools()[i].description;
+    for (const auto& tool: run_info()->tools()) {
+        std::string out = "T " + tool.name + "\n" + tool.version + "\n" + tool.description;
         write_string(escape(out));
         m_cursor += sprintf(m_cursor, "\n");
     }
 
 
-    for ( auto att: run_info()->attributes() ) {
+    for ( const auto& att: run_info()->attributes() ) {
         std::string st;
         if ( !att.second->to_string(st) ) {
             HEPMC3_WARNING("WriterAscii::write_run_info: problem serializing attribute: " << att.first)
@@ -338,7 +337,7 @@ void WriterAscii::write_run_info() {
     }
 }
 
-void WriterAscii::write_particle(ConstGenParticlePtr p, int second_field) {
+void WriterAscii::write_particle(const ConstGenParticlePtr& p, int second_field) {
     flush();
     m_cursor += sprintf(m_cursor, m_particle_printf_specifier.c_str(), p->id(), second_field, p->pid(), p->momentum().px(), p->momentum().py(), p->momentum().pz(), p->momentum().e(), p->generated_mass(), p->status());
     flush();

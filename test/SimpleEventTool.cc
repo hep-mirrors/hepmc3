@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #include "SimpleEventTool.h"
 
@@ -22,11 +22,11 @@ int SimpleEventTool::process(GenEvent &hepmc) {
 
     // Make particles
     HEPMC2CODE(
-        GenParticle *e1     = new GenParticle( momentum_e1,   -11, 2 );
-        GenParticle *e2     = new GenParticle( momentum_e2,    11, 2 );
-        GenParticle *tau1   = new GenParticle( momentum_tau1, -15, 1 );
-        GenParticle *tau2   = new GenParticle( momentum_tau2,  15, 1 );
-        GenVertex   *vertex = new GenVertex();
+        auto *e1     = new GenParticle( momentum_e1,   -11, 2 );
+        auto *e2     = new GenParticle( momentum_e2,    11, 2 );
+        auto *tau1   = new GenParticle( momentum_tau1, -15, 1 );
+        auto *tau2   = new GenParticle( momentum_tau2,  15, 1 );
+        auto   *vertex = new GenVertex();
     )
     HEPMC3CODE(
         // Although the code for HepMC2 would work (thanks to backward compatibility)

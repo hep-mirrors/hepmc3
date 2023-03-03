@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /// @file GenVertex.h
 /// @brief Definition of \b class GenVertex
@@ -16,8 +16,6 @@
 
 namespace HepMC3 {
 
-/** Deprecated */
-using namespace std;
 
 class Attribute;
 class GenEvent;

@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
      if (!s.length()) s=std::to_string((long long int)iWeight);
      names.push_back(s);
     }
-    if (!names.size()) names.push_back("default");
+    if (names.empty()) names.emplace_back("default");
     run->set_weight_names(names);
     WriterAscii file(argv[2],run);
 

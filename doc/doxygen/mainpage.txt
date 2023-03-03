@@ -14,6 +14,13 @@
     the latest HepMC3 series is a completely new re-write using currently available C++11 techniques,
     and have out-of-the-box interfaces for the widely used in HEP community ROOT and Python.
 
+    Further documentation that might be useful for the users of HepMC3 can be found in the following documents:
+
+     - <a href="https://arxiv.org/pdf/2203.08230.pdf">E.Bothmann et al., A standard convention for particle-level Monte Carlo event-variation weights</a>
+    <a href="https://inspirehep.net/literature/2053416"> InSpire record</a>
+
+    - <a href="https://doi.org/10.1016/j.cpc.2006.11.010">J. Alwall et al., A standard format for Les Houches Event Files</a> 
+    <a href="https://inspirehep.net/literature/725284"> InSpire record</a>
 
     @section releases Status of releases
     The current development effort is concentrated on the HepMC3 series. Users

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenRunInfo.cc
@@ -10,8 +10,9 @@
  */
 #include <sstream>
 
-#include "HepMC3/GenRunInfo.h"
 #include "HepMC3/Data/GenRunInfoData.h"
+#include "HepMC3/GenRunInfo.h"
+
 
 namespace HepMC3 {
 
@@ -38,7 +39,7 @@ void GenRunInfo::set_weight_names(const std::vector<std::string> & names) {
 
 std::string GenRunInfo::attribute_as_string(const std::string &name) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::map< std::string, std::shared_ptr<Attribute> >::iterator i = m_attributes.find(name);
+    auto i = m_attributes.find(name);
     if ( i == m_attributes.end() ) return {};
 
     if ( !i->second ) return {};
@@ -54,29 +55,29 @@ void GenRunInfo::write_data(GenRunInfoData& data) const {
     data.weight_names = this->weight_names();
 
     // Attributes
-    typedef std::map<std::string, std::shared_ptr<Attribute> >::value_type att_val_t;
+    using att_val_t = std::map<std::string, std::shared_ptr<Attribute>>::value_type;
 
     for (const att_val_t& vt: m_attributes) {
         std::string att;
         vt.second->to_string(att);
 
-        data.attribute_name.  push_back(vt.first);
-        data.attribute_string.push_back(att);
+        data.attribute_name.  emplace_back(vt.first);
+        data.attribute_string.emplace_back(att);
     }
 
     // Tools
     for ( const ToolInfo &tool: this->tools() ) {
-        data.tool_name.       push_back(tool.name);
-        data.tool_version.    push_back(tool.version);
-        data.tool_description.push_back(tool.description);
+        data.tool_name.       emplace_back(tool.name);
+        data.tool_version.    emplace_back(tool.version);
+        data.tool_description.emplace_back(tool.description);
     }
 }
 
 
 std::vector<std::string> GenRunInfo::attribute_names() const {
     std::vector<std::string> results;
-    for (auto vt1: m_attributes) {
-        results.push_back(vt1.first);
+    for (const auto& vt1: m_attributes) {
+        results.emplace_back(vt1.first);
     }
     return results;
 }
@@ -98,7 +99,7 @@ void GenRunInfo::read_data(const GenRunInfoData& data) {
         ti.version     = data.tool_version[i];
         ti.description = data.tool_description[i];
 
-        this->tools().push_back(ti);
+        this->tools().emplace_back(ti);
     }
 }
 

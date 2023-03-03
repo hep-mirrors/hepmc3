@@ -1,11 +1,11 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #include "ValidationControl.h"
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 int main(int /*argc*/, char** /*argv*/)
 {
     FILE* Finput=fopen("testPythia1.input","w");

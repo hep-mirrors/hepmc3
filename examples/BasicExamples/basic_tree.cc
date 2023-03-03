@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /// @example basic_tree.cc
 /// @brief Basic example of building HepMC3 tree by hand
@@ -126,8 +126,8 @@ int main() {
     // now this should be null
     cs = evt.attribute<GenCrossSection>("GenCrossSection");
 
-    if(!cs)std::cout << "Successfully removed attribute" <<std::endl;
-    else   std::cout << "Problem removing attribute!" <<std::endl;
+    if(!cs){std::cout << "Successfully removed attribute" <<std::endl;}
+    else   {std::cout << "Problem removing attribute!" <<std::endl;}
 
     //
     // Example of adding attributes and finding particles with attributes

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file WriterRootTree.cc
@@ -100,9 +100,7 @@ void WriterRootTree::close()
 
 bool WriterRootTree::failed()
 {
-    if ( !m_file->IsOpen() ) return true;
-
-    return false;
+    return !m_file->IsOpen();
 }
 
 } // namespace HepMC3

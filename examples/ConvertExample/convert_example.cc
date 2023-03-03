@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /// @example convert_example.cc
 /// @brief Utility to convert between different types of event records
@@ -124,8 +124,9 @@ int main(int argc, char** argv)
     {
         std::string optarg=std::string(ai.extensions_arg[i]);
         size_t pos = optarg.find_first_of('=');
-        if ( pos < optarg.length() )
+        if ( pos < optarg.length() ) {
             options[std::string(optarg,0,pos)] = std::string(optarg, pos+1, optarg.length());
+        }
     }
     long int  events_parsed = 0;
     long int  events_limit = ai.events_limit_arg;
@@ -320,10 +321,10 @@ int main(int argc, char** argv)
         }
         break;
     case dump:
-        output_file = NULL;
+        output_file = nullptr;
         break;
     case none:
-        output_file = NULL;
+        output_file = nullptr;
         ignore_writer = true;
         break;
     default:
@@ -335,14 +336,14 @@ int main(int argc, char** argv)
     {
         GenEvent evt(Units::GEV, Units::MM);
         bool res_read = input_file->read_event(evt);
-        
+
         if( input_file->failed() )  {
             printf("End of file reached. Exit.\n");
             break;
         }
         if ( !res_read && ai.strict_read_arg) {
-          printf("Broken event. Exit.\n");
-          exit(3);
+            printf("Broken event. Exit.\n");
+            exit(3);
         }
         if (evt.event_number() < first_event_number) continue;
         if (evt.event_number() > last_event_number) continue;
@@ -352,7 +353,7 @@ int main(int argc, char** argv)
         {
             if (output_file)
             {
-              output_file->write_event(evt);
+                output_file->write_event(evt);
             }
             else
             {

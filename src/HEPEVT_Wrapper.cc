@@ -1,13 +1,14 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file HEPEVT_Wrapper.cc
  *  @brief Implementation of helper functions used to manipulate with HEPEVT block
  */
 #include <algorithm>
+#include <array>
 #include <set>
 #include <vector>
 
@@ -38,33 +39,37 @@ bool pair_GenVertexPtr_int_greater::operator()(const std::pair<ConstGenVertexPtr
     if (lx.first->particles_out().size() != rx.first->particles_out().size()) return (lx.first->particles_out().size() < rx.first->particles_out().size());
     /* The code below is usefull mainly for debug. Assures strong ordering.*/
     std::vector<int> lx_id_in;
+    lx_id_in.reserve(lx.first->particles_in().size());
     std::vector<int> rx_id_in;
-    for (ConstGenParticlePtr pp: lx.first->particles_in()) lx_id_in.push_back(pp->pid());
-    for (ConstGenParticlePtr pp: rx.first->particles_in()) rx_id_in.push_back(pp->pid());
+    rx_id_in.reserve(rx.first->particles_in().size());
+    for (const ConstGenParticlePtr& pp: lx.first->particles_in()) lx_id_in.emplace_back(pp->pid());
+    for (const ConstGenParticlePtr& pp: rx.first->particles_in()) rx_id_in.emplace_back(pp->pid());
     std::sort(lx_id_in.begin(), lx_id_in.end());
     std::sort(rx_id_in.begin(), rx_id_in.end());
     for (unsigned int i = 0; i < lx_id_in.size(); i++) if (lx_id_in[i] != rx_id_in[i]) return  (lx_id_in[i] < rx_id_in[i]);
 
     std::vector<int> lx_id_out;
+    lx_id_out.reserve(lx.first->particles_out().size());
     std::vector<int> rx_id_out;
-    for (ConstGenParticlePtr pp: lx.first->particles_in()) lx_id_out.push_back(pp->pid());
-    for (ConstGenParticlePtr pp: rx.first->particles_in()) rx_id_out.push_back(pp->pid());
+    rx_id_out.reserve(rx.first->particles_out().size());
+    for (const ConstGenParticlePtr& pp: lx.first->particles_in()) lx_id_out.emplace_back(pp->pid());
+    for (const ConstGenParticlePtr& pp: rx.first->particles_in()) rx_id_out.emplace_back(pp->pid());
     std::sort(lx_id_out.begin(), lx_id_out.end());
     std::sort(rx_id_out.begin(), rx_id_out.end());
     for (unsigned int i = 0; i < lx_id_out.size(); i++) if (lx_id_out[i] != rx_id_out[i]) return  (lx_id_out[i] < rx_id_out[i]);
 
     std::vector<double> lx_mom_in;
     std::vector<double> rx_mom_in;
-    for (ConstGenParticlePtr pp: lx.first->particles_in()) lx_mom_in.push_back(pp->momentum().e());
-    for (ConstGenParticlePtr pp: rx.first->particles_in()) rx_mom_in.push_back(pp->momentum().e());
+    for (const ConstGenParticlePtr& pp: lx.first->particles_in()) lx_mom_in.emplace_back(pp->momentum().e());
+    for (const ConstGenParticlePtr& pp: rx.first->particles_in()) rx_mom_in.emplace_back(pp->momentum().e());
     std::sort(lx_mom_in.begin(), lx_mom_in.end());
     std::sort(rx_mom_in.begin(), rx_mom_in.end());
     for (unsigned int i = 0; i < lx_mom_in.size(); i++) if (lx_mom_in[i] != rx_mom_in[i]) return  (lx_mom_in[i] < rx_mom_in[i]);
 
     std::vector<double> lx_mom_out;
     std::vector<double> rx_mom_out;
-    for (ConstGenParticlePtr pp: lx.first->particles_in()) lx_mom_out.push_back(pp->momentum().e());
-    for (ConstGenParticlePtr pp: rx.first->particles_in()) rx_mom_out.push_back(pp->momentum().e());
+    for (const ConstGenParticlePtr& pp: lx.first->particles_in()) lx_mom_out.emplace_back(pp->momentum().e());
+    for (const ConstGenParticlePtr& pp: rx.first->particles_in()) rx_mom_out.emplace_back(pp->momentum().e());
     std::sort(lx_mom_out.begin(), lx_mom_out.end());
     std::sort(rx_mom_out.begin(), rx_mom_out.end());
     for (unsigned int i = 0; i < lx_mom_out.size(); i++) if (lx_mom_out[i] != rx_mom_out[i]) return  (lx_mom_out[i] < rx_mom_out[i]);
@@ -77,21 +82,22 @@ bool pair_GenVertexPtr_int_greater::operator()(const std::pair<ConstGenVertexPtr
 void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexPtr, int>& pathl)
 {
     int p = 0;
-    for (ConstGenParticlePtr pp: v->particles_in()) {
+    for (const ConstGenParticlePtr& pp: v->particles_in()) {
         ConstGenVertexPtr v2 = pp->production_vertex();
         if (v2 == v) continue; //LOOP! THIS SHOULD NEVER HAPPEN FOR A PROPER EVENT!
         if (!v2) { p = std::max(p, 1); }
         else
-        {if (pathl.find(v2) == pathl.end())  calculate_longest_path_to_top(v2, pathl); p = std::max(p, pathl[v2]+1);}
+        {if (pathl.count(v2) == 0)  calculate_longest_path_to_top(v2, pathl); p = std::max(p, pathl[v2]+1);}
     }
     pathl[v] = p;
 }
 
+/** @brief pointer to the common block */
 HEPMC3_EXPORT_API struct HEPEVT*  hepevtptr = nullptr;
 HEPMC3_EXPORT_API std::shared_ptr<struct HEPEVT_Pointers<double> >  HEPEVT_Wrapper_Runtime_Static::m_hepevtptr = nullptr;
 HEPMC3_EXPORT_API int HEPEVT_Wrapper_Runtime_Static::m_max_particles = 0;
 
-
+/** @brief Set the address */
 void HEPEVT_Wrapper_Runtime::set_hepevt_address(char *c) {
     m_hepevtptr = std::make_shared<struct HEPEVT_Pointers<double> >();
     char* x = c;
@@ -126,16 +132,14 @@ void HEPEVT_Wrapper_Runtime::print_hepevt( std::ostream& ostr ) const
 
 void HEPEVT_Wrapper_Runtime::print_hepevt_particle( int index, std::ostream& ostr ) const
 {
-    char buf[255];//Note: the format is fixed, so no reason for complicated treatment
+    std::array<char, 255> buf;//Note: the format is fixed, so no reason for complicated treatment
 
-    sprintf(buf, "%5i %6i", index, m_hepevtptr->idhep[index-1]);
-    ostr << buf;
-    sprintf(buf, "%4i - %4i  ", m_hepevtptr->jmohep[2*(index-1)], m_hepevtptr->jmohep[2*(index-1)+1]);
-    ostr << buf;
-    sprintf(buf, "%4i - %4i ", m_hepevtptr->jdahep[2*(index-1)], m_hepevtptr->jdahep[2*(index-1)+1]);
-    ostr << buf;
-    sprintf(buf, "%8.2f %8.2f %8.2f %8.2f %8.2f", m_hepevtptr->phep[5*(index-1)], m_hepevtptr->phep[5*(index-1)+1], m_hepevtptr->phep[5*(index-1)+2], m_hepevtptr->phep[5*(index-1)+3], m_hepevtptr->phep[5*(index-1)+4]);
-    ostr << buf << std::endl;
+    snprintf(buf.data(), buf.size(), "%5i %6i%4i - %4i  %4i - %4i %8.2f %8.2f %8.2f %8.2f %8.2f",
+             index, m_hepevtptr->idhep[index-1],
+             m_hepevtptr->jmohep[2*(index-1)], m_hepevtptr->jmohep[2*(index-1)+1],
+             m_hepevtptr->jdahep[2*(index-1)], m_hepevtptr->jdahep[2*(index-1)+1],
+             m_hepevtptr->phep[5*(index-1)], m_hepevtptr->phep[5*(index-1)+1], m_hepevtptr->phep[5*(index-1)+2], m_hepevtptr->phep[5*(index-1)+3], m_hepevtptr->phep[5*(index-1)+4]);
+    ostr << buf.data() << std::endl;
 }
 
 

@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef HEPMC3_WRITERDOT_H
 #define HEPMC3_WRITERDOT_H
 ///
@@ -29,7 +34,7 @@ public:
     /// @brief Write event to file
     ///
     /// @param[in] evt Event to be serialized
-    void write_event(const GenEvent &evt);
+    void write_event(const GenEvent &evt) override;
     /// @brief Return status of the stream
     bool failed() override {
         return (bool)m_file.rdstate();

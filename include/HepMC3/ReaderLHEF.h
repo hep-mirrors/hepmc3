@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERLHEF_H
 #define HEPMC3_READERLHEF_H
@@ -55,8 +55,8 @@ private:
     std::shared_ptr<std::istream> m_shared_stream; ///< Holds temporary stream
     std::shared_ptr<LHEF::Reader> m_reader;            ///< The actual reader
     std::shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
-    int m_neve;                         ///< Event counter
-    bool m_failed;                      ///< State of reader
+    int m_neve = 0;                         ///< Event counter
+    bool m_failed = false;                      ///< State of reader
     std::deque<GenEvent> m_storage; ///<storage used for subevents.
 };
 }

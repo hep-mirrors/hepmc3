@@ -6,6 +6,9 @@
 int skip(const std::string& s1)
 {
     if (s1.length()==0) return 1;
+#ifdef IGNORE_DEFAULT_WEIGHT
+    if (s1=="W Default") return 1;
+#endif
     if (s1.find("HepMC::Version")!=std::string::npos) return 1;
     return 0;
 }

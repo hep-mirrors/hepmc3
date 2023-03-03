@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_CROSS_SECTION_H
 #define HEPMC3_CROSS_SECTION_H
@@ -177,7 +177,7 @@ public:
 private:
 
     /** @brief get the weight index given a weight name. */
-    int windx(std::string wName) const;
+    int windx(const std::string& wName) const;
 
 };
 

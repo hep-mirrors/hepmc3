@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenEvent.h
@@ -188,7 +188,11 @@ public:
     const FourVector& event_pos() const;
 
     /// @brief Vector of beam particles
-    std::vector<ConstGenParticlePtr> beams(const int status = 0) const;
+    std::vector<ConstGenParticlePtr> beams() const;
+
+    /// @brief Vector of beam particles
+    std::vector<ConstGenParticlePtr> beams(const int status) const;
+
 
     /// @brief Vector of beam particles
     const std::vector<GenParticlePtr> & beams();
@@ -368,15 +372,15 @@ private:
     std::vector<GenVertexPtr> m_vertices;
 
     /// Event number
-    int m_event_number;
+    int m_event_number = 0;
 
     /// Event weights
     std::vector<double> m_weights;
 
     /// Momentum unit
-    Units::MomentumUnit m_momentum_unit;
+    Units::MomentumUnit m_momentum_unit = Units::GEV;
     /// Length unit
-    Units::LengthUnit m_length_unit;
+    Units::LengthUnit m_length_unit = Units::MM;
 
     /// The root vertex is stored outside the normal vertices list to block user access to it
     GenVertexPtr m_rootvertex;
@@ -428,10 +432,12 @@ std::shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) 
         std::shared_ptr<T> att = std::make_shared<T>();
         att->m_event = this;
 
-        if ( id > 0 && id <= int(particles().size()) )
+        if ( id > 0 && id <= int(particles().size()) ) {
             att->m_particle = m_particles[id - 1];
-        if ( id < 0 && -id <= int(vertices().size()) )
+        }
+        if ( id < 0 && -id <= int(vertices().size()) ) {
             att->m_vertex = m_vertices[-id - 1];
+        }
         if ( att->from_string(i2->second->unparsed_string()) &&
                 att->init() ) {
             // update map with new pointer

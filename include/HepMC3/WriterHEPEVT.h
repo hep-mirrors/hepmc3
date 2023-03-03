@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_WRITERHEPEVT_H
 #define HEPMC3_WRITERHEPEVT_H
@@ -84,8 +84,8 @@ protected:
     std::ofstream m_file; //!< Output file
     std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
-    char* hepevtbuffer;   //!< Pointer to HEPEVT Fortran common block/C struct
-    int   m_events_count; //!< Events count. Needed to generate unique object name
+    char* hepevtbuffer = nullptr;   //!< Pointer to HEPEVT Fortran common block/C struct
+    int   m_events_count = 0; //!< Events count. Needed to generate unique object name
     HEPEVT_Wrapper_Template<100000> m_hepevt_interface; //!< Templated HEPEVT interface
 };
 

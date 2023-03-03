@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
@@ -38,8 +38,9 @@ int main()
     }
     evts[i].remove_particles(evts[j].particles());
 
-    for (GenParticlePtr p: evts.at(i).particles())
+    for (GenParticlePtr p: evts.at(i).particles()) {
         evts[j].remove_particle(p);
+    }
 
     for (GenParticlePtr p: evts.at(i).particles()) {
         for (GenVertexPtr v: evts.at(j).vertices()) {

@@ -127,7 +127,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 		}
 		return Reader::set_options(a0);
 	}
-	using _binder_ret_0 = class std::map<std::string, std::string >;
+	using _binder_ret_0 = std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderLHEF *>(this), "get_options");
@@ -238,7 +238,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 		}
 		return ReaderPlugin::set_options(a0);
 	}
-	using _binder_ret_0 = class std::map<std::string, std::string >;
+	using _binder_ret_0 = std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderPlugin *>(this), "get_options");
@@ -336,7 +336,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 		}
 		return WriterPlugin::set_options(a0);
 	}
-	using _binder_ret_0 = class std::map<std::string, std::string >;
+	using _binder_ret_0 = std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterPlugin *>(this), "get_options");

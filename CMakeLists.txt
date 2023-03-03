@@ -7,7 +7,7 @@ SET(HEPMC3_VERSION_MAJOR  3)
 SET(HEPMC3_VERSION_MINOR  2)
 SET(HEPMC3_VERSION_PATCH  6)
 
-set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_VERBOSE_MAKEFILE OFF)
 #This module respects HFS, e.g. defines lib or lib64 when it is needed.
 include("GNUInstallDirs")
 #---Setting HepMC3 Build type-----------------------------------------------
@@ -18,7 +18,8 @@ else(CMAKE_BUILD_TYPE)
   message(STATUS "HepMC3 Build type not specified, use: ${CMAKE_BUILD_TYPE}")
 endif(CMAKE_BUILD_TYPE)
 
-if (${CMAKE_VERSION} GREATER "3.8")
+message(STATUS "HepMC3: CMAKE_VERSION=${CMAKE_VERSION}")
+if (${CMAKE_VERSION} VERSION_GREATER "3.8")
   cmake_policy(SET CMP0069 NEW)
 endif()
 
@@ -38,18 +39,18 @@ option(HEPMC3_INSTALL_INTERFACES "Enables installation of HepMC3 interfaces to M
 option(HEPMC3_BUILD_STATIC_LIBS  "Enables building of static libraties." ON)
 option(HEPMC3_ENABLE_CLANG_TIDY  "Enables usage of clang-tidy." OFF)
 if (HEPMC3_ENABLE_CLANG_TIDY)
-  set(checks_to_remove_1 "-cppcoreguidelines-pro-type-reinterpret-cast,-altera-id-dependent-backward-branch,-readability-function-cognitive-complexity,-fuchsia-overloaded-operator,-altera-struct-pack-align")
-  set(checks_to_remove_2 "-google-readability-casting,-cppcoreguidelines-pro-type-vararg,-hicpp-vararg,-altera-unroll-loops,-cppcoreguidelines-avoid-magic-numbers,-readability-magic-numbers,-clang-analyzer-core.NonNullParamChecker")
-  set(checks_to_remove_3 "-llvm-include-order,-fuchsia-default-arguments-calls,-llvmlibc-implementation-in-namespace,-llvmlibc-restrict-system-libc-headers,-cert-err33-c,-cppcoreguidelines-pro-type-cstyle-cast")
-  set(checks_to_remove_4 "-readability-identifier-length,-modernize-use-trailing-return-type,-cppcoreguidelines-avoid-non-const-global-variables,-llvmlibc-callee-namespace,-cppcoreguidelines-owning-memory")
-  set(checks_to_remove_5 "-bugprone-easily-swappable-parameters,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-readability-implicit-bool-conversion,-hicpp-braces-around-statements,-readability-redundant-smartptr-get")
-  set(checks_to_remove_6 "-cert-err34-c,-readability-braces-around-statements,-hicpp-use-emplace,-modernize-use-emplace,-google-default-arguments,-modernize-use-using")
-  set(checks_to_remove_7 "-performance-unnecessary-value-param,-performance-for-range-copy,-google-runtime-int,-modernize-pass-by-value,-misc-no-recursion,-modernize-loop-convert,-llvm-else-after-return,-readability-else-after-return")
-  set(checks_to_remove_8 "-cppcoreguidelines-pro-type-member-init,-hicpp-member-init,-bugprone-narrowing-conversions,-cppcoreguidelines-narrowing-conversions,-cert-err58-cpp,-fuchsia-statically-constructed-objects")
-  set(checks_to_remove_9 "-cppcoreguidelines-prefer-member-initializer,-concurrency-mt-unsafe,-readability-convert-member-functions-to-static,-bugprone-implicit-widening-of-multiplication-result,-hicpp-use-auto,-modernize-use-auto")
-  set(checks_to_remove_10 "-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-hicpp-no-array-decay,-clang-analyzer-optin.cplusplus.VirtualCall,-cppcoreguidelines-avoid-c-arrays,-hicpp-avoid-c-arrays,-modernize-avoid-c-arrays")
-  set(checks_to_remove_11 "-readability-delete-null-pointer,-cppcoreguidelines-init-variables,-clang-analyzer-core.CallAndMessage")
-  set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--checks=*,${checks_to_remove_1},${checks_to_remove_2},${checks_to_remove_3},${checks_to_remove_4},${checks_to_remove_5},${checks_to_remove_6},${checks_to_remove_7},${checks_to_remove_8},${checks_to_remove_9},${checks_to_remove_10},${checks_to_remove_11}")
+  set(ctor_1 "-cppcoreguidelines-pro-type-reinterpret-cast,-altera-id-dependent-backward-branch,-readability-function-cognitive-complexity")
+  set(ctor_2 "-google-readability-casting,-cppcoreguidelines-pro-type-vararg,-hicpp-vararg,-altera-unroll-loops,-cppcoreguidelines-avoid-magic-numbers")
+  set(ctor_3 "-fuchsia-default-arguments-calls,-cppcoreguidelines-pro-type-cstyle-cast,-llvmlibc*,-modernize-loop-convert,-fuchsia-overloaded-operator")
+  set(ctor_4 "-readability-braces-around-statements,-readability-identifier-length,-modernize-use-trailing-return-type,-cppcoreguidelines-avoid-non-const-global-variables")
+  set(ctor_5 "-bugprone-easily-swappable-parameters,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-readability-implicit-bool-conversion,-hicpp-braces-around-statements")
+  set(ctor_6 "-google-default-arguments,-readability-redundant-smartptr-get,-cppcoreguidelines-owning-memory,-llvm-include-order,-readability-magic-numbers")
+  set(ctor_7 "-performance-unnecessary-value-param,-performance-for-range-copy,-google-runtime-int,-modernize-pass-by-value,-readability-else-after-return")
+  set(ctor_8 "-cppcoreguidelines-pro-type-member-init,-hicpp-member-init,-bugprone-narrowing-conversions,-cppcoreguidelines-narrowing-conversions")
+  set(ctor_9 "-cppcoreguidelines-prefer-member-initializer,-concurrency-mt-unsafe,-readability-convert-member-functions-to-static,-clang-analyzer-core.NonNullParamChecker")
+  set(ctor_10 "-clang-analyzer-optin.cplusplus.VirtualCall,-cert-err33-c,-cert-err34-c,-cert-err58-cpp,-fuchsia-statically-constructed-objects,-misc-no-recursion")
+  set(ctor_11 "-readability-delete-null-pointer,-clang-analyzer-core.CallAndMessage,-bugprone-implicit-widening-of-multiplication-result,-cert-msc30-c,-cert-msc50-cpp,-clang-diagnostic-unused-command-line-argument,-google-build-using-namespace,-android-cloexec-fopen")
+  set(CMAKE_CXX_CLANG_TIDY "clang-tidy;--checks=*,${ctor_1},${ctor_2},${ctor_3},${ctor_4},${ctor_5},${ctor_6},${ctor_7},${ctor_8},${ctor_9},${ctor_10},${ctor_11}")
 endif()
 
 if (NOT HEPMC3_PYTHON_VERSIONS)
@@ -193,6 +194,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 CHECK_CXX_COMPILER_FLAG("-Wno-strict-aliasing" COMPILER_SUPPORTS_-Wno-strict-aliasing)
 if (COMPILER_SUPPORTS_-Wno-strict-aliasing)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
+endif()
+
+CHECK_CXX_COMPILER_FLAG("-Wno-unused-command-line-argument" COMPILER_SUPPORTS_-Wno-unused-command-line-argument)
+if (COMPILER_SUPPORTS_-Wno-unused-command-line-argument)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-command-line-argument")
+endif()
+CHECK_CXX_COMPILER_FLAG("-Wno-gnu-zero-variadic-macro-arguments" COMPILER_SUPPORTS_-Wno-gnu-zero-variadic-macro-arguments)
+if (COMPILER_SUPPORTS_-Wno-gnu-zero-variadic-macro-arguments)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-gnu-zero-variadic-macro-arguments")
 endif()
 #Workarounds for Intel
 if (${CMAKE_CXX_COMPILER_ID} MATCHES "Intel")
@@ -469,12 +479,15 @@ if (ASTYLE)
     include/HepMC3/*HEPEVT*h
     include/HepMC3/Gen*h
     include/HepMC3/Com*h
+    include/HepMC3/Att*h
     examples/*/src/*cc
+    examples/*/convert_example.cc    
     examples/*/include/*h
     test/*cc
     test/*h
     interfaces/*/include/*.h
     interfaces/*/include/*/*.h
+    interfaces/*/include/*/*.cc
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
 endif()

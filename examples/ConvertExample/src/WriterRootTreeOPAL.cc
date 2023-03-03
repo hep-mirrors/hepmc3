@@ -1,5 +1,8 @@
 // -*- C++ -*-
 //
+// This file is part of HepMC
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+//
 #include "WriterRootTreeOPAL.h"
 #include "TTree.h"
 namespace HepMC3
@@ -15,14 +18,15 @@ void WriterRootTreeOPAL::write_event(const GenEvent &evt)
 {
     m_Ievnt=evt.event_number();
     std::vector<size_t> beams;
-    for (size_t i=0; i<evt.particles().size(); i++)
+    for (size_t i=0; i<evt.particles().size(); i++) {
         if (evt.particles().at(i)->status()==4&&std::abs(evt.particles().at(i)->pid())==11)
-            beams.push_back(i);
-
-    if (beams.size()==2)
+        { beams.push_back(i);}
+    }
+    if (beams.size()==2) {
         m_Ebeam=std::abs(evt.particles().at(beams[0])->momentum().e());
-    else
+    } else {
         m_Ebeam=std::abs(evt.particles().at(0)->momentum().e());
+    }
     WriterRootTree::write_event(evt);
 }
 void WriterRootTreeOPAL::set_run_number(const int nr) {m_Irun=nr;}
