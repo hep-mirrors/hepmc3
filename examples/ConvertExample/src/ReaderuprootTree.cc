@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+//
 #include "ReaderuprootTree.h"
 namespace HepMC3
 {
