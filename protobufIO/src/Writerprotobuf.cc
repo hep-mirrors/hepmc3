@@ -21,13 +21,14 @@
 namespace HepMC3 {
 
 std::string const ProtobufMagicHeader = "hmpb";
-size_t const ProtobufMagicHeaderBytes = 4;
 
-HEPMC3_DECLARE_WRITER_FILE(Writerprotobuf);
-HEPMC3_DECLARE_WRITER_STREAM(Writerprotobuf);
+HEPMC3_DECLARE_WRITER_FILE(Writerprotobuf)
+HEPMC3_DECLARE_WRITER_STREAM(Writerprotobuf)
 
+/// @brief Constant
 static size_t const MDBytesLength = 10;
 
+/// @brief Write a message
 template <typename T>
 size_t write_message(std::ostream *out_stream, T &msg,
                      HepMC3_pb::MessageDigest::MessageType type) {

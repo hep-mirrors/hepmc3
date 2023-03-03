@@ -14,7 +14,6 @@
 #include <iterator>
 using namespace HepMC3;
 const size_t NinputCopies=4;
-const size_t NmaxThreads=3;
 std::shared_ptr<GenEvent> generate(const int Z) {
     std::shared_ptr<GenEvent> evt = std::make_shared<GenEvent>();
     std::shared_ptr<GenRunInfo> run = std::make_shared<GenRunInfo>();

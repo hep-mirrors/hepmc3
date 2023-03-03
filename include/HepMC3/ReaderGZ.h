@@ -37,7 +37,7 @@ public:
         m_zstr = std::shared_ptr< std::istream >(new istream(is));
         m_reader = std::make_shared<T>(*(m_zstr.get()));
     }
-
+    /// @brief The ctor to read from shared pointer to stream
     ReaderGZ(std::shared_ptr<std::istream> s_stream) {
         m_zstr = s_stream;
         m_reader = std::make_shared<T>(*(m_zstr.get()));
