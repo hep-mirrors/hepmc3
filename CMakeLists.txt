@@ -195,6 +195,15 @@ CHECK_CXX_COMPILER_FLAG("-Wno-strict-aliasing" COMPILER_SUPPORTS_-Wno-strict-ali
 if (COMPILER_SUPPORTS_-Wno-strict-aliasing)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
 endif()
+
+CHECK_CXX_COMPILER_FLAG("-Wno-unused-command-line-argument" COMPILER_SUPPORTS_-Wno-unused-command-line-argument)
+if (COMPILER_SUPPORTS_-Wno-unused-command-line-argument)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-command-line-argument")
+endif()
+CHECK_CXX_COMPILER_FLAG("-Wno-gnu-zero-variadic-macro-arguments" COMPILER_SUPPORTS_-Wno-gnu-zero-variadic-macro-arguments)
+if (COMPILER_SUPPORTS_-Wno-gnu-zero-variadic-macro-arguments)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-gnu-zero-variadic-macro-arguments")
+endif()
 #Workarounds for Intel
 if (${CMAKE_CXX_COMPILER_ID} MATCHES "Intel")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -diag-disable=2196")

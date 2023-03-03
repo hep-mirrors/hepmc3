@@ -116,6 +116,14 @@ protected:
     /// Hide the copy constructor
     GenericFeature(const GenericFeature &copy) : m_internal(copy.m_internal) {}
 
+    /** @brief Move constructor */
+    GenericFeature(GenericFeature && ) = default;
+    /** @brief = */
+    GenericFeature& operator=(const GenericFeature&) = default;
+    /** @brief = */
+    GenericFeature& operator=(GenericFeature&&) = default;
+
+
     /// @brief internal copy of func for evaluation
     /// on the heap so will persist in resulting Filters even if
     /// parent Feature object was destroyed

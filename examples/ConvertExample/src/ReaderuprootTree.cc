@@ -115,7 +115,7 @@ bool ReaderuprootTree::init(const std::string &filename)
     set_run_info(std::make_shared<GenRunInfo>());
 
     Py_Initialize();
-    import_array()
+    import_array();
 
     m_python_module = init_python_module(
 
