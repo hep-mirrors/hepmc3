@@ -18,6 +18,7 @@
 namespace HepMC3 {
 
 bool GenHeavyIon::from_string(const std::string &att) {
+/// If HEPMC3_NO_DEPRECATED is not defined, those are member variables.
 #ifdef HEPMC3_NO_DEPRECATED
     double spectator_neutrons, spectator_protons, eccentricity;
 #endif

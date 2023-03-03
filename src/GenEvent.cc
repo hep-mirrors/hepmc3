@@ -700,14 +700,14 @@ void GenEvent::read_data(const GenEventData &data) {
 
     // Fill particle information
     for ( const GenParticleData &pd: data.particles ) {
-        m_particles.emplace_back(std::move(std::make_shared<GenParticle>(pd)));
+        m_particles.emplace_back(std::make_shared<GenParticle>(pd));
         m_particles.back()->m_event = this;
         m_particles.back()->m_id    = m_particles.size();
     }
 
     // Fill vertex information
     for ( const GenVertexData &vd: data.vertices ) {
-        m_vertices.emplace_back(std::move(std::make_shared<GenVertex>(vd)));
+        m_vertices.emplace_back(std::make_shared<GenVertex>(vd));
         m_vertices.back()->m_event = this;
         m_vertices.back()->m_id    = -(int)m_vertices.size();
     }

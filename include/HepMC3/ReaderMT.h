@@ -91,12 +91,14 @@ public:
         m_events.pop_back();
         return true;
     }
+    /// @brief failed
     bool failed()  override {
         for (auto& reader: m_readers)    if (reader && !reader->failed()) return false;
         if ( !m_events.empty() ) return false;
         if ( m_go_try_cache ) return false;
         return true;
     }
+    /// @brief close
     void close()   override {
         for (auto& reader: m_readers) if (reader) reader->close();
     }

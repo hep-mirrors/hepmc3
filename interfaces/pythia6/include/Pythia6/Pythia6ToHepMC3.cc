@@ -288,7 +288,7 @@ extern "C" {
             printf("Warning in %s: Writer at position %i does not exist\n", __FUNCTION__, position);
             return 1;
         }
-        if (hepmc3_gWriters[position].second->weights().size() < index) {
+        if (hepmc3_gWriters[position].second->weights().size() < (unsigned long int)index) {
             printf("Warning in %s: Event has no weight with index %i\n", __FUNCTION__, index);
             return 2;
         }
