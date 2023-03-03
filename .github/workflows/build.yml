@@ -11,7 +11,6 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.9"]
-#        python-version: ["2.7", "3.9"]
         config: 
         - {
             name: "MacOSX-12",
@@ -54,8 +53,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9"]
-#        python-version: ["2.7", "3.9"]
+        python-version: ["3.10"]
         config: 
         - {
             name: "Windows Latest MSVC",
@@ -71,10 +69,9 @@ jobs:
         with:
           python-version: "${{ matrix.python-version }}"
       - name: Set up Protobuf
-#          curl.exe --output protoc-21.1-win64.zip --url https://github.com/protocolbuffers/protobuf/releases/download/v21.1/protoc-21.1-win64.zip
         run:  |
-          Invoke-WebRequest -Uri https://github.com/protocolbuffers/protobuf/releases/download/v3.19.4/protoc-3.19.4-win64.zip -OutFile protoc-3.19.4-win64.zip
-          Expand-Archive -Path protoc-3.19.4-win64.zip -DestinationPath C:\output
+          Invoke-WebRequest -Uri https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win64.zip -OutFile protoc-21.12-win64.zip
+          Expand-Archive -Path protoc-21.12-win64.zip -DestinationPath C:\output
           vcpkg install protobuf:x64-windows
           copy  C:\output\bin\protoc.exe C:\vcpkg\packages\protobuf_x64-windows\bin 
           vcpkg list
@@ -126,5 +123,4 @@ jobs:
         cmake --install BUILD 
 #        cd BUILD
 #        ctest .
-
 

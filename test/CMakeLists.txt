@@ -75,6 +75,7 @@ option(HEPMC3_TEST_VALGRIND  "Use valgrind in tests if available" OFF)
 option(HEPMC3_TEST_ZLIB      "Use zlib in tests if available" ON)
 option(HEPMC3_TEST_LZMA      "Use lzma in tests if available" ON)
 option(HEPMC3_TEST_BZIP2     "Use bzip2 in tests if available" ON)
+option(HEPMC3_TEST_ZSTD      "Use zstd in tests if available" ON)
 
 set(HEPMC3_TEST_PACKAGES_LIST "")
 if (HEPMC3_TEST_MCTESTER)
@@ -107,6 +108,9 @@ endif()
 if (HEPMC3_TEST_BZIP2)
  LIST(APPEND HEPMC3_TEST_PACKAGES_LIST "bzip2")
 endif()
+if (HEPMC3_TEST_ZSTD)
+ LIST(APPEND HEPMC3_TEST_PACKAGES_LIST "zstd")
+endif()
 message(STATUS "HepMC3 test: The following packages are enabled for tests HEPMC3_TEST_PACKAGES_LIST=${HEPMC3_TEST_PACKAGES_LIST}" )
 
 option(HEPMC3_USE_INTERFACE_FROM_MCTESTER "Use interface from installed MC-TESTER" ON)
@@ -134,6 +138,7 @@ set( HepMC_tests
         testIO6
         testIO7
         testIO8
+        testIO11
         testReaderFactory1
         testSingleVertexHepMC2
         testAttributes
@@ -177,6 +182,7 @@ if("Threads" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND Threads_FOUND AND NOT (${CMAK
   message(STATUS "HepMC3 test: Threads library found.  Thread safety tests enabled")
   list( APPEND HepMC_tests "testThreads1" )
   list( APPEND HepMC_tests "testIO10" )
+  list( APPEND HepMC_tests "testReaderFactory3" )
   if (HEPMC3_ENABLE_SEARCH)
     list( APPEND HepMC_search_tests "testThreadssearch" )
   endif()
@@ -206,6 +212,14 @@ if ("bzip2" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
     list( APPEND HepMC_tests ${compress_tests} )
   endif()
 endif()  
+if ("zstd" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
+  #find_package(ZSTD)#FIXME!
+  if(ZSTD_FOUND)
+    message(STATUS "HepMC3 test: Zstd library found.  Zstd tests enabled")
+    list( APPEND HepMC_tests ${compress_tests} )
+  endif()
+endif() 
+
 ## Here we add the tests
 list(REMOVE_DUPLICATES HepMC_tests)
 foreach ( test ${HepMC_tests} )
@@ -235,6 +249,7 @@ if(Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI") AND NOT (${CMA
   if(THREADS_HAVE_PTHREAD_ARG)
     target_compile_options(testThreads1 PUBLIC "-pthread")
     target_compile_options(testIO10 PUBLIC "-pthread")
+    target_compile_options(testReaderFactory3 PUBLIC "-pthread")
     if (HEPMC3_ENABLE_SEARCH)
      target_compile_options(testThreadssearch PUBLIC "-pthread")
     endif()    
@@ -242,6 +257,7 @@ if(Threads_FOUND AND NOT (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI") AND NOT (${CMA
   if(CMAKE_THREAD_LIBS_INIT)
     target_link_libraries(testThreads1 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
     target_link_libraries(testIO10 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
+    target_link_libraries(testReaderFactory3 PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
     if (HEPMC3_ENABLE_SEARCH)
      target_link_libraries(testThreadssearch PUBLIC "${CMAKE_THREAD_LIBS_INIT}")
     endif() 
@@ -269,6 +285,13 @@ if (WIN32)
        file(COPY ${bz2dll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
      endif()
    endif()
+   #if ("zstd" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND ZSTD_FOUND)
+     #get_filename_component(b ${ZSTD_LIBRARIES} DIRECTORY)
+     #find_file(zstddll NAME libzstd.dll PATHS ${b} ${b}/../bin/)
+     #if (zstddll)
+       #file(COPY ${zstddll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+     #endif()
+   #endif()
 endif()
 
 foreach ( ctest ${compress_tests} )
@@ -290,6 +313,12 @@ foreach ( ctest ${compress_tests} )
     target_link_libraries(${ctest} PRIVATE "${BZIP2_LIBRARIES}" )
     target_include_directories(${ctest} PRIVATE "${BZIP2_INCLUDE_DIRS}" )
   endif()
+  #if ("zstd" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND ZSTD_FOUND)
+    #target_compile_options(${ctest} PUBLIC "-DHEPMC3_USE_COMPRESSION")
+    #target_compile_options(${ctest} PUBLIC "-DHEPMC3_ZSTD_SUPPORT=1")
+    #target_link_libraries(${ctest} PRIVATE "${ZSTD_LIBRARIES}" )
+    #target_include_directories(${ctest} PRIVATE "${ZSTD_INCLUDE_DIRS}" )
+  #endif()
 endforeach ( ctest ${compress_tests} )
 #So far the test with ROOT have issues on WIN32
 if(HEPMC3_ENABLE_ROOTIO AND (NOT WIN32) )

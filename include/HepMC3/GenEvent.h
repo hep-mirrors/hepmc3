@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file GenEvent.h
@@ -43,15 +43,15 @@ class GenEvent {
 public:
 
     /// @brief Event constructor without a run
-    GenEvent(Units::MomentumUnit momentum_unit = Units::GEV,
-             Units::LengthUnit length_unit = Units::MM);
+    GenEvent(Units::MomentumUnit mu = Units::GEV,
+             Units::LengthUnit lu = Units::MM);
 
 #if !defined(__CINT__)
 
     /// @brief Constructor with associated run
     GenEvent(std::shared_ptr<GenRunInfo> run,
-             Units::MomentumUnit momentum_unit = Units::GEV,
-             Units::LengthUnit length_unit = Units::MM);
+             Units::MomentumUnit mu = Units::GEV,
+             Units::LengthUnit lu = Units::MM);
 
     /// @brief Copy constructor
     GenEvent(const GenEvent&);
@@ -70,7 +70,6 @@ public:
     /// @brief Get list of vertices (const)
     const std::vector<ConstGenVertexPtr>& vertices() const;
 
-
     /// @brief Get/set list of particles (non-const)
     const std::vector<GenParticlePtr>& particles() { return m_particles; }
     /// @brief Get/set list of vertices (non-const)
@@ -80,16 +79,17 @@ public:
 
 
     /// @name Particle and vertex access
-    //@{
-    ///Particles size, HepMC2 compatiility
+    /// @{
+    /// Particles size, HepMC2 compatibility
     inline int particles_size() const { return m_particles.size(); }
-    ///Particles empty, HepMC2 compatiility
+    /// Particles empty, HepMC2 compatibility
     inline bool particles_empty() const { return m_particles.empty(); }
-    ///Vertices size, HepMC2 compatiility
+    /// Vertices size, HepMC2 compatibility
     inline int vertices_size() const { return m_vertices.size(); }
-    ///Vertices empty, HepMC2 compatiility
+    /// Vertices empty, HepMC2 compatibility
     inline bool vertices_empty() const { return m_vertices.empty(); }
-    //@}
+    /// @}
+
 
     /// @name Event weights
     /// @{
@@ -191,6 +191,10 @@ public:
     std::vector<ConstGenParticlePtr> beams() const;
 
     /// @brief Vector of beam particles
+    std::vector<ConstGenParticlePtr> beams(const int status) const;
+
+
+    /// @brief Vector of beam particles
     const std::vector<GenParticlePtr> & beams();
 
     /// @brief Shift position of all vertices in the event by @a delta
@@ -202,10 +206,10 @@ public:
         shift_position_by(delta);
     }
 
-    /// @brief Boost event using x,y,z components of @a v as velocities
-    bool boost( const FourVector&  v );
-    /// @brief Rotate event using x,y,z components of @a v as rotation angles
-    bool rotate( const FourVector&  v );
+    /// @brief Boost event using x,y,z components of @a delta as velocities
+    bool boost( const FourVector&  delta );
+    /// @brief Rotate event using x,y,z components of @a delta as rotation angles
+    bool rotate( const FourVector&  delta );
     /// @brief Change sign of @a axis
     bool reflect(const int axis);
 
@@ -277,7 +281,7 @@ public:
     /// if it is the only incoming particle of this vertex.
     /// It will also production vertex of this particle if this vertex
     /// has no more outgoing particles
-    void remove_particle( GenParticlePtr v );
+    void remove_particle( GenParticlePtr p );
 
     /// @brief Remove a set of particles
     ///
@@ -299,12 +303,12 @@ public:
     ///
     /// @note Any particles on this list that do not belong to the tree
     ///       will be ignored.
-    void add_tree( const std::vector<GenParticlePtr> &particles );
+    void add_tree( const std::vector<GenParticlePtr> &parts );
 
     /// @brief Reserve memory for particles and vertices
     ///
     /// Helps optimize event creation when size of the event is known beforehand
-    void reserve(const size_t& particles, const size_t& vertices = 0);
+    void reserve(const size_t& parts, const size_t& verts = 0);
 
     /// @brief Remove contents of this event
     void clear();
@@ -315,10 +319,12 @@ public:
     /// @{
 
     /// @brief Add particle by raw pointer
+    ///
     /// @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
     void add_particle( GenParticle *p );
 
     /// @brief Add vertex by raw pointer
+    ///
     /// @deprecated Use GenEvent::add_vertex( const GenVertexPtr& ) instead
     void add_vertex  ( GenVertex *v );
 
@@ -366,15 +372,15 @@ private:
     std::vector<GenVertexPtr> m_vertices;
 
     /// Event number
-    int m_event_number;
+    int m_event_number = 0;
 
     /// Event weights
     std::vector<double> m_weights;
 
     /// Momentum unit
-    Units::MomentumUnit m_momentum_unit;
+    Units::MomentumUnit m_momentum_unit = Units::GEV;
     /// Length unit
-    Units::LengthUnit m_length_unit;
+    Units::LengthUnit m_length_unit = Units::MM;
 
     /// The root vertex is stored outside the normal vertices list to block user access to it
     GenVertexPtr m_rootvertex;
@@ -401,6 +407,8 @@ private:
 
 };
 
+
+
 #if !defined(__CINT__)
 //
 // Template methods
@@ -408,8 +416,7 @@ private:
 template<class T>
 std::shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) const {
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 =
-        m_attributes.find(name);
+    std::map< std::string, std::map<int, std::shared_ptr<Attribute> > >::iterator i1 = m_attributes.find(name);
     if ( i1 == m_attributes.end() ) {
         if ( id == 0 && run_info() ) {
             return run_info()->attribute<T>(name);
@@ -425,10 +432,12 @@ std::shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) 
         std::shared_ptr<T> att = std::make_shared<T>();
         att->m_event = this;
 
-        if ( id > 0 && id <= int(particles().size()) )
+        if ( id > 0 && id <= int(particles().size()) ) {
             att->m_particle = m_particles[id - 1];
-        if ( id < 0 && -id <= int(vertices().size()) )
+        }
+        if ( id < 0 && -id <= int(vertices().size()) ) {
             att->m_vertex = m_vertices[-id - 1];
+        }
         if ( att->from_string(i2->second->unparsed_string()) &&
                 att->init() ) {
             // update map with new pointer
@@ -441,6 +450,7 @@ std::shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) 
     else return std::dynamic_pointer_cast<T>(i2->second);
 }
 #endif // __CINT__
+
 
 } // namespace HepMC3
 #endif

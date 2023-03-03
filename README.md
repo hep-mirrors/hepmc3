@@ -52,6 +52,12 @@ The following commands will install the HepMC3 in the corresponding systems:
     ```
     The dependencies can vary.
 
+  - Gentoo linux
+    The package is available in the standard repository https://packages.gentoo.org/packages/sci-physics/hepmc. To install:
+    ```
+    sudo emerge --ask hepmc:3
+    ```
+
   - MacOSX
     The HepMC3 package is available in the ``homebrew-hep`` repository https://davidchall.github.io/homebrew-hep/.
     To install:
@@ -281,7 +287,7 @@ for the `HEPMC3_PYTHON_VERSIONS` option, e.g.
 -DHEPMC3_PYTHON_VERSIONS=pypy2
 ```
 
-11
+11.
 
 HepMC3 is shipped with interfaces to some MC event generators/codes located in the interfaces/ directory.
 This is done to allow the usage of HepMC3 with codes that so far don't have HepMC3 interfaces.
@@ -306,6 +312,86 @@ To use the interfaces and tests shipped with HepMC3, one can set the following o
 ```
 Adjustment of LD_LIBRARY_PATH might be needed.
 
+## Using a binary distribution of HepMC3 in your CMake project
+
+To include an existing build of HepMC3 in your project, you can use find_package as below:
+
+```
+find_package(HepMC3 3.3.0 REQUIRED)
+```
+
+This will set up a number of CMake variables targets depending on the features that were built with the found version of HepMC3. Some useful CMake variables that will be set are included below:
+
+```
+HEPMC3_VERSION
+HEPMC3_VERSION_MAJOR
+HEPMC3_VERSION_MINOR
+HEPMC3_VERSION_PATCH
+HEPMC3_FEATURES
+HEPMC3_INCLUDE_DIR
+HEPMC3_LIB
+HEPMC3_SEARCH_LIB
+HEPMC3_ROOTIO_LIB
+HEPMC3_PROTOBUFIO_LIB
+```
+
+Generally in modern CMake projects you should use exported targets to model dependencies, rather than setting your own compiler and linker options using the values of variables like the above. Modern HepMC3 exports a number of targets, reproduced below:
+
+```
+HepMC3::All
+HepMC3::HepMC3
+HepMC3::search #if -DHEPMC3_ENABLE_SEARCH=ON
+HepMC3::rootIO #if -DHEPMC3_ENABLE_ROOTIO=ON
+HepMC3::protobufIO #if -DHEPMC3_ENABLE_PROTOBUF=ON
+
+HepMC3::All_static #if -DHEPMC3_BUILD_STATIC_LIBS=ON
+HepMC3::HepMC3_static #if -DHEPMC3_BUILD_STATIC_LIBS=ON
+HepMC3::search_static #if -DHEPMC3_BUILD_STATIC_LIBS=ON
+HepMC3::protobufIO_static #if -DHEPMC3_BUILD_STATIC_LIBS=ON
+```
+
+To link a target, `MyLibrary`, from your project to the main HepMC3 library you would include a CMake command like:
+
+```
+target_link_libraries(MyLibrary PUBLIC HepMC3::All)
+```
+
+_N.B._ That these exported targets container their own dependencies, the above _should_ be all that is needed to correctly set up the relevant compiler options, include directories, and link options on `MyLibrary`. This includes, for example, if you need to write out using the rootIO module, `HepMC3::All` links to `HepMC::rootIO`, which depends on a number of ROOT libraries and the ROOT include directory.
+
+### A ROOT Gotcha
+
+The way that the dependency on ROOT is currently included, means that paths to the ROOT include directory and ROOT libraries are hard-coded in the exported targets. This means that if your version of HepMC3 was built against one install of ROOT and other parts of your project pick up a different install of ROOT, you could have conflicts.
+
+## Adding a dependency to HepMC3 with CPM.cmake
+
+[CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) wraps modern CMake builtins to provide an intuitive interface for specifying dependencies within a CMake project that can be fetched and built automatically if they are not found. To include HepMC3 in your CMake project via CPM.cmake include something like:
+
+```
+CPMAddPackage(
+    NAME HepMC3
+    VERSION 3.2.5
+    GIT_REPOSITORY "https://gitlab.cern.ch/hepmc/HepMC3.git"
+    GIT_TAG 3.2.5
+    OPTIONS
+      "HEPMC3_CXX_STANDARD ${CMAKE_CXX_STANDARD}"
+      "HEPMC3_ENABLE_SEARCH OFF"
+      "HEPMC3_ENABLE_ROOTIO OFF"
+      "HEPMC3_ENABLE_PROTOBUFIO OFF"
+      "HEPMC3_ENABLE_PYTHON OFF"
+      "HEPMC3_BUILD_DOCS OFF"
+      "HEPMC3_BUILD_EXAMPLES OFF"
+      "HEPMC3_INSTALL_EXAMPLES OFF"
+      "HEPMC3_ENABLE_TEST OFF"
+      "HEPMC3_INSTALL_INTERFACES OFF"
+      "HEPMC3_BUILD_STATIC_LIBS OFF"
+)
+```
+
+To use this version of HepMC3 in your CMake project, follow the [instructions above](#using-a-binary-distribution-of-hepmc3-in-your-cmake-project).
+
+During the configuration step of your project, the HepMC3 source of the specified version will be fetched and its CMake project run and targets set up and exposed to your project such that the dependent build and installation is automatically run as required by your project targets.
+
+You can optionally try and find an existing HepMC3 installation, rather than build a dependent one, by using `CPMFindPackage` instead of `CPMAddPackage`.
 
 # Installation troubleshooting
 
@@ -334,8 +420,10 @@ cmake -DUSE_INSTALLED_HEPMC3=ON CMakeLists.txt
 make
 ```
 Please note that in case the HepMC3 installation is not system-wide,
-CMake will require an additional flag  `-DHepMC3_DIR=/where/you/have/it` to point to the HepMC3 installation directory.
-
+CMake will require an additional flag  `-DHepMC3_DIR=/directory/where/you/have/HepMC3Config.cmake/file` to point to 
+the directory containing the installed `HepMC3Config.cmake` file.
+The examples use multiple parts of HepMC3, therefore to use all of them a full installation of HepMC3 
+(i.e. including ROOT MC event generator interfaces is needed).
 
 # Source package structure
 

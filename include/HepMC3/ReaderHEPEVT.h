@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERHEPEVT_H
 #define HEPMC3_READERHEPEVT_H
@@ -69,7 +69,7 @@ public:
     /** @brief Get stream error state */
     bool failed()  override;
 
-    char* hepevtbuffer; //!< Pointer to HEPEVT Fortran common block/C struct
+    char* hepevtbuffer = nullptr; //!< Pointer to HEPEVT Fortran common block/C struct
 private:
     std::ifstream m_file; //!< Input file
     std::shared_ptr<std::istream> m_shared_stream; //!< For ctor when reading from temp stream

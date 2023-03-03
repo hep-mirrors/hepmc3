@@ -152,8 +152,9 @@ debian-salsa:
     - uname -a 
     - cat /etc/issue
     - yum -y install  cmake make binutils sed gawk grep
-    - yum -y install  doxygen 
-    - yum -y install  valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static  graphviz graphviz-devel pythia8 pythia8-devel  root
+    - yum -y install  doxygen
+    - yum -y update --exclude=kern*
+    - yum -y install  valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static libzstd-devel libzstd graphviz graphviz-devel pythia8 pythia8-devel  root
 #    - yum -y install  glibc-debuginfo --enablerepo=*debug*
 ########################################################################
 .pythoninstall: &pythoninstall
@@ -532,7 +533,7 @@ CentOS8s-gcc:
     - dnf config-manager --set-enabled appstream  
     - dnf config-manager --set-enabled epel-testing    
     - yum -y install json-devel
-    - rpm -i http://ftp.tu-chemnitz.de/pub/linux/centos/8-stream/BaseOS/x86_64/os/Packages/zlib-devel-1.2.11-17.el8.x86_64.rpm --nodeps
+    - rpm -i http://ftp.tu-chemnitz.de/pub/linux/centos/8-stream/BaseOS/x86_64/os/Packages/zlib-devel-1.2.11-21.el8.x86_64.rpm --nodeps
     - *commoninstall
     - *clanginstall
     - *pythoninstall 
@@ -554,7 +555,7 @@ CentOS8s-clang:
     - dnf config-manager --set-enabled appstream  
     - dnf config-manager --set-enabled epel-testing
     - yum -y install json-devel 
-    - rpm -i http://ftp.tu-chemnitz.de/pub/linux/centos/8-stream/BaseOS/x86_64/os/Packages/zlib-devel-1.2.11-17.el8.x86_64.rpm --nodeps
+    - rpm -i http://ftp.tu-chemnitz.de/pub/linux/centos/8-stream/BaseOS/x86_64/os/Packages/zlib-devel-1.2.11-21.el8.x86_64.rpm --nodeps
     - *commoninstall
     - *clanginstall
     - *pythoninstall 
@@ -575,6 +576,7 @@ CentOS9s-gcc:
     - dnf config-manager --set-enabled crb  
     - dnf config-manager --set-enabled epel-testing    
     - yum -y install json-devel
+    - yum -y install zlib zlib-devel --nobest --allowerasing
     - *commoninstall
     - *clanginstall
     - *python3install 
@@ -595,6 +597,7 @@ CentOS9s-clang:
     - dnf config-manager --set-enabled crb  
     - dnf config-manager --set-enabled epel-testing
     - yum -y install json-devel 
+    - yum -y install zlib zlib-devel --nobest --allowerasing
     - *commoninstall
     - *clanginstall
     - *python3install 

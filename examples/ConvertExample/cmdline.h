@@ -49,6 +49,9 @@ struct gengetopt_args_info
   unsigned int extensions_min; /**< @brief Extensions, in a form extension=value, could be passed to readers/writers's minimum occurreces */
   unsigned int extensions_max; /**< @brief Extensions, in a form extension=value, could be passed to readers/writers's maximum occurreces */
   const char *extensions_help; /**< @brief Extensions, in a form extension=value, could be passed to readers/writers help description.  */
+  long strict_read_arg;	/**< @brief Exit in case of reading broken event. (default='0').  */
+  char * strict_read_orig;	/**< @brief Exit in case of reading broken event. original value given at command line.  */
+  const char *strict_read_help; /**< @brief Exit in case of reading broken event. help description.  */
   long events_limit_arg;	/**< @brief Limit of events to read from input (default='100000000').  */
   char * events_limit_orig;	/**< @brief Limit of events to read from input original value given at command line.  */
   const char *events_limit_help; /**< @brief Limit of events to read from input help description.  */
@@ -71,6 +74,7 @@ struct gengetopt_args_info
   unsigned int input_format_given ;	/**< @brief Whether input-format was given.  */
   unsigned int output_format_given ;	/**< @brief Whether output-format was given.  */
   unsigned int extensions_given ;	/**< @brief Whether extensions was given.  */
+  unsigned int strict_read_given ;	/**< @brief Whether strict-read was given.  */
   unsigned int events_limit_given ;	/**< @brief Whether events-limit was given.  */
   unsigned int first_event_number_given ;	/**< @brief Whether first-event-number was given.  */
   unsigned int last_event_number_given ;	/**< @brief Whether last-event-number was given.  */

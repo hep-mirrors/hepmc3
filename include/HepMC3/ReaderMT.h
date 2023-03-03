@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERMT_H
 #define HEPMC3_READERMT_H
@@ -29,7 +29,8 @@ private:
     bool m_go_try_cache; //!< Flag to trigger using the cached event
     std::vector< std::shared_ptr<T> > m_readers; //!< Vector of all active readers
     std::vector< std::pair<GenEvent, bool> > m_events; //!< Vector of events
-    std::vector< std::thread > m_threads;
+    std::vector< std::thread > m_threads;  //!< Vector of threads
+    /// @brief The reading function
     static void read_function(std::pair<GenEvent,bool>& e, std::shared_ptr<T> r)
     {
         e.second = r->read_event(e.first);
@@ -37,6 +38,7 @@ private:
         if (r->failed()) r->close();
     }
 public:
+    /// @brief Constructor 
     ReaderMT(const std::string& filename): m_go_try_cache(true) {
         m_events.reserve(m_number_of_threads);
         m_readers.reserve(m_number_of_threads);
@@ -46,14 +48,17 @@ public:
             m_readers.back()->skip(m_number_of_threads-1-i);
         }
     }
+    /// @brief Destructor
     ~ReaderMT() {
         m_readers.clear();
         m_events.clear();
         m_threads.clear();
     }
+    /// @brief skip
     bool skip(const int) override  {
         return false;///Not implemented
     }
+    /// @brief event reading
     bool read_event(GenEvent& evt)  override {
         if ( !m_events.empty() ) {
             evt = m_events.back().first;
@@ -86,12 +91,14 @@ public:
         m_events.pop_back();
         return true;
     }
+    /// @brief failed
     bool failed()  override {
         for (auto& reader: m_readers)    if (reader && !reader->failed()) return false;
         if ( !m_events.empty() ) return false;
         if ( m_go_try_cache ) return false;
         return true;
     }
+    /// @brief close
     void close()   override {
         for (auto& reader: m_readers) if (reader) reader->close();
     }

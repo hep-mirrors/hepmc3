@@ -1,3 +1,8 @@
+// -*- C++ -*-
+//
+// This file is part of HepMC
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+//
 #ifndef HEPMC3_ANALYSISEXAMPLE_H
 #define HEPMC3_ANALYSISEXAMPLE_H
 ///
@@ -45,7 +50,7 @@ public:
     std::map<std::string, std::vector<double> > m_errs;  //!< Uncertainties
 private:
     std::ofstream m_file; //!< Output file
-    std::ostream* m_stream; //!< Output stream
+    std::ostream* m_stream=nullptr; //!< Output stream
 };
 }
 #endif

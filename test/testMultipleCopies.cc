@@ -15,6 +15,7 @@
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/Print.h"
+#define IGNORE_DEFAULT_WEIGHT
 #include "HepMC3TestUtils.h"
 using namespace HepMC3;
 int main()
@@ -40,7 +41,7 @@ int main()
         //........................................EVENT LOOP
         int icount=0;
         int num_good_events=0;
-        int icnt;
+        int icnt=0;
         GenEvent evt1;
         ascii_in.read_event(evt1);
         if (ascii_in.failed()) return 3;

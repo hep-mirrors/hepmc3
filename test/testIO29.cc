@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2022 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 // -- Purpose: Test the fail state of the reader and the return value of
 // read_event near the end of the event stream
@@ -18,36 +18,36 @@
 
 int main() {
 
-  HepMC3::GenEvent evt;
+    HepMC3::GenEvent evt;
 
-  std::stringstream binstream;
+    std::stringstream binstream;
 
-  auto writer = std::make_shared<HepMC3::Writerprotobuf>(binstream);
-  writer->write_event(evt);
-  writer->write_event(evt);
-  writer->write_event(evt);
-  writer->close();
+    auto writer = std::make_shared<HepMC3::Writerprotobuf>(binstream);
+    writer->write_event(evt);
+    writer->write_event(evt);
+    writer->write_event(evt);
+    writer->close();
 
-  auto reader = std::make_shared<HepMC3::Readerprotobuf>(binstream);
-  HepMC3::GenEvent evt_in;
-  reader->read_event(evt_in);
-  reader->read_event(evt_in);
-  reader->read_event(evt_in);
+    auto reader = std::make_shared<HepMC3::Readerprotobuf>(binstream);
+    HepMC3::GenEvent evt_in;
+    reader->read_event(evt_in);
+    reader->read_event(evt_in);
+    reader->read_event(evt_in);
 
-  // we have now read all events from file, ensure that the stream is still
-  // considered good
-  if (reader->failed()) {
-    return 3;
-  }
-  // the next event read should fail
-  if (reader->read_event(evt_in)) {
-    return 4;
-  }
-  // and should set the stream to bad
-  if (!reader->failed()) {
-    return 5;
-  }
+    // we have now read all events from file, ensure that the stream is still
+    // considered good
+    if (reader->failed()) {
+        return 3;
+    }
+    // the next event read should fail
+    if (reader->read_event(evt_in)) {
+        return 4;
+    }
+    // and should set the stream to bad
+    if (!reader->failed()) {
+        return 5;
+    }
 
-  reader->close();
-  return 0;
+    reader->close();
+    return 0;
 }

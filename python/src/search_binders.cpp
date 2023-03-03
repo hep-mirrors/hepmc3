@@ -24,46 +24,46 @@ namespace binder {
 	M.def("ACCEPT_ALL", (bool (*)(class std::shared_ptr<const class HepMC3::GenParticle>)) &HepMC3::ACCEPT_ALL, "A Filter that will accept all particles\n This might be needed if a signature requires a default Filter\n\nC++: HepMC3::ACCEPT_ALL(class std::shared_ptr<const class HepMC3::GenParticle>) --> bool", pybind11::arg("dummy"));
 
 
-  M.def("children_particles",   (std::vector<HepMC3::GenParticlePtr>(*)(HepMC3::GenVertexPtr)      ) &HepMC3::children_particles,  "See documentation");
-  M.def("children_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(HepMC3::ConstGenVertexPtr) ) &HepMC3::children_particles,  "See documentation");
-  M.def("children_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)(HepMC3::GenParticlePtr)        ) &HepMC3::children_vertices,  "See documentation");
-  M.def("children_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*)(HepMC3::ConstGenParticlePtr)   ) &HepMC3::children_vertices,  "See documentation");
+  M.def("children_particles",   (std::vector<HepMC3::GenParticlePtr>(*)(const HepMC3::GenVertexPtr&)     ) &HepMC3::children_particles,  "See documentation");
+  M.def("children_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(const HepMC3::ConstGenVertexPtr&)) &HepMC3::children_particles,  "See documentation");
+  M.def("children_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)(const HepMC3::GenParticlePtr&)       ) &HepMC3::children_vertices,  "See documentation");
+  M.def("children_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*)(const HepMC3::ConstGenParticlePtr&)  ) &HepMC3::children_vertices,  "See documentation");
 
-  M.def("grandchildren_particles",   (std::vector<HepMC3::GenParticlePtr>(*)(HepMC3::GenParticlePtr)       ) &HepMC3::grandchildren_particles,  "See documentation");
-  M.def("grandchildren_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*) (HepMC3::ConstGenParticlePtr)) &HepMC3::grandchildren_particles,  "See documentation");
-  M.def("grandchildren_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)(HepMC3::GenVertexPtr)          ) &HepMC3::grandchildren_vertices,  "See documentation");
-  M.def("grandchildren_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*)(HepMC3::ConstGenVertexPtr)    ) &HepMC3::grandchildren_vertices,  "See documentation");
+  M.def("grandchildren_particles",   (std::vector<HepMC3::GenParticlePtr>(*)(const HepMC3::GenParticlePtr&)      ) &HepMC3::grandchildren_particles,  "See documentation");
+  M.def("grandchildren_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*) (const HepMC3::ConstGenParticlePtr&)) &HepMC3::grandchildren_particles,  "See documentation");
+  M.def("grandchildren_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)(const HepMC3::GenVertexPtr&)         ) &HepMC3::grandchildren_vertices,  "See documentation");
+  M.def("grandchildren_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*)(const HepMC3::ConstGenVertexPtr&)   ) &HepMC3::grandchildren_vertices,  "See documentation");
 
-  M.def("parent_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (HepMC3::GenVertexPtr)       ) &HepMC3::parent_particles,  "See documentation");
-  M.def("parent_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(HepMC3::ConstGenVertexPtr)  ) &HepMC3::parent_particles,  "See documentation");
-  M.def("parent_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)        (HepMC3::GenParticlePtr)         ) &HepMC3::parent_vertices,  "See documentation");
-  M.def("parent_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*)   (HepMC3::ConstGenParticlePtr)    ) &HepMC3::parent_vertices,  "See documentation");
+  M.def("parent_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (const HepMC3::GenVertexPtr&)      ) &HepMC3::parent_particles,  "See documentation");
+  M.def("parent_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(const HepMC3::ConstGenVertexPtr&) ) &HepMC3::parent_particles,  "See documentation");
+  M.def("parent_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)        (const HepMC3::GenParticlePtr&)        ) &HepMC3::parent_vertices,  "See documentation");
+  M.def("parent_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*)   (const HepMC3::ConstGenParticlePtr&)   ) &HepMC3::parent_vertices,  "See documentation");
 
-  M.def("grandparent_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (HepMC3::GenParticlePtr)       ) &HepMC3::grandparent_particles,  "See documentation");
-  M.def("grandparent_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(HepMC3::ConstGenParticlePtr)  ) &HepMC3::grandparent_particles,  "See documentation");
-  M.def("grandparent_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)        (HepMC3::GenVertexPtr)         ) &HepMC3::grandparent_vertices,  "See documentation");
-  M.def("grandparent_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*)   (HepMC3::ConstGenVertexPtr)    ) &HepMC3::grandparent_vertices,  "See documentation");
+  M.def("grandparent_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (const HepMC3::GenParticlePtr&)      ) &HepMC3::grandparent_particles,  "See documentation");
+  M.def("grandparent_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(const HepMC3::ConstGenParticlePtr&) ) &HepMC3::grandparent_particles,  "See documentation");
+  M.def("grandparent_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)        (const HepMC3::GenVertexPtr&)        ) &HepMC3::grandparent_vertices,  "See documentation");
+  M.def("grandparent_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*)   (const HepMC3::ConstGenVertexPtr&)   ) &HepMC3::grandparent_vertices,  "See documentation");
 
-  M.def("descendant_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(HepMC3::ConstGenVertexPtr) ) &HepMC3::descendant_particles,  "See documentation");
-  M.def("descendant_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (HepMC3::GenVertexPtr)     ) &HepMC3::descendant_particles,  "See documentation");
-  M.def("descendant_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(HepMC3::ConstGenParticlePtr) ) &HepMC3::descendant_particles,  "See documentation");
-  M.def("descendant_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (HepMC3::GenParticlePtr)      ) &HepMC3::descendant_particles,  "See documentation");
+  M.def("descendant_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(const HepMC3::ConstGenVertexPtr&)) &HepMC3::descendant_particles,  "See documentation");
+  M.def("descendant_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (const HepMC3::GenVertexPtr&)    ) &HepMC3::descendant_particles,  "See documentation");
+  M.def("descendant_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(const HepMC3::ConstGenParticlePtr&)) &HepMC3::descendant_particles,  "See documentation");
+  M.def("descendant_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (const HepMC3::GenParticlePtr&)     ) &HepMC3::descendant_particles,  "See documentation");
 
-  M.def("descendant_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*) (HepMC3::ConstGenParticlePtr)   ) &HepMC3::descendant_vertices,  "See documentation");
-  M.def("descendant_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)      (HepMC3::GenParticlePtr)        ) &HepMC3::descendant_vertices,  "See documentation");
-  M.def("descendant_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*) (HepMC3::ConstGenVertexPtr)  ) &HepMC3::descendant_vertices,  "See documentation");
-  M.def("descendant_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)      (HepMC3::GenVertexPtr)         ) &HepMC3::descendant_vertices,  "See documentation");
+  M.def("descendant_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*) (const HepMC3::ConstGenParticlePtr&)  ) &HepMC3::descendant_vertices,  "See documentation");
+  M.def("descendant_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)      (const HepMC3::GenParticlePtr&)       ) &HepMC3::descendant_vertices,  "See documentation");
+  M.def("descendant_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*) (const HepMC3::ConstGenVertexPtr&) ) &HepMC3::descendant_vertices,  "See documentation");
+  M.def("descendant_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)      (const HepMC3::GenVertexPtr&)        ) &HepMC3::descendant_vertices,  "See documentation");
 
-  M.def("ancestor_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(HepMC3::ConstGenVertexPtr) ) &HepMC3::ancestor_particles,  "See documentation");
-  M.def("ancestor_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (HepMC3::GenVertexPtr)      ) &HepMC3::ancestor_particles,  "See documentation");
-  M.def("ancestor_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(HepMC3::ConstGenParticlePtr) ) &HepMC3::ancestor_particles,  "See documentation");
-  M.def("ancestor_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (HepMC3::GenParticlePtr)      ) &HepMC3::ancestor_particles,  "See documentation");
+  M.def("ancestor_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(const HepMC3::ConstGenVertexPtr&)) &HepMC3::ancestor_particles,  "See documentation");
+  M.def("ancestor_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (const HepMC3::GenVertexPtr&)     ) &HepMC3::ancestor_particles,  "See documentation");
+  M.def("ancestor_particles",   (std::vector<HepMC3::ConstGenParticlePtr>(*)(const HepMC3::ConstGenParticlePtr&)) &HepMC3::ancestor_particles,  "See documentation");
+  M.def("ancestor_particles",   (std::vector<HepMC3::GenParticlePtr>(*)     (const HepMC3::GenParticlePtr&)     ) &HepMC3::ancestor_particles,  "See documentation");
 
 
-  M.def("ancestor_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*) (HepMC3::ConstGenParticlePtr)   ) &HepMC3::ancestor_vertices,  "See documentation");
-  M.def("ancestor_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)      (HepMC3::GenParticlePtr)           ) &HepMC3::ancestor_vertices,  "See documentation");
-  M.def("ancestor_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*) (HepMC3::ConstGenVertexPtr)  ) &HepMC3::ancestor_vertices,  "See documentation");
-  M.def("ancestor_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)      (HepMC3::GenVertexPtr)            ) &HepMC3::ancestor_vertices,  "See documentation");
+  M.def("ancestor_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*) (const HepMC3::ConstGenParticlePtr&)  ) &HepMC3::ancestor_vertices,  "See documentation");
+  M.def("ancestor_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)      (const HepMC3::GenParticlePtr&)          ) &HepMC3::ancestor_vertices,  "See documentation");
+  M.def("ancestor_vertices",   (std::vector<HepMC3::ConstGenVertexPtr>(*) (const HepMC3::ConstGenVertexPtr&) ) &HepMC3::ancestor_vertices,  "See documentation");
+  M.def("ancestor_vertices",   (std::vector<HepMC3::GenVertexPtr>(*)      (const HepMC3::GenVertexPtr&)           ) &HepMC3::ancestor_vertices,  "See documentation");
 
        }
 

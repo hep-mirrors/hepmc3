@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2020 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READERGZ_H
 #define HEPMC3_READERGZ_H
@@ -37,7 +37,7 @@ public:
         m_zstr = std::shared_ptr< std::istream >(new istream(is));
         m_reader = std::make_shared<T>(*(m_zstr.get()));
     }
-
+    /// @brief The ctor to read from shared pointer to stream
     ReaderGZ(std::shared_ptr<std::istream> s_stream) {
         m_zstr = s_stream;
         m_reader = std::make_shared<T>(*(m_zstr.get()));

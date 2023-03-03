@@ -1,6 +1,6 @@
 #include "MyClass.h"
 
-MyClass::MyClass():someint(0), event(0) {}
+MyClass::MyClass():someint(0), event(nullptr) {}
 
 void MyClass::SetEvent(GenEvent* myevt)
 {
@@ -17,7 +17,7 @@ void MyClass::SetInt(int theint)
     someint = theint;
 }
 
-int MyClass::GetInt()
+int MyClass::GetInt() const
 {
     return someint;
 }

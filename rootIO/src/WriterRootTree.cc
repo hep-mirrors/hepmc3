@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file WriterRootTree.cc
@@ -20,7 +20,7 @@ namespace HepMC3
 HEPMC3_DECLARE_WRITER_FILE(WriterRootTree)
 
 WriterRootTree::WriterRootTree(const std::string &filename, std::shared_ptr<GenRunInfo> run):
-    m_tree(0),
+    m_tree(nullptr),
     m_events_count(0),
     m_tree_name("hepmc3_tree"),
     m_branch_name("hepmc3_event")
@@ -30,10 +30,10 @@ WriterRootTree::WriterRootTree(const std::string &filename, std::shared_ptr<GenR
 }
 
 WriterRootTree::WriterRootTree(const std::string &filename, const std::string &treename, const std::string &branchname, std::shared_ptr<GenRunInfo> run):
-    m_tree(0),
+    m_tree(nullptr),
     m_events_count(0),
-    m_tree_name(treename.c_str()),
-    m_branch_name(branchname.c_str())
+    m_tree_name(treename),
+    m_branch_name(branchname)
 {
     m_file = TFile::Open(filename.c_str(), "RECREATE");
     if (!init(run)) return;
@@ -100,9 +100,7 @@ void WriterRootTree::close()
 
 bool WriterRootTree::failed()
 {
-    if ( !m_file->IsOpen() ) return true;
-
-    return false;
+    return !m_file->IsOpen();
 }
 
 } // namespace HepMC3

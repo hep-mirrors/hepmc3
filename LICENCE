@@ -1,6 +1,6 @@
 This software is released under Version 3 of the GNU Lesser General Public Licence (see ./COPYING) or any later version.
 
-Copyright (C) 2014-2021 HepMC3 Authors
+Copyright (C) 2014-2022 HepMC3 Authors
 
 The third party codes are distributed under their own licenses.
 
@@ -43,6 +43,6 @@ The third party codes are distributed under their own licenses.
 
 # ./COPYING  from https://www.gnu.org/licenses/gpl-3.0.html
 # Type: GPLv3+
-# Copyright: 2014-2021 The HepMC collaboration (see AUTHORS for details)
+# Copyright: 2014-2022 The HepMC collaboration (see AUTHORS for details)
 # Part of code was adopted from Pythia8-HepMC interface by Mikhail Kirsanov.
 ./interfaces/pythia8/include/Pythia8/Pythia8ToHepMC3.h

@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_ATTRIBUTE_H
 #define HEPMC3_ATTRIBUTE_H
@@ -166,11 +166,12 @@ public:
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const std::string &att) override {
         m_val = atoi( att.c_str() );
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att = std::to_string(m_val);
         return true;
     }
@@ -183,6 +184,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const int& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -191,7 +193,7 @@ private:
 
 /**
  *  @class HepMC3::LongAttribute
- *  @brief Attribute that holds an Integer implemented as an int
+ *  @brief Attribute that holds an Integer implemented as a long int
  *
  *  @ingroup attributes
  */
@@ -205,13 +207,14 @@ public:
     LongAttribute(long val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att)  override{
+    bool from_string(const std::string &att)  override {
         m_val = atol( att.c_str() );
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att = std::to_string(m_val);
         return true;
     }
@@ -224,6 +227,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const long& l) {
         m_val = l;
+        set_is_parsed(true);
     }
 
 private:
@@ -248,13 +252,14 @@ public:
     DoubleAttribute(double val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att)  override{
+    bool from_string(const std::string &att)  override {
         m_val = atof( att.c_str() );
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         std::ostringstream oss;
         oss << std::setprecision(std::numeric_limits<double>::digits10)
             << m_val;
@@ -270,6 +275,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const double& d) {
         m_val = d;
+        set_is_parsed(true);
     }
 
 private:
@@ -293,13 +299,14 @@ public:
     FloatAttribute(float val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att)  override{
+    bool from_string(const std::string &att)  override {
         m_val = float(atof( att.c_str() ));
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         std::ostringstream oss;
         oss << std::setprecision(std::numeric_limits<float>::digits10)
             << m_val;
@@ -315,6 +322,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const float& f) {
         m_val = f;
+        set_is_parsed(true);
     }
 
 private:
@@ -347,13 +355,13 @@ public:
     StringAttribute(const std::string &st):Attribute(st) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att)  override{
+    bool from_string(const std::string &att)  override {
         set_unparsed_string(att);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att = unparsed_string();
         return true;
     }
@@ -372,7 +380,7 @@ public:
 
 /**
  *  @class HepMC3::CharAttribute
- *  @brief Attribute that holds an Chareger implemented as an int
+ *  @brief Attribute that holds an Character implemented as an int
  *
  *  @ingroup attributes
  */
@@ -387,6 +395,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const std::string &att) override {
+        set_is_parsed(true);
         if (att.size())
         {
             m_val = att.at(0);
@@ -409,6 +418,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const char& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -417,7 +427,7 @@ private:
 
 /**
  *  @class HepMC3::LongLongAttribute
- *  @brief Attribute that holds an Integer implemented as an int
+ *  @brief Attribute that holds an Integer implemented as a long long int
  *
  *  @ingroup attributes
  */
@@ -431,13 +441,14 @@ public:
     LongLongAttribute(long long val): Attribute(), m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att)  override{
+    bool from_string(const std::string &att)  override {
         m_val = atoll( att.c_str() );
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att = std::to_string(m_val);
         return true;
     }
@@ -450,17 +461,18 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const long long& l) {
         m_val = l;
+        set_is_parsed(true);
     }
 
 private:
 
-    long  long m_val; ///< Attribute value
+    long long m_val; ///< Attribute value
 
 };
 
 /**
  *  @class HepMC3::LongDoubleAttribute
- *  @brief Attribute that holds a real number as a double.
+ *  @brief Attribute that holds a real number as a long double.
  *
  *  @ingroup attributes
  */
@@ -476,11 +488,12 @@ public:
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const std::string &att) override {
         m_val = strtold( att.c_str(),NULL);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         std::ostringstream oss;
         oss << std::setprecision(std::numeric_limits<long double>::digits10)
             << m_val;
@@ -496,6 +509,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const long double& d) {
         m_val = d;
+        set_is_parsed(true);
     }
 
 private:
@@ -521,13 +535,14 @@ public:
     UIntAttribute(unsigned int val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att)  override{
+    bool from_string(const std::string &att)  override {
         m_val = strtoul(att.c_str(), NULL, 0);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att = std::to_string(m_val);
         return true;
     }
@@ -540,6 +555,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const unsigned int& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -564,13 +580,14 @@ public:
     ULongAttribute(unsigned long val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att)  override{
+    bool from_string(const std::string &att)  override {
         m_val = strtoul(att.c_str(), NULL, 0);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att = std::to_string(m_val);
         return true;
     }
@@ -583,6 +600,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const unsigned long& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -606,13 +624,14 @@ public:
     ULongLongAttribute(unsigned long long val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att)  override{
+    bool from_string(const std::string &att)  override {
         m_val = strtoull(att.c_str(), NULL, 0);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att = std::to_string(m_val);
         return true;
     }
@@ -625,17 +644,19 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const unsigned long long& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
     unsigned long long m_val; ///< Attribute value
 };
+
 /**
- *  @class HepMC3::BoolAttribute
- *  @brief Attribute that holds an Booleger implemented as an int
- *
- *  @ingroup attributes
- */
+*  @class HepMC3::BoolAttribute
+*  @brief Attribute that holds an Booleger implemented as an int
+*
+*  @ingroup attributes
+*/
 class BoolAttribute : public Attribute {
 public:
 
@@ -646,15 +667,16 @@ public:
     BoolAttribute(bool val):Attribute(),m_val(val) {}
 
     /** @brief Implementation of Attribute::from_string */
-    bool from_string(const std::string &att)  override{
+    bool from_string(const std::string &att)  override {
         if (att.size()!=1) return false;
         if (att==std::string("1")) {m_val = true;  return true;}
         if (att==std::string("0")) {m_val = false; return true;}
+        set_is_parsed(true);
         return false;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const override{
+    bool to_string(std::string &att) const override {
         att = std::to_string(m_val);
         return true;
     }
@@ -667,6 +689,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const bool& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -675,7 +698,7 @@ private:
 
 /**
  *  @class HepMC3::VectorCharAttribute
- *  @brief Attribute that holds a vector of charegers of type  char
+ *  @brief Attribute that holds a vector of characters of type  char
  *
  *  @ingroup attributes
  */
@@ -693,25 +716,28 @@ public:
         char  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
     /** @brief get the value associated to this Attribute. */
     std::vector<char> value() const {
         return m_val;
+
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<char>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -720,7 +746,7 @@ private:
 
 /**
  *  @class HepMC3::VectorFloatAttribute
- *  @brief Attribute that holds a vector of floategers of type  float
+ *  @brief Attribute that holds a vector of real numbers of type float
  *
  *  @ingroup attributes
  */
@@ -738,14 +764,15 @@ public:
         float  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -757,6 +784,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<float>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -766,7 +794,7 @@ private:
 
 /**
  *  @class HepMC3::VectorLongDoubleAttribute
- *  @brief Attribute that holds a vector of long doubleegers of type  long double
+ *  @brief Attribute that holds a vector of real numbers of type long double
  *
  *  @ingroup attributes
  */
@@ -784,14 +812,15 @@ public:
         long double  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -803,6 +832,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<long double>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -813,7 +843,7 @@ private:
 
 /**
  *  @class HepMC3::VectorLongLongAttribute
- *  @brief Attribute that holds a vector of long longegers of type  long long
+ *  @brief Attribute that holds a vector of integers of type  long long
  *
  *  @ingroup attributes
  */
@@ -831,14 +861,15 @@ public:
         long long  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -850,6 +881,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<long long>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -876,14 +908,15 @@ public:
         unsigned int  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -895,6 +928,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<unsigned int>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -903,7 +937,7 @@ private:
 
 /**
  *  @class HepMC3::VectorULongAttribute
- *  @brief Attribute that holds a vector of unsigned longegers of type  unsigned long
+ *  @brief Attribute that holds a vector of unsigned integers of type  unsigned long
  *
  *  @ingroup attributes
  */
@@ -921,14 +955,15 @@ public:
         unsigned long  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -940,6 +975,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<unsigned long>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -949,7 +985,7 @@ private:
 
 /**
  *  @class HepMC3::VectorULongLongAttribute
- *  @brief Attribute that holds a vector of unsigned long longegers of type  unsigned long long
+ *  @brief Attribute that holds a vector of integers of type  unsigned long long
  *
  *  @ingroup attributes
  */
@@ -967,14 +1003,15 @@ public:
         unsigned long long  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -986,6 +1023,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<unsigned long long>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -1012,25 +1050,28 @@ public:
         int  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
     /** @brief get the value associated to this Attribute. */
     std::vector<int> value() const {
         return m_val;
+
     }
 
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<int>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -1039,7 +1080,7 @@ private:
 
 /**
  *  @class HepMC3::VectorLongIntAttribute
- *  @brief Attribute that holds a vector of integers of type  int
+ *  @brief Attribute that holds a vector of integers of type long int
  *
  *  @ingroup attributes
  */
@@ -1057,14 +1098,15 @@ public:
         long int  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -1076,6 +1118,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<long int>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -1084,7 +1127,7 @@ private:
 
 /**
  *  @class HepMC3::VectorDoubleAttribute
- *  @brief Attribute that holds a vector of FPs of type  double
+ *  @brief Attribute that holds a vector of real numbers of type  double
  *
  *  @ingroup attributes
  */
@@ -1102,14 +1145,15 @@ public:
         double  datafoo;
         m_val.clear();
         std::stringstream datastream(att);
-        while (datastream >> datafoo) m_val.push_back(datafoo);
+        while (datastream >> datafoo) m_val.emplace_back(datafoo);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=std::to_string(a);}
         return true;
     }
 
@@ -1121,6 +1165,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<double>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:
@@ -1130,7 +1175,7 @@ private:
 
 /**
  *  @class HepMC3::VectorStringAttribute
- *  @brief Attribute that holds a vector of FPs of type  string
+ *  @brief Attribute that holds a vector of type  string
  *
  *  @ingroup attributes
  */
@@ -1147,17 +1192,18 @@ public:
     bool from_string(const string &att) override {
         size_t posb = att.find_first_not_of(' ');
         do {
-           size_t pose = att.find_first_of(' ', posb);
-           m_val.push_back(att.substr(posb, pose - posb));
-           posb = att.find_first_not_of(' ', pose);
+            size_t pose = att.find_first_of(' ', posb);
+            m_val.push_back(att.substr(posb, pose - posb));
+            posb = att.find_first_not_of(' ', pose);
         } while (posb != std::string::npos);
+        set_is_parsed(true);
         return true;
     }
 
     /** @brief Implementation of Attribute::to_string */
-    bool to_string(std::string &att) const  override{
+    bool to_string(std::string &att) const  override {
         att.clear();
-        for (auto a:  m_val) {if (att.length()) att+=" ";  att+=a;}
+        for (const auto& a:  m_val) {if (att.length()) att+=" ";  att+=a;}
         return true;
     }
 
@@ -1169,6 +1215,7 @@ public:
     /** @brief set the value associated to this Attribute. */
     void set_value(const std::vector<std::string>& i) {
         m_val = i;
+        set_is_parsed(true);
     }
 
 private:

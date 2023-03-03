@@ -1,4 +1,22 @@
   --------------------------  HepMC3.2.6-pre ----------------------
+2023-03-03 Andrii Verbytskyi for HepMC
+         * Better Doxygen documentation for code
+2023-03-02 Andrii Verbytskyi for HepMC
+         * Improvements in ReaderFactory that should help detect the file type more successfully.
+2023-02-14 Andrii Verbytskyi for HepMC
+         * Multiple optimizations inspired by clang-tidy
+2023-02-10 Andrii Verbytskyi for HepMC
+         * The Attributes are now set to be parsed after calls to from_string or set_value
+2023-02-07 Andrii Verbytskyi for HepMC
+         * API breaking changes in the search module: pass by const reference 
+2023-01-24 Andrii Verbytskyi for HepMC
+         * Update python bindings
+2022-11-20 Luke Pickering for HepMC
+         * Modernisation of cmake
+2022-09-12 Andrii Verbytskyi for HepMC
+         * Fix output value of ReaderLHEF::read_event
+2022-09-12 Andrii Verbytskyi for HepMC
+         * Better documentation for standalone examples
 2022-06-07 Luke Pickering for HepMC
          * Adds a protobuf-based HepMC3::Reader/Writer
 2022-05-25 Andrii Verbytskyi for HepMC

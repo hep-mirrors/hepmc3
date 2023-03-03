@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @example class_example_read.cc
@@ -39,11 +39,11 @@ int main(int argc, char **argv) {
     TFile fo(argv[1]);
     WriterAscii text_output(argv[2]);
 
-    MyClass* myevent;
+    MyClass* myevent = nullptr;
     int events_parsed = 0;
 
     // Get GenRunInfo, if available
-    MyRunClass *my_run = (MyRunClass*)fo.Get("MyRunClass");
+    auto *my_run = (MyRunClass*)fo.Get("MyRunClass");
     std::shared_ptr<GenRunInfo> run_info;
 
     if( my_run ) run_info.reset(my_run->GetRunInfo());
@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
     fo.GetListOfKeys()->Print();
 
     TIter next(fo.GetListOfKeys());
-    TKey *key;
+    TKey *key = nullptr;
 
     while ((key=(TKey*)next()))
     {

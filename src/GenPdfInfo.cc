@@ -1,16 +1,17 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenPdfInfo.cc
  *  @brief Implementation of \b class GenPdfInfo
  *
  */
-#include <cstring> // memcmp
-#include <cstdlib> // atoi
+#include <array>
 #include <cstdio> // sprintf
+#include <cstdlib> // atoi
+#include <cstring> // memcmp
 
 #include "HepMC3/GenPdfInfo.h"
 
@@ -49,9 +50,9 @@ bool GenPdfInfo::from_string(const std::string &att) {
 }
 
 bool GenPdfInfo::to_string(std::string &att) const {
-    char buf[255];//Note: the format is fixed, so no reason for complicatied tratment
+    std::array<char, 255> buf;//Note: the format is fixed, so no reason for complicatied tratment
 
-    snprintf(buf, 255, "%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
+    snprintf(buf.data(), buf.size(), "%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
              parton_id[0],
              parton_id[1],
              x[0],
@@ -62,7 +63,7 @@ bool GenPdfInfo::to_string(std::string &att) const {
              pdf_id[0],
              pdf_id[1]);
 
-    att = buf;
+    att = buf.data();
 
     return true;
 }
@@ -91,15 +92,15 @@ bool GenPdfInfo::operator!=(const GenPdfInfo& a) const {
 
 bool GenPdfInfo::is_valid() const
 {
-    if ( parton_id[0] != 0 ) return true;
-    if ( parton_id[1] != 0 ) return true;
-    if ( x[0]         != 0 ) return true;
-    if ( x[1]         != 0 ) return true;
-    if ( scale        != 0 ) return true;
-    if ( xf[0]        != 0 ) return true;
-    if ( xf[1]        != 0 ) return true;
-    if ( pdf_id[0]    != 0 ) return true;
-    if ( pdf_id[1]    != 0 ) return true;
+    if ( parton_id[0] != 0 ) { return true; }
+    if ( parton_id[1] != 0 ) { return true; }
+    if ( x[0]         != 0 ) { return true; }
+    if ( x[1]         != 0 ) { return true; }
+    if ( scale        != 0 ) { return true; }
+    if ( xf[0]        != 0 ) { return true; }
+    if ( xf[1]        != 0 ) { return true; }
+    if ( pdf_id[0]    != 0 ) { return true; }
+    if ( pdf_id[1]    != 0 ) { return true; }
 
     return false;
 }

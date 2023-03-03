@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2019 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file ReaderRootTree.cc
@@ -16,7 +16,7 @@ namespace HepMC3
 HEPMC3_DECLARE_READER_FILE(ReaderRootTree)
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
-    m_tree(0), m_events_count(0), m_tree_name("hepmc3_tree"), m_branch_name("hepmc3_event")
+    m_tree(nullptr), m_events_count(0), m_tree_name("hepmc3_tree"), m_branch_name("hepmc3_event")
 {
     m_file = TFile::Open(filename.c_str());
     if (!init()) return;
@@ -24,7 +24,7 @@ ReaderRootTree::ReaderRootTree(const std::string &filename):
 
 
 ReaderRootTree::ReaderRootTree(const std::string &filename, const std::string &treename, const std::string &branchname):
-    m_tree(0), m_events_count(0), m_tree_name(treename.c_str()), m_branch_name(branchname.c_str())
+    m_tree(nullptr), m_events_count(0), m_tree_name(treename), m_branch_name(branchname)
 {
     m_file = TFile::Open(filename.c_str());
     if (!init()) return;
@@ -58,7 +58,7 @@ bool ReaderRootTree::init()
     {
         HEPMC3_WARNING("ReaderRootTree: problem reading branch tree: GenRunInfo. Will attempt to read GenRunInfoData object.")
         std::shared_ptr<GenRunInfo> ri = std::make_shared<GenRunInfo>();
-        GenRunInfoData *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
+        auto *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
         if (run) {
             ri->read_data(*run);
             delete run;
@@ -76,8 +76,7 @@ bool ReaderRootTree::init()
 bool ReaderRootTree::skip(const int n)
 {
     m_events_count+=n;
-    if (m_events_count > m_tree->GetEntries()) return false;
-    return true;
+    return m_events_count <= m_tree->GetEntries();
 }
 
 

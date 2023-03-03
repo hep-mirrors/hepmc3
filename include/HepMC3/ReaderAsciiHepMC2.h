@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #ifndef HEPMC3_READER_ASCII_HEPMC2_H
 #define HEPMC3_READER_ASCII_HEPMC2_H
@@ -139,7 +139,7 @@ private:
     std::vector<GenParticlePtr> m_particle_cache;      //!< Particle cache
     std::vector<int>            m_end_vertex_barcodes; //!< Old end vertex barcodes
 
-    GenEvent*              m_event_ghost;                      //!< To save particle and verstex attributes.
+    GenEvent*              m_event_ghost = nullptr;                      //!< To save particle and verstex attributes.
     std::vector<GenParticlePtr> m_particle_cache_ghost;//!< Particle cache for attributes
     std::vector<GenVertexPtr>   m_vertex_cache_ghost;        //!< Vertex cache for attributes
 };

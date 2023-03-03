@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 #include <iostream>
 #include <fstream>
@@ -9,7 +9,7 @@
 #include "HepMC3/FourVector.h"
 #include "HepMC3/PrintStreams.h"
 #undef NDEBUG
-#include <assert.h>
+#include <cassert>
 using namespace HepMC3;
 int main()
 {

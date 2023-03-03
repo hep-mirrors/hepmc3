@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 /**
  *  @file GenVertex.cc
@@ -10,11 +10,11 @@
  */
 #include <algorithm> // std::remove
 
-#include "HepMC3/GenVertex.h"
-#include "HepMC3/GenParticle.h"
-#include "HepMC3/GenEvent.h"
-#include "HepMC3/Setup.h"
 #include "HepMC3/Attribute.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
+#include "HepMC3/Setup.h"
 
 namespace HepMC3 {
 
@@ -39,7 +39,7 @@ void GenVertex::add_particle_in(GenParticlePtr p) {
     // Avoid duplicates
     if (std::find(particles_in().begin(), particles_in().end(), p) != particles_in().end()) return;
 
-    m_particles_in.push_back(p);
+    m_particles_in.emplace_back(p);
 
     if ( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
 
@@ -55,7 +55,7 @@ void GenVertex::add_particle_out(GenParticlePtr p) {
     // Avoid duplicates
     if (std::find(particles_out().begin(), particles_out().end(), p) != particles_out().end()) return;
 
-    m_particles_out.push_back(p);
+    m_particles_out.emplace_back(p);
 
     if ( p->production_vertex() ) p->production_vertex()->remove_particle_out(p);
 
@@ -81,7 +81,6 @@ void GenVertex::remove_particle_out(GenParticlePtr p) {
 
 void GenVertex::set_id(int id) {
     m_id = id;
-    return;
 }
 
 
@@ -103,7 +102,7 @@ const FourVector& GenVertex::position() const {
         //This could be a recussive call.  Try to prevent it.
         if (!cycles || cycles->value() == 0)
         {
-            for (ConstGenParticlePtr p: m_particles_in) {
+            for (const auto& p: m_particles_in) {
                 ConstGenVertexPtr v = p->production_vertex();
                 if (v) return v->position();
             }
@@ -134,7 +133,7 @@ std::string GenVertex::attribute_as_string(const std::string& name) const {
 std::vector<std::string> GenVertex::attribute_names() const {
     if ( parent_event() ) return parent_event()->attribute_names(id());
 
-    return std::vector<std::string>();
+    return {};
 }
 
 } // namespace HepMC3
