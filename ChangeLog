@@ -1,4 +1,6 @@
   --------------------------  HepMC3.2.6-pre ----------------------
+2023-03-03 Andrii Verbytskyi for HepMC
+         * Better Doxygen documentation for code
 2023-03-02 Andrii Verbytskyi for HepMC
          * Improvements in ReaderFactory that should help detect the file type more successfully.
 2023-02-14 Andrii Verbytskyi for HepMC
