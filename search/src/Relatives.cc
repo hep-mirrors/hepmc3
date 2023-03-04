@@ -57,13 +57,13 @@ std::vector<HepMC3::ConstGenParticlePtr> grandchildren(const HepMC3::ConstGenPar
 /// @brief Returns grandchildren of vertex, i.e. the end vertices of the outgoing particles.
 std::vector<HepMC3::GenVertexPtr>        grandchildren(const HepMC3::GenVertexPtr& O) {
     std::vector<HepMC3::GenVertexPtr> result;
-    if (O) for (auto o: O->particles_out()) if (o->end_vertex()) result.emplace_back(o->end_vertex());
+    if (O) for (const auto&o: O->particles_out()) if (o->end_vertex()) result.emplace_back(o->end_vertex());
     return result;
 }
 /// @brief Returns grandchildren of const vertex, i.e. the end vertices of the outgoing particles.
 std::vector<HepMC3::ConstGenVertexPtr>   grandchildren(const HepMC3::ConstGenVertexPtr& O) {
     std::vector<HepMC3::ConstGenVertexPtr> result;
-    if (O)  for (auto o:O->particles_out()) if (o->end_vertex()) result.emplace_back(o->end_vertex());
+    if (O)  for (const auto& o:O->particles_out()) if (o->end_vertex()) result.emplace_back(o->end_vertex());
     return result;
 }
 /// @brief Returns parents of vertex, i.e. incoming particles.
@@ -101,13 +101,13 @@ std::vector<HepMC3::ConstGenParticlePtr> grandparents(const HepMC3::ConstGenPart
 /// @brief Returns grandparents of vertex, i.e. production vertices of incoming particles.
 std::vector<HepMC3::GenVertexPtr>        grandparents(const HepMC3::GenVertexPtr& O) {
     std::vector<HepMC3::GenVertexPtr> result;
-    if (O) for (auto o: O->particles_in()) if (o->production_vertex()) result.emplace_back(o->production_vertex());
+    if (O) for (const auto& o: O->particles_in()) if (o->production_vertex()) result.emplace_back(o->production_vertex());
     return result;
 }
 /// @brief Returns grandparents of const vertex, i.e. production vertices of incoming particles.
 std::vector<HepMC3::ConstGenVertexPtr>   grandparents(const HepMC3::ConstGenVertexPtr& O) {
     std::vector<HepMC3::ConstGenVertexPtr> result;
-    if (O)  for (auto o:O->particles_in()) if (o->end_vertex()) result.emplace_back(o->production_vertex());
+    if (O)  for (const auto& o: O->particles_in()) if (o->end_vertex()) result.emplace_back(o->production_vertex());
     return result;
 }
 /// @brief Returns descendands of the same type, i.e. vertices for vertex and particles for particle
@@ -115,15 +115,16 @@ template <class O>  std::vector<O> descendants_of_same_type(const O& obj)
 {
     std::vector<O>  result = grandchildren(obj);
     size_t gc = 0;
+    std::vector<O>  temp;
     for (;;)
     {
-        std::vector<O>  temp;
+        temp.clear();
         for (; gc < result.size(); gc++)
         {
             auto  temp0 = grandchildren(result[gc]);
-            temp.insert(temp.end(), temp0.begin(), temp0.end());
+            std::move(temp0.begin(), temp0.end(), std::back_inserter(temp));
         }
-        for (const auto& p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.push_back(p2);
+        for (const auto& p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.emplace_back(p2);
         if (gc >= result.size()) break;
     }
     return result;
@@ -136,7 +137,7 @@ template <class O, class R>  std::vector<R> descendants_of_other_type(const O& o
     for (const auto& c: localchildren)
     {
         std::vector<R> desc = descendants_of_same_type(c);
-        for (const auto& d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.push_back(d);
+        for (const auto& d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.emplace_back(d);
     }
     return result;
 }
@@ -145,15 +146,16 @@ template <class O>  std::vector<O> ancestors_of_same_type(const O& obj)
 {
     std::vector<O>  result = grandparents(obj);
     size_t gc = 0;
+    std::vector<O>  temp;
     for (;;)
     {
-        std::vector<O>  temp;
+        temp.clear();
         for (; gc < result.size(); gc++)
         {
             auto  temp0 = grandparents(result[gc]);
-            temp.insert(temp.end(), temp0.begin(), temp0.end());
+            std::move(temp0.begin(), temp0.end(), std::back_inserter(temp));
         }
-        for (const auto& p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.push_back(p2);
+        for (const auto& p2: temp) if (std::find(result.begin(), result.end(), p2) == result.end()) result.emplace_back(p2);
         if (gc >= result.size()) break;
     }
     return result;
@@ -166,7 +168,7 @@ template <class O, class R>  std::vector<R> ancestors_of_other_type(const O& obj
     for (const auto& c: localparents)
     {
         std::vector<R> desc = ancestors_of_same_type(c);
-        for (const auto& d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.push_back(d);
+        for (const auto& d: desc) if (std::find(result.begin(), result.end(), d) == result.end()) result.emplace_back(d);
     }
     return result;
 }

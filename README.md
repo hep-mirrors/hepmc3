@@ -2,7 +2,9 @@
 
 HepMC3 is a new version of the HepMC event record. It uses shared pointers for in-memory navigation and the POD concept for persistency.
 Visit the home page of the project http://hepmc.web.cern.ch/hepmc/ or the CERN GitLab repository https://gitlab.cern.ch/hepmc/HepMC3 for more information.
-You can also send bug reports, feature requests and questions about HepMC3 to hepmc-devATcern.ch
+A short information on the compatibility between the HePMC3 versions and deprecation of some functionality see below.
+You can also send bug reports, feature requests and questions about HepMC3 to hepmc-devATcern.ch.
+
 
 
 # Quick-start (applicable to recent versions):
@@ -317,7 +319,7 @@ Adjustment of LD_LIBRARY_PATH might be needed.
 To include an existing build of HepMC3 in your project, you can use find_package as below:
 
 ```
-find_package(HepMC3 3.3.0 REQUIRED)
+find_package(HepMC3 3.2.0 REQUIRED)
 ```
 
 This will set up a number of CMake variables targets depending on the features that were built with the found version of HepMC3. Some useful CMake variables that will be set are included below:
@@ -369,9 +371,9 @@ The way that the dependency on ROOT is currently included, means that paths to t
 ```
 CPMAddPackage(
     NAME HepMC3
-    VERSION 3.2.5
+    VERSION 3.2.6
     GIT_REPOSITORY "https://gitlab.cern.ch/hepmc/HepMC3.git"
-    GIT_TAG 3.2.5
+    GIT_TAG 3.2.6
     OPTIONS
       "HEPMC3_CXX_STANDARD ${CMAKE_CXX_STANDARD}"
       "HEPMC3_ENABLE_SEARCH OFF"
@@ -424,6 +426,28 @@ CMake will require an additional flag  `-DHepMC3_DIR=/directory/where/you/have/H
 the directory containing the installed `HepMC3Config.cmake` file.
 The examples use multiple parts of HepMC3, therefore to use all of them a full installation of HepMC3 
 (i.e. including ROOT MC event generator interfaces is needed).
+
+# Compatibility and deprecation notes
+  - The `IO_GenEvent` (HepMC2) and HEPEVT  ASCII files produced by all HepMC3 versions should be readable by all HepMC3 
+    versions and latest versions of HepMC2.
+  - The `Asciiv3` (HepMC3) ASCII files produced by all HepMC3>=3.0.0 versions should be readable by all HepMC3>3.0.0 versions. 
+  - The ROOT files produced by all HepMC3>=3.0.0 versions should be readable by all HepMC3>3.0.0 versions. 
+  - The ROOT files produced by all HepMC3>=3.1.0 versions will not be readable by HepMC3<3.1.0 versions.    
+  
+  - The HepMC3 versions with the same SOVERSION of library are ABI backwards compatible. I.e. the code compiled with HepMC3=3.2.x
+    will work with HepMC3=3.2.(x+1) if libHepMC3=3.2.(x+1) will have the same SOVERSION as libHepMC3=3.2.x. 
+    Please note that `libHepMC3`, `libHepMC3search` and other libraries have different SOVERSION.
+  - The minor versions of HepMC3 are API backward compatible.
+  - The major versions of HepMC3 are almost API backward compatible.
+
+  - For HepMC3>3.2.6 the member functions in `GenEvent/GenVertex` that deal with raw pointers, e.g. `add_particle_in ( GenParticle *p )` will be removed.
+  - The Python2 is not in development anymore, therefore at some point the Python2 support will be removed.
+    As of version HepMC3=3.2.6 it is present `as is`.
+  - The class HepMC3::RelativesInterface are deprecated will be removed in the future.
+    Use HepMC3::children_particles, HepMC3::descendant_particles, etc. instead.
+  - The minimal required version of `cmake` slowly changes from version to version. It is recommented to use the `cmake` 
+     released not earlier than 3-4 years ago.
+
 
 # Source package structure
 
@@ -551,6 +575,7 @@ and those that are involved in testing of HepMC3 with Monte Carlo generators/too
 ./test/testPythia2.cc
 ./test/testPythia1.cc
 ./test/testTauola1.cc
+...
 ```
 
 
