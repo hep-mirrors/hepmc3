@@ -42,6 +42,7 @@
 
     @subsection hepmc3_releases HepMC3 releases
     <a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>
+      - <a href="releases/HepMC3-3.2.6.tar.gz">HepMC-3.2.6.tar.gz</a> HepMC3-3.2.6 <b> Mar.2023</b>
       - <a href="releases/HepMC3-3.2.5.tar.gz">HepMC-3.2.5.tar.gz</a> HepMC3-3.2.5 <b> 22.Feb.2022</b>
       - <a href="releases/HepMC3-3.2.4.tar.gz">HepMC-3.2.4.tar.gz</a> HepMC3-3.2.4 <b> 07.Jul.2021</b>  
       - <a href="releases/HepMC3-3.2.3.tar.gz">HepMC-3.2.3.tar.gz</a> HepMC3-3.2.3 <b> 14.Dec.2020</b>
@@ -72,7 +73,7 @@
     - @subpage differences
     - HepMC2.06 <a href="releases/HepMC2_user_manual.pdf">user manual</a> and <a href="releases/HepMC2_reference_manual.pdf">reference manual</a> (old documents NOT covering HepMC3)
 
-    @subsection linksx  Links to project-related web-pages
+    @subsection links  Links to project-related web-pages
      - <a href="https://gitlab.cern.ch/hepmc/HepMC3">       <b>HepMC3 GitLab repository </b></a>
      - <a href="https://gitlab.cern.ch/hepmc/HepMC">        <b>HepMC2 GitLab repository </b></a>
      - <a href="https://sft.its.cern.ch/jira/browse/HEPMC"> <b>HepMC project JIRA instance </b></a>

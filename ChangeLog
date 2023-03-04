@@ -1,4 +1,6 @@
-  --------------------------  HepMC3.2.6-pre ----------------------
+  --------------------------  HepMC3.2.6 ----------------------
+2023-03-03 Andrii Verbytskyi for HepMC
+         * Preparation to the rease 3.2.6.
 2023-03-03 Andrii Verbytskyi for HepMC
          * Better Doxygen documentation for code
 2023-03-02 Andrii Verbytskyi for HepMC

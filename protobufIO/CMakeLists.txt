@@ -21,7 +21,7 @@ target_link_libraries(HepMC3protobufIO HepMC3 protobuf::libprotobuf)
 
 set_target_properties(HepMC3protobufIO 
   PROPERTIES
-    SOVERSION 3
+    SOVERSION 1
     POSITION_INDEPENDENT_CODE 1
     ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
     LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
