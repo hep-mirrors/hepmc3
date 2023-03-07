@@ -28,31 +28,31 @@ LCG_99_x86_64-centos7-gcc8-opt:
     - export LCGPLATFORM=x86_64-centos7-gcc8-opt
     - export LCG_LOCATION=/cvmfs/sft.cern.ch/lcg/releases/LCG_99
     - source /cvmfs/sft.cern.ch/lcg/contrib/gcc/8.2.0/${LCGPLATFORM}/setup.sh
-    - source ${LCG_LOCATION}/ROOT/v6.22.06/${LCGPLATFORM}/ROOT-env.sh 
+    - source ${LCG_LOCATION}/ROOT/v6.22.06/${LCGPLATFORM}/ROOT-env.sh
     - export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/latest/Linux-x86_64/bin/:${PATH}
     - export ROOTSYS=${LCG_LOCATION}/ROOT/v6.22.06/${LCGPLATFORM}/
     - source ${LCG_LOCATION}/valgrind/3.16.1/${LCGPLATFORM}/valgrind-env.sh
     - source ${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/graphviz-env.sh
     - source ${LCG_LOCATION}/zlib/1.2.11/${LCGPLATFORM}/zlib-env.sh
     - source ${LCG_LOCATION}/Python/3.8.6/${LCGPLATFORM}/Python-env.sh
-    - source ${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/HepMC-env.sh 
+    - source ${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/HepMC-env.sh
     - source ${LCG_LOCATION}/protobuf/2.5.0/${LCGPLATFORM}/protobuf-env.sh
 #LCG 99 calls its variable Protobuf__HOME instead of Protobuf_HOME
     - export Protobuf_ROOT=$(pkg-config protobuf --variable=prefix)
   script:
     - export
     - LARG=" "
-    - LARG="$LARG "-DPYTHIA8_ROOT_DIR=${LCG_LOCATION}/MCGenerators/pythia8/244/${LCGPLATFORM} 
-    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/photos++/3.64/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/tauola++/1.1.8/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DMCTESTER_ROOT_DIR=${LCG_LOCATION}/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DHEPMC2_ROOT_DIR=${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DGRAPHVIZ_ROOT=${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/   
-    - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include 
+    - LARG="$LARG "-DPYTHIA8_ROOT_DIR=${LCG_LOCATION}/MCGenerators/pythia8/244/${LCGPLATFORM}
+    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/photos++/3.64/${LCGPLATFORM}/
+    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/tauola++/1.1.8/${LCGPLATFORM}/
+    - LARG="$LARG "-DMCTESTER_ROOT_DIR=${LCG_LOCATION}/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/
+    - LARG="$LARG "-DHEPMC2_ROOT_DIR=${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/
+    - LARG="$LARG "-DGRAPHVIZ_ROOT=${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/
+    - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
     - LARG="$LARG "-DProtobuf_LIBRARY=${Protobuf_ROOT}/lib/libprotobuf.so
-    - LARG="$LARG "-DHEPMC3_USE_INTERFACE_FROM_PYTHIA8:BOOL=OFF 
-    - LARG="$LARG "-DHEPMC3_PYTHON_VERSIONS=3 
-    - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install 
+    - LARG="$LARG "-DHEPMC3_USE_INTERFACE_FROM_PYTHIA8:BOOL=OFF
+    - LARG="$LARG "-DHEPMC3_PYTHON_VERSIONS=3
+    - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
     - LARG="$LARG "-DHEPMC3_Python_SITEARCH38=$(pwd)/install/lib/python3.8/site-packages
     - *LCGcmake
 ########################################################################
@@ -65,7 +65,7 @@ LCG_95_x86_64-centos7-gcc8-opt:
   before_script:
     - export LCGPLATFORM=x86_64-centos7-gcc8-opt
     - source /cvmfs/sft.cern.ch/lcg/contrib/gcc/8.2.0/${LCGPLATFORM}/setup.sh
-    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/ROOT-env.sh 
+    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/ROOT-env.sh
     - export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/3.13.4/Linux-x86_64/bin/:${PATH}
     - export ROOTSYS=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/ROOT/6.16.00/${LCGPLATFORM}/
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
@@ -78,19 +78,19 @@ LCG_95_x86_64-centos7-gcc8-opt:
   script:
     - export
     - LARG=" "
-    - LARG="$LARG "-DHEPMC3_PYTHON_VERSIONS=2 
-    - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install 
-    - LARG="$LARG "-DHEPMC3_Python_SITEARCH27=$(pwd)/install/lib/python2.7/site-packages 
-    - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM} 
-    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include 
-    - LARG="$LARG "-DProtobuf_LIBRARY=${Protobuf_ROOT}/lib/libprotobuf.so    
+    - LARG="$LARG "-DHEPMC3_PYTHON_VERSIONS=2
+    - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
+    - LARG="$LARG "-DHEPMC3_Python_SITEARCH27=$(pwd)/install/lib/python2.7/site-packages
+    - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}
+    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/
+    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/
+    - LARG="$LARG "-DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/
+    - LARG="$LARG "-DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/
+    - LARG="$LARG "-DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
+    - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
+    - LARG="$LARG "-DProtobuf_LIBRARY=${Protobuf_ROOT}/lib/libprotobuf.so
     - *LCGcmake
-    
+
 ########################################################################
 LCG_95_x86_64-ubuntu1804-gcc8-opt:
   only:
@@ -121,24 +121,24 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
   script:
     - export
     - LARG=" "
-    - LARG="$LARG "-DHEPMC3_PYTHON_VERSIONS=2 
-    - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install 
-    - LARG="$LARG "-DHEPMC3_Python_SITEARCH27=$(pwd)/install/lib/python2.7/site-packages 
-    - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM} 
-    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/ 
-    - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include 
-    - LARG="$LARG "-DProtobuf_LIBRARY=${Protobuf_ROOT}/lib/libprotobuf.so    
+    - LARG="$LARG "-DHEPMC3_PYTHON_VERSIONS=2
+    - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
+    - LARG="$LARG "-DHEPMC3_Python_SITEARCH27=$(pwd)/install/lib/python2.7/site-packages
+    - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}
+    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/
+    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/
+    - LARG="$LARG "-DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/
+    - LARG="$LARG "-DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/
+    - LARG="$LARG "-DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
+    - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
+    - LARG="$LARG "-DProtobuf_LIBRARY=${Protobuf_ROOT}/lib/libprotobuf.so
     - LARG="$LARG "-DHEPMC3_TEST_LZMA:BOOL=OFF
     - *LCGcmake
 ########################################################################
 
 .check_commit: &check_commit
   stage: check_if_dockerfile_updated
-  image: 
+  image:
         name: alpine/git
         entrypoint: [""]
   script:
@@ -164,7 +164,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
 
 .build_image: &build_image
   stage: build_docker_image
-  image: 
+  image:
         name: gcr.io/kaniko-project/executor:debug
         entrypoint: [""]
   script:
@@ -183,7 +183,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
   before_script:
     - set -x
-    - uname -a 
+    - uname -a
     - cat /etc/issue
     - export GIT_DEPTH=1
   cache:
@@ -196,7 +196,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - $CMAKE --build BUILD -j 10
     - $CMAKE --install BUILD
     - cd BUILD
-    - $CTEST -j 5 --output-on-failure 
+    - $CTEST -j 5 --output-on-failure
 
 .oldcmake: &oldcmake
     - mkdir -p BUILD
@@ -204,12 +204,12 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - $CMAKE ..   -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
     - make -j 10
     - make install
-    - $CTEST -j 5 --output-on-failure 
+    - $CTEST -j 5 --output-on-failure
 
 .ex:  &ex
-    - if [ "${TOOLSET}" == "LLVM" ]; then export CXX=clang++; export CC=clang; export FC=gfortran; fi  
-    - if [ "${TOOLSET}" == "GNU" ]; then export CXX=g++; export CC=gcc; export FC=gfortran; fi   
-    - if [ "${TOOLSET}" == "INTEL" ]; then source /opt/intel/oneapi/setvars.sh; export CXX=icx; export CC=icx; export FC=ifx; fi   
+    - if [ "${TOOLSET}" == "LLVM" ]; then export CXX=clang++; export CC=clang; export FC=gfortran; fi
+    - if [ "${TOOLSET}" == "GNU" ]; then export CXX=g++; export CC=gcc; export FC=gfortran; fi
+    - if [ "${TOOLSET}" == "INTEL" ]; then source /opt/intel/oneapi/setvars.sh; export CXX=icx; export CC=icx; export FC=ifx; fi
     - export CCACHE_BASEDIR=`pwd`/CACHES/cache-${OS}-${FREL}-${TOOLSET}
     - export CCACHE_DIR=`pwd`/CACHES/cache-${OS}-${FREL}-${TOOLSET}/ccache
     - mkdir -p CCACHE_DIR
@@ -246,7 +246,7 @@ check_commit_Fedora37:
 check_commit_Fedora35:
   variables: { OS: Fedora, FREL: 35}
   extends: .check_commit
-    
+
 check_commit_Fedora34:
   variables: { OS: Fedora, FREL: 34}
   extends: .check_commit
@@ -413,7 +413,7 @@ CentOS7-GNU:
   extends: .any-cmake
   needs:
     - job: build_image_CentOS7
-    
+
 Archlinux0-GNU:
   variables: { OS: Archlinux, FREL: 0, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
   extends: .any-cmake

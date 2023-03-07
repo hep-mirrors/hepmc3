@@ -261,7 +261,7 @@ set( hepmc3core_sources
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 add_library(HepMC3 SHARED ${hepmc3core_sources})
-target_include_directories(HepMC3 PUBLIC 
+target_include_directories(HepMC3 PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 3
@@ -270,7 +270,7 @@ set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 3
                                                RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
                                                EXPORT_NAME HepMC3::HepMC3)
 
-# Alias for packages that include this as a sub-project but 
+# Alias for packages that include this as a sub-project but
 # want to use the namespaced target names
 add_library(HepMC3::HepMC3 ALIAS HepMC3)
 target_link_libraries(HepMC3 PRIVATE ${CMAKE_DL_LIBS})
@@ -280,7 +280,7 @@ install(TARGETS HepMC3 EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} 
 if (HEPMC3_BUILD_STATIC_LIBS)
   add_library(HepMC3_static STATIC  ${hepmc3core_sources})
 
-  target_include_directories(HepMC3_static PUBLIC 
+  target_include_directories(HepMC3_static PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
   target_compile_definitions(HepMC3_static PRIVATE HEPMC3_NO_EXPORTS)
@@ -293,7 +293,7 @@ if (HEPMC3_BUILD_STATIC_LIBS)
   target_link_libraries(HepMC3_static PRIVATE ${CMAKE_DL_LIBS})
 #---Install build products---------------------------------------------------
   install(TARGETS HepMC3_static EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
-  # Alias for packages that include this as a sub-project but 
+  # Alias for packages that include this as a sub-project but
   # want to use the namespaced target names
   add_library(HepMC3::HepMC3_static ALIAS HepMC3_static)
 endif()
@@ -338,11 +338,11 @@ if(HEPMC3_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 if (HEPMC3_INSTALL_EXAMPLES)
-  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc  
-          FILES_MATCHING PATTERN "*"   
-          PATTERN "*CMakeFiles*" EXCLUDE  
-          PATTERN "Makefile" EXCLUDE  
-          PATTERN "*cmake_install.cmake*" EXCLUDE  
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc
+          FILES_MATCHING PATTERN "*"
+          PATTERN "*CMakeFiles*" EXCLUDE
+          PATTERN "Makefile" EXCLUDE
+          PATTERN "*cmake_install.cmake*" EXCLUDE
           PATTERN "*libAnalysis*" EXCLUDE )
   list(APPEND HEPMC3_FEATURES "examples")
 endif()
@@ -381,7 +381,7 @@ configure_package_config_file(cmake/Templates/HepMC3Config.cmake.in
             HEPMC3_ROOTIO_INSTALL_LIBDIR
             INTERFACES_INSTALL_DIR)
 
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake 
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3Config-version.cmake
   COMPATIBILITY SameMajorVersion VERSION ${PROJECT_VERSION})
 
 configure_package_config_file(HepMC3-config.in
@@ -438,7 +438,7 @@ if(HEPMC3_BUILD_STATIC_LIBS AND NOT HEPMC3_ALL_LIBRARY_INCLUDED)
   target_link_libraries(HepMC3All_static INTERFACE HepMC3_static)
 endif()
 
-# Aliases for packages that include this as a sub-project but 
+# Aliases for packages that include this as a sub-project but
 # want to use the namespaced target names
 add_library(HepMC3::All ALIAS HepMC3All)
 if(HEPMC3_BUILD_STATIC_LIBS)
@@ -475,7 +475,7 @@ if (ASTYLE)
     include/HepMC3/Com*h
     include/HepMC3/Att*h
     examples/*/src/*cc
-    examples/*/convert_example.cc    
+    examples/*/convert_example.cc
     examples/*/include/*h
     test/*cc
     test/*h

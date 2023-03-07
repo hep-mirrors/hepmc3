@@ -144,28 +144,28 @@ private:
   size_t m_bytes_read = 0;
 
   /** @brief The file stream of the file being read
-   * 
-   * @detail This is non-null and owned by this class if constructed with the 
+   *
+   * @detail This is non-null and owned by this class if constructed with the
    * string constructor, otherwise it will be null
    */
   std::unique_ptr<std::ifstream> m_in_file;
   /** @brief The stream object that is read from
-   * 
-   * @detail If constructed with the string constructor, this just points to 
+   *
+   * @detail If constructed with the string constructor, this just points to
    * m_in_file.get())
    */
   std::istream *m_in_stream = nullptr;
 
-  /** @brief The buffer used to hold the current message binary 
+  /** @brief The buffer used to hold the current message binary
    * (header/genruninfo/genevent/footer)
    */
   std::string m_msg_buffer;
-  /** @brief The buffer used to hold the current message digest binary 
+  /** @brief The buffer used to hold the current message digest binary
    * (message frame)
    */
   std::string m_md_buffer;
   /** @brief The type of current message
-   * 
+   *
    * @details Defined in HepMC3_pb::MessageDigest::MessageType in the proto file
    */
   int m_msg_type;
@@ -175,8 +175,8 @@ private:
   HepMC3::GenEventData m_evdata;
 
   /** @brief A copy of the library version info stored in the proto file header
-   * 
-   * @detail This is a copy so as to avoid passing on protobuf header 
+   *
+   * @detail This is a copy so as to avoid passing on protobuf header
    * dependencies to files that include this header
    */
   FileHeader m_file_header;

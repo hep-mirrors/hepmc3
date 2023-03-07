@@ -84,7 +84,7 @@ CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       HEPMC3STATUS=hepmc3_new_weight(OUTID(2),'weps2'//char(0))
       NEVHEP=-123456
       HEPMC3STATUS=hepmc3_set_hepevt_address(NEVHEP)
-C...Or one can set the pointer to some predefined block size      
+C...Or one can set the pointer to some predefined block size
 C      HEPMC3STATUS=hepmc3_set_hepevt_address(NEVHEPL)
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C-----------------------------------------------------------------

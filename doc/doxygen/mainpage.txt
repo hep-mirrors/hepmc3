@@ -19,7 +19,7 @@
      - <a href="https://arxiv.org/pdf/2203.08230.pdf">E.Bothmann et al., A standard convention for particle-level Monte Carlo event-variation weights</a>
     <a href="https://inspirehep.net/literature/2053416"> InSpire record</a>
 
-    - <a href="https://doi.org/10.1016/j.cpc.2006.11.010">J. Alwall et al., A standard format for Les Houches Event Files</a> 
+    - <a href="https://doi.org/10.1016/j.cpc.2006.11.010">J. Alwall et al., A standard format for Les Houches Event Files</a>
     <a href="https://inspirehep.net/literature/725284"> InSpire record</a>
 
     @section releases Status of releases
@@ -44,7 +44,7 @@
     <a href="https://gitlab.cern.ch/hepmc/HepMC3/blob/master/ChangeLog">ChangeLog</a>
       - <a href="releases/HepMC3-3.2.6.tar.gz">HepMC-3.2.6.tar.gz</a> HepMC3-3.2.6 <b> Mar.2023</b>
       - <a href="releases/HepMC3-3.2.5.tar.gz">HepMC-3.2.5.tar.gz</a> HepMC3-3.2.5 <b> 22.Feb.2022</b>
-      - <a href="releases/HepMC3-3.2.4.tar.gz">HepMC-3.2.4.tar.gz</a> HepMC3-3.2.4 <b> 07.Jul.2021</b>  
+      - <a href="releases/HepMC3-3.2.4.tar.gz">HepMC-3.2.4.tar.gz</a> HepMC3-3.2.4 <b> 07.Jul.2021</b>
       - <a href="releases/HepMC3-3.2.3.tar.gz">HepMC-3.2.3.tar.gz</a> HepMC3-3.2.3 <b> 14.Dec.2020</b>
       - <a href="releases/HepMC3-3.2.2.tar.gz">HepMC-3.2.2.tar.gz</a> HepMC3-3.2.2 <b> 10.Jun.2020</b>
       - <a href="releases/HepMC3-3.2.1.tar.gz">HepMC-3.2.1.tar.gz</a> HepMC3-3.2.1 <b> 17.Mar.2020</b>

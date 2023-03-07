@@ -10,8 +10,8 @@ The third party codes are distributed under their own licenses.
  ./include/HepMC3/bxzstr/*
 
 
-# http://www.thep.lu.se/~torbjorn/Pythia.html 
-# Copyright: 2010 Torbjorn Sjostrand et al. 
+# http://www.thep.lu.se/~torbjorn/Pythia.html
+# Copyright: 2010 Torbjorn Sjostrand et al.
 ./examples/Pythia6Example/main63.f
 ./examples/Pythia6Example/pythia-6.4.28.f
 
@@ -24,7 +24,7 @@ The third party codes are distributed under their own licenses.
 # Copyright: 2014 University of Southern California
 ./examples/ViewerExample/cmake/Modules/FindGraphviz.cmake
 
-# ./cmake/Modules/Copyright.txt from  https://cmake.org/licensing 
+# ./cmake/Modules/Copyright.txt from  https://cmake.org/licensing
 # Type: OSI-approved BSD 3-Clause License
 # Copyright: 2000-2021 Kitware, Inc. and Contributors
 ./cmake/Modules/CMakeFindFrameworks.cmake

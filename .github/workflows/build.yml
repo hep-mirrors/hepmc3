@@ -11,23 +11,23 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.9"]
-        config: 
+        config:
         - {
             name: "MacOSX-12",
             os: macos-12,
-            cc: "clang", 
+            cc: "clang",
             cxx: "clang++"
           }
         - {
             name: "MacOSX-11",
             os: macos-11,
-            cc: "clang", 
+            cc: "clang",
             cxx: "clang++"
           }
         - {
             name: "MacOSX-10.15",
             os: macos-10.15,
-            cc: "clang", 
+            cc: "clang",
             cxx: "clang++"
           }
 
@@ -42,8 +42,8 @@ jobs:
         brew install protobuf
         brew install doxygen
         cmake -S. -B BUILD -DCMAKE_INSTALL_PREFIX=./INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
-        cmake --build BUILD 
-        cmake --install BUILD         
+        cmake --build BUILD
+        cmake --install BUILD
         cd BUILD
         ctest . --output-on-failure
   nativewin:
@@ -54,11 +54,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.10"]
-        config: 
+        config:
         - {
             name: "Windows Latest MSVC",
             os: windows-latest,
-            cc: "cl", 
+            cc: "cl",
             cxx: "cl",
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
           }
@@ -73,14 +73,14 @@ jobs:
           Invoke-WebRequest -Uri https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-win64.zip -OutFile protoc-21.12-win64.zip
           Expand-Archive -Path protoc-21.12-win64.zip -DestinationPath C:\output
           vcpkg install protobuf:x64-windows
-          copy  C:\output\bin\protoc.exe C:\vcpkg\packages\protobuf_x64-windows\bin 
+          copy  C:\output\bin\protoc.exe C:\vcpkg\packages\protobuf_x64-windows\bin
           vcpkg list
-          dir   C:\vcpkg\packages\protobuf_x64-windows\bin 
+          dir   C:\vcpkg\packages\protobuf_x64-windows\bin
       - name: Build
         run:  |
           cmake -S. -B BUILD -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DProtobuf_PROTOC_EXECUTABLE=C:\vcpkg\packages\protobuf_x64-windows\bin\protoc.exe  -DProtobuf_INCLUDE_DIR=C:\vcpkg\packages\protobuf_x64-windows\include -DProtobuf_LIBRARY=C:\vcpkg\packages\protobuf_x64-windows\lib\libprotobuf.lib -DCMAKE_INSTALL_PREFIX=C:\INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF  -DHEPMC3_BUILD_EXAMPLES:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
-          cmake --build BUILD 
-          cmake --install BUILD 
+          cmake --build BUILD
+          cmake --install BUILD
           chdir BUILD
           ctest . -C Debug --output-on-failure
 
@@ -119,8 +119,8 @@ jobs:
 #Fix here examples
       run:  |
         cmake -S. -B BUILD -DCMAKE_INSTALL_PREFIX=./INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF  -DHEPMC3_BUILD_EXAMPLES:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=OFF -DHEPMC3_PYTHON_VERSIONS=3
-        cmake --build BUILD 
-        cmake --install BUILD 
+        cmake --build BUILD
+        cmake --install BUILD
 #        cd BUILD
 #        ctest .
 

@@ -2991,11 +2991,11 @@ protected:
 
 public:
   /**
-   *  initfile rdstate 
+   *  initfile rdstate
    */
    std::ios_base::iostate initfile_rdstate() const { if (initfile) return initfile->rdstate(); return std::ifstream::goodbit; }
   /**
-   *  file rdstate 
+   *  file rdstate
    */
    std::ios_base::iostate file_rdstate() const { if (file) return file->rdstate(); return std::ifstream::goodbit; }
 
