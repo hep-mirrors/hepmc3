@@ -310,7 +310,7 @@ To use the interfaces and tests shipped with HepMC3, one can set the following o
 
  In order to build with PROTOBUFIO put the following flags
 ```
--DHEPMC3_ENABLE_PROTOBUF=ON 
+-DHEPMC3_ENABLE_PROTOBUF=ON
 ```
 Adjustment of LD_LIBRARY_PATH might be needed.
 
@@ -422,20 +422,20 @@ cmake -DUSE_INSTALLED_HEPMC3=ON CMakeLists.txt
 make
 ```
 Please note that in case the HepMC3 installation is not system-wide,
-CMake will require an additional flag  `-DHepMC3_DIR=/directory/where/you/have/HepMC3Config.cmake/file` to point to 
+CMake will require an additional flag  `-DHepMC3_DIR=/directory/where/you/have/HepMC3Config.cmake/file` to point to
 the directory containing the installed `HepMC3Config.cmake` file.
-The examples use multiple parts of HepMC3, therefore to use all of them a full installation of HepMC3 
+The examples use multiple parts of HepMC3, therefore to use all of them a full installation of HepMC3
 (i.e. including ROOT MC event generator interfaces is needed).
 
 # Compatibility and deprecation notes
-  - The `IO_GenEvent` (HepMC2) and HEPEVT  ASCII files produced by all HepMC3 versions should be readable by all HepMC3 
+  - The `IO_GenEvent` (HepMC2) and HEPEVT  ASCII files produced by all HepMC3 versions should be readable by all HepMC3
     versions and latest versions of HepMC2.
-  - The `Asciiv3` (HepMC3) ASCII files produced by all HepMC3>=3.0.0 versions should be readable by all HepMC3>3.0.0 versions. 
-  - The ROOT files produced by all HepMC3>=3.0.0 versions should be readable by all HepMC3>3.0.0 versions. 
-  - The ROOT files produced by all HepMC3>=3.1.0 versions will not be readable by HepMC3<3.1.0 versions.    
-  
+  - The `Asciiv3` (HepMC3) ASCII files produced by all HepMC3>=3.0.0 versions should be readable by all HepMC3>3.0.0 versions.
+  - The ROOT files produced by all HepMC3>=3.0.0 versions should be readable by all HepMC3>3.0.0 versions.
+  - The ROOT files produced by all HepMC3>=3.1.0 versions will not be readable by HepMC3<3.1.0 versions.
+
   - The HepMC3 versions with the same SOVERSION of library are ABI backwards compatible. I.e. the code compiled with HepMC3=3.2.x
-    will work with HepMC3=3.2.(x+1) if libHepMC3=3.2.(x+1) will have the same SOVERSION as libHepMC3=3.2.x. 
+    will work with HepMC3=3.2.(x+1) if libHepMC3=3.2.(x+1) will have the same SOVERSION as libHepMC3=3.2.x.
     Please note that `libHepMC3`, `libHepMC3search` and other libraries have different SOVERSION.
   - The minor versions of HepMC3 are API backward compatible.
   - The major versions of HepMC3 are almost API backward compatible.
@@ -445,7 +445,7 @@ The examples use multiple parts of HepMC3, therefore to use all of them a full i
     As of version HepMC3=3.2.6 it is present `as is`.
   - The class HepMC3::RelativesInterface are deprecated will be removed in the future.
     Use HepMC3::children_particles, HepMC3::descendant_particles, etc. instead.
-  - The minimal required version of `cmake` slowly changes from version to version. It is recommented to use the `cmake` 
+  - The minimal required version of `cmake` slowly changes from version to version. It is recommented to use the `cmake`
      released not earlier than 3-4 years ago.
 
 

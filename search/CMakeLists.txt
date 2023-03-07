@@ -24,7 +24,7 @@ target_include_directories(HepMC3search PUBLIC
 # installs
 install(TARGETS HepMC3search EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT searchlibs)
 
-# Alias for packages that include this as a sub-project but 
+# Alias for packages that include this as a sub-project but
 # want to use the namespaced target names
 add_library(HepMC3::search ALIAS HepMC3search)
 
@@ -44,7 +44,7 @@ if (HEPMC3_BUILD_STATIC_LIBS)
                                              EXPORT_NAME HepMC3::search_static)
   install(TARGETS HepMC3search_static EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT searchlibs)
 
-  # Alias for packages that include this as a sub-project but 
+  # Alias for packages that include this as a sub-project but
   # want to use the namespaced target names
   add_library(HepMC3::search_static ALIAS HepMC3search_static)
 endif()

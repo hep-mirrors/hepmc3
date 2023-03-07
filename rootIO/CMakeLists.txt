@@ -21,7 +21,7 @@ target_link_libraries(HepMC3rootIO ${ROOT_Tree_LIBRARY} ${ROOT_RIO_LIBRARY} ${RO
 target_include_directories(HepMC3rootIO PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>  
+  $<INSTALL_INTERFACE:include>
   ${ROOT_INCLUDE_DIRS})
 
 set_target_properties(HepMC3rootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
@@ -35,6 +35,6 @@ install(TARGETS HepMC3rootIO EXPORT HepMC3Targets DESTINATION ${HEPMC3_ROOTIO_IN
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/ DESTINATION  ${HEPMC3_ROOTIO_INSTALL_LIBDIR}  COMPONENT rootIOlibs  FILES_MATCHING  PATTERN "*.pcm"  PATTERN "*.rootmap"  PATTERN "CMakeFiles" EXCLUDE   PATTERN "src" EXCLUDE  PATTERN "include" EXCLUDE)
 install(DIRECTORY include/HepMC3 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT rootIOdevel)
 
-# Alias for packages that include this as a sub-project but 
+# Alias for packages that include this as a sub-project but
 # want to use the namespaced target names
 add_library(HepMC3::rootIO ALIAS HepMC3rootIO)

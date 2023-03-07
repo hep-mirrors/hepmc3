@@ -7,7 +7,7 @@ RUN  yum -y  install  bc make cmake binutils git wget diffutils file sed gawk gr
                       ccache  \
                       protobuf protobuf-devel  \
                       python3 python3-devel  python3-numpy   \
-                      root-core root root-physics doxygen &&  yum -y   clean all  
+                      root-core root root-physics doxygen &&  yum -y   clean all
 
 
 #RUN  printf '[oneAPI]\nname=Intel® oneAPI repository\nbaseurl=https://yum.repos.intel.com/oneapi\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB\n' > /etc/yum.repos.d/oneAPI.repo  \
