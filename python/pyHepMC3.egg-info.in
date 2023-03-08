@@ -5,7 +5,7 @@ Summary: Python bindings for HepMC3
 Home-page: https://gitlab.cern.ch/hepmc/HepMC3
 Author: HepMC3 Developers
 Author-email: hepmc-dev@cern.ch
-License: GPLv3
+License: LGPLv3
 Description: pyHepMC3
               Official python bindings for the HepMC3 library
 Platform: UNKNOWN
