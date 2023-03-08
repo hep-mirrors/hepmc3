@@ -5,7 +5,7 @@ Summary: Python bindings for HepMC3 protobufIO module
 Home-page: https://gitlab.cern.ch/hepmc/HepMC3
 Author: HepMC3 Developers
 Author-email: hepmc-dev@cern.ch
-License: GPLv3
+License: LGPLv3
 Description: pyHepMC3.protobufIO
               Official python bindings for the protobufIO module of the HepMC3 library
 Platform: UNKNOWN
