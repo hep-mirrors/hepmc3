@@ -5,13 +5,13 @@ Summary: Python bindings for HepMC3 protobufIO module
 Home-page: https://gitlab.cern.ch/hepmc/HepMC3
 Author: HepMC3 Developers
 Author-email: hepmc-dev@cern.ch
-License: LGPLv3
+License: LGPLv3+
 Description: pyHepMC3.protobufIO
               Official python bindings for the protobufIO module of the HepMC3 library
 Platform: UNKNOWN
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Physicists
-Classifier: License :: OSI Approved :: GPLv3
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)
 Classifier: License :: OSI Approved :: Python Software Foundation License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
