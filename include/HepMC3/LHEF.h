@@ -4,9 +4,9 @@
 //
 // This is the declaration of the Les Houches Event File classes,
 // implementing a simple C++ parser/writer for Les Houches Event files.
-// Copyright (C) 2009-2013 Leif Lonnblad
+// Copyright (C) 2009-2023 Leif Lonnblad
 //
-// The code is licenced under version 2 of the GPL, see COPYING for details.
+// The code is licenced under LGPLv3+, see COPYING for details.
 // Please respect the MCnet academic guidelines, see GUIDELINES for details.
 //
 
