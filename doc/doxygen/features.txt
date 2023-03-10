@@ -70,11 +70,11 @@
 
 
     ###########################################################################
-    @subsection links Links
+    @subsection links_mem Links
     ###########################################################################
 
     The relations between vertices and particles in GenEventData are encoded via
-     members links1 and links2, wich are std::vector<int> containing object ids.
+    members links1 and links2, wich are std::vector<int> containing object ids.
     Direct manipulations with links1 and links2 can be useful. For instance,
     when the events are saved in ROOT format, one can extract the information
     from links1 and links2 without reading whole event.
@@ -83,13 +83,13 @@
     @code{.cpp}
         // Andrii Verbytskyi, 2017, MPI fuer Physik
         // Here is a code to look for a scattered DIS electron  in HepMC3 event record using links.
-        // The implementation is extended to provide example of links1,lins2 usage.
+        // The implementation is extended to provide example of links1, links2 usage.
         // Dummy code.
         GenEventData*  A=...
         ...
         int i;
         int j;
-        int current_l=0;                             // If the  incoming electron is the first particle in the list
+        int current_l=0;                             // If the incoming electron is the first particle in the list
         int vertex_l=0;                              // We set final vertex to some nonsense value.
         bool found_next_vertex=true;
         while(found_next_vertex)                     // Looking for the electron end vertex

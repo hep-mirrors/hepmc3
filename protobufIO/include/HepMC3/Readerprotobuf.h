@@ -145,13 +145,13 @@ private:
 
   /** @brief The file stream of the file being read
    *
-   * @detail This is non-null and owned by this class if constructed with the
+   * @details This is non-null and owned by this class if constructed with the
    * string constructor, otherwise it will be null
    */
   std::unique_ptr<std::ifstream> m_in_file;
   /** @brief The stream object that is read from
    *
-   * @detail If constructed with the string constructor, this just points to
+   * @details If constructed with the string constructor, this just points to
    * m_in_file.get())
    */
   std::istream *m_in_stream = nullptr;
@@ -176,7 +176,7 @@ private:
 
   /** @brief A copy of the library version info stored in the proto file header
    *
-   * @detail This is a copy so as to avoid passing on protobuf header
+   * @details This is a copy so as to avoid passing on protobuf header
    * dependencies to files that include this header
    */
   FileHeader m_file_header;

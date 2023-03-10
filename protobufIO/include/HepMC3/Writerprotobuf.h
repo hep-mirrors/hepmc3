@@ -88,13 +88,13 @@ private:
 
   /** @brief The output file stream
    *
-   * @detail This is non-null and owned by this class if the instance was
+   * @details This is non-null and owned by this class if the instance was
    * constructed with the string constructor, it is null otherwise.
    */
   std::unique_ptr<std::ofstream> m_out_file;
   /** @brief The stream object that is written to
    *
-   * @detail If constructed with the string constructor, this just points to
+   * @details If constructed with the string constructor, this just points to
    * m_out_file.get())
    */
   std::ostream *m_out_stream;
