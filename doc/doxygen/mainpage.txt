@@ -19,7 +19,7 @@
      - <a href="https://arxiv.org/pdf/2203.08230.pdf">E.Bothmann et al., A standard convention for particle-level Monte Carlo event-variation weights</a>
     <a href="https://inspirehep.net/literature/2053416"> InSpire record</a>
 
-    - <a href="https://doi.org/10.1016/j.cpc.2006.11.010">J. Alwall et al., A standard format for Les Houches Event Files</a>
+     - <a href="https://doi.org/10.1016/j.cpc.2006.11.010">J. Alwall et al., A standard format for Les Houches Event Files</a>
     <a href="https://inspirehep.net/literature/725284"> InSpire record</a>
 
     @section releases Status of releases
