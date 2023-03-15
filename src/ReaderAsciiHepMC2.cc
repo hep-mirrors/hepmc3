@@ -604,21 +604,17 @@ bool ReaderAsciiHepMC2::parse_xs_info(GenEvent &evt, const char *buf) {
     std::shared_ptr<GenCrossSection>  xs     = std::make_shared<GenCrossSection>();
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    double xs_val  = atof(cursor);
+    const double xs_val  = atof(cursor);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
-    double xs_err = atof(cursor);
-    const size_t all = m_options.count("keep_single_crosssection") ? size_t{1} :
-                       std::max(evt.weights().size(),size_t{1});
-    if (all > 1 && m_options.count("fill_crosssections_with_zeros") != 0) {
-        xs->set_cross_section(std::vector<double>(all,0.0), std::vector<double>(all,0.0));
-        xs->set_xsec(0,xs_val);
-        xs->set_xsec_err(0,xs_err);
-    } else {
-        xs->set_cross_section(std::vector<double>(all,xs_val), std::vector<double>(all,xs_err));
-    }
+    const double xs_err = atof(cursor);
+    const size_t all = m_options.count("keep_single_crosssection") ? size_t{1} : std::max(evt.weights().size(),size_t{1});
+    const double xs_val_dummy = m_options.count("fill_crosssections_value") ? std::strtod(m_options.at("fill_crosssections_value").c_str(),nullptr) : xs_val;
+    const double xs_err_dummy = m_options.count("fill_crosssections_error") ? std::strtod(m_options.at("fill_crosssections_error").c_str(),nullptr) : xs_err;
+    xs->set_cross_section(std::vector<double>(all,xs_val_dummy), std::vector<double>(all,xs_err_dummy));
+    xs->set_xsec(0,xs_val);
+    xs->set_xsec_err(0,xs_err);
     evt.add_attribute("GenCrossSection", xs);
-
     return true;
 }
 
