@@ -30,7 +30,7 @@ set_target_properties(HepMC3protobufIO
 
 #---Install shared build products---------------------------------------------------
 install(TARGETS HepMC3protobufIO
-  EXPORT HepMC3Targets
+  EXPORT HepMC3protobufIOTargets
   DESTINATION ${CMAKE_INSTALL_LIBDIR}
   COMPONENT protobufIOlibs)
 
@@ -67,9 +67,17 @@ if (HEPMC3_BUILD_STATIC_LIBS)
       EXPORT_NAME HepMC3::protobufIO_static)
 
 #---Install static build products---------------------------------------------------
-  install(TARGETS HepMC3protobufIO_static EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT protobufIOlibs)
+  install(TARGETS HepMC3protobufIO_static
+    EXPORT HepMC3protobufIOTargets
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    COMPONENT protobufIOlibs)
 
   # Alias for packages that include this as a sub-project but
   # want to use the namespaced target names
   add_library(HepMC3::protobufIO_static ALIAS HepMC3protobufIO_static)
 endif()
+
+set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/cmake)
+install(EXPORT HepMC3protobufIOTargets
+  DESTINATION ${CONFIG_INSTALL_DIR}
+  COMPONENT protobufIOlibs)
