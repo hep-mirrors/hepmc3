@@ -31,10 +31,18 @@ if (MSVC)
 endif()
 set_target_properties(HepMC3rootIO PROPERTIES SOVERSION 3)
 # installs
-install(TARGETS HepMC3rootIO EXPORT HepMC3Targets DESTINATION ${HEPMC3_ROOTIO_INSTALL_LIBDIR} COMPONENT rootIOlibs)
+install(TARGETS HepMC3rootIO
+  EXPORT HepMC3rootIOTargets
+  DESTINATION ${HEPMC3_ROOTIO_INSTALL_LIBDIR}
+  COMPONENT rootIOlibs)
 install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/ DESTINATION  ${HEPMC3_ROOTIO_INSTALL_LIBDIR}  COMPONENT rootIOlibs  FILES_MATCHING  PATTERN "*.pcm"  PATTERN "*.rootmap"  PATTERN "CMakeFiles" EXCLUDE   PATTERN "src" EXCLUDE  PATTERN "include" EXCLUDE)
 install(DIRECTORY include/HepMC3 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR} COMPONENT rootIOdevel)
 
 # Alias for packages that include this as a sub-project but
 # want to use the namespaced target names
 add_library(HepMC3::rootIO ALIAS HepMC3rootIO)
+
+set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/cmake)
+install(EXPORT HepMC3rootIOTargets
+  DESTINATION ${CONFIG_INSTALL_DIR}
+  COMPONENT rootIOdevel)

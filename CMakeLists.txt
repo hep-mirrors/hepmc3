@@ -122,6 +122,7 @@ if (NOT HEPMC3_CXX_STANDARD)
   set(HEPMC3_CXX_STANDARD 11)
 endif()
 set(HEPMC3_FEATURES "")
+set(HEPMC3_COMPONENTS "")
 if(HEPMC3_ENABLE_ROOTIO)
   set (ROOT_FIND_COMPONENTS Core RIO Tree)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
@@ -265,34 +266,40 @@ target_include_directories(HepMC3 PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 3
-                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-                                               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-                                               EXPORT_NAME HepMC3::HepMC3)
+  ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+  LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+  RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+  EXPORT_NAME HepMC3::HepMC3)
 
 # Alias for packages that include this as a sub-project but
 # want to use the namespaced target names
 add_library(HepMC3::HepMC3 ALIAS HepMC3)
 target_link_libraries(HepMC3 PRIVATE ${CMAKE_DL_LIBS})
 #---Install build products---------------------------------------------------
-install(TARGETS HepMC3 EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+install(TARGETS HepMC3
+  EXPORT HepMC3Targets
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  COMPONENT libs)
 
 if (HEPMC3_BUILD_STATIC_LIBS)
-  add_library(HepMC3_static STATIC  ${hepmc3core_sources})
+  add_library(HepMC3_static STATIC ${hepmc3core_sources})
 
   target_include_directories(HepMC3_static PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
   target_compile_definitions(HepMC3_static PRIVATE HEPMC3_NO_EXPORTS)
   set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static
-                                               ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-                                               LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-                                               RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-                                               EXPORT_NAME HepMC3::HepMC3_static)
+    ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+    LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+    RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
+    EXPORT_NAME HepMC3::HepMC3_static)
 
   target_link_libraries(HepMC3_static PRIVATE ${CMAKE_DL_LIBS})
 #---Install build products---------------------------------------------------
-  install(TARGETS HepMC3_static EXPORT HepMC3Targets DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT libs)
+  install(TARGETS HepMC3_static
+    EXPORT HepMC3Targets
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    COMPONENT libs)
   # Alias for packages that include this as a sub-project but
   # want to use the namespaced target names
   add_library(HepMC3::HepMC3_static ALIAS HepMC3_static)
@@ -309,6 +316,7 @@ set(INTERFACES_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/interfaces)
 if(HEPMC3_ENABLE_SEARCH)
   add_subdirectory(search)
   list(APPEND HEPMC3_FEATURES "search")
+  list(APPEND HEPMC3_COMPONENTS "search")
 endif()
 
 #Interfaces for some MCEGs
@@ -324,12 +332,14 @@ endif()
 if(ROOT_FOUND)
    add_subdirectory(rootIO)
    list(APPEND HEPMC3_FEATURES "rootIO")
+   list(APPEND HEPMC3_COMPONENTS "rootIO")
 endif()
 
 if(Protobuf_FOUND)
   add_subdirectory(protobufIO)
   list(APPEND HEPMC3_FEATURES "protobufIO")
   list(APPEND HEPMC3_FEATURES "protobufIO${Protobuf_VERSION}")
+  list(APPEND HEPMC3_COMPONENTS "protobufIO")
 endif()
 
 # Add the examples subdirectories
@@ -401,54 +411,32 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/outputs/bin/HepMC3-config
         PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 add_library(HepMC3All INTERFACE)
-set_target_properties(HepMC3All PROPERTIES EXPORT_NAME HepMC3::All)
+target_link_libraries(HepMC3All INTERFACE HepMC3::HepMC3)
 
-if(HEPMC3_BUILD_STATIC_LIBS)
+if(TARGET HepMC3::HepMC3_static)
   add_library(HepMC3All_static INTERFACE)
-  set_target_properties(HepMC3All_static PROPERTIES EXPORT_NAME HepMC3::All_static)
+  target_link_libraries(HepMC3All_static INTERFACE HepMC3::HepMC3_static)
 endif()
 
-#As the libraries below depend on HepMC3 already, we don't need to add them
-#manually unless we have no optional components
-SET(HEPMC3_ALL_LIBRARY_INCLUDED FALSE)
-if (HEPMC3_ENABLE_SEARCH)
-  target_link_libraries(HepMC3All INTERFACE HepMC3search)
-  if(HEPMC3_BUILD_STATIC_LIBS)
-    target_link_libraries(HepMC3All_static INTERFACE HepMC3search_static)
+foreach(_comp ${HEPMC3_COMPONENTS})
+  target_link_libraries(HepMC3All INTERFACE HepMC3::${_comp})
+  if(TARGET HepMC3::${_comp}_static)
+    target_link_libraries(HepMC3All_static INTERFACE HepMC3::${_comp}_static)
   endif()
-  SET(HEPMC3_ALL_LIBRARY_INCLUDED TRUE)
-endif()
-if(ROOT_FOUND)
-  target_link_libraries(HepMC3All INTERFACE HepMC3rootIO)
-  SET(HEPMC3_ALL_LIBRARY_INCLUDED TRUE)
-endif()
-if(Protobuf_FOUND)
-  target_link_libraries(HepMC3All INTERFACE HepMC3protobufIO)
-  if(HEPMC3_BUILD_STATIC_LIBS)
-    target_link_libraries(HepMC3All_static INTERFACE HepMC3protobufIO_static)
-  endif()
-  SET(HEPMC3_ALL_LIBRARY_INCLUDED TRUE)
-endif()
-
-if(NOT HEPMC3_ALL_LIBRARY_INCLUDED)
-  target_link_libraries(HepMC3All INTERFACE HepMC3)
-endif()
-
-if(HEPMC3_BUILD_STATIC_LIBS AND NOT HEPMC3_ALL_LIBRARY_INCLUDED)
-  target_link_libraries(HepMC3All_static INTERFACE HepMC3_static)
-endif()
+endforeach()
 
 # Aliases for packages that include this as a sub-project but
 # want to use the namespaced target names
 add_library(HepMC3::All ALIAS HepMC3All)
-if(HEPMC3_BUILD_STATIC_LIBS)
+get_target_property(_all HepMC3::All INTERFACE_LINK_LIBRARIES)
+message(STATUS "HepMC3::All contains: ${_all}")
+if(TARGET HepMC3All_static)
   add_library(HepMC3::All_static ALIAS HepMC3All_static)
-  install(TARGETS HepMC3All HepMC3All_static EXPORT HepMC3Targets)
-else()
-  install(TARGETS HepMC3All EXPORT HepMC3Targets)
+  get_target_property(_allstatic HepMC3::All_static INTERFACE_LINK_LIBRARIES)
+  message(STATUS "HepMC3::All_static contains: ${_allstatic}")
 endif()
 
-install(EXPORT HepMC3Targets DESTINATION ${CONFIG_INSTALL_DIR})
+install(EXPORT HepMC3Targets DESTINATION ${CONFIG_INSTALL_DIR} COMPONENT devel)
 
 # uninstall target
 if(NOT TARGET uninstall)
