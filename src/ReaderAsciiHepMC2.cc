@@ -609,8 +609,8 @@ bool ReaderAsciiHepMC2::parse_xs_info(GenEvent &evt, const char *buf) {
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     const double xs_err = atof(cursor);
     const size_t all = m_options.count("keep_single_crosssection") ? size_t{1} : std::max(evt.weights().size(),size_t{1});
-    const double xs_val_dummy = m_options.count("fill_crosssections_value") ? std::strtod(m_options.at("fill_crosssections_value").c_str(),nullptr) : xs_val;
-    const double xs_err_dummy = m_options.count("fill_crosssections_error") ? std::strtod(m_options.at("fill_crosssections_error").c_str(),nullptr) : xs_err;
+    const double xs_val_dummy = m_options.count("fill_crosssections_value") ? std::strtod(m_options.at("fill_crosssections_value").c_str(),nullptr) : 0.0;
+    const double xs_err_dummy = m_options.count("fill_crosssections_error") ? std::strtod(m_options.at("fill_crosssections_error").c_str(),nullptr) : 0.0;
     xs->set_cross_section(std::vector<double>(all,xs_val_dummy), std::vector<double>(all,xs_err_dummy));
     xs->set_xsec(0,xs_val);
     xs->set_xsec_err(0,xs_err);
