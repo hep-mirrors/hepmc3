@@ -40,7 +40,7 @@
      in the HepMC2 style. This is pre-3.2.6 default behaviour. 
      Otherwise, the cross-section vector will be expanded to the size  of event weights. This is 3.2.6+ default behaviour.
      If present, "fill_crosssections_value"/"fill_crosssections_error" values will be inserted into the cross-section vector.
-     Otherwise, the nominal cross-section and error will be used.
+     Otherwise, the cross-sections and errors will be filled with zeros.
      
 
       "particle_flows_are_separated"
