@@ -34,12 +34,12 @@
     @endcode
 
     The options for ReaderAsciiHepMC2
-      "keep_single_crosssection"
-      "fill_crosssections_value"/"fill_crosssections_error"
-     If "keep_single_crosssection" is present the reader will keep a single cross-section per event, just
+      "disable_pad_cross_sections"
+      "pad_cross_section_value"/"pad_cross_section_error"
+     If "disable_pad_cross_sections" is present the reader will keep a single cross-section per event, just
      in the HepMC2 style. This is pre-3.2.6 default behaviour. 
      Otherwise, the cross-section vector will be expanded to the size  of event weights. This is 3.2.6+ default behaviour.
-     If present, "fill_crosssections_value"/"fill_crosssections_error" values will be inserted into the cross-section vector.
+     If present, "pad_cross_section_value"/"pad_cross_section_error" values will be inserted into the cross-section vector.
      Otherwise, the cross-sections and errors will be filled with zeros.
      
 
