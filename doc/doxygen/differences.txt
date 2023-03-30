@@ -401,6 +401,20 @@
         HepMC3::GenParticle::add_attribute("theta",make_shared<DoubleAttribute>(theta));
         HepMC3::GenParticle::add_attribute("phi",make_shared<DoubleAttribute>(phi));
     @endcode
+
+    @code{.cpp}
+        // HepMC2 code:
+        GenCrossSection* XS;
+        double xs, xs_err;
+        XS->set_cross_section(xs,xs_err)
+        // Replace with:
+        GenCrossSectionPtr XS;
+        ....
+        std::vector<double> xs, xs_err;
+        ....
+        XS->set_cross_section(xs,xs_err)
+    @endcode
+
     ###########################################################################
     @subsection attributes Standard attributes
     ###########################################################################
