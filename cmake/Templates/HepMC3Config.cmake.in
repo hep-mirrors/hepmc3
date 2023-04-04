@@ -33,6 +33,9 @@ endif()
 
 include(${CMAKE_CURRENT_LIST_DIR}/HepMC3Targets.cmake)
 
+if (TARGET HepMC3All)
+  message(STATUS "WARNING: Please note that multiple calls to find_package(HepMC3) are not recommended!")
+else()
 add_library(HepMC3All INTERFACE)
 target_link_libraries(HepMC3All INTERFACE HepMC3::HepMC3)
 
@@ -70,5 +73,6 @@ foreach(_comp ${HepMC3_FIND_COMPONENTS})
     endif()
   endif()
 endforeach()
+endif()
 
 check_required_components(HepMC3)
