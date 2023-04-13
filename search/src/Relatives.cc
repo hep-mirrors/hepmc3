@@ -10,10 +10,10 @@
 #include "HepMC3/Relatives.h"
 
 namespace HepMC3 {
-const Parents     Relatives::PARENTS;
-const Children    Relatives::CHILDREN;
-const Ancestors   Relatives::ANCESTORS;
-const Descendants Relatives::DESCENDANTS;
+const Parents     Relatives::PARENTS{};
+const Children    Relatives::CHILDREN{};
+const Ancestors   Relatives::ANCESTORS{};
+const Descendants Relatives::DESCENDANTS{};
 } // namespace HepMC3
 
 namespace HepMC3 {
