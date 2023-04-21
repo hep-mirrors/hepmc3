@@ -608,7 +608,8 @@ bool ReaderAsciiHepMC2::parse_xs_info(GenEvent &evt, const char *buf) {
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     const double xs_err = atof(cursor);
-    const size_t all = m_options.count("disable_pad_cross_sections") ? size_t{1} : std::max(evt.weights().size(),size_t{1});
+    const size_t all = m_options.count("disable_pad_cross_sections") ? size_t{1} :
+                       std::max(evt.weights().size(),size_t{1});
     const double xs_val_dummy = m_options.count("pad_cross_section_value") ? std::strtod(m_options.at("pad_cross_section_value").c_str(),nullptr) : 0.0;
     const double xs_err_dummy = m_options.count("pad_cross_section_error") ? std::strtod(m_options.at("pad_cross_section_error").c_str(),nullptr) : 0.0;
     xs->set_cross_section(std::vector<double>(all,xs_val_dummy), std::vector<double>(all,xs_err_dummy));

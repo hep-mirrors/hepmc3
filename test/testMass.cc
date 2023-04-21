@@ -54,7 +54,9 @@ int main()
         bool readOK=ascii_in.read_event(evt);
         if (!readOK) return 1;
         icount++;
-        if ( icount%50==1 ) {std::cout << "Processing Event Number " << icount<< " its # " << evt.event_number() << std::endl;}
+        if ( icount%50==1 ) {
+            std::cout << "Processing Event Number " << icount<< " its # " << evt.event_number() << std::endl;
+        }
         if ( is_good_event(evt) )
         {
             if (num_good_events == 0 )

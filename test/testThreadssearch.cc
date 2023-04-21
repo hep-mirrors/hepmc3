@@ -71,7 +71,9 @@ int main()
     for (size_t i = 0; i < NinputCopies; i++) {
         threads.emplace_back(std::thread(attribute_function1,std::cref(thr_evts[i]), std::ref(res[i])));
     }
-    for (auto& th : threads) {th.join();}
+    for (auto& th : threads) {
+        th.join();
+    }
     threads.clear();
 
     for (size_t k = 1; k < NinputCopies; k++)

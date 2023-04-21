@@ -154,7 +154,7 @@ set( HepMC_root_tests
         )
 
 set( HepMC_search_tests
-
+        testSearch1
         )
 if (WIN32)
   set( HepMC_protobuf_tests )

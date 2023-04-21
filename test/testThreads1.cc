@@ -39,7 +39,9 @@ int main()
     inputA.close();
     std::vector<std::vector<GenEvent>> thr_evts;
     thr_evts.reserve(NinputCopies);
-    for (size_t i=0; i<NinputCopies; i++) {thr_evts.emplace_back(evts);}
+    for (size_t i=0; i<NinputCopies; i++) {
+        thr_evts.emplace_back(evts);
+    }
 
     for (size_t i=0; i<NinputCopies; i++) {
         for (size_t e=0; e<evts.size(); e++)
@@ -62,7 +64,9 @@ int main()
             for (size_t j=0; j<ids.size(); j++) {
                 threads.emplace_back(std::thread(attribute_function1,std::cref(thr_evts[i].at(e)),ids[j]));
             }
-            for (auto& th : threads) {th.join();}
+            for (auto& th : threads) {
+                th.join();
+            }
             threads.clear();
         }
     }
@@ -70,7 +74,9 @@ int main()
     {
         WriterAscii       outputA("outputThreads1_"+std::to_string(k)+".hepmc");
         if(outputA.failed()) return 2;
-        for (size_t i=0; i<thr_evts[k].size(); i++) {outputA.write_event(thr_evts[k].at(i));}
+        for (size_t i=0; i<thr_evts[k].size(); i++) {
+            outputA.write_event(thr_evts[k].at(i));
+        }
         thr_evts[k].clear();
         outputA.close();
         if (k>0)

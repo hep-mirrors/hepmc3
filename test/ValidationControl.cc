@@ -79,7 +79,9 @@ void ValidationControl::read_file(const std::string &filename) {
         else if( strncmp(buf.data(),"INPUT",5)==0 ) {
             in >> buf.data();
 
-            if( m_has_input_source ) {status = ADDITIONAL_INPUT;}
+            if( m_has_input_source ) {
+                status = ADDITIONAL_INPUT;
+            }
             else {
                 ValidationTool *input = nullptr;
                 // Use tool as input source
@@ -94,7 +96,9 @@ void ValidationControl::read_file(const std::string &filename) {
                     status = UNAVAILABLE_TOOL;
 #endif
                 }
-                else {status = UNRECOGNIZED_INPUT;}
+                else {
+                    status = UNRECOGNIZED_INPUT;
+                }
 
                 if(!status) {
                     m_has_input_source = true;
@@ -139,8 +143,12 @@ void ValidationControl::read_file(const std::string &filename) {
                 in >> buf.data();
 
                 int events = 0;
-                if( strncmp(buf.data(),"ALL",3)==0 ) {events = -1;}
-                else                          {events = atoi(buf.data());}
+                if( strncmp(buf.data(),"ALL",3)==0 ) {
+                    events = -1;
+                }
+                else                          {
+                    events = atoi(buf.data());
+                }
 
                 print_events(events);
             }
@@ -148,8 +156,12 @@ void ValidationControl::read_file(const std::string &filename) {
                 in >> buf.data();
 
                 int events = 0;
-                if( strncmp(buf.data(),"ALL",3)==0 ) {events = -1;}
-                else                          {events = atoi(buf.data());}
+                if( strncmp(buf.data(),"ALL",3)==0 ) {
+                    events = -1;
+                }
+                else                          {
+                    events = atoi(buf.data());
+                }
 
                 check_momentum_for_events(events);
             }
@@ -191,8 +203,12 @@ void ValidationControl::read_file(const std::string &filename) {
     }
 
     // Having input source is enough to start validation
-    if(m_has_input_source) {m_status = 0;}
-    else {printf("ValidationControl: no valid input source\n");}
+    if(m_has_input_source) {
+        m_status = 0;
+    }
+    else {
+        printf("ValidationControl: no valid input source\n");
+    }
 }
 
 bool ValidationControl::new_event() {
@@ -240,7 +256,9 @@ bool ValidationControl::new_event() {
 void ValidationControl::initialize() {
     printf("ValidationControl: initializing\n");
 
-    for (auto tool=m_toolchain.begin(); tool!=m_toolchain.end(); ++tool) { (*tool)->initialize();}
+    for (auto tool=m_toolchain.begin(); tool!=m_toolchain.end(); ++tool) {
+        (*tool)->initialize();
+    }
 }
 
 void ValidationControl::process(GenEvent &hepmc) {
@@ -275,7 +293,9 @@ void ValidationControl::process(GenEvent &hepmc) {
             HEPMC2CODE(
                 for ( GenEvent::particle_const_iterator p = hepmc.particles_begin();
             p != hepmc.particles_end();  ++p ) {
-            if( (*p)->status() != 1 ) { continue;}
+            if( (*p)->status() != 1 ) {
+                    continue;
+                }
                 FourVector m = (*p)->momentum();
                 sum.setPx( sum.px() + m.px() );
                 sum.setPy( sum.py() + m.py() );
@@ -294,7 +314,12 @@ void ValidationControl::process(GenEvent &hepmc) {
             )
 
             HEPMC3CODE(
-            for (auto p: hepmc.particles()) {if( p->status() != 1 ) {continue; }  sum += p->momentum();}
+            for (auto p: hepmc.particles()) {
+            if( p->status() != 1 ) {
+                    continue;
+                }
+                sum += p->momentum();
+            }
             if(!input_momentum.is_zero()) delta = (input_momentum - sum).length();
             )
 
@@ -321,7 +346,9 @@ void ValidationControl::finalize() {
 
     // Print timers
     for (auto t=m_toolchain.begin(); t!=m_toolchain.end(); ++t) {
-        if((*t)->timer()) {(*t)->timer()->print();}
+        if((*t)->timer()) {
+            (*t)->timer()->print();
+        }
     }
 
     printf("ValidationControl: finished processing:\n");

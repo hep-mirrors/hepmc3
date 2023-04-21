@@ -147,7 +147,9 @@ int main()
         A->fChain->GetEntry(entry);
         for (int i=0; i<A->particles_; i++) {
             if (A->particles_status[i]==1&&(std::abs(A->particles_pid[i])==211||std::abs(A->particles_pid[i])==11))
-            {   H1.Fill(std::sqrt(A->particles_momentum_m_v1[i]*A->particles_momentum_m_v1[i]+A->particles_momentum_m_v2[i]*A->particles_momentum_m_v2[i]) );}
+            {
+                H1.Fill(std::sqrt(A->particles_momentum_m_v1[i]*A->particles_momentum_m_v1[i]+A->particles_momentum_m_v2[i]*A->particles_momentum_m_v2[i]) );
+            }
         }
     }
     delete A;

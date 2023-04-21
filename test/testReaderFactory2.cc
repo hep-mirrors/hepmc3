@@ -73,7 +73,9 @@ int main()
             evt.clear();
         }
     }
-    for (size_t i=0; i<outputv.size(); i++) {outputv.at(i)->close();}
+    for (size_t i=0; i<outputv.size(); i++) {
+        outputv.at(i)->close();
+    }
 
     return COMPARE_ASCII_FILES("AA.hepmc2","BB.hepmc2")+COMPARE_ASCII_FILES("BB.hepmc2","DD.hepmc2");
 }
