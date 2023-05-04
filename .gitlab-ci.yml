@@ -361,13 +361,14 @@ Fedora34-LLVM:
     - job: build_image_Fedora34
 
 Fedora33-GNU-pypy:
-  variables: { OS: Fedora, FREL: 33, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=2,3,pypy2" }
+#No pypy -- fix me
+  variables: { OS: Fedora, FREL: 33, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3" }
   extends: .any-cmake
   needs:
     - job: build_image_Fedora33
 
-Fedora24-GNU:
-  variables: { OS: Fedora, FREL: 24, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF"}
+Fedora24-GNU-nopython:
+  variables: { OS: Fedora, FREL: 24, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF"}
   extends: .any-oldcmake
   needs:
     - job: build_image_Fedora24
@@ -402,8 +403,8 @@ CentOS8-GNU:
   needs:
     - job: build_image_CentOS8
 
-CentOS7-GNU:
-  variables: { OS: CentOS, FREL: 7, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3.4,3.6"}
+CentOS7-GNU-nopython:
+  variables: { OS: CentOS, FREL: 7, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PYTHON:BOOL=OFF"}
   extends: .any-cmake
   needs:
     - job: build_image_CentOS7
