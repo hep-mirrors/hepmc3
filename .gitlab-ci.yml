@@ -71,16 +71,13 @@ LCG_95_x86_64-centos7-gcc8-opt:
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/graphviz-env.sh
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/zlib/1.2.11/${LCGPLATFORM}/zlib-env.sh
-    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/Python/2.7.15/${LCGPLATFORM}/Python-env.sh
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/protobuf/2.5.0/${LCGPLATFORM}/protobuf-env.sh
 #LCG 99 calls its variable Protobuf__HOME instead of Protobuf_HOME
     - export Protobuf_ROOT=$(pkg-config protobuf --variable=prefix)
   script:
     - export
     - LARG=" "
-    - LARG="$LARG "-DHEPMC3_PYTHON_VERSIONS=2
     - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
-    - LARG="$LARG "-DHEPMC3_Python_SITEARCH27=$(pwd)/install/lib/python2.7/site-packages
     - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}
     - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/
     - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/
@@ -114,16 +111,13 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/graphviz-env.sh
-    - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/Python/2.7.15/${LCGPLATFORM}/Python-env.sh
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/protobuf/2.5.0/${LCGPLATFORM}/protobuf-env.sh
 #LCG 99 calls its variable Protobuf__HOME instead of Protobuf_HOME
     - export Protobuf_ROOT=$(pkg-config protobuf --variable=prefix)
   script:
     - export
     - LARG=" "
-    - LARG="$LARG "-DHEPMC3_PYTHON_VERSIONS=2
     - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
-    - LARG="$LARG "-DHEPMC3_Python_SITEARCH27=$(pwd)/install/lib/python2.7/site-packages
     - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}
     - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/
     - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/
@@ -409,7 +403,7 @@ CentOS8-GNU:
     - job: build_image_CentOS8
 
 CentOS7-GNU:
-  variables: { OS: CentOS, FREL: 7, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=2,3.4,3.6"}
+  variables: { OS: CentOS, FREL: 7, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3.4,3.6"}
   extends: .any-cmake
   needs:
     - job: build_image_CentOS7

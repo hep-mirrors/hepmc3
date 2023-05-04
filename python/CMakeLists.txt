@@ -301,35 +301,6 @@ if (${ver} MATCHES pypy* )
   set(Python_SITEARCH          ${PyPy_SITEARCH})
 endif()
 
-#Compilation with CPython2
-if (${ver} STREQUAL 2)
-  message(STATUS "HepMC3 python: WARNING: The support of Python2 is deprecated and might be removed in the future!")
-  unset(Python2_FOUND CACHE)
-  unset(Python2_VERSION CACHE)
-  unset(Python2_Interpreter_FOUND CACHE)
-  unset(Python2_EXECUTABLE CACHE)
-  unset(Python2_INCLUDE_DIR CACHE)
-  unset(Python2_INCLUDE_DIRS CACHE)
-  unset(Python2_LIBRARIES CACHE)
-  unset(_Python2_EXECUTABLE CACHE) # Attempt to make FindPython reenterant
-  unset(_Python2_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
-  if (${verminor} STREQUAL X)
-    find_package (Python2 ${ver} COMPONENTS  Interpreter Development.Module)
-  else()
-    find_package (Python2 ${ver}.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
-  endif()
-  if (Python2_VERSION AND Python2_INCLUDE_DIRS AND Python2_EXECUTABLE  ) #something is set
-    SET( Python_VERSION       ${Python2_VERSION})
-    SET( Python_VERSION_MAJOR ${Python2_VERSION_MAJOR})
-    SET( Python_VERSION_MINOR ${Python2_VERSION_MINOR})
-    SET( Python_LIBRARIES     ${Python2_LIBRARIES})
-    SET( Python_SITEARCH      ${Python2_SITEARCH})
-    SET( Python_EXECUTABLE    ${Python2_EXECUTABLE})
-    SET( Python_INCLUDE_DIRS  ${Python2_INCLUDE_DIRS})
-    unset(_Python2_EXECUTABLE CACHE) # Attempt to make FindPython reenterant
-    unset(_Python2_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
-  endif()
-endif()
 
 #Compilation with CPython3
 if (${ver} STREQUAL 3)
@@ -393,28 +364,6 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
         PROPERTIES
           PREFIX ""
           OUTPUT_NAME pyHepMC3protobufIO.pypy-${PyPy_PyPy_VERSION_MAJOR}${PyPy_PyPy_VERSION_MINOR})
-    endif()
-  endif()
-
-#Compilation with CPython2
-  if (${ver} STREQUAL 2)
-    Python2_add_library(pyHepMC3${Python_VERSION} MODULE  ${BN}   )
-    set_target_properties(pyHepMC3${Python_VERSION}
-      PROPERTIES  OUTPUT_NAME pyHepMC3  )
-    if(ROOT_FOUND)
-      Python2_add_library(pyHepMC3rootIO${Python_VERSION} MODULE  ${BNrootIO}   )
-      set_target_properties(pyHepMC3rootIO${Python_VERSION}
-        PROPERTIES  OUTPUT_NAME pyHepMC3rootIO  )
-    endif()
-    if(HEPMC3_ENABLE_SEARCH)
-      Python2_add_library(pyHepMC3search${Python_VERSION} MODULE  ${BNsearch}   )
-      set_target_properties(pyHepMC3search${Python_VERSION}
-        PROPERTIES  OUTPUT_NAME pyHepMC3search  )
-    endif()
-    if(HEPMC3_ENABLE_PROTOBUFIO)
-      Python2_add_library(pyHepMC3protobufIO${Python_VERSION} MODULE  ${BNprotobufIO}   )
-      set_target_properties(pyHepMC3protobufIO${Python_VERSION}
-        PROPERTIES  OUTPUT_NAME pyHepMC3protobufIO  )
     endif()
   endif()
 
