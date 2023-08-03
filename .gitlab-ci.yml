@@ -176,7 +176,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
 ########################################################################
 
 .any: &any
-  image: $CI_REGISTRY_IMAGE:${OS}_${FREL}
+  image: gitlab-registry.cern.ch/hepmc/hepmc3:${OS}_${FREL}
   stage: build
   only:
     variables:
