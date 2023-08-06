@@ -5,13 +5,13 @@ Summary: Python bindings for HepMC3
 Home-page: https://gitlab.cern.ch/hepmc/HepMC3
 Author: HepMC3 Developers
 Author-email: hepmc-dev@cern.ch
-License: GPLv3
+License: LGPLv3+
 Description: pyHepMC3
               Official python bindings for the HepMC3 library
 Platform: UNKNOWN
 Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Physicists
-Classifier: License :: OSI Approved :: GPLv3
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)
 Classifier: License :: OSI Approved :: Python Software Foundation License
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
@@ -28,4 +28,6 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Software Development :: Libraries :: Python Modules

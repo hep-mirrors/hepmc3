@@ -15,9 +15,9 @@
 
 static  char*  create_image_from_dot(char* m_buffer)
 {
-    GVC_t * gvc=gvContext();
-    Agraph_t *g= agmemread(m_buffer);
-    gvLayout(gvc,g,"dot");
+    GVC_t *gvc = gvContext();
+    Agraph_t *g = agmemread(m_buffer);
+    gvLayout(gvc, g, "dot");
 
     int err;
     char *data;
@@ -29,8 +29,9 @@ static  char*  create_image_from_dot(char* m_buffer)
     if (err)
         return NULL;
     data = (char*)realloc(data, length + 1);
-    delete g;
-    delete gvc;
+    gvFreeLayout(gvc, g);
+    agclose(g);
+    gvFreeContext(gvc);
     return data;
 }
 

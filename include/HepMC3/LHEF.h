@@ -4,9 +4,9 @@
 //
 // This is the declaration of the Les Houches Event File classes,
 // implementing a simple C++ parser/writer for Les Houches Event files.
-// Copyright (C) 2009-2013 Leif Lonnblad
+// Copyright (C) 2009-2023 Leif Lonnblad
 //
-// The code is licenced under version 2 of the GPL, see COPYING for details.
+// The code is licenced under LGPLv3+, see COPYING for details.
 // Please respect the MCnet academic guidelines, see GUIDELINES for details.
 //
 
@@ -2991,11 +2991,11 @@ protected:
 
 public:
   /**
-   *  initfile rdstate 
+   *  initfile rdstate
    */
    std::ios_base::iostate initfile_rdstate() const { if (initfile) return initfile->rdstate(); return std::ifstream::goodbit; }
   /**
-   *  file rdstate 
+   *  file rdstate
    */
    std::ios_base::iostate file_rdstate() const { if (file) return file->rdstate(); return std::ifstream::goodbit; }
 
