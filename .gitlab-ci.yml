@@ -176,7 +176,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
 ########################################################################
 
 .any: &any
-  image: $CI_REGISTRY_IMAGE:${OS}_${FREL}
+  image: gitlab-registry.cern.ch/hepmc/hepmc3:${OS}_${FREL}
   stage: build
   only:
     variables:
@@ -239,6 +239,10 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
 ###########################################################################
 #Check commit messages
 
+check_commit_Fedora38:
+  variables: { OS: Fedora, FREL: 38}
+  extends: .check_commit
+
 check_commit_Fedora37:
   variables: { OS: Fedora, FREL: 37}
   extends: .check_commit
@@ -281,6 +285,12 @@ check_commit_Archlinux0:
 
 ###########################################################################
 #Build images
+build_image_Fedora38:
+  variables: { OS: Fedora, FREL: 38}
+  extends: .build_image
+  needs:
+    - job: check_commit_Fedora38
+
 build_image_Fedora37:
   variables: { OS: Fedora, FREL: 37}
   extends: .build_image
@@ -342,6 +352,12 @@ build_image_Archlinux0:
     - job: check_commit_Archlinux0
 
 ###########################################################################
+Fedora38-GNU:
+  variables: { OS: Fedora, FREL: 38, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  extends: .any-cmake
+  needs:
+    - job: build_image_Fedora38
+
 Fedora37-LLVM:
   variables: { OS: Fedora, FREL: 37, TOOLSET: LLVM,  EXTRACMAKEFLAGS: }
   extends: .any-cmake

@@ -12,6 +12,7 @@
 
 #include "cast.h"
 
+#include <cstdint>
 #include <functional>
 
 PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
