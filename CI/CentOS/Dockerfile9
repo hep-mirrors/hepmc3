@@ -1,0 +1,15 @@
+FROM gitlab-registry.cern.ch/linuxsupport/rpmci/builder-cs9
+RUN  yum -y  install  dnf-plugins-core --exclude=*uploa* --exclude=*product* --exclude=*subscr*    epel*
+RUN  yum -y  install  bc make cmake binutils git wget diffutils file sed gawk grep which \
+                      gcc-gfortran gcc-c++ clang bzip2 openssl-devel openssl \
+                      libzip-devel  zlib zlib-devel pythia8-devel pythia8 \
+                      valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static libzstd-devel libzstd graphviz graphviz-devel pythia8 pythia8-devel  root \
+                      ccache  \
+                      protobuf protobuf-devel  \
+                      python3 python3-devel  python3-numpy   \
+                      root-core root root-physics doxygen &&  yum -y   clean all
+
+
+#RUN  printf '[oneAPI]\nname=Intel® oneAPI repository\nbaseurl=https://yum.repos.intel.com/oneapi\nenabled=1\ngpgcheck=1\nrepo_gpgcheck=1\ngpgkey=https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB\n' > /etc/yum.repos.d/oneAPI.repo  \
+#                      && yum -y install intel-oneapi-compiler-dpcpp-cpp-and-cpp-classic intel-oneapi-compiler-fortran && yum -y  clean all
+#RUN  yum-config-manager --add-repo https://developer.download.nvidia.com/hpc-sdk/rhel/nvhpc.repo  && yum install -y nvhpc-23.1 &&  yum -y  clean all

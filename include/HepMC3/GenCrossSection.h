@@ -60,10 +60,13 @@ public:
 
     /** @brief Implementation of Attribute::to_string */
     bool to_string(std::string &att) const override;
-
-    /** @brief Set all fields */
+    /// @name Deprecated functionality
+    /// @{
+    /// @brief Set all fields
+    /// @deprecated Use set_cross_section(const std::vector<double>& xs, const std::vector<double>& xs_err instead
     void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1);
 
+    /// @}
     /** @brief Set all fields */
     void set_cross_section(const std::vector<double>& xs, const std::vector<double>& xs_err,const long& n_acc = -1, const long& n_att = -1);
 

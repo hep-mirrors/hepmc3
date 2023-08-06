@@ -112,11 +112,11 @@ TODOS BEFORE RELEASE
 - Check the Changelog
 - Check if there are no open issues that can be closed.
 - Update the header-only libraries pybind11 and bxzstr if possible.
-- Rerun binder to re-generate python bindings.
+- Rerun binder to re-generate python bindings. Don't forget to check those are compileable on all platforms.
 - Run cppcheck/clang-tidy, e.g. "make staticcheck" for cppcheck.
 - Run code formatting, e.g. "make beauty"
-- Check the CI, runn all jobs. See above how to do that.
-- Run builds on Windows and Mac using e.g. github.
+- Check the CI, run all jobs. See above how to do that.
+- Run builds on Windows and Mac using e.g. github. The configuration is stored in .github
 - Update the version number in the CMakeLists, etc.
 - Request a tag.
 

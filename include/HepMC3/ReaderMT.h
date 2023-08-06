@@ -38,7 +38,7 @@ private:
         if (r->failed()) r->close();
     }
 public:
-    /// @brief Constructor 
+    /// @brief Constructor
     ReaderMT(const std::string& filename): m_go_try_cache(true) {
         m_events.reserve(m_number_of_threads);
         m_readers.reserve(m_number_of_threads);

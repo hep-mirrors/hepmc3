@@ -1,6 +1,6 @@
 try:
  import platform
- if platform.system() != 'Darwin':  
+ if platform.system() != 'Darwin':
    from ctypes import cdll
    libCore = cdll.LoadLibrary("libCore.so")
 except:

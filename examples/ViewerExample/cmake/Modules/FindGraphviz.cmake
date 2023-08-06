@@ -1,102 +1,51 @@
-# - Try to find Graphviz
-# Once done this will define
+# - Locate Graphviz library
+# in a directory defined via  Graphviz_DIR or Graphviz_DIR.
+# Defines:
 #
-#  GRAPHVIZ_FOUND - system has Graphviz
-#  GRAPHVIZ_INCLUDE_DIRS - Graphviz include directories
-#  GRAPHVIZ_CDT_LIBRARY - Graphviz CDT library
-#  GRAPHVIZ_GVC_LIBRARY - Graphviz GVC library
-#  GRAPHVIZ_CGRAPH_LIBRARY - Graphviz CGRAPH library
-#  GRAPHVIZ_PATHPLAN_LIBRARY - Graphviz PATHPLAN library
-#  GRAPHVIZ_VERSION - Graphviz version
-#
-# This module reads hints about search locations from the following cmake variables:
-#  GRAPHVIZ_ROOT          - Graphviz installation prefix
-#                           (containing bin/, include/, etc.)
-
-# Copyright (c) 2009, Adrien Bustany, <madcat@mymadcat.com>
-# Copyright (c) 2013-2014 Kevin Funk <kevin.funk@kdab.com>
-
-# Version computation and some cleanups by Allen Winter <allen.winter@kdab.com>
-# Copyright (c) 2012-2014 Klarälvdalens Datakonsult AB, a KDAB Group company <info@kdab.com>
-
-# Simplified script by Dogan Can <dogancan@usc.edu>
-# Copyright (c) 2014 University of Southern California
-
-# Redistribution and use is allowed according to the terms of the GPLv3+ license.
-
-
-if(GRAPHVIZ_ROOT)
-  set(_GRAPHVIZ_INCLUDE_DIR ${GRAPHVIZ_ROOT}/include)
-  set(_GRAPHVIZ_LIBRARY_DIR ${GRAPHVIZ_ROOT}/lib)
+#  Graphviz_FOUND
+#  Graphviz_INCLUDE_DIR
+#  Graphviz_INCLUDE_DIRS (not cached)
+#  Graphviz_CGRAPH_LIBRARY
+#  Graphviz_GVC_LIBRARY
+if (Graphviz_DIR OR Graphviz_DIR OR (DEFINED ENV{Graphviz_DIR}) OR (DEFINED ENV{Graphviz_DIR}) )
+  set(Graphviz_SEARCH_DIRS "" CACHE STRING "" FORCE)
+  if (Graphviz_DIR)
+    list (APPEND Graphviz_SEARCH_DIRS "${Graphviz_DIR}" )
+  endif()
+  if (Graphviz_DIR)
+    list (APPEND Graphviz_SEARCH_DIRS "${Graphviz_DIR}" )
+  endif()
+  if (DEFINED ENV{Graphviz_DIR})
+    list (APPEND Graphviz_SEARCH_DIRS "$ENV{Graphviz_DIR}" )
+  endif()
+  if (DEFINED ENV{Graphviz_DIR})
+    list (APPEND Graphviz_SEARCH_DIRS "ENV{Graphviz_DIR}" )
+  endif()
 endif()
 
-find_path(GRAPHVIZ_INCLUDE_DIR         NAMES graphviz/cgraph.h
-          HINTS ${_GRAPHVIZ_INCLUDE_DIR})
-find_library(GRAPHVIZ_CDT_LIBRARY      NAMES cdt
-             HINTS ${_GRAPHVIZ_LIBRARY_DIR}  ${GRAPHVIZ_ROOT}/lib64 )
-find_library(GRAPHVIZ_GVC_LIBRARY      NAMES gvc
-             HINTS ${_GRAPHVIZ_LIBRARY_DIR}  ${GRAPHVIZ_ROOT}/lib64 )
-find_library(GRAPHVIZ_CGRAPH_LIBRARY   NAMES cgraph
-             HINTS ${_GRAPHVIZ_LIBRARY_DIR}  ${GRAPHVIZ_ROOT}/lib64 )
-find_library(GRAPHVIZ_PATHPLAN_LIBRARY NAMES pathplan
-             HINTS ${_GRAPHVIZ_LIBRARY_DIR}  ${GRAPHVIZ_ROOT}/lib64 )
-find_library(GRAPHVIZ_GRAPH_LIBRARY   NAMES graph
-             HINTS ${_GRAPHVIZ_LIBRARY_DIR}  ${GRAPHVIZ_ROOT}/lib64 )
-
-
-if(GRAPHVIZ_INCLUDE_DIR AND GRAPHVIZ_CDT_LIBRARY AND GRAPHVIZ_GVC_LIBRARY
-    AND GRAPHVIZ_CGRAPH_LIBRARY AND GRAPHVIZ_PATHPLAN_LIBRARY)
-  set(GRAPHVIZ_FOUND TRUE)
+if (Graphviz_SEARCH_DIRS)
+  find_path(Graphviz_INCLUDE_DIR graphviz/gvc.h PATHS ${Graphviz_SEARCH_DIRS} PATH_SUFFIXES include NO_DEFAULT_PATH)
+  find_library(Graphviz_CGRAPH_LIBRARY NAMES cgraph PATHS ${Graphviz_SEARCH_DIRS}  PATH_SUFFIXES lib lib64 NO_DEFAULT_PATH)
+  find_library(Graphviz_GVC_LIBRARY NAMES gvc PATHS ${Graphviz_SEARCH_DIRS}  PATH_SUFFIXES lib lib64 NO_DEFAULT_PATH)
 else()
-  set(GRAPHVIZ_FOUND FALSE)
+  find_path(Graphviz_INCLUDE_DIR graphviz/gvc.h PATH_SUFFIXES include)
+  find_library(Graphviz_CGRAPH_LIBRARY NAMES cgraph PATHS_SUFFIXES lib lib64)
+  find_library(Graphviz_GVC_LIBRARY NAMES gvc PATHS_SUFFIXES lib lib64)
 endif()
 
-# Ok, now compute the version
-if(GRAPHVIZ_FOUND)
-    set(FIND_GRAPHVIZ_VERSION_SOURCE
-      "#include <graphviz/graphviz_version.h>\n#include <stdio.h>\n int main()\n {\n printf(\"%s\",PACKAGE_VERSION);return 1;\n }\n")
-    set(FIND_GRAPHVIZ_VERSION_SOURCE_FILE ${CMAKE_BINARY_DIR}/CMakeTmp/FindGRAPHVIZ.cxx)
-    file(WRITE "${FIND_GRAPHVIZ_VERSION_SOURCE_FILE}" "${FIND_GRAPHVIZ_VERSION_SOURCE}")
-
-    set(FIND_GRAPHVIZ_VERSION_ADD_INCLUDES
-      "-DINCLUDE_DIRECTORIES:STRING=${GRAPHVIZ_INCLUDE_DIR}")
-
-    try_run(RUN_RESULT COMPILE_RESULT
-      ${CMAKE_BINARY_DIR}
-      ${FIND_GRAPHVIZ_VERSION_SOURCE_FILE}
-      CMAKE_FLAGS "${FIND_GRAPHVIZ_VERSION_ADD_INCLUDES}"
-      RUN_OUTPUT_VARIABLE GRAPHVIZ_VERSION)
-
-    if(COMPILE_RESULT AND RUN_RESULT EQUAL 1)
-      message(STATUS "Graphviz version: ${GRAPHVIZ_VERSION}")
-    else()
-      message(FATAL_ERROR "Unable to compile or run the graphviz version detection program.")
-    endif()
-
-    set(GRAPHVIZ_INCLUDE_DIRS ${GRAPHVIZ_INCLUDE_DIR} ${GRAPHVIZ_INCLUDE_DIR}/graphviz)
-
-    if(NOT Graphviz_FIND_QUIETLY)
-      message(STATUS "Graphviz include: ${GRAPHVIZ_INCLUDE_DIRS}")
-      message(STATUS "Graphviz libraries: ${GRAPHVIZ_CDT_LIBRARY} ${GRAPHVIZ_GVC_LIBRARY} ${GRAPHVIZ_CGRAPH_LIBRARY} ${GRAPHVIZ_PATHPLAN_LIBRARY}")
-    endif()
-
-    set(FIND_GRAPHVIZ_NOAST_SOURCE
-      "#include <string.h>\n#include <graphviz/gvc.h>\n int main()\n {return strcmp(\"AB\",\"A\");\n }\n")
-    set(FIND_GRAPHVIZ_AST_SOURCE
-      "#include <string.h>\n#define _PACKAGE_ast #include <graphviz/gvc.h>\n int main()\n {return strcmp(\"AB\",\"A\");\n }\n")
-    set(GRAPHVIZ_DEFINES "")
-    set(CMAKE_REQUIRED_FLAGS    ${CMAKE_CXX_FLAGS})
-    set(CMAKE_REQUIRED_INCLUDES ${GRAPHVIZ_INCLUDE_DIRS})
-    set(CMAKE_REQUIRED_LIBRARIES ${GRAPHVIZ_CDT_LIBRARY} ${GRAPHVIZ_GVC_LIBRARY} ${GRAPHVIZ_CGRAPH_LIBRARY} ${GRAPHVIZ_PATHPLAN_LIBRARY})
-    check_cxx_source_compiles("${FIND_GRAPHVIZ_AST_SOURCE}" GRAPHVIZ_AST_COMPILES )
-    check_cxx_source_compiles("${FIND_GRAPHVIZ_NOAST_SOURCE}" GRAPHVIZ_NOAST_COMPILES )
-    if (GRAPHVIZ_AST_COMPILES AND  (NOT GRAPHVIZ_NOAST_COMPILES ) )
-      set(GRAPHVIZ_DEFINES "-D_PACKAGE_ast=1")
-    endif()
+set(Graphviz_INCLUDE_DIRS ${Graphviz_INCLUDE_DIR})
+get_filename_component(Graphviz_LIBRARY_DIR ${Graphviz_GVC_LIBRARY} PATH)
+set ( TEST_SOURCE "#include <graphviz/gvc.h>\n#include <string>\n int main(){\nreturn strcmp(\"XX\",\"XXY\");\n}\n")
+check_cxx_source_compiles("${TEST_SOURCE}" TEST_SOURCE_NOAST_COMPILES )
+check_cxx_source_compiles("#define _PACKAGE_ast 1\n${TEST_SOURCE}" TEST_SOURCE_AST_COMPILES )
+if (TEST_SOURCE_AST_COMPILES AND (NOT TEST_SOURCE_NOAST_COMPILES))
+  set(Graphviz_DEFINES "-D_PACKAGE_ast=1")
+else()
+  set(Graphviz_DEFINES "")  
 endif()
 
-if(Graphviz_FIND_REQUIRED AND NOT GRAPHVIZ_FOUND)
-  message(FATAL_ERROR "Could not find GraphViz.")
-endif()
+INCLUDE(FindPackageHandleStandardArgs)
 
-mark_as_advanced(GRAPHVIZ_DEFINES)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Graphviz FOUND_VAR Graphviz_FOUND REQUIRED_VARS Graphviz_DEFINES Graphviz_INCLUDE_DIR Graphviz_CGRAPH_LIBRARY Graphviz_GVC_LIBRARY  HANDLE_COMPONENTS)
+
+mark_as_advanced(Graphviz_FOUND Graphviz_INCLUDE_DIRS Graphviz_CGRAPH_LIBRARY Graphviz_GVC_LIBRARY Graphviz_DEFINES)

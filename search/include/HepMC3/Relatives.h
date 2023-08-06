@@ -148,9 +148,9 @@ public:
  std::vector<GenParticlePtr> operator()(GenParticlePtr input) const { return descendant_particles(input);}
 };
 
-/// alias 
+/// alias
 using Parents  = SearchParents;
-/// alias 
+/// alias
 using Children = SearchChildren;
 /// Ancestors
 using Ancestors = SearchAncestors;
