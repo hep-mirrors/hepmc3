@@ -1,7 +1,7 @@
 macro( hepmc_test testname )
   message( STATUS "HepMC3 test: building ${testname} for ${testname}" )
   find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
-  ADD_EXECUTABLE(${testname} ${${testname}_source}   ${ARGN} )
+  ADD_EXECUTABLE(${testname} ${${testname}_source} ${ARGN} )
   target_include_directories(${testname} BEFORE
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/)
