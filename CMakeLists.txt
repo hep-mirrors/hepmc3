@@ -256,6 +256,7 @@ set( hepmc3core_sources
   ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc
   ${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderFactory.cc
 )
 
 #We need to export all symbols on Win to build .lib files

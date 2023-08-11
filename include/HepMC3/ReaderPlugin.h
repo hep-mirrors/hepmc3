@@ -24,9 +24,11 @@ class ReaderPlugin : public Reader
 {
 public:
     /** @brief Constructor  to read from stream*/
-    ReaderPlugin(std::istream & stream,const std::string &libname, const std::string &newreader);
+    ReaderPlugin(std::shared_ptr<std::istream> stream, const std::string &libname, const std::string &newreader);
+    /** @brief Constructor  to read from stream*/
+    ReaderPlugin(std::istream & stream, const std::string &libname, const std::string &newreader);
     /** @brief Constructor to read from file*/
-    ReaderPlugin(const std::string& filename,const std::string &libname, const std::string &newreader);
+    ReaderPlugin(const std::string& filename, const std::string &libname, const std::string &newreader);
     /** @brief Skip or fast forward reading of some events*/
     bool skip(const int n) override { if (!m_reader) return false; return m_reader->skip(n); }
     /** @brief Reading event */
@@ -34,7 +36,7 @@ public:
     /** @brief Close */
     void close() override { if (!m_reader) return; m_reader->close(); };
     /** @brief State */
-    bool failed() override {if (!m_reader) return true; return m_reader->failed();};
+    bool failed() override { if (!m_reader) return true; return m_reader->failed();};
     /** @brief Get the global GenRunInfo object. */
     std::shared_ptr<GenRunInfo> run_info() const  override  { return m_reader?m_reader->run_info():nullptr; }
     /** @brief  Set options */
