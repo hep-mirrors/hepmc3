@@ -325,7 +325,6 @@ if (HEPMC3_INSTALL_INTERFACES)
   list(APPEND HEPMC3_FEATURES "interfaces")
   list(APPEND HEPMC3_FEATURES "interfaceshepmc2")
   list(APPEND HEPMC3_FEATURES "interfacespythia6")
-  list(APPEND HEPMC3_FEATURES "interfacespythia8")
 endif()
 
 # ROOT support
