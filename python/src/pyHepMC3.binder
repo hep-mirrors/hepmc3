@@ -59,6 +59,8 @@
 +add_on_binder HepMC3::GenRunInfo  binder::custom_GenRunInfo_binder
 -function HepMC3::GenRunInfo::tools
 
++add_on_binder_for_namespace HepMC3 binder::custom_deduce_reader
+
 +add_on_binder LHEF::Generator   binder::custom_T_binder<LHEF::Generator>
 -function  LHEF::Generator::print
 +add_on_binder LHEF::XMLTag  binder::custom_T_binder<LHEF::XMLTag>
