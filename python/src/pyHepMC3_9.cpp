@@ -122,7 +122,7 @@ struct PyCallBack_HepMC3_Writer : public HepMC3::Writer {
 		}
 		return Writer::set_options(a0);
 	}
-	using _binder_ret_0 = std::map<std::string, std::string >;
+	using _binder_ret_0 = class std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Writer *>(this), "get_options");
@@ -140,7 +140,7 @@ struct PyCallBack_HepMC3_Writer : public HepMC3::Writer {
 
 void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::GenParticle file:HepMC3/GenParticle.h line:31
+	{ // HepMC3::GenParticle file:HepMC3/GenParticle.h line:28
 		pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl(M("HepMC3"), "GenParticle", "");
 		cl.def( pybind11::init( [](){ return new HepMC3::GenParticle(); } ), "doc" );
 		cl.def( pybind11::init( [](const class HepMC3::FourVector & a0){ return new HepMC3::GenParticle(a0); } ), "doc" , pybind11::arg("momentum"));
@@ -188,7 +188,7 @@ void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namesp
 		cl.def("is_zero", (bool (HepMC3::GenVertexData::*)() const) &HepMC3::GenVertexData::is_zero, "Check if this struct fields are zero\n\nC++: HepMC3::GenVertexData::is_zero() const --> bool");
 		cl.def("assign", (struct HepMC3::GenVertexData & (HepMC3::GenVertexData::*)(const struct HepMC3::GenVertexData &)) &HepMC3::GenVertexData::operator=, "C++: HepMC3::GenVertexData::operator=(const struct HepMC3::GenVertexData &) --> struct HepMC3::GenVertexData &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::GenVertex file:HepMC3/GenVertex.h line:26
+	{ // HepMC3::GenVertex file:HepMC3/GenVertex.h line:24
 		pybind11::class_<HepMC3::GenVertex, std::shared_ptr<HepMC3::GenVertex>> cl(M("HepMC3"), "GenVertex", "Stores vertex-related information");
 		cl.def( pybind11::init( [](){ return new HepMC3::GenVertex(); } ), "doc" );
 		cl.def( pybind11::init<const class HepMC3::FourVector &>(), pybind11::arg("position") );

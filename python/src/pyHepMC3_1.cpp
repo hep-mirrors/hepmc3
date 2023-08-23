@@ -27,6 +27,7 @@ void bind_pyHepMC3_1(std::function< pybind11::module &(std::string const &namesp
 		cl.def( pybind11::init<double, double, double, double>(), pybind11::arg("xx"), pybind11::arg("yy"), pybind11::arg("zz"), pybind11::arg("ee") );
 
 		cl.def( pybind11::init( [](HepMC3::FourVector const &o){ return new HepMC3::FourVector(o); } ) );
+		cl.def("assign", (class HepMC3::FourVector & (HepMC3::FourVector::*)(const class HepMC3::FourVector &)) &HepMC3::FourVector::operator=, "= \n\nC++: HepMC3::FourVector::operator=(const class HepMC3::FourVector &) --> class HepMC3::FourVector &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 		cl.def("set", (void (HepMC3::FourVector::*)(double, double, double, double)) &HepMC3::FourVector::set, "Set all FourVector fields, in order x,y,z,t \n\nC++: HepMC3::FourVector::set(double, double, double, double) --> void", pybind11::arg("x1"), pybind11::arg("x2"), pybind11::arg("x3"), pybind11::arg("x4"));
 		cl.def("set_component", (void (HepMC3::FourVector::*)(const int, const double)) &HepMC3::FourVector::set_component, "set component of position/displacement\n\nC++: HepMC3::FourVector::set_component(const int, const double) --> void", pybind11::arg("i"), pybind11::arg("x"));
 		cl.def("get_component", (double (HepMC3::FourVector::*)(const int) const) &HepMC3::FourVector::get_component, "get component of position/displacement\n\nC++: HepMC3::FourVector::get_component(const int) const --> double", pybind11::arg("i"));
@@ -92,29 +93,28 @@ void bind_pyHepMC3_1(std::function< pybind11::module &(std::string const &namesp
 		cl.def("__imul__", (void (HepMC3::FourVector::*)(const double)) &HepMC3::FourVector::operator*=, "Arithmetic operator *= by scalar\n\nC++: HepMC3::FourVector::operator*=(const double) --> void", pybind11::arg("rhs"));
 		cl.def("__itruediv__", (void (HepMC3::FourVector::*)(const double)) &HepMC3::FourVector::operator/=, "Arithmetic operator /= by scalar\n\nC++: HepMC3::FourVector::operator/=(const double) --> void", pybind11::arg("rhs"));
 		cl.def_static("ZERO_VECTOR", (const class HepMC3::FourVector & (*)()) &HepMC3::FourVector::ZERO_VECTOR, "Static null FourVector = (0,0,0,0)\n\nC++: HepMC3::FourVector::ZERO_VECTOR() --> const class HepMC3::FourVector &", pybind11::return_value_policy::automatic);
-		cl.def("assign", (class HepMC3::FourVector & (HepMC3::FourVector::*)(const class HepMC3::FourVector &)) &HepMC3::FourVector::operator=, "C++: HepMC3::FourVector::operator=(const class HepMC3::FourVector &) --> class HepMC3::FourVector &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 
 		 binder::custom_FourVector_binder(cl);
 	}
-	// HepMC3::delta_phi(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:313
+	// HepMC3::delta_phi(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:317
 	M("HepMC3").def("delta_phi", (double (*)(const class HepMC3::FourVector &, const class HepMC3::FourVector &)) &HepMC3::delta_phi, "Signed azimuthal angle separation in [-pi, pi] between vecs  and \n\nC++: HepMC3::delta_phi(const class HepMC3::FourVector &, const class HepMC3::FourVector &) --> double", pybind11::arg("a"), pybind11::arg("b"));
 
-	// HepMC3::delta_eta(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:316
+	// HepMC3::delta_eta(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:320
 	M("HepMC3").def("delta_eta", (double (*)(const class HepMC3::FourVector &, const class HepMC3::FourVector &)) &HepMC3::delta_eta, "Pseudorapidity separation between vecs  and \n\nC++: HepMC3::delta_eta(const class HepMC3::FourVector &, const class HepMC3::FourVector &) --> double", pybind11::arg("a"), pybind11::arg("b"));
 
-	// HepMC3::delta_rap(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:319
+	// HepMC3::delta_rap(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:323
 	M("HepMC3").def("delta_rap", (double (*)(const class HepMC3::FourVector &, const class HepMC3::FourVector &)) &HepMC3::delta_rap, "Rapidity separation between vecs  and \n\nC++: HepMC3::delta_rap(const class HepMC3::FourVector &, const class HepMC3::FourVector &) --> double", pybind11::arg("a"), pybind11::arg("b"));
 
-	// HepMC3::delta_r2_eta(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:322
+	// HepMC3::delta_r2_eta(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:326
 	M("HepMC3").def("delta_r2_eta", (double (*)(const class HepMC3::FourVector &, const class HepMC3::FourVector &)) &HepMC3::delta_r2_eta, "R_eta^2-distance separation dR^2 = dphi^2 + deta^2 between vecs  and \n\nC++: HepMC3::delta_r2_eta(const class HepMC3::FourVector &, const class HepMC3::FourVector &) --> double", pybind11::arg("a"), pybind11::arg("b"));
 
-	// HepMC3::delta_r_eta(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:325
+	// HepMC3::delta_r_eta(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:329
 	M("HepMC3").def("delta_r_eta", (double (*)(const class HepMC3::FourVector &, const class HepMC3::FourVector &)) &HepMC3::delta_r_eta, "R_eta-distance separation dR = sqrt(dphi^2 + deta^2) between vecs  and \n\nC++: HepMC3::delta_r_eta(const class HepMC3::FourVector &, const class HepMC3::FourVector &) --> double", pybind11::arg("a"), pybind11::arg("b"));
 
-	// HepMC3::delta_r2_rap(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:328
+	// HepMC3::delta_r2_rap(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:332
 	M("HepMC3").def("delta_r2_rap", (double (*)(const class HepMC3::FourVector &, const class HepMC3::FourVector &)) &HepMC3::delta_r2_rap, "R_rap^2-distance separation dR^2 = dphi^2 + drap^2 between vecs  and \n\nC++: HepMC3::delta_r2_rap(const class HepMC3::FourVector &, const class HepMC3::FourVector &) --> double", pybind11::arg("a"), pybind11::arg("b"));
 
-	// HepMC3::delta_r_rap(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:331
+	// HepMC3::delta_r_rap(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:335
 	M("HepMC3").def("delta_r_rap", (double (*)(const class HepMC3::FourVector &, const class HepMC3::FourVector &)) &HepMC3::delta_r_rap, "R_rap-distance separation dR = sqrt(dphi^2 + drap^2) between vecs  and \n\nC++: HepMC3::delta_r_rap(const class HepMC3::FourVector &, const class HepMC3::FourVector &) --> double", pybind11::arg("a"), pybind11::arg("b"));
 
 }
