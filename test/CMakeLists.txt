@@ -140,6 +140,7 @@ set( HepMC_tests
         testSingleVertexHepMC2
         testAttributes
         testHEPEVTWrapper1
+        testOrder
 
          )
 set( HepMC_root_tests
