@@ -28,8 +28,9 @@ string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 #-------------Options-------------------------------------------------------
 
 option(HEPMC3_ENABLE_SEARCH      "Enables building of search library" ON)
-option(HEPMC3_ENABLE_ROOTIO      "Enables building with ROOT O/I." ON)
-option(HEPMC3_ENABLE_PROTOBUFIO  "Enables building with protobuf O/I." OFF)
+option(HEPMC3_ENABLE_ROOTIO      "Enables building with ROOT I/O." ON)
+option(HEPMC3_ENABLE_PROTOBUFIO  "Enables building with protobuf I/O." OFF)
+option(HEPMC3_ENABLE_HDF5IO      "Enables building with hdf5 I/O." OFF)
 option(HEPMC3_ENABLE_PYTHON      "Enables building of Python  bindings, master switch" ON)
 option(HEPMC3_BUILD_DOCS         "Enables building of documentation" OFF)
 option(HEPMC3_BUILD_EXAMPLES     "Enables building of examples." OFF)
@@ -65,6 +66,7 @@ endif()
 message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_PROTOBUFIO     ${HEPMC3_ENABLE_PROTOBUFIO}")
+message(STATUS "HepMC3: HEPMC3_ENABLE_HDF5IO         ${HEPMC3_ENABLE_HDF5IO}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_PYTHON         ${HEPMC3_ENABLE_PYTHON}")
 message(STATUS "HepMC3: HEPMC3_PYTHON_VERSIONS       ${HEPMC3_PYTHON_VERSIONS}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_TEST           ${HEPMC3_ENABLE_TEST}")
@@ -185,6 +187,12 @@ if(HEPMC3_ENABLE_PROTOBUFIO)
     message(FATAL_ERROR "Found libprotobuf, but cannot find proto compiler, protoc, which is required.")
   endif()
   add_definitions(-DHEPMC3_PROTOBUFIO)
+endif()
+
+if(HEPMC3_ENABLE_HDF5IO)
+  find_package(HDF5 REQUIRED)
+  add_definitions(-DHEPMC3_HDF5IO)
+  set(HEPMC3_HDF5IO_LIBRARY "-lHepMC3HDF5IO" )  
 endif()
 
 
@@ -342,6 +350,12 @@ if(Protobuf_FOUND)
   list(APPEND HEPMC3_COMPONENTS "protobufIO")
 endif()
 
+if(HDF5_FOUND)
+  add_subdirectory(HDF5IO)
+  list(APPEND HEPMC3_FEATURES "HDF5IO")
+  list(APPEND HEPMC3_COMPONENTS "HDF5IO")
+endif()
+
 # Add the examples subdirectories
 if(HEPMC3_BUILD_EXAMPLES)
   set(HepMC_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
@@ -455,6 +469,7 @@ if (ASTYLE)
     src/*cc
     rootIO/src/*cc
     protobufIO/src/*cc
+    HDF5IO/src/*.cc
     search/src/*cc
     include/HepMC3/Reader*h
     include/HepMC3/Writer*h
@@ -468,7 +483,6 @@ if (ASTYLE)
     test/*cc
     test/*h
     interfaces/*/include/*.h
-    interfaces/*/include/*/*.h
     interfaces/*/include/*/*.cc
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
@@ -488,6 +502,7 @@ if(CPPCHECK)
       search/src/*.cc
       rootIO/src/*.cc
       protobufIO/src/*.cc
+      HDF5IO/src/*.cc
       include/HepMC3/Reader*h
       include/HepMC3/Writer*h
       include/HepMC3/HEPEVT*h

@@ -77,6 +77,7 @@ InputInfo::InputInfo (const std::string &filename) {
 }
 void InputInfo::classify() {
 
+    if ( strncmp(m_head.at(0).c_str(), "\211HDF", 4) == 0 ) m_hdf5 = true;
     if ( strncmp(m_head.at(0).c_str(), "root", 4) == 0 ) m_root = true;
     if ( strncmp(m_head.at(0).c_str(), "hmpb", 4) == 0 ) m_protobuf = true;
     if ( strncmp(m_head.at(0).c_str(), "HepMC::Version", 14) == 0 && strncmp(m_head.at(1).c_str(), "HepMC::Asciiv3", 14) == 0 ) m_asciiv3 = true;

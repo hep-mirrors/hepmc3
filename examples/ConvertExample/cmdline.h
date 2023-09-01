@@ -69,7 +69,7 @@ struct gengetopt_args_info
   char * compressed_output_arg;	/**< @brief Write compressed output for expicitely specified formats. Requires linkage with zlib/lzma/bz2. (default='plaintext').  */
   char * compressed_output_orig;	/**< @brief Write compressed output for expicitely specified formats. Requires linkage with zlib/lzma/bz2. original value given at command line.  */
   const char *compressed_output_help; /**< @brief Write compressed output for expicitely specified formats. Requires linkage with zlib/lzma/bz2. help description.  */
-
+  
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int input_format_given ;	/**< @brief Whether input-format was given.  */
   unsigned int output_format_given ;	/**< @brief Whether output-format was given.  */
@@ -171,7 +171,7 @@ void cmdline_parser_print_help(void);
 void cmdline_parser_print_version(void);
 
 /**
- * Initializes all the fields a cmdline_parser_params structure
+ * Initializes all the fields a cmdline_parser_params structure 
  * to their default values
  * @param params the structure to initialize
  */

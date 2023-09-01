@@ -55,6 +55,12 @@ if(Protobuf_FOUND)
   set(basic_libdir "${basic_libdir}:${Protobuf_LIBRARY_DIR}")
 endif()
 
+if(HDF5_FOUND)
+  list(APPEND basic_includes ${PROJECT_SOURCE_DIR}/HDF5IO/include  ${HDF5_INCLUDE_DIRS})
+  list(APPEND basic_libraries ${HDF5_LIBRARIES} ${HEPMC3_HDF5IO_LIB})
+  # create environment scripts
+  set(basic_libdir "${basic_libdir}:${HDF5_LIBRARY_DIR}")
+endif()
 
 if(${CMAKE_VERSION} VERSION_GREATER "3.8")
 ########################################################################

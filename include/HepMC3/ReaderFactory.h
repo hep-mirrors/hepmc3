@@ -30,6 +30,10 @@ inline std::shared_ptr<Reader> deduce_reader(const std::string &filename)
         HEPMC3_DEBUG(10, "deduce_reader: Attempt ProtobufIO for " << filename);
         return std::make_shared<ReaderPlugin>(filename, libHepMC3protobufIO, std::string("newReaderprotobuffile"));
     }
+    if (input.m_hdf5) {
+        HEPMC3_DEBUG(10, "deduce_reader: Attempt HDF5IO for " << filename);
+        return std::make_shared<ReaderPlugin>(filename, libHepMC3HDF5IO, std::string("newReaderHDF5file"));
+    }
 #if HEPMC3_USE_COMPRESSION
     HEPMC3_DEBUG(10, "Attempt ReaderGZ for " << filename);
     char buf[6];

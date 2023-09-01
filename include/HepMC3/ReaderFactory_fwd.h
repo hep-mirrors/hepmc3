@@ -22,14 +22,17 @@ namespace HepMC3 {
 #if ! (defined(__darwin__) || defined(__APPLE__)) &&  ! ((defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__))
 const std::string libHepMC3rootIO = "libHepMC3rootIO.so.3";
 const std::string libHepMC3protobufIO = "libHepMC3protobufIO.so.3";
+const std::string libHepMC3HDF5IO = "libHepMC3HDF5IO.so.3";
 #endif
 #if defined(__darwin__) || defined(__APPLE__)
 const std::string libHepMC3rootIO = "libHepMC3rootIO.dylib";
 const std::string libHepMC3protobufIO = "libHepMC3protobufIO.dylib";
+const std::string libHepMC3HDF5IO = "libHepMC3HDF5IO.dylib";
 #endif
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
 const std::string libHepMC3protobufIO = "HepMC3protobufIO.dll";
 const std::string libHepMC3rootIO = "HepMC3rootIO.dll";
+const std::string libHepMC3HDFIO = "HepMC3HDF5IO.dll";
 #endif
 
 class InputInfo {
@@ -43,6 +46,7 @@ public:
     bool m_error = false;
     bool m_init = false;
     bool m_root = false;
+    bool m_hdf5 = false;
     bool m_protobuf = false;
     bool m_asciiv3 = false;
     bool m_iogenevent = false;
