@@ -753,16 +753,6 @@ void GenEvent::read_data(const GenEventData &data) {
 // Deprecated functions
 //
 
-void GenEvent::add_particle(GenParticle *p) {
-    add_particle(GenParticlePtr(p));
-}
-
-
-void GenEvent::add_vertex(GenVertex *v) {
-    add_vertex(GenVertexPtr(v));
-}
-
-
 void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
     m_rootvertex->add_particle_out(p1);
     m_rootvertex->add_particle_out(p2);

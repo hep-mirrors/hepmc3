@@ -318,17 +318,6 @@ public:
     /// @name Deprecated functionality
     /// @{
 
-    /// @brief Add particle by raw pointer
-    ///
-    /// @deprecated Use GenEvent::add_particle( const GenParticlePtr& ) instead
-    void add_particle( GenParticle *p );
-
-    /// @brief Add vertex by raw pointer
-    ///
-    /// @deprecated Use GenEvent::add_vertex( const GenVertexPtr& ) instead
-    void add_vertex  ( GenVertex *v );
-
-
     /// @brief Set incoming beam particles
     /// @deprecated Backward compatibility
     void set_beam_particles(GenParticlePtr p1, GenParticlePtr p2);

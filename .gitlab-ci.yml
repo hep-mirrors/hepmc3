@@ -23,6 +23,8 @@ LCG_99_x86_64-centos7-gcc8-opt:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
+  tags:
+    - k8s-cvmfs
   stage: LCG
   before_script:
     - export LCGPLATFORM=x86_64-centos7-gcc8-opt
@@ -61,6 +63,8 @@ LCG_95_x86_64-centos7-gcc8-opt:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
+  tags:
+    - k8s-cvmfs
   stage: LCG
   before_script:
     - export LCGPLATFORM=x86_64-centos7-gcc8-opt
@@ -97,6 +101,8 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-ubuntu18
+  tags:
+    - k8s-cvmfs
   stage: LCG
   before_script:
     - export LCGPLATFORM=x86_64-ubuntu1804-gcc8-opt
