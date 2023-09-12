@@ -1,7 +1,22 @@
 #include "binders.h"
 #include <HepMC3/Print.h>
+#include <HepMC3/ReaderFactory_fwd.h>
 
 namespace binder {
+void custom_deduce_reader(pybind11::module&  M){
+		M.def("deduce_reader", [](const std::string & filename) -> std::shared_ptr<class HepMC3::Reader>{ 
+    HepMC3::InputInfo input(filename);
+    if (input.m_init && !input.m_error && input.m_reader) return input.m_reader;
+    if (input.m_root || input.m_remote) {
+        return   std::make_shared<HepMC3::ReaderPlugin>(filename, HepMC3::libHepMC3rootIO, std::string("newReaderRootTreefile"));
+    }
+    if (input.m_protobuf) {
+        return std::make_shared<HepMC3::ReaderPlugin>(filename, HepMC3::libHepMC3protobufIO, std::string("newReaderprotobuffile"));
+    }
+    std::string f = filename;
+    return input.native_reader(f);
+} , "This function deduces the type of input file based on the name/URL\n and its content, and will return an appropriate Reader object.\n\n \n\nC++: HepMC3::deduce_reader(const std::string &) --> class std::shared_ptr<class HepMC3::Reader>", pybind11::arg("filename"));
+}
 
 void custom_HEPEVT_Wrapper_Runtime_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper_Runtime, std::shared_ptr<HepMC3::HEPEVT_Wrapper_Runtime>> cl)
 {

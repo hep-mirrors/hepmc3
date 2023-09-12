@@ -1,3 +1,6 @@
+  --------------------------  HepMC3.2.7-pre ----------------------
+2023-09-03 Andrii Verbytskyi for HepMC
+         * Removed functions that operate on raw pointers.
   --------------------------  HepMC3.2.6 ----------------------
 2023-03-30 Andrii Verbytskyi for HepMC
          * Deprecated the set_cross_section function with double in favour of those with vector of doubles.

@@ -9,9 +9,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 option(USE_INSTALLED_HEPMC3 "Use HepMC3 bindings as a standalone package" OFF)
 option(RERUN_BINDER "Rerun binder" OFF)
 if (USE_INSTALLED_HEPMC3)
-  set(${PROJECT_NAME}_VERSION 3.2.6)
+  set(${PROJECT_NAME}_VERSION 3.2.7)
   set(THIS_PROJECT_NAME ${PROJECT_NAME})
-  set(THIS_PROJECT_NAME_VERSION 3.2.6)
+  set(THIS_PROJECT_NAME_VERSION 3.2.7)
   option(HEPMC3_ENABLE_TEST "Enable tests" ON)
 
   find_package(HepMC3  REQUIRED  )
@@ -577,6 +577,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
   endif()
   set( HepMC_python_tests
         test_IO1
+        test_IO3
         test_Boost
         test_Print
         test_Polarization
@@ -610,7 +611,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     foreach ( ptest ${HepMC_python_tests} )
       file(GLOB INPUT${ptest}  "${CMAKE_CURRENT_SOURCE_DIR}/test/input${testname}*" )
       file(COPY ${INPUT${ptest}} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/test")
-      file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/test/${ptest}.py" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/test/")
+      configure_file("${CMAKE_CURRENT_SOURCE_DIR}/test/${ptest}.py" "${CMAKE_CURRENT_BINARY_DIR}/test/${ptest}.py" COPYONLY)
       add_test(NAME python${Python_VERSION}_${ptest}
         COMMAND ${Python_EXECUTABLE} ${ptest}.py
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/test"

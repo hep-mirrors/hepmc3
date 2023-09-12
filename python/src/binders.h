@@ -27,7 +27,7 @@ cl.def("print", [](T const &o, pybind11::object  & a1) -> void { std::stringstre
 }
 void custom_LHEFTagBase_binder (pybind11::class_<LHEF::TagBase, std::shared_ptr<LHEF::TagBase>> cl);
 void	print_binder(pybind11::module &M);
-
+void custom_deduce_reader(pybind11::module &M);
 } // namespace binder
 
 #endif

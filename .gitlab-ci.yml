@@ -23,6 +23,8 @@ LCG_99_x86_64-centos7-gcc8-opt:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
+  tags:
+    - k8s-cvmfs
   stage: LCG
   before_script:
     - export LCGPLATFORM=x86_64-centos7-gcc8-opt
@@ -43,9 +45,6 @@ LCG_99_x86_64-centos7-gcc8-opt:
     - export
     - LARG=" "
     - LARG="$LARG "-DPYTHIA8_ROOT_DIR=${LCG_LOCATION}/MCGenerators/pythia8/244/${LCGPLATFORM}
-    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/photos++/3.64/${LCGPLATFORM}/
-    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/tauola++/1.1.8/${LCGPLATFORM}/
-    - LARG="$LARG "-DMCTESTER_ROOT_DIR=${LCG_LOCATION}/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/
     - LARG="$LARG "-DHEPMC2_ROOT_DIR=${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/
     - LARG="$LARG "-DGRAPHVIZ_ROOT=${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/
     - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
@@ -61,6 +60,8 @@ LCG_95_x86_64-centos7-gcc8-opt:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
+  tags:
+    - k8s-cvmfs
   stage: LCG
   before_script:
     - export LCGPLATFORM=x86_64-centos7-gcc8-opt
@@ -79,9 +80,6 @@ LCG_95_x86_64-centos7-gcc8-opt:
     - LARG=" "
     - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
     - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}
-    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/
-    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/
-    - LARG="$LARG "-DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/
     - LARG="$LARG "-DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/
     - LARG="$LARG "-DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
     - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
@@ -94,6 +92,8 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
   image: gitlab-registry.cern.ch/sft/docker:lcg-ubuntu18
+  tags:
+    - k8s-cvmfs
   stage: LCG
   before_script:
     - export LCGPLATFORM=x86_64-ubuntu1804-gcc8-opt
@@ -103,10 +103,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - export CXX=/usr/bin/g++-8
     - export CC=/usr/bin/gcc-8
     - export FC=/usr/bin/gfortran-8
-    - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/lib:${LD_LIBRARY_PATH}
-    - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
-    - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
@@ -119,9 +116,6 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - LARG=" "
     - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
     - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}
-    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/
-    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/
-    - LARG="$LARG "-DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/
     - LARG="$LARG "-DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/
     - LARG="$LARG "-DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
     - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
@@ -430,4 +424,5 @@ Archlinux0-GNU:
   extends: .any-cmake
   needs:
     - job: build_image_Archlinux0
+
 
