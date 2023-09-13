@@ -26,7 +26,8 @@ template <typename T>  void custom_T_binder (pybind11::class_<T, std::shared_ptr
 cl.def("print", [](T const &o, pybind11::object  & a1) -> void { std::stringstream b;  o.print(b); a1.attr("write")(pybind11::str(b.str().c_str())); }, "Print the object", pybind11::arg("file"));
 }
 void custom_LHEFTagBase_binder (pybind11::class_<LHEF::TagBase, std::shared_ptr<LHEF::TagBase>> cl);
-void	print_binder(pybind11::module &M);
+void custom_LHEFReader_binder (pybind11::class_<LHEF::Reader, std::shared_ptr<LHEF::Reader>> cl);
+void print_binder(pybind11::module &M);
 void custom_deduce_reader(pybind11::module &M);
 } // namespace binder
 
