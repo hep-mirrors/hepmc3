@@ -79,6 +79,14 @@ void custom_FourVector_binder(pybind11::class_<HepMC3::FourVector, std::shared_p
 
 }
 
+ void custom_LHEFReader_binder (pybind11::class_<LHEF::Reader, std::shared_ptr<LHEF::Reader>> cl)
+{
+		cl.def("initfile_rdstate", (std::ios_base::iostate (LHEF::Reader::*)() const) &LHEF::Reader::initfile_rdstate, "initfile rdstate\n\nC++: LHEF::Reader::initfile_rdstate() const --> enum std::_Ios_Iostate");
+		cl.def("file_rdstate", (std::ios_base::iostate (LHEF::Reader::*)() const) &LHEF::Reader::file_rdstate, "file rdstate\n\nC++: LHEF::Reader::file_rdstate() const --> enum std::_Ios_Iostate");
+
+}
+
+
 
 void	print_binder(pybind11::module &M)
 

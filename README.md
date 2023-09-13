@@ -176,8 +176,7 @@ The full explanation  for the installation options is given below.
   -DHEPMC3_BUILD_EXAMPLES=ON
   ```
 
-  Additional flags control the location installation of Photos, Tauola MC-TESTER, HepMC2
-  and Pythia8  that are used for tests. Please note that some examples are disabled  on Windows.
+  Please note that some examples are disabled  on Windows.
 
   For tests and for development purposes  HepMC3 uses extra packages, e.g. GrpahViz, binder.
   On Windows, most extra packages have no default location.
@@ -297,14 +296,7 @@ In the future the codes from the interfaces  will be submitted to the
 upstream of corresponding projects and removed from HepMC3.
 
 To enable the installation of interfaces use `-DHEPMC3_INSTALL_INTERFACES:BOOL=ON`  option for the cmake.
-In the test suite the already installed interfaces from MC event generators are used by default.
-To use the interfaces and tests shipped with HepMC3, one can set the following options for cmake
-```
--DHEPMC3_USE_INTERFACE_FROM_MCTESTER:BOOL=OFF
--DHEPMC3_USE_INTERFACE_FROM_PHOTOSPP:BOOL=OFF
--DHEPMC3_USE_INTERFACE_FROM_TAUOLAPP:BOOL=OFF
--DHEPMC3_USE_INTERFACE_FROM_PYTHIA8:BOOL=OFF
-```
+
 
 12.
 
@@ -537,7 +529,7 @@ to build the binding.
 5. The subdirectory `interfaces/` contains subdirectories with interfaces
 (C++/Fortran source files, C++ headers) to
 Monte Carlo event generators and event processing tools, e.g.
-mc-tester,  Photospp,  pythia6,  pythia8 and  Tauolapp.
+HepMC2 and pythia6.
 
 
 6. The subdirectories `test/` and `python/test` contain sets of files (source files, scripts, inputs)
@@ -547,35 +539,6 @@ The files in `test/` can be split in two groups:
 ```
 ./test/testIO4.cc
 ./test/inputIO4.root
-```
-and those that are involved in testing of HepMC3 with Monte Carlo generators/tools
-
-```
-./test/McTesterValidationTool.cc
-./test/PhotosValidationTool.h
-./test/SimpleEventTool.cc
-./test/McTesterValidationTool.h
-./test/HepMC3TestUtils.h
-./test/ValidationControl.cc
-./test/OutputValidationTool.cc
-./test/ValidationTool.h
-./test/PythiaValidationTool.h
-./test/TauolaValidationTool.cc
-./test/SimpleEventTool.h
-./test/PythiaValidationTool.cc
-./test/OutputValidationTool.h
-./test/IsGoodEvent.h
-./test/ValidationControl.h
-./test/Timer.h
-./test/TauolaValidationTool.h
-./test/PhotosValidationTool.cc
-./test/testMCTester1.cc
-./test/testPhotos1.cc
-./test/testPythia3.cc
-./test/testPythia2.cc
-./test/testPythia1.cc
-./test/testTauola1.cc
-...
 ```
 
 
