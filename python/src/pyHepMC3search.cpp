@@ -10,7 +10,6 @@
 typedef std::function< pybind11::module & (std::string const &) > ModuleGetter;
 
 void bind_pyHepMC3search_0(std::function< pybind11::module &(std::string const &namespace_) > &M);
-void bind_pyHepMC3search_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
 
 
 PYBIND11_MODULE(pyHepMC3search, root_module) {
@@ -42,6 +41,5 @@ PYBIND11_MODULE(pyHepMC3search, root_module) {
 	//pybind11::class_<std::shared_ptr<void>>(M(""), "_encapsulated_data_");
 
 	bind_pyHepMC3search_0(M);
-	bind_pyHepMC3search_1(M);
 
 }
