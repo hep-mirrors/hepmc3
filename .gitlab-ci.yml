@@ -199,7 +199,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - $CTEST -j 5 --output-on-failure
     - cd $TTOP
 
-.oldstandalone: &oldstandalone
+.oldstandaloneexamples: &oldstandaloneexamples
     - export TTOP=$(pwd)
     - mkdir -p STANDALONE
     - cp -r INSTALL/share/doc/HepMC3/examples STANDALONE
@@ -209,6 +209,8 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - $CMAKE .. -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/
     - make -j 4
     - cd $TTOP
+.oldstandalonepython: &oldstandalonepython
+    - export TTOP=$(pwd)
     - cd python
     - mkdir -p BUILD
     - cd BUILD 
@@ -263,7 +265,15 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
   script:
       - *ex
       - *oldcmake
-      - *oldstandalone
+      - *oldstandaloneexamples
+      - *oldstandalonepython
+
+.any-oldcmake-no-python: &any-oldcmake-no-python
+  extends: .any
+  script:
+      - *ex
+      - *oldcmake
+      - *oldstandaloneexamples
 
 
 ###########################################################################
@@ -426,13 +436,13 @@ Fedora24-GNU:
 
 Fedora23-LLVM-noroot-nopython-noprotobuf:
   variables: { OS: Fedora, FREL: 23, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF"}
-  extends: .any-oldcmake
+  extends: .any-oldcmake-no-python
   needs:
     - job: build_image_Fedora23
 
 Fedora23-GNU-noroot-nopython-noprotobuf:
   variables: { OS: Fedora, FREL: 23, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF"}
-  extends: .any-oldcmake
+  extends: .any-oldcmake-no-python
   needs:
     - job: build_image_Fedora23
 

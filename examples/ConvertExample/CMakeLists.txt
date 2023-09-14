@@ -56,7 +56,7 @@ if(Protobuf_FOUND)
 endif()
 
 
-if(${CMAKE_VERSION} VERSION_GREATER "3.8")
+if(${CMAKE_VERSION} VERSION_GREATER "3.14")
 ########################################################################
 #FindPython is not reenterant, so we have to hack the cache.
 ########################################################################
