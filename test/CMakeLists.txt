@@ -330,10 +330,9 @@ macro( hepmc_convert_test testname )
   message( STATUS "HepMC3 test: building Convert test ${testname} ${${testname}_source} with HEPMC2" )
   ADD_EXECUTABLE(convert_${testname} ${${testname}_source}  ${ARGN} )
   target_include_directories(convert_${testname} BEFORE
-  PUBLIC ${HEPMC2_INCLUDE_DIRS}
   PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src   ${CMAKE_CURRENT_SOURCE_DIR}/../include/   "${PROJECT_SOURCE_DIR}/interfaces/HepMCCompatibility/include" )
-  target_link_libraries(convert_${testname} PRIVATE ${HEPMC2_LIBRARIES}   HepMC3  )
+  target_link_libraries(convert_${testname} PRIVATE HepMC2::HepMC2  HepMC3  )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( convert_${testname} convert_${testname} )

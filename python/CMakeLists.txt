@@ -12,7 +12,10 @@ if (USE_INSTALLED_HEPMC3)
   set(${PROJECT_NAME}_VERSION 3.2.7)
   set(THIS_PROJECT_NAME ${PROJECT_NAME})
   set(THIS_PROJECT_NAME_VERSION 3.2.7)
+  set(CMAKE_MODULE_PATH ../cmake/Modules ${CMAKE_MODULE_PATH})
+  message(STATUS "${CMAKE_MODULE_PATH}")
   option(HEPMC3_ENABLE_TEST "Enable tests" ON)
+
 
   find_package(HepMC3  REQUIRED  )
   include(CheckCXXCompilerFlag)
@@ -22,6 +25,9 @@ if (USE_INSTALLED_HEPMC3)
   message(STATUS "HEPMC3_LIB: ${HEPMC3_LIB}")
   include(GNUInstallDirs)
   if (HEPMC3_ROOTIO_LIB)
+    list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
+    list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
+    find_package(ROOT REQUIRED COMPONENTS Core RIO Tree)
     message(STATUS "ROOT_FOUND:     ${ROOT_FOUND}")
     message(STATUS "ROOT includes:  ${ROOT_INCLUDE_DIRS}")
     message(STATUS "ROOT libraries: ${ROOT_LIBRARIES}")
@@ -155,6 +161,7 @@ set(BN       ${autoBN}       ${CMAKE_CURRENT_SOURCE_DIR}/src/binders.cpp)
 set(BNrootIO ${autoBNrootIO} ${CMAKE_CURRENT_SOURCE_DIR}/src/rootIObinders.cpp)
 set(BNsearch ${autoBNsearch} ${CMAKE_CURRENT_SOURCE_DIR}/src/searchbinders.cpp)
 set(BNprotobufIO ${autoBNprotobufIO} ${CMAKE_CURRENT_SOURCE_DIR}/src/protobufIObinders.cpp)
+
 foreach(_comp IN ITEMS " " ${HEPMC3_COMPONENTS})
   if (${_comp} STREQUAL " ")
     set(_dotcomp "") 
@@ -283,7 +290,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     target_link_libraries(pyHepMC3${_comp}${Python_VERSION}
         PUBLIC  HepMC3::HepMC3 ${__comp} )
     target_include_directories(pyHepMC3${_comp}${Python_VERSION}
-        PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include ${HEPMC3_INCLUDE_DIRECTORIES} ${CMAKE_CURRENT_SOURCE_DIR} )
+        PUBLIC ${Python_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/include  ${CMAKE_CURRENT_SOURCE_DIR} )
     add_custom_target(
         foo${_comp}${Python_VERSION} ALL
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/${_comp}/
