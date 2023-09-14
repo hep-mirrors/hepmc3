@@ -61,6 +61,8 @@ public:
 
     /** @brief Get file  error state */
     bool failed()  override;
+    
+   ~ReaderRootTree();
 
 private:
     /** @brief init routine */
@@ -71,11 +73,11 @@ private:
 private:
     std::shared_ptr<TFile> m_file; //!< File handler
 public:
-     std::shared_ptr<TTree> m_tree;//!< Tree handler. Public to allow simple access, e.g. custom branches.
+    TTree* m_tree;//!< Tree handler. Public to allow simple access, e.g. custom branches.
 private:
     int   m_events_count; //!< Events count. Needed to read the tree
-    std::shared_ptr<GenEventData> m_event_data; //!< Pointer to structure that holds event data
-    std::shared_ptr<GenRunInfoData> m_run_info_data; //!< Pointer to structure that holds run info data
+    GenEventData* m_event_data; //!< Pointer to structure that holds event data
+    GenRunInfoData* m_run_info_data; //!< Pointer to structure that holds run info data
     std::string m_tree_name; //!< Name of TTree
     std::string m_branch_name; //!< Name of TBranch in TTree
 };

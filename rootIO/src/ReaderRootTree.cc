@@ -39,28 +39,29 @@ bool ReaderRootTree::init()
     }
 
 
-    m_tree = std::shared_ptr<TTree>(reinterpret_cast<TTree*>(m_file->Get(m_tree_name.c_str())));
+    m_tree = reinterpret_cast<TTree*>(m_file->Get(m_tree_name.c_str()));
     if (!m_tree)
     {
         HEPMC3_ERROR("ReaderRootTree: problem opening tree:  " << m_tree_name)
         return false;
     }
-    m_event_data = std::make_shared<GenEventData>();
-    int result = m_tree->SetBranchAddress(m_branch_name.c_str(), m_event_data.get());
+    m_event_data = new GenEventData();
+    int result = m_tree->SetBranchAddress(m_branch_name.c_str(), &m_event_data);
     if (result < 0)
     {
         HEPMC3_ERROR("ReaderRootTree: problem reading branch tree:  " << m_tree_name)
         return false;
     }
-    m_run_info_data = std::make_shared<GenRunInfoData>();
-    result = m_tree->SetBranchAddress("GenRunInfo", m_run_info_data.get());
+    m_run_info_data = new GenRunInfoData();
+    result = m_tree->SetBranchAddress("GenRunInfo", &m_run_info_data);
     if (result < 0)
     {
         HEPMC3_WARNING("ReaderRootTree: problem reading branch tree: GenRunInfo. Will attempt to read GenRunInfoData object.")
         std::shared_ptr<GenRunInfo> ri = std::make_shared<GenRunInfo>();
-        auto run = std::shared_ptr<GenRunInfoData>(reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData")));
+        auto *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
         if (run) {
-            ri->read_data(*(run.get()));
+            ri->read_data(*run);
+            delete run;
             set_run_info(ri);
             HEPMC3_WARNING("ReaderRootTree::init The object was written with HepMC3 version 3.0")
         } else {
@@ -118,6 +119,11 @@ bool ReaderRootTree::failed()
     if ( !m_file->IsOpen() ) return true;
     if (m_events_count > m_tree->GetEntries()) return true;
     return false;
+}
+ ReaderRootTree::~ ReaderRootTree() {
+  delete m_event_data;
+  delete m_run_info_data;
+  delete m_tree;
 }
 
 } // namespace HepMC3
