@@ -76,14 +76,14 @@ bool ReaderRootTree::init()
 bool ReaderRootTree::skip(const int n)
 {
     m_events_count+=n;
-    return m_events_count <= m_tree->GetEntries();
+    return m_events_count < m_tree->GetEntries();
 }
 
 
 
 bool ReaderRootTree::read_event(GenEvent& evt)
 {
-    if (m_events_count > m_tree->GetEntries()) return false;
+    if (m_events_count >= m_tree->GetEntries()) { m_events_count++; return false;}
     m_event_data->particles.clear();
     m_event_data->vertices.clear();
     m_event_data->links1.clear();
@@ -121,9 +121,9 @@ bool ReaderRootTree::failed()
     return false;
 }
  ReaderRootTree::~ ReaderRootTree() {
-  delete m_event_data;
-  delete m_run_info_data;
-  delete m_tree;
+  //delete m_event_data;
+  //delete m_run_info_data;
+  //delete 
 }
 
 } // namespace HepMC3
