@@ -1,6 +1,6 @@
 
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}  ${ROOT_INCLUDE_DIRS})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR})
 
 #----------------------------------------------------------------------------
 # Generate dictionaries
@@ -15,7 +15,7 @@ add_executable(class_example_read.exe
         ${CMAKE_CURRENT_SOURCE_DIR}/class_example_read.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyRunClass.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyClass.cc myclass_Classes.cxx)
-target_link_libraries(class_example_read.exe ROOT::Tree ROOT::RIO ROOT::Core ${HEPMC3_LIB} ${HEPMC3_ROOTIO_LIB})
+target_link_libraries(class_example_read.exe ROOT::Tree ROOT::RIO ROOT::Core HepMC3::HepMC3 HepMC3::rootIO)
 set_target_properties(class_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 add_dependencies( class_example_read.exe dictionary )
 
@@ -23,7 +23,7 @@ add_executable(class_example_write.exe
         ${CMAKE_CURRENT_SOURCE_DIR}/class_example_write.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyRunClass.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/MyClass.cc myclass_Classes.cxx)
-target_link_libraries(class_example_write.exe ROOT::Tree ROOT::RIO ROOT::Core ${HEPMC3_LIB} ${HEPMC3_ROOTIO_LIB})
+target_link_libraries(class_example_write.exe ROOT::Tree ROOT::RIO ROOT::Core HepMC3::HepMC3 HepMC3::rootIO)
 set_target_properties(class_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 add_dependencies( class_example_write.exe dictionary )
 

@@ -134,18 +134,22 @@ endif()
 
 
 
-add_subdirectory(BasicExamples)
-add_subdirectory(LHEFExample)
+
+
 add_subdirectory(ConvertExample)
 add_subdirectory(Pythia8Example)
 if (HEPMC3_ENABLE_SEARCH)
-   add_subdirectory(SearchExample)
+  add_subdirectory(SearchExample)
 endif()
 if(ROOT_FOUND)
+  add_subdirectory(LHEFExample)
   add_subdirectory(RootIOExample)
   add_subdirectory(RootIOExample2)
   add_subdirectory(RootIOExample3)
   add_subdirectory(ViewerExample)
+  if (HEPMC3_ENABLE_SEARCH)
+    add_subdirectory(BasicExamples)
+  endif()
 else()
   message(STATUS "HepMC3 examples: ROOT package not found, rootIO_examples disabled.")
 endif()
