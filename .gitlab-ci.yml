@@ -184,21 +184,55 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
    - key: cache-${OS}-${FREL}-${TOOLSET}
      paths:
        -  CACHES/cache-${OS}-${FREL}-${TOOLSET}/
+.standalone: &standalone
+    - export TTOP=$(pwd)
+    - mkdir -p STANDALONE
+    - cp -r INSTALL/share/doc/HepMC3/examples STANDALONE
+    - cd STANDALONE/examples
+    - $CMAKE -S . -B BUILD -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/
+    - $CMAKE --build BUILD 
+    - cd $TTOP
+    - cd python
+    - $CMAKE -S . -B BUILD -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/ -DHEPMC3_ENABLE_TEST=ON $CACHINGFLAGS
+    - $CMAKE --build BUILD 
+    - cd BUILD
+    - $CTEST -j 5 --output-on-failure
+    - cd $TTOP
+
+.oldstandalone: &oldstandalone
+    - export TTOP=$(pwd)
+    - mkdir -p STANDALONE
+    - cp -r INSTALL/share/doc/HepMC3/examples STANDALONE
+    - cd STANDALONE/examples
+    - mkdir -p BUILD
+    - cd BUILD 
+    - $CMAKE .. -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/
+    - make -j 4
+    - cd $TTOP
+    - cd python
+    - mkdir -p BUILD
+    - cd BUILD 
+    - $CMAKE .. -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/ -DHEPMC3_ENABLE_TEST=ON $CACHINGFLAGS
+    - make -j 4
+    - $CTEST -j 5 --output-on-failure
+    - cd $TTOP
 
 .cmake: &cmake
-    - $CMAKE -S . -B BUILD  -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
+    - $CMAKE -S . -B BUILD -DCMAKE_INSTALL_PREFIX=$(pwd)/INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
     - $CMAKE --build BUILD -j 10
     - $CMAKE --install BUILD
     - cd BUILD
     - $CTEST -j 5 --output-on-failure
-
+    - cd ..
+    
 .oldcmake: &oldcmake
     - mkdir -p BUILD
     - cd  BUILD
-    - $CMAKE ..   -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
+    - $CMAKE ..  -DCMAKE_INSTALL_PREFIX=$(pwd)/../INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
     - make -j 10
     - make install
     - $CTEST -j 5 --output-on-failure
+    - cd ..
 
 .ex:  &ex
     - if [ "${TOOLSET}" == "LLVM" ]; then export CXX=clang++; export CC=clang; export FC=gfortran; fi
@@ -222,12 +256,14 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
   script:
       - *ex
       - *cmake
+      - *standalone
 
 .any-oldcmake: &any-oldcmake
   extends: .any
   script:
       - *ex
       - *oldcmake
+      - *oldstandalone
 
 
 ###########################################################################
