@@ -23,7 +23,7 @@ WriterRoot::WriterRoot(const std::string &filename, std::shared_ptr<GenRunInfo> 
     m_events_count(0) {
     set_run_info(run);
 
-    m_file = TFile::Open(filename.c_str(), "RECREATE");
+    m_file = std::shared_ptr<TFile>(TFile::Open(filename.c_str(),"RECREATE"));
     if ( !m_file->IsOpen() ) {
         HEPMC3_ERROR("WriterRoot: problem opening file: " << filename)
         return;

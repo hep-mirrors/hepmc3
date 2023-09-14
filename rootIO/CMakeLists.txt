@@ -29,7 +29,7 @@ set_target_properties(HepMC3rootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT
 if (MSVC)
   set_target_properties(HepMC3rootIO PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>)
 endif()
-set_target_properties(HepMC3rootIO PROPERTIES SOVERSION 3)
+set_target_properties(HepMC3rootIO PROPERTIES SOVERSION 4)
 # installs
 install(TARGETS HepMC3rootIO
   EXPORT HepMC3rootIOTargets

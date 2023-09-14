@@ -67,7 +67,7 @@ public:
 // Fields
 //
 private:
-    TFile* m_file;         //!< File handler
+    std::shared_ptr<TFile> m_file; //!< File handler
     int    m_events_count; //!< Events count. Needed to generate unique object name
 };
 

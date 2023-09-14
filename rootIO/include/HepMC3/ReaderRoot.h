@@ -60,8 +60,8 @@ public:
 // Fields
 //
 private:
-    TFile* m_file; //!< File handler
-    TIter* m_next; //!< Iterator for event reading
+    std::shared_ptr<TFile> m_file; //!< File handler
+    std::shared_ptr<TIter> m_next; //!< Iterator for event reading
 };
 
 } // namespace HepMC3

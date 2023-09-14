@@ -15,8 +15,8 @@ namespace HepMC3 {
 HEPMC3_DECLARE_READER_FILE(ReaderRoot)
 
 ReaderRoot::ReaderRoot(const std::string &filename) {
-    m_file = TFile::Open(filename.c_str());
-    m_next = new TIter(m_file->GetListOfKeys());
+    m_file = std::shared_ptr<TFile>(TFile::Open(filename.c_str()));
+    m_next = std::make_shared<TIter>(m_file->GetListOfKeys());
 
     if ( !m_file->IsOpen() ) {
         HEPMC3_ERROR("ReaderRoot: problem opening file: " << filename)
@@ -25,11 +25,10 @@ ReaderRoot::ReaderRoot(const std::string &filename) {
 
     std::shared_ptr<GenRunInfo> ri = std::make_shared<GenRunInfo>();
 
-    auto *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
+    auto run = std::shared_ptr<GenRunInfoData>(reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData")));
 
     if (run) {
-        ri->read_data(*run);
-        delete run;
+        ri->read_data(*(run.get()));
     }
 
     set_run_info(ri);
@@ -48,10 +47,10 @@ bool ReaderRoot::skip(const int n)
 
 bool ReaderRoot::read_event(GenEvent& evt) {
     // Skip object of different type than GenEventData
-    GenEventData *data = nullptr;
+    std::shared_ptr<GenEventData> data = nullptr;
 
     while (true) {
-        TKey *key = (TKey*) (*m_next)();
+        TKey *key = (TKey*) (*(m_next.get()))();
 
         if ( !key ) {
             m_file->Close();
@@ -65,7 +64,7 @@ bool ReaderRoot::read_event(GenEvent& evt) {
         size_t geneventdata31 = strncmp(cl, "HepMC3::GenEventData", 20);
         if ( geneventdata31 == 0 || geneventdata30 == 0 ) {
             if (geneventdata30 == 0) {HEPMC3_WARNING("ReaderRoot::read_event: The object was written with HepMC3 version 3.0")}
-            data = reinterpret_cast<GenEventData*>(key->ReadObj());
+            data = std::shared_ptr<GenEventData>(reinterpret_cast<GenEventData*>(key->ReadObj()));
             break;
         }
     }
@@ -76,10 +75,9 @@ bool ReaderRoot::read_event(GenEvent& evt) {
         return false;
     }
 
-    evt.read_data(*data);
+    evt.read_data(*(data.get()));
     evt.set_run_info(run_info());
 
-    delete data;
     return true;
 }
 
