@@ -1,12 +1,12 @@
 
-include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/rootIO/include ${ROOT_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/rootIO/include )
 
 add_executable(rootIO_example_read.exe ${CMAKE_CURRENT_SOURCE_DIR}/rootIO_example_read.cc)
-target_link_libraries(rootIO_example_read.exe ROOT::Tree ROOT::RIO ROOT::Core ${HEPMC3_LIB} ${HEPMC3_ROOTIO_LIB})
+target_link_libraries(rootIO_example_read.exe ROOT::Tree ROOT::RIO ROOT::Core HepMC3::HepMC3 HepMC3::rootIO)
 set_target_properties(rootIO_example_read.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 
 add_executable(rootIO_example_write.exe ${CMAKE_CURRENT_SOURCE_DIR}/rootIO_example_write.cc)
-target_link_libraries(rootIO_example_write.exe ROOT::Tree ROOT::RIO ROOT::Core ${HEPMC3_LIB} ${HEPMC3_ROOTIO_LIB})
+target_link_libraries(rootIO_example_write.exe ROOT::Tree ROOT::RIO ROOT::Core HepMC3::HepMC3 HepMC3::rootIO)
 set_target_properties(rootIO_example_write.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 
 # create environment scripts
