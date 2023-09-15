@@ -207,13 +207,16 @@ SET( Python_VERSION_MAJOR "0")
 SET( Python_VERSION_MINOR "0")
 string(REPLACE "pypy" "" ver "${verin}")
 if (${verin} MATCHES pypy* )
-set(Python2_FIND_IMPLEMENTATIONS PyPy)
-set(Python3_FIND_IMPLEMENTATIONS PyPy)
-set(IMPL PyPy)
+  set(Python2_FIND_IMPLEMENTATIONS PyPy)
+  set(Python3_FIND_IMPLEMENTATIONS PyPy)
+  set(IMPL PyPy)
+  if(NOT (${CMAKE_VERSION} VERSION_GREATER "3.17"))
+    message(STATUS "HepMC3 python: WARNING: Version of cmake ${CMAKE_VERSION} is too low to support PyPy. at leas version 3.18 is required") 
+  endif()
 else()
-set(Python2_FIND_IMPLEMENTATIONS CPython)
-set(Python3_FIND_IMPLEMENTATIONS CPython)
-set(IMPL CPython)
+  set(Python2_FIND_IMPLEMENTATIONS CPython)
+  set(Python3_FIND_IMPLEMENTATIONS CPython)
+  set(IMPL CPython)
 endif()
 
 
@@ -305,9 +308,10 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3${_comp})
     endif()
     if (${verin} MATCHES pypy* )
-#      add_library(pyHepMC3${_comp}${Python_VERSION} MODULE  ${BN${_comp}} )
+      execute_process( COMMAND ${Python_EXECUTABLE} -c "import  sys;v=sys.pypy_version_info;print(str(v[0])+str(v[1]))" 
+      OUTPUT_VARIABLE PyPy_PyPy_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
       set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION}
-      PROPERTIES PREFIX "" OUTPUT_NAME pyHepMC3${_comp}.pypy-73)
+      PROPERTIES PREFIX "" OUTPUT_NAME pyHepMC3${_comp}.pypy-${PyPy_PyPy_VERSION})
     endif()
   
     set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION}
