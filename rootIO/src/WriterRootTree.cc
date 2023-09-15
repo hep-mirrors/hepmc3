@@ -106,7 +106,6 @@ WriterRootTree::~WriterRootTree()
 {
     delete m_event_data;
     delete m_run_info_data;
-    delete m_tree;
 }
 
 } // namespace HepMC3
