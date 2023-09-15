@@ -56,26 +56,6 @@ if(Protobuf_FOUND)
 endif()
 
 
-if(${CMAKE_VERSION} VERSION_GREATER "3.14")
-########################################################################
-#FindPython is not reenterant, so we have to hack the cache.
-########################################################################
-  unset(_Python3_LIBRARY_RELEASE CACHE) # Attempt to make FindPython reenterant
-  unset(_Python3_NumPy_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
-  find_package(Python3 3.5 COMPONENTS Development.Embed NumPy)
-  if (Python3_FOUND)
-     list(APPEND basic_includes  ${Python3_INCLUDE_DIRS} ${Python3_NumPy_INCLUDE_DIRS})
-     list(APPEND basic_sources   ${CMAKE_CURRENT_SOURCE_DIR}/src/ReaderuprootTree.cc )
-     list(APPEND basic_libraries ${Python3_LIBRARIES})
-     list(APPEND basic_defines HEPMCCONVERT_EXTENSION_UPROOTTREEREADER=1)
-  elseif()
-     message(STATUS "HepMC3 ConvertExample: Python3.5 with NumPy not found. uproot support disabled.")
-  endif()
-  unset(_Python3_LIBRARY_RELEASE CACHE) # Attempt to make FindPython reenterant
-  unset(_Python3_NumPy_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
-########################################################################
-endif()
-
 add_executable(convert_example.exe  ${basic_sources} )
 add_library(Analysis SHARED src/AnalysisExample.cc)
 target_link_libraries(Analysis HepMC3::HepMC3 )
