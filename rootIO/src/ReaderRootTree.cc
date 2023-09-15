@@ -120,10 +120,11 @@ bool ReaderRootTree::failed()
     if (m_events_count > m_tree->GetEntries()) return true;
     return false;
 }
- ReaderRootTree::~ ReaderRootTree() {
-  //delete m_event_data;
-  //delete m_run_info_data;
-  //delete 
+ReaderRootTree::~ ReaderRootTree() 
+{
+    delete m_event_data;
+    delete m_run_info_data;
+    delete m_tree; 
 }
 
 } // namespace HepMC3
