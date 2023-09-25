@@ -187,6 +187,7 @@ void GenEvent::remove_particles(std::vector<GenParticlePtr> v) {
 
 void GenEvent::remove_vertex(GenVertexPtr v) {
     if ( !v || v->parent_event() != this ) return;
+
     HEPMC3_DEBUG(30, "GenEvent::remove_vertex   - called with vertex:  " << v->id());
     std::shared_ptr<GenVertex> null_vtx;
 
