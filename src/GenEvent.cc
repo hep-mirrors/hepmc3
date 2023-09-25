@@ -229,6 +229,7 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
                 changed_attributes.emplace_back(*vt2);
             }
         }
+
         std::reverse(changed_attributes.begin(),changed_attributes.end());
         std::sort(changed_attributes.begin(),changed_attributes.end(),[](const auto &a, const auto &b){ return a.first > b.first; });
         for ( const auto& val: changed_attributes ) {
