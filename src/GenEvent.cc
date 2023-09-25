@@ -15,6 +15,7 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
+#include "HepMC3/Print.h"
 
 
 namespace HepMC3 {
@@ -160,7 +161,7 @@ void GenEvent::remove_particle(GenParticlePtr p) {
                 changed_attributes.emplace_back(*vt2);
             }
         }
-
+        std::sort(changed_attributes.begin(),changed_attributes.end(), [](const auto &a, const auto &b){ return a.first < b.first; });
         for ( const auto& val: changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first-1] = val.second;
@@ -186,7 +187,7 @@ void GenEvent::remove_particles(std::vector<GenParticlePtr> v) {
 
 void GenEvent::remove_vertex(GenVertexPtr v) {
     if ( !v || v->parent_event() != this ) return;
-
+    Print::line(vertices().back(),true);
     HEPMC3_DEBUG(30, "GenEvent::remove_vertex   - called with vertex:  " << v->id());
     std::shared_ptr<GenVertex> null_vtx;
 
@@ -228,7 +229,8 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
                 changed_attributes.emplace_back(*vt2);
             }
         }
-
+        std::reverse(changed_attributes.begin(),changed_attributes.end());
+        std::sort(changed_attributes.begin(),changed_attributes.end(),[](const auto &a, const auto &b){ return a.first > b.first; });
         for ( const auto& val: changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first+1] = val.second;
@@ -239,6 +241,8 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
     for (; it != m_vertices.end(); ++it) {
         ++((*it)->m_id);
     }
+    Print::line(vertices().back(),true);
+
 
     // Finally - set parent event and id of this vertex to 0
     v->m_event = nullptr;
