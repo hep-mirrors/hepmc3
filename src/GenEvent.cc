@@ -160,6 +160,7 @@ void GenEvent::remove_particle(GenParticlePtr p) {
                 changed_attributes.emplace_back(*vt2);
             }
         }
+
         std::sort(changed_attributes.begin(),changed_attributes.end(), [](const auto &a, const auto &b){ return a.first < b.first; });
         for ( const auto& val: changed_attributes ) {
             vt1.second.erase(val.first);
@@ -239,7 +240,6 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
     for (; it != m_vertices.end(); ++it) {
         ++((*it)->m_id);
     }
-
 
     // Finally - set parent event and id of this vertex to 0
     v->m_event = nullptr;
