@@ -15,7 +15,6 @@
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"
-#include "HepMC3/Print.h"
 
 
 namespace HepMC3 {
@@ -187,7 +186,6 @@ void GenEvent::remove_particles(std::vector<GenParticlePtr> v) {
 
 void GenEvent::remove_vertex(GenVertexPtr v) {
     if ( !v || v->parent_event() != this ) return;
-    Print::line(vertices().back(),true);
     HEPMC3_DEBUG(30, "GenEvent::remove_vertex   - called with vertex:  " << v->id());
     std::shared_ptr<GenVertex> null_vtx;
 
@@ -241,7 +239,6 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
     for (; it != m_vertices.end(); ++it) {
         ++((*it)->m_id);
     }
-    Print::line(vertices().back(),true);
 
 
     // Finally - set parent event and id of this vertex to 0
