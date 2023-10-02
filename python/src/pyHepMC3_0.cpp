@@ -21,6 +21,8 @@
 
 void bind_pyHepMC3_0(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
+
+	binder::custom_deduce_reader(M("HepMC3"));
 	{ // HepMC3::Setup file:HepMC3/Setup.h line:22
 		pybind11::class_<HepMC3::Setup, HepMC3::Setup*> cl(M("HepMC3"), "Setup", "Configuration for HepMC\n\n Contains macro definitions for printing debug output, feature deprecation, etc.\n Static class - configuration is shared among all HepMC events\n and program threads");
 		cl.def_static("print_errors", (bool (*)()) &HepMC3::Setup::print_errors, "Get error messages printing flag\n\nC++: HepMC3::Setup::print_errors() --> bool");

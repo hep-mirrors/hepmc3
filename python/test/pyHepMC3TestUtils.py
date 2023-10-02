@@ -4,14 +4,7 @@ import sys, os, math
 
 def python_label():
     v = sys.version_info
-    impl = ""
-    try:
-        pypyv = sys.pypy_version_info
-        impl = "pypy"
-        print(pypyv)
-    except:
-        pass
-    a = str(impl) + str(v[0]) + "." + str(v[1]) + "." + str(v[2])
+    a =  str(v[0]) + "." + str(v[1]) + "." + str(v[2])
     print(a)
     return a
 

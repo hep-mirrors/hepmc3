@@ -24,6 +24,7 @@ std::string const ProtobufMagicHeader = "hmpb";
 
 HEPMC3_DECLARE_WRITER_FILE(Writerprotobuf)
 HEPMC3_DECLARE_WRITER_STREAM(Writerprotobuf)
+HEPMC3_DECLARE_WRITER_SPSTREAM(Writerprotobuf)
 
 /// @brief Constant
 static size_t const MDBytesLength = 10;

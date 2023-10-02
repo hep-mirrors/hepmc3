@@ -1,3 +1,8 @@
+  --------------------------  HepMC3.2.8-pre ----------------------
+2023-09-015 Andrii Verbytskyi for HepMC
+         * Major update of the build system, removed most of the custom modules.
+2023-09-03 Andrii Verbytskyi for HepMC
+         * Removed functions that operate on raw pointers.
   --------------------------  HepMC3.2.7 ----------------------
 2023-10-02 Andrii Verbytskyi for HepMC
          * Patch release to fix the problem with vertex attributes removal.

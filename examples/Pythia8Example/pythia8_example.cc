@@ -8,11 +8,7 @@
 #include "HepMC3/Print.h"
 
 #include "Pythia8/Pythia.h"
-#ifdef HEPMC3_USE_INTERFACE_FROM_PYTHIA8
 #include "Pythia8Plugins/HepMC3.h"
-#else
-#include "Pythia8ToHepMC3.h"
-#endif
 #include <iostream>
 using namespace HepMC3;
 

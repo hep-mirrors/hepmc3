@@ -1,11 +1,10 @@
-
 set(basic_sources   ${CMAKE_CURRENT_SOURCE_DIR}/convert_example.cc
                     ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterDOT.cc
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterHEPEVTZEUS.cc )
 set(basic_includes ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR} )
-set(basic_libraries ${HEPMC3_LIB})
-set(basic_defines   HEPMCCONVERT_EXTENSION_HEPEVTZEUS=1   HEPMCCONVERT_EXTENSION_DOT=1)
+set(basic_libraries HepMC3::HepMC3)
+set(basic_defines HEPMCCONVERT_EXTENSION_HEPEVTZEUS=1 HEPMCCONVERT_EXTENSION_DOT=1)
 set(basic_dependencies )
 set(basic_libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" )
 find_package(ZLIB)
@@ -43,7 +42,7 @@ endif()
 if(ROOT_FOUND)
   list(APPEND basic_includes ${PROJECT_SOURCE_DIR}/rootIO/include  ${ROOT_INCLUDE_DIRS})
   list(APPEND basic_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterRootTreeOPAL.cc )
-  list(APPEND basic_libraries ${ROOT_LIBRARIES} ${HEPMC3_ROOTIO_LIB})
+  list(APPEND basic_libraries ROOT::Tree ROOT::RIO ROOT::Core HepMC3::rootIO)
   list(APPEND basic_defines HEPMCCONVERT_EXTENSION_ROOTTREEOPAL=1)
   list(APPEND basic_dependencies dictionary)
   # create environment scripts
@@ -51,35 +50,15 @@ if(ROOT_FOUND)
 endif()
 if(Protobuf_FOUND)
   list(APPEND basic_includes ${PROJECT_SOURCE_DIR}/protobufIO/include  ${Protobuf_INCLUDE_DIRS})
-  list(APPEND basic_libraries ${Protobuf_LIBRARIES} ${HEPMC3_PROTOBUFIO_LIB})
+  list(APPEND basic_libraries ${Protobuf_LIBRARIES} HepMC3::protobufIO)
   # create environment scripts
   set(basic_libdir "${basic_libdir}:${Protobuf_LIBRARY_DIR}")
 endif()
 
 
-if(${CMAKE_VERSION} VERSION_GREATER "3.8")
-########################################################################
-#FindPython is not reenterant, so we have to hack the cache.
-########################################################################
-  unset(_Python3_LIBRARY_RELEASE CACHE) # Attempt to make FindPython reenterant
-  unset(_Python3_NumPy_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
-  find_package(Python3 3.5 COMPONENTS Development.Embed NumPy)
-  if (Python3_FOUND)
-     list(APPEND basic_includes  ${Python3_INCLUDE_DIRS} ${Python3_NumPy_INCLUDE_DIRS})
-     list(APPEND basic_sources   ${CMAKE_CURRENT_SOURCE_DIR}/src/ReaderuprootTree.cc )
-     list(APPEND basic_libraries ${Python3_LIBRARIES})
-     list(APPEND basic_defines HEPMCCONVERT_EXTENSION_UPROOTTREEREADER=1)
-  elseif()
-     message(STATUS "HepMC3 ConvertExample: Python3.5 with NumPy not found. uproot support disabled.")
-  endif()
-  unset(_Python3_LIBRARY_RELEASE CACHE) # Attempt to make FindPython reenterant
-  unset(_Python3_NumPy_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
-########################################################################
-endif()
-
 add_executable(convert_example.exe  ${basic_sources} )
 add_library(Analysis SHARED src/AnalysisExample.cc)
-target_link_libraries(Analysis ${HEPMC3_LIB} )
+target_link_libraries(Analysis HepMC3::HepMC3 )
 
 if (MSVC)
   set(  MSVCLINKFLAGS "/WHOLEARCHIVE:${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/HepMC3-static.lib")
@@ -102,7 +81,7 @@ set_target_properties(Analysis PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BIN
 
 configure_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/convert_example_env.sh.in
-	    ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/convert_example_env.sh @ONLY)
+        ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/convert_example_env.sh @ONLY)
 
 # installs
 if (USE_INSTALLED_HEPMC3)

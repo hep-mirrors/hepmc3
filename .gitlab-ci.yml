@@ -45,9 +45,6 @@ LCG_99_x86_64-centos7-gcc8-opt:
     - export
     - LARG=" "
     - LARG="$LARG "-DPYTHIA8_ROOT_DIR=${LCG_LOCATION}/MCGenerators/pythia8/244/${LCGPLATFORM}
-    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/photos++/3.64/${LCGPLATFORM}/
-    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=${LCG_LOCATION}/MCGenerators/tauola++/1.1.8/${LCGPLATFORM}/
-    - LARG="$LARG "-DMCTESTER_ROOT_DIR=${LCG_LOCATION}/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/
     - LARG="$LARG "-DHEPMC2_ROOT_DIR=${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/
     - LARG="$LARG "-DGRAPHVIZ_ROOT=${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/
     - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
@@ -86,9 +83,6 @@ LCG_95_x86_64-centos7-gcc8-opt:
     - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
     - LARG="$LARG "-DHEPMC3_Python_SITEARCH27=$(pwd)/install/lib/python2.7/site-packages
     - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}
-    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/
-    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/
-    - LARG="$LARG "-DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/
     - LARG="$LARG "-DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/
     - LARG="$LARG "-DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
     - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
@@ -112,10 +106,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - export CXX=/usr/bin/g++-8
     - export CC=/usr/bin/gcc-8
     - export FC=/usr/bin/gfortran-8
-    - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/lib:${LD_LIBRARY_PATH}
-    - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
-    - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - export LD_LIBRARY_PATH=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/lib/:${LD_LIBRARY_PATH}
     - source /cvmfs/sft.cern.ch/lcg/releases/LCG_95/valgrind/3.13.0/${LCGPLATFORM}/valgrind-env.sh
@@ -131,9 +122,6 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
     - LARG="$LARG "-DHEPMC3_Python_SITEARCH27=$(pwd)/install/lib/python2.7/site-packages
     - LARG="$LARG "-DPYTHIA8_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/pythia8/240/${LCGPLATFORM}
-    - LARG="$LARG "-DPHOTOSPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/photos++/3.61/${LCGPLATFORM}/
-    - LARG="$LARG "-DTAUOLAPP_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/tauola++/1.1.6/${LCGPLATFORM}/
-    - LARG="$LARG "-DMCTESTER_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/MCGenerators/mctester/1.25.0/${LCGPLATFORM}/
     - LARG="$LARG "-DHEPMC2_ROOT_DIR=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/HepMC/2.06.09/${LCGPLATFORM}/
     - LARG="$LARG "-DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
     - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
@@ -196,21 +184,57 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
    - key: cache-${OS}-${FREL}-${TOOLSET}
      paths:
        -  CACHES/cache-${OS}-${FREL}-${TOOLSET}/
+.standalone: &standalone
+    - export TTOP=$(pwd)
+    - mkdir -p STANDALONE
+    - cp -r INSTALL/share/doc/HepMC3/examples STANDALONE
+    - cd STANDALONE/examples
+    - $CMAKE -S . -B BUILD -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/
+    - $CMAKE --build BUILD 
+    - cd $TTOP
+    - cd python
+    - $CMAKE -S . -B BUILD -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/ -DHEPMC3_ENABLE_TEST=ON $CACHINGFLAGS
+    - $CMAKE --build BUILD 
+    - cd BUILD
+    - $CTEST -j 5 --output-on-failure
+    - cd $TTOP
+
+.oldstandaloneexamples: &oldstandaloneexamples
+    - export TTOP=$(pwd)
+    - mkdir -p STANDALONE
+    - cp -r INSTALL/share/doc/HepMC3/examples STANDALONE
+    - cd STANDALONE/examples
+    - mkdir -p BUILD
+    - cd BUILD 
+    - $CMAKE .. -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/
+    - make -j 4
+    - cd $TTOP
+.oldstandalonepython: &oldstandalonepython
+    - export TTOP=$(pwd)
+    - cd python
+    - mkdir -p BUILD
+    - cd BUILD 
+    - $CMAKE .. -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/ -DHEPMC3_ENABLE_TEST=ON $CACHINGFLAGS
+    - make -j 4
+    - $CTEST -j 5 --output-on-failure
+    - cd $TTOP
 
 .cmake: &cmake
-    - $CMAKE -S . -B BUILD  -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
+    - $CMAKE -S . -B BUILD -DCMAKE_INSTALL_PREFIX=$(pwd)/INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
     - $CMAKE --build BUILD -j 10
     - $CMAKE --install BUILD
     - cd BUILD
     - $CTEST -j 5 --output-on-failure
-
+    - cd ..
+    
 .oldcmake: &oldcmake
     - mkdir -p BUILD
     - cd  BUILD
-    - $CMAKE ..   -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
+    - $CMAKE ..  -DCMAKE_INSTALL_PREFIX=$(pwd)/../INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
     - make -j 10
     - make install
     - $CTEST -j 5 --output-on-failure
+    - cd ..
 
 .ex:  &ex
     - if [ "${TOOLSET}" == "LLVM" ]; then export CXX=clang++; export CC=clang; export FC=gfortran; fi
@@ -234,16 +258,30 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
   script:
       - *ex
       - *cmake
+      - *standalone
 
 .any-oldcmake: &any-oldcmake
   extends: .any
   script:
       - *ex
       - *oldcmake
+      - *oldstandaloneexamples
+      - *oldstandalonepython
+
+.any-oldcmake-no-python: &any-oldcmake-no-python
+  extends: .any
+  script:
+      - *ex
+      - *oldcmake
+      - *oldstandaloneexamples
 
 
 ###########################################################################
 #Check commit messages
+
+check_commit_Fedora38:
+  variables: { OS: Fedora, FREL: 38}
+  extends: .check_commit
 
 check_commit_Fedora37:
   variables: { OS: Fedora, FREL: 37}
@@ -287,6 +325,12 @@ check_commit_Archlinux0:
 
 ###########################################################################
 #Build images
+build_image_Fedora38:
+  variables: { OS: Fedora, FREL: 38}
+  extends: .build_image
+  needs:
+    - job: check_commit_Fedora38
+
 build_image_Fedora37:
   variables: { OS: Fedora, FREL: 37}
   extends: .build_image
@@ -348,6 +392,12 @@ build_image_Archlinux0:
     - job: check_commit_Archlinux0
 
 ###########################################################################
+Fedora38-GNU:
+  variables: { OS: Fedora, FREL: 38, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  extends: .any-cmake
+  needs:
+    - job: build_image_Fedora38
+
 Fedora37-LLVM:
   variables: { OS: Fedora, FREL: 37, TOOLSET: LLVM,  EXTRACMAKEFLAGS: }
   extends: .any-cmake
@@ -386,13 +436,13 @@ Fedora24-GNU:
 
 Fedora23-LLVM-noroot-nopython-noprotobuf:
   variables: { OS: Fedora, FREL: 23, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF"}
-  extends: .any-oldcmake
+  extends: .any-oldcmake-no-python
   needs:
     - job: build_image_Fedora23
 
 Fedora23-GNU-noroot-nopython-noprotobuf:
   variables: { OS: Fedora, FREL: 23, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF"}
-  extends: .any-oldcmake
+  extends: .any-oldcmake-no-python
   needs:
     - job: build_image_Fedora23
 
@@ -425,4 +475,5 @@ Archlinux0-GNU:
   extends: .any-cmake
   needs:
     - job: build_image_Archlinux0
+
 

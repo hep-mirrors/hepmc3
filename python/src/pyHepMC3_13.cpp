@@ -1,6 +1,5 @@
 #include <HepMC3/Attribute.h>
 #include <HepMC3/Data/GenEventData.h>
-#include <HepMC3/Data/GenParticleData.h>
 #include <HepMC3/Data/GenRunInfoData.h>
 #include <HepMC3/FourVector.h>
 #include <HepMC3/GenCrossSection.h>
@@ -153,7 +152,7 @@ struct PyCallBack_HepMC3_WriterHEPEVT : public HepMC3::WriterHEPEVT {
 		}
 		return Writer::set_options(a0);
 	}
-	using _binder_ret_0 = std::map<std::string, std::string >;
+	using _binder_ret_0 = class std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "get_options");
@@ -277,7 +276,7 @@ struct PyCallBack_HepMC3_ReaderHEPEVT : public HepMC3::ReaderHEPEVT {
 		}
 		return Reader::set_options(a0);
 	}
-	using _binder_ret_0 = std::map<std::string, std::string >;
+	using _binder_ret_0 = class std::map<std::string, std::string >;
 	_binder_ret_0 get_options() const override {
 		pybind11::gil_scoped_acquire gil;
 		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "get_options");

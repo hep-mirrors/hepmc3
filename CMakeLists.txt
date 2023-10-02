@@ -61,7 +61,6 @@ if (NOT HEPMC3_ROOTIO_INSTALL_LIBDIR)
   set(HEPMC3_ROOTIO_INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
 endif()
 
-
 message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_PROTOBUFIO     ${HEPMC3_ENABLE_PROTOBUFIO}")
@@ -88,7 +87,7 @@ endif()
 # - Prepend our own CMake Modules to the search path
 # This allows us to customize, add, and factor out functionality
 # NB: if our custom modules include others that we don't supply, those in the
-# base path will be used, so watch for incompatibilities!!
+# base path will be used, so watch for incompatibilities!
 #
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 
@@ -103,7 +102,7 @@ SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # (but later on when installing)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
@@ -124,7 +123,6 @@ endif()
 set(HEPMC3_FEATURES "")
 set(HEPMC3_COMPONENTS "")
 if(HEPMC3_ENABLE_ROOTIO)
-  set (ROOT_FIND_COMPONENTS Core RIO Tree)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
   list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
   set(ROOT_CXX_FLAGS_BEFORE_ROOT "${ROOT_CXX_FLAGS}")
@@ -256,6 +254,7 @@ set( hepmc3core_sources
   ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc
   ${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderFactory.cc
 )
 
 #We need to export all symbols on Win to build .lib files
@@ -265,7 +264,7 @@ add_library(HepMC3 SHARED ${hepmc3core_sources})
 target_include_directories(HepMC3 PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 3
+set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 4
   ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
@@ -325,7 +324,6 @@ if (HEPMC3_INSTALL_INTERFACES)
   list(APPEND HEPMC3_FEATURES "interfaces")
   list(APPEND HEPMC3_FEATURES "interfaceshepmc2")
   list(APPEND HEPMC3_FEATURES "interfacespythia6")
-  list(APPEND HEPMC3_FEATURES "interfacespythia8")
 endif()
 
 # ROOT support
