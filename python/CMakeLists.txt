@@ -9,10 +9,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 option(USE_INSTALLED_HEPMC3 "Use HepMC3 bindings as a standalone package" OFF)
 option(RERUN_BINDER "Rerun binder" OFF)
 if (USE_INSTALLED_HEPMC3)
-  set(${PROJECT_NAME}_VERSION 3.2.7)
+  set(${PROJECT_NAME}_VERSION 3.2.8)
   set(THIS_PROJECT_NAME ${PROJECT_NAME})
-  set(THIS_PROJECT_NAME_VERSION 3.2.7)
-  message(STATUS "${CMAKE_MODULE_PATH}")
+  set(THIS_PROJECT_NAME_VERSION 3.2.8)
   option(HEPMC3_ENABLE_TEST "Enable tests" ON)
 
 
