@@ -51,7 +51,7 @@ int main() {
     auto barcode2 = v2->attribute<IntAttribute>("barcode");
     auto val2 = barcode2?barcode2->value():-10002;
     if (val1==val2) {
-      return 0;
+        return 0;
     }
     HepMC3::Print::line(v2,true);
     return 1;
