@@ -491,7 +491,7 @@ CentOS7-GNU-arm:
     - cat /etc/issue
     - export GIT_DEPTH=1
   script: 
-      - yum -y  install  bc make ninja-build cmake binutils git wget diffutils file sed gawk grep which  
+      - yum -y  install  bc make ninja-build cmake binutils git wget diffutils file sed gawk grep which  epel-release
       - yum -y  install                  gcc-gfortran gcc-c++ clang bzip2 openssl-devel openssl 
       - yum -y  install                  libzip-devel  zlib zlib-devel pythia8-devel pythia8 python3-lhapdf lhapdf lhapdf-devel  
       - yum -y  install                  valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static libzstd-devel libzstd graphviz graphviz-devel pythia8 pythia8-devel  root 
