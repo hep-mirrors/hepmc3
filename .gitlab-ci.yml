@@ -476,4 +476,23 @@ Archlinux0-GNU:
   needs:
     - job: build_image_Archlinux0
 
+CentOS7-GNU-arm:
+  image: centos:7
+  variables: { OS: CentOS, FREL: 7, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=2,3.4,3.6"}
+  tags:
+    - k8s-arm
+  stage: build
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch"
+  before_script:
+    - set -x
+    - uname -a
+    - cat /etc/issue
+    - export GIT_DEPTH=1
+  script:
+      - *ex
+      - *cmake
+      - *standalone
+
 
