@@ -1,6 +1,5 @@
 #include <HepMC3/Attribute.h>
 #include <HepMC3/Data/GenEventData.h>
-#include <HepMC3/Data/GenParticleData.h>
 #include <HepMC3/Data/GenRunInfoData.h>
 #include <HepMC3/FourVector.h>
 #include <HepMC3/GenCrossSection.h>

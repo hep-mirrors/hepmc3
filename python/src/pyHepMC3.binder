@@ -98,4 +98,9 @@
 -function LHEF::TagBase::printattrs
 -function LHEF::TagBase::closetag
 
+-function LHEF::Reader::initfile_rdstate
+-function LHEF::Reader::file_rdstate
++add_on_binder LHEF::Reader  binder::custom_LHEFReader_binder
+
+
 
