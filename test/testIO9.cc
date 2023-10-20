@@ -16,7 +16,7 @@ int main()
 {
     ReaderAsciiHepMC2 inputA("inputIO9.hepmc");
     if(inputA.failed()) return 1;
-    const std::vector<Compression> supported = HepMC3::supported_compression_types;
+    auto supported = HepMC3::supported_compression_types;
     std::vector<std::shared_ptr<Writer> > writersGZ;
     for (auto w: supported) {
         switch (w) {
