@@ -36,7 +36,7 @@ inline std::shared_ptr<Reader> deduce_reader(const std::string &filename)
     snprintf(buf, 6, "%s", input.m_head.at(0).c_str());
     Compression det = detect_compression_type(buf, buf + 6);
     if ( det != Compression::plaintext ) {
-        HEPMC3_DEBUG(10, "Detected supported compression " << std::to_string(det));
+        HEPMC3_DEBUG(10, "Detected supported compression: " << det);
         return deduce_reader(std::shared_ptr< std::istream >(new ifstream(filename.c_str())));
     }
 #endif
