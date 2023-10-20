@@ -50,10 +50,8 @@ std::vector<Compression> known_compression_types = {
     Compression::bz2,
     Compression::zstd,
 };
-}
-namespace std
-{
-string to_string(HepMC3::Compression & c) {
+
+inline std::string to_string(HepMC3::Compression & c) {
     switch (c) {
     case HepMC3::Compression::z:
         return string("z");
@@ -68,7 +66,13 @@ string to_string(HepMC3::Compression & c) {
     }
     return string("plaintext");
 }
+
 }
+
+inline std::ostream& operator<<(std::ostream& os, HepMC3::Compression & c) {
+    return os << HepMC3::to_string(c);
+}
+
 
 #endif
 #endif
