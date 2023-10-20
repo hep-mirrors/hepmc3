@@ -21,7 +21,7 @@
 namespace HepMC3 {
 #if ! (defined(__darwin__) || defined(__APPLE__)) &&  ! ((defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__))
 const std::string libHepMC3rootIO = "libHepMC3rootIO.so.3";
-const std::string libHepMC3protobufIO = "libHepMC3protobufIO.so.3";
+const std::string libHepMC3protobufIO = "libHepMC3protobufIO.so.1";
 #endif
 #if defined(__darwin__) || defined(__APPLE__)
 const std::string libHepMC3rootIO = "libHepMC3rootIO.dylib";
