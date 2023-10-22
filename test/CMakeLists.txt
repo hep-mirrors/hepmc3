@@ -169,7 +169,11 @@ else()
   message(STATUS "HepMC3 test: No threads library found or disabled for compiller with ID ${CMAKE_CXX_COMPILER_ID}. Thread safety tests are disabled")
 endif()
 
-set(compress_tests "testIO9")
+set(compress_tests testIO9)
+if(HEPMC3_ENABLE_PROTOBUFIO)
+  LIST(APPEND compress_tests testReaderFactory4)
+endif()
+
 if ("zlib" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
   find_package(ZLIB)
   if(ZLIB_FOUND)
@@ -299,6 +303,12 @@ foreach ( ctest ${compress_tests} )
     #target_include_directories(${ctest} PRIVATE "${ZSTD_INCLUDE_DIRS}" )
   #endif()
 endforeach ( ctest ${compress_tests} )
+
+if(HEPMC3_ENABLE_PROTOBUFIO AND "testReaderFactory4" IN_LIST compress_tests)
+    target_link_libraries(testReaderFactory4 PRIVATE HepMC3protobufIO)
+  target_include_directories(testReaderFactory4 BEFORE PRIVATE  ${CMAKE_CURRENT_SOURCE_DIR}/../protobufIO/include)
+endif()
+
 #So far the test with ROOT have issues on WIN32
 if(HEPMC3_ENABLE_ROOTIO AND (NOT WIN32) )
   foreach ( test ${HepMC_root_tests} )
