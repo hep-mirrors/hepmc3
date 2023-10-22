@@ -66,7 +66,9 @@ Readerprotobuf::Readerprotobuf(std::istream &stream)
 }
 
 Readerprotobuf::Readerprotobuf(std::shared_ptr<std::istream> stream)
-    : Readerprotobuf(*stream) {}
+    : Readerprotobuf(*stream) {
+      m_shared_stream = stream;
+    }
 
 bool Readerprotobuf::read_file_start() {
 
