@@ -21,15 +21,15 @@ int main()
     for (auto w: supported) {
         switch (w) {
         case Compression::z: {
-            writersGZ.push_back(std::shared_ptr<Writer>(new WriterGZ<WriterAsciiHepMC2,Compression::z>("frominputIO9.hepmc."+std::to_string(w))));
+            writersGZ.push_back(std::shared_ptr<Writer>(new WriterGZ<WriterAsciiHepMC2,Compression::z>("frominputIO9.hepmc."+HepMC3::to_string(w))));
             break;
         }
         case Compression::lzma: {
-            writersGZ.push_back(std::shared_ptr<Writer>(new WriterGZ<WriterAsciiHepMC2,Compression::lzma>("frominputIO9.hepmc."+std::to_string(w))));
+            writersGZ.push_back(std::shared_ptr<Writer>(new WriterGZ<WriterAsciiHepMC2,Compression::lzma>("frominputIO9.hepmc."+HepMC3::to_string(w))));
             break;
         }
         case Compression::bz2: {
-            writersGZ.push_back(std::shared_ptr<Writer>(new WriterGZ<WriterAsciiHepMC2,Compression::bz2>("frominputIO9.hepmc."+std::to_string(w))));
+            writersGZ.push_back(std::shared_ptr<Writer>(new WriterGZ<WriterAsciiHepMC2,Compression::bz2>("frominputIO9.hepmc."+HepMC3::to_string(w))));
             break;
         }
         default: {
@@ -56,10 +56,10 @@ int main()
 
     int result = 0;
     for (auto w: supported) {
-        ReaderGZ<ReaderAsciiHepMC2> inputB("frominputIO9.hepmc."+std::to_string(w));
+        ReaderGZ<ReaderAsciiHepMC2> inputB("frominputIO9.hepmc."+HepMC3::to_string(w));
         if(inputB.failed()) return 20;
 
-        WriterAsciiHepMC2 outputB("fromfrominputIO9" + std::to_string(w) + ".hepmc");
+        WriterAsciiHepMC2 outputB("fromfrominputIO9" + HepMC3::to_string(w) + ".hepmc");
         if(outputB.failed()) return 4;
         while( !inputB.failed() )
         {
@@ -74,7 +74,7 @@ int main()
         }
         inputB.close();
         outputB.close();
-        result += COMPARE_ASCII_FILES("fromfrominputIO9" + std::to_string(w) + ".hepmc","inputIO9.hepmc");
+        result += COMPARE_ASCII_FILES("fromfrominputIO9" + HepMC3::to_string(w) + ".hepmc","inputIO9.hepmc");
     }
     return result;
 }
