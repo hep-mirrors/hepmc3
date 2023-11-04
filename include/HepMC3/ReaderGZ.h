@@ -65,6 +65,12 @@ public:
         if(dynamic_pointer_cast<ifstream>(m_zstr)) dynamic_pointer_cast<ifstream>(m_zstr)->close();
     }
 
+    /// Set the act reader's GenRunInfo object.
+    void set_run_info(std::shared_ptr<GenRunInfo> run) { if (m_reader) m_reader->set_run_info(run); }
+
+    /// Get the act reader's GenRunInfo object.
+    std::shared_ptr<GenRunInfo> run_info() const { return m_reader?m_reader->run_info():nullptr; }
+
 private:
     ///@brief Close file stream
     std::shared_ptr< std::istream > m_zstr;  ///< Stream to read
