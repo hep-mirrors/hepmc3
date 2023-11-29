@@ -39,7 +39,7 @@ HepMC::GenEvent* ConvertHepMCGenEvent_3to2(const HepMC3::GenEvent& evt)
     for (auto v3: evt.vertices())
     {
         HepMC3::FourVector pos3=v3->position();
-        HepMC::FourVector pos2=HepMC::FourVector(pos3.x(),pos3.y(),pos3.pz(),pos3.t());
+        HepMC::FourVector pos2(pos3.x(),pos3.y(),pos3.z(),pos3.t());
         HepMC::GenVertex* v2= new HepMC::GenVertex(pos2);
         std::vector<double> vweights;
         if(v3->attribute_names().size())
@@ -66,7 +66,7 @@ HepMC::GenEvent* ConvertHepMCGenEvent_3to2(const HepMC3::GenEvent& evt)
     for (auto p3: evt.particles())
     {
         HepMC3::FourVector mom3=p3->momentum();
-        HepMC::FourVector mom2=HepMC::FourVector(mom3.px(),mom3.py(),mom3.pz(),mom3.e());
+        HepMC::FourVector mom2(mom3.px(),mom3.py(),mom3.pz(),mom3.e());
         HepMC::GenParticle* p2= new HepMC::GenParticle(mom2,p3->pid(),p3->status());
         if (p3->is_generated_mass_set())p2->set_generated_mass(p3->generated_mass());
         /** Converts HepMC3::Genevent to HepMC::Genevent */
@@ -213,7 +213,7 @@ HepMC3::GenEvent*  ConvertHepMCGenEvent_2to3(const HepMC::GenEvent& evt, std::sh
     for (auto v2=evt.vertices_begin(); v2!=evt.vertices_end(); v2++)
     {
         HepMC::FourVector pos2=(*v2)->position();
-        HepMC3::FourVector pos3=HepMC3::FourVector(pos2.x(),pos2.y(),pos2.pz(),pos2.t());
+        HepMC3::FourVector pos3(pos2.x(),pos2.y(),pos2.z(),pos2.t());
         auto v3=std::make_shared<HepMC3::GenVertex>(pos3);
         n->add_vertex(v3);
         vertexmap2to3[*v2]=v3;
@@ -224,7 +224,7 @@ HepMC3::GenEvent*  ConvertHepMCGenEvent_2to3(const HepMC::GenEvent& evt, std::sh
     {
 
         HepMC::FourVector mom2=(*p2)->momentum();
-        HepMC3::FourVector mom3=HepMC3::FourVector(mom2.px(),mom2.py(),mom2.pz(),mom2.e());
+        HepMC3::FourVector mom3(mom2.px(),mom2.py(),mom2.pz(),mom2.e());
         auto p3= std::make_shared<HepMC3::GenParticle>(mom3,(*p2)->pdg_id(),(*p2)->status());
         /// we set it always as there is no way to check if it is set
         p3->set_generated_mass((*p2)->generated_mass());
