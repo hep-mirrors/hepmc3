@@ -214,7 +214,7 @@ HepMC3::GenEvent*  ConvertHepMCGenEvent_2to3(const HepMC::GenEvent& evt, std::sh
     {
         HepMC::FourVector pos2=(*v2)->position();
         HepMC3::FourVector pos3=HepMC3::FourVector(pos2.x(),pos2.y(),pos2.pz(),pos2.t());
-        HepMC3::GenVertexPtr v3=std::make_shared<HepMC3::GenVertex>(pos3);
+        auto v3=std::make_shared<HepMC3::GenVertex>(pos3);
         n->add_vertex(v3);
         vertexmap2to3[*v2]=v3;
     }
@@ -225,7 +225,7 @@ HepMC3::GenEvent*  ConvertHepMCGenEvent_2to3(const HepMC::GenEvent& evt, std::sh
 
         HepMC::FourVector mom2=(*p2)->momentum();
         HepMC3::FourVector mom3=HepMC3::FourVector(mom2.px(),mom2.py(),mom2.pz(),mom2.e());
-        HepMC3::GenParticlePtr p3= std::make_shared<HepMC3::GenParticle>(mom3,(*p2)->pdg_id(),(*p2)->status());
+        auto p3= std::make_shared<HepMC3::GenParticle>(mom3,(*p2)->pdg_id(),(*p2)->status());
         /// we set it always as there is no way to check if it is set
         p3->set_generated_mass((*p2)->generated_mass());
         particlemap2to3[*p2]=p3;

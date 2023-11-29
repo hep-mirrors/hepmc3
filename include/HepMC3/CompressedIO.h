@@ -35,18 +35,18 @@ inline Compression detect_compression_type(char* in_buff_start, char* in_buff_en
 }
 constexpr int num_supported_compression_types = 0
 #if HEPMC3_Z_SUPPORT
-+1
+        +1
 #endif
 #if HEPMC3_LZMA_SUPPORT
-+1
+        +1
 #endif
 #if HEPMC3_BZ2_SUPPORT
-+1
+        +1
 #endif
 #if HEPMC3_ZSTD_SUPPORT
-+1
+        +1
 #endif
-;
+        ;
 constexpr std::array<Compression,num_supported_compression_types> supported_compression_types{
 #if HEPMC3_Z_SUPPORT
     Compression::z,
