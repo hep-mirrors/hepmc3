@@ -161,7 +161,7 @@ void GenEvent::remove_particle(GenParticlePtr p) {
             }
         }
 
-        std::sort(changed_attributes.begin(),changed_attributes.end(), [](const std::pair< int, std::shared_ptr<Attribute> > &a, const std::pair< int, std::shared_ptr<Attribute> > &b){ return a.first < b.first; });
+        std::sort(changed_attributes.begin(),changed_attributes.end(), [](const std::pair< int, std::shared_ptr<Attribute> > &a, const std::pair< int, std::shared_ptr<Attribute> > &b) { return a.first < b.first; });
         for ( const auto& val: changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first-1] = val.second;
@@ -231,7 +231,7 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
         }
 
         std::reverse(changed_attributes.begin(),changed_attributes.end());
-        std::sort(changed_attributes.begin(),changed_attributes.end(),[](const std::pair< int, std::shared_ptr<Attribute> > &a, const std::pair< int, std::shared_ptr<Attribute> > &b){ return a.first > b.first; });
+        std::sort(changed_attributes.begin(),changed_attributes.end(),[](const std::pair< int, std::shared_ptr<Attribute> > &a, const std::pair< int, std::shared_ptr<Attribute> > &b) { return a.first > b.first; });
         for ( const auto& val: changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first+1] = val.second;

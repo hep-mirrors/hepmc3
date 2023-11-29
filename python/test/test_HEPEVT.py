@@ -11,7 +11,6 @@ from pyHepMC3 import HepMC3 as hm
 
 
 def test_HEPEVT():
-
     # Build the graph, which will look like
     # Please note this is not physically meaningful event.
     #                       p7                   #
@@ -93,13 +92,13 @@ def test_HEPEVT():
     v4.add_particle_out(p8)
 
     evt.add_attribute("signal_process_vertex", hm.IntAttribute(v3.id()))
-    evt.set_beam_particles(p1,p2)
+    evt.set_beam_particles(p1, p2)
     # The event is complete, we now print it out
 
     hew = hm.HEPEVT_Wrapper_Runtime()
     hew.set_max_number_entries(200)
     hew.allocate_internal_storage()
-    hew.GenEvent_to_HEPEVT(evt);
+    hew.GenEvent_to_HEPEVT(evt)
     hew.print_hepevt()
     hew.print_hepevt_particle(2)
     evt.clear()

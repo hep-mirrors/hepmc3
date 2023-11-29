@@ -102,8 +102,8 @@ Writerprotobuf::Writerprotobuf(std::ostream &stream,
 Writerprotobuf::Writerprotobuf(std::shared_ptr<std::ostream> stream,
                                std::shared_ptr<GenRunInfo> run)
     : Writerprotobuf(*stream, run) {
-      m_shared_stream = stream;
-    }
+    m_shared_stream = stream;
+}
 
 void Writerprotobuf::start_file() {
     // The first 16 bytes of a HepMC protobuf file
