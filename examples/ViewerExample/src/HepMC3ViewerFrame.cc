@@ -65,8 +65,8 @@ static char*  write_event_to_dot(char* used_cursor,const HepMC3::GenEvent &evt,i
                 else  used_cursor += sprintf(used_cursor, "node [color=\"black\"];\n");
             }
         }
-        HepMC3::FourVector in=HepMC3::FourVector(0,0,0,0);
-        HepMC3::FourVector out=HepMC3::FourVector(0,0,0,0);
+        HepMC3::FourVector in(0,0,0,0);
+        HepMC3::FourVector out(0,0,0,0);
         double energy=0;
         for(auto p1: v->particles_in()  ) {
             in+=p1->momentum();
