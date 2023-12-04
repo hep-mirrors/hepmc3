@@ -271,8 +271,9 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     std::set_difference(all_ids.begin(), all_ids.end(), filled_ids.begin(), filled_ids.end(), std::inserter(diff, diff.begin()));
     auto it = diff.rbegin();
     //Set available ids to vertices sequentially.
+    /* FIXME
     for (const auto& v: evt.vertices()) if (v->id() == 0) { v->set_id(*it); it++;}
-
+     */
     return true;
 }
 
@@ -427,8 +428,9 @@ bool ReaderAscii::parse_vertex_information(GenEvent &evt, const char *buf) {
 
     evt.add_vertex(data);
     //Restore vertex id, as it is used to build connections inside event.
+            /* FIXME
     data->set_id(id);
-
+*/
     return true;
 }
 
@@ -466,7 +468,9 @@ bool ReaderAscii::parse_particle_information(GenEvent &evt, const char *buf) {
         vertex->add_particle_out(data);
         evt.add_vertex(vertex);
         //ID of this vertex is not explicitely set in the input. We set it to zero to prevent overlap with other ids. It will be restored later.
-        vertex->set_id(0);
+        /* FIXME
+         vertex->set_id(0);
+         */ 
     }
     // Parent object is vertex
     else {

@@ -57,9 +57,6 @@ public:
     /// @note This is not the same as id() in HepMC v2, which is now @c status()
     int id() const { return m_id; }
 
-    /// @brief set the vertex identifier
-    void set_id(int id);
-
     /// Get vertex status code
     int status() const { return m_data.status; }
     /// Set vertex status code
