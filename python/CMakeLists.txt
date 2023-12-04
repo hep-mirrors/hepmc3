@@ -138,6 +138,7 @@ if (RERUN_BINDER)
          set(_comp "") 
        endif()
       configure_file("${_comp}includes.hpp.in" "${_comp}includes.hpp" IMMEDIATE @ONLY)
+      message(STATUS "HepMC3 python:  ${autoBN${_comp}}")
       add_custom_command(
         OUTPUT  ${autoBN${_comp}}
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp src/pyHepMC3${_comp}.binder
@@ -156,6 +157,7 @@ if (RERUN_BINDER)
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM
       )
+      add_custom_target( bindersources${_comp} DEPENDS ${autoBN${_comp}})
     endforeach()
   else()
     message(FATAL_ERROR "HepMC3  python: binder not found!  Automatic generatin of code for python bindings is not possible.")
@@ -273,7 +275,9 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION}
       PROPERTIES PREFIX "" OUTPUT_NAME pyHepMC3${_comp}.pypy-${PyPy_PyPy_VERSION})
     endif()
-  
+    if (TARGET bindersources${_comp})
+    add_dependencies( ${IMPL}pyHepMC3${_comp}${Python_VERSION} bindersources${_comp})
+    endif()
     set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION}
         PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/${_comp}/$<0:>
