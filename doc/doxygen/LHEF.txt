@@ -122,7 +122,7 @@ and for each process <tt>IPR</tt>:
   </li>
   <li>
     <tt>XMAXUP</tt>: the overestimated cross section such that the
-    sum over the individual weights in each <tt><event></tt> times
+    sum over the individual weights in each <tt>&lt;event&gt;</tt> times
     this file times <tt>XMAXUP</tt> equals <tt>XSECUP</tt> times
     the number of events;
   </li>
@@ -221,18 +221,18 @@ optional with a default value (D).
 
 @subsection LHEF-init Standardised tags in the init block
 
-The <tt><init></tt> block contains information about the full run
+The <tt>&lt;init&gt;</tt> block contains information about the full run
 (similar to the information contained in HepMC3::GenRunInfo). The
 following tags are defined.
 
 <ul>
-  <li><b><tt><generator></tt></b> (optional, multiple, see LHEF::HEPRUP::generators)<br> For easy
+  <li><b><tt>&lt;generator&gt;</tt></b> (optional, multiple, see LHEF::HEPRUP::generators)<br> For easy
     access to the generator(s) used to generate this file. An
     optional attribute <tt>version</tt> can be given with a string
     containg a version string. The content of the tag can include
     any generator specific information.
   </li>
-  <li><b><tt><xsecinfo></tt></b> (required, multiple, see LHEF::HEPRUP::xsecinfos)<br>
+  <li><b><tt>&lt;xsecinfo&gt;</tt></b> (required, multiple, see LHEF::HEPRUP::xsecinfos)<br>
     The information in the HEPRUP common block is in principle
     sufficient to figure out the cross sections of the processes
     involved. However, the way things are specified is a bit
@@ -283,19 +283,19 @@ following tags are defined.
       </li>
     </ul>
   </li>
-  <li><b><tt><cutsinfo></tt></b>(optional, multiple, see LHEF::HEPRUP::cuts)<br>
+  <li><b><tt>&lt;cutsinfo&gt;</tt></b>(optional, multiple, see LHEF::HEPRUP::cuts)<br>
     Used by a generator to supply information about the cuts used
     in the generation. Inside this tag any number of <tt>cut</tt>
     and <tt>ptype</tt> tags can be supplied.
   </li>
-  <li><b><tt><ptype></tt></b>(optional, multiple, see LHEF::HEPRUP::ptypes)<br>
+  <li><b><tt>&lt;ptype&gt;</tt></b>(optional, multiple, see LHEF::HEPRUP::ptypes)<br>
     To be used inside the <tt>cutinfo</tt> tag to define a group
     of particles to which a cut can be applied. Its contents
     should be a white-space separated list of PDG particle
     codes. The only attribute is <tt>name</tt> (R): the string
     used to represent this <tt>ptype</tt> in a <tt>cut</tt> .
   </li>
-  <li><b><tt><cut></tt></b>(optional, multiple, see LHEF::HEPRUP::cuts)<br>
+  <li><b><tt>&lt;cut&gt;</tt></b>(optional, multiple, see LHEF::HEPRUP::cuts)<br>
 
     This tag has information of a particular cut used. The information
     needed is which particle(s) are affected, what variable is used
@@ -344,7 +344,7 @@ following tags are defined.
       </li>
     </ul>
   </li>
-  <li><b><tt><procinfo></tt></b>(optional, multiple, see LHEF::HEPRUP::procinfo)<br>
+  <li><b><tt>&lt;procinfo&gt;</tt></b>(optional, multiple, see LHEF::HEPRUP::procinfo)<br>
     For each process number used in the LPRUP variable in the HEPEUP
     common block we can have additional information given in the
     following attributes:
@@ -378,7 +378,7 @@ following tags are defined.
     </ul>
     The content of this tag is a string with arbitrary information about the process.
   </li>
-  <li><b><tt><mergeinfo></tt></b>(DEPRECATED, multiple, see LHEF::HEPRUP::mergeinfo)<br>
+  <li><b><tt>&lt;mergeinfo&gt;</tt></b>(DEPRECATED, multiple, see LHEF::HEPRUP::mergeinfo)<br>
     For some merging schemes (eg. for CKKW) it is possible to reweight the
     the events with Sudakov form factors already in the MEG. If this has
     been done the content of the mergetype tag for the corresponding
@@ -400,7 +400,7 @@ following tags are defined.
       </li>
     </ul>
   </li>
-  <li><b><tt><eventfile></tt></b>(optional, multiple, see LHEF::HEPRUP::eventfiles)<br>
+  <li><b><tt>&lt;eventfile&gt;</tt></b>(optional, multiple, see LHEF::HEPRUP::eventfiles)<br>
     Sometimes it is desirable to have the events in a separate file(s)
     from the <tt>init</tt> block, eg. when the event files become
     extremely long or when one wants to write the <tt>init</tt> block
@@ -422,7 +422,7 @@ following tags are defined.
       </li>
     </ul>
   </li>
-  <li><b><tt><weightinfo></tt></b>(optional, multiple, see LHEF::HEPRUP::weightinfo)<br>
+  <li><b><tt>&lt;weightinfo&gt;</tt></b>(optional, multiple, see LHEF::HEPRUP::weightinfo)<br>
     When using multiple weights for events, each weight is given an
     index and a name using the <tt>weightinfo</tt> tag. The default
     weight (as given by the LHEF:HEPEUP::XWGTUP variable) is always
@@ -452,7 +452,7 @@ following tags are defined.
       </li>
     </ul>
   </li>
-  <li><b><tt><weightgroup></tt></b>(optional, multiple, see
+  <li><b><tt>&lt;weightgroup&gt;</tt></b>(optional, multiple, see
     LHEF::HEPRUP::weightgroup)<br> This tag can be used to
     group <tt>weightinfo</tt> tags together.  The only well defined
     attribute is
@@ -462,7 +462,7 @@ following tags are defined.
     included to include information about the weight variation used
     and is available in LHEF::WeightGroup::attributes.
   </li>
-  <li><b><tt><initrwgt></tt></b>(optional, multiple, see LHEF::HEPRUP::weightinfo)<br>
+  <li><b><tt>&lt;initrwgt&gt;</tt></b>(optional, multiple, see LHEF::HEPRUP::weightinfo)<br>
     Due to an initial confusion some generators uses this tag instead
     of the <tt>weightinfo</tt> tag. It accepts the same attributes
     as <tt>weightinfo</tt>, except that the name attribute is
@@ -500,25 +500,25 @@ corresponding to the original Les Houches Accord Fortran common
 block. Here is a list of additional tags that may be provided.
 
 <ul>
-  <li><b><tt><weights></tt></b> (optional, see LHEF::HEPEUP::weights)<br>
+  <li><b><tt>&lt;weights&gt;</tt></b> (optional, see LHEF::HEPEUP::weights)<br>
     This tag should contain a list of weights or the events given in
     the order they are defined by the <tt>weightinfo</tt> tags in the <tt>init</tt>
     block. If for some obscure reason a weight is absent, it should be
     anyway be included as a zero weight. Note that the weight for the
     nominal event is still given by <tt>XWGTUP</tt>. This tag has no attributes.
   </li>
-  <li><b><tt><rwgt></tt></b> (optional, see LHEF::HEPEUP::weights)<br>
+  <li><b><tt>&lt;rwgt&gt;</tt></b> (optional, see LHEF::HEPEUP::weights)<br>
     For weights declared in <tt>initrwgt</tt> this should contain the
     weights for this event. The difference wrt. the <tt>weights</tt>
     tag is that each weight needs to be given in an <tt>wgt</tt> tag.
   </li>
-  <li><b><tt><wgt></tt></b> (optional, see LHEF::HEPEUP::weights)<br>
+  <li><b><tt>&lt;wgt&gt;</tt></b> (optional, see LHEF::HEPEUP::weights)<br>
     This tag contains a single weight correspoding to a weight
     declared in the <tt>initrwgt</tt> tag. The only attribute is
     the <tt>id</tt> of the weight defined in the
     corresponing <tt>weightinfo</tt> tag.
   </li>
-  <li><b><tt><scales></tt></b> (optional, see LHEF::HEPEUP::scales)<br>
+  <li><b><tt>&lt;scales&gt;</tt></b> (optional, see LHEF::HEPEUP::scales)<br>
     Since it is often necessary to define more than one scale in an
     event, this tag is provided to specify these. The scales are given
     as the followin attributes:
@@ -537,9 +537,9 @@ block. Here is a list of additional tags that may be provided.
     Also other attributes are allowed and will be stored in
     LHEF::Scales::attributes.<br>
   </li>
-  <li><b><tt><scale></tt></b> (optional inside a <tt><scales></tt>
+  <li><b><tt>&lt;scale&gt;</tt></b> (optional inside a <tt>&lt;scales&gt;</tt>
     tag)<br> It is also possible to specify an individual scale for
-    any particle in the event in a <tt><scale></tt> tag. This is
+    any particle in the event in a <tt>&lt;scale&gt;</tt> tag. This is
     typically used to define a starting scale for a parton shower in
     resonance decays. This tag can also be used to specify the scale
     of a set of particle types. The following attributes can be given:

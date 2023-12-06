@@ -4,7 +4,7 @@ import sys, os, math
 
 def python_label():
     v = sys.version_info
-    a =  str(v[0]) + "." + str(v[1]) + "." + str(v[2])
+    a = str(v[0]) + "." + str(v[1]) + "." + str(v[2])
     print(a)
     return a
 

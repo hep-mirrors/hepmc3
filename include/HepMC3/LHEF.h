@@ -196,7 +196,7 @@ struct XMLTag {
    * by leftover (if not null).
    */
   static std::vector<XMLTag*> findXMLTags(std::string str,
-                      std::string * leftover = 0) {
+                                          std::string * leftover = 0) {
     std::vector<XMLTag*> tags;
     pos_t curr = 0;
 
@@ -207,26 +207,26 @@ struct XMLTag {
 
       // Check for comments
       if ( begin != end && str.find("<!--", curr) == begin ) {
-    pos_t endcom = str.find("-->", begin);
-    tags.push_back(new XMLTag());
-    if ( endcom == end ) {
-      tags.back()->contents = str.substr(curr);
-      if ( leftover ) *leftover += str.substr(curr);
-      return tags;
-    }
-    tags.back()->contents = str.substr(curr, endcom - curr);
-    if ( leftover ) *leftover += str.substr(curr, endcom - curr);
-    curr = endcom;
-    continue;
+        pos_t endcom = str.find("-->", begin);
+        tags.push_back(new XMLTag());
+        if ( endcom == end ) {
+          tags.back()->contents = str.substr(curr);
+          if ( leftover ) *leftover += str.substr(curr);
+          return tags;
+        }
+        tags.back()->contents = str.substr(curr, endcom - curr);
+        if ( leftover ) *leftover += str.substr(curr, endcom - curr);
+        curr = endcom;
+        continue;
       }
 
       if ( begin != curr ) {
-    tags.push_back(new XMLTag());
-    tags.back()->contents = str.substr(curr, begin - curr);
-    if ( leftover ) *leftover += str.substr(curr, begin - curr);
+        tags.push_back(new XMLTag());
+        tags.back()->contents = str.substr(curr, begin - curr);
+        if ( leftover ) *leftover += str.substr(curr, begin - curr);
       }
       if ( begin == end || begin > str.length() - 3 || str[begin + 1] == '/' )
-    return tags;
+        return tags;
 
       pos_t close = str.find(">", curr);
       if ( close == end ) return tags;
@@ -238,30 +238,30 @@ struct XMLTag {
 
       while ( true ) {
 
-    // Now skip some white space to see if we can find an attribute.
-    curr = str.find_first_not_of(" \t\n", curr);
-    if ( curr == end || curr >= close ) break;
+        // Now skip some white space to see if we can find an attribute.
+        curr = str.find_first_not_of(" \t\n", curr);
+        if ( curr == end || curr >= close ) break;
 
-    pos_t tend = str.find_first_of("= \t\n", curr);
-    if ( tend == end || tend >= close ) break;
+        pos_t tend = str.find_first_of("= \t\n", curr);
+        if ( tend == end || tend >= close ) break;
 
-    std::string namex = str.substr(curr, tend - curr);
-    curr = str.find("=", curr) + 1;
+        std::string namex = str.substr(curr, tend - curr);
+        curr = str.find("=", curr) + 1;
 
-    // OK now find the beginning and end of the atribute.
-    curr = str.find_first_of("\"'", curr);
-    if ( curr == end || curr >= close ) break;
-    char quote = str[curr];
-    pos_t bega = ++curr;
-    curr = str.find(quote, curr);
-    while ( curr != end && str[curr - 1] == '\\' )
-      curr = str.find(quote, curr + 1);
+        // OK now find the beginning and end of the atribute.
+        curr = str.find_first_of("\"'", curr);
+        if ( curr == end || curr >= close ) break;
+        char quote = str[curr];
+        pos_t bega = ++curr;
+        curr = str.find(quote, curr);
+        while ( curr != end && str[curr - 1] == '\\' )
+          curr = str.find(quote, curr + 1);
 
-    std::string value = str.substr(bega, curr == end? end: curr - bega);
+        std::string value = str.substr(bega, curr == end? end: curr - bega);
 
-    tags.back()->attr[namex] = value;
+        tags.back()->attr[namex] = value;
 
-    ++curr;
+        ++curr;
 
       }
 
@@ -270,11 +270,11 @@ struct XMLTag {
 
       pos_t endtag = str.find("</" + tags.back()->name + ">", curr);
       if ( endtag == end ) {
-    tags.back()->contents = str.substr(curr);
-    curr = endtag;
+        tags.back()->contents = str.substr(curr);
+        curr = endtag;
       } else {
-    tags.back()->contents = str.substr(curr, endtag - curr);
-    curr = endtag + tags.back()->name.length() + 3;
+        tags.back()->contents = str.substr(curr, endtag - curr);
+        curr = endtag + tags.back()->name.length() + 3;
       }
 
       std::string leftovers;
@@ -306,7 +306,7 @@ struct XMLTag {
     }
     os << "<" << name;
     for ( AttributeMap::const_iterator it = attr.begin();
-      it != attr.end(); ++it )
+          it != attr.end(); ++it )
       os << oattr(it->first, it->second);
     if ( contents.empty() && tags.empty() ) {
       os << "/>" << std::endl;
@@ -333,7 +333,7 @@ inline std::string hashline(std::string s) {
     if ( ss.empty() ) continue;
     if ( ss.find_first_not_of(" \t") == std::string::npos ) continue;
     if ( ss.find('#') == std::string::npos ||
-     ss.find('#') != ss.find_first_not_of(" \t") ) ss = "# " + ss;
+         ss.find('#') != ss.find_first_not_of(" \t") ) ss = "# " + ss;
     ret += ss + '\n';
   }
   return ret;
@@ -434,7 +434,7 @@ struct TagBase {
    */
   void printattrs(std::ostream & file) const {
     for ( AttributeMap::const_iterator it = attributes.begin();
-      it != attributes.end(); ++ it )
+          it != attributes.end(); ++ it )
       file << oattr(it->first, it->second);
   }
 
@@ -525,12 +525,12 @@ struct XSecInfo : public TagBase {
       negweights(false), varweights(false) {
     if ( !getattr("neve", neve) )
       throw std::runtime_error("Found xsecinfo tag without neve attribute "
-                   "in Les Houches Event File.");
+                               "in Les Houches Event File.");
     ntries = neve;
     getattr("ntries", ntries);
     if ( !getattr("totxsec", totxsec) )
       throw std::runtime_error("Found xsecinfo tag without totxsec "
-                   "attribute in Les Houches Event File.");
+                               "attribute in Les Houches Event File.");
     getattr("xsecerr", xsecerr);
     getattr("weightname", weightname);
     getattr("maxweight", maxweight);
@@ -628,7 +628,7 @@ struct EventFile : public TagBase {
     : TagBase(tag.attr, tag.contents), filename(""), neve(-1), ntries(-1) {
     if ( !getattr("name", filename) )
       throw std::runtime_error("Found eventfile tag without name attribute "
-                   "in Les Houches Event File.");
+                               "in Les Houches Event File.");
     getattr("neve", neve);
     ntries = neve;
     getattr("ntries", ntries);
@@ -672,7 +672,7 @@ struct Cut : public TagBase {
    * Intitialize default values.
    */
   Cut(): min(-0.99*std::numeric_limits<double>::max()),
-     max(0.99*std::numeric_limits<double>::max()) {}
+         max(0.99*std::numeric_limits<double>::max()) {}
 
   /**
    * Create from XML tag.
@@ -684,26 +684,26 @@ struct Cut : public TagBase {
       max(0.99*std::numeric_limits<double>::max()) {
     if ( !getattr("type", type) )
       throw std::runtime_error("Found cut tag without type attribute "
-                   "in Les Houches file");
+                               "in Les Houches file");
     long tmp;
     if ( tag.getattr("p1", np1) ) {
       if ( ptypes.find(np1) != ptypes.end() ) {
-    p1 =  ptypes.find(np1)->second;
-    attributes.erase("p1");
+        p1 =  ptypes.find(np1)->second;
+        attributes.erase("p1");
       } else {
-    getattr("p1", tmp);
-    p1.insert(tmp);
-    np1 = "";
+        getattr("p1", tmp);
+        p1.insert(tmp);
+        np1 = "";
       }
     }
     if ( tag.getattr("p2", np2) ) {
       if ( ptypes.find(np2) != ptypes.end() ) {
-    p2 =  ptypes.find(np2)->second;
-    attributes.erase("p2");
+        p2 =  ptypes.find(np2)->second;
+        attributes.erase("p2");
       } else {
-    getattr("p2", tmp);
-    p2.insert(tmp);
-    np2 = "";
+        getattr("p2", tmp);
+        p2.insert(tmp);
+        np2 = "";
       }
     }
 
@@ -711,7 +711,7 @@ struct Cut : public TagBase {
     iss >> min;
     if ( iss >> max ) {
       if ( min >= max )
-    min = -0.99*std::numeric_limits<double>::max();
+        min = -0.99*std::numeric_limits<double>::max();
     } else
       max = 0.99*std::numeric_limits<double>::max();
   }
@@ -763,57 +763,57 @@ struct Cut : public TagBase {
    * the cut defined in this event.
    */
   bool passCuts(const std::vector<long> & id,
-        const std::vector< std::vector<double> >& p ) const {
+                const std::vector< std::vector<double> >& p ) const {
     if ( ( type == "m" && !p2.size() ) || type == "kt" || type == "eta" ||
-     type == "y" || type == "E" ) {
+         type == "y" || type == "E" ) {
       for ( int i = 0, N = id.size(); i < N; ++i )
-    if ( match(id[i]) ) {
-      if ( type == "m" ) {
-        double v = p[i][4]*p[i][4] - p[i][3]*p[i][3] - p[i][2]*p[i][2]
-          - p[i][1]*p[i][1];
-        v = v >= 0.0? std::sqrt(v): -std::sqrt(-v);
-        if ( outside(v) ) return false;
-      }
-      else if ( type == "kt" ) {
-        if ( outside(std::sqrt(p[i][2]*p[i][2] + p[i][1]*p[i][1])) )
-          return false;
-      }
-      else if ( type == "E" ) {
-        if ( outside(p[i][4]) ) return false;
-      }
-      else if ( type == "eta" ) {
-        if ( outside(eta(p[i])) ) return false;
-      }
-      else if ( type == "y" ) {
-        if ( outside(rap(p[i])) ) return false;
-      }
-    }
+        if ( match(id[i]) ) {
+          if ( type == "m" ) {
+            double v = p[i][4]*p[i][4] - p[i][3]*p[i][3] - p[i][2]*p[i][2]
+              - p[i][1]*p[i][1];
+            v = v >= 0.0? std::sqrt(v): -std::sqrt(-v);
+            if ( outside(v) ) return false;
+          }
+          else if ( type == "kt" ) {
+            if ( outside(std::sqrt(p[i][2]*p[i][2] + p[i][1]*p[i][1])) )
+              return false;
+          }
+          else if ( type == "E" ) {
+            if ( outside(p[i][4]) ) return false;
+          }
+          else if ( type == "eta" ) {
+            if ( outside(eta(p[i])) ) return false;
+          }
+          else if ( type == "y" ) {
+            if ( outside(rap(p[i])) ) return false;
+          }
+        }
     }
     else if ( type == "m"  || type == "deltaR" ) {
       for ( int i = 1, N = id.size(); i < N; ++i )
-    for ( int j = 0; j < i; ++j )
-      if ( match(id[i], id[j]) || match(id[j], id[i]) ) {
-        if ( type == "m" ) {
-          double v = (p[i][4] + p[j][4])*(p[i][4] + p[j][4])
-        - (p[i][3] + p[j][3])*(p[i][3] + p[j][3])
-        - (p[i][2] + p[j][2])*(p[i][2] + p[j][2])
-        - (p[i][1] + p[j][1])*(p[i][1] + p[j][1]);
-          v = v >= 0.0? std::sqrt(v): -std::sqrt(-v);
-          if ( outside(v) ) return false;
-        }
-        else if ( type == "deltaR" ) {
-          if ( outside(deltaR(p[i], p[j])) ) return false;
-        }
-      }
+        for ( int j = 0; j < i; ++j )
+          if ( match(id[i], id[j]) || match(id[j], id[i]) ) {
+            if ( type == "m" ) {
+              double v = (p[i][4] + p[j][4])*(p[i][4] + p[j][4])
+                - (p[i][3] + p[j][3])*(p[i][3] + p[j][3])
+                - (p[i][2] + p[j][2])*(p[i][2] + p[j][2])
+                - (p[i][1] + p[j][1])*(p[i][1] + p[j][1]);
+              v = v >= 0.0? std::sqrt(v): -std::sqrt(-v);
+              if ( outside(v) ) return false;
+            }
+            else if ( type == "deltaR" ) {
+              if ( outside(deltaR(p[i], p[j])) ) return false;
+            }
+          }
     }
     else if ( type == "ETmiss" ) {
       double x = 0.0;
       double y = 0.0;
       for ( int i = 0, N = id.size(); i < N; ++i )
-    if ( match(id[i]) && !match(0, id[i]) ) {
-      x += p[i][1];
-      y += p[i][2];
-    }
+        if ( match(id[i]) && !match(0, id[i]) ) {
+          x += p[i][1];
+          y += p[i][2];
+        }
       if ( outside(std::sqrt(x*x + y*y)) ) return false;
     }
     else if ( type == "HT" ) {
@@ -834,7 +834,7 @@ struct Cut : public TagBase {
     if ( pt2 != 0.0 ) {
       double dum = std::sqrt(pt2 + p[3]*p[3]) + p[3];
       if ( dum != 0.0 )
-    return std::log(dum/std::sqrt(pt2));
+        return std::log(dum/std::sqrt(pt2));
     }
     return p[3] < 0.0? -std::numeric_limits<double>::max():
       std::numeric_limits<double>::max();
@@ -848,7 +848,7 @@ struct Cut : public TagBase {
     if ( pt2 != 0.0 ) {
       double dum = std::sqrt(pt2 + p[3]*p[3]) + p[3];
       if ( dum != 0.0 )
-    return std::log(dum/std::sqrt(pt2));
+        return std::log(dum/std::sqrt(pt2));
     }
     return p[3] < 0.0? -std::numeric_limits<double>::max():
       std::numeric_limits<double>::max();
@@ -858,7 +858,7 @@ struct Cut : public TagBase {
    * Return the delta-R of a particle pair with momenta \a p1 and \a p2.
    */
   static double deltaR(const std::vector<double> & p1,
-               const std::vector<double> & p2) {
+                       const std::vector<double> & p2) {
     double deta = eta(p1) - eta(p2);
     double dphi = std::atan2(p1[1], p1[2]) - std::atan2(p2[1], p2[2]);
     if ( dphi > M_PI ) dphi -= 2.0*M_PI;
@@ -1045,7 +1045,7 @@ struct WeightInfo : public TagBase {
    * Constructors
    */
   WeightInfo(): inGroup(-1), isrwgt(false),
-        muf(1.0), mur(1.0), pdf(0), pdf2(0) {}
+                muf(1.0), mur(1.0), pdf(0), pdf2(0) {}
 
   /**
    * Construct from the XML tag
@@ -1061,7 +1061,7 @@ struct WeightInfo : public TagBase {
     if ( isrwgt )
       getattr("id", name);
     else
-      getattr("name",  name);
+      getattr("name", name);
   }
 
   /**
@@ -1142,10 +1142,10 @@ struct WeightGroup : public TagBase {
     getattr("combine", combine);
     for ( int i = 0, N = tag.tags.size(); i < N; ++i ) {
       if ( tag.tags[i]->name == "weight" ||
-       tag.tags[i]->name == "weightinfo" ) {
-    WeightInfo wi(*tag.tags[i]);
-    wi.inGroup = groupIndex;
-    wiv.push_back(wi);
+           tag.tags[i]->name == "weightinfo" ) {
+        WeightInfo wi(*tag.tags[i]);
+        wi.inGroup = groupIndex;
+        wiv.push_back(wi);
       }
     }
   }
@@ -1325,7 +1325,7 @@ struct Scale : public TagBase {
     : TagBase(tag.attr, tag.contents),stype("veto"), emitter(0) {
     if ( !getattr("stype", stype) )
       throw std::runtime_error("Found scale tag without stype attribute "
-                   "in Les Houches Event File.");
+                               "in Les Houches Event File.");
     std::string pattr;
     if ( getattr("pos", pattr) ) {
       std::istringstream pis(pattr);
@@ -1542,15 +1542,16 @@ struct PDFInfo : public TagBase {
   /**
    * Initialize default values.
    */
-  PDFInfo(double defscale = -1.0): p1(0), p2(0), x1(-1.0), x2(-1.0),
-         xf1(-1.0),  xf2(-1.0), scale(defscale), SCALUP(defscale) {}
+  PDFInfo(double defscale = -1.0)
+    : p1(0), p2(0), x1(-1.0), x2(-1.0), xf1(-1.0), xf2(-1.0),
+      scale(defscale), SCALUP(defscale) {}
 
   /**
    * Create from XML tag.
    */
   PDFInfo(const XMLTag & tag, double defscale = -1.0)
     : TagBase(tag.attr, tag.contents),
-      p1(0), p2(0), x1(-1.0), x2(-1.0), xf1(-1.0),  xf2(-1.0),
+      p1(0), p2(0), x1(-1.0), x2(-1.0), xf1(-1.0), xf2(-1.0),
       scale(defscale), SCALUP(defscale) {
     getattr("scale", scale);
     getattr("p1", p1);
@@ -1659,17 +1660,17 @@ public:
     // The first (anonymous) tag should just be the init block.
     std::istringstream iss(tags[0]->contents);
     if ( !( iss >> IDBMUP.first >> IDBMUP.second >> EBMUP.first >> EBMUP.second
-        >> PDFGUP.first >> PDFGUP.second >> PDFSUP.first >> PDFSUP.second
-        >> IDWTUP >> NPRUP ) ) {
+            >> PDFGUP.first >> PDFGUP.second >> PDFSUP.first >> PDFSUP.second
+            >> IDWTUP >> NPRUP ) ) {
       throw std::runtime_error("Could not parse init block "
-                   "in Les Houches Event File.");
+                               "in Les Houches Event File.");
     }
     resize();
 
     for ( int i = 0; i < NPRUP; ++i ) {
       if ( !( iss >> XSECUP[i] >> XERRUP[i] >> XMAXUP[i] >> LPRUP[i] ) ) {
-      throw std::runtime_error("Could not parse processes in init block "
-                   "in Les Houches Event File.");
+        throw std::runtime_error("Could not parse processes in init block "
+                                 "in Les Houches Event File.");
       }
     }
 
@@ -1679,57 +1680,57 @@ public:
       if ( tag.name.empty() ) junk += tag.contents;
 
       if ( tag.name == "initrwgt" ) {
-    for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
-      if ( tag.tags[j]->name == "weightgroup" )
-        weightgroup.push_back(WeightGroup(*tag.tags[j], weightgroup.size(),
-                          weightinfo));
-      if ( tag.tags[j]->name == "weight" )
-        weightinfo.push_back(WeightInfo(*tag.tags[j]));
+        for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
+          if ( tag.tags[j]->name == "weightgroup" )
+            weightgroup.push_back(WeightGroup(*tag.tags[j], weightgroup.size(),
+                                              weightinfo));
+          if ( tag.tags[j]->name == "weight" )
+            weightinfo.push_back(WeightInfo(*tag.tags[j]));
 
-    }
+        }
       }
       if ( tag.name == "weightinfo" ) {
-    weightinfo.push_back(WeightInfo(tag));
+        weightinfo.push_back(WeightInfo(tag));
       }
       if ( tag.name == "weightgroup" ) {
-    weightgroup.push_back(WeightGroup(tag, weightgroup.size(),
-                      weightinfo));
+        weightgroup.push_back(WeightGroup(tag, weightgroup.size(),
+                                          weightinfo));
       }
       if ( tag.name == "eventfiles" ) {
-    for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
-      XMLTag & eftag = *tag.tags[j];
+        for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
+          XMLTag & eftag = *tag.tags[j];
           if ( eftag.name == "eventfile" )
             eventfiles.push_back(EventFile(eftag));
         }
       }
       if ( tag.name == "xsecinfo" ) {
-    XSecInfo xsecinfo = XSecInfo(tag);
+        XSecInfo xsecinfo(tag);
         xsecinfos[xsecinfo.weightname] = xsecinfo;
       }
       if ( tag.name == "generator" ) {
-    generators.push_back(Generator(tag));
+        generators.push_back(Generator(tag));
       }
       else if ( tag.name == "cutsinfo" ) {
-    for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
-      XMLTag & ctag = *tag.tags[j];
+        for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
+          XMLTag & ctag = *tag.tags[j];
 
-      if ( ctag.name == "ptype" ) {
-        std::string tname = ctag.attr["name"];
-        long id;
-        std::istringstream isss(ctag.contents);
-        while ( isss >> id ) ptypes[tname].insert(id);
-      }
-      else if ( ctag.name == "cut" )
-        cuts.push_back(Cut(ctag, ptypes));
-    }
+          if ( ctag.name == "ptype" ) {
+            std::string tname = ctag.attr["name"];
+            long id;
+            std::istringstream isss(ctag.contents);
+            while ( isss >> id ) ptypes[tname].insert(id);
+          }
+          else if ( ctag.name == "cut" )
+            cuts.push_back(Cut(ctag, ptypes));
+        }
       }
       else if ( tag.name == "procinfo" ) {
-    ProcInfo proc(tag);
-    procinfo[proc.iproc] = proc;
+        ProcInfo proc(tag);
+        procinfo[proc.iproc] = proc;
       }
       else if ( tag.name == "mergeinfo" ) {
-    MergeInfo merge(tag);
-    mergeinfo[merge.iproc] = merge;
+        MergeInfo merge(tag);
+        mergeinfo[merge.iproc] = merge;
       }
 
     }
@@ -1753,7 +1754,7 @@ public:
     if ( i < 0 || i >= (int)weightinfo.size() ) return name;
     if ( weightinfo[i].inGroup >= 0 )
       name = weightgroup[weightinfo[i].inGroup].type + "/"
-    +  weightgroup[weightinfo[i].inGroup].combine + "/";
+        +  weightgroup[weightinfo[i].inGroup].combine + "/";
     name += weightinfo[i].name;
     return name;
   }
@@ -1767,22 +1768,22 @@ public:
     file << std::setprecision(dprec);
 
     file << "<init>\n"
-     << " " << std::setw(8) << IDBMUP.first
-     << " " << std::setw(8) << IDBMUP.second
-     << " " << std::setw(14) << EBMUP.first
-     << " " << std::setw(14) << EBMUP.second
-     << " " << std::setw(4) << PDFGUP.first
-     << " " << std::setw(4) << PDFGUP.second
-     << " " << std::setw(4) << PDFSUP.first
-     << " " << std::setw(4) << PDFSUP.second
-     << " " << std::setw(4) << IDWTUP
-     << " " << std::setw(4) << NPRUP << std::endl;
+         << " " << std::setw(8) << IDBMUP.first
+         << " " << std::setw(8) << IDBMUP.second
+         << " " << std::setw(14) << EBMUP.first
+         << " " << std::setw(14) << EBMUP.second
+         << " " << std::setw(4) << PDFGUP.first
+         << " " << std::setw(4) << PDFGUP.second
+         << " " << std::setw(4) << PDFSUP.first
+         << " " << std::setw(4) << PDFSUP.second
+         << " " << std::setw(4) << IDWTUP
+         << " " << std::setw(4) << NPRUP << std::endl;
 
     for ( int i = 0; i < NPRUP; ++i )
       file << " " << std::setw(14) << XSECUP[i]
-       << " " << std::setw(14) << XERRUP[i]
-       << " " << std::setw(14) << XMAXUP[i]
-       << " " << std::setw(6) << LPRUP[i] << std::endl;
+           << " " << std::setw(14) << XERRUP[i]
+           << " " << std::setw(14) << XMAXUP[i]
+           << " " << std::setw(6) << LPRUP[i] << std::endl;
 
     for ( int i = 0, N = generators.size(); i < N; ++i )
       generators[i].print(file);
@@ -1803,48 +1804,48 @@ public:
       file << "<cutsinfo>" << std::endl;
 
       for ( std::map<std::string, std::set<long> >::const_iterator ptit =
-          ptypes.begin(); ptit !=  ptypes.end(); ++ptit ) {
-    file << "<ptype" << oattr("name", ptit->first) << ">";
-    for ( std::set<long>::const_iterator it = ptit->second.begin();
-          it != ptit->second.end(); ++it )
-      file << " " << *it;
-    file << "</ptype>" << std::endl;
+              ptypes.begin(); ptit !=  ptypes.end(); ++ptit ) {
+        file << "<ptype" << oattr("name", ptit->first) << ">";
+        for ( std::set<long>::const_iterator it = ptit->second.begin();
+              it != ptit->second.end(); ++it )
+          file << " " << *it;
+        file << "</ptype>" << std::endl;
       }
 
       for ( int i = 0, N = cuts.size(); i < N; ++i )
-    cuts[i].print(file);
+        cuts[i].print(file);
       file << "</cutsinfo>" << std::endl;
     }
 
     for ( std::map<long,ProcInfo>::const_iterator it = procinfo.begin();
-      it != procinfo.end(); ++it )
+          it != procinfo.end(); ++it )
       it->second.print(file);
 
     for ( std::map<long,MergeInfo>::const_iterator it = mergeinfo.begin();
-      it != mergeinfo.end(); ++it )
+          it != mergeinfo.end(); ++it )
       it->second.print(file);
 
     bool isrwgt = false;
     int ingroup = -1;
     for ( int i = 0, N = weightinfo.size(); i < N; ++i ) {
       if ( weightinfo[i].isrwgt ) {
-    if ( !isrwgt ) file << "<initrwgt>\n";
-    isrwgt = true;
+        if ( !isrwgt ) file << "<initrwgt>\n";
+        isrwgt = true;
       } else {
-    if ( isrwgt ) file << "</initrwgt>\n";
-    isrwgt = false;
+        if ( isrwgt ) file << "</initrwgt>\n";
+        isrwgt = false;
       }
       int group = weightinfo[i].inGroup;
       if ( group != ingroup ) {
-    if ( ingroup != -1 ) file << "</weightgroup>\n";
-    if ( group != -1 ) {
-      file << "<weightgroup"
-           << oattr("type", weightgroup[group].type);
-      if ( !weightgroup[group].combine.empty() )
-        file << oattr("combine", weightgroup[group].combine);
-      file << ">\n";
-    }
-    ingroup = group;
+        if ( ingroup != -1 ) file << "</weightgroup>\n";
+        if ( group != -1 ) {
+          file << "<weightgroup"
+               << oattr("type", weightgroup[group].type);
+          if ( !weightgroup[group].combine.empty() )
+            file << oattr("combine", weightgroup[group].combine);
+          file << ">\n";
+        }
+        ingroup = group;
       }
       weightinfo[i].print(file);
     }
@@ -2203,7 +2204,7 @@ public:
 
     if ( heprup->NPRUP < 0 )
       throw std::runtime_error("Tried to read events but no processes defined "
-                   "in init block of Les Houches file.");
+                               "in init block of Les Houches file.");
 
     std::vector<XMLTag*> tags = tagin.tags;
 
@@ -2229,11 +2230,11 @@ public:
     // Read all particle lines.
     for ( int i = 0; i < NUP; ++i ) {
       if ( !( iss >> IDUP[i] >> ISTUP[i] >> MOTHUP[i].first >> MOTHUP[i].second
-               >> ICOLUP[i].first >> ICOLUP[i].second
+              >> ICOLUP[i].first >> ICOLUP[i].second
               >> PUP[i][0] >> PUP[i][1] >> PUP[i][2]
               >> PUP[i][3] >> PUP[i][4]
               >> VTIMUP[i] >> SPINUP[i] ) )
-    throw std::runtime_error("Failed to parse event in Les Houches file.");
+        throw std::runtime_error("Failed to parse event in Les Houches file.");
     }
 
     junk.clear();
@@ -2245,7 +2246,7 @@ public:
     namedweights.clear();
     weights.clear();
     weights.resize(heprup->nWeights(),
-           std::make_pair(XWGTUP, (WeightInfo*)(0)));
+                   std::make_pair(XWGTUP, (WeightInfo*)(0)));
     weights.front().first = XWGTUP;
     for ( int i = 1, N = weights.size(); i < N; ++i )
       weights[i].second =  &heprup->weightinfo[i - 1];
@@ -2256,41 +2257,41 @@ public:
       if ( tag.name.empty() ) junk += tag.contents;
 
       if ( tag.name == "weights" ) {
-    weights.resize(heprup->nWeights(),
-               std::make_pair(XWGTUP, (WeightInfo*)(0)));
-    weights.front().first = XWGTUP;
-    for ( int ii = 1, NN = weights.size(); ii < NN; ++ii )
-      weights[ii].second =  &heprup->weightinfo[ii - 1];
-    double w = 0.0;
-    int iii = 0;
-    std::istringstream isss(tag.contents);
-    while ( isss >> w )
-      if ( ++iii < int(weights.size()) )
-        weights[iii].first = w;
-      else
-        weights.push_back(std::make_pair(w, (WeightInfo*)(0)));
+        weights.resize(heprup->nWeights(),
+                       std::make_pair(XWGTUP, (WeightInfo*)(0)));
+        weights.front().first = XWGTUP;
+        for ( int ii = 1, NN = weights.size(); ii < NN; ++ii )
+          weights[ii].second =  &heprup->weightinfo[ii - 1];
+        double w = 0.0;
+        int iii = 0;
+        std::istringstream isss(tag.contents);
+        while ( isss >> w )
+          if ( ++iii < int(weights.size()) )
+            weights[iii].first = w;
+          else
+            weights.push_back(std::make_pair(w, (WeightInfo*)(0)));
       }
       if ( tag.name == "weight" ) {
-    namedweights.push_back(Weight(tag));
+        namedweights.push_back(Weight(tag));
       }
       if ( tag.name == "rwgt" ) {
-    for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
-      if ( tag.tags[j]->name == "wgt" ) {
-        namedweights.push_back(Weight(*tag.tags[j]));
-      }
-    }
+        for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
+          if ( tag.tags[j]->name == "wgt" ) {
+            namedweights.push_back(Weight(*tag.tags[j]));
+          }
+        }
       }
       else if ( tag.name == "clustering" ) {
-    for ( int j = 0, M= tag.tags.size(); j < M; ++j ) {
-      if ( tag.tags[j]->name == "clus" )
-        clustering.push_back(Clus(*tag.tags[j]));
-    }
+        for ( int j = 0, M= tag.tags.size(); j < M; ++j ) {
+          if ( tag.tags[j]->name == "clus" )
+            clustering.push_back(Clus(*tag.tags[j]));
+        }
       }
       else if ( tag.name == "pdfinfo" ) {
-    pdfinfo = PDFInfo(tag, SCALUP);
+        pdfinfo = PDFInfo(tag, SCALUP);
       }
       else if ( tag.name == "scales" ) {
-    scales = Scales(tag, SCALUP, NUP);
+        scales = Scales(tag, SCALUP, NUP);
       }
 
     }
@@ -2298,17 +2299,17 @@ public:
     for ( int i = 0, N = namedweights.size(); i < N; ++i ) {
       int indx = heprup->weightIndex(namedweights[i].name);
       if ( indx > 0 ) {
-    weights[indx].first = namedweights[i].weights[0];
-    namedweights[i].indices[0] = indx;
+        weights[indx].first = namedweights[i].weights[0];
+        namedweights[i].indices[0] = indx;
       } else {
-    weights.push_back(std::make_pair(namedweights[i].weights[0],
-                     (WeightInfo*)(0)));
-    namedweights[i].indices[0] = weights.size() - 1;
+        weights.push_back(std::make_pair(namedweights[i].weights[0],
+                                         (WeightInfo*)(0)));
+        namedweights[i].indices[0] = weights.size() - 1;
       }
       for ( int j = 1, M = namedweights[i].weights.size(); j < M; ++j ) {
-    weights.push_back(std::make_pair(namedweights[i].weights[j],
-                     (WeightInfo*)(0)));
-    namedweights[i].indices[j] = weights.size() - 1;
+        weights.push_back(std::make_pair(namedweights[i].weights[j],
+                                         (WeightInfo*)(0)));
+        namedweights[i].indices[j] = weights.size() - 1;
       }
     }
 
@@ -2325,13 +2326,13 @@ public:
     if ( isGroup ) {
       file << "<eventgroup";
       if ( subevents.nreal > 0 )
-    file << oattr("nreal", subevents.nreal);
+        file << oattr("nreal", subevents.nreal);
       if ( subevents.ncounter > 0 )
-    file << oattr("ncounter", subevents.ncounter);
+        file << oattr("ncounter", subevents.ncounter);
       printattrs(file);
       file << ">\n";
       for ( int i = 0, N = subevents.size(); i < N; ++i )
-    subevents[i]->print(file);
+        subevents[i]->print(file);
       file << "</eventgroup>\n";
       return;
     }
@@ -2341,26 +2342,26 @@ public:
     printattrs(file);
     file << ">\n";
     file << " " << std::setw(4) << NUP
-     << " " << std::setw(6) << IDPRUP
-     << " " << std::setw(14) << XWGTUP
-     << " " << std::setw(14) << SCALUP
-     << " " << std::setw(14) << AQEDUP
-     << " " << std::setw(14) << AQCDUP << "\n";
+         << " " << std::setw(6) << IDPRUP
+         << " " << std::setw(14) << XWGTUP
+         << " " << std::setw(14) << SCALUP
+         << " " << std::setw(14) << AQEDUP
+         << " " << std::setw(14) << AQCDUP << "\n";
 
     for ( int i = 0; i < NUP; ++i )
       file << " " << std::setw(8) << IDUP[i]
-       << " " << std::setw(2) << ISTUP[i]
-       << " " << std::setw(4) << MOTHUP[i].first
-       << " " << std::setw(4) << MOTHUP[i].second
-       << " " << std::setw(4) << ICOLUP[i].first
-       << " " << std::setw(4) << ICOLUP[i].second
-       << " " << std::setw(14) << PUP[i][0]
-       << " " << std::setw(14) << PUP[i][1]
-       << " " << std::setw(14) << PUP[i][2]
-       << " " << std::setw(14) << PUP[i][3]
-       << " " << std::setw(14) << PUP[i][4]
-       << " " << std::setw(1) << VTIMUP[i]
-       << " " << std::setw(1) << SPINUP[i] << std::endl;
+           << " " << std::setw(2) << ISTUP[i]
+           << " " << std::setw(4) << MOTHUP[i].first
+           << " " << std::setw(4) << MOTHUP[i].second
+           << " " << std::setw(4) << ICOLUP[i].first
+           << " " << std::setw(4) << ICOLUP[i].second
+           << " " << std::setw(14) << PUP[i][0]
+           << " " << std::setw(14) << PUP[i][1]
+           << " " << std::setw(14) << PUP[i][2]
+           << " " << std::setw(14) << PUP[i][3]
+           << " " << std::setw(14) << PUP[i][4]
+           << " " << std::setw(1) << VTIMUP[i]
+           << " " << std::setw(1) << SPINUP[i] << std::endl;
 
     if ( weights.size() > 0 ) {
       file << "<weights>";
@@ -2512,11 +2513,11 @@ public:
       PDFGUPsave = heprup->PDFGUP;
       PDFSUPsave = heprup->PDFSUP;
       if ( currentWeight->pdf ) {
-    heprup->PDFGUP.first =  heprup->PDFGUP.second = 0;
-    heprup->PDFSUP.first =  heprup->PDFSUP.second = currentWeight->pdf;
+        heprup->PDFGUP.first =  heprup->PDFGUP.second = 0;
+        heprup->PDFSUP.first =  heprup->PDFSUP.second = currentWeight->pdf;
       }
       if ( currentWeight->pdf2 ) {
-    heprup->PDFSUP.second = currentWeight->pdf2;
+        heprup->PDFSUP.second = currentWeight->pdf2;
       }
 
     }
@@ -2796,8 +2797,8 @@ private:
     getline();
     if ( !currentFind("<LesHouchesEvents") )
       throw std::runtime_error
-    ("Tried to read a file which does not start with the "
-     "LesHouchesEvents tag.");
+        ("Tried to read a file which does not start with the "
+         "LesHouchesEvents tag.");
     version = 1;
     if ( currentFind("version=\"3" ) )
       version = 3;
@@ -2805,51 +2806,51 @@ private:
       version = 2;
     else if ( !currentFind("version=\"1" ) )
       throw std::runtime_error
-    ("Tried to read a LesHouchesEvents file which is above version 3.");
+        ("Tried to read a LesHouchesEvents file which is above version 3.");
 
     // Loop over all lines until we hit the </init> tag.
     while ( getline() && !currentFind("</init>") ) {
       if ( currentFind("<header") ) {
-    // We have hit the header block, so we should dump this and
-    // all following lines to headerBlock until we hit the end of
-    // it.
-    readingHeader = true;
-    headerBlock = currentLine + "\n";
+        // We have hit the header block, so we should dump this and
+        // all following lines to headerBlock until we hit the end of
+        // it.
+        readingHeader = true;
+        headerBlock = currentLine + "\n";
       }
       else if ( currentFind("<init>") ) {
-    // We have hit the init block
-    readingInit = true;
-    initComments = currentLine + "\n";
+        // We have hit the init block
+        readingInit = true;
+        initComments = currentLine + "\n";
       }
       else if ( currentFind("</header>") ) {
-    // The end of the header block. Dump this line as well to the
-    // headerBlock and we're done.
-    readingHeader = false;
-    headerBlock += currentLine + "\n";
+        // The end of the header block. Dump this line as well to the
+        // headerBlock and we're done.
+        readingHeader = false;
+        headerBlock += currentLine + "\n";
       }
       else if ( readingHeader ) {
-    // We are in the process of reading the header block. Dump the
-    // line to haderBlock.
-    headerBlock += currentLine + "\n";
+        // We are in the process of reading the header block. Dump the
+        // line to haderBlock.
+        headerBlock += currentLine + "\n";
       }
       else if ( readingInit ) {
-    // Here we found a comment line. Dump it to initComments.
-    initComments += currentLine + "\n";
+        // Here we found a comment line. Dump it to initComments.
+        initComments += currentLine + "\n";
       }
       else {
-    // We found some other stuff outside the standard tags.
-    outsideBlock += currentLine + "\n";
+        // We found some other stuff outside the standard tags.
+        outsideBlock += currentLine + "\n";
       }
     }
     if ( !currentFind("</init>") )
-          throw std::runtime_error("Found incomplete init tag in "
-                 "Les Houches file.");
+      throw std::runtime_error("Found incomplete init tag in "
+                               "Les Houches file.");
     initComments += currentLine + "\n";
     std::vector<XMLTag*> tags = XMLTag::findXMLTags(initComments);
     for ( int i = 0, N = tags.size(); i < N; ++i )
       if ( tags[i]->name == "init" ) {
-    heprup = HEPRUP(*tags[i], version);
-    break;
+        heprup = HEPRUP(*tags[i], version);
+        break;
       }
     XMLTag::deleteAll(tags);
 
@@ -2877,20 +2878,20 @@ public:
     // Keep reading lines until we hit the end of an event or event group.
     while ( getline() ) {
       if ( inEvent ) {
-    eventLines += currentLine + "\n";
-    if ( inEvent == 1 && currentFind("</event>") ) break;
-    if ( inEvent == 2 && currentFind("</eventgroup>") ) break;
+        eventLines += currentLine + "\n";
+        if ( inEvent == 1 && currentFind("</event>") ) break;
+        if ( inEvent == 2 && currentFind("</eventgroup>") ) break;
       }
       else if ( currentFind("<eventgroup") ) {
-    eventLines += currentLine + "\n";
-    inEvent = 2;
+        eventLines += currentLine + "\n";
+        inEvent = 2;
       }
       else if ( currentFind("<event") ) {
-    eventLines += currentLine + "\n";
-    inEvent = 1;
+        eventLines += currentLine + "\n";
+        inEvent = 1;
       }
       else {
-    outsideBlock += currentLine + "\n";
+        outsideBlock += currentLine + "\n";
       }
     }
     if ( ( inEvent == 1 && !currentFind("</event>") ) ||
@@ -2905,11 +2906,11 @@ public:
 
     for ( int i = 0, N = tags.size(); i < N ; ++i ) {
       if ( tags[i]->name == "event" || tags[i]->name == "eventgroup" ) {
-    hepeup = HEPEUP(*tags[i], heprup);
-    XMLTag::deleteAll(tags);
+        hepeup = HEPEUP(*tags[i], heprup);
+        XMLTag::deleteAll(tags);
         ++currevent;
         if ( curreventfile >= 0 ) ++currfileevent;
-    return true;
+        return true;
       }
     }
 
@@ -2993,11 +2994,18 @@ public:
   /**
    *  initfile rdstate
    */
-   std::ios_base::iostate initfile_rdstate() const { if (initfile) return initfile->rdstate(); return std::ifstream::goodbit; }
+  std::ios_base::iostate initfile_rdstate() const {
+    if (initfile) return initfile->rdstate();
+    return std::ifstream::goodbit;
+  }
+
   /**
    *  file rdstate
    */
-   std::ios_base::iostate file_rdstate() const { if (file) return file->rdstate(); return std::ifstream::goodbit; }
+  std::ios_base::iostate file_rdstate() const {
+    if (file) return file->rdstate();
+    return std::ifstream::goodbit;
+  }
 
   /**
    * XML file version
@@ -3232,12 +3240,12 @@ public:
     std::string headBlock = headerStream.str();
     if ( headBlock.length() ) {
       if ( headBlock.find("<header>") == std::string::npos )
-    *file << "<header>\n";
+        *file << "<header>\n";
       if ( headBlock[headBlock.length() - 1] != '\n' )
-    headBlock += '\n';
+        headBlock += '\n';
       *file << headBlock;
       if ( headBlock.find("</header>") == std::string::npos )
-    *file << "</header>\n";
+        *file << "</header>\n";
     }
 
     heprup.print(*file);

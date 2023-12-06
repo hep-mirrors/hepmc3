@@ -24,15 +24,15 @@ int main(int argc, char **argv) {
     pythia.readFile(argv[1]);
     pythia.init();
     std::shared_ptr<GenRunInfo> run = std::make_shared<GenRunInfo>();
-    struct GenRunInfo::ToolInfo generator={std::string("Pythia8"),std::to_string(PYTHIA_VERSION).substr(0,5),std::string("Used generator")};
+    struct GenRunInfo::ToolInfo generator = {std::string("Pythia8"),std::to_string(PYTHIA_VERSION).substr(0,5),std::string("Used generator")};
     run->tools().push_back(generator);
-    struct GenRunInfo::ToolInfo config={std::string(argv[1]),"1.0",std::string("Control cards")};
+    struct GenRunInfo::ToolInfo config = {std::string(argv[1]),"1.0",std::string("Control cards")};
     run->tools().push_back(config);
     std::vector<std::string> names;
-    for (int iWeight=0; iWeight < pythia.info.nWeights(); ++iWeight) {
-     std::string s=pythia.info.weightLabel(iWeight);
-     if (!s.length()) s=std::to_string((long long int)iWeight);
-     names.push_back(s);
+    for (int iWeight = 0; iWeight < pythia.info.nWeights(); ++iWeight) {
+        std::string s = pythia.info.weightLabel(iWeight);
+        if (!s.length()) s = std::to_string((long long int)iWeight);
+        names.push_back(s);
     }
     if (names.empty()) names.emplace_back("default");
     run->set_weight_names(names);
@@ -40,14 +40,14 @@ int main(int argc, char **argv) {
 
     int nEvent = pythia.mode("Main:numberOfEvents");
 
-    for( int i = 0; i< nEvent; ++i ) {
+    for( int i = 0; i < nEvent; ++i ) {
         if( !pythia.next() ) continue;
 
         GenEvent hepmc( Units::GEV, Units::MM );
 
         pythiaToHepMC.fill_next_event(pythia.event, &hepmc, -1, &pythia.info);
 
-        if( i==0 ) {
+        if( i == 0 ) {
             std::cout << "First event: " << std::endl;
             Print::listing(hepmc);
         }
