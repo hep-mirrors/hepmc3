@@ -445,6 +445,13 @@ void GenEvent::shift_position_by(const FourVector & delta) {
 
 bool GenEvent::rotate(const FourVector&  delta)
 {
+    long double cosa = std::cos(delta.x());
+    long double sina = std::sin(delta.x());
+    long double cosb = std::cos(delta.y());
+    long double sinb = std::sin(delta.y());
+    long double cosg = std::cos(delta.z());
+    long double sing = std::sin(delta.z());
+
     for ( auto& p: m_particles)
     {
         const FourVector& mom = p->momentum();
@@ -452,25 +459,15 @@ bool GenEvent::rotate(const FourVector&  delta)
         long double tempY = mom.y();
         long double tempZ = mom.z();
 
-        long double cosa = std::cos(delta.x());
-        long double sina = std::sin(delta.x());
-
         long double tempY_ = cosa*tempY+sina*tempZ;
         long double tempZ_ = -sina*tempY+cosa*tempZ;
         tempY = tempY_;
         tempZ = tempZ_;
 
-
-        long double cosb = std::cos(delta.y());
-        long double sinb = std::sin(delta.y());
-
         long double tempX_ = cosb*tempX-sinb*tempZ;
         tempZ_ = sinb*tempX+cosb*tempZ;
         tempX = tempX_;
         tempZ = tempZ_;
-
-        long double cosg = std::cos(delta.z());
-        long double sing = std::sin(delta.z());
 
         tempX_ = cosg*tempX+sing*tempY;
         tempY_ = -sing*tempX+cosg*tempY;
@@ -483,29 +480,21 @@ bool GenEvent::rotate(const FourVector&  delta)
     for (auto& v: m_vertices)
     {
         const FourVector& pos = v->position();
+        if (pos.is_zero()) continue;
+        
         long double tempX = pos.x();
         long double tempY = pos.y();
         long double tempZ = pos.z();
-
-        long double cosa = std::cos(delta.x());
-        long double sina = std::sin(delta.x());
 
         long double tempY_ = cosa*tempY+sina*tempZ;
         long double tempZ_ = -sina*tempY+cosa*tempZ;
         tempY = tempY_;
         tempZ = tempZ_;
 
-
-        long double cosb = std::cos(delta.y());
-        long double sinb = std::sin(delta.y());
-
         long double tempX_ = cosb*tempX-sinb*tempZ;
         tempZ_ = sinb*tempX+cosb*tempZ;
         tempX = tempX_;
         tempZ = tempZ_;
-
-        long double cosg = std::cos(delta.z());
-        long double sing = std::sin(delta.z());
 
         tempX_ = cosg*tempX+sing*tempY;
         tempY_ = -sing*tempX+cosg*tempY;
@@ -554,18 +543,18 @@ bool GenEvent::reflect(const int axis)
 
 bool GenEvent::boost(const FourVector&  delta)
 {
-    double deltalength2d = delta.length2();
-    if (deltalength2d > 1.0)
+    double deltalength2 = delta.length2();
+    if (deltalength2 > 1.0)
     {
         HEPMC3_WARNING("GenEvent::boost: wrong large boost vector. Will leave event as is.")
         return false;
     }
-    if (std::abs(deltalength2d-1.0) < std::numeric_limits<double>::epsilon())
+    if (std::abs(deltalength2-1.0) < std::numeric_limits<double>::epsilon())
     {
         HEPMC3_WARNING("GenEvent::boost: too large gamma. Will leave event as is.")
         return false;
     }
-    if (std::abs(deltalength2d) < std::numeric_limits<double>::epsilon())
+    if (std::abs(deltalength2) < std::numeric_limits<double>::epsilon())
     {
         HEPMC3_WARNING("GenEvent::boost: wrong small boost vector. Will leave event as is.")
         return true;
@@ -573,7 +562,6 @@ bool GenEvent::boost(const FourVector&  delta)
     long double deltaX = delta.x();
     long double deltaY = delta.y();
     long double deltaZ = delta.z();
-    long double deltalength2 = deltaX*deltaX+deltaY*deltaY+deltaZ*deltaZ;
     long double deltalength = std::sqrt(deltalength2);
     long double gamma = 1.0/std::sqrt(1.0-deltalength2);
 
@@ -586,10 +574,10 @@ bool GenEvent::boost(const FourVector&  delta)
         long double tempZ = mom.z();
         long double tempE = mom.e();
         long double nr = (deltaX*tempX+deltaY*tempY+deltaZ*tempZ)/deltalength;
-
-        tempX+=(deltaX*((gamma-1)*nr/deltalength)-deltaX*(tempE*gamma));
-        tempY+=(deltaY*((gamma-1)*nr/deltalength)-deltaY*(tempE*gamma));
-        tempZ+=(deltaZ*((gamma-1)*nr/deltalength)-deltaZ*(tempE*gamma));
+        long double gfac = (gamma-1)*nr/deltalength-tempE*gamma;
+        tempX+=(deltaX*gfac);
+        tempY+=(deltaY*gfac);
+        tempZ+=(deltaZ*gfac);
         tempE = gamma*(tempE-deltalength*nr);
         FourVector temp(tempX, tempY, tempZ, tempE);
         p->set_momentum(temp);
