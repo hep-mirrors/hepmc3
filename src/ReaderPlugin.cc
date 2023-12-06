@@ -24,6 +24,25 @@
 #include "HepMC3/ReaderPlugin.h"
 
 namespace HepMC3 {
+ReaderPlugin::ReaderPlugin(std::shared_ptr<std::istream> stream, const std::string &libname, const std::string &newreader) {
+#ifdef WIN32
+    dll_handle = LoadLibrary(libname.c_str());
+    if (!dll_handle) { printf("Error  while loading library %s. Error code %i\n", libname.c_str(), GetLastError()); m_reader = nullptr; return;  }
+    typedef Reader* (__stdcall *f_funci)(std::shared_ptr<std::istream> stream);
+    f_funci newReader = (f_funci)GetProcAddress((HINSTANCE)(dll_handle), newreader.c_str());
+    if (!newReader) { printf("Error  while loading function %s from  library %s. Error code %i\n", newreader.c_str(), libname.c_str(), GetLastError()); m_reader = nullptr; return;  }
+    m_reader = (Reader*)(newReader(stream));
+#endif
+
+#if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(BSD) || defined(__sun)
+    dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+    if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_reader = nullptr; return;  }
+    using f_funci = Reader *(*)(std::shared_ptr<std::istream>);
+    auto newReader = (f_funci)dlsym(dll_handle, newreader.c_str());
+    if (!newReader) { printf("Error  while loading function %s from  library %s: %s\n", newreader.c_str(), libname.c_str(), dlerror()); m_reader = nullptr; return;   }
+    m_reader = (Reader*)(newReader(stream));
+#endif
+}
 
 ReaderPlugin::ReaderPlugin(std::istream & stream, const std::string &libname, const std::string &newreader) {
 #ifdef WIN32

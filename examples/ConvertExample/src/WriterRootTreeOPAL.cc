@@ -17,15 +17,15 @@ void WriterRootTreeOPAL::init_branches()
 void WriterRootTreeOPAL::write_event(const GenEvent &evt)
 {
     m_Ievnt=evt.event_number();
-    std::vector<size_t> beams;
-    for (size_t i=0; i<evt.particles().size(); i++) {
-        if (evt.particles().at(i)->status()==4&&std::abs(evt.particles().at(i)->pid())==11)
-        { beams.push_back(i);}
+    std::vector<HepMC3::ConstGenParticlePtr> beams;
+    for (auto particle : evt.particles()) {
+        if (particle->status()==4&&std::abs(particle->pid())==11)
+        { beams.push_back(particle);}
     }
     if (beams.size()==2) {
-        m_Ebeam=std::abs(evt.particles().at(beams[0])->momentum().e());
+        m_Ebeam=std::abs(beams[0]->momentum().e());
     } else {
-        m_Ebeam=std::abs(evt.particles().at(0)->momentum().e());
+        m_Ebeam=std::abs(evt.particles().front()->momentum().e());
     }
     WriterRootTree::write_event(evt);
 }

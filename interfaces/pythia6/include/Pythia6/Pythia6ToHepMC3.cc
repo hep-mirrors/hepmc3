@@ -226,7 +226,7 @@ extern "C" {
 #ifdef WIN32
         libHepMC3rootIO="HepMC3rootIO.dll";
 #endif
-        std::string filename=std::string(ffilename);
+        std::string filename(ffilename);
         int r_position=position;
         if (r_position == 0)
         {

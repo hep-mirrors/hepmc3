@@ -13,8 +13,8 @@
 #include <utility>
 #include <vector>
 
-#include <pybind11/pybind11.h>
 #include <functional>
+#include <pybind11/pybind11.h>
 #include <string>
 #include <HepMC3/Version.h>
 #include <HepMC3/Reader.h>
@@ -23,7 +23,7 @@
 #include <HepMC3/GenRunInfo.h>
 #include <HepMC3/Writerprotobuf.h>
 #include <HepMC3/Readerprotobuf.h>
-#include <src/protobuf_binders.h>
+#include <src/protobufIObinders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER

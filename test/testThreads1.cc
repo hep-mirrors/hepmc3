@@ -28,7 +28,7 @@ int main()
     std::vector<GenEvent> evts;
     while( !inputA.failed() )
     {
-        GenEvent evt=GenEvent(Units::GEV,Units::MM);
+        GenEvent evt(Units::GEV,Units::MM);
         inputA.read_event(evt);
         if( inputA.failed() )  {
             printf("End of file reached. Exit.\n");

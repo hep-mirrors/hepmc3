@@ -460,7 +460,7 @@
     block. These are
 
     include/HepMC3/HEPEVT_Wrapper.h -- the default implementation. The size of common block is defined in
-    compile time via appropriate #define. The block can hold float/double precision momenta.
+    compile time via appropriate @c #define. The block can hold float/double precision momenta.
     This implementation is not compiled into any library. All functions and variables are static,
     so only one instance of the interface can exists.
 

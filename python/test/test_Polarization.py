@@ -100,7 +100,7 @@ def test_Polarization():
     v4.add_particle_out(p8)
 
     evt.add_attribute("signal_process_vertex", hm.IntAttribute(v3.id()))
-    evt.set_beam_particles(p1,p2)
+    evt.set_beam_particles(p1, p2)
     # The event is complete, we now print it out
     hm.Print.content(evt)
     hm.Print.listing(evt, 8)
