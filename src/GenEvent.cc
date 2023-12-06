@@ -804,6 +804,32 @@ void GenEvent::add_attribute(const std::string &name, const std::shared_ptr<Attr
     }
 }
 
+void GenEvent::add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att, const GenParticlePtr& particle ) {
+    ///Disallow empty strings
+    if (name.length() == 0) return;
+    if (!att)  return;
+    if (not particle) return;
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    if (m_attributes.count(name) == 0) // add attribute
+      m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+    m_attributes[name][particle->id()] = att;
+    att->m_event = this;
+    att->m_particle = particle;
+}
+
+void GenEvent::add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att, const GenVertexPtr& vertex ) {
+    ///Disallow empty strings
+    if (name.length() == 0) return;
+    if (!att)  return;
+    if (not vertex) return;
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    if (m_attributes.count(name) == 0) // add attribute
+      m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+    m_attributes[name][vertex->id()] = att;
+    att->m_event = this;
+    att->m_vertex = vertex;
+}
+
 
 void GenEvent::add_attributes(const std::vector<std::string> &names, const std::vector<std::shared_ptr<Attribute> > &atts, const std::vector<int>& ids) {
     size_t N = names.size();

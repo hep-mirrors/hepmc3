@@ -224,6 +224,18 @@ public:
     /// with the same name is present
     void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0);
 
+    /// @brief Add event attribute to event
+    ///
+    /// This will overwrite existing attribute if an attribute
+    /// with the same name is present
+    void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const GenParticlePtr& particle);
+  
+    /// @brief Add event attribute to event
+    ///
+    /// This will overwrite existing attribute if an attribute
+    /// with the same name is present
+    void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const GenVertexPtr& vertex);
+  
     /// @brief Add multiple attributes to event
     ///
     /// This will overwrite existing attributes if attributes

@@ -93,7 +93,7 @@ std::vector<ConstGenParticlePtr> GenParticle::children() const {
 
 bool GenParticle::add_attribute(const std::string& name, std::shared_ptr<Attribute> att) {
     if ( !parent_event() ) return false;
-    parent_event()->add_attribute(name, att, id());
+    parent_event()->add_attribute(name, att, shared_from_this());
     return true;
 }
 
