@@ -73,6 +73,7 @@ int main()
     p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
     p1->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     p1->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    v1->add_particle_in(p1);
 
     GenVertexPtr v2 = std::make_shared<GenVertex>();
     evt.add_vertex( v2 );
@@ -161,6 +162,7 @@ int main()
     // contained in those vertices
     evt.clear();
 
+    std::cout << "testPolarization1.dat and testPolarisation2.dat not meant to be the same" << std::endl;
     bool passed = ((COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization5.out") == 0)&&(COMPARE_ASCII_FILES("testPolarization1.dat","testPolarization2.dat") != 0));
     if (!passed) return 1;
     return 0;

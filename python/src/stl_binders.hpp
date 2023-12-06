@@ -77,6 +77,7 @@ public:
 	}
 };
 
+  
 } // namespace binder
 
 #endif // _INCLUDED_std_binders_hpp_

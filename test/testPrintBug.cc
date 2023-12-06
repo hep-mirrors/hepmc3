@@ -18,7 +18,7 @@ int main()
         FourVector vector(1.0,1.0,1.0,1.0);
         GenVertexPtr vertex=std::make_shared<GenVertex>();
         vertex->set_position(vector);
-        vertex->set_id(i);
+        // vertex->set_id(i);
         for(int j=0; j<3; j++)
         {
             GenParticlePtr particle = std::make_shared<GenParticle>(vector,1,2);

@@ -1,6 +1,7 @@
 #include <HepMC3/ReaderRoot.h>
 #include <functional>
 #include <iterator>
+#include <list>
 #include <map>
 #include <memory>
 #include <sstream> // __str__
@@ -33,6 +34,6 @@
 void bind_pyHepMC3rootIO_2(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
 	// HepMC3::ReaderRoot file:HepMC3/ReaderRoot.h line:33
-	 binder::ReaderRoot_binder(M("HepMC3"));
+	binder::ReaderRoot_binder(M("HepMC3"));
 
 }

@@ -143,7 +143,7 @@ int main(int /*argc*/, char ** /*argv*/) {
         std::shared_ptr<AssociatedParticle> assoc =
           ev.attribute<AssociatedParticle>("OtherIncoming", 1);
         if ( !assoc || !assoc->associated() ||
-             assoc->associated() != ev.particles()[1] ) return 3;
+             assoc->associated() != ev.particle(1) ) return 3;
 
         // Make sure the weight names are the same.
         if ( input.run_info()->weight_names() != weightnames ) return 2;

@@ -2,6 +2,7 @@
 #include <HepMC3/WriterRoot.h>
 #include <functional>
 #include <iterator>
+#include <list>
 #include <map>
 #include <memory>
 #include <sstream> // __str__
@@ -34,9 +35,9 @@
 void bind_pyHepMC3rootIO_1(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
 	// HepMC3::ReaderRootTree file:HepMC3/ReaderRootTree.h line:35
-	 binder::ReaderRootTree_binder(M("HepMC3"));
+	binder::ReaderRootTree_binder(M("HepMC3"));
 
 	// HepMC3::WriterRoot file:HepMC3/WriterRoot.h line:37
-	 binder::WriterRoot_binder(M("HepMC3"));
+	binder::WriterRoot_binder(M("HepMC3"));
 
 }

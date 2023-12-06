@@ -13,6 +13,7 @@
 #include "HepMC3/GenVertex_fwd.h"
 #include "HepMC3/Data/GenVertexData.h"
 #include "HepMC3/FourVector.h"
+#include <forward_list>
 
 namespace HepMC3 {
 
@@ -26,7 +27,6 @@ class GenVertex : public std::enable_shared_from_this<GenVertex> {
     friend class GenEvent;
 
 public:
-
     /// @name Constructors
     /// @{
 
@@ -55,10 +55,7 @@ public:
     /// Get the vertex unique identifier
     ///
     /// @note This is not the same as id() in HepMC v2, which is now @c status()
-    int id() const { return m_id; }
-
-    /// @brief set the vertex identifier
-    void set_id(int id);
+    int id() const { return m_data.id; }
 
     /// Get vertex status code
     int status() const { return m_data.status; }
@@ -78,19 +75,23 @@ public:
     void remove_particle_out( GenParticlePtr p);
 
     /// Number of incoming particles, HepMC2 compatiility
-    inline int particles_in_size() const { return m_particles_in.size(); }
+    inline int particles_in_size() const {
+        return m_particles_in.size();
+    }
     /// Number of outgoing particles, HepMC2 compatiility
-    inline int particles_out_size() const { return m_particles_out.size(); }
+    inline int particles_out_size() const {
+        return m_particles_out.size();
+    }
 
 
     /// Get list of incoming particles
-    const std::vector<GenParticlePtr>& particles_in() { return m_particles_in; }
+    const GenParticles& particles_in() { return m_particles_in; }
     /// Get list of incoming particles (for const access)
-    const std::vector<ConstGenParticlePtr>& particles_in() const;
+    const ConstGenParticles& particles_in() const;
     /// Get list of outgoing particles
-    const std::vector<GenParticlePtr>& particles_out() { return m_particles_out; }
+    const GenParticles& particles_out() { return m_particles_out; }
     /// Get list of outgoing particles (for const access)
-    const std::vector<ConstGenParticlePtr>& particles_out() const;
+    const ConstGenParticles& particles_out() const;
 
     /// @brief Get vertex position
     ///
@@ -113,7 +114,7 @@ public:
     bool add_attribute(const std::string& name, std::shared_ptr<Attribute> att);
 
     /// @brief Get list of names of attributes assigned to this particle
-    std::vector<std::string> attribute_names() const;
+    std::forward_list<std::string> attribute_names() const;
 
     /// @brief Remove attribute
     void remove_attribute(const std::string& name);
@@ -142,16 +143,19 @@ public:
 
 
 private:
+    /// @brief set the vertex identifier
+    void set_id(int id);
+
 
     /// @name Fields
     /// @{
     GenEvent       *m_event;  //!< Parent event
-    int             m_id;     //!< Vertex id
+    // int             m_id;     //!< Vertex id
     GenVertexData   m_data;   //!< Vertex data
 
-    std::vector<GenParticlePtr>  m_particles_in;  //!< Incoming particle list
+    GenParticles  m_particles_in;  //!< Incoming particle list
 
-    std::vector<GenParticlePtr>  m_particles_out; //!< Outgoing particle list
+    GenParticles  m_particles_out; //!< Outgoing particle list
     /// @}
 
 };

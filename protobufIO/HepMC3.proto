@@ -59,12 +59,14 @@ message GenEventData {
         required bool is_mass_set = 3;
         required double mass = 4;
         required FourVector momentum = 5;
+        optional int32 id = 6 [default = 0];
     }
 
     message GenVertexData {
         required int32 status = 1;
 
         required FourVector position = 2;
+        optional int32 id = 3 [default = 0];
     }
 
     repeated GenParticleData particles = 4;

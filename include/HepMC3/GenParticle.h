@@ -54,7 +54,7 @@ public:
     const GenEvent* parent_event() const { return m_event; }
 
     /// @brief Get the particle ID number (*not* PDG ID)
-    int id() const { return m_id; }
+    int id() const { return m_data.id; }
 
     const GenParticleData& data()         const { return m_data;  } //!< Get particle data
 
@@ -66,19 +66,19 @@ public:
 
     /// @brief Convenience access to immediate incoming particles via production vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    std::vector<GenParticlePtr> parents();
+    GenParticles parents();
 
     /// @brief Convenience access to immediate incoming particles via production vertex (const version)
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    std::vector<ConstGenParticlePtr> parents() const;
+    ConstGenParticles parents() const;
 
     /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    std::vector<GenParticlePtr> children();
+    GenParticles children();
 
     /// @brief Convenience access to immediate outgoing particles via end vertex
     /// @note Less efficient than via the vertex since return must be by value (in case there is no vertex)
-    std::vector<ConstGenParticlePtr> children() const;
+    ConstGenParticles children() const;
 
     int   pid()                   const { return m_data.pid;            } //!< Get PDG ID
     int   abs_pid()               const { return std::abs(pid());            } //!< Get absolute value of PDG ID
@@ -91,7 +91,6 @@ public:
     /// This function will return mass as set by a generator/tool.
     /// If not set, it will return momentum().m()
     double generated_mass() const;
-
 
     void set_pid(int pid);                         //!< Set PDG ID
     void set_status(int status);                   //!< Set status code
@@ -107,7 +106,7 @@ public:
     bool add_attribute(const std::string& name, std::shared_ptr<Attribute> att);
 
     /// @brief Get list of names of attributes assigned to this particle
-    std::vector<std::string> attribute_names() const;
+    std::forward_list<std::string> attribute_names() const;
 
     /// @brief Remove attribute
     void remove_attribute(const std::string& name);
@@ -136,8 +135,9 @@ public:
 // Fields
 //
 private:
+    void set_id(int id) { m_data.id = id; }
     GenEvent        *m_event; //!< Parent event
-    int              m_id;    //!< Index
+    // int              m_id;    //!< Index
     GenParticleData  m_data;  //!< Particle data
 
     std::weak_ptr<GenVertex>    m_production_vertex; //!< Production vertex

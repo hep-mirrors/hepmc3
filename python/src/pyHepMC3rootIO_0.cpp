@@ -1,6 +1,7 @@
 #include <HepMC3/WriterRootTree.h>
 #include <functional>
 #include <iterator>
+#include <list>
 #include <map>
 #include <memory>
 #include <sstream> // __str__
@@ -33,6 +34,6 @@
 void bind_pyHepMC3rootIO_0(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
 	// HepMC3::WriterRootTree file:HepMC3/WriterRootTree.h line:40
-	 binder::WriterRootTree_binder(M("HepMC3"));
+	binder::WriterRootTree_binder(M("HepMC3"));
 
 }

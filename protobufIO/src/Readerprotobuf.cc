@@ -302,6 +302,7 @@ bool Readerprotobuf::read_GenEvent(bool skip) {
 
         HepMC3::GenParticleData pdata;
 
+        pdata.id = particle_pb.id();
         pdata.pid = particle_pb.pid();
         pdata.status = particle_pb.status();
         pdata.is_mass_set = particle_pb.is_mass_set();
@@ -311,6 +312,7 @@ bool Readerprotobuf::read_GenEvent(bool skip) {
             particle_pb.momentum().m_v1(), particle_pb.momentum().m_v2(),
             particle_pb.momentum().m_v3(), particle_pb.momentum().m_v4()};
 
+        if (pdata.id == 0) pdata.id = it + 1;
         m_evdata.particles.push_back(pdata);
     }
 
@@ -321,12 +323,14 @@ bool Readerprotobuf::read_GenEvent(bool skip) {
 
         HepMC3::GenVertexData vdata;
 
+        vdata.id = vertex_pb.id();
         vdata.status = vertex_pb.status();
 
         vdata.position = HepMC3::FourVector{
             vertex_pb.position().m_v1(), vertex_pb.position().m_v2(),
             vertex_pb.position().m_v3(), vertex_pb.position().m_v4()};
 
+        if (vdata.id == 0) vdata.id = - (it + 1);
         m_evdata.vertices.push_back(vdata);
     }
 

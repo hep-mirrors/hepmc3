@@ -10,6 +10,7 @@
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
 #include <src/binders.h>
+#include <src/list_binder.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER

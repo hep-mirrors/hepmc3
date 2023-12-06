@@ -12,6 +12,8 @@
 #define HEPMC3_GENVERTEX_FWD_H
 
 #include <memory>
+#include <forward_list>
+#include <list>
 
 namespace HepMC3 {
 
@@ -19,6 +21,9 @@ class GenVertex;
 
 using GenVertexPtr = std::shared_ptr<GenVertex>;
 using ConstGenVertexPtr = std::shared_ptr<const GenVertex>;
+
+using GenVertices=std::list<GenVertexPtr>;
+using ConstGenVertices=std::list<ConstGenVertexPtr>;
 
 template<typename T>
 using GenVertex_type = typename std::conditional<std::is_const<typename T::element_type>::value, ConstGenVertexPtr, GenVertexPtr>::type;

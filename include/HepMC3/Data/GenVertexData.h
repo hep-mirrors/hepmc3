@@ -20,6 +20,7 @@
 namespace HepMC3 {
 
 struct GenVertexData {
+    int        id;
     int        status;   ///< Vertex status
     FourVector position; ///< Position in time-space
 

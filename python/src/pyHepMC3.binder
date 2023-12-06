@@ -6,10 +6,12 @@
 
 +include <src/stl_binders.hpp>
 +include <src/binders.h>
++include <src/list_binder.h>
 +namespace HepMC3
 +namespace LHEF
 +binder std::vector binder::vector_binder
 +binder std::map binder::map_binder
++binder std::list binder::list_binder
 
 -class std::istream
 -class std::ostream

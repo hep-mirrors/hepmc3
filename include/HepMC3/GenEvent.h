@@ -66,15 +66,19 @@ public:
     /// @{
 
     /// @brief Get list of particles (const)
-    const std::vector<ConstGenParticlePtr>& particles() const;
+    const ConstGenParticles& particles() const;
     /// @brief Get list of vertices (const)
-    const std::vector<ConstGenVertexPtr>& vertices() const;
+    const ConstGenVertices& vertices() const;
 
     /// @brief Get/set list of particles (non-const)
-    const std::vector<GenParticlePtr>& particles() { return m_particles; }
+    const GenParticles& particles() { return m_particles; }
     /// @brief Get/set list of vertices (non-const)
-    const std::vector<GenVertexPtr>& vertices() { return m_vertices; }
+    const GenVertices& vertices() { return m_vertices; }
 
+    /// @brief Get particle with specified ID, or null
+    GenParticlePtr particle(int id) const;
+    /// @brief Get vertex with specified ID, or null
+    GenVertexPtr vertex(int id) const;
     /// @}
 
 
@@ -188,14 +192,14 @@ public:
     const FourVector& event_pos() const;
 
     /// @brief Vector of beam particles
-    std::vector<ConstGenParticlePtr> beams() const;
+    ConstGenParticles beams() const;
 
     /// @brief Vector of beam particles
-    std::vector<ConstGenParticlePtr> beams(const int status) const;
+    ConstGenParticles beams(const int status) const;
 
 
     /// @brief Vector of beam particles
-    const std::vector<GenParticlePtr> & beams();
+    const GenParticles& beams();
 
     /// @brief Shift position of all vertices in the event by @a delta
     void shift_position_by( const FourVector & delta );
@@ -223,6 +227,16 @@ public:
     /// This will overwrite existing attribute if an attribute
     /// with the same name is present
     void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const int& id = 0);
+    /// @brief Add event attribute to particle
+    ///
+    /// This will overwrite existing attribute if an attribute
+    /// with the same name is present
+    void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const GenParticlePtr& particle);
+    /// @brief Add event attribute to vertex
+    ///
+    /// This will overwrite existing attribute if an attribute
+    /// with the same name is present
+    void add_attribute(const std::string &name, const std::shared_ptr<Attribute> &att,  const GenVertexPtr& vertex);
 
     /// @brief Add multiple attributes to event
     ///
@@ -254,7 +268,7 @@ public:
     std::string attribute_as_string(const std::string &name,  const int& id = 0) const;
 
     /// @brief Get list of attribute names
-    std::vector<std::string> attribute_names( const int& id = 0) const;
+    std::forward_list<std::string> attribute_names( const int& id = 0) const;
 
     /// @brief Get a copy of the list of attributes
     /// @note To avoid thread issues, this is returns a copy. Better solution may be needed.
@@ -270,11 +284,26 @@ public:
     /// @{
 
     /// @brief Add particle
-    void add_particle( GenParticlePtr p );
+    ///
+    /// @param p      Particle to add
+    /// @param hintId Suggested ID of particle.
+    //                After adding p->id() will return the actual ID used.
+    //                If this is non-positive, use a sequential number 
+    void add_particle( GenParticlePtr p , int hintId=0 );
 
     /// @brief Add vertex
-    void add_vertex( GenVertexPtr v );
+    ///
+    /// @param v      vertex to add
+    /// @param hintId Suggested ID of vertex
+    //                After adding v->id() will return the actual ID used.
+    //                If this is positive, then use a sequential number.
+    void add_vertex( GenVertexPtr v, int hintId=1 );
 
+    /// @brief Ensure all vertices are assign a good ID
+    ///
+    /// Vertices that have ID=0 are assigned a new ID
+    void fix_vertex_ids();
+  
     /// @brief Remove particle from the event
     ///
     /// This function  will remove whole sub-tree starting from this particle
@@ -289,10 +318,50 @@ public:
     /// a list of particles from the event.
     void remove_particles( std::vector<GenParticlePtr> v );
 
+    /// @brief Remove a set of particles given by an iterator range.
+    /// Preferably the particles should be sorted before-hand.
+    ///
+    /// This function follows rules of GenEvent::remove_particle to remove
+    /// a list of particles from the event.
+    template<typename Iter>
+    void remove_particles(Iter begin, Iter end) {
+        for (auto p = begin; p != end; ++p) {
+            remove_particle(*p);
+        }
+    }
+
+    /// @brief Remove a set of particles given some container.
+    /// Preferably the particles should be sorted before-hand.
+    ///
+    template <typename Container>
+    void remove_particles(Container c) {
+        remove_particles(std::begin(c),std::end(c));
+    }
+
     /// @brief Remove vertex from the event
     ///
     /// This will remove all sub-trees of all outgoing particles of this vertex
     void remove_vertex( GenVertexPtr v );
+
+    /// @brief Check event for cyclic nodes
+    ///
+    /// If the event is already marked cyclic, then nothing is done. 
+    bool check_cycles(const GenParticles& parts);
+
+    /// @brief Check event for cyclic nodes
+    ///
+    bool check_cycles();
+  
+    /// @brief Add whole tree in topological order
+    ///
+    /// This function will find the beam particles (particles
+    /// that have no production vertices or their production vertices
+    /// have no particles) and will add the whole decay tree starting from
+    /// these particles.
+    ///
+    /// @note Any particles on this list that do not belong to the tree
+    ///       will be ignored.
+    void add_tree( const GenParticles &parts );
 
     /// @brief Add whole tree in topological order
     ///
@@ -304,7 +373,7 @@ public:
     /// @note Any particles on this list that do not belong to the tree
     ///       will be ignored.
     void add_tree( const std::vector<GenParticlePtr> &parts );
-
+  
     /// @brief Reserve memory for particles and vertices
     ///
     /// Helps optimize event creation when size of the event is known beforehand
@@ -356,9 +425,9 @@ private:
 #if !defined(__CINT__)
 
     /// List of particles
-    std::vector<GenParticlePtr> m_particles;
+    GenParticles m_particles;
     /// List of vertices
-    std::vector<GenVertexPtr> m_vertices;
+    GenVertices m_vertices;
 
     /// Event number
     int m_event_number = 0;
@@ -421,11 +490,11 @@ std::shared_ptr<T> GenEvent::attribute(const std::string &name,  const int& id) 
         std::shared_ptr<T> att = std::make_shared<T>();
         att->m_event = this;
 
-        if ( id > 0 && id <= int(particles().size()) ) {
-            att->m_particle = m_particles[id - 1];
+        if ( id > 0 ) {
+            att->m_particle = particle(id);
         }
-        if ( id < 0 && -id <= int(vertices().size()) ) {
-            att->m_vertex = m_vertices[-id - 1];
+        if ( id < 0 ) {
+            att->m_vertex = vertex(id);
         }
         if ( att->from_string(i2->second->unparsed_string()) &&
                 att->init() ) {

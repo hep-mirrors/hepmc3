@@ -29,7 +29,7 @@ GenEvent generate1() {
     v1->add_particle_out(b3);
     evt.add_vertex(v1);
     for (size_t z= 0; z < 5; z++) {
-        std::vector<GenParticlePtr> particles = evt.particles();
+        auto particles = evt.particles();
         for (auto p: particles) {
             if (p->end_vertex()) continue;
             GenParticlePtr p2 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0+0.01*evt.particles().size(),  7000.0  ),2212,  3 );
@@ -104,7 +104,10 @@ int main()
     std::shared_ptr<WriterAscii> w6= std::make_shared<WriterAscii>("testHEPEVTWrapper1output6.txt");
     w6->write_event(evt6);
     w6->close();
-    return COMPARE_ASCII_FILES("testHEPEVTWrapper1output1.txt","testHEPEVTWrapper1output2.txt") +
+
+    // HEPEVT does not preserve particle ID (number)
+    //
+    return COMPARE_ASCII_FILES("testHEPEVTWrapper1output1.txt","testHEPEVTWrapper1output2.txt",11) +
            COMPARE_ASCII_FILES("testHEPEVTWrapper1output2.txt","testHEPEVTWrapper1output3.txt") +
            COMPARE_ASCII_FILES("testHEPEVTWrapper1output3.txt","testHEPEVTWrapper1output4.txt") +
            COMPARE_ASCII_FILES("testHEPEVTWrapper1output4.txt","testHEPEVTWrapper1output5.txt") +

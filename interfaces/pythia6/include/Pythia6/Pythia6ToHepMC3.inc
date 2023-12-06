@@ -1,3 +1,4 @@
+C -*- mode: fortran -*- 
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
 C...Copyright (C) 2014-2023 The HepMC collaboration
 C...These variables will be used for conversion. Block size is different

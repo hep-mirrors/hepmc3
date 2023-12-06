@@ -43,7 +43,7 @@ public:
         IntAttribute::from_string(att);
         if ( associatedId() > int(event()->particles().size()) ||
                 associatedId() <= 0  ) return false;
-        m_associated = event()->particles()[associatedId() -1];
+        m_associated = event()->particle(associatedId());
         return true;
     }
 

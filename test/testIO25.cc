@@ -76,6 +76,7 @@ int main() {
     auto reader = std::make_shared<HepMC3::Readerprotobuf>(binstream);
     HepMC3::GenEvent evt_in;
     if(!reader->read_event(evt_in)) {
+        std::cerr << "Failed to read in event from binary stream" << std::endl;
         return 1;
     }
     reader->close();

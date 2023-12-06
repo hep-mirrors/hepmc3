@@ -165,6 +165,7 @@ void Writerprotobuf::write_event(const GenEvent &evt) {
 
     for (auto const &pdata : data.particles) {
         auto particle_pb = ged_pb.add_particles();
+        particle_pb->set_id(pdata.id);
         particle_pb->set_pid(pdata.pid);
         particle_pb->set_status(pdata.status);
         particle_pb->set_is_mass_set(pdata.is_mass_set);
@@ -178,6 +179,7 @@ void Writerprotobuf::write_event(const GenEvent &evt) {
 
     for (auto const &vdata : data.vertices) {
         auto vertex_pb = ged_pb.add_vertices();
+        vertex_pb->set_id(vdata.id);
         vertex_pb->set_status(vdata.status);
 
         vertex_pb->mutable_position()->set_m_v1(vdata.position.x());

@@ -147,7 +147,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     int idbeam2 = 10000;
     if (!beams.empty()) idbeam1 += beams[0] + 1;
     if (beams.size() > 1) idbeam2 += beams[1] + 1;
-    m_cursor += sprintf(m_cursor, "E %d %d %e %e %e %d %d %zu %i %i",
+    m_cursor += sprintf(m_cursor, "E %d %d %e %e %e %d %d %d %i %i",
                         evt.event_number(),
                         mpi,
                         event_scale,

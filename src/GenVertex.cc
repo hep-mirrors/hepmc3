@@ -20,15 +20,16 @@ namespace HepMC3 {
 
 
 GenVertex::GenVertex(const FourVector& pos):
-    m_event(nullptr),
-    m_id(0) {
+    m_event(nullptr)
+    // m_id(0)
+{
     m_data.status   = 0;
     m_data.position = pos;
+    m_data.id       = 0;
 }
 
 GenVertex::GenVertex(const GenVertexData &dat):
     m_event(nullptr),
-    m_id(0),
     m_data(dat) {
 }
 
@@ -37,14 +38,15 @@ void GenVertex::add_particle_in(GenParticlePtr p) {
     if (!p) return;
 
     // Avoid duplicates
-    if (std::find(particles_in().begin(), particles_in().end(), p) != particles_in().end()) return;
+    if (std::find(particles_in().begin(),
+                  particles_in().end(), p) != particles_in().end())
+        return;
 
     m_particles_in.emplace_back(p);
 
     if ( p->end_vertex() ) p->end_vertex()->remove_particle_in(p);
 
     p->m_end_vertex = shared_from_this();
-
     if (m_event) m_event->add_particle(p);
 }
 
@@ -53,7 +55,8 @@ void GenVertex::add_particle_out(GenParticlePtr p) {
     if (!p) return;
 
     // Avoid duplicates
-    if (std::find(particles_out().begin(), particles_out().end(), p) != particles_out().end()) return;
+    if (std::find(particles_out().begin(),
+                  particles_out().end(), p) != particles_out().end()) return;
 
     m_particles_out.emplace_back(p);
 
@@ -66,30 +69,26 @@ void GenVertex::add_particle_out(GenParticlePtr p) {
 
 void GenVertex::remove_particle_in(GenParticlePtr p) {
     if (!p) return;
-    if (std::find(m_particles_in.begin(), m_particles_in.end(), p) == m_particles_in.end()) return;
-    p->m_end_vertex.reset();
-    m_particles_in.erase(std::remove(m_particles_in.begin(), m_particles_in.end(), p), m_particles_in.end());
+    m_particles_in.remove(p);
 }
 
 
 void GenVertex::remove_particle_out(GenParticlePtr p) {
     if (!p) return;
-    if (std::find(m_particles_out.begin(), m_particles_out.end(), p) == m_particles_out.end()) return;
-    p->m_production_vertex.reset();
-    m_particles_out.erase(std::remove(m_particles_out.begin(), m_particles_out.end(), p), m_particles_out.end());
+    m_particles_out.remove(p);
 }
 
 void GenVertex::set_id(int id) {
-    m_id = id;
+    m_data.id = id;
 }
 
 
-const std::vector<ConstGenParticlePtr>& GenVertex::particles_in()const {
-    return *(reinterpret_cast<const std::vector<ConstGenParticlePtr>*>(&m_particles_in));
+const ConstGenParticles& GenVertex::particles_in()const {
+    return *(reinterpret_cast<const ConstGenParticles*>(&m_particles_in));
 }
 
-const std::vector<ConstGenParticlePtr>& GenVertex::particles_out()const {
-    return *(reinterpret_cast<const std::vector<ConstGenParticlePtr>*>(&m_particles_out));
+const ConstGenParticles& GenVertex::particles_out()const {
+    return *(reinterpret_cast<const ConstGenParticles*>(&m_particles_out));
 }
 
 const FourVector& GenVertex::position() const {
@@ -118,7 +117,7 @@ void GenVertex::set_position(const FourVector& new_pos) {
 
 bool GenVertex::add_attribute(const std::string& name, std::shared_ptr<Attribute> att) {
     if ( !parent_event() ) return false;
-    parent_event()->add_attribute(name, att, id());
+    parent_event()->add_attribute(name, att, shared_from_this());
     return true;
 }
 
@@ -130,10 +129,10 @@ std::string GenVertex::attribute_as_string(const std::string& name) const {
     return parent_event() ? parent_event()->attribute_as_string(name, id()) : std::string();
 }
 
-std::vector<std::string> GenVertex::attribute_names() const {
+std::forward_list<std::string> GenVertex::attribute_names() const {
     if ( parent_event() ) return parent_event()->attribute_names(id());
 
-    return {};
+    return std::forward_list<std::string>{};
 }
 
 } // namespace HepMC3

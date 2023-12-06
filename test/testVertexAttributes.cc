@@ -46,7 +46,7 @@ int main() {
     auto v1 = e.vertices().back();
     auto barcode1 = v1->attribute<IntAttribute>("barcode");
     auto val1 = barcode1?barcode1->value():-10001;
-    e.remove_vertex(e.vertices()[e.vertices().size()/2]);
+    e.remove_vertex(e.vertex(e.vertices().size()/2));
     auto v2 = e.vertices().back();
     auto barcode2 = v2->attribute<IntAttribute>("barcode");
     auto val2 = barcode2?barcode2->value():-10002;

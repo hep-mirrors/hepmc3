@@ -434,12 +434,12 @@ if (ASTYLE)
     include/HepMC3/Com*h
     include/HepMC3/Att*h
     examples/*/src/*cc
-    examples/*/convert_example.cc
+    examples/*/*_example.cc
+    examples/PruneExample/*.h
     examples/*/include/*h
     test/*cc
     test/*h
     interfaces/*/include/*.h
-    interfaces/*/include/*/*.h
     interfaces/*/include/*/*.cc
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )

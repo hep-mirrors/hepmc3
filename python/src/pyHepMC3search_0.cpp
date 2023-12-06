@@ -3,10 +3,10 @@
 #include <HepMC3/Selector.h>
 #include <functional>
 #include <iterator>
+#include <list>
 #include <memory>
 #include <sstream> // __str__
 #include <string>
-#include <vector>
 
 #include <functional>
 #include <pybind11/pybind11.h>
@@ -27,7 +27,7 @@
 void bind_pyHepMC3search_0(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
 
-	 binder::search_binder(M("HepMC3"));
+	binder::search_binder(M("HepMC3"));
 	{ // HepMC3::AttributeFeature file:HepMC3/AttributeFeature.h line:22
 		pybind11::class_<HepMC3::AttributeFeature, std::shared_ptr<HepMC3::AttributeFeature>> cl(M("HepMC3"), "AttributeFeature", "");
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("name") );

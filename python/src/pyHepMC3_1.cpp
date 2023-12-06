@@ -10,6 +10,7 @@
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
 #include <src/binders.h>
+#include <src/list_binder.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -94,7 +95,7 @@ void bind_pyHepMC3_1(std::function< pybind11::module &(std::string const &namesp
 		cl.def("__itruediv__", (void (HepMC3::FourVector::*)(const double)) &HepMC3::FourVector::operator/=, "Arithmetic operator /= by scalar\n\nC++: HepMC3::FourVector::operator/=(const double) --> void", pybind11::arg("rhs"));
 		cl.def_static("ZERO_VECTOR", (const class HepMC3::FourVector & (*)()) &HepMC3::FourVector::ZERO_VECTOR, "Static null FourVector = (0,0,0,0)\n\nC++: HepMC3::FourVector::ZERO_VECTOR() --> const class HepMC3::FourVector &", pybind11::return_value_policy::automatic);
 
-		 binder::custom_FourVector_binder(cl);
+		binder::custom_FourVector_binder(cl);
 	}
 	// HepMC3::delta_phi(const class HepMC3::FourVector &, const class HepMC3::FourVector &) file:HepMC3/FourVector.h line:317
 	M("HepMC3").def("delta_phi", (double (*)(const class HepMC3::FourVector &, const class HepMC3::FourVector &)) &HepMC3::delta_phi, "Signed azimuthal angle separation in [-pi, pi] between vecs  and \n\nC++: HepMC3::delta_phi(const class HepMC3::FourVector &, const class HepMC3::FourVector &) --> double", pybind11::arg("a"), pybind11::arg("b"));

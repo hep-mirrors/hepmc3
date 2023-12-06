@@ -13,6 +13,8 @@
 
 #include <memory>
 #include <vector>
+#include <forward_list>
+#include <list>
 
 namespace HepMC3 {
 
@@ -21,8 +23,8 @@ class GenParticle;
 using GenParticlePtr = std::shared_ptr<GenParticle>;
 using ConstGenParticlePtr = std::shared_ptr<const GenParticle>;
 
-using GenParticles = std::vector<GenParticlePtr>;
-using ConstGenParticles = std::vector<ConstGenParticlePtr>;
+using GenParticles = std::list<GenParticlePtr>;
+using ConstGenParticles = std::list<ConstGenParticlePtr>;
 
 /// An alias to a vector of GenParticle pointers whose constness depends on the
 /// constness of the template shared_ptr param

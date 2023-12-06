@@ -14,7 +14,8 @@
 ///
 /// @ingroup IO
 ///
-#include <set>
+#include <unordered_set>
+#include <unordered_map>
 #include <string>
 #include <fstream>
 #include <istream>
@@ -162,12 +163,16 @@ private:
 
 
     /** @brief Store attributes global to the run being written/read. */
-    std::map< std::string, std::shared_ptr<Attribute> > m_global_attributes;
+    std::unordered_map< std::string, std::shared_ptr<Attribute> > m_global_attributes;
 
     /** @brief Temp storage for  outgoing particle ids */
-    std::map<GenVertexPtr, std::set<int> >  m_forward_mothers;
+    std::unordered_map<GenVertexPtr, std::unordered_set<int> >  m_forward_mothers;
     /** @brief Temp storage for  prod vertex ids */
-    std::map<GenParticlePtr, int >  m_forward_daughters;
+    std::unordered_map<GenParticlePtr, int >  m_forward_daughters;
+    /** @brief Temp mapping from ID to vertex */
+    std::unordered_map<int,GenVertexPtr> m_vertices;
+    /** @brief Temp mapping from ID to particle */
+    std::unordered_map<int,GenParticlePtr> m_particles;
 
 };
 

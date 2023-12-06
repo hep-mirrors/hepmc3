@@ -12,7 +12,7 @@ int skip(const std::string& s1)
     if (s1.find("HepMC::Version")!=std::string::npos) return 1;
     return 0;
 }
-int COMPARE_ASCII_FILES(const std::string& f1,const std::string& f2)
+int COMPARE_ASCII_FILES(const std::string& f1,const std::string& f2, int maxLines=-1)
 {
     std::fstream file1(f1.c_str()), file2(f2.c_str());
     std::string string1, string2;
@@ -20,7 +20,7 @@ int COMPARE_ASCII_FILES(const std::string& f1,const std::string& f2)
     j1 = 0;
     j2 = 0;
     std::cout << "Run comparison" << "\n";
-    while((!file1.eof()) && (!file2.eof()))
+    while((!file1.eof()) && (!file2.eof()) && (maxLines < 0 or j1 < maxLines))
     {
         for (;;) {
             j1++;

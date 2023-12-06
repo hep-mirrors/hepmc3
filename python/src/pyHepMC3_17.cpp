@@ -1,18 +1,12 @@
-#include <HepMC3/Attribute.h>
-#include <HepMC3/Data/GenRunInfoData.h>
-#include <HepMC3/FourVector.h>
-#include <HepMC3/GenCrossSection.h>
-#include <HepMC3/GenHeavyIon.h>
-#include <HepMC3/GenRunInfo.h>
-#include <HepMC3/LHEFAttributes.h>
-#include <functional>
+#include <HepMC3/LHEF.h>
+#include <ios>
+#include <istream>
 #include <iterator>
-#include <map>
 #include <memory>
+#include <ostream>
 #include <sstream> // __str__
+#include <streambuf>
 #include <string>
-#include <utility>
-#include <vector>
 
 #include <functional>
 #include <pybind11/pybind11.h>
@@ -23,6 +17,7 @@
 #include <HepMC3/Print.h>
 #include <src/stl_binders.hpp>
 #include <src/binders.h>
+#include <src/list_binder.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -32,153 +27,40 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// HepMC3::HEPRUPAttribute file:HepMC3/LHEFAttributes.h line:26
-struct PyCallBack_HepMC3_HEPRUPAttribute : public HepMC3::HEPRUPAttribute {
-	using HepMC3::HEPRUPAttribute::HEPRUPAttribute;
-
-	bool from_string(const std::string & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPRUPAttribute *>(this), "from_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return HEPRUPAttribute::from_string(a0);
-	}
-	bool to_string(std::string & a0) const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPRUPAttribute *>(this), "to_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return HEPRUPAttribute::to_string(a0);
-	}
-	bool init() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPRUPAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init();
-	}
-	bool init(const class HepMC3::GenRunInfo & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPRUPAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init(a0);
-	}
-};
-
-// HepMC3::HEPEUPAttribute file:HepMC3/LHEFAttributes.h line:68
-struct PyCallBack_HepMC3_HEPEUPAttribute : public HepMC3::HEPEUPAttribute {
-	using HepMC3::HEPEUPAttribute::HEPEUPAttribute;
-
-	bool from_string(const std::string & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPEUPAttribute *>(this), "from_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return HEPEUPAttribute::from_string(a0);
-	}
-	bool init() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPEUPAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return HEPEUPAttribute::init();
-	}
-	bool init(const class HepMC3::GenRunInfo & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPEUPAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return HEPEUPAttribute::init(a0);
-	}
-	bool to_string(std::string & a0) const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::HEPEUPAttribute *>(this), "to_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return HEPEUPAttribute::to_string(a0);
-	}
-};
-
 void bind_pyHepMC3_17(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::HEPRUPAttribute file:HepMC3/LHEFAttributes.h line:26
-		pybind11::class_<HepMC3::HEPRUPAttribute, std::shared_ptr<HepMC3::HEPRUPAttribute>, PyCallBack_HepMC3_HEPRUPAttribute, HepMC3::Attribute> cl(M("HepMC3"), "HEPRUPAttribute", "Class for storing data for LHEF run information");
-		cl.def( pybind11::init( [](){ return new HepMC3::HEPRUPAttribute(); }, [](){ return new PyCallBack_HepMC3_HEPRUPAttribute(); } ) );
-		cl.def( pybind11::init<std::string>(), pybind11::arg("s") );
+	{ // LHEF::Reader file:HepMC3/LHEF.h line:2743
+		pybind11::class_<LHEF::Reader, std::shared_ptr<LHEF::Reader>> cl(M("LHEF"), "Reader", "The Reader class is initialized with a stream from which to read a\n version 1/2 Les Houches Accord event file. In the constructor of\n the Reader object the optional header information is read and then\n the mandatory init is read. After this the whole header block\n including the enclosing lines with tags are available in the public\n headerBlock member variable. Also the information from the init\n block is available in the heprup member variable and any additional\n comment lines are available in initComments. After each successful\n call to the readEvent() function the standard Les Houches Accord\n information about the event is available in the hepeup member\n variable and any additional comments in the eventComments\n variable. A typical reading sequence would look as follows:\n\n ");
+		cl.def( pybind11::init<std::string>(), pybind11::arg("filename") );
 
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_HEPRUPAttribute const &o){ return new PyCallBack_HepMC3_HEPRUPAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::HEPRUPAttribute const &o){ return new HepMC3::HEPRUPAttribute(o); } ) );
-		cl.def_readwrite("heprup", &HepMC3::HEPRUPAttribute::heprup);
-		cl.def_readwrite("tags", &HepMC3::HEPRUPAttribute::tags);
-		cl.def("from_string", (bool (HepMC3::HEPRUPAttribute::*)(const std::string &)) &HepMC3::HEPRUPAttribute::from_string, "Fill class content from string \n\nC++: HepMC3::HEPRUPAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::HEPRUPAttribute::*)(std::string &) const) &HepMC3::HEPRUPAttribute::to_string, "Fill string from class content \n\nC++: HepMC3::HEPRUPAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("clear", (void (HepMC3::HEPRUPAttribute::*)()) &HepMC3::HEPRUPAttribute::clear, "Clear this object. \n\nC++: HepMC3::HEPRUPAttribute::clear() --> void");
-		cl.def("assign", (class HepMC3::HEPRUPAttribute & (HepMC3::HEPRUPAttribute::*)(const class HepMC3::HEPRUPAttribute &)) &HepMC3::HEPRUPAttribute::operator=, "C++: HepMC3::HEPRUPAttribute::operator=(const class HepMC3::HEPRUPAttribute &) --> class HepMC3::HEPRUPAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def_readwrite("version", &LHEF::Reader::version);
+		cl.def_readwrite("outsideBlock", &LHEF::Reader::outsideBlock);
+		cl.def_readwrite("headerBlock", &LHEF::Reader::headerBlock);
+		cl.def_readwrite("heprup", &LHEF::Reader::heprup);
+		cl.def_readwrite("initComments", &LHEF::Reader::initComments);
+		cl.def_readwrite("hepeup", &LHEF::Reader::hepeup);
+		cl.def_readwrite("eventComments", &LHEF::Reader::eventComments);
+		cl.def_readwrite("currevent", &LHEF::Reader::currevent);
+		cl.def_readwrite("curreventfile", &LHEF::Reader::curreventfile);
+		cl.def_readwrite("currfileevent", &LHEF::Reader::currfileevent);
+		cl.def_readwrite("dirpath", &LHEF::Reader::dirpath);
+		cl.def("readEvent", (bool (LHEF::Reader::*)()) &LHEF::Reader::readEvent, "Read an event from the file and store it in the hepeup\n object. Optional comment lines are stored i the eventComments\n member variable.\n \n\n true if the read sas successful.\n\nC++: LHEF::Reader::readEvent() --> bool");
+		cl.def("openeventfile", (void (LHEF::Reader::*)(int)) &LHEF::Reader::openeventfile, "Open the efentfile with index ifile. If another eventfile is\n being read, its remaining contents is discarded. This is a noop\n if current read session is not a multi-file run.\n\nC++: LHEF::Reader::openeventfile(int) --> void", pybind11::arg("ifile"));
+
+		binder::custom_LHEFReader_binder(cl);
 	}
-	{ // HepMC3::HEPEUPAttribute file:HepMC3/LHEFAttributes.h line:68
-		pybind11::class_<HepMC3::HEPEUPAttribute, std::shared_ptr<HepMC3::HEPEUPAttribute>, PyCallBack_HepMC3_HEPEUPAttribute, HepMC3::Attribute> cl(M("HepMC3"), "HEPEUPAttribute", "Class for storing data for LHEF run information");
-		cl.def( pybind11::init( [](){ return new HepMC3::HEPEUPAttribute(); }, [](){ return new PyCallBack_HepMC3_HEPEUPAttribute(); } ) );
-		cl.def( pybind11::init<std::string>(), pybind11::arg("s") );
+	{ // LHEF::Writer file:HepMC3/LHEF.h line:3107
+		pybind11::class_<LHEF::Writer, std::shared_ptr<LHEF::Writer>> cl(M("LHEF"), "Writer", "The Writer class is initialized with a stream to which to write a\n version 1.0 Les Houches Accord event file. In the constructor of\n the Writer object the main XML tag is written out, with the\n corresponding end tag is written in the destructor. After a Writer\n object has been created, it is possible to assign standard init\n information in the heprup member variable. In addition any XML\n formatted information can be added to the headerBlock member\n variable (directly or via the addHeader() function). Further\n comment line (beginning with a # character) can be\n added to the initComments variable (directly or with the\n addInitComment() function). After this information is set, it\n should be written out to the file with the init() function.\n\n Before each event is written out with the writeEvent() function,\n the standard event information can then be assigned to the hepeup\n variable and optional comment lines (beginning with a\n # character) may be given to the eventComments\n variable (directly or with the addEventComment() function).\n\n ");
+		cl.def( pybind11::init<std::string>(), pybind11::arg("filename") );
 
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_HEPEUPAttribute const &o){ return new PyCallBack_HepMC3_HEPEUPAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::HEPEUPAttribute const &o){ return new HepMC3::HEPEUPAttribute(o); } ) );
-		cl.def_readwrite("hepeup", &HepMC3::HEPEUPAttribute::hepeup);
-		cl.def_readwrite("tags", &HepMC3::HEPEUPAttribute::tags);
-		cl.def("from_string", (bool (HepMC3::HEPEUPAttribute::*)(const std::string &)) &HepMC3::HEPEUPAttribute::from_string, "Fill class content from string \n\nC++: HepMC3::HEPEUPAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("init", (bool (HepMC3::HEPEUPAttribute::*)()) &HepMC3::HEPEUPAttribute::init, "Parse the XML-tags. \n\nC++: HepMC3::HEPEUPAttribute::init() --> bool");
-		cl.def("init", (bool (HepMC3::HEPEUPAttribute::*)(const class HepMC3::GenRunInfo &)) &HepMC3::HEPEUPAttribute::init, "Dummy function. \n\nC++: HepMC3::HEPEUPAttribute::init(const class HepMC3::GenRunInfo &) --> bool", pybind11::arg(""));
-		cl.def("to_string", (bool (HepMC3::HEPEUPAttribute::*)(std::string &) const) &HepMC3::HEPEUPAttribute::to_string, "Fill string from class content \n\nC++: HepMC3::HEPEUPAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("momentum", (class HepMC3::FourVector (HepMC3::HEPEUPAttribute::*)(int) const) &HepMC3::HEPEUPAttribute::momentum, "Get momentum \n\nC++: HepMC3::HEPEUPAttribute::momentum(int) const --> class HepMC3::FourVector", pybind11::arg("i"));
-		cl.def("clear", (void (HepMC3::HEPEUPAttribute::*)()) &HepMC3::HEPEUPAttribute::clear, "Clear this object. \n\nC++: HepMC3::HEPEUPAttribute::clear() --> void");
-		cl.def("assign", (class HepMC3::HEPEUPAttribute & (HepMC3::HEPEUPAttribute::*)(const class HepMC3::HEPEUPAttribute &)) &HepMC3::HEPEUPAttribute::operator=, "C++: HepMC3::HEPEUPAttribute::operator=(const class HepMC3::HEPEUPAttribute &) --> class HepMC3::HEPEUPAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def_readwrite("heprup", &LHEF::Writer::heprup);
+		cl.def_readwrite("hepeup", &LHEF::Writer::hepeup);
+		cl.def("headerBlock", (void (LHEF::Writer::*)(const std::string &)) &LHEF::Writer::headerBlock, "Add header lines consisting of XML code with this stream.\n\nC++: LHEF::Writer::headerBlock(const std::string &) --> void", pybind11::arg("a"));
+		cl.def("initComments", (void (LHEF::Writer::*)(const std::string &)) &LHEF::Writer::initComments, "Add comment lines to the init block with this stream.\n\nC++: LHEF::Writer::initComments(const std::string &) --> void", pybind11::arg("a"));
+		cl.def("eventComments", (void (LHEF::Writer::*)(const std::string &)) &LHEF::Writer::eventComments, "Add comment lines to the next event to be written out with this stream.\n\nC++: LHEF::Writer::eventComments(const std::string &) --> void", pybind11::arg("a"));
+		cl.def("init", (void (LHEF::Writer::*)()) &LHEF::Writer::init, "Initialize the writer.\n\nC++: LHEF::Writer::init() --> void");
+		cl.def("openeventfile", (bool (LHEF::Writer::*)(int)) &LHEF::Writer::openeventfile, "Open a new event file, possibly closing a previous opened one.\n\nC++: LHEF::Writer::openeventfile(int) --> bool", pybind11::arg("ifile"));
+		cl.def("writeinit", (void (LHEF::Writer::*)()) &LHEF::Writer::writeinit, "Write out an optional header block followed by the standard init\n block information together with any comment lines.\n\nC++: LHEF::Writer::writeinit() --> void");
+		cl.def("writeEvent", (void (LHEF::Writer::*)()) &LHEF::Writer::writeEvent, "Write the current HEPEUP object to the stream;\n\nC++: LHEF::Writer::writeEvent() --> void");
 	}
 }

@@ -42,7 +42,8 @@ HepMC::GenEvent* ConvertHepMCGenEvent_3to2(const HepMC3::GenEvent& evt)
         HepMC::FourVector pos2(pos3.x(),pos3.y(),pos3.z(),pos3.t());
         HepMC::GenVertex* v2= new HepMC::GenVertex(pos2);
         std::vector<double> vweights;
-        if(v3->attribute_names().size())
+        auto attrNames = v3->attribute_names();
+        if(std::distance(attrNames.begin(),attrNames.end()))
         {
             std::shared_ptr<HepMC3::VectorDoubleAttribute> rsvec=v3->attribute<HepMC3::VectorDoubleAttribute>("weights");
             if (rsvec) { vweights =rsvec->value(); }
@@ -109,12 +110,15 @@ HepMC::GenEvent* ConvertHepMCGenEvent_3to2(const HepMC3::GenEvent& evt)
             if (p3_flow3) p2->set_flow(3,p3_flow2->value());
         }
     }
-    std::vector<HepMC3::ConstGenParticlePtr> bms=evt.beams();
+    auto bms=evt.beams();
     if (bms.size()>=2)
     {
-        if (particlemap3to2.find(bms[0])!=particlemap3to2.end() && particlemap3to2.find(bms[1])!=particlemap3to2.end() )
-        {
-            n->set_beam_particles(particlemap3to2[bms[0]],particlemap3to2[bms[1]]);
+        auto b1 = bms.front();
+        auto b2 = *std::next(bms.begin(),1);
+        auto i1 = particlemap3to2.find(b1);
+        auto i2 = particlemap3to2.find(b2);
+        if (i1 !=particlemap3to2.end() && i2 !=particlemap3to2.end() )  {
+            n->set_beam_particles(i1->second, i2->second);
         }
     }
     std::shared_ptr<HepMC3::GenCrossSection> cs3 = evt.attribute<HepMC3::GenCrossSection>("GenCrossSection");
@@ -209,17 +213,17 @@ HepMC3::GenEvent*  ConvertHepMCGenEvent_2to3(const HepMC::GenEvent& evt, std::sh
 
     n->set_run_info(run);
     n->set_event_number(evt.event_number());
-    std::map<HepMC::GenVertex*,HepMC3::GenVertexPtr> vertexmap2to3;
+    std::map<HepMC::GenVertex*,std::shared_ptr<HepMC3::GenVertex>> vertexmap2to3;
     for (auto v2=evt.vertices_begin(); v2!=evt.vertices_end(); v2++)
     {
         HepMC::FourVector pos2=(*v2)->position();
         HepMC3::FourVector pos3(pos2.x(),pos2.y(),pos2.z(),pos2.t());
         auto v3=std::make_shared<HepMC3::GenVertex>(pos3);
-        n->add_vertex(v3);
+        n->add_vertex(v3,(*v2)->barcode());
         vertexmap2to3[*v2]=v3;
     }
 
-    std::map<HepMC::GenParticle*,HepMC3::GenParticlePtr> particlemap2to3;
+    std::map<HepMC::GenParticle*,std::shared_ptr<HepMC3::GenParticle>> particlemap2to3;
     for (auto p2=evt.particles_begin(); p2!=evt.particles_end(); p2++)
     {
 
@@ -228,22 +232,24 @@ HepMC3::GenEvent*  ConvertHepMCGenEvent_2to3(const HepMC::GenEvent& evt, std::sh
         auto p3= std::make_shared<HepMC3::GenParticle>(mom3,(*p2)->pdg_id(),(*p2)->status());
         /// we set it always as there is no way to check if it is set
         p3->set_generated_mass((*p2)->generated_mass());
+        // p3->set_id((*p2)->barcode());
         particlemap2to3[*p2]=p3;
-
+        // n->add_particle(p3, (*p2)->barcode());
+        
         auto v2production=(*p2)->production_vertex();
-        HepMC3::GenVertexPtr v3production;
+        std::shared_ptr<HepMC3::GenVertex> v3production;
         if (v2production)
         {
             auto v3=vertexmap2to3.find(v2production);
-            if (v3!=vertexmap2to3.end())  v3production=vertexmap2to3[v2production];
+            if (v3!=vertexmap2to3.end())  v3production=v3->second;
         }
 
         auto v2end=(*p2)->end_vertex();
-        HepMC3::GenVertexPtr v3end;
+        std::shared_ptr<HepMC3::GenVertex> v3end ;
         if (v2end)
         {
             auto v3=vertexmap2to3.find(v2end);
-            if (v3!=vertexmap2to3.end())  v3end=vertexmap2to3[v2end];
+            if (v3!=vertexmap2to3.end())  v3end=v3->second;
         }
 
         if (v3production) v3production->add_particle_out(p3);
