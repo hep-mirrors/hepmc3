@@ -78,7 +78,7 @@ bool GenCrossSection::from_string(const std::string &att) {
     // Use the default values to fill the vector to the size of N.
     size_t oldsize = cross_sections.size();
     if (oldsize != N) {
-        HEPMC3_WARNING("GenCrossSection::from_string: the number of cross-sections cross_sections.size()=" << cross_sections.size() << " does not match the number of weights" << event()->weights().size())
+        HEPMC3_WARNING("GenCrossSection::from_string: the number of cross-sections cross_sections.size()=" << cross_sections.size() << " does not match the number of weights " << event()->weights().size())
     }
     for (size_t i = oldsize; i < N; i++) {cross_sections.emplace_back(cross_section); cross_section_errors.emplace_back(cross_section_error);}
     return true;

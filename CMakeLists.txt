@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3)
-set(PROJECT_VERSION 3.02.06)
-SET(HEPMC3_VERSION 3.02.06)
+set(PROJECT_VERSION 3.02.08)
+SET(HEPMC3_VERSION 3.02.08)
 SET(HEPMC3_VERSION_MAJOR  3)
 SET(HEPMC3_VERSION_MINOR  2)
-SET(HEPMC3_VERSION_PATCH  6)
+SET(HEPMC3_VERSION_PATCH  8)
 
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 #This module respects HFS, e.g. defines lib or lib64 when it is needed.
@@ -60,7 +60,6 @@ if (NOT HEPMC3_ROOTIO_INSTALL_LIBDIR)
   set(HEPMC3_ROOTIO_INSTALL_LIBDIR ${CMAKE_INSTALL_LIBDIR})
 endif()
 
-
 message(STATUS "HepMC3: HEPMC3_ENABLE_SEARCH         ${HEPMC3_ENABLE_SEARCH}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_ROOTIO         ${HEPMC3_ENABLE_ROOTIO}")
 message(STATUS "HepMC3: HEPMC3_ENABLE_PROTOBUFIO     ${HEPMC3_ENABLE_PROTOBUFIO}")
@@ -87,7 +86,7 @@ endif()
 # - Prepend our own CMake Modules to the search path
 # This allows us to customize, add, and factor out functionality
 # NB: if our custom modules include others that we don't supply, those in the
-# base path will be used, so watch for incompatibilities!!
+# base path will be used, so watch for incompatibilities!
 #
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/Modules ${CMAKE_MODULE_PATH})
 
@@ -102,7 +101,7 @@ SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # (but later on when installing)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
-SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
 
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
@@ -123,7 +122,6 @@ endif()
 set(HEPMC3_FEATURES "")
 set(HEPMC3_COMPONENTS "")
 if(HEPMC3_ENABLE_ROOTIO)
-  set (ROOT_FIND_COMPONENTS Core RIO Tree)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
   list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
   set(ROOT_CXX_FLAGS_BEFORE_ROOT "${ROOT_CXX_FLAGS}")
@@ -148,12 +146,9 @@ if(HEPMC3_ENABLE_ROOTIO)
     message(STATUS "ROOT includes:  ${ROOT_INCLUDE_DIRS}")
     message(STATUS "ROOT libraries: ${ROOT_LIBRARIES}")
     message(STATUS "ROOT definitions: ${ROOT_DEFINITIONS}")
-    include_directories(${ROOT_INCLUDE_DIRS})
     add_definitions(-DHEPMC3_ROOTIO)
     string(REPLACE " " ";" ROOT_CXX_FLAGS_LIST ${ROOT_CXX_FLAGS})
     foreach(fl ${ROOT_CXX_FLAGS_LIST})
-      CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
-      if(COMPILER_SUPPORTS_${fl})
         if ("${fl}" MATCHES   ".*\\+\\+14$" OR "${fl}" MATCHES   ".*\\+\\+1y$" )
           set(HEPMC3_CXX_STANDARD 14)
         endif()
@@ -166,10 +161,7 @@ if(HEPMC3_ENABLE_ROOTIO)
         if ("${fl}" MATCHES   ".*\\+\\+23$" OR "${fl}" MATCHES   ".*\\+\\+2b$" )
           set(HEPMC3_CXX_STANDARD 23)
         endif()
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
-      endif()
     endforeach(fl ${ROOT_CXX_FLAGS_LIST})
-    set(HEPMC3_ROOTIO_LIBRARY "-lHepMC3rootIO" )
   else()
     message(STATUS "HepMC3 warning: ROOT needed for ROOTIO but not found")
     message(STATUS "HepMC3 warning: Skipping HepMC ROOT IO libraries")
@@ -185,46 +177,25 @@ if(HEPMC3_ENABLE_PROTOBUFIO)
   endif()
   add_definitions(-DHEPMC3_PROTOBUFIO)
 endif()
-
-
 #Workarounds for gcc/clang
-set(CMAKE_CXX_STANDARD ${HEPMC3_CXX_STANDARD})
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-CHECK_CXX_COMPILER_FLAG("-Wno-strict-aliasing" COMPILER_SUPPORTS_-Wno-strict-aliasing)
-if (COMPILER_SUPPORTS_-Wno-strict-aliasing)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-strict-aliasing")
-endif()
-
-CHECK_CXX_COMPILER_FLAG("-Wno-unused-command-line-argument" COMPILER_SUPPORTS_-Wno-unused-command-line-argument)
-if (COMPILER_SUPPORTS_-Wno-unused-command-line-argument)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-command-line-argument")
-endif()
-CHECK_CXX_COMPILER_FLAG("-Wno-gnu-zero-variadic-macro-arguments" COMPILER_SUPPORTS_-Wno-gnu-zero-variadic-macro-arguments)
-if (COMPILER_SUPPORTS_-Wno-gnu-zero-variadic-macro-arguments)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-gnu-zero-variadic-macro-arguments")
-endif()
-#Workarounds for Intel
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "Intel")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -diag-disable=2196")
-endif()
-#Workarounds for nvc++
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC")
-    set(CMAKE_CXX_EXTENSIONS ON)
-    #Workaround for pybind11 templates
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wc,--pending_instantiations=0 ")
-endif()
-#Workarounds for VS
-if (MSVC OR ${CMAKE_CXX_COMPILER_ID} MATCHES "MSVC" )
-#Memory problem and false positive warnings.
-  set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj" "/D_CRT_SECURE_NO_WARNINGS" "/wd4267" "/wd4244" "/wd4477" "/wd4251")
-  foreach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
-    CHECK_CXX_COMPILER_FLAG(${fl} COMPILER_SUPPORTS_${fl})
-    if(COMPILER_SUPPORTS_${fl})
+  set(CMAKE_CXX_STANDARD ${HEPMC3_CXX_STANDARD})
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+  set(${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK "")
+  set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj;/D_CRT_SECURE_NO_WARNINGS;/wd4267;/wd4244;/wd4477;/wd4251")
+  set(PGIC_CXX_FLAGS_TO_CHECK "-Wc,--pending_instantiations=0")
+  set(NVHPCC_CXX_FLAGS_TO_CHECK "-Wc,--pending_instantiations=0")
+  set(IntelC_CXX_FLAGS_TO_CHECK "-diag-disable=2196")
+  set(IntelLLVMC_CXX_FLAGS_TO_CHECK "-diag-disable=2196")
+  set(GNUC_CXX_FLAGS_TO_CHECK "-Wno-strict-aliasing;-Wno-unused-command-line-argument;-Wno-gnu-zero-variadic-macro-arguments")
+  set(ClangC_CXX_FLAGS_TO_CHECK "-Wno-strict-aliasing;-Wno-unused-command-line-argument;-Wno-gnu-zero-variadic-macro-arguments")
+  list(APPEND ${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK ${ROOT_CXX_FLAGS_LIST})
+foreach(fl ${${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK})
+  CHECK_CXX_COMPILER_FLAG(${fl} CXX_COMPILER_SUPPORTS_${fl})
+    if(CXX_COMPILER_SUPPORTS_${fl})
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
     endif()
-  endforeach(fl ${MSVC_CXX_FLAGS_TO_CHECK})
-endif()
+endforeach()
 
 message(STATUS "HepMC3: HEPMC3_CXX_STANDARD ${HEPMC3_CXX_STANDARD} " )
 message(STATUS "HepMC3: CMAKE_CXX_COMPILER_ID ${CMAKE_CXX_COMPILER_ID} " )
@@ -261,6 +232,7 @@ set( hepmc3core_sources
   ${PROJECT_SOURCE_DIR}/src/WriterAsciiHepMC2.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderPlugin.cc
   ${PROJECT_SOURCE_DIR}/src/WriterPlugin.cc
+  ${PROJECT_SOURCE_DIR}/src/ReaderFactory.cc
 )
 
 #We need to export all symbols on Win to build .lib files
@@ -270,7 +242,7 @@ add_library(HepMC3 SHARED ${hepmc3core_sources})
 target_include_directories(HepMC3 PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
-set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 3
+set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 4
   ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
@@ -330,7 +302,6 @@ if (HEPMC3_INSTALL_INTERFACES)
   list(APPEND HEPMC3_FEATURES "interfaces")
   list(APPEND HEPMC3_FEATURES "interfaceshepmc2")
   list(APPEND HEPMC3_FEATURES "interfacespythia6")
-  list(APPEND HEPMC3_FEATURES "interfacespythia8")
 endif()
 
 # ROOT support
@@ -516,7 +487,7 @@ set(CPACK_PACKAGE_VENDOR "HepMC3 Developers")
 set(CPACK_PACKAGE_VERSION 3)
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 2)
-set(CPACK_PACKAGE_VERSION_PATCH 6)
+set(CPACK_PACKAGE_VERSION_PATCH 8)
 set(CPACK_PACKAGE_RELEASE 0)
 set(CPACK_PACKAGE_FILE_NAME "HepMC3")
 set(CPACK_PACKAGE_DESCRIPTION "Event record library for high energy physics Monte Carlo")

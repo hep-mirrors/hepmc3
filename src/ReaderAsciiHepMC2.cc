@@ -321,7 +321,6 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             }
         }
     }
-
     std::shared_ptr<IntAttribute> signal_process_vertex_barcode = evt.attribute<IntAttribute>("signal_process_vertex");
     if (signal_process_vertex_barcode) {
         int signal_process_vertex_barcode_value = signal_process_vertex_barcode->value();
@@ -582,6 +581,7 @@ int ReaderAsciiHepMC2::parse_particle_information(const char *buf) {
         data_ghost->add_attribute("flows", std::make_shared<VectorIntAttribute>(vectorflows));
     }
     // Set prod_vtx link
+    if (m_vertex_cache.empty()) {HEPMC3_DEBUG(1, "The first particle in event appears before the first vertex"); return -1;}
     if ( end_vtx == m_vertex_barcodes.back() ) {
         m_vertex_cache.back()->add_particle_in(data);
         end_vtx = 0;
@@ -608,7 +608,8 @@ bool ReaderAsciiHepMC2::parse_xs_info(GenEvent &evt, const char *buf) {
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     const double xs_err = atof(cursor);
-    const size_t all = m_options.count("disable_pad_cross_sections") ? size_t{1} : std::max(evt.weights().size(),size_t{1});
+    const size_t all = m_options.count("disable_pad_cross_sections") ? size_t{1} :
+                       std::max(evt.weights().size(),size_t{1});
     const double xs_val_dummy = m_options.count("pad_cross_section_value") ? std::strtod(m_options.at("pad_cross_section_value").c_str(),nullptr) : 0.0;
     const double xs_err_dummy = m_options.count("pad_cross_section_error") ? std::strtod(m_options.at("pad_cross_section_error").c_str(),nullptr) : 0.0;
     xs->set_cross_section(std::vector<double>(all,xs_val_dummy), std::vector<double>(all,xs_err_dummy));

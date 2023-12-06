@@ -24,6 +24,7 @@ std::string const ProtobufMagicHeader = "hmpb";
 
 HEPMC3_DECLARE_WRITER_FILE(Writerprotobuf)
 HEPMC3_DECLARE_WRITER_STREAM(Writerprotobuf)
+HEPMC3_DECLARE_WRITER_SPSTREAM(Writerprotobuf)
 
 /// @brief Constant
 static size_t const MDBytesLength = 10;
@@ -100,7 +101,9 @@ Writerprotobuf::Writerprotobuf(std::ostream &stream,
 
 Writerprotobuf::Writerprotobuf(std::shared_ptr<std::ostream> stream,
                                std::shared_ptr<GenRunInfo> run)
-    : Writerprotobuf(*stream, run) {}
+    : Writerprotobuf(*stream, run) {
+    m_shared_stream = stream;
+}
 
 void Writerprotobuf::start_file() {
     // The first 16 bytes of a HepMC protobuf file

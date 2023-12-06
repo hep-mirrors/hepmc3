@@ -56,6 +56,12 @@ public:
         if(dynamic_pointer_cast<ofstream>(m_zstr)) dynamic_pointer_cast<ofstream>(m_zstr)->close();
     }
 
+    /// Set the act writer's GenRunInfo object.
+    void set_run_info(std::shared_ptr<GenRunInfo> run) {  if (m_writer) m_writer->set_run_info(run); }
+
+    /// Get the act writer's GenRunInfo object.
+    std::shared_ptr<GenRunInfo> run_info() const { return m_writer?m_writer->run_info():nullptr; }
+
 private:
     std::shared_ptr< std::ostream > m_zstr;  ///< Stream to write
     std::shared_ptr<Writer> m_writer; //!< actual writter

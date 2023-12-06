@@ -92,7 +92,6 @@ class Pythia8ToHepMC3:
         #        // mothers or daughters. These need to be attached to a vertex, or else
         #        // they will never become part of the event.
         for i in range(1, pyev.size()):
-
             #            // Check for particles not added to the event
             #            // NOTE: We have to check if this step makes any sense in HepMC event standard
             if not hepevt_particles[i]:

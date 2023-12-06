@@ -12,7 +12,7 @@
 #include <HepMC3/Version.h>
 #include <HepMC3/Relatives.h>
 #include <HepMC3/Selector.h>
-#include <src/search_binders.h>
+#include <src/searchbinders.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER

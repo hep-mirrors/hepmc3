@@ -92,6 +92,12 @@ private:
    * constructed with the string constructor, it is null otherwise.
    */
   std::unique_ptr<std::ofstream> m_out_file;
+  /** @brief Passed in shared_ptr to an output stream
+   *
+   * @details This is non-null and shared by this class if constructed with the
+   * stream constructor
+   */
+  std::shared_ptr<std::ostream> m_shared_stream;
   /** @brief The stream object that is written to
    *
    * @details If constructed with the string constructor, this just points to

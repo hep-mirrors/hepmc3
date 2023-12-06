@@ -561,8 +561,10 @@ inline PyThreadState *get_thread_state_unchecked() {
     return (PyThreadState *) _Py_atomic_load_relaxed(&_PyThreadState_Current);
 #elif PY_VERSION_HEX < 0x03050200
     return (PyThreadState *) _PyThreadState_Current.value;
-#else
+#elif PY_VERSION_HEX < 0x030D0000
     return _PyThreadState_UncheckedGet();
+#else
+    return PyThreadState_GetUnchecked();
 #endif
 }
 

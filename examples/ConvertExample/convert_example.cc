@@ -58,14 +58,11 @@
 #ifdef HEPMCCONVERT_EXTENSION_DOT
 #include "WriterDOT.h"
 #endif
-#ifdef HEPMCCONVERT_EXTENSION_UPROOTTREEREADER
-#include "ReaderuprootTree.h"
-#endif
 
 
 #include "cmdline.h"
 using namespace HepMC3;
-enum formats {autodetect, hepmc2, hepmc3, hpe,root, treeroot, treerootopal, hpezeus, lhef, dump, dot, uproot, plugin, none, proto, oscar1997, oscar1999, oscar2013};
+enum formats {autodetect, hepmc2, hepmc3, hpe,root, treeroot, treerootopal, hpezeus, lhef, dump, dot,  plugin, none, proto, oscar1997, oscar1999, oscar2013};
 
 template <class T>
 std::shared_ptr<Reader> get_input_file(const char* name, const bool input_is_stdin, const bool use_compression) {
@@ -112,7 +109,6 @@ int main(int argc, char** argv)
     format_map.insert(std::pair<std::string,formats> ( "lhef", lhef ));
     format_map.insert(std::pair<std::string,formats> ( "dump", dump ));
     format_map.insert(std::pair<std::string,formats> ( "dot", dot ));
-    format_map.insert(std::pair<std::string,formats> ( "uproot", uproot ));
     format_map.insert(std::pair<std::string,formats> ( "plugin", plugin ));
     format_map.insert(std::pair<std::string,formats> ( "oscar1997", oscar1997 ));
     format_map.insert(std::pair<std::string,formats> ( "oscar1999", oscar1999 ));
@@ -122,7 +118,7 @@ int main(int argc, char** argv)
     std::map<std::string, std::string> options;
     for (size_t i=0; i<ai.extensions_given; i++)
     {
-        std::string optarg=std::string(ai.extensions_arg[i]);
+        std::string optarg(ai.extensions_arg[i]);
         size_t pos = optarg.find_first_of('=');
         if ( pos < optarg.length() ) {
             options[std::string(optarg,0,pos)] = std::string(optarg, pos+1, optarg.length());
@@ -174,14 +170,6 @@ int main(int argc, char** argv)
     case oscar2013:
         input_file = get_input_file<ReaderOSCAR2013>(ai.inputs[0], input_is_stdin, ai.compressed_input_flag);
         break;
-    case uproot:
-#ifdef HEPMCCONVERT_EXTENSION_UPROOTTREEREADER
-        input_file = std::make_shared<ReaderuprootTree>(ai.inputs[0]);
-        break;
-#else
-        printf("Input format %s  is not supported\n", ai.input_format_arg);
-        exit(2);
-#endif
     case treeroot:
 #ifdef HEPMC3_ROOTIO
         input_file = std::make_shared<ReaderRootTree>(ai.inputs[0]);

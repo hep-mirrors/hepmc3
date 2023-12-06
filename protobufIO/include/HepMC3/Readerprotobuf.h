@@ -149,6 +149,13 @@ private:
    * string constructor, otherwise it will be null
    */
   std::unique_ptr<std::ifstream> m_in_file;
+
+  /** @brief Passed in shared_ptr to an input stream
+   *
+   * @details This is non-null and shared by this class if constructed with the
+   * stream constructor
+   */
+  std::shared_ptr<std::istream> m_shared_stream;
   /** @brief The stream object that is read from
    *
    * @details If constructed with the string constructor, this just points to

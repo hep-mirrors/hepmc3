@@ -27,6 +27,7 @@ size_t const ProtobufMagicHeaderBytes = 4;
 
 HEPMC3_DECLARE_READER_FILE(Readerprotobuf)
 HEPMC3_DECLARE_READER_STREAM(Readerprotobuf)
+HEPMC3_DECLARE_READER_SPSTREAM(Readerprotobuf)
 
 /// @brief Constant
 static size_t const MDBytesLength = 10;
@@ -65,7 +66,9 @@ Readerprotobuf::Readerprotobuf(std::istream &stream)
 }
 
 Readerprotobuf::Readerprotobuf(std::shared_ptr<std::istream> stream)
-    : Readerprotobuf(*stream) {}
+    : Readerprotobuf(*stream) {
+    m_shared_stream = stream;
+}
 
 bool Readerprotobuf::read_file_start() {
 
