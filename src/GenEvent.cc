@@ -147,31 +147,40 @@ void GenEvent::remove_particle(GenParticlePtr p) {
         vt1.second.erase(vt2);
     }
 
-    //
-    // Reassign id of attributes with id above this one
-    //
-    std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
-
-    for (att_key_t& vt1: m_attributes) {
-        changed_attributes.clear();
-
-        for (auto vt2 = vt1.second.begin(); vt2 != vt1.second.end(); ++vt2) {
-            if ( (*vt2).first > p->id() ) {
-                changed_attributes.emplace_back(*vt2);
-            }
-        }
-
-        std::sort(changed_attributes.begin(),changed_attributes.end(), [](const std::pair< int, std::shared_ptr<Attribute> > &a, const std::pair< int, std::shared_ptr<Attribute> > &b) { return a.first < b.first; });
-        for ( const auto& val: changed_attributes ) {
-            vt1.second.erase(val.first);
-            vt1.second[val.first-1] = val.second;
-        }
-    }
     // Reassign id of particles with id above this one
+    //
+    // This fixes the above. What we do is that we reassign the ID
+    // based on the vertex's _actual_ position in the container, as
+    // calculated by `std::distance`.
+    //
+    // That means, we need to reassign attributes here, too.
+    int newIdx = std::distance(m_particles.begin(),it);
     for (; it != m_particles.end(); ++it) {
-        --((*it)->m_id);
-    }
+      int oldId  = (*it)->id();
+      int newId  = ++newIdx;//Id one larger
+      HEPMC3_DEBUG(30, "GenEvent::remove_particle "
+                   "- renumber particle: " << oldId
+                   << " to " << newId << " "
+                   << newIdx << " " << (*it).get())
 
+        (*it)->m_id = newId;
+
+      for (auto& attribute : m_attributes) {
+        auto& mapping = attribute.second;
+        auto iter = mapping.find(oldId);
+        if (iter == mapping.end()) continue;
+          
+        // What if `attribute[newId]` is already set?, then that will
+        // be lost here.
+        auto value = iter->second;
+        mapping.erase(oldId);
+        mapping[newId] = value;
+        HEPMC3_DEBUG(30, "GenEvent::remove_particle "
+                     "- reassign attribute: " << attribute.first
+                     << " from " << oldId << " -> " << newId);
+      }
+    }
+    
     // Finally - set parent event and id of this particle to 0
     p->m_event = nullptr;
     p->m_id    = 0;
@@ -188,7 +197,8 @@ void GenEvent::remove_particles(std::vector<GenParticlePtr> v) {
 void GenEvent::remove_vertex(GenVertexPtr v) {
     if ( !v || v->parent_event() != this ) return;
 
-    HEPMC3_DEBUG(30, "GenEvent::remove_vertex   - called with vertex:  " << v->id());
+    HEPMC3_DEBUG(30, "GenEvent::remove_vertex   - called with vertex:  " << v->id() << " " << v.get());
+    // v->m_event = nullptr; // Disassociate from event 
     std::shared_ptr<GenVertex> null_vtx;
 
     for (const auto& p: v->particles_in()) {
@@ -203,46 +213,58 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
     }
 
     // Erase this vertex from vertices list
-    HEPMC3_DEBUG(30, "GenEvent::remove_vertex   - erasing vertex: " << v->id())
-
     int idx = -v->id();
+    HEPMC3_DEBUG(30, "GenEvent::remove_vertex   - erasing vertex: " << v->id() << " " << idx-1 << " " << m_vertices.size() << " " << v.get())
+
     auto it = m_vertices.erase(m_vertices.begin() + idx-1);
-    // Remove attributes of this vertex
+    HEPMC3_DEBUG(30, "GenEvent::remove_vertex   - after erase: size=" << m_vertices.size() << " iterator at end " << (it == m_vertices.end()));
+
+    // Lock access to attributes 
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+
+    // Remove attributes of this vertex
     for (att_key_t& vt1: m_attributes) {
-        auto vt2 = vt1.second.find(-idx);
-        if (vt2 == vt1.second.end()) continue;
-        vt1.second.erase(vt2);
-    }
-
-    //
-    // Reassign id of attributes with id below this one
-    //
-
-    std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
-
-    for ( att_key_t& vt1: m_attributes ) {
-        changed_attributes.clear();
-
-        for (auto vt2 = vt1.second.begin(); vt2 != vt1.second.end(); ++vt2) {
-            if ( (*vt2).first < v->id() ) {
-                changed_attributes.emplace_back(*vt2);
-            }
-        }
-
-        std::reverse(changed_attributes.begin(),changed_attributes.end());
-        std::sort(changed_attributes.begin(),changed_attributes.end(),[](const std::pair< int, std::shared_ptr<Attribute> > &a, const std::pair< int, std::shared_ptr<Attribute> > &b) { return a.first > b.first; });
-        for ( const auto& val: changed_attributes ) {
-            vt1.second.erase(val.first);
-            vt1.second[val.first+1] = val.second;
-        }
+      auto vt2 = vt1.second.find(-idx);
+      if (vt2 == vt1.second.end()) continue;
+      HEPMC3_DEBUG(30, "GenEvent::remove_vertex   "
+                   "- remove attribute: " << vt1.first << " of "
+                   << vt2->first);
+      vt1.second.erase(vt2);
     }
 
     // Reassign id of particles with id above this one
+    //
+    // What we do is that we reassign the ID based on the vertex's
+    // _actual_ position in the container, as calculated by
+    // `std::distance`.
+    //
+    // That means, we need to reassign attributes here, too.
+    int newIdx = std::distance(m_vertices.begin(),it);
     for (; it != m_vertices.end(); ++it) {
-        ++((*it)->m_id);
-    }
+      int oldId  = (*it)->id();
+      int newId  = -(++newIdx); // Abs(id) one larger
+      HEPMC3_DEBUG(30, "GenEvent::remove_vertex   "
+                   "- renumber vertex: " << oldId
+                   << " to " << newId << " "
+                   << newIdx << " " << (*it).get())
 
+        (*it)->m_id = newId;
+
+      for (auto& attribute : m_attributes) {
+        auto& mapping = attribute.second;
+        auto iter = mapping.find(oldId);
+        if (iter == mapping.end()) continue;
+        
+        // What if `attribute[newId]` is already set?, then that will
+        // be lost here.
+        auto value = iter->second;
+        mapping.erase(oldId);
+        mapping[newId] = value;
+        HEPMC3_DEBUG(30, "GenEvent::remove_vertex   "
+                     "- reassign attribute: " << attribute.first
+                     << " from " << oldId << " -> " << newId);
+      }
+    }
     // Finally - set parent event and id of this vertex to 0
     v->m_event = nullptr;
     v->m_id    = 0;
