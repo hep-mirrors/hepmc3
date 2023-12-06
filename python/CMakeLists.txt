@@ -134,9 +134,9 @@ if (RERUN_BINDER)
   if(BINDER)
     message(STATUS "HepMC3 python: binder found in ${BINDER}. Automatic generatin of code for python bindings is possible.")
     foreach(_comp IN ITEMS " " ${HEPMC3_COMPONENTS} )
-       if (${_comp} STREQUAL " ")
-         set(_comp "") 
-       endif()
+      if (${_comp} STREQUAL " ")
+        set(_comp "") 
+      endif()
       configure_file("${_comp}includes.hpp.in" "${_comp}includes.hpp" IMMEDIATE @ONLY)
       add_custom_command(
         OUTPUT  ${autoBN${_comp}}

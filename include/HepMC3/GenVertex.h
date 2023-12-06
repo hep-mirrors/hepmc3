@@ -38,7 +38,6 @@ public:
 
     /// @}
 
-public:
 
     /// @name Accessors
     /// @{

@@ -73,6 +73,7 @@ int main()
     p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
     p1->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
     p1->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    v1->add_particle_in(p1);
 
     GenVertexPtr v2 = std::make_shared<GenVertex>();
     evt.add_vertex( v2 );

@@ -27,7 +27,7 @@ std::shared_ptr<GenEvent> generate(const int Z) {
     v1->add_particle_out(b3);
     evt->add_vertex(v1);
     for (int z = 0; z < Z; z++) {
-        std::vector<GenParticlePtr> particles = evt->particles();
+        auto particles = evt->particles();
         for (auto p: particles) {
             if (p->end_vertex()) continue;
             GenParticlePtr p2 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0+0.01*evt->particles().size(),  7000.0  ),2212,  3 );

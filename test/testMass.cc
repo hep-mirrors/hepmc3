@@ -66,8 +66,8 @@ int main()
                 // use beam momentum
                 if( evt.beams().size()==2 )
                 {
-                    GenParticlePtr bp1 = evt.beams().at(0);
-                    GenParticlePtr bp2 = evt.beams().at(1);
+                    GenParticlePtr bp1 = evt.beams().front();
+                    GenParticlePtr bp2 = evt.beams().back();
                     xf1 = x1*bp1->momentum().p3mod();
                     xf2 = x2*bp1->momentum().p3mod();
                 }
