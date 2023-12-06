@@ -81,7 +81,11 @@ void InputInfo::classify() {
     if ( strncmp(m_head.at(0).c_str(), "hmpb", 4) == 0 ) m_protobuf = true;
     if ( strncmp(m_head.at(0).c_str(), "HepMC::Version", 14) == 0 && strncmp(m_head.at(1).c_str(), "HepMC::Asciiv3", 14) == 0 ) m_asciiv3 = true;
     if ( strncmp(m_head.at(0).c_str(), "HepMC::Version", 14) == 0 && strncmp(m_head.at(1).c_str(), "HepMC::IO_GenEvent", 18) == 0 ) m_iogenevent = true;
-    if ( strncmp(m_head.at(0).c_str(), "<LesHouchesEvents", 17) == 0) m_lhef=true;
+    if ( strncmp(m_head.at(0).c_str(), "<LesHouchesEvents", 17) == 0) m_lhef = true;
+    if ( strncmp(m_head.at(0).c_str(), "#!OSCAR2013", 10) == 0) m_OSCAR2013 = true;
+    if ( strncmp(m_head.at(0).c_str(), "# OSC1999A", 10) == 0) m_OSCAR1999 = true;
+    if ( strncmp(m_head.at(0).c_str(), "OSC1997A", 8) == 0) m_OSCAR1997 = true;
+
 
     std::stringstream st_e(m_head.at(0).c_str());
     char attr = ' ';

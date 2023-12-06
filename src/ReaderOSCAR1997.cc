@@ -40,6 +40,15 @@ ReaderOSCAR1997::ReaderOSCAR1997(std::istream & stream)
     set_run_info(std::make_shared<GenRunInfo>());
 }
 
+ReaderOSCAR1997::ReaderOSCAR1997(std::shared_ptr<std::istream> s_stream)
+    : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
+{
+    if ( !m_stream->good() ) {
+        HEPMC3_ERROR("ReaderOSCAR1997: could not open input stream ")
+    }
+    set_run_info(std::make_shared<GenRunInfo>());
+}
+
 ReaderOSCAR1997::~ReaderOSCAR1997() {
     if (!m_isstream) close();
 }

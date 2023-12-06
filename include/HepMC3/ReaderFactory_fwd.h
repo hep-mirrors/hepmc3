@@ -15,6 +15,9 @@
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/ReaderHEPEVT.h"
 #include "HepMC3/ReaderLHEF.h"
+#include "HepMC3/ReaderOSCAR1997.h"
+#include "HepMC3/ReaderOSCAR1999.h"
+#include "HepMC3/ReaderOSCAR2013.h"
 #include "HepMC3/ReaderPlugin.h"
 #include "HepMC3/CompressedIO.h"
 
@@ -48,6 +51,9 @@ public:
     bool m_iogenevent = false;
     bool m_lhef = false;
     bool m_hepevt = false;
+    bool m_OSCAR2013 = false;
+    bool m_OSCAR1999 = false;
+    bool m_OSCAR1997 = false;
     std::shared_ptr<Reader> m_reader = nullptr;
     template <class T> std::shared_ptr<Reader> native_reader(T& argument);
 };
@@ -74,6 +80,18 @@ template <class T> std::shared_ptr<Reader> InputInfo::native_reader(T& argument)
     if (m_hepevt)  {
         HEPMC3_DEBUG(10, "Attempt ReaderHEPEVT");
         return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(argument)));
+    }
+    if (m_OSCAR2013)  {
+        HEPMC3_DEBUG(10, "Attempt ReaderOSCAR2013");
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR2013(argument)));
+    }
+    if (m_OSCAR1999)  {
+        HEPMC3_DEBUG(10, "Attempt ReaderOSCAR1999");
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR1999(argument)));
+    }
+    if (m_OSCAR1997)  {
+        HEPMC3_DEBUG(10, "Attempt ReaderOSCAR1997");
+        return std::shared_ptr<Reader>((Reader*) ( new ReaderOSCAR1997(argument)));
     }
     HEPMC3_DEBUG(10, "deduce_reader: all attempts failed");
     return std::shared_ptr<Reader>(nullptr);

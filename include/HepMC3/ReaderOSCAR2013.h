@@ -33,6 +33,8 @@ public:
     ReaderOSCAR2013(const std::string& filename);
     /// The ctor to read from stdin
     ReaderOSCAR2013(std::istream &);
+    /// The ctor to read from stream. Useful for temp. streams
+    ReaderOSCAR2013(std::shared_ptr<std::istream> s_stream);        
     /// @brief Destructor
     ~ReaderOSCAR2013();
 
@@ -53,7 +55,8 @@ public:
 private:
     int m_OSCARType; ///< the type of input: 1=particles only, 2=full event
     std::ifstream m_file; //!< Input file
-    std::istream* m_stream; ///< For ctor when reading from stdin
+    std::shared_ptr<std::istream> m_shared_stream;///< For ctor when reading from temp. stream
+    std::istream* m_stream; ///< For ctor when reading from stream
     bool m_isstream; ///< toggles usage of m_file or m_stream
     std::vector<std::string> m_header; ///< header lines
     std::vector<GenVertexPtr> m_vertices; ///< pool of vertices
