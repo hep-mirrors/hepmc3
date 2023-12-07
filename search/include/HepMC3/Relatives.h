@@ -229,6 +229,7 @@ public:
     GenParticles_type<ConstGenVertexPtr> operator()(ConstGenVertexPtr input) const override {return _internal(input);}
 
 private:
+    /// Internal relatives code 
     Relative_type _internal;
 };
 /** @brief  Recursive */
