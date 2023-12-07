@@ -62,8 +62,14 @@ public:
     bool to_string(std::string &att) const override;
     /// @name Deprecated functionality
     /// @{
-    /// @brief Set all fields
-    /// @deprecated Use set_cross_section(const std::vector<double>& xs, const std::vector<double>& xs_err instead
+    /** @brief Set all fields
+        @deprecated Use set_cross_section(const std::vector<double>& xs, const std::vector<double>& xs_err instead
+       
+        @param xs Cross section
+        @param xs_err Uncertainty on cross-section
+        @param n_acc Number of accepted events
+        @param n_att Number of attempted events
+    */
     void set_cross_section(const double& xs, const double& xs_err,const long& n_acc = -1, const long& n_att = -1);
 
     /// @}

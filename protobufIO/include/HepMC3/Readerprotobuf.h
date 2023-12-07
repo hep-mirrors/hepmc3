@@ -41,13 +41,20 @@ public:
    * @brief A copy of the information contained in the protobuf file header
    */
   struct FileHeader {
+    /// Version string
     std::string m_version_str;
+    /// Major version 
     unsigned int m_version_maj;
+    /// Minor version
     unsigned int m_version_min;
+    /// Patch release
     unsigned int m_version_patch;
 
+    /// Protobuf major version
     unsigned int m_protobuf_version_maj;
+    /// Protobuf minor version
     unsigned int m_protobuf_version_min;
+    /// Protobuf patch release
     unsigned int m_protobuf_version_patch;
   };
 
