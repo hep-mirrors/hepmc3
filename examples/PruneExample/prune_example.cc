@@ -66,7 +66,7 @@ int main(int argc, char** argv)
     bool        timing      = false;
     for (int i = 1; i < argc; i++) {
         std::string arg(argv[i]);
-        if (arg == "-h" or arg == "--help") {
+        if (arg == "-h" || arg == "--help") {
             usage(argv[0]);
             return 0;
         }
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
     HepMC3::GenEvent    event;
 
     // The selection of particles
-    auto select = [](HepMC3::ConstGenParticlePtr particle) {
+    auto select = [](HepMC3::ConstGenParticlePtr& particle) {
         switch (particle->status()) {
         case 1: // Final st
         case 2: // Decayed
@@ -125,17 +125,15 @@ int main(int argc, char** argv)
     };
 
     // Test if we have more events to do.
-    auto more = [max](int iev) {
-        return max <= 0 or iev < max;
-    };
+    auto more = [max](int iev) { return max <= 0 || iev < max; };
 
     int iev = 0;
-    while (more(iev) and reader.read_event(event) and not reader.failed()) {
+    while (more(iev) && reader.read_event(event) && !reader.failed()) {
         iev++;
 
         {
             timer t(event.particles().size(),std::clog,timing);
-            prune(event, select, verb);
+            HepMC3::prune_particles1(event, select);
             t._after = event.particles().size();
         }
 
