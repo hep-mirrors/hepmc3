@@ -7,7 +7,7 @@
 #include <HepMC3/WriterAscii.h>
 #include <list>
 namespace HepMC3 {
-// Assuming vector starage and allowing momenta noncoservation 
+// Assuming vector storage and allowing momenta noncoservation 
 template <typename Select>
 void remove_particles1(GenEvent& event, Select select) {
     auto& particles = event.particles();
@@ -33,7 +33,7 @@ void remove_particles1(GenEvent& event, Select select) {
     for (auto& vtx : vert_toremove) event.remove_vertex(vtx);
 }
 
-// Assuming list starage and allowing momenta noncoservation
+// Assuming list storage and allowing momenta noncoservation
 template <typename Select>
 void remove_particles2(GenEvent& event, Select select) {
     auto& particles = event.particles();
@@ -56,7 +56,7 @@ void remove_particles2(GenEvent& event, Select select) {
     for (auto& vtx : event.vertices()) if (vtx->particles_out().empty() && vtx->particles_in().empty()) vert_toremove.push_back(vtx);
     for (auto& vtx : vert_toremove) event.remove_vertex(vtx);
 }
-// Assuming vector starage
+// Assuming vector storage
 template <typename Select>
 void remove_particles3(GenEvent& event, Select select) {
     auto& particles = event.particles();
@@ -74,6 +74,7 @@ void remove_particles3(GenEvent& event, Select select) {
         if (endVtx && prdVtx && prdVtx != endVtx ) {
           for (auto& outgoing : endVtx->particles_out()) prdVtx->add_particle_out(outgoing);
           for (auto& incoming : endVtx->particles_in()) prdVtx->add_particle_in(incoming);
+          for (auto& out : prodVtx->particles_out()) if ( out->end_vertex() == endVtx) part_toremove.push_back(out);
         }
     }
     std::sort(part_toremove.begin(),part_toremove.end(), [](const auto& a, consta auto& b) {return a->id()<b->id();});
@@ -83,7 +84,7 @@ void remove_particles3(GenEvent& event, Select select) {
     for (auto& vtx : vert_toremove) event.remove_vertex(vtx);
 }
 
-// Assuming list starage
+// Assuming list storage
 template <typename Select>
 void remove_particles4(GenEvent& event, Select select) {
     auto& particles = event.particles();
@@ -101,6 +102,7 @@ void remove_particles4(GenEvent& event, Select select) {
         if (endVtx && prdVtx && prdVtx != endVtx ) {
           for (auto& outgoing : endVtx->particles_out()) prdVtx->add_particle_out(outgoing);
           for (auto& incoming : endVtx->particles_in()) prdVtx->add_particle_in(incoming);
+          for (auto& out : prodVtx->particles_out()) if ( out->end_vertex() == endVtx) part_toremove.push_back(out);
         }
     }
     for (auto& particle : part_toremove) event.remove_particle(particle);
