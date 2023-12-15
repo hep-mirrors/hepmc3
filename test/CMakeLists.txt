@@ -123,6 +123,7 @@ set( HepMC_tests
         testAttributes
         testHEPEVTWrapper1
         testVertexAttributes
+        testLooping
          )
 set( HepMC_root_tests
         testIO2

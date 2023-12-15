@@ -141,31 +141,28 @@ void GenEvent::remove_particle(GenParticlePtr p) {
 
     // Remove attributes of this particle
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    for (att_key_t& vt1: m_attributes) {
-        auto vt2 = vt1.second.find(idx);
-        if (vt2 == vt1.second.end()) continue;
-        vt1.second.erase(vt2);
-    }
+
 
     //
     // Reassign id of attributes with id above this one
     //
-    std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
-
+ //   std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
+ //   changed_attributes.reserve(200);
     for (att_key_t& vt1: m_attributes) {
-        changed_attributes.clear();
-
-        for (auto vt2 = vt1.second.begin(); vt2 != vt1.second.end(); ++vt2) {
-            if ( (*vt2).first > p->id() ) {
-                changed_attributes.emplace_back(*vt2);
-            }
+        auto vt2 = vt1.second.find(idx);
+        if (vt2 != vt1.second.end())  vt1.second.erase(vt2);
+   //     changed_attributes.clear();
+        for (auto vt2 = vt1.second.upper_bound(idx); vt2 != vt1.second.end(); ++vt2) {
+                std::pair< int, std::shared_ptr<Attribute> > xx = std::move(*vt2);
+                xx.first --;
+                vt1.second.insert(xx);
         }
-
+/*
         std::sort(changed_attributes.begin(),changed_attributes.end(), [](const std::pair< int, std::shared_ptr<Attribute> > &a, const std::pair< int, std::shared_ptr<Attribute> > &b) { return a.first < b.first; });
         for ( const auto& val: changed_attributes ) {
             vt1.second.erase(val.first);
             vt1.second[val.first-1] = val.second;
-        }
+        }*/
     }
     // Reassign id of particles with id above this one
     for (; it != m_particles.end(); ++it) {
@@ -209,33 +206,29 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
     auto it = m_vertices.erase(m_vertices.begin() + idx-1);
     // Remove attributes of this vertex
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    for (att_key_t& vt1: m_attributes) {
-        auto vt2 = vt1.second.find(-idx);
-        if (vt2 == vt1.second.end()) continue;
-        vt1.second.erase(vt2);
-    }
-
     //
     // Reassign id of attributes with id below this one
     //
 
-    std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
-
+    //std::vector< std::pair< int, std::shared_ptr<Attribute> > > changed_attributes;
+  //  changed_attributes.reserve(200);
     for ( att_key_t& vt1: m_attributes ) {
-        changed_attributes.clear();
+      //  changed_attributes.clear();
+        auto vt2 = vt1.second.find(-idx);
+        if (vt2 != vt1.second.end()) vt1.second.erase(vt2);
+        for (auto vt2 = vt1.second.begin(); vt2 != vt1.second.end() && vt2 != vt1.second.lower_bound(-idx) ; ++vt2) {
+                std::pair< int, std::shared_ptr<Attribute> > xx = std::move(*vt2);
+                xx.first ++;
+                vt1.second.insert(xx);
 
-        for (auto vt2 = vt1.second.begin(); vt2 != vt1.second.end(); ++vt2) {
-            if ( (*vt2).first < v->id() ) {
-                changed_attributes.emplace_back(*vt2);
-            }
         }
 
-        std::reverse(changed_attributes.begin(),changed_attributes.end());
-        std::sort(changed_attributes.begin(),changed_attributes.end(),[](const std::pair< int, std::shared_ptr<Attribute> > &a, const std::pair< int, std::shared_ptr<Attribute> > &b) { return a.first > b.first; });
-        for ( const auto& val: changed_attributes ) {
-            vt1.second.erase(val.first);
-            vt1.second[val.first+1] = val.second;
-        }
+        //std::reverse(changed_attributes.begin(),changed_attributes.end());
+        //std::sort(changed_attributes.begin(),changed_attributes.end(),[](const std::pair< int, std::shared_ptr<Attribute> > &a, const std::pair< int, std::shared_ptr<Attribute> > &b) { return a.first > b.first; });
+       // for ( const auto& val: changed_attributes ) {
+      //      vt1.second.erase(val.first);
+    //        vt1.second[val.first+1] = val.second;
+  //      }
     }
 
     // Reassign id of particles with id above this one
