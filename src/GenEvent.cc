@@ -373,7 +373,7 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
                 ++((*next++)->m_id);
             }
         } else {
-            HEPMC3_WARNING("ReaderAsciiHepMC2: Suspicious looking rootvertex found. Will try to cope.")
+            HEPMC3_WARNING("GenEvent::add_tree Suspicious looking rootvertex found. Will try to cope.")
         }
     }
 
