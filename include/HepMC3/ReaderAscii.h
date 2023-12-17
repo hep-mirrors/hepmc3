@@ -19,8 +19,10 @@
 #include <fstream>
 #include <istream>
 #include <iterator>
+#include <unordered_map>
 #include "HepMC3/Reader.h"
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/Data/GenEventData.h"
 
 
 namespace HepMC3 {
@@ -67,69 +69,61 @@ private:
     /// @brief Parse event
     ///
     /// Helper routine for parsing event information
-    /// @param[out] evt Event that will be filled with new data
     /// @param[in]  buf Line of text that needs to be parsed
     /// @return vertices count and particles count for verification
-    std::pair<int,int> parse_event_information(GenEvent &evt, const char *buf);
+    std::pair<int,int> parse_event_information(const char *buf);
 
     /// @brief Parse weight value lines
     ///
     /// Helper routine for parsing weight value information
-    /// @param[out] evt Event whose GenWeights will be filled with weight values
     /// @param[in]  buf Line of text that needs to be parsed
     ///
-    bool parse_weight_values(GenEvent &evt, const char *buf);
+    bool parse_weight_values(const char *buf);
 
     /// @brief Parse units
     ///
     /// Helper routine for parsing units information
-    /// @param[out] evt Event that will be filled with unit information
     /// @param[in]  buf Line of text that needs to be parsed
     ///
-    bool parse_units(GenEvent &evt, const char *buf);
+    bool parse_units(const char *buf);
 
     /// @brief Parse struct GenPdfInfo information
     ///
     /// Helper routine for parsing PDF information
-    /// @param[out] evt Event that will be filled with unit information
     /// @param[in]  buf Line of text that needs to be parsed
-    bool parse_pdf_info(GenEvent &evt, const char *buf);
+    bool parse_pdf_info(const char *buf);
 
     /// @brief Parse struct GenHeavyIon information
     ///
     /// Helper routine for parsing heavy ion information
-    /// @param[out] evt Event that will be filled with unit information
     /// @param[in]  buf Line of text that needs to be parsed
-    bool parse_heavy_ion(GenEvent &evt, const char *buf);
+    bool parse_heavy_ion(const char *buf);
 
     /// @brief Parse struct GenCrossSection information
     ///
     /// Helper routine for parsing cross-section information
-    /// @param[out] evt Event that will be filled with unit information
     /// @param[in]  buf Line of text that needs to be parsed
-    bool parse_cross_section(GenEvent &evt, const char *buf);
+    bool parse_cross_section( const char *buf);
 
     /// @brief Parse vertex
     ///
     /// Helper routine for parsing single event information
-    /// @param[out] evt Event that will contain parsed vertex
     /// @param[in] buf Line of text that needs to be parsed
     ///
-    bool parse_vertex_information(GenEvent &evt, const char *buf);
+    bool parse_vertex_information(const char *buf);
 
     /// @brief Parse particle
     ///
     /// Helper routine for parsing single particle information
     /// @param[out] evt Event that will contain parsed particle
     /// @param[in] buf Line of text that needs to be parsed
-    bool parse_particle_information(GenEvent &evt, const char *buf);
+    bool parse_particle_information(const char *buf);
 
     /// @brief Parse attribute
     ///
     /// Helper routine for parsing single attribute information
-    /// @param[out] evt Event that will contain parsed attribute
     /// @param[in] buf Line of text that needs to be parsed
-    bool parse_attribute(GenEvent &evt, const char *buf);
+    bool parse_attribute( const char *buf);
 
     /// @brief Parse run-level attribute.
     ///
@@ -160,15 +154,16 @@ private:
     std::istream* m_stream; ///< For ctor when reading from stream
     bool m_isstream; ///< toggles usage of m_file or m_stream
 
-
-    /** @brief Store attributes global to the run being written/read. */
-    std::map< std::string, std::shared_ptr<Attribute> > m_global_attributes;
-
-    /** @brief Temp storage for  outgoing particle ids */
-    std::map<GenVertexPtr, std::set<int> >  m_forward_mothers;
-    /** @brief Temp storage for  prod vertex ids */
-    std::map<GenParticlePtr, int >  m_forward_daughters;
-
+    /** @brief Temp storage for sets of incoming/outgoing ids for explicit vertices.*/
+    std::map<int, std::pair< std::set<int>, std::set<int> > >  m_io_explicit;
+    /** @brief Temp storage for sets of incoming/outgoing ids for implicit vertices.*/
+    std::unordered_map<int, std::pair< std::set<int>, std::set<int> > >  m_io_implicit;
+    /** @brief Temp storage to keep the order of implicit vertices.*/
+    std::vector<int> m_io_implicit_ids;
+    /** @brief Temp storage to keep the order of explicit vertices.*/
+    std::set<int> m_io_explicit_ids;
+    
+    GenEventData m_data;
 };
 
 

@@ -368,7 +368,7 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
                     vt1.second[val.first == rootid? 0: val.first + 1] = val.second;
                 }
             }
-            m_rootvertex->set_id(0);
+            m_rootvertex->m_id = 0;
             while ( next != m_vertices.end() ) {
                 ++((*next++)->m_id);
             }
