@@ -303,7 +303,7 @@
         // Replace with:
         HepMC3::FourVector position(pos[1],pos[2],pos[3],pos[0]);
         HepMC3::GenVertexPtr vertex = std::make_shared<HepMC3::GenVertex>(position);
-        vertex->set_id(1);
+        vertex->set_status(1);
     @endcode
 
     @code{.cpp}

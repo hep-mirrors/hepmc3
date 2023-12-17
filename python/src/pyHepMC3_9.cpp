@@ -199,7 +199,6 @@ void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namesp
 		cl.def("parent_event", (class HepMC3::GenEvent * (HepMC3::GenVertex::*)()) &HepMC3::GenVertex::parent_event, "Get parent event\n\nC++: HepMC3::GenVertex::parent_event() --> class HepMC3::GenEvent *", pybind11::return_value_policy::automatic);
 		cl.def("in_event", (bool (HepMC3::GenVertex::*)() const) &HepMC3::GenVertex::in_event, "Check if this vertex belongs to an event\n\nC++: HepMC3::GenVertex::in_event() const --> bool");
 		cl.def("id", (int (HepMC3::GenVertex::*)() const) &HepMC3::GenVertex::id, "Get the vertex unique identifier\n\n \n This is not the same as id() in HepMC v2, which is now \n\nC++: HepMC3::GenVertex::id() const --> int");
-		cl.def("set_id", (void (HepMC3::GenVertex::*)(int)) &HepMC3::GenVertex::set_id, "set the vertex identifier\n\nC++: HepMC3::GenVertex::set_id(int) --> void", pybind11::arg("id"));
 		cl.def("status", (int (HepMC3::GenVertex::*)() const) &HepMC3::GenVertex::status, "Get vertex status code\n\nC++: HepMC3::GenVertex::status() const --> int");
 		cl.def("set_status", (void (HepMC3::GenVertex::*)(int)) &HepMC3::GenVertex::set_status, "Set vertex status code\n\nC++: HepMC3::GenVertex::set_status(int) --> void", pybind11::arg("stat"));
 		cl.def("data", (const struct HepMC3::GenVertexData & (HepMC3::GenVertex::*)() const) &HepMC3::GenVertex::data, "Get vertex data\n\nC++: HepMC3::GenVertex::data() const --> const struct HepMC3::GenVertexData &", pybind11::return_value_policy::automatic);
