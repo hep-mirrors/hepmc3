@@ -322,6 +322,7 @@ if (HEPMC3_INSTALL_EXAMPLES)
   install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/examples/ DESTINATION  ${CMAKE_INSTALL_DOCDIR}/examples COMPONENT doc
           FILES_MATCHING PATTERN "*"
           PATTERN "*CMakeFiles*" EXCLUDE
+          PATTERN "*myclass_Classes.cxx" EXCLUDE
           PATTERN "*pcm" EXCLUDE
           PATTERN "*rootmap" EXCLUDE
           PATTERN "*Dict.cxx" EXCLUDE
