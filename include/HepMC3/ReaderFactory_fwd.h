@@ -34,11 +34,29 @@ const std::string libHepMC3protobufIO = "libHepMC3protobufIO.dylib";
 const std::string libHepMC3protobufIO = "HepMC3protobufIO.dll";
 const std::string libHepMC3rootIO = "HepMC3rootIO.dll";
 #endif
+/** Information about input.
 
+    This class deduces information about the input file from the
+    filename, such as
+
+    - is it a remote file
+    - is reading from it an error
+    - is it a ROOT file
+    - is it a protobuf file
+    - is it ASCII (v3)
+    - is it ASCII (v2)
+    - is it LHEF file
+    - is it HEPEVT
+
+    It can also return a reader 
+*/
 class InputInfo {
 public:
+    /// @brief Constructor 
     InputInfo() {};
+    /// @brief Constructor 
     InputInfo(const std::string &filename);
+    /// @brief Classify input 
     void classify();
     std::vector<std::string> m_head;
     bool m_remote = false;
@@ -55,6 +73,7 @@ public:
     bool m_OSCAR1999 = false;
     bool m_OSCAR1997 = false;
     std::shared_ptr<Reader> m_reader = nullptr;
+    /// @brief Get native (built-in) reader 
     template <class T> std::shared_ptr<Reader> native_reader(T& argument);
 };
 

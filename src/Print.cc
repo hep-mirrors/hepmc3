@@ -241,7 +241,7 @@ void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
     os << " (X,cT): " << pos.x() << ", " <<pos.y() << ", " << pos.z() << ", " << pos.t();
     if (attributes)
     {
-        std::vector<std::string> names     = v->attribute_names();
+        auto names     = v->attribute_names();
         for (const auto& ss: names) {
             os << " " << ss << "=" << (*v).attribute_as_string(ss);
         }
@@ -300,15 +300,15 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
     const ConstGenVertexPtr end  = p->end_vertex();
     int prod_vtx_id   = (prod) ? prod->id() : 0;
     int end_vtx_id    = (end)  ? end->id()  : 0;
+    auto names        = p->attribute_names();
 
     os << " Stat: " << p->status()
        << " PV: " << prod_vtx_id
        << " EV: " << end_vtx_id
-       << " Attr: " << (*p).attribute_names().size();
+       << " Attr: " << names.size();
 
     if (attributes)
     {
-        std::vector<std::string> names     = p->attribute_names();
         for (const auto& ss: names) {
             os << " " << ss << "=" << (*p).attribute_as_string(ss);
         }

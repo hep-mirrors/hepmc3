@@ -50,6 +50,7 @@ public:
 
     /// @name Static constants
     /// @{
+  
     /// Default maxUlps for AlmostEqual2sComplement function (double precision)
     static const unsigned int DEFAULT_DOUBLE_ALMOST_EQUAL_MAXULPS;
 
