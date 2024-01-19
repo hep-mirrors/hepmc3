@@ -1,11 +1,6 @@
-#--------
-#-root IO
 
 include_directories(${PROJECT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR})
 
-#----------------------------------------------------------------------------
-# Generate dictionaries
-#
 if (MSVC)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 else()
@@ -16,7 +11,7 @@ ROOT_GENERATE_DICTIONARY(G__HepMC3rootIO include/rootIO_Classes.hh LINKDEF inclu
 add_library(HepMC3rootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRootTree.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRootTree.cc ${PROJECT_SOURCE_DIR}/rootIO/src/Streamers.cc G__HepMC3rootIO.cxx)
 set_property(TARGET HepMC3rootIO PROPERTY POSITION_INDEPENDENT_CODE 1)
 
-target_link_libraries(HepMC3rootIO ROOT::Tree ROOT::RIO ROOT::Core HepMC3)
+target_link_libraries(HepMC3rootIO ROOT::Tree ROOT::RIO ROOT::Core HepMC3::HepMC3)
 
 target_include_directories(HepMC3rootIO PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
