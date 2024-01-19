@@ -4,7 +4,6 @@ find_package(Pythia8 8.300 COMPONENTS HepMC3)
 if(Pythia8_FOUND)
   message(STATUS "HepMC3 Pythia8Example: Pythia8 package found. pythia8_example enabled")
   add_executable(pythia8_example.exe ${CMAKE_CURRENT_SOURCE_DIR}/pythia8_example.cc )
-
   target_link_libraries(pythia8_example.exe Pythia8::Pythia8 HepMC3::HepMC3)
   set_target_properties(pythia8_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 

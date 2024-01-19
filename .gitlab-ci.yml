@@ -87,6 +87,7 @@ LCG_95_x86_64-centos7-gcc8-opt:
     - LARG="$LARG "-DGRAPHVIZ_ROOT=/cvmfs/sft.cern.ch/lcg/releases/LCG_95/graphviz/2.28.0/${LCGPLATFORM}/
     - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
     - LARG="$LARG "-DProtobuf_LIBRARY=${Protobuf_ROOT}/lib/libprotobuf.so
+    - LARG="$LARG "-DHEPMC3_TEST_LZMA:BOOL=OFF
     - *LCGcmake
 
 ########################################################################
@@ -221,7 +222,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
 
 .cmake: &cmake
     - $CMAKE -S . -B BUILD -DCMAKE_INSTALL_PREFIX=$(pwd)/INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
-    - $CMAKE --build BUILD -j 10
+    - $CMAKE --build BUILD -j 10  --verbose
     - $CMAKE --install BUILD
     - cd BUILD
     - $CTEST -j 5 --output-on-failure
@@ -231,7 +232,7 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
     - mkdir -p BUILD
     - cd  BUILD
     - $CMAKE ..  -DCMAKE_INSTALL_PREFIX=$(pwd)/../INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
-    - make -j 10
+    - make -j 10  SHELL='sh -x'
     - make install
     - $CTEST -j 5 --output-on-failure
     - cd ..
@@ -429,19 +430,19 @@ Fedora33-GNU-pypy:
     - job: build_image_Fedora33
 
 Fedora24-GNU:
-  variables: { OS: Fedora, FREL: 24, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF"}
+  variables: { OS: Fedora, FREL: 24, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
   extends: .any-oldcmake
   needs:
     - job: build_image_Fedora24
 
 Fedora23-LLVM-noroot-nopython-noprotobuf:
-  variables: { OS: Fedora, FREL: 23, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF"}
+  variables: { OS: Fedora, FREL: 23, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
   extends: .any-oldcmake-no-python
   needs:
     - job: build_image_Fedora23
 
 Fedora23-GNU-noroot-nopython-noprotobuf:
-  variables: { OS: Fedora, FREL: 23, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF"}
+  variables: { OS: Fedora, FREL: 23, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
   extends: .any-oldcmake-no-python
   needs:
     - job: build_image_Fedora23
