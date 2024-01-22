@@ -47507,7 +47507,7 @@ C...Write decay information by Nils-Erik Bomark 3/29/2010
         KF = KFORIG
         KC = PYCOMP(KF)
         IF (KC.NE.0) THEN
-          WRITE(LFN,7000) ''
+          WRITE(LFN,7000) ' '
           WRITE(LFN,7000) '         PDG            Width'
           WRITE(LFN,7500) KF,PMAS(KC,2), CHAF(KC,1)
           WRITE(LFN,7000) 

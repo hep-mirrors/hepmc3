@@ -439,6 +439,11 @@ The examples use multiple parts of HepMC3, therefore to use all of them a full i
     Use HepMC3::children_particles, HepMC3::descendant_particles, etc. instead.
   - The minimal required version of `cmake` slowly changes from version to version. It is recommented to use the `cmake`
      released not earlier than 3-4 years ago.
+  - HepMC3 CI uses the GNU and LLVM (Clang) compiler toolsets for compilation on Linux/x86_64, therefore those compilers are the primary supported compilers.
+    In addition to that HepMC3 compilation is tested regularly with MSVC@Windows/x86_64, GNU@Darwin/x86_64, GNU@Darwin/aarch64 and GNU@Linux/(architectures supported by RHEL/Fedora). 
+    The following compiler combinations are tested irregularly: ARM@Linux/aarch64, IntelLLVM@Linux/x86_64, Intel@Linux/x86_64, NVidia@Linux/x86_64, 
+    IBM XL@Linux/ppc64le, AOCC@Linux/x86_64.
+    SunPro@Linux/x86_64 is not supported as of 3.2.8.
 
 
 # Source package structure
