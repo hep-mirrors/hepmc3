@@ -2,6 +2,7 @@ set(basic_sources   ${CMAKE_CURRENT_SOURCE_DIR}/convert_example.cc
                     ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterDOT.cc
                     ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterHEPEVTZEUS.cc )
+set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c PROPERTIES LANGUAGE CXX)
 set(basic_libraries HepMC3::HepMC3)
 set(basic_defines HEPMCCONVERT_EXTENSION_HEPEVTZEUS=1 HEPMCCONVERT_EXTENSION_DOT=1)
 set(basic_dependencies )

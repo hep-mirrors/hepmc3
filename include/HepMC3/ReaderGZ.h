@@ -66,10 +66,10 @@ public:
     }
 
     /// Set the act reader's GenRunInfo object.
-    void set_run_info(std::shared_ptr<GenRunInfo> run) { if (m_reader) m_reader->set_run_info(run); }
+    void set_run_info(std::shared_ptr<GenRunInfo> run) override { if (m_reader) m_reader->set_run_info(run); }
 
     /// Get the act reader's GenRunInfo object.
-    std::shared_ptr<GenRunInfo> run_info() const { return m_reader?m_reader->run_info():nullptr; }
+    std::shared_ptr<GenRunInfo> run_info() const override { return m_reader?m_reader->run_info():nullptr; }
 
 private:
     ///@brief Close file stream
