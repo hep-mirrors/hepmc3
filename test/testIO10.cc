@@ -25,6 +25,7 @@ int main()
             printf("End of file reached. Exit.\n");
             break;
         }
+        evt.set_run_info(nullptr);
         inputA_events.push_back(evt);
     }
     inputA.close();
