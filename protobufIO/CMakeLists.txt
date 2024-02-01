@@ -3,6 +3,7 @@ protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS HepMC3.proto)
 set(HepMC3protobufIO_sources
   src/Writerprotobuf.cc
   src/Readerprotobuf.cc
+  src/protobufUtils.cc
   ${PROTO_SRCS})
 
 #---Define dynamic library---------------------------------------------------
@@ -34,11 +35,16 @@ install(TARGETS HepMC3protobufIO
   DESTINATION ${CMAKE_INSTALL_LIBDIR}
   COMPONENT protobufIOlibs)
 
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/HepMC3.proto
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/HepMC3/protobufIO
+  COMPONENT protobufIOdevel)
+
 # Alias for packages that include this as a sub-project but
 # want to use the namespaced target names
 add_library(HepMC3::protobufIO ALIAS HepMC3protobufIO)
 
 install(FILES
+          ${PROTO_HDRS}
           ${CMAKE_CURRENT_SOURCE_DIR}/include/HepMC3/Writerprotobuf.h
           ${CMAKE_CURRENT_SOURCE_DIR}/include/HepMC3/Readerprotobuf.h
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/HepMC3
