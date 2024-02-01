@@ -81,8 +81,6 @@ public:
   void write_run_info();
 
 private:
-
-
   /** @brief Write non-event front matter to the output stream. */
   void start_file();
 

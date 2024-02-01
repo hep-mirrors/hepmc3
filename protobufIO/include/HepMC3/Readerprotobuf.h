@@ -25,8 +25,6 @@
 
 #include "HepMC3/GenEvent.h"
 
-#include "HepMC3/Data/GenEventData.h"
-
 #include <array>
 #include <fstream>
 #include <string>
@@ -43,7 +41,7 @@ public:
   struct FileHeader {
     /// Version string
     std::string m_version_str;
-    /// Major version 
+    /// Major version
     unsigned int m_version_maj;
     /// Minor version
     unsigned int m_version_min;
@@ -133,7 +131,7 @@ private:
    * GenEvent
    * @return Whether the reader can still be read from after reading
    */
-  bool read_GenEvent(bool skip = false);
+  bool read_GenEvent(bool skip, GenEvent &);
 
   /** @brief Parse the next protobuf message as a Header message
    *
@@ -183,10 +181,6 @@ private:
    * @details Defined in HepMC3_pb::MessageDigest::MessageType in the proto file
    */
   int m_msg_type;
-
-  /** @brief The event data parsed from the message
-   */
-  HepMC3::GenEventData m_evdata;
 
   /** @brief A copy of the library version info stored in the proto file header
    *
