@@ -69,6 +69,7 @@ GenEvent::GenEvent(const GenEvent&e) {
         GenEventData tdata;
         e.write_data(tdata);
         read_data(tdata);
+        m_run_info = e.m_run_info;
     }
 }
 
@@ -89,6 +90,7 @@ GenEvent& GenEvent::operator=(const GenEvent& e) {
         GenEventData tdata;
         e.write_data(tdata);
         read_data(tdata);
+        m_run_info = e.m_run_info;
     }
     return *this;
 }
