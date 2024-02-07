@@ -143,7 +143,7 @@ set( HepMC_root_tests
         )
 
 set( HepMC_search_tests
-
+        testSearch1
         )
 if (WIN32)
   set( HepMC_protobuf_tests )
@@ -385,6 +385,9 @@ endmacro(add_memcheck_test)
 
 if(MEMORYCHECK_COMMAND)
   set( HepMC_memcheck_tests ${HepMC_tests} )
+  if(HEPMC3_ENABLE_SEARCH )
+    set( HepMC_memcheck_tests ${HepMC_memcheck_tests} ${HepMC_search_tests} )
+  endif()
   if(HEPMC3_ENABLE_PROTOBUFIO )
     set( HepMC_memcheck_tests ${HepMC_memcheck_tests} ${HepMC_protobuf_tests} )
   endif()

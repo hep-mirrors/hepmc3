@@ -245,7 +245,12 @@ public:
         m_checkedObjects.clear();
         return _recursive(input);
     }
-
+    ~Recursive() { 
+        for (auto obj: m_checkedObjects) {
+            delete obj;
+        }
+        m_checkedObjects.clear();
+    }
 private:
     /// @brief recursive
     template<typename GenObject_type, typename dummy>
