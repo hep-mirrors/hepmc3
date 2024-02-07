@@ -25,6 +25,11 @@
 
 #include "HepMC3/GenEvent.h"
 
+// protobuf header files
+#include "HepMC3.pb.h"
+
+#include "google/protobuf/io/zero_copy_stream_impl.h"
+
 #include <array>
 #include <fstream>
 #include <string>
@@ -34,27 +39,6 @@ namespace HepMC3 {
 
 class Readerprotobuf : public Reader {
 public:
-  /**
-   * @class HepMC3::Readerprotobuf::FileHeader
-   * @brief A copy of the information contained in the protobuf file header
-   */
-  struct FileHeader {
-    /// Version string
-    std::string m_version_str;
-    /// Major version
-    unsigned int m_version_maj;
-    /// Minor version
-    unsigned int m_version_min;
-    /// Patch release
-    unsigned int m_version_patch;
-
-    /// Protobuf major version
-    unsigned int m_protobuf_version_maj;
-    /// Protobuf minor version
-    unsigned int m_protobuf_version_min;
-    /// Protobuf patch release
-    unsigned int m_protobuf_version_patch;
-  };
 
   //
   // Constructors
@@ -102,22 +86,17 @@ public:
   /** @brief Close file stream */
   void close() override;
 
-  /** @brief Get the header information read from the protobuf file */
-  FileHeader const &file_header() { return m_file_header; }
-
   /** @brief Get stream error state */
   bool failed() override;
   //
   // Fields
   //
 private:
-  /** @brief Read the next protobuf message into the message buffer
+  /** @brief Read the next protobuf message digest
    *
-   * @details Fills m_msg_buffer with the next message and sets m_msg_type to
-   * signify the message type. Returns true if there is a message in the buffer
-   * ready to parse.
+   * @details Determines the type and byte length of the next payload
    */
-  bool buffer_message();
+  bool read_digest();
 
   /** @brief Parse the next protobuf message as a GenRunInfo message
    *
@@ -144,17 +123,6 @@ private:
    */
   bool read_file_start();
 
-  /** @brief The total number of event bytes read, including message frames
-   */
-  size_t m_bytes_read = 0;
-
-  /** @brief The file stream of the file being read
-   *
-   * @details This is non-null and owned by this class if constructed with the
-   * string constructor, otherwise it will be null
-   */
-  std::unique_ptr<std::ifstream> m_in_file;
-
   /** @brief Passed in shared_ptr to an input stream
    *
    * @details This is non-null and shared by this class if constructed with the
@@ -163,31 +131,19 @@ private:
   std::shared_ptr<std::istream> m_shared_stream;
   /** @brief The stream object that is read from
    *
-   * @details If constructed with the string constructor, this just points to
-   * m_in_file.get())
+   * @details If constructed with either stream constructor this lets us check
+   * we can use this to check stream status
    */
   std::istream *m_in_stream = nullptr;
 
-  /** @brief The buffer used to hold the current message binary
-   * (header/genruninfo/genevent/footer)
-   */
-  std::string m_msg_buffer;
-  /** @brief The buffer used to hold the current message digest binary
-   * (message frame)
-   */
-  std::string m_md_buffer;
-  /** @brief The type of current message
-   *
-   * @details Defined in HepMC3_pb::MessageDigest::MessageType in the proto file
-   */
-  int m_msg_type;
+  std::unique_ptr<google::protobuf::io::FileInputStream> m_inf_zcstream;
+  std::unique_ptr<google::protobuf::io::IstreamInputStream> m_in_zcistream;
+  google::protobuf::io::ZeroCopyInputStream *m_in_zcstream = nullptr;
 
-  /** @brief A copy of the library version info stored in the proto file header
-   *
-   * @details This is a copy so as to avoid passing on protobuf header
-   * dependencies to files that include this header
-   */
-  FileHeader m_file_header;
+  HepMC3_pb::MessageDigest m_md_pb;
+  HepMC3_pb::Header m_hdr_pb;
+  HepMC3_pb::GenRunInfoData m_gri_pb;
+  HepMC3_pb::GenEventData m_evt_pb;
 };
 
 } // namespace HepMC3

@@ -9,13 +9,11 @@ set(HepMC3protobufIO_sources
 #---Define dynamic library---------------------------------------------------
 add_library(HepMC3protobufIO SHARED ${HepMC3protobufIO_sources})
 
-target_include_directories(HepMC3protobufIO PRIVATE
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-  $<BUILD_INTERFACE:${Protobuf_INCLUDE_DIRS}>)
-
 target_include_directories(HepMC3protobufIO PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<BUILD_INTERFACE:${Protobuf_INCLUDE_DIRS}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
   $<INSTALL_INTERFACE:include>)
 
 target_link_libraries(HepMC3protobufIO HepMC3 protobuf::libprotobuf)
@@ -47,6 +45,7 @@ install(FILES
           ${PROTO_HDRS}
           ${CMAKE_CURRENT_SOURCE_DIR}/include/HepMC3/Writerprotobuf.h
           ${CMAKE_CURRENT_SOURCE_DIR}/include/HepMC3/Readerprotobuf.h
+          ${CMAKE_CURRENT_SOURCE_DIR}/include/HepMC3/protobufUtils.h
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/HepMC3
   COMPONENT protobufIOdevel)
 
@@ -55,13 +54,11 @@ if (HEPMC3_BUILD_STATIC_LIBS)
   add_library(HepMC3protobufIO_static STATIC ${HepMC3protobufIO_sources})
   target_compile_definitions(HepMC3protobufIO_static PRIVATE HEPMC3_NO_EXPORTS)
 
-  target_include_directories(HepMC3protobufIO_static PRIVATE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-    $<BUILD_INTERFACE:${Protobuf_INCLUDE_DIRS}>)
-
   target_include_directories(HepMC3protobufIO_static PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+    $<BUILD_INTERFACE:${Protobuf_INCLUDE_DIRS}>
     $<INSTALL_INTERFACE:include>)
 
   set_target_properties(HepMC3protobufIO_static
