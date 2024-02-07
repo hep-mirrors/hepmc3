@@ -1,12 +1,14 @@
 #include "HepMC3/protobufUtils.h"
 
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
+
 #include "HepMC3/Data/GenEventData.h"
+#include "HepMC3/Data/GenParticleData.h"
 #include "HepMC3/Data/GenRunInfoData.h"
+#include "HepMC3/Data/GenVertexData.h"
 
 #include "HepMC3/Version.h"
-
-// protobuf header files
-#include "HepMC3.pb.h"
 
 namespace HepMC3 {
 
@@ -18,7 +20,7 @@ template <typename T> std::string PBObjToString(T const &o) {
   return ostr;
 }
 
-std::string GenRunInfo(const HepMC3::GenRunInfo &run_info) {
+std::string GenRunInfo(HepMC3::GenRunInfo const &run_info) {
   GenRunInfoData data;
   run_info.write_data(data);
 
@@ -48,7 +50,7 @@ std::string GenRunInfo(const HepMC3::GenRunInfo &run_info) {
   return PBObjToString(gri_pb);
 }
 
-std::string GenEvent(const HepMC3::GenEvent &evt) {
+std::string GenEvent(HepMC3::GenEvent const &evt) {
   GenEventData data;
   evt.write_data(data);
 
@@ -139,17 +141,9 @@ std::string GenEvent(const HepMC3::GenEvent &evt) {
 } // namespace Serialize
 
 namespace Deserialize {
-bool GenRunInfo(std::string const &msg,
-                std::shared_ptr<HepMC3::GenRunInfo> run_info) {
 
-  if(!run_info){ // elide work because we have nowhere to put it
-    return true;
-  }
-
-  HepMC3_pb::GenRunInfoData gri_pb;
-  if (!gri_pb.ParseFromString(msg)) {
-    return false;
-  }
+void FillGenRunInfo(HepMC3_pb::GenRunInfoData const &gri_pb,
+                    std::shared_ptr<HepMC3::GenRunInfo> run_info) {
 
   HepMC3::GenRunInfoData gridata;
 
@@ -186,16 +180,26 @@ bool GenRunInfo(std::string const &msg,
   }
 
   run_info->read_data(gridata);
+}
+
+bool GenRunInfo(std::string const &msg,
+                std::shared_ptr<HepMC3::GenRunInfo> run_info) {
+  if (!run_info) { // elide work because we have nowhere to put it
+    return true;
+  }
+
+  HepMC3_pb::GenRunInfoData gri_pb;
+  if (!gri_pb.ParseFromString(msg)) {
+    return false;
+  }
+
+  FillGenRunInfo(gri_pb, run_info);
 
   return true;
 }
 
-bool GenEvent(std::string const &msg, HepMC3::GenEvent &evt) {
-
-  HepMC3_pb::GenEventData ged_pb;
-  if (!ged_pb.ParseFromString(msg)) {
-    return false;
-  }
+void FillGenEvent(HepMC3_pb::GenEventData const &ged_pb,
+                  HepMC3::GenEvent &evt) {
 
   HepMC3::GenEventData evtdata;
   evtdata.event_number = ged_pb.event_number();
@@ -211,7 +215,7 @@ bool GenEvent(std::string const &msg, HepMC3::GenEvent &evt) {
   }
   default: {
     HEPMC3_ERROR("Unknown momentum unit: " << ged_pb.momentum_unit());
-    return false;
+    return;
   }
   }
 
@@ -226,7 +230,7 @@ bool GenEvent(std::string const &msg, HepMC3::GenEvent &evt) {
   }
   default: {
     HEPMC3_ERROR("Unknown length unit: " << ged_pb.length_unit());
-    return false;
+    return;
   }
   }
 
@@ -308,8 +312,141 @@ bool GenEvent(std::string const &msg, HepMC3::GenEvent &evt) {
   }
 
   evt.read_data(evtdata);
+}
+
+bool GenEvent(std::string const &msg, HepMC3::GenEvent &evt) {
+
+  HepMC3_pb::GenEventData ged_pb;
+  if (!ged_pb.ParseFromString(msg)) {
+    return false;
+  }
+
+  FillGenEvent(ged_pb, evt);
+
   return true;
 }
+
 } // namespace Deserialize
+
+void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
+  this->clear();
+  this->set_event_number(data.event_number());
+
+  // Note: set_units checks the current unit of event, i.e. applicable only for
+  // fully constructed event.
+  switch (data.momentum_unit()) {
+  case HepMC3_pb::GenEventData::MEV: {
+    m_momentum_unit = HepMC3::Units::MEV;
+    break;
+  }
+  case HepMC3_pb::GenEventData::GEV: {
+    m_momentum_unit = HepMC3::Units::GEV;
+    break;
+  }
+  }
+
+  switch (data.length_unit()) {
+  case HepMC3_pb::GenEventData::MM: {
+    m_length_unit = HepMC3::Units::MM;
+    break;
+  }
+  case HepMC3_pb::GenEventData::CM: {
+    m_length_unit = HepMC3::Units::CM;
+    break;
+  }
+  }
+
+  this->shift_position_to(
+      HepMC3::FourVector{data.event_pos().m_v1(), data.event_pos().m_v2(),
+                         data.event_pos().m_v3(), data.event_pos().m_v4()});
+
+  // Fill weights
+  m_weights.resize(data.weights_size());
+  std::copy(data.weights().begin(), data.weights().end(), m_weights.begin());
+
+  m_particles.reserve(data.particles_size());
+  m_vertices.reserve(data.vertices_size());
+
+  // Fill particle information
+  for (auto const &pd : data.particles()) {
+    m_particles.emplace_back(std::make_shared<GenParticle>(pd));
+    m_particles.back()->m_event = this;
+    m_particles.back()->m_id = m_particles.size();
+  }
+
+  // Fill vertex information
+  for (auto const &vd : data.vertices()) {
+    m_vertices.emplace_back(std::make_shared<GenVertex>(vd));
+    m_vertices.back()->m_event = this;
+    m_vertices.back()->m_id = -(int)m_vertices.size();
+  }
+
+  // Restore links
+  for (unsigned int i = 0; i < data.links1_size(); ++i) {
+    const int id1 = data.links1(i);
+    const int id2 = data.links2(i);
+    /* @note:
+    The  meaningfull combinations for (id1,id2) are:
+    (+-)  --  particle has end vertex
+    (-+)  --  particle  has production vertex
+    */
+    if ((id1 < 0 && id2 < 0) || (id1 > 0 && id2 > 0)) {
+      HEPMC3_WARNING("GenEvent::read_data: wrong link: " << id1 << " " << id2);
+      continue;
+    }
+
+    if (id1 > 0) {
+      m_vertices[(-id2) - 1]->add_particle_in(m_particles[id1 - 1]);
+      continue;
+    }
+    if (id1 < 0) {
+      m_vertices[(-id1) - 1]->add_particle_out(m_particles[id2 - 1]);
+      continue;
+    }
+  }
+  for (auto &p : m_particles)
+    if (!p->production_vertex())
+      m_rootvertex->add_particle_out(p);
+
+  // Read attributes
+  std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+  for (unsigned int i = 0; i < data.attribute_id_size(); ++i) {
+    /// Disallow empty strings
+    const std::string name = data.attribute_name(i);
+    if (name.length() == 0)
+      continue;
+    const int id = data.attribute_id(i);
+    if (m_attributes.count(name) == 0)
+      m_attributes[name] = std::map<int, std::shared_ptr<Attribute>>();
+    auto att = std::make_shared<StringAttribute>(data.attribute_string(i));
+    att->m_event = this;
+    if (id > 0 && id <= int(m_particles.size())) {
+      att->m_particle = m_particles[id - 1];
+    }
+    if (id < 0 && -id <= int(m_vertices.size())) {
+      att->m_vertex = m_vertices[-id - 1];
+    }
+    m_attributes[name][id] = att;
+  }
+}
+
+GenVertex::GenVertex(HepMC3_pb::GenEventData_GenVertexData const &data)
+    : m_event(nullptr), m_id(0) {
+  m_data.status = data.status();
+  m_data.position =
+      HepMC3::FourVector{data.position().m_v1(), data.position().m_v2(),
+                         data.position().m_v3(), data.position().m_v4()};
+}
+
+GenParticle::GenParticle(HepMC3_pb::GenEventData_GenParticleData const &data)
+    : m_event(nullptr), m_id(0) {
+  m_data.pid = data.pid();
+  m_data.momentum =
+      HepMC3::FourVector{data.momentum().m_v1(), data.momentum().m_v2(),
+                         data.momentum().m_v3(), data.momentum().m_v4()};
+  m_data.status = data.status();
+  m_data.is_mass_set = data.is_mass_set();
+  m_data.mass = data.mass();
+}
 
 } // namespace HepMC3
