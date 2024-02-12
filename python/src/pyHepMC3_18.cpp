@@ -44,7 +44,7 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// HepMC3::ReaderLHEF file:HepMC3/ReaderLHEF.h line:34
+// HepMC3::ReaderLHEF file:HepMC3/ReaderLHEF.h line:
 struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 	using HepMC3::ReaderLHEF::ReaderLHEF;
 
@@ -155,7 +155,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 	}
 };
 
-// HepMC3::ReaderPlugin file:HepMC3/ReaderPlugin.h line:23
+// HepMC3::ReaderPlugin file:HepMC3/ReaderPlugin.h line:
 struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 	using HepMC3::ReaderPlugin::ReaderPlugin;
 
@@ -266,7 +266,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 	}
 };
 
-// HepMC3::WriterPlugin file:HepMC3/WriterPlugin.h line:23
+// HepMC3::WriterPlugin file:HepMC3/WriterPlugin.h line:
 struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 	using HepMC3::WriterPlugin::WriterPlugin;
 
@@ -366,7 +366,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 
 void bind_pyHepMC3_18(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::ReaderLHEF file:HepMC3/ReaderLHEF.h line:34
+	{ // HepMC3::ReaderLHEF file:HepMC3/ReaderLHEF.h line:
 		pybind11::class_<HepMC3::ReaderLHEF, std::shared_ptr<HepMC3::ReaderLHEF>, PyCallBack_HepMC3_ReaderLHEF, HepMC3::Reader> cl(M("HepMC3"), "ReaderLHEF", "");
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
@@ -375,7 +375,7 @@ void bind_pyHepMC3_18(std::function< pybind11::module &(std::string const &names
 		cl.def("close", (void (HepMC3::ReaderLHEF::*)()) &HepMC3::ReaderLHEF::close, "Close \n\nC++: HepMC3::ReaderLHEF::close() --> void");
 		cl.def("failed", (bool (HepMC3::ReaderLHEF::*)()) &HepMC3::ReaderLHEF::failed, "State \n\nC++: HepMC3::ReaderLHEF::failed() --> bool");
 	}
-	{ // HepMC3::ReaderPlugin file:HepMC3/ReaderPlugin.h line:23
+	{ // HepMC3::ReaderPlugin file:HepMC3/ReaderPlugin.h line:
 		pybind11::class_<HepMC3::ReaderPlugin, std::shared_ptr<HepMC3::ReaderPlugin>, PyCallBack_HepMC3_ReaderPlugin, HepMC3::Reader> cl(M("HepMC3"), "ReaderPlugin", "");
 		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &>(), pybind11::arg("filename"), pybind11::arg("libname"), pybind11::arg("newreader") );
 
@@ -388,7 +388,7 @@ void bind_pyHepMC3_18(std::function< pybind11::module &(std::string const &names
 		cl.def("get_options", (class std::map<std::string, std::string > (HepMC3::ReaderPlugin::*)() const) &HepMC3::ReaderPlugin::get_options, "Get options  \n\nC++: HepMC3::ReaderPlugin::get_options() const --> class std::map<std::string, std::string >");
 		cl.def("set_run_info", (void (HepMC3::ReaderPlugin::*)(class std::shared_ptr<class HepMC3::GenRunInfo>)) &HepMC3::ReaderPlugin::set_run_info, "Set the global GenRunInfo object.\n\nC++: HepMC3::ReaderPlugin::set_run_info(class std::shared_ptr<class HepMC3::GenRunInfo>) --> void", pybind11::arg("run"));
 	}
-	{ // HepMC3::WriterPlugin file:HepMC3/WriterPlugin.h line:23
+	{ // HepMC3::WriterPlugin file:HepMC3/WriterPlugin.h line:
 		pybind11::class_<HepMC3::WriterPlugin, std::shared_ptr<HepMC3::WriterPlugin>, PyCallBack_HepMC3_WriterPlugin, HepMC3::Writer> cl(M("HepMC3"), "WriterPlugin", "");
 		cl.def( pybind11::init( [](const std::string & a0, const std::string & a1, const std::string & a2){ return new HepMC3::WriterPlugin(a0, a1, a2); }, [](const std::string & a0, const std::string & a1, const std::string & a2){ return new PyCallBack_HepMC3_WriterPlugin(a0, a1, a2); } ), "doc");
 		cl.def( pybind11::init<const std::string &, const std::string &, const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("libname"), pybind11::arg("newwriter"), pybind11::arg("run") );
@@ -401,7 +401,7 @@ void bind_pyHepMC3_18(std::function< pybind11::module &(std::string const &names
 		cl.def("get_options", (class std::map<std::string, std::string > (HepMC3::WriterPlugin::*)() const) &HepMC3::WriterPlugin::get_options, "Get options  \n\nC++: HepMC3::WriterPlugin::get_options() const --> class std::map<std::string, std::string >");
 		cl.def("set_run_info", (void (HepMC3::WriterPlugin::*)(class std::shared_ptr<class HepMC3::GenRunInfo>)) &HepMC3::WriterPlugin::set_run_info, "Set the global GenRunInfo object.\n\nC++: HepMC3::WriterPlugin::set_run_info(class std::shared_ptr<class HepMC3::GenRunInfo>) --> void", pybind11::arg("run"));
 	}
-	{ // HepMC3::HEPEVT_Wrapper_Runtime file:HepMC3/HEPEVT_Wrapper_Runtime.h line:29
+	{ // HepMC3::HEPEVT_Wrapper_Runtime file:HepMC3/HEPEVT_Wrapper_Runtime.h line:
 		pybind11::class_<HepMC3::HEPEVT_Wrapper_Runtime, std::shared_ptr<HepMC3::HEPEVT_Wrapper_Runtime>> cl(M("HepMC3"), "HEPEVT_Wrapper_Runtime", "");
 		cl.def( pybind11::init( [](){ return new HepMC3::HEPEVT_Wrapper_Runtime(); } ) );
 		cl.def( pybind11::init( [](HepMC3::HEPEVT_Wrapper_Runtime const &o){ return new HepMC3::HEPEVT_Wrapper_Runtime(o); } ) );
@@ -445,6 +445,6 @@ void bind_pyHepMC3_18(std::function< pybind11::module &(std::string const &names
 		cl.def("set_position", (void (HepMC3::HEPEVT_Wrapper_Runtime::*)(const int, const double, const double, const double, const double)) &HepMC3::HEPEVT_Wrapper_Runtime::set_position, "C++: HepMC3::HEPEVT_Wrapper_Runtime::set_position(const int, const double, const double, const double, const double) --> void", pybind11::arg("index"), pybind11::arg("x"), pybind11::arg("y"), pybind11::arg("z"), pybind11::arg("t"));
 		cl.def("assign", (class HepMC3::HEPEVT_Wrapper_Runtime & (HepMC3::HEPEVT_Wrapper_Runtime::*)(const class HepMC3::HEPEVT_Wrapper_Runtime &)) &HepMC3::HEPEVT_Wrapper_Runtime::operator=, "C++: HepMC3::HEPEVT_Wrapper_Runtime::operator=(const class HepMC3::HEPEVT_Wrapper_Runtime &) --> class HepMC3::HEPEVT_Wrapper_Runtime &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 
-		 binder::custom_HEPEVT_Wrapper_Runtime_binder(cl);
+		binder::custom_HEPEVT_Wrapper_Runtime_binder(cl);
 	}
 }

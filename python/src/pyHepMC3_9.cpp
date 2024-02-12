@@ -40,7 +40,7 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// HepMC3::Writer file:HepMC3/Writer.h line:25
+// HepMC3::Writer file:HepMC3/Writer.h line:
 struct PyCallBack_HepMC3_Writer : public HepMC3::Writer {
 	using HepMC3::Writer::Writer;
 
@@ -140,7 +140,7 @@ struct PyCallBack_HepMC3_Writer : public HepMC3::Writer {
 
 void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::GenParticle file:HepMC3/GenParticle.h line:28
+	{ // HepMC3::GenParticle file:HepMC3/GenParticle.h line:
 		pybind11::class_<HepMC3::GenParticle, std::shared_ptr<HepMC3::GenParticle>> cl(M("HepMC3"), "GenParticle", "");
 		cl.def( pybind11::init( [](){ return new HepMC3::GenParticle(); } ), "doc" );
 		cl.def( pybind11::init( [](const class HepMC3::FourVector & a0){ return new HepMC3::GenParticle(a0); } ), "doc" , pybind11::arg("momentum"));
@@ -177,9 +177,9 @@ void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namesp
 		cl.def("set_pdg_id", (void (HepMC3::GenParticle::*)(const int &)) &HepMC3::GenParticle::set_pdg_id, "Set PDG ID\n \n\n Use set_pid() instead\n\nC++: HepMC3::GenParticle::set_pdg_id(const int &) --> void", pybind11::arg("pidin"));
 		cl.def("assign", (class HepMC3::GenParticle & (HepMC3::GenParticle::*)(const class HepMC3::GenParticle &)) &HepMC3::GenParticle::operator=, "C++: HepMC3::GenParticle::operator=(const class HepMC3::GenParticle &) --> class HepMC3::GenParticle &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 
-		 binder::custom_GenParticle_binder(cl);
+		binder::custom_GenParticle_binder(cl);
 	}
-	{ // HepMC3::GenVertexData file: line:22
+	{ // HepMC3::GenVertexData file: line:
 		pybind11::class_<HepMC3::GenVertexData, std::shared_ptr<HepMC3::GenVertexData>> cl(M("HepMC3"), "GenVertexData", "");
 		cl.def( pybind11::init( [](){ return new HepMC3::GenVertexData(); } ) );
 		cl.def( pybind11::init( [](HepMC3::GenVertexData const &o){ return new HepMC3::GenVertexData(o); } ) );
@@ -188,7 +188,7 @@ void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namesp
 		cl.def("is_zero", (bool (HepMC3::GenVertexData::*)() const) &HepMC3::GenVertexData::is_zero, "Check if this struct fields are zero\n\nC++: HepMC3::GenVertexData::is_zero() const --> bool");
 		cl.def("assign", (struct HepMC3::GenVertexData & (HepMC3::GenVertexData::*)(const struct HepMC3::GenVertexData &)) &HepMC3::GenVertexData::operator=, "C++: HepMC3::GenVertexData::operator=(const struct HepMC3::GenVertexData &) --> struct HepMC3::GenVertexData &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::GenVertex file:HepMC3/GenVertex.h line:24
+	{ // HepMC3::GenVertex file:HepMC3/GenVertex.h line:
 		pybind11::class_<HepMC3::GenVertex, std::shared_ptr<HepMC3::GenVertex>> cl(M("HepMC3"), "GenVertex", "Stores vertex-related information");
 		cl.def( pybind11::init( [](){ return new HepMC3::GenVertex(); } ), "doc" );
 		cl.def( pybind11::init<const class HepMC3::FourVector &>(), pybind11::arg("position") );
@@ -221,9 +221,9 @@ void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namesp
 		cl.def("add_particle_out", (void (HepMC3::GenVertex::*)(class HepMC3::GenParticle *)) &HepMC3::GenVertex::add_particle_out, "Add outgoing particle by raw pointer\n \n\n Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead\n\nC++: HepMC3::GenVertex::add_particle_out(class HepMC3::GenParticle *) --> void", pybind11::arg("p"));
 		cl.def("assign", (class HepMC3::GenVertex & (HepMC3::GenVertex::*)(const class HepMC3::GenVertex &)) &HepMC3::GenVertex::operator=, "C++: HepMC3::GenVertex::operator=(const class HepMC3::GenVertex &) --> class HepMC3::GenVertex &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 
-		 binder::custom_GenVertex_binder(cl);
+		binder::custom_GenVertex_binder(cl);
 	}
-	{ // HepMC3::GenRunInfoData file:HepMC3/Data/GenRunInfoData.h line:23
+	{ // HepMC3::GenRunInfoData file:HepMC3/Data/GenRunInfoData.h line:
 		pybind11::class_<HepMC3::GenRunInfoData, std::shared_ptr<HepMC3::GenRunInfoData>> cl(M("HepMC3"), "GenRunInfoData", "");
 		cl.def( pybind11::init( [](){ return new HepMC3::GenRunInfoData(); } ) );
 		cl.def( pybind11::init( [](HepMC3::GenRunInfoData const &o){ return new HepMC3::GenRunInfoData(o); } ) );
@@ -235,7 +235,7 @@ void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namesp
 		cl.def_readwrite("attribute_string", &HepMC3::GenRunInfoData::attribute_string);
 		cl.def("assign", (struct HepMC3::GenRunInfoData & (HepMC3::GenRunInfoData::*)(const struct HepMC3::GenRunInfoData &)) &HepMC3::GenRunInfoData::operator=, "C++: HepMC3::GenRunInfoData::operator=(const struct HepMC3::GenRunInfoData &) --> struct HepMC3::GenRunInfoData &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::GenEventData file:HepMC3/Data/GenEventData.h line:26
+	{ // HepMC3::GenEventData file:HepMC3/Data/GenEventData.h line:
 		pybind11::class_<HepMC3::GenEventData, std::shared_ptr<HepMC3::GenEventData>> cl(M("HepMC3"), "GenEventData", "");
 		cl.def( pybind11::init( [](){ return new HepMC3::GenEventData(); } ) );
 		cl.def( pybind11::init( [](HepMC3::GenEventData const &o){ return new HepMC3::GenEventData(o); } ) );
@@ -253,13 +253,13 @@ void bind_pyHepMC3_9(std::function< pybind11::module &(std::string const &namesp
 		cl.def_readwrite("attribute_string", &HepMC3::GenEventData::attribute_string);
 		cl.def("assign", (struct HepMC3::GenEventData & (HepMC3::GenEventData::*)(const struct HepMC3::GenEventData &)) &HepMC3::GenEventData::operator=, "C++: HepMC3::GenEventData::operator=(const struct HepMC3::GenEventData &) --> struct HepMC3::GenEventData &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	// HepMC3::version() file: line:20
+	// HepMC3::version() file: line:
 	M("HepMC3").def("version", (std::string (*)()) &HepMC3::version, "Get the HepMC library version string\n\nC++: HepMC3::version() --> std::string");
 
-	// HepMC3::Print file: line:27
+	// HepMC3::Print file: line:
 	binder::print_binder(M("HepMC3"));
 
-	{ // HepMC3::Writer file:HepMC3/Writer.h line:25
+	{ // HepMC3::Writer file:HepMC3/Writer.h line:
 		pybind11::class_<HepMC3::Writer, std::shared_ptr<HepMC3::Writer>, PyCallBack_HepMC3_Writer> cl(M("HepMC3"), "Writer", "");
 		cl.def( pybind11::init( [](){ return new PyCallBack_HepMC3_Writer(); } ) );
 		cl.def("write_event", (void (HepMC3::Writer::*)(const class HepMC3::GenEvent &)) &HepMC3::Writer::write_event, "Write event  to output target\n\nC++: HepMC3::Writer::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("evt"));

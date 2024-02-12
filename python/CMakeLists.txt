@@ -8,6 +8,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 option(USE_INSTALLED_HEPMC3 "Use HepMC3 bindings as a standalone package" OFF)
 option(RERUN_BINDER "Rerun binder" OFF)
+if (RERUN_BINDER)
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
 if (USE_INSTALLED_HEPMC3)
   set(${PROJECT_NAME}_VERSION 3.2.8)
   set(THIS_PROJECT_NAME ${PROJECT_NAME})
@@ -119,36 +122,64 @@ foreach(_comp IN ITEMS " " ${HEPMC3_COMPONENTS})
   endif()
   configure_file("pyHepMC3${_dotcomp}.egg-info.in" "pyHepMC3${_dotcomp}.egg-info" IMMEDIATE @ONLY)
 endforeach()
-if (RERUN_BINDER)
+if (RERUN_BINDER AND ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
   find_program (BINDER binder HINTS $ENV{HOME}/bin /usr/bin)
+
+  execute_process(COMMAND ${BINDER} --version OUTPUT_VARIABLE BINDER_VERSION_STRING OUTPUT_STRIP_TRAILING_WHITESPACE) 
+  string(REGEX REPLACE "[\r\n ]" ";" BINDER_VERSION_LIST "${BINDER_VERSION_STRING} foo 0.0.0")
+  list(GET BINDER_VERSION_LIST 1 BINDER_VERSION)
+  if (BINDER_VERSION VERSION_GREATER 1.4.0)
+    message(STATUS "HepMC3 python: BINDER_VERSION=${BINDER_VERSION} is sufficient for the generation of bindings.")
+  else()
+    message(FATAL_ERROR "HepMC3 python: BINDER_VERSION=${BINDER_VERSION}<=1.4.0 is not sufficient for the generation of bindings.")
+  endif()
+  set(INCARG "")
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -v /dev/null -S ERROR_VARIABLE GCCSPEC OUTPUT_QUIET)
+  STRING(REGEX REPLACE "\r?\n" ";" GCCSPECV2 "${GCCSPEC}")
+  FOREACH(line ${GCCSPECV2})
+    string(REGEX MATCH "^LIBRARY_PATH.*"  GCCSPECV3 "${line}")
+    string(REPLACE "LIBRARY_PATH=/"  "/" GCCSPECV4 "${GCCSPECV3}")
+    if (GCCSPECV4)
+      STRING(REPLACE ":" ";--extra-arg=-I" INCARG "--extra-arg=-I${GCCSPECV4}")
+      message(STATUS "HepMC3 python: INCARG=${INCARG}")
+    endif()
+  endforeach()
   if(BINDER)
     message(STATUS "HepMC3 python: binder found in ${BINDER}. Automatic generatin of code for python bindings is possible.")
     foreach(_comp IN ITEMS " " ${HEPMC3_COMPONENTS} )
+      set(EARG "")
       if (${_comp} STREQUAL " ")
         set(_comp "") 
+      else()
+        STRING(TOUPPER ${_comp} _COMP)
+        set(EARG "--extra-arg=-DHEPMC3_${_COMP}")
       endif()
       configure_file("${_comp}includes.hpp.in" "${_comp}includes.hpp" IMMEDIATE @ONLY)
       add_custom_command(
         OUTPUT  ${autoBN${_comp}}
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp src/pyHepMC3${_comp}.binder
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3${_comp}.binder
         COMMAND ${BINDER} --flat --max-file-size=20000
+                          --skip-line-number
                           --root-module pyHepMC3${_comp}
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-                          --config src/pyHepMC3${_comp}.binder   ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp
-                          --  -std=c++${HEPMC3_CXX_STANDARD}
-                          -I.
-                          -I${CMAKE_CURRENT_SOURCE_DIR}
-                          -I${CMAKE_CURRENT_SOURCE_DIR}/include
-                           ${HEPMC3_INCLUDE_FLAGS}
-                          -I${ROOT_INCLUDE_DIRS}
-                          -I/usr/lib/gcc/x86_64-redhat-linux/8/include/
-                          -I/usr/lib/gcc/x86_64-redhat-linux/12/include/
+                          --config ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3${_comp}.binder   
+                            ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp
+                          --extra-arg=-std=c++${HEPMC3_CXX_STANDARD}
+                          --extra-arg=-I${PROJECT_SOURCE_DIR}/${_comp}/include
+                          --extra-arg=-I${PROJECT_BINARY_DIR}/${_comp}
+                          --extra-arg=-I${CMAKE_CURRENT_SOURCE_DIR}
+                          --extra-arg=-I${CMAKE_CURRENT_SOURCE_DIR}/include
+                          --extra-arg=-I${ROOT_INCLUDE_DIRS}
+                           ${INCARG}
+                           ${EARG}
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM
+        COMMENT "Generating ${autoBN${_comp}}"
       )
+      add_custom_target(generate_${_comp} DEPENDS ${autoBN${_comp}})
     endforeach()
   else()
-    message(FATAL_ERROR "HepMC3  python: binder not found!  Automatic generatin of code for python bindings is not possible.")
+    message(FATAL_ERROR "HepMC3  python: binder not found and/or the C++ is not GNU!  Automatic generatin of code for python bindings is not possible.")
   endif()
 endif()
 
@@ -262,6 +293,9 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       OUTPUT_VARIABLE PyPy_PyPy_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
       set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION}
       PROPERTIES PREFIX "" OUTPUT_NAME pyHepMC3${_comp}.pypy-${PyPy_PyPy_VERSION})
+    endif()
+    if (RERUN_BINDER)
+      add_dependencies(${IMPL}pyHepMC3${_comp}${Python_VERSION} generate_${_comp})
     endif()
   
     set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION}
