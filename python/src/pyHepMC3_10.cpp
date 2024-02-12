@@ -36,7 +36,7 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// HepMC3::Reader file:HepMC3/Reader.h line:25
+// HepMC3::Reader file:HepMC3/Reader.h line:
 struct PyCallBack_HepMC3_Reader : public HepMC3::Reader {
 	using HepMC3::Reader::Reader;
 
@@ -149,7 +149,7 @@ struct PyCallBack_HepMC3_Reader : public HepMC3::Reader {
 
 void bind_pyHepMC3_10(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::Reader file:HepMC3/Reader.h line:25
+	{ // HepMC3::Reader file:HepMC3/Reader.h line:
 		pybind11::class_<HepMC3::Reader, std::shared_ptr<HepMC3::Reader>, PyCallBack_HepMC3_Reader> cl(M("HepMC3"), "Reader", "");
 		cl.def( pybind11::init( [](){ return new PyCallBack_HepMC3_Reader(); } ) );
 		cl.def("skip", (bool (HepMC3::Reader::*)(const int)) &HepMC3::Reader::skip, "skip or fast forward reading of some events\n\nC++: HepMC3::Reader::skip(const int) --> bool", pybind11::arg(""));

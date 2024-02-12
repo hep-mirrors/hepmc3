@@ -44,7 +44,7 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// HepMC3::ReaderAscii file:HepMC3/ReaderAscii.h line:29
+// HepMC3::ReaderAscii file:HepMC3/ReaderAscii.h line:
 struct PyCallBack_HepMC3_ReaderAscii : public HepMC3::ReaderAscii {
 	using HepMC3::ReaderAscii::ReaderAscii;
 
@@ -155,7 +155,7 @@ struct PyCallBack_HepMC3_ReaderAscii : public HepMC3::ReaderAscii {
 	}
 };
 
-// HepMC3::WriterAsciiHepMC2 file:HepMC3/WriterAsciiHepMC2.h line:26
+// HepMC3::WriterAsciiHepMC2 file:HepMC3/WriterAsciiHepMC2.h line:
 struct PyCallBack_HepMC3_WriterAsciiHepMC2 : public HepMC3::WriterAsciiHepMC2 {
 	using HepMC3::WriterAsciiHepMC2::WriterAsciiHepMC2;
 
@@ -253,7 +253,7 @@ struct PyCallBack_HepMC3_WriterAsciiHepMC2 : public HepMC3::WriterAsciiHepMC2 {
 	}
 };
 
-// HepMC3::ReaderAsciiHepMC2 file:HepMC3/ReaderAsciiHepMC2.h line:30
+// HepMC3::ReaderAsciiHepMC2 file:HepMC3/ReaderAsciiHepMC2.h line:
 struct PyCallBack_HepMC3_ReaderAsciiHepMC2 : public HepMC3::ReaderAsciiHepMC2 {
 	using HepMC3::ReaderAsciiHepMC2::ReaderAsciiHepMC2;
 
@@ -366,7 +366,7 @@ struct PyCallBack_HepMC3_ReaderAsciiHepMC2 : public HepMC3::ReaderAsciiHepMC2 {
 
 void bind_pyHepMC3_12(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::ReaderAscii file:HepMC3/ReaderAscii.h line:29
+	{ // HepMC3::ReaderAscii file:HepMC3/ReaderAscii.h line:
 		pybind11::class_<HepMC3::ReaderAscii, std::shared_ptr<HepMC3::ReaderAscii>, PyCallBack_HepMC3_ReaderAscii, HepMC3::Reader> cl(M("HepMC3"), "ReaderAscii", "");
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 
@@ -375,7 +375,7 @@ void bind_pyHepMC3_12(std::function< pybind11::module &(std::string const &names
 		cl.def("failed", (bool (HepMC3::ReaderAscii::*)()) &HepMC3::ReaderAscii::failed, "Return status of the stream\n\nC++: HepMC3::ReaderAscii::failed() --> bool");
 		cl.def("close", (void (HepMC3::ReaderAscii::*)()) &HepMC3::ReaderAscii::close, "Close file stream\n\nC++: HepMC3::ReaderAscii::close() --> void");
 	}
-	{ // HepMC3::WriterAsciiHepMC2 file:HepMC3/WriterAsciiHepMC2.h line:26
+	{ // HepMC3::WriterAsciiHepMC2 file:HepMC3/WriterAsciiHepMC2.h line:
 		pybind11::class_<HepMC3::WriterAsciiHepMC2, std::shared_ptr<HepMC3::WriterAsciiHepMC2>, PyCallBack_HepMC3_WriterAsciiHepMC2, HepMC3::Writer> cl(M("HepMC3"), "WriterAsciiHepMC2", "");
 		cl.def( pybind11::init( [](const std::string & a0){ return new HepMC3::WriterAsciiHepMC2(a0); }, [](const std::string & a0){ return new PyCallBack_HepMC3_WriterAsciiHepMC2(a0); } ), "doc");
 		cl.def( pybind11::init<const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("run") );
@@ -387,7 +387,7 @@ void bind_pyHepMC3_12(std::function< pybind11::module &(std::string const &names
 		cl.def("set_precision", (void (HepMC3::WriterAsciiHepMC2::*)(const int &)) &HepMC3::WriterAsciiHepMC2::set_precision, "Set output precision\n\n Available range is [2,24]. Default is 16.\n\nC++: HepMC3::WriterAsciiHepMC2::set_precision(const int &) --> void", pybind11::arg("prec"));
 		cl.def("precision", (int (HepMC3::WriterAsciiHepMC2::*)() const) &HepMC3::WriterAsciiHepMC2::precision, "Return output precision\n\nC++: HepMC3::WriterAsciiHepMC2::precision() const --> int");
 	}
-	{ // HepMC3::ReaderAsciiHepMC2 file:HepMC3/ReaderAsciiHepMC2.h line:30
+	{ // HepMC3::ReaderAsciiHepMC2 file:HepMC3/ReaderAsciiHepMC2.h line:
 		pybind11::class_<HepMC3::ReaderAsciiHepMC2, std::shared_ptr<HepMC3::ReaderAsciiHepMC2>, PyCallBack_HepMC3_ReaderAsciiHepMC2, HepMC3::Reader> cl(M("HepMC3"), "ReaderAsciiHepMC2", "");
 		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
 

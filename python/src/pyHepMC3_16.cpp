@@ -28,7 +28,7 @@
 
 void bind_pyHepMC3_16(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // LHEF::Reader file:HepMC3/LHEF.h line:2742
+	{ // LHEF::Reader file:HepMC3/LHEF.h line:
 		pybind11::class_<LHEF::Reader, std::shared_ptr<LHEF::Reader>> cl(M("LHEF"), "Reader", "The Reader class is initialized with a stream from which to read a\n version 1/2 Les Houches Accord event file. In the constructor of\n the Reader object the optional header information is read and then\n the mandatory init is read. After this the whole header block\n including the enclosing lines with tags are available in the public\n headerBlock member variable. Also the information from the init\n block is available in the heprup member variable and any additional\n comment lines are available in initComments. After each successful\n call to the readEvent() function the standard Les Houches Accord\n information about the event is available in the hepeup member\n variable and any additional comments in the eventComments\n variable. A typical reading sequence would look as follows:\n\n ");
 		cl.def( pybind11::init<std::string>(), pybind11::arg("filename") );
 
@@ -46,9 +46,9 @@ void bind_pyHepMC3_16(std::function< pybind11::module &(std::string const &names
 		cl.def("readEvent", (bool (LHEF::Reader::*)()) &LHEF::Reader::readEvent, "Read an event from the file and store it in the hepeup\n object. Optional comment lines are stored i the eventComments\n member variable.\n \n\n true if the read sas successful.\n\nC++: LHEF::Reader::readEvent() --> bool");
 		cl.def("openeventfile", (void (LHEF::Reader::*)(int)) &LHEF::Reader::openeventfile, "Open the efentfile with index ifile. If another eventfile is\n being read, its remaining contents is discarded. This is a noop\n if current read session is not a multi-file run.\n\nC++: LHEF::Reader::openeventfile(int) --> void", pybind11::arg("ifile"));
 
-		 binder::custom_LHEFReader_binder(cl);
+		binder::custom_LHEFReader_binder(cl);
 	}
-	{ // LHEF::Writer file:HepMC3/LHEF.h line:3099
+	{ // LHEF::Writer file:HepMC3/LHEF.h line:
 		pybind11::class_<LHEF::Writer, std::shared_ptr<LHEF::Writer>> cl(M("LHEF"), "Writer", "The Writer class is initialized with a stream to which to write a\n version 1.0 Les Houches Accord event file. In the constructor of\n the Writer object the main XML tag is written out, with the\n corresponding end tag is written in the destructor. After a Writer\n object has been created, it is possible to assign standard init\n information in the heprup member variable. In addition any XML\n formatted information can be added to the headerBlock member\n variable (directly or via the addHeader() function). Further\n comment line (beginning with a # character) can be\n added to the initComments variable (directly or with the\n addInitComment() function). After this information is set, it\n should be written out to the file with the init() function.\n\n Before each event is written out with the writeEvent() function,\n the standard event information can then be assigned to the hepeup\n variable and optional comment lines (beginning with a\n # character) may be given to the eventComments\n variable (directly or with the addEventComment() function).\n\n ");
 		cl.def( pybind11::init<std::string>(), pybind11::arg("filename") );
 
