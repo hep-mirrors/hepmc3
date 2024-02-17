@@ -1,5 +1,12 @@
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS HepMC3.proto)
 
+FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/HepMC3)
+
+add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/HepMC3/HepMC3.pb.h
+  COMMAND ${CMAKE_COMMAND} -E copy ${PROTO_HDRS} ${CMAKE_CURRENT_BINARY_DIR}/HepMC3/
+  DEPENDS ${PROTO_HDRS})
+add_custom_target(copy_pb_header DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/HepMC3/HepMC3.pb.h)
+
 set(HepMC3protobufIO_sources
   src/Writerprotobuf.cc
   src/Readerprotobuf.cc
@@ -8,6 +15,7 @@ set(HepMC3protobufIO_sources
 
 #---Define dynamic library---------------------------------------------------
 add_library(HepMC3protobufIO SHARED ${HepMC3protobufIO_sources})
+add_dependencies(HepMC3protobufIO copy_pb_header)
 
 target_include_directories(HepMC3protobufIO PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -52,6 +60,8 @@ install(FILES
 if (HEPMC3_BUILD_STATIC_LIBS)
 #---Define static library---------------------------------------------------
   add_library(HepMC3protobufIO_static STATIC ${HepMC3protobufIO_sources})
+  add_dependencies(HepMC3protobufIO_static copy_pb_header)
+
   target_compile_definitions(HepMC3protobufIO_static PRIVATE HEPMC3_NO_EXPORTS)
 
   target_include_directories(HepMC3protobufIO_static PUBLIC
