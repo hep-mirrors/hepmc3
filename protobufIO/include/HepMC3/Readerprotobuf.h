@@ -26,7 +26,7 @@
 #include "HepMC3/GenEvent.h"
 
 // protobuf header files
-#include "HepMC3.pb.h"
+#include "HepMC3/HepMC3.pb.h"
 
 #include "google/protobuf/io/zero_copy_stream_impl.h"
 

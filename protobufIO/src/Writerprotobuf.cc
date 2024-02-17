@@ -15,7 +15,7 @@
 #include "HepMC3/Version.h"
 
 // protobuf header files
-#include "HepMC3.pb.h"
+#include "HepMC3/HepMC3.pb.h"
 
 namespace HepMC3 {
 
