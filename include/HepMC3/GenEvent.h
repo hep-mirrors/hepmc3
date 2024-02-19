@@ -29,6 +29,12 @@
 class TBuffer;
 #endif
 
+#ifdef HEPMC3_PROTOBUFIO
+namespace HepMC3_pb {
+class GenEventData;
+}
+#endif
+
 
 namespace HepMC3 {
 
@@ -59,7 +65,7 @@ public:
     /// @brief Destructor
     ~GenEvent();
 
-    /// @brief Assignment operator
+    /// @brief Copy Assignment operator
     GenEvent& operator=(const GenEvent&);
 
     /// @name Particle and vertex access
@@ -346,8 +352,13 @@ public:
 #ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
-    /// @}
 #endif
+
+#ifdef HEPMC3_PROTOBUFIO
+    /// @brief protobuf I/O reader
+    void read_data(HepMC3_pb::GenEventData const &data);
+#endif
+    /// @}
 
 private:
 

@@ -12,7 +12,6 @@
 +include <HepMC3/ReaderRootTree.h>
 +include <src/rootIObinders.h>
 
-
 -class std::istream
 -class std::basic_ios
 -class HepMC3::GenEventData

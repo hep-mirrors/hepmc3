@@ -33,10 +33,10 @@
 
 void bind_pyHepMC3rootIO_1(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	// HepMC3::ReaderRootTree file:HepMC3/ReaderRootTree.h line:35
-	 binder::ReaderRootTree_binder(M("HepMC3"));
+	// HepMC3::ReaderRootTree file:HepMC3/ReaderRootTree.h line:
+	binder::ReaderRootTree_binder(M("HepMC3"));
 
-	// HepMC3::WriterRoot file:HepMC3/WriterRoot.h line:37
-	 binder::WriterRoot_binder(M("HepMC3"));
+	// HepMC3::WriterRoot file:HepMC3/WriterRoot.h line:
+	binder::WriterRoot_binder(M("HepMC3"));
 
 }

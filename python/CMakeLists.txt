@@ -8,6 +8,9 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 option(USE_INSTALLED_HEPMC3 "Use HepMC3 bindings as a standalone package" OFF)
 option(RERUN_BINDER "Rerun binder" OFF)
+if (RERUN_BINDER)
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
 if (USE_INSTALLED_HEPMC3)
   set(${PROJECT_NAME}_VERSION 3.2.8)
   set(THIS_PROJECT_NAME ${PROJECT_NAME})
@@ -24,17 +27,24 @@ if (USE_INSTALLED_HEPMC3)
     list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
     list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
     find_package(ROOT REQUIRED COMPONENTS Core RIO Tree)
-    message(STATUS "ROOT_FOUND:     ${ROOT_FOUND}")
-    message(STATUS "ROOT includes:  ${ROOT_INCLUDE_DIRS}")
-    message(STATUS "ROOT libraries: ${ROOT_LIBRARIES}")
-    message(STATUS "ROOT definitions: ${ROOT_DEFINITIONS}")
-    if(ROOT_FOUND)
-      list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
-      list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
-      add_definitions(${ROOT_DEFINITIONS})
+    if(ROOT_FOUND)  
+      message(STATUS "HepMC3 python: ROOT_FOUND=${ROOT_FOUND}")
+      message(STATUS "HepMC3 python: ROOT_USE_FILE=${ROOT_USE_FILE}")
+      message(STATUS "HepMC3 python: ROOT_INCLUDE_DIRS=${ROOT_INCLUDE_DIRS}")
+      message(STATUS "HepMC3 python: ROOT_LIBRARIES=${ROOT_LIBRARIES}")
+      message(STATUS "HepMC3 python: ROOT_DEFINITIONS=${ROOT_DEFINITIONS}")
+      message(STATUS "HepMC3 python: ROOT_CXX_FLAGS=${ROOT_CXX_FLAGS}")
+      string(REPLACE "ROOTUseFile.cmake" "modules/RootNewMacros.cmake" ROOT_NEWMACROS_FILE "${ROOT_USE_FILE}")
+      if(EXISTS "${ROOT_NEWMACROS_FILE}")
+        include(${ROOT_NEWMACROS_FILE})
+      endif()
       add_definitions(-DHEPMC3_ROOTIO)
-      string(REPLACE " " ";" ROOT_CXX_FLAGS_LIST ${ROOT_CXX_FLAGS})
-     foreach(fl ${ROOT_CXX_FLAGS_LIST})
+# Use ROOT_CXX_STANDARD if defined, otherwise deduce from ROOT_CXX_FLAGS
+      if(DEFINED ROOT_CXX_STANDARD)
+        set(HEPMC3_CXX_STANDARD ${ROOT_CXX_STANDARD})
+      else()
+        string(REPLACE " " ";" ROOT_CXX_FLAGS_LIST ${ROOT_CXX_FLAGS})
+        foreach(fl ${ROOT_CXX_FLAGS_LIST})
           if ("${fl}" MATCHES   ".*\\+\\+14$" OR "${fl}" MATCHES   ".*\\+\\+1y$" )
             set(HEPMC3_CXX_STANDARD 14)
           endif()
@@ -44,11 +54,9 @@ if (USE_INSTALLED_HEPMC3)
           if ("${fl}" MATCHES   ".*\\+\\+20$" OR "${fl}" MATCHES   ".*\\+\\+2a$" )
             set(HEPMC3_CXX_STANDARD 20)
           endif()
-          if ("${fl}" MATCHES   ".*\\+\\+23$" OR "${fl}" MATCHES   ".*\\+\\+2b$" )
-            set(HEPMC3_CXX_STANDARD 23)
-          endif()
           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
-      endforeach(fl ${ROOT_CXX_FLAGS_LIST})
+        endforeach(fl ${ROOT_CXX_FLAGS_LIST})
+      endif()
     endif()
   endif()
   if (HEPMC3_PROTOBUFIO_LIB)
@@ -59,47 +67,32 @@ if (USE_INSTALLED_HEPMC3)
     set(HEPMC3_CXX_STANDARD 11)
   endif()
 #Memory problem and false positive warnings.
- set(${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK "")
+  set(${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK "")
   set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj;/D_CRT_SECURE_NO_WARNINGS;/wd4267;/wd4244;/wd4477")
-  set(PGI_CXX_FLAGS_TO_CHECK "-Wc,--pending_instantiations=0")
-  set(NVHPC_CXX_FLAGS_TO_CHECK "-Wc,--pending_instantiations=0")
+  set(PGI_CXX_FLAGS_TO_CHECK "-Wc,--pending_instantiations=0;-noswitcherror;--diag_suppress=code_is_unreachable;--diag_suppress=inline_gnu_noinline_conflict;--diag_suppress=declared_but_not_referenced")
+  set(NVHPC_CXX_FLAGS_TO_CHECK "-Wc,--pending_instantiations=0;-noswitcherror;--diag_suppress=code_is_unreachable;--diag_suppress=inline_gnu_noinline_conflict;--diag_suppress=declared_but_not_referenced")
   set(Intel_CXX_FLAGS_TO_CHECK "-diag-disable=2196")
   set(IntelLLVM_CXX_FLAGS_TO_CHECK "-diag-disable=2196")
-  set(CNU_CXX_FLAGS_TO_CHECK "-Wno-unused-value;-Wno-unused-but-set-variable")
+  set(GNU_CXX_FLAGS_TO_CHECK "-Wno-unused-value;-Wno-unused-but-set-variable")
   set(Clang_CXX_FLAGS_TO_CHECK "-fsized-deallocation;-Wno-unused-value;-Wno-unused-but-set-variable")
   set (HEPMC3_LOADABLE_LIBRARIES_DIR ${HEPMC3_LIB_DIR})
   message(STATUS "pyHepMC3 v${THIS_PROJECT_NAME_VERSION}")
 else()
   list(APPEND ${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK "-Wno-unused-but-set-variable")
   list(APPEND ${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK "-Wno-unused-value")
+  list(APPEND ${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK "--diag_suppress=inline_gnu_noinline_conflict")
+  list(APPEND ${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK "--diag_suppress=declared_but_not_referenced")
+  list(APPEND ${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK "-Wno-delete-abstract-non-virtual-dtor")
   set(THIS_PROJECT_NAME pyHepMC3)
   set(THIS_PROJECT_NAME_VERSION ${HEPMC3_VERSION_MAJOR}.${HEPMC3_VERSION_MINOR}.${HEPMC3_VERSION_PATCH})
   set (HEPMC3_LOADABLE_LIBRARIES_DIR ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
 endif()
-list( APPEND ${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK ${ROOT_CXX_FLAGS_LIST})
 foreach(fl ${${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK})
   CHECK_CXX_COMPILER_FLAG(${fl} CXX_COMPILER_SUPPORTS_${fl})
     if(CXX_COMPILER_SUPPORTS_${fl})
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
     endif()
 endforeach()
-
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "Sun*")
-    message(STATUS "HepMC3 python: WARNING: you are trying to use Oracle Studio compiller that is not officially supported by pybind11.\
- This compiler does not have the needed functionality to build the HepMC3 python modules using pybind11. Most likely the build fill fail.\
- To disable the build of python bindings use -DHEPMC3_ENABLE_PYTHON=OFF with cmake.")
-endif()
-
-#Workaround for nvc++ for this particular code
-if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "NVHPC")
-    message(STATUS "HepMC3 python: WARNING: you are using PGI/NVidia compiller that is not officially supported by pybind11.\
- The optimization and debug for the python modules will be disabled.")
-    foreach( fl  IN ITEMS "-g" "-fast" "-O1" "-O2" "-O3" "-O4")
-      string(REPLACE "${fl}" ""  CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-      string(REPLACE "${fl}" ""  CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-    endforeach()
-    set(CMAKE_CXX_FLAGS   "${CMAKE_CXX_FLAGS} -O0")
-endif()
 
 if(HEPMC3_ENABLE_SEARCH)
   add_definitions(-DHEPMC3_ENABLE_SEARCH)
@@ -129,36 +122,64 @@ foreach(_comp IN ITEMS " " ${HEPMC3_COMPONENTS})
   endif()
   configure_file("pyHepMC3${_dotcomp}.egg-info.in" "pyHepMC3${_dotcomp}.egg-info" IMMEDIATE @ONLY)
 endforeach()
-if (RERUN_BINDER)
+if (RERUN_BINDER AND ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
   find_program (BINDER binder HINTS $ENV{HOME}/bin /usr/bin)
+
+  execute_process(COMMAND ${BINDER} --version OUTPUT_VARIABLE BINDER_VERSION_STRING OUTPUT_STRIP_TRAILING_WHITESPACE) 
+  string(REGEX REPLACE "[\r\n ]" ";" BINDER_VERSION_LIST "${BINDER_VERSION_STRING} foo 0.0.0")
+  list(GET BINDER_VERSION_LIST 1 BINDER_VERSION)
+  if (BINDER_VERSION VERSION_GREATER 1.4.0)
+    message(STATUS "HepMC3 python: BINDER_VERSION=${BINDER_VERSION} is sufficient for the generation of bindings.")
+  else()
+    message(FATAL_ERROR "HepMC3 python: BINDER_VERSION=${BINDER_VERSION}<=1.4.0 is not sufficient for the generation of bindings.")
+  endif()
+  set(INCARG "")
+  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -v /dev/null -S ERROR_VARIABLE GCCSPEC OUTPUT_QUIET)
+  STRING(REGEX REPLACE "\r?\n" ";" GCCSPECV2 "${GCCSPEC}")
+  FOREACH(line ${GCCSPECV2})
+    string(REGEX MATCH "^LIBRARY_PATH.*"  GCCSPECV3 "${line}")
+    string(REPLACE "LIBRARY_PATH=/"  "/" GCCSPECV4 "${GCCSPECV3}")
+    if (GCCSPECV4)
+      STRING(REPLACE ":" ";--extra-arg=-I" INCARG "--extra-arg=-I${GCCSPECV4}")
+      message(STATUS "HepMC3 python: INCARG=${INCARG}")
+    endif()
+  endforeach()
   if(BINDER)
     message(STATUS "HepMC3 python: binder found in ${BINDER}. Automatic generatin of code for python bindings is possible.")
     foreach(_comp IN ITEMS " " ${HEPMC3_COMPONENTS} )
+      set(EARG "")
       if (${_comp} STREQUAL " ")
         set(_comp "") 
+      else()
+        STRING(TOUPPER ${_comp} _COMP)
+        set(EARG "--extra-arg=-DHEPMC3_${_COMP}")
       endif()
       configure_file("${_comp}includes.hpp.in" "${_comp}includes.hpp" IMMEDIATE @ONLY)
       add_custom_command(
         OUTPUT  ${autoBN${_comp}}
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp src/pyHepMC3${_comp}.binder
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3${_comp}.binder
         COMMAND ${BINDER} --flat --max-file-size=20000
+                          --skip-line-number
                           --root-module pyHepMC3${_comp}
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
-                          --config src/pyHepMC3${_comp}.binder   ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp
-                          --  -std=c++${HEPMC3_CXX_STANDARD}
-                          -I.
-                          -I${CMAKE_CURRENT_SOURCE_DIR}
-                          -I${CMAKE_CURRENT_SOURCE_DIR}/include
-                           ${HEPMC3_INCLUDE_FLAGS}
-                          -I${ROOT_INCLUDE_DIRS}
-                          -I/usr/lib/gcc/x86_64-redhat-linux/8/include/
-                          -I/usr/lib/gcc/x86_64-redhat-linux/12/include/
+                          --config ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3${_comp}.binder   
+                            ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp
+                          --extra-arg=-std=c++${HEPMC3_CXX_STANDARD}
+                          --extra-arg=-I${PROJECT_SOURCE_DIR}/${_comp}/include
+                          --extra-arg=-I${PROJECT_BINARY_DIR}/${_comp}
+                          --extra-arg=-I${CMAKE_CURRENT_SOURCE_DIR}
+                          --extra-arg=-I${CMAKE_CURRENT_SOURCE_DIR}/include
+                          --extra-arg=-I${ROOT_INCLUDE_DIRS}
+                           ${INCARG}
+                           ${EARG}
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         VERBATIM
+        COMMENT "Generating ${autoBN${_comp}}"
       )
+      add_custom_target(generate_${_comp} DEPENDS ${autoBN${_comp}})
     endforeach()
   else()
-    message(FATAL_ERROR "HepMC3  python: binder not found!  Automatic generatin of code for python bindings is not possible.")
+    message(FATAL_ERROR "HepMC3  python: binder not found and/or the C++ is not GNU!  Automatic generatin of code for python bindings is not possible.")
   endif()
 endif()
 
@@ -171,7 +192,7 @@ if (${verin} MATCHES pypy* )
   set(Python3_FIND_IMPLEMENTATIONS PyPy)
   set(IMPL PyPy)
   if(NOT (${CMAKE_VERSION} VERSION_GREATER "3.17"))
-    message(STATUS "HepMC3 python: WARNING: Version of cmake ${CMAKE_VERSION} is too low to support PyPy. at leas version 3.18 is required") 
+    message(STATUS "HepMC3 python: WARNING: Version of cmake ${CMAKE_VERSION} is too low to support PyPy. at least version 3.18 is required") 
   endif()
 else()
   set(Python2_FIND_IMPLEMENTATIONS CPython)
@@ -272,6 +293,9 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       OUTPUT_VARIABLE PyPy_PyPy_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
       set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION}
       PROPERTIES PREFIX "" OUTPUT_NAME pyHepMC3${_comp}.pypy-${PyPy_PyPy_VERSION})
+    endif()
+    if (RERUN_BINDER)
+      add_dependencies(${IMPL}pyHepMC3${_comp}${Python_VERSION} generate_${_comp})
     endif()
   
     set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION}

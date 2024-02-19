@@ -40,7 +40,7 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// HepMC3::WriterAscii file:HepMC3/WriterAscii.h line:25
+// HepMC3::WriterAscii file:HepMC3/WriterAscii.h line:
 struct PyCallBack_HepMC3_WriterAscii : public HepMC3::WriterAscii {
 	using HepMC3::WriterAscii::WriterAscii;
 
@@ -140,7 +140,7 @@ struct PyCallBack_HepMC3_WriterAscii : public HepMC3::WriterAscii {
 
 void bind_pyHepMC3_11(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::WriterAscii file:HepMC3/WriterAscii.h line:25
+	{ // HepMC3::WriterAscii file:HepMC3/WriterAscii.h line:
 		pybind11::class_<HepMC3::WriterAscii, std::shared_ptr<HepMC3::WriterAscii>, PyCallBack_HepMC3_WriterAscii, HepMC3::Writer> cl(M("HepMC3"), "WriterAscii", "");
 		cl.def( pybind11::init( [](const std::string & a0){ return new HepMC3::WriterAscii(a0); }, [](const std::string & a0){ return new PyCallBack_HepMC3_WriterAscii(a0); } ), "doc");
 		cl.def( pybind11::init<const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("run") );
