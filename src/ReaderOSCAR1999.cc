@@ -10,6 +10,7 @@
 #include <cstring>
 #include <sstream>
 #include <cassert>
+#include <array>
 
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
