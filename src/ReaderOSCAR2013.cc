@@ -81,7 +81,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
         if ( strncmp(buf, "\r", 1) == 0 ) continue;
         /// Check for ReaderOSCAR1999 header/footer
         if ( strncmp(buf, "#", 1) == 0 && strncmp(buf, "# interaction", 13) != 0 ) {
-            std::vector<std::string> parsed = tokenize_string(std::string(buf), " #\r\n");
+           auto parsed = tokenize_string(std::string(buf), " #\r\n");
             if (parsed.size() == 14 ) {
                 if ( parsed.at(0) == "!OSCAR2013" && parsed.at(1) == "particle_lists" ) m_OSCARType = 1;
                 if ( parsed.at(0) == "!OSCAR2013" && parsed.at(1) == "full_event_history" ) m_OSCARType = 2;
@@ -165,7 +165,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                 m_header.push_back(std::string(buf));
                 if (m_header.size() == 2 && !file_header_parsed) {
                     run_info()->add_attribute("units", std::make_shared<StringAttribute>(m_header.at(0)));
-                    std::vector<std::string> parsed1 = tokenize_string(m_header.at(1), "- #\r\n");
+                    auto parsed1 = tokenize_string(m_header.at(1), "- #\r\n");
                     struct GenRunInfo::ToolInfo generator = {parsed1.size()>0?parsed1.at(0):"Unknown", parsed1.size()>1?parsed1.at(1):"0.0.0", std::string("Used generator")};
                     run_info()->tools().push_back(generator);
                     file_header_parsed = true;
@@ -202,7 +202,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
             {
                 /// The expected contect is interaction string in a form
                 ///# interaction in 2 out 2 rho    0.0000000 weight     46.76038 partial   17.8799439 type     3
-                std::vector<std::string> interaction_header_tokens = tokenize_string(std::string(buf), " #\r\n");
+                auto interaction_header_tokens = tokenize_string(std::string(buf), " #\r\n");
                 int nin = atoi (  interaction_header_tokens.at(2).c_str());
                 int nout = atoi (  interaction_header_tokens.at(4).c_str());
                 GenVertexPtr v = std::make_shared<GenVertex>();

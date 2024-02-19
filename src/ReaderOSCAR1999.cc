@@ -81,7 +81,7 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
         if ( strncmp(buf, "\r", 1) == 0 ) continue;
         /// Check for ReaderOSCAR1999 header/footer
         if ( strncmp(buf, "#", 1) == 0 ) {
-            std::vector<std::string> parsed = tokenize_string(std::string(buf), " #\r\n");
+            auto parsed = tokenize_string(std::string(buf), " #\r\n");
             if (parsed.size() == 1 ) {
                 if ( parsed.at(0) == "OSC1999A" ) { m_header.clear(); continue;}
                 /// Check for the type of content
@@ -92,7 +92,7 @@ bool ReaderOSCAR1999::read_event(GenEvent &evt) {
             if (!file_header_parsed) file_header_parsed = parse_header();
             continue;
         }
-        std::vector<std::string> interaction_header_tokens = tokenize_string(std::string(buf), " \r\n");
+        auto interaction_header_tokens = tokenize_string(std::string(buf), " \r\n");
         if (interaction_header_tokens.size() < 2) { HEPMC3_ERROR("Unexpected string"<< buf); continue; }
         if (interaction_header_tokens.at(0) == "0" && interaction_header_tokens.at(1) == "0") {
             /// This should be the end of event
@@ -304,7 +304,7 @@ bool ReaderOSCAR1999::parse_header() {
     for (auto &s: m_header) s.erase( std::remove(s.begin(), s.end(), '\r'), s.end() );
     run_info()->add_attribute("content", std::make_shared<StringAttribute>(m_header.at(0).substr(2)));
     std::string toparse1 = m_header.at(1);
-    std::vector<std::string> parsed1 = tokenize_string(toparse1, " -#\r\n"); // treat "generator-version" same as "generator version"
+    auto parsed1 = tokenize_string(toparse1, " -#\r\n"); // treat "generator-version" same as "generator version"
     struct GenRunInfo::ToolInfo generator = {parsed1.size()>0?parsed1.at(0):"Unknown", parsed1.size()>1?parsed1.at(1):"0.0.0", std::string("Used generator")};
     run_info()->tools().push_back(generator);
     std::string toparse2 = m_header.at(2);
@@ -314,7 +314,7 @@ bool ReaderOSCAR1999::parse_header() {
         std::string reaction = toparse2.substr(reaction_b, reaction_e - reaction_b);
         run_info()->add_attribute("reaction", std::make_shared<StringAttribute>(reaction));
         toparse2.erase(reaction_b, reaction_e - reaction_b);
-        std::vector<std::string> parsed2 = tokenize_string(toparse2, " #\r\n");
+        auto parsed2 = tokenize_string(toparse2, " #\r\n");
         if (parsed2.size() > 0) run_info()->add_attribute("reference_frame", std::make_shared<StringAttribute>(parsed2.at(0)));
         if (parsed2.size() > 1) run_info()->add_attribute("beam_energy", std::make_shared<DoubleAttribute>(std::strtof(parsed2.at(1).c_str(),NULL)));
         if (parsed2.size() > 2) run_info()->add_attribute("test_particles_per_nuclon", std::make_shared<IntAttribute>(std::atoi(parsed2.at(2).c_str())));

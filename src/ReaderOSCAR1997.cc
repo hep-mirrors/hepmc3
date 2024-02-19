@@ -150,7 +150,7 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
                 run_info()->add_attribute("reaction", std::make_shared<StringAttribute>(reaction));
                 toparse1.erase(reaction_b,reaction_e - reaction_b);
                 /// We remove the reaction decription before we tokenize the line. The - is needed for SMASH that concatenates the name and the version of generator.
-                std::vector<std::string> parsed1 = tokenize_string(toparse1, "- \r\n");
+                auto parsed1 = tokenize_string(toparse1, "- \r\n");
                 struct GenRunInfo::ToolInfo generator = { parsed1.size() > 1 ? parsed1.at(0) :"Unknown", parsed1.size() > 2 ? parsed1.at(1) : "0.0.0", std::string("Used generator")};
                 /// Add generator name to run info
                 run_info()->tools().push_back(generator);
