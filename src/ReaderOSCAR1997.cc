@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2021 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2024 The HepMC collaboration (see AUTHORS for details)
 //
 ///
 /// @file ReaderOSCAR1997.cc
@@ -21,6 +21,7 @@
 
 namespace HepMC3 {
 
+std::vector<std::string> tokenize_string(const std::string& str, const std::string& delimiters );
 
 ReaderOSCAR1997::ReaderOSCAR1997(const std::string &filename)
     : m_file(filename), m_stream(0), m_isstream(false)
@@ -72,19 +73,7 @@ inline void filter_spaces(char* actual_input) {
     j++;
     output[j] = '\0';
 }
-inline std::vector<std::string> tokenize_string(const std::string& str, const std::string& delimiters )
-{
-    std::vector<std::string> tokens;
-    std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-    std::string::size_type pos     = str.find_first_of(delimiters, lastPos);
-    while (std::string::npos != pos || std::string::npos != lastPos)
-    {
-        tokens.push_back(str.substr(lastPos, pos - lastPos));
-        lastPos = str.find_first_not_of(delimiters, pos);
-        pos = str.find_first_of(delimiters, lastPos);
-    }
-    return tokens;
-}
+
 bool ReaderOSCAR1997::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
     const size_t       max_buffer_size = 512*512;

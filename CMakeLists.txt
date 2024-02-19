@@ -213,6 +213,7 @@ set( hepmc3core_sources
   ${PROJECT_SOURCE_DIR}/src/WriterOSCAR1997.cc
   ${PROJECT_SOURCE_DIR}/src/WriterOSCAR1999.cc
   ${PROJECT_SOURCE_DIR}/src/WriterOSCAR2013.cc
+  ${PROJECT_SOURCE_DIR}/src/OSCARUtils.cc
   ${PROJECT_SOURCE_DIR}/src/ReaderHEPEVT.cc
   ${PROJECT_SOURCE_DIR}/src/WriterAscii.cc
   ${PROJECT_SOURCE_DIR}/src/GenHeavyIon.cc
