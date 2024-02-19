@@ -25,5 +25,15 @@ std::vector<std::string> tokenize_string(const std::string& str, const std::stri
     }
     return tokens;
 }
+int tricharge(const int pdg) {
+        switch (pdg) {
+        case 2212: return 3;
+        case  2112: return 0;
+        case  211: return 3;
+        case  -211: return -3;
+        case  111: return 0;
+        }
+ return -999;
+}
 
 } // namespace HepMC3

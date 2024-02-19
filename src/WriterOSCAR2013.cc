@@ -16,6 +16,8 @@
 #include "HepMC3/WriterOSCAR2013.h"
 namespace HepMC3
 {
+int tricharge(const int pid);
+
 
 WriterOSCAR2013::WriterOSCAR2013(const std::string &filename,
                                  std::shared_ptr<GenRunInfo> run): m_file(filename), m_stream(&m_file) {
@@ -66,7 +68,7 @@ void WriterOSCAR2013::write_event(const GenEvent &evt)
 {
     auto allparticles = evt.particles();
     int n_final = 0;
-    for (auto part: allparticles) if (!part->end_vertex()) n_final++;
+    for (const auto& part: allparticles) if (!part->end_vertex()) n_final++;
     char buf[512*512];//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor = &(buf[0]);
     auto hi = evt.heavy_ion();
@@ -79,7 +81,7 @@ void WriterOSCAR2013::write_event(const GenEvent &evt)
     const double to_fm = (evt.length_unit() == Units::MM) ? 1e+12 : 1e+13;
     const double to_gev = (evt.momentum_unit() == Units::GEV) ? 1 : 1e-3;
     int counter = 0;
-    for (auto part: allparticles) {
+    for (const auto& part: allparticles) {
         if (part->end_vertex()) continue;
         FourVector p = part->momentum();
         FourVector v = part->production_vertex() ? part->production_vertex()->position() : evt.event_pos();
@@ -106,21 +108,8 @@ int WriterOSCAR2013::charge(const int pdg) const {
     if (m_pdg_to_charge.count(pdg)) {
         return  m_pdg_to_charge.at(pdg);
     } else {
-        int res = -999;
-        switch (pdg) {
-        case 2212:
-        { res = 1; m_pdg_to_charge[pdg] = res; break;}
-        case  2112:
-        { res = 0; m_pdg_to_charge[pdg] = res; break;}
-        case  211:
-        { res = 1; m_pdg_to_charge[pdg] = res; break;}
-        case  -211:
-        { res = -1; m_pdg_to_charge[pdg] = res; break;}
-        case  111:
-        { res = 0; m_pdg_to_charge[pdg] = res; break;}
-        default:
-        {}
-        }
+        int res = tricharge(pdg)/3;
+        m_pdg_to_charge[pdg] = res;
         return res;
     }
 }
