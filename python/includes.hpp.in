@@ -43,5 +43,17 @@
 
 #include <@HEPMC3_INCLUDE_DIR@HepMC3/HEPEVT_Wrapper_Runtime.h>
 
+
+#include <@HEPMC3_INCLUDE_DIR@HepMC3/WriterOSCAR1997.h>
+#include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderOSCAR1997.h>
+
+#include <@HEPMC3_INCLUDE_DIR@HepMC3/WriterOSCAR1999.h>
+#include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderOSCAR1999.h>
+
+#include <@HEPMC3_INCLUDE_DIR@HepMC3/WriterOSCAR2013.h>
+#include <@HEPMC3_INCLUDE_DIR@HepMC3/ReaderOSCAR2013.h>
+
+
+
 #include <memory>
 

@@ -28,6 +28,7 @@ void bind_pyHepMC3_15(std::function< pybind11::module &(std::string const &names
 void bind_pyHepMC3_16(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_pyHepMC3_17(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_pyHepMC3_18(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_pyHepMC3_19(std::function< pybind11::module &(std::string const &namespace_) > &M);
 
 
 PYBIND11_MODULE(pyHepMC3, root_module) {
@@ -79,5 +80,6 @@ PYBIND11_MODULE(pyHepMC3, root_module) {
 	bind_pyHepMC3_16(M);
 	bind_pyHepMC3_17(M);
 	bind_pyHepMC3_18(M);
+	bind_pyHepMC3_19(M);
 
 }
