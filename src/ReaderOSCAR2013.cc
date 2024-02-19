@@ -62,8 +62,8 @@ bool ReaderOSCAR2013::skip(const int n)
 
 bool ReaderOSCAR2013::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
-    const size_t       max_buffer_size = 512*512;
-    char               buf[max_buffer_size];
+    std::array<char, 262144>   buf;
+    const char                 *cursor   = buf.data();
     evt.clear();
     m_vertices.clear();
     m_prod.clear();
@@ -76,12 +76,12 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
     const double from_fm = (evt.length_unit() == Units::MM) ? 1e-12 : 1e-13;
     const double from_gev = (evt.momentum_unit() == Units::GEV) ? 1 : 1e+3;
     while (!failed()) {
-        m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
-        if ( strlen(buf) == 0 ) continue;
-        if ( strncmp(buf, "\r", 1) == 0 ) continue;
+        m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
+        if ( strlen(buf.data()) == 0 ) continue;
+        if ( strncmp(buf.data(), "\r", 1) == 0 ) continue;
         /// Check for ReaderOSCAR1999 header/footer
-        if ( strncmp(buf, "#", 1) == 0 && strncmp(buf, "# interaction", 13) != 0 ) {
-           auto parsed = tokenize_string(std::string(buf), " #\r\n");
+        if ( strncmp(buf.data(), "#", 1) == 0 && strncmp(buf.data(), "# interaction", 13) != 0 ) {
+           auto parsed = tokenize_string(std::string(buf.data()), " #\r\n");
             if (parsed.size() == 14 ) {
                 if ( parsed.at(0) == "!OSCAR2013" && parsed.at(1) == "particle_lists" ) m_OSCARType = 1;
                 if ( parsed.at(0) == "!OSCAR2013" && parsed.at(1) == "full_event_history" ) m_OSCARType = 2;
@@ -162,7 +162,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
             }
             if (parsed.size() == 0) continue;
             if (m_header.size() < 2) {
-                m_header.push_back(std::string(buf));
+                m_header.push_back(std::string(buf.data()));
                 if (m_header.size() == 2 && !file_header_parsed) {
                     run_info()->add_attribute("units", std::make_shared<StringAttribute>(m_header.at(0)));
                     auto parsed1 = tokenize_string(m_header.at(1), "- #\r\n");
@@ -172,7 +172,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                 }
                 continue;
             }
-            HEPMC3_ERROR("Unknown header line" << buf);
+            HEPMC3_ERROR("Unknown header line" << buf.data());
         }
 
         if (m_OSCARType == 1) {
@@ -180,7 +180,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
             double d[8];
             /// The expected format is
             /// t x y z mass p0 px py pz pdg ID charge
-            sscanf(buf,"%i %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", i, d, d+1, d+2, d+3, d+4, d+5, d+6,  d+7, i+1, i+2, i+3);
+            sscanf(buf.data(),"%i %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", i, d, d+1, d+2, d+3, d+4, d+5, d+6,  d+7, i+1, i+2, i+3);
             /// Create two particles. One for the final state and the other to connect the "interaction" vertex with the "final" vertex
             GenParticlePtr in = std::make_shared<GenParticle>(FourVector(from_gev*d[5], from_gev*d[6], from_gev*d[7], from_gev*d[4]), i[1], 3);
             GenParticlePtr out = std::make_shared<GenParticle>(FourVector(from_gev*d[5], from_gev*d[6], from_gev*d[7], from_gev*d[4]), i[1], 1);
@@ -198,18 +198,18 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
             continue;
         }
         if (m_OSCARType == 2) {
-            if ( strncmp(buf, "#", 1) == 0 )
+            if ( strncmp(buf.data(), "#", 1) == 0 )
             {
                 /// The expected contect is interaction string in a form
                 ///# interaction in 2 out 2 rho    0.0000000 weight     46.76038 partial   17.8799439 type     3
-                auto interaction_header_tokens = tokenize_string(std::string(buf), " #\r\n");
+                auto interaction_header_tokens = tokenize_string(std::string(buf.data()), " #\r\n");
                 int nin = atoi (  interaction_header_tokens.at(2).c_str());
                 int nout = atoi (  interaction_header_tokens.at(4).c_str());
                 GenVertexPtr v = std::make_shared<GenVertex>();
 
                 for (int j = 0; j < nin + nout; j++ ) {
-                    m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
-                    if ( strlen(buf) == 0 ) {
+                    m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
+                    if ( strlen(buf.data()) == 0 ) {
                         HEPMC3_ERROR("ReaderOSCAR2013: event parsing failed. Returning empty event")
                         return false;
                     }
@@ -217,7 +217,7 @@ bool ReaderOSCAR2013::read_event(GenEvent &evt) {
                     double d[9];
                     ///  The expected content is particle in a form
                     ///  t x y z mass p0 px py pz pdg ID charge
-                    sscanf(buf,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", d, d+1, d+2, d+3, d+4, d+5, d+6, d+7, d+8, i, i+1, i+2);
+                    sscanf(buf.data(),"%lf %lf %lf %lf %lf %lf %lf %lf %lf %i %i %i\n", d, d+1, d+2, d+3, d+4, d+5, d+6, d+7, d+8, i, i+1, i+2);
                     GenParticlePtr p = std::make_shared<GenParticle>(FourVector(from_gev*d[6], from_gev*d[7], from_gev*d[8], from_gev*d[5]), i[0], 3);
                     p->set_generated_mass(from_gev*d[4]);
                     FourVector fv(from_fm*d[1], from_fm*d[2], from_fm*d[3], from_fm*d[0]);

@@ -76,9 +76,8 @@ inline void filter_spaces(char* actual_input) {
 
 bool ReaderOSCAR1997::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
-    const size_t       max_buffer_size = 512*512;
-    char               buf[max_buffer_size];
-    const char                 *cursor   = buf;
+    std::array<char, 262144>   buf;
+    const char                 *cursor   = buf.data();
     evt.clear();
     /// The OSCAR format has fixed units
     evt.set_run_info(run_info());
@@ -101,16 +100,16 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
     const double from_fm = (evt.length_unit() == Units::MM) ? 1e-12 : 1e-13;
     const double from_gev = (evt.momentum_unit() == Units::GEV) ? 1 : 1e+3;
     while (!failed()) {
-        m_isstream ? m_stream->getline(buf, max_buffer_size) : m_file.getline(buf, max_buffer_size);
-        cursor = buf;
-        if ( strlen(buf) == 0 ) continue;
+        m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
+        cursor = buf.data();
+        if ( strlen(buf.data()) == 0 ) continue;
         /// Check if the event header was parsed.
         if (event_header) {
             /// Yes, the expected content is particle
-            filter_spaces(buf);
+            filter_spaces(buf.data());
             int i[2];
             double d[9];
-            sscanf(buf," %i %i %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", i, i+1, d, d+1, d+2, d+3, d+4, d+5, d+6, d+7, d+8);
+            sscanf(buf.data()," %i %i %lf %lf %lf %lf %lf %lf %lf %lf %lf\n", i, i+1, d, d+1, d+2, d+3, d+4, d+5, d+6, d+7, d+8);
             /// Create two particles. One for the final state and the other to connect the "interaction" vertex with the "final" vertex
             GenParticlePtr in = std::make_shared<GenParticle>(FourVector(from_gev*d[0], from_gev*d[1], from_gev*d[2], from_gev*d[3]), i[1], 3);
             GenParticlePtr out = std::make_shared<GenParticle>(FourVector(from_gev*d[0], from_gev*d[1], from_gev*d[2], from_gev*d[3]), i[1], 1);
@@ -131,12 +130,12 @@ bool ReaderOSCAR1997::read_event(GenEvent &evt) {
         }
 
         /// The very beginning of input
-        if ( strncmp(buf, "OSC1997A", 8) == 0 ) {
+        if ( strncmp(buf.data(), "OSC1997A", 8) == 0 ) {
             m_header.clear();
             continue;
         }
         /// The expected content is file header.
-        if (m_header.size() < 2) { m_header.push_back(std::string(buf)); continue;}
+        if (m_header.size() < 2) { m_header.push_back(std::string(buf.data())); continue;}
         else if (m_header.size() == 2) {
             /// We add the line that describes the content to the run info. That should be "final_id_p_x".
             run_info()->add_attribute("content", std::make_shared<StringAttribute>(m_header.at(0)));
