@@ -48,6 +48,7 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::shared_ptr<std::istream> s_stream)
         HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input stream ")
     }
     set_run_info(std::make_shared<GenRunInfo>());
+    m_event_ghost = new GenEvent();
 }
 
 
