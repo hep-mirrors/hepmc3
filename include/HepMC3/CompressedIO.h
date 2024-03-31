@@ -18,6 +18,7 @@
 #if HEPMC3_ZSTD_SUPPORT
 #define BXZSTR_ZSTD_SUPPORT 1
 #endif
+#endif
 #include "HepMC3/bxzstr/bxzstr.hpp"
 
 #include <array>
@@ -30,7 +31,7 @@ using ifstream = bxz::ifstream;
 using istream = bxz::istream;
 
 using Compression = bxz::Compression;
-inline Compression detect_compression_type(char* in_buff_start, char* in_buff_end) {
+inline Compression detect_compression_type(const char* in_buff_start, const char* in_buff_end) {
     return bxz::detect_type(in_buff_start,in_buff_end);
 }
 constexpr int num_supported_compression_types = 0
@@ -91,5 +92,4 @@ inline std::ostream& operator<<(std::ostream& os, HepMC3::Compression & c) {
 }
 
 
-#endif
 #endif

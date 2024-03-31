@@ -279,6 +279,9 @@ LCG_95_x86_64-ubuntu1804-gcc8-opt:
 
 ###########################################################################
 #Check commit messages
+check_commit_Fedora40:
+  variables: { OS: Fedora, FREL: 40}
+  extends: .check_commit
 
 check_commit_Fedora38:
   variables: { OS: Fedora, FREL: 38}
@@ -326,6 +329,12 @@ check_commit_Archlinux0:
 
 ###########################################################################
 #Build images
+build_image_Fedora40:
+  variables: { OS: Fedora, FREL: 40}
+  extends: .build_image
+  needs:
+    - job: check_commit_Fedora40
+
 build_image_Fedora38:
   variables: { OS: Fedora, FREL: 38}
   extends: .build_image
@@ -393,6 +402,12 @@ build_image_Archlinux0:
     - job: check_commit_Archlinux0
 
 ###########################################################################
+Fedora40-GNU:
+  variables: { OS: Fedora, FREL: 40, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  extends: .any-cmake
+  needs:
+    - job: build_image_Fedora40
+
 Fedora38-GNU:
   variables: { OS: Fedora, FREL: 38, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
   extends: .any-cmake

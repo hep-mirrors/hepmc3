@@ -35,3 +35,8 @@ The third party codes are distributed under their own licenses.
 # Copyright: 2014-2022 The HepMC collaboration (see AUTHORS for details)
 # Part of code was adopted from Pythia8-HepMC interface by Mikhail Kirsanov.
 ./interfaces/pythia8/include/Pythia8/Pythia8ToHepMC3.h
+
+# Type: BSD-3 like
+# python/src/pystreambuf.h, see details in python/src/pystreambuf.h
+# cctbx Copyright (c) 2006, The Regents of the University of California
+# Original from http://cci.lbl.gov/cctbx_sources/boost_adaptbx/python_streambuf.h

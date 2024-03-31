@@ -1,6 +1,10 @@
 #include "binders.h"
 #include <HepMC3/Print.h>
 #include <HepMC3/ReaderFactory_fwd.h>
+#ifndef PYPY_VERSION
+#include <pybind11/embed.h>
+#include "pystreambuf.h"
+#endif
 
 namespace binder {
 void custom_deduce_reader(pybind11::module&  M){
@@ -14,6 +18,52 @@ void custom_deduce_reader(pybind11::module&  M){
         return std::make_shared<HepMC3::ReaderPlugin>(filename, HepMC3::libHepMC3protobufIO, std::string("newReaderprotobuffile"));
     }
     std::string f = filename;
+#ifndef PYPY_VERSION
+    char buf[6];
+    snprintf(buf, 6, "%s", input.m_head.at(0).c_str());
+    HepMC3::Compression det  = HepMC3::detect_compression_type(buf, buf + 5);    
+    switch (det) {
+     case HepMC3::Compression::zstd: {
+          try {
+          auto mzstd = pybind11::module::import("zstandard");
+          if (!pybind11::hasattr(mzstd,"open")) { pybind11::print("zstandard module has no open function");  return nullptr;}
+          auto zstdfile = mzstd.attr("open")(f.c_str(),"rb");
+          return HepMC3::deduce_reader(std::shared_ptr< std::istream >(new pystream::istream(zstdfile)));
+          } catch (pybind11::import_error &e) { pybind11::print("Cannot import zstandard module");  return nullptr;}
+       }
+     case HepMC3::Compression::bz2: {
+          try {
+          auto mbz2 = pybind11::module::import("bz2");
+          if (!pybind11::hasattr(mbz2,"open")) { pybind11::print("bz2 module has no open function");  return nullptr;}
+          auto bz2file = mbz2.attr("open")(f.c_str(),"rb");
+          return HepMC3::deduce_reader(std::shared_ptr< std::istream >(new pystream::istream(bz2file)));
+          } catch (pybind11::import_error &e) { pybind11::print("Cannot import bz2 module"); return nullptr;}
+       }
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 2
+     case HepMC3::Compression::z: {
+          try {
+          auto mgzip = pybind11::module::import("gzip");
+          if (!pybind11::hasattr(mgzip,"open")) { pybind11::print("gzip module has no open function");  return nullptr;}
+          auto gzipfile = mgzip.attr("open")(f.c_str(),"rb");
+          return HepMC3::deduce_reader(std::shared_ptr< std::istream >(new pystream::istream(gzipfile)));
+          } catch (pybind11::import_error &e) { pybind11::print("Cannot import gzip module");  return nullptr;}
+     }
+#endif
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 3
+     case HepMC3::Compression::lzma: {
+          try {
+          auto mlzma = pybind11::module::import("lzma");
+          if (!pybind11::hasattr(mlzma,"open")) { pybind11::print("lzma module has no open function");  return nullptr;}
+          auto lzmafile = mlzma.attr("open")(f.c_str(),"rb");
+          return HepMC3::deduce_reader(std::shared_ptr< std::istream >(new pystream::istream(lzmafile)));
+          } catch (pybind11::import_error &e) { pybind11::print("Cannot import lzma module");  return nullptr;}
+     }
+#endif
+     case HepMC3::Compression::plaintext:
+     default: 
+     break;
+    }
+#endif
     return input.native_reader(f);
 } , "This function deduces the type of input file based on the name/URL\n and its content, and will return an appropriate Reader object.\n\n \n\nC++: HepMC3::deduce_reader(const std::string &) --> class std::shared_ptr<class HepMC3::Reader>", pybind11::arg("filename"));
 }
