@@ -6,7 +6,7 @@ RUN  yum -y  install  bc make cmake binutils git wget diffutils file sed gawk gr
                       valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static libzstd-devel libzstd graphviz graphviz-devel pythia8 pythia8-devel  root \
                       ccache  \
                       protobuf protobuf-devel  \
-                      python3 python3-devel  python3-numpy   \
+                      python3 python3-devel  python3-numpy  python3-zstandard \
                       root-core root root-physics doxygen &&  yum -y   clean all
 
 

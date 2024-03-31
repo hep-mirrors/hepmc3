@@ -383,6 +383,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
   set( HepMC_python_tests
         test_IO1
         test_IO3
+        test_IO4
         test_Boost
         test_Print
         test_Polarization
