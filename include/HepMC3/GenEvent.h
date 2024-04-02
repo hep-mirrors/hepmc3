@@ -29,13 +29,6 @@
 class TBuffer;
 #endif
 
-#ifdef HEPMC3_PROTOBUFIO
-namespace HepMC3_pb {
-class GenEventData;
-}
-#endif
-
-
 namespace HepMC3 {
 
 struct GenEventData;
@@ -347,17 +340,15 @@ public:
     void write_data(GenEventData &data) const;
 
     /// @brief Fill GenEvent based on GenEventData
-    void read_data(const GenEventData &data);
+    template <class T> void read_data(const T &data);
+    //template <> void read_data<GenEventData>(const GenEventData &data);
 
 #ifdef HEPMC3_ROOTIO
     /// @brief ROOT I/O streamer
     void Streamer(TBuffer &b);
 #endif
 
-#ifdef HEPMC3_PROTOBUFIO
-    /// @brief protobuf I/O reader
-    void read_data(HepMC3_pb::GenEventData const &data);
-#endif
+
     /// @}
 
 private:

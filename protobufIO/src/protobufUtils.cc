@@ -328,7 +328,8 @@ bool GenEvent(std::string const &msg, HepMC3::GenEvent &evt) {
 
 } // namespace Deserialize
 
-void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
+template <>
+void GenEvent::read_data<HepMC3_pb::GenEventData>(HepMC3_pb::GenEventData const &data) {
   this->clear();
   this->set_event_number(data.event_number());
 
@@ -429,16 +430,16 @@ void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
     m_attributes[name][id] = att;
   }
 }
-
-GenVertex::GenVertex(HepMC3_pb::GenEventData_GenVertexData const &data)
+template<>
+GenVertex::GenVertex<HepMC3_pb::GenEventData_GenVertexData>(HepMC3_pb::GenEventData_GenVertexData const &data)
     : m_event(nullptr), m_id(0) {
   m_data.status = data.status();
   m_data.position =
       HepMC3::FourVector{data.position().m_v1(), data.position().m_v2(),
                          data.position().m_v3(), data.position().m_v4()};
 }
-
-GenParticle::GenParticle(HepMC3_pb::GenEventData_GenParticleData const &data)
+template<>
+GenParticle::GenParticle<HepMC3_pb::GenEventData_GenParticleData>(HepMC3_pb::GenEventData_GenParticleData const &data)
     : m_event(nullptr), m_id(0) {
   m_data.pid = data.pid();
   m_data.momentum =

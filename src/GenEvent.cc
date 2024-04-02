@@ -59,6 +59,69 @@ void GenEvent::add_particle(GenParticlePtr p) {
     }
 }
 
+template <>
+void GenEvent::read_data<GenEventData>(const GenEventData &data) {
+    this->clear();
+    this->set_event_number(data.event_number);
+    //Note: set_units checks the current unit of event, i.e. applicable only for fully constructed event.
+    m_momentum_unit = data.momentum_unit;
+    m_length_unit = data.length_unit;
+    this->shift_position_to(data.event_pos);
+
+    // Fill weights
+    this->weights() = data.weights;
+    m_particles.reserve(data.particles.size());
+    m_vertices.reserve(data.vertices.size());
+
+    // Fill particle information
+    for ( const GenParticleData &pd: data.particles ) {
+        m_particles.emplace_back(std::make_shared<GenParticle>(pd));
+        m_particles.back()->m_event = this;
+        m_particles.back()->m_id    = m_particles.size();
+    }
+
+    // Fill vertex information
+    for ( const GenVertexData &vd: data.vertices ) {
+        m_vertices.emplace_back(std::make_shared<GenVertex>(vd));
+        m_vertices.back()->m_event = this;
+        m_vertices.back()->m_id    = -(int)m_vertices.size();
+    }
+
+    // Restore links
+    for (unsigned int i = 0; i < data.links1.size(); ++i) {
+        const int id1 = data.links1[i];
+        const int id2 = data.links2[i];
+        /* @note:
+        The  meaningfull combinations for (id1,id2) are:
+        (+-)  --  particle has end vertex
+        (-+)  --  particle  has production vertex
+        */
+        if ((id1 < 0 && id2 <0) || (id1 > 0 && id2 > 0))   { HEPMC3_WARNING("GenEvent::read_data: wrong link: " << id1 << " " << id2); continue;}
+
+        if ( id1 > 0 ) { m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] ); continue; }
+        if ( id1 < 0 ) { m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );   continue; }
+    }
+    for (auto& p:  m_particles) if (!p->production_vertex()) m_rootvertex->add_particle_out(p);
+
+    // Read attributes
+    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
+    for (unsigned int i = 0; i < data.attribute_id.size(); ++i) {
+        ///Disallow empty strings
+        const std::string name = data.attribute_name[i];
+        if (name.length() == 0) continue;
+        const int id = data.attribute_id[i];
+        if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
+        auto att = std::make_shared<StringAttribute>(data.attribute_string[i]);
+        att->m_event = this;
+        if ( id > 0 && id <= int(m_particles.size()) ) {
+            att->m_particle = m_particles[id - 1];
+        }
+        if ( id < 0 && -id <= int(m_vertices.size()) ) {
+            att->m_vertex = m_vertices[-id - 1];
+        }
+        m_attributes[name][id] = att;
+    }
+}
 
 GenEvent::GenEvent(const GenEvent&e) {
     if (this != &e)
@@ -678,68 +741,6 @@ void GenEvent::write_data(GenEventData& data) const {
 }
 
 
-void GenEvent::read_data(const GenEventData &data) {
-    this->clear();
-    this->set_event_number(data.event_number);
-    //Note: set_units checks the current unit of event, i.e. applicable only for fully constructed event.
-    m_momentum_unit = data.momentum_unit;
-    m_length_unit = data.length_unit;
-    this->shift_position_to(data.event_pos);
-
-    // Fill weights
-    this->weights() = data.weights;
-    m_particles.reserve(data.particles.size());
-    m_vertices.reserve(data.vertices.size());
-
-    // Fill particle information
-    for ( const GenParticleData &pd: data.particles ) {
-        m_particles.emplace_back(std::make_shared<GenParticle>(pd));
-        m_particles.back()->m_event = this;
-        m_particles.back()->m_id    = m_particles.size();
-    }
-
-    // Fill vertex information
-    for ( const GenVertexData &vd: data.vertices ) {
-        m_vertices.emplace_back(std::make_shared<GenVertex>(vd));
-        m_vertices.back()->m_event = this;
-        m_vertices.back()->m_id    = -(int)m_vertices.size();
-    }
-
-    // Restore links
-    for (unsigned int i = 0; i < data.links1.size(); ++i) {
-        const int id1 = data.links1[i];
-        const int id2 = data.links2[i];
-        /* @note:
-        The  meaningfull combinations for (id1,id2) are:
-        (+-)  --  particle has end vertex
-        (-+)  --  particle  has production vertex
-        */
-        if ((id1 < 0 && id2 <0) || (id1 > 0 && id2 > 0))   { HEPMC3_WARNING("GenEvent::read_data: wrong link: " << id1 << " " << id2); continue;}
-
-        if ( id1 > 0 ) { m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] ); continue; }
-        if ( id1 < 0 ) { m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );   continue; }
-    }
-    for (auto& p:  m_particles) if (!p->production_vertex()) m_rootvertex->add_particle_out(p);
-
-    // Read attributes
-    std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    for (unsigned int i = 0; i < data.attribute_id.size(); ++i) {
-        ///Disallow empty strings
-        const std::string name = data.attribute_name[i];
-        if (name.length() == 0) continue;
-        const int id = data.attribute_id[i];
-        if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
-        auto att = std::make_shared<StringAttribute>(data.attribute_string[i]);
-        att->m_event = this;
-        if ( id > 0 && id <= int(m_particles.size()) ) {
-            att->m_particle = m_particles[id - 1];
-        }
-        if ( id < 0 && -id <= int(m_vertices.size()) ) {
-            att->m_vertex = m_vertices[-id - 1];
-        }
-        m_attributes[name][id] = att;
-    }
-}
 
 
 //

@@ -20,11 +20,6 @@
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"
 
-#ifdef HEPMC3_PROTOBUFIO
-namespace HepMC3_pb {
-class GenEventData_GenParticleData;
-}
-#endif
 
 namespace HepMC3 {
 
@@ -45,12 +40,7 @@ public:
     GenParticle( const FourVector &momentum = FourVector::ZERO_VECTOR(), int pid = 0, int status = 0 );
 
     /// @brief Constructor based on particle data
-    GenParticle( const GenParticleData &data );
-
-#ifdef HEPMC3_PROTOBUFIO
-    /// @brief Constructor based on protobuf messages
-    GenParticle( HepMC3_pb::GenEventData_GenParticleData const &data );
-#endif
+    template <class T> GenParticle( const T &data );
 
 //
 // Functions
