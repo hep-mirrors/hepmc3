@@ -122,8 +122,6 @@ bool Readerprotobuf::read_digest() {
     return false;
   }
 
-  int nbytes = m_in_zcstream->ByteCount();
-
   if (!m_md_pb.ParseFromBoundedZeroCopyStream(m_in_zcstream, MDBytesLength)) {
     return false;
   }
@@ -149,8 +147,6 @@ bool Readerprotobuf::read_Header() {
     return false;
   }
 
-  int nbytes = m_in_zcstream->ByteCount();
-
   if (!m_hdr_pb.ParseFromBoundedZeroCopyStream(m_in_zcstream,
                                                m_md_pb.bytes())) {
     // if we fail to read a message then close the stream to indicate failed
@@ -173,8 +169,6 @@ bool Readerprotobuf::read_GenRunInfo() {
 
   set_run_info(std::make_shared<HepMC3::GenRunInfo>());
 
-  int nbytes = m_in_zcstream->ByteCount();
-
   if (!m_gri_pb.ParseFromBoundedZeroCopyStream(m_in_zcstream,
                                                m_md_pb.bytes())) {
     close();
@@ -194,8 +188,6 @@ bool Readerprotobuf::read_GenEvent(bool skip, GenEvent &evt) {
   if (m_md_pb.message_type() != HepMC3_pb::MessageDigest::Event) {
     return false;
   }
-
-  int nbytes = m_in_zcstream->ByteCount();
 
   if (!m_evt_pb.ParseFromBoundedZeroCopyStream(m_in_zcstream,
                                                m_md_pb.bytes())) {

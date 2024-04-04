@@ -382,7 +382,7 @@ void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
   }
 
   // Restore links
-  for (unsigned int i = 0; i < data.links1_size(); ++i) {
+  for (unsigned int i = 0; i < (unsigned int)data.links1_size(); ++i) {
     const int id1 = data.links1(i);
     const int id2 = data.links2(i);
     /* @note:
@@ -410,7 +410,7 @@ void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
 
   // Read attributes
   std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-  for (unsigned int i = 0; i < data.attribute_id_size(); ++i) {
+  for (unsigned int i = 0; i < (unsigned int)data.attribute_id_size(); ++i) {
     /// Disallow empty strings
     const std::string name = data.attribute_name(i);
     if (name.length() == 0)
