@@ -132,7 +132,7 @@ void HEPEVT_Wrapper_Runtime::print_hepevt( std::ostream& ostr ) const
 
 void HEPEVT_Wrapper_Runtime::print_hepevt_particle( int index, std::ostream& ostr ) const
 {
-    std::array<char, 255> buf;//Note: the format is fixed, so no reason for complicated treatment
+    std::array<char, 255> buf{};//Note: the format is fixed, so no reason for complicated treatment
 
     snprintf(buf.data(), buf.size(), "%5i %6i%4i - %4i  %4i - %4i %8.2f %8.2f %8.2f %8.2f %8.2f",
              index, m_hepevtptr->idhep[index-1],

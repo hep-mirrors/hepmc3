@@ -32,9 +32,9 @@ public:
     /** @brief Set run number */
     void set_run_number(const int nr);
 private:
-    float  m_Ebeam; ///< Beam energy in GEV
-    int    m_Irun;  ///< Run number
-    int    m_Ievnt; ///< Event number
+    float  m_Ebeam = 0.0; ///< Beam energy in GEV
+    int    m_Irun = 0;  ///< Run number
+    int    m_Ievnt = 0; ///< Event number
 };
 }
 #endif

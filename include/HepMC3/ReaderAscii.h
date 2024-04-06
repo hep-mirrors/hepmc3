@@ -61,7 +61,7 @@ public:
 private:
 
     /// @brief Unsecape '\' and '\n' characters in string
-    std::string unescape(const std::string& s);
+    static std::string unescape(const std::string& s);
 
     /// @name Read helpers
     /// @{

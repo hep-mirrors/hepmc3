@@ -83,8 +83,8 @@ Readerprotobuf::Readerprotobuf(std::shared_ptr<std::istream> stream)
 
 bool Readerprotobuf::read_file_start() {
 
-  const void *MagicIntro;
-  int nbytes;
+  const void *MagicIntro = nullptr;
+  int nbytes = 0;
   m_in_zcstream->Next(&MagicIntro, &nbytes);
 
   // Check the first four bytes it should read "hmpb"
@@ -180,7 +180,7 @@ bool Readerprotobuf::read_GenRunInfo() {
   return true;
 }
 
-bool Readerprotobuf::read_GenEvent(bool skip, GenEvent &evt) {
+bool Readerprotobuf::read_GenEvent(bool /*skip*/, GenEvent &evt) {
   if (!read_digest()) {
     return false;
   }

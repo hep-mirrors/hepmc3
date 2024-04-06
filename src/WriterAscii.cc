@@ -24,11 +24,7 @@ namespace HepMC3 {
 
 WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo> run)
     : m_file(filename),
-      m_stream(&m_file),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144)
+      m_stream(&m_file)
 {
     set_run_info(run);
     if ( !m_file.is_open() ) {
@@ -51,11 +47,7 @@ WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo
 
 
 WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
-    : m_stream(&stream),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144)
+    : m_stream(&stream)
 {
     set_run_info(run);
     const std::string header = "HepMC::Version " + version() + "\nHepMC::Asciiv3-START_EVENT_LISTING\n";
@@ -74,11 +66,7 @@ WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
 
 WriterAscii::WriterAscii(std::shared_ptr<std::ostream> s_stream, std::shared_ptr<GenRunInfo> run)
     : m_shared_stream(s_stream),
-      m_stream(s_stream.get()),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144)
+      m_stream(s_stream.get())
 {
     set_run_info(run);
     const std::string header = "HepMC::Version " + version() + "\nHepMC::Asciiv3-START_EVENT_LISTING\n";
@@ -97,7 +85,7 @@ WriterAscii::WriterAscii(std::shared_ptr<std::ostream> s_stream, std::shared_ptr
 
 WriterAscii::~WriterAscii() {
     close();
-    if ( m_buffer ) delete[] m_buffer;
+    delete[] m_buffer;
 }
 
 
@@ -237,7 +225,7 @@ void WriterAscii::allocate_buffer() {
 }
 
 
-std::string WriterAscii::escape(const std::string& s) const {
+std::string WriterAscii::escape(const std::string& s) {
     std::string ret;
     ret.reserve(s.length()*2);
     for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {

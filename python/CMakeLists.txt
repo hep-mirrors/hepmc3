@@ -289,6 +289,9 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       Python3_add_library(${IMPL}pyHepMC3${_comp}${Python_VERSION} MODULE ${BN${_comp}})
       set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3${_comp})
     endif()
+    foreach(_s IN ITEMS ${BN${_comp}})
+      set_source_files_properties(${_s} PROPERTIES SKIP_LINTING ON)
+    endforeach()
     if (${verin} MATCHES pypy* )
       execute_process( COMMAND ${Python_EXECUTABLE} -c "import  sys;v=sys.pypy_version_info;print(str(v[0])+str(v[1]))" 
       OUTPUT_VARIABLE PyPy_PyPy_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)

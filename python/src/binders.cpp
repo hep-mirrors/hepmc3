@@ -1,4 +1,5 @@
 #include "binders.h"
+#include <array>
 #include <HepMC3/Print.h>
 #include <HepMC3/ReaderFactory_fwd.h>
 #ifndef PYPY_VERSION
@@ -19,9 +20,9 @@ void custom_deduce_reader(pybind11::module&  M){
     }
     std::string f = filename;
 #ifndef PYPY_VERSION
-    char buf[6];
-    snprintf(buf, 6, "%s", input.m_head.at(0).c_str());
-    HepMC3::Compression det  = HepMC3::detect_compression_type(buf, buf + 5);    
+    std::array<char,6> buf;
+    snprintf(buf.data(), 6, "%s", input.m_head.at(0).c_str());
+    HepMC3::Compression det  = HepMC3::detect_compression_type(buf.data(), buf.data() + 5);    
     switch (det) {
      case HepMC3::Compression::zstd: {
           try {

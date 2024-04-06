@@ -53,7 +53,7 @@ ReaderAscii::~ReaderAscii() { if (!m_isstream) close(); }
 
 bool ReaderAscii::skip(const int n)
 {
-    std::array<char, 262144> buf;
+    std::array<char, 262144> buf{};
     bool               event_context    = false;
     bool               run_info_context    = false;
     int nn = n;
@@ -91,7 +91,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
     char               peek(0);
-    std::array<char, 262144> buf;
+    std::array<char, 262144> buf{};
     bool               event_context    = false;
     bool               parsed_weights    = false;
     bool               parsed_particles_or_vertices    = false;
@@ -228,7 +228,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     auto fir = m_io_implicit_ids.rbegin();
     for (const auto& iofirst: m_io_explicit_ids) {
         for (;currid < iofirst; ++currid, ++fir) {
-            if (fir == m_io_implicit_ids.rend()) HEPMC3_ERROR("ReaderAscii: not enough implicit vertices")
+            if (fir == m_io_implicit_ids.rend()) { HEPMC3_ERROR("ReaderAscii: not enough implicit vertices") }
             /// Found a gap in ids, insert an implicit vertex into a list of gaps.
             m_io_explicit[currid] = std::move(m_io_implicit[*fir]);
         }
@@ -494,7 +494,7 @@ bool ReaderAscii::parse_particle_information(const char *buf) {
 bool ReaderAscii::parse_attribute(const char *buf) {
     const char     *cursor  = buf;
     const char     *cursor2 = buf;
-    std::array<char, 512> name;
+    std::array<char, 512> name{};
     int             id = 0;
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
@@ -509,7 +509,7 @@ bool ReaderAscii::parse_attribute(const char *buf) {
     cursor = cursor2+1;
 
     m_data.attribute_id.push_back(id);
-    m_data.attribute_name.push_back(name.data());
+    m_data.attribute_name.emplace_back(name.data());
     m_data.attribute_string.push_back(unescape(cursor));
 
     return true;
@@ -518,7 +518,7 @@ bool ReaderAscii::parse_attribute(const char *buf) {
 bool ReaderAscii::parse_run_attribute(const char *buf) {
     const char     *cursor  = buf;
     const char     *cursor2 = buf;
-    std::array<char, 512> name;
+    std::array<char, 512> name{};
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     ++cursor;

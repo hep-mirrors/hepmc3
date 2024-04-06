@@ -79,7 +79,7 @@ std::shared_ptr<Writer> get_output_file(const char* name, const char* use_compre
 
 int main(int argc, char** argv)
 {
-    gengetopt_args_info ai;
+    gengetopt_args_info ai{};
     if (cmdline_parser (argc, argv, &ai) != 0) {
         exit(1);
     }
