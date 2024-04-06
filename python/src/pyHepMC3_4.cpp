@@ -1,13 +1,8 @@
 #include <HepMC3/Attribute.h>
-#include <HepMC3/Data/GenEventData.h>
 #include <HepMC3/Data/GenRunInfoData.h>
-#include <HepMC3/FourVector.h>
 #include <HepMC3/GenCrossSection.h>
-#include <HepMC3/GenEvent.h>
 #include <HepMC3/GenHeavyIon.h>
-#include <HepMC3/GenParticle.h>
 #include <HepMC3/GenRunInfo.h>
-#include <HepMC3/GenVertex.h>
 #include <functional>
 #include <iterator>
 #include <map>
@@ -24,8 +19,9 @@
 #include <HepMC3/Reader.h>
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
-#include <src/stl_binders.hpp>
+#include <pybind11/stl_bind.h>
 #include <src/binders.h>
+#include <pybind11/stl.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -35,13 +31,13 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// HepMC3::Attribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_Attribute : public HepMC3::Attribute {
-	using HepMC3::Attribute::Attribute;
+// HepMC3::VectorULongLongAttribute file:HepMC3/Attribute.h line:
+struct PyCallBack_HepMC3_VectorULongLongAttribute : public HepMC3::VectorULongLongAttribute {
+	using HepMC3::VectorULongLongAttribute::VectorULongLongAttribute;
 
 	bool from_string(const std::string & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Attribute *>(this), "from_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorULongLongAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -50,11 +46,24 @@ struct PyCallBack_HepMC3_Attribute : public HepMC3::Attribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		pybind11::pybind11_fail("Tried to call pure virtual function \"Attribute::from_string\"");
+		return VectorULongLongAttribute::from_string(a0);
+	}
+	bool to_string(std::string & a0) const override {
+		pybind11::gil_scoped_acquire gil;
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorULongLongAttribute *>(this), "to_string");
+		if (overload) {
+			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
+			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
+				static pybind11::detail::override_caster_t<bool> caster;
+				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
+			}
+			else return pybind11::detail::cast_safe<bool>(std::move(o));
+		}
+		return VectorULongLongAttribute::to_string(a0);
 	}
 	bool init() override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Attribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorULongLongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -67,78 +76,7 @@ struct PyCallBack_HepMC3_Attribute : public HepMC3::Attribute {
 	}
 	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Attribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init(a0);
-	}
-	bool to_string(std::string & a0) const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::Attribute *>(this), "to_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		pybind11::pybind11_fail("Tried to call pure virtual function \"Attribute::to_string\"");
-	}
-};
-
-// HepMC3::IntAttribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_IntAttribute : public HepMC3::IntAttribute {
-	using HepMC3::IntAttribute::IntAttribute;
-
-	bool from_string(const std::string & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::IntAttribute *>(this), "from_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return IntAttribute::from_string(a0);
-	}
-	bool to_string(std::string & a0) const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::IntAttribute *>(this), "to_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return IntAttribute::to_string(a0);
-	}
-	bool init() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::IntAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init();
-	}
-	bool init(const class HepMC3::GenRunInfo & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::IntAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorULongLongAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -151,13 +89,13 @@ struct PyCallBack_HepMC3_IntAttribute : public HepMC3::IntAttribute {
 	}
 };
 
-// HepMC3::LongAttribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_LongAttribute : public HepMC3::LongAttribute {
-	using HepMC3::LongAttribute::LongAttribute;
+// HepMC3::VectorIntAttribute file:HepMC3/Attribute.h line:
+struct PyCallBack_HepMC3_VectorIntAttribute : public HepMC3::VectorIntAttribute {
+	using HepMC3::VectorIntAttribute::VectorIntAttribute;
 
 	bool from_string(const std::string & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongAttribute *>(this), "from_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorIntAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -166,11 +104,11 @@ struct PyCallBack_HepMC3_LongAttribute : public HepMC3::LongAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return LongAttribute::from_string(a0);
+		return VectorIntAttribute::from_string(a0);
 	}
 	bool to_string(std::string & a0) const override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongAttribute *>(this), "to_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorIntAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -179,11 +117,11 @@ struct PyCallBack_HepMC3_LongAttribute : public HepMC3::LongAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return LongAttribute::to_string(a0);
+		return VectorIntAttribute::to_string(a0);
 	}
 	bool init() override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorIntAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -196,7 +134,7 @@ struct PyCallBack_HepMC3_LongAttribute : public HepMC3::LongAttribute {
 	}
 	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorIntAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -209,13 +147,13 @@ struct PyCallBack_HepMC3_LongAttribute : public HepMC3::LongAttribute {
 	}
 };
 
-// HepMC3::DoubleAttribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_DoubleAttribute : public HepMC3::DoubleAttribute {
-	using HepMC3::DoubleAttribute::DoubleAttribute;
+// HepMC3::VectorLongIntAttribute file:HepMC3/Attribute.h line:
+struct PyCallBack_HepMC3_VectorLongIntAttribute : public HepMC3::VectorLongIntAttribute {
+	using HepMC3::VectorLongIntAttribute::VectorLongIntAttribute;
 
 	bool from_string(const std::string & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::DoubleAttribute *>(this), "from_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongIntAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -224,11 +162,11 @@ struct PyCallBack_HepMC3_DoubleAttribute : public HepMC3::DoubleAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return DoubleAttribute::from_string(a0);
+		return VectorLongIntAttribute::from_string(a0);
 	}
 	bool to_string(std::string & a0) const override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::DoubleAttribute *>(this), "to_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongIntAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -237,11 +175,11 @@ struct PyCallBack_HepMC3_DoubleAttribute : public HepMC3::DoubleAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return DoubleAttribute::to_string(a0);
+		return VectorLongIntAttribute::to_string(a0);
 	}
 	bool init() override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::DoubleAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongIntAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -254,7 +192,7 @@ struct PyCallBack_HepMC3_DoubleAttribute : public HepMC3::DoubleAttribute {
 	}
 	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::DoubleAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorLongIntAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -267,13 +205,13 @@ struct PyCallBack_HepMC3_DoubleAttribute : public HepMC3::DoubleAttribute {
 	}
 };
 
-// HepMC3::FloatAttribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_FloatAttribute : public HepMC3::FloatAttribute {
-	using HepMC3::FloatAttribute::FloatAttribute;
+// HepMC3::VectorDoubleAttribute file:HepMC3/Attribute.h line:
+struct PyCallBack_HepMC3_VectorDoubleAttribute : public HepMC3::VectorDoubleAttribute {
+	using HepMC3::VectorDoubleAttribute::VectorDoubleAttribute;
 
 	bool from_string(const std::string & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::FloatAttribute *>(this), "from_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorDoubleAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -282,11 +220,11 @@ struct PyCallBack_HepMC3_FloatAttribute : public HepMC3::FloatAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return FloatAttribute::from_string(a0);
+		return VectorDoubleAttribute::from_string(a0);
 	}
 	bool to_string(std::string & a0) const override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::FloatAttribute *>(this), "to_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorDoubleAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -295,11 +233,11 @@ struct PyCallBack_HepMC3_FloatAttribute : public HepMC3::FloatAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return FloatAttribute::to_string(a0);
+		return VectorDoubleAttribute::to_string(a0);
 	}
 	bool init() override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::FloatAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorDoubleAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -312,7 +250,7 @@ struct PyCallBack_HepMC3_FloatAttribute : public HepMC3::FloatAttribute {
 	}
 	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::FloatAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorDoubleAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -325,13 +263,13 @@ struct PyCallBack_HepMC3_FloatAttribute : public HepMC3::FloatAttribute {
 	}
 };
 
-// HepMC3::StringAttribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_StringAttribute : public HepMC3::StringAttribute {
-	using HepMC3::StringAttribute::StringAttribute;
+// HepMC3::VectorStringAttribute file:HepMC3/Attribute.h line:
+struct PyCallBack_HepMC3_VectorStringAttribute : public HepMC3::VectorStringAttribute {
+	using HepMC3::VectorStringAttribute::VectorStringAttribute;
 
 	bool from_string(const std::string & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::StringAttribute *>(this), "from_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorStringAttribute *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -340,11 +278,11 @@ struct PyCallBack_HepMC3_StringAttribute : public HepMC3::StringAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return StringAttribute::from_string(a0);
+		return VectorStringAttribute::from_string(a0);
 	}
 	bool to_string(std::string & a0) const override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::StringAttribute *>(this), "to_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorStringAttribute *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -353,11 +291,11 @@ struct PyCallBack_HepMC3_StringAttribute : public HepMC3::StringAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return StringAttribute::to_string(a0);
+		return VectorStringAttribute::to_string(a0);
 	}
 	bool init() override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::StringAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorStringAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -370,7 +308,7 @@ struct PyCallBack_HepMC3_StringAttribute : public HepMC3::StringAttribute {
 	}
 	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::StringAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::VectorStringAttribute *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -383,13 +321,13 @@ struct PyCallBack_HepMC3_StringAttribute : public HepMC3::StringAttribute {
 	}
 };
 
-// HepMC3::CharAttribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_CharAttribute : public HepMC3::CharAttribute {
-	using HepMC3::CharAttribute::CharAttribute;
+// HepMC3::GenHeavyIon file:HepMC3/GenHeavyIon.h line:
+struct PyCallBack_HepMC3_GenHeavyIon : public HepMC3::GenHeavyIon {
+	using HepMC3::GenHeavyIon::GenHeavyIon;
 
 	bool from_string(const std::string & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::CharAttribute *>(this), "from_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenHeavyIon *>(this), "from_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -398,11 +336,11 @@ struct PyCallBack_HepMC3_CharAttribute : public HepMC3::CharAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return CharAttribute::from_string(a0);
+		return GenHeavyIon::from_string(a0);
 	}
 	bool to_string(std::string & a0) const override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::CharAttribute *>(this), "to_string");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenHeavyIon *>(this), "to_string");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -411,11 +349,11 @@ struct PyCallBack_HepMC3_CharAttribute : public HepMC3::CharAttribute {
 			}
 			else return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
-		return CharAttribute::to_string(a0);
+		return GenHeavyIon::to_string(a0);
 	}
 	bool init() override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::CharAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenHeavyIon *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>();
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -428,181 +366,7 @@ struct PyCallBack_HepMC3_CharAttribute : public HepMC3::CharAttribute {
 	}
 	bool init(const class HepMC3::GenRunInfo & a0) override {
 		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::CharAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init(a0);
-	}
-};
-
-// HepMC3::LongLongAttribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_LongLongAttribute : public HepMC3::LongLongAttribute {
-	using HepMC3::LongLongAttribute::LongLongAttribute;
-
-	bool from_string(const std::string & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongLongAttribute *>(this), "from_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return LongLongAttribute::from_string(a0);
-	}
-	bool to_string(std::string & a0) const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongLongAttribute *>(this), "to_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return LongLongAttribute::to_string(a0);
-	}
-	bool init() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongLongAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init();
-	}
-	bool init(const class HepMC3::GenRunInfo & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongLongAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init(a0);
-	}
-};
-
-// HepMC3::LongDoubleAttribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_LongDoubleAttribute : public HepMC3::LongDoubleAttribute {
-	using HepMC3::LongDoubleAttribute::LongDoubleAttribute;
-
-	bool from_string(const std::string & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongDoubleAttribute *>(this), "from_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return LongDoubleAttribute::from_string(a0);
-	}
-	bool to_string(std::string & a0) const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongDoubleAttribute *>(this), "to_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return LongDoubleAttribute::to_string(a0);
-	}
-	bool init() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongDoubleAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init();
-	}
-	bool init(const class HepMC3::GenRunInfo & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::LongDoubleAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init(a0);
-	}
-};
-
-// HepMC3::UIntAttribute file:HepMC3/Attribute.h line:
-struct PyCallBack_HepMC3_UIntAttribute : public HepMC3::UIntAttribute {
-	using HepMC3::UIntAttribute::UIntAttribute;
-
-	bool from_string(const std::string & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::UIntAttribute *>(this), "from_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return UIntAttribute::from_string(a0);
-	}
-	bool to_string(std::string & a0) const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::UIntAttribute *>(this), "to_string");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return UIntAttribute::to_string(a0);
-	}
-	bool init() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::UIntAttribute *>(this), "init");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return Attribute::init();
-	}
-	bool init(const class HepMC3::GenRunInfo & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::UIntAttribute *>(this), "init");
+		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::GenHeavyIon *>(this), "init");
 		if (overload) {
 			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
 			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
@@ -617,136 +381,113 @@ struct PyCallBack_HepMC3_UIntAttribute : public HepMC3::UIntAttribute {
 
 void bind_pyHepMC3_4(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::Attribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::Attribute, std::shared_ptr<HepMC3::Attribute>, PyCallBack_HepMC3_Attribute> cl(M("HepMC3"), "Attribute", "Base attribute class. ");
-		cl.def( pybind11::init( [](){ return new PyCallBack_HepMC3_Attribute(); } ) );
-		cl.def(pybind11::init<PyCallBack_HepMC3_Attribute const &>());
-		cl.def("from_string", (bool (HepMC3::Attribute::*)(const std::string &)) &HepMC3::Attribute::from_string, "Fill class content from string.\n\nC++: HepMC3::Attribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("init", (bool (HepMC3::Attribute::*)()) &HepMC3::Attribute::init, "Optionally initialize the attribute after from_string.\n\nC++: HepMC3::Attribute::init() --> bool");
-		cl.def("init", (bool (HepMC3::Attribute::*)(const class HepMC3::GenRunInfo &)) &HepMC3::Attribute::init, "Optionally initialize the attribute after from_string\n\n Is passed a reference to the GenRunInfo object to which the\n Attribute belongs.\n\nC++: HepMC3::Attribute::init(const class HepMC3::GenRunInfo &) --> bool", pybind11::arg(""));
-		cl.def("to_string", (bool (HepMC3::Attribute::*)(std::string &) const) &HepMC3::Attribute::to_string, "Fill string from class content \n\nC++: HepMC3::Attribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("is_parsed", (bool (HepMC3::Attribute::*)() const) &HepMC3::Attribute::is_parsed, "Check if this attribute is parsed \n\nC++: HepMC3::Attribute::is_parsed() const --> bool");
-		cl.def("unparsed_string", (const std::string & (HepMC3::Attribute::*)() const) &HepMC3::Attribute::unparsed_string, "Get unparsed string \n\nC++: HepMC3::Attribute::unparsed_string() const --> const std::string &", pybind11::return_value_policy::automatic);
-		cl.def("event", (const class HepMC3::GenEvent * (HepMC3::Attribute::*)() const) &HepMC3::Attribute::event, "return the GenEvent to which this Attribute belongs, if at all. \n\nC++: HepMC3::Attribute::event() const --> const class HepMC3::GenEvent *", pybind11::return_value_policy::automatic);
-		cl.def("particle", (class std::shared_ptr<class HepMC3::GenParticle> (HepMC3::Attribute::*)()) &HepMC3::Attribute::particle, "return the GenParticle to which this Attribute belongs, if at all. \n\nC++: HepMC3::Attribute::particle() --> class std::shared_ptr<class HepMC3::GenParticle>");
-		cl.def("vertex", (class std::shared_ptr<class HepMC3::GenVertex> (HepMC3::Attribute::*)()) &HepMC3::Attribute::vertex, "return the GenVertex to which this Attribute belongs, if at all. \n\nC++: HepMC3::Attribute::vertex() --> class std::shared_ptr<class HepMC3::GenVertex>");
-		cl.def("assign", (class HepMC3::Attribute & (HepMC3::Attribute::*)(const class HepMC3::Attribute &)) &HepMC3::Attribute::operator=, "C++: HepMC3::Attribute::operator=(const class HepMC3::Attribute &) --> class HepMC3::Attribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
-	}
-	{ // HepMC3::IntAttribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::IntAttribute, std::shared_ptr<HepMC3::IntAttribute>, PyCallBack_HepMC3_IntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "IntAttribute", "Attribute that holds an Integer implemented as an int\n\n  \n\n ");
-		cl.def( pybind11::init( [](){ return new HepMC3::IntAttribute(); }, [](){ return new PyCallBack_HepMC3_IntAttribute(); } ) );
-		cl.def( pybind11::init<int>(), pybind11::arg("val") );
+	{ // HepMC3::VectorULongLongAttribute file:HepMC3/Attribute.h line:
+		pybind11::class_<HepMC3::VectorULongLongAttribute, std::shared_ptr<HepMC3::VectorULongLongAttribute>, PyCallBack_HepMC3_VectorULongLongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorULongLongAttribute", "Attribute that holds a vector of integers of type  unsigned long long\n\n  \n\n ");
+		cl.def( pybind11::init( [](){ return new HepMC3::VectorULongLongAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorULongLongAttribute(); } ) );
+		cl.def( pybind11::init<class std::vector<unsigned long long>>(), pybind11::arg("val") );
 
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_IntAttribute const &o){ return new PyCallBack_HepMC3_IntAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::IntAttribute const &o){ return new HepMC3::IntAttribute(o); } ) );
-		cl.def("from_string", (bool (HepMC3::IntAttribute::*)(const std::string &)) &HepMC3::IntAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::IntAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::IntAttribute::*)(std::string &) const) &HepMC3::IntAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::IntAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("value", (int (HepMC3::IntAttribute::*)() const) &HepMC3::IntAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::IntAttribute::value() const --> int");
-		cl.def("set_value", (void (HepMC3::IntAttribute::*)(const int &)) &HepMC3::IntAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::IntAttribute::set_value(const int &) --> void", pybind11::arg("i"));
-		cl.def("assign", (class HepMC3::IntAttribute & (HepMC3::IntAttribute::*)(const class HepMC3::IntAttribute &)) &HepMC3::IntAttribute::operator=, "C++: HepMC3::IntAttribute::operator=(const class HepMC3::IntAttribute &) --> class HepMC3::IntAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def( pybind11::init( [](PyCallBack_HepMC3_VectorULongLongAttribute const &o){ return new PyCallBack_HepMC3_VectorULongLongAttribute(o); } ) );
+		cl.def( pybind11::init( [](HepMC3::VectorULongLongAttribute const &o){ return new HepMC3::VectorULongLongAttribute(o); } ) );
+		cl.def("from_string", (bool (HepMC3::VectorULongLongAttribute::*)(const std::string &)) &HepMC3::VectorULongLongAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::VectorULongLongAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
+		cl.def("to_string", (bool (HepMC3::VectorULongLongAttribute::*)(std::string &) const) &HepMC3::VectorULongLongAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::VectorULongLongAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
+		cl.def("value", (class std::vector<unsigned long long> (HepMC3::VectorULongLongAttribute::*)() const) &HepMC3::VectorULongLongAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::VectorULongLongAttribute::value() const --> class std::vector<unsigned long long>");
+		cl.def("set_value", (void (HepMC3::VectorULongLongAttribute::*)(const class std::vector<unsigned long long> &)) &HepMC3::VectorULongLongAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorULongLongAttribute::set_value(const class std::vector<unsigned long long> &) --> void", pybind11::arg("i"));
+		cl.def("assign", (class HepMC3::VectorULongLongAttribute & (HepMC3::VectorULongLongAttribute::*)(const class HepMC3::VectorULongLongAttribute &)) &HepMC3::VectorULongLongAttribute::operator=, "C++: HepMC3::VectorULongLongAttribute::operator=(const class HepMC3::VectorULongLongAttribute &) --> class HepMC3::VectorULongLongAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::LongAttribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::LongAttribute, std::shared_ptr<HepMC3::LongAttribute>, PyCallBack_HepMC3_LongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "LongAttribute", "Attribute that holds an Integer implemented as a long int\n\n  \n\n ");
-		cl.def( pybind11::init( [](){ return new HepMC3::LongAttribute(); }, [](){ return new PyCallBack_HepMC3_LongAttribute(); } ) );
-		cl.def( pybind11::init<long>(), pybind11::arg("val") );
+	{ // HepMC3::VectorIntAttribute file:HepMC3/Attribute.h line:
+		pybind11::class_<HepMC3::VectorIntAttribute, std::shared_ptr<HepMC3::VectorIntAttribute>, PyCallBack_HepMC3_VectorIntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorIntAttribute", "Attribute that holds a vector of integers of type  int\n\n  \n\n ");
+		cl.def( pybind11::init( [](){ return new HepMC3::VectorIntAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorIntAttribute(); } ) );
+		cl.def( pybind11::init<class std::vector<int>>(), pybind11::arg("val") );
 
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_LongAttribute const &o){ return new PyCallBack_HepMC3_LongAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::LongAttribute const &o){ return new HepMC3::LongAttribute(o); } ) );
-		cl.def("from_string", (bool (HepMC3::LongAttribute::*)(const std::string &)) &HepMC3::LongAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::LongAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::LongAttribute::*)(std::string &) const) &HepMC3::LongAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::LongAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("value", (long (HepMC3::LongAttribute::*)() const) &HepMC3::LongAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::LongAttribute::value() const --> long");
-		cl.def("set_value", (void (HepMC3::LongAttribute::*)(const long &)) &HepMC3::LongAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::LongAttribute::set_value(const long &) --> void", pybind11::arg("l"));
-		cl.def("assign", (class HepMC3::LongAttribute & (HepMC3::LongAttribute::*)(const class HepMC3::LongAttribute &)) &HepMC3::LongAttribute::operator=, "C++: HepMC3::LongAttribute::operator=(const class HepMC3::LongAttribute &) --> class HepMC3::LongAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def( pybind11::init( [](PyCallBack_HepMC3_VectorIntAttribute const &o){ return new PyCallBack_HepMC3_VectorIntAttribute(o); } ) );
+		cl.def( pybind11::init( [](HepMC3::VectorIntAttribute const &o){ return new HepMC3::VectorIntAttribute(o); } ) );
+		cl.def("from_string", (bool (HepMC3::VectorIntAttribute::*)(const std::string &)) &HepMC3::VectorIntAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::VectorIntAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
+		cl.def("to_string", (bool (HepMC3::VectorIntAttribute::*)(std::string &) const) &HepMC3::VectorIntAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::VectorIntAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
+		cl.def("value", (class std::vector<int> (HepMC3::VectorIntAttribute::*)() const) &HepMC3::VectorIntAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::VectorIntAttribute::value() const --> class std::vector<int>");
+		cl.def("set_value", (void (HepMC3::VectorIntAttribute::*)(const class std::vector<int> &)) &HepMC3::VectorIntAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorIntAttribute::set_value(const class std::vector<int> &) --> void", pybind11::arg("i"));
+		cl.def("assign", (class HepMC3::VectorIntAttribute & (HepMC3::VectorIntAttribute::*)(const class HepMC3::VectorIntAttribute &)) &HepMC3::VectorIntAttribute::operator=, "C++: HepMC3::VectorIntAttribute::operator=(const class HepMC3::VectorIntAttribute &) --> class HepMC3::VectorIntAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::DoubleAttribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::DoubleAttribute, std::shared_ptr<HepMC3::DoubleAttribute>, PyCallBack_HepMC3_DoubleAttribute, HepMC3::Attribute> cl(M("HepMC3"), "DoubleAttribute", "Attribute that holds a real number as a double.\n\n  \n\n ");
-		cl.def( pybind11::init( [](){ return new HepMC3::DoubleAttribute(); }, [](){ return new PyCallBack_HepMC3_DoubleAttribute(); } ) );
-		cl.def( pybind11::init<double>(), pybind11::arg("val") );
+	{ // HepMC3::VectorLongIntAttribute file:HepMC3/Attribute.h line:
+		pybind11::class_<HepMC3::VectorLongIntAttribute, std::shared_ptr<HepMC3::VectorLongIntAttribute>, PyCallBack_HepMC3_VectorLongIntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorLongIntAttribute", "Attribute that holds a vector of integers of type long int\n\n  \n\n ");
+		cl.def( pybind11::init( [](){ return new HepMC3::VectorLongIntAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorLongIntAttribute(); } ) );
+		cl.def( pybind11::init<class std::vector<long>>(), pybind11::arg("val") );
 
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_DoubleAttribute const &o){ return new PyCallBack_HepMC3_DoubleAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::DoubleAttribute const &o){ return new HepMC3::DoubleAttribute(o); } ) );
-		cl.def("from_string", (bool (HepMC3::DoubleAttribute::*)(const std::string &)) &HepMC3::DoubleAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::DoubleAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::DoubleAttribute::*)(std::string &) const) &HepMC3::DoubleAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::DoubleAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("value", (double (HepMC3::DoubleAttribute::*)() const) &HepMC3::DoubleAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::DoubleAttribute::value() const --> double");
-		cl.def("set_value", (void (HepMC3::DoubleAttribute::*)(const double &)) &HepMC3::DoubleAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::DoubleAttribute::set_value(const double &) --> void", pybind11::arg("d"));
-		cl.def("assign", (class HepMC3::DoubleAttribute & (HepMC3::DoubleAttribute::*)(const class HepMC3::DoubleAttribute &)) &HepMC3::DoubleAttribute::operator=, "C++: HepMC3::DoubleAttribute::operator=(const class HepMC3::DoubleAttribute &) --> class HepMC3::DoubleAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def( pybind11::init( [](PyCallBack_HepMC3_VectorLongIntAttribute const &o){ return new PyCallBack_HepMC3_VectorLongIntAttribute(o); } ) );
+		cl.def( pybind11::init( [](HepMC3::VectorLongIntAttribute const &o){ return new HepMC3::VectorLongIntAttribute(o); } ) );
+		cl.def("from_string", (bool (HepMC3::VectorLongIntAttribute::*)(const std::string &)) &HepMC3::VectorLongIntAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::VectorLongIntAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
+		cl.def("to_string", (bool (HepMC3::VectorLongIntAttribute::*)(std::string &) const) &HepMC3::VectorLongIntAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::VectorLongIntAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
+		cl.def("value", (class std::vector<long> (HepMC3::VectorLongIntAttribute::*)() const) &HepMC3::VectorLongIntAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::VectorLongIntAttribute::value() const --> class std::vector<long>");
+		cl.def("set_value", (void (HepMC3::VectorLongIntAttribute::*)(const class std::vector<long> &)) &HepMC3::VectorLongIntAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorLongIntAttribute::set_value(const class std::vector<long> &) --> void", pybind11::arg("i"));
+		cl.def("assign", (class HepMC3::VectorLongIntAttribute & (HepMC3::VectorLongIntAttribute::*)(const class HepMC3::VectorLongIntAttribute &)) &HepMC3::VectorLongIntAttribute::operator=, "C++: HepMC3::VectorLongIntAttribute::operator=(const class HepMC3::VectorLongIntAttribute &) --> class HepMC3::VectorLongIntAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::FloatAttribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::FloatAttribute, std::shared_ptr<HepMC3::FloatAttribute>, PyCallBack_HepMC3_FloatAttribute, HepMC3::Attribute> cl(M("HepMC3"), "FloatAttribute", "Attribute that holds a real number as a float.\n\n  \n\n ");
-		cl.def( pybind11::init( [](){ return new HepMC3::FloatAttribute(); }, [](){ return new PyCallBack_HepMC3_FloatAttribute(); } ) );
-		cl.def( pybind11::init<float>(), pybind11::arg("val") );
+	{ // HepMC3::VectorDoubleAttribute file:HepMC3/Attribute.h line:
+		pybind11::class_<HepMC3::VectorDoubleAttribute, std::shared_ptr<HepMC3::VectorDoubleAttribute>, PyCallBack_HepMC3_VectorDoubleAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorDoubleAttribute", "Attribute that holds a vector of real numbers of type  double\n\n  \n\n ");
+		cl.def( pybind11::init( [](){ return new HepMC3::VectorDoubleAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorDoubleAttribute(); } ) );
+		cl.def( pybind11::init<class std::vector<double>>(), pybind11::arg("val") );
 
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_FloatAttribute const &o){ return new PyCallBack_HepMC3_FloatAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::FloatAttribute const &o){ return new HepMC3::FloatAttribute(o); } ) );
-		cl.def("from_string", (bool (HepMC3::FloatAttribute::*)(const std::string &)) &HepMC3::FloatAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::FloatAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::FloatAttribute::*)(std::string &) const) &HepMC3::FloatAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::FloatAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("value", (float (HepMC3::FloatAttribute::*)() const) &HepMC3::FloatAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::FloatAttribute::value() const --> float");
-		cl.def("set_value", (void (HepMC3::FloatAttribute::*)(const float &)) &HepMC3::FloatAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::FloatAttribute::set_value(const float &) --> void", pybind11::arg("f"));
-		cl.def("assign", (class HepMC3::FloatAttribute & (HepMC3::FloatAttribute::*)(const class HepMC3::FloatAttribute &)) &HepMC3::FloatAttribute::operator=, "C++: HepMC3::FloatAttribute::operator=(const class HepMC3::FloatAttribute &) --> class HepMC3::FloatAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def( pybind11::init( [](PyCallBack_HepMC3_VectorDoubleAttribute const &o){ return new PyCallBack_HepMC3_VectorDoubleAttribute(o); } ) );
+		cl.def( pybind11::init( [](HepMC3::VectorDoubleAttribute const &o){ return new HepMC3::VectorDoubleAttribute(o); } ) );
+		cl.def("from_string", (bool (HepMC3::VectorDoubleAttribute::*)(const std::string &)) &HepMC3::VectorDoubleAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::VectorDoubleAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
+		cl.def("to_string", (bool (HepMC3::VectorDoubleAttribute::*)(std::string &) const) &HepMC3::VectorDoubleAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::VectorDoubleAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
+		cl.def("value", (class std::vector<double> (HepMC3::VectorDoubleAttribute::*)() const) &HepMC3::VectorDoubleAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::VectorDoubleAttribute::value() const --> class std::vector<double>");
+		cl.def("set_value", (void (HepMC3::VectorDoubleAttribute::*)(const class std::vector<double> &)) &HepMC3::VectorDoubleAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorDoubleAttribute::set_value(const class std::vector<double> &) --> void", pybind11::arg("i"));
+		cl.def("assign", (class HepMC3::VectorDoubleAttribute & (HepMC3::VectorDoubleAttribute::*)(const class HepMC3::VectorDoubleAttribute &)) &HepMC3::VectorDoubleAttribute::operator=, "C++: HepMC3::VectorDoubleAttribute::operator=(const class HepMC3::VectorDoubleAttribute &) --> class HepMC3::VectorDoubleAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::StringAttribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::StringAttribute, std::shared_ptr<HepMC3::StringAttribute>, PyCallBack_HepMC3_StringAttribute, HepMC3::Attribute> cl(M("HepMC3"), "StringAttribute", "Attribute that holds a string\n\n  Default attribute constructed when reading input files.\n  It can be then parsed by other attributes or left as a string.\n\n  \n\n ");
-		cl.def( pybind11::init( [](){ return new HepMC3::StringAttribute(); }, [](){ return new PyCallBack_HepMC3_StringAttribute(); } ) );
-		cl.def( pybind11::init<const std::string &>(), pybind11::arg("st") );
+	{ // HepMC3::VectorStringAttribute file:HepMC3/Attribute.h line:
+		pybind11::class_<HepMC3::VectorStringAttribute, std::shared_ptr<HepMC3::VectorStringAttribute>, PyCallBack_HepMC3_VectorStringAttribute, HepMC3::Attribute> cl(M("HepMC3"), "VectorStringAttribute", "Attribute that holds a vector of type  string\n\n  \n\n ");
+		cl.def( pybind11::init( [](){ return new HepMC3::VectorStringAttribute(); }, [](){ return new PyCallBack_HepMC3_VectorStringAttribute(); } ) );
+		cl.def( pybind11::init<class std::vector<std::string >>(), pybind11::arg("val") );
 
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_StringAttribute const &o){ return new PyCallBack_HepMC3_StringAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::StringAttribute const &o){ return new HepMC3::StringAttribute(o); } ) );
-		cl.def("from_string", (bool (HepMC3::StringAttribute::*)(const std::string &)) &HepMC3::StringAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::StringAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::StringAttribute::*)(std::string &) const) &HepMC3::StringAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::StringAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("value", (std::string (HepMC3::StringAttribute::*)() const) &HepMC3::StringAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::StringAttribute::value() const --> std::string");
-		cl.def("set_value", (void (HepMC3::StringAttribute::*)(const std::string &)) &HepMC3::StringAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::StringAttribute::set_value(const std::string &) --> void", pybind11::arg("s"));
-		cl.def("assign", (class HepMC3::StringAttribute & (HepMC3::StringAttribute::*)(const class HepMC3::StringAttribute &)) &HepMC3::StringAttribute::operator=, "C++: HepMC3::StringAttribute::operator=(const class HepMC3::StringAttribute &) --> class HepMC3::StringAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def( pybind11::init( [](PyCallBack_HepMC3_VectorStringAttribute const &o){ return new PyCallBack_HepMC3_VectorStringAttribute(o); } ) );
+		cl.def( pybind11::init( [](HepMC3::VectorStringAttribute const &o){ return new HepMC3::VectorStringAttribute(o); } ) );
+		cl.def("from_string", (bool (HepMC3::VectorStringAttribute::*)(const std::string &)) &HepMC3::VectorStringAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::VectorStringAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
+		cl.def("to_string", (bool (HepMC3::VectorStringAttribute::*)(std::string &) const) &HepMC3::VectorStringAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::VectorStringAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
+		cl.def("value", (class std::vector<std::string > (HepMC3::VectorStringAttribute::*)() const) &HepMC3::VectorStringAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::VectorStringAttribute::value() const --> class std::vector<std::string >");
+		cl.def("set_value", (void (HepMC3::VectorStringAttribute::*)(const class std::vector<std::string > &)) &HepMC3::VectorStringAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::VectorStringAttribute::set_value(const class std::vector<std::string > &) --> void", pybind11::arg("i"));
+		cl.def("assign", (class HepMC3::VectorStringAttribute & (HepMC3::VectorStringAttribute::*)(const class HepMC3::VectorStringAttribute &)) &HepMC3::VectorStringAttribute::operator=, "C++: HepMC3::VectorStringAttribute::operator=(const class HepMC3::VectorStringAttribute &) --> class HepMC3::VectorStringAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
-	{ // HepMC3::CharAttribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::CharAttribute, std::shared_ptr<HepMC3::CharAttribute>, PyCallBack_HepMC3_CharAttribute, HepMC3::Attribute> cl(M("HepMC3"), "CharAttribute", "Attribute that holds an Character implemented as an int\n\n  \n\n ");
-		cl.def( pybind11::init( [](){ return new HepMC3::CharAttribute(); }, [](){ return new PyCallBack_HepMC3_CharAttribute(); } ) );
-		cl.def( pybind11::init<char>(), pybind11::arg("val") );
-
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_CharAttribute const &o){ return new PyCallBack_HepMC3_CharAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::CharAttribute const &o){ return new HepMC3::CharAttribute(o); } ) );
-		cl.def("from_string", (bool (HepMC3::CharAttribute::*)(const std::string &)) &HepMC3::CharAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::CharAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::CharAttribute::*)(std::string &) const) &HepMC3::CharAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::CharAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("value", (char (HepMC3::CharAttribute::*)() const) &HepMC3::CharAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::CharAttribute::value() const --> char");
-		cl.def("set_value", (void (HepMC3::CharAttribute::*)(const char &)) &HepMC3::CharAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::CharAttribute::set_value(const char &) --> void", pybind11::arg("i"));
-		cl.def("assign", (class HepMC3::CharAttribute & (HepMC3::CharAttribute::*)(const class HepMC3::CharAttribute &)) &HepMC3::CharAttribute::operator=, "C++: HepMC3::CharAttribute::operator=(const class HepMC3::CharAttribute &) --> class HepMC3::CharAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
-	}
-	{ // HepMC3::LongLongAttribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::LongLongAttribute, std::shared_ptr<HepMC3::LongLongAttribute>, PyCallBack_HepMC3_LongLongAttribute, HepMC3::Attribute> cl(M("HepMC3"), "LongLongAttribute", "Attribute that holds an Integer implemented as a long long int\n\n  \n\n ");
-		cl.def( pybind11::init( [](){ return new HepMC3::LongLongAttribute(); }, [](){ return new PyCallBack_HepMC3_LongLongAttribute(); } ) );
-		cl.def( pybind11::init<long long>(), pybind11::arg("val") );
-
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_LongLongAttribute const &o){ return new PyCallBack_HepMC3_LongLongAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::LongLongAttribute const &o){ return new HepMC3::LongLongAttribute(o); } ) );
-		cl.def("from_string", (bool (HepMC3::LongLongAttribute::*)(const std::string &)) &HepMC3::LongLongAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::LongLongAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::LongLongAttribute::*)(std::string &) const) &HepMC3::LongLongAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::LongLongAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("value", (long long (HepMC3::LongLongAttribute::*)() const) &HepMC3::LongLongAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::LongLongAttribute::value() const --> long long");
-		cl.def("set_value", (void (HepMC3::LongLongAttribute::*)(const long long &)) &HepMC3::LongLongAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::LongLongAttribute::set_value(const long long &) --> void", pybind11::arg("l"));
-		cl.def("assign", (class HepMC3::LongLongAttribute & (HepMC3::LongLongAttribute::*)(const class HepMC3::LongLongAttribute &)) &HepMC3::LongLongAttribute::operator=, "C++: HepMC3::LongLongAttribute::operator=(const class HepMC3::LongLongAttribute &) --> class HepMC3::LongLongAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
-	}
-	{ // HepMC3::LongDoubleAttribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::LongDoubleAttribute, std::shared_ptr<HepMC3::LongDoubleAttribute>, PyCallBack_HepMC3_LongDoubleAttribute, HepMC3::Attribute> cl(M("HepMC3"), "LongDoubleAttribute", "Attribute that holds a real number as a long double.\n\n  \n\n ");
-		cl.def( pybind11::init( [](){ return new HepMC3::LongDoubleAttribute(); }, [](){ return new PyCallBack_HepMC3_LongDoubleAttribute(); } ) );
-		cl.def( pybind11::init<long double>(), pybind11::arg("val") );
-
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_LongDoubleAttribute const &o){ return new PyCallBack_HepMC3_LongDoubleAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::LongDoubleAttribute const &o){ return new HepMC3::LongDoubleAttribute(o); } ) );
-		cl.def("from_string", (bool (HepMC3::LongDoubleAttribute::*)(const std::string &)) &HepMC3::LongDoubleAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::LongDoubleAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::LongDoubleAttribute::*)(std::string &) const) &HepMC3::LongDoubleAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::LongDoubleAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("value", (long double (HepMC3::LongDoubleAttribute::*)() const) &HepMC3::LongDoubleAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::LongDoubleAttribute::value() const --> long double");
-		cl.def("set_value", (void (HepMC3::LongDoubleAttribute::*)(const long double &)) &HepMC3::LongDoubleAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::LongDoubleAttribute::set_value(const long double &) --> void", pybind11::arg("d"));
-		cl.def("assign", (class HepMC3::LongDoubleAttribute & (HepMC3::LongDoubleAttribute::*)(const class HepMC3::LongDoubleAttribute &)) &HepMC3::LongDoubleAttribute::operator=, "C++: HepMC3::LongDoubleAttribute::operator=(const class HepMC3::LongDoubleAttribute &) --> class HepMC3::LongDoubleAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
-	}
-	{ // HepMC3::UIntAttribute file:HepMC3/Attribute.h line:
-		pybind11::class_<HepMC3::UIntAttribute, std::shared_ptr<HepMC3::UIntAttribute>, PyCallBack_HepMC3_UIntAttribute, HepMC3::Attribute> cl(M("HepMC3"), "UIntAttribute", "Attribute that holds an unsigned int\n\n  \n\n ");
-		cl.def( pybind11::init( [](){ return new HepMC3::UIntAttribute(); }, [](){ return new PyCallBack_HepMC3_UIntAttribute(); } ) );
-		cl.def( pybind11::init<unsigned int>(), pybind11::arg("val") );
-
-		cl.def( pybind11::init( [](PyCallBack_HepMC3_UIntAttribute const &o){ return new PyCallBack_HepMC3_UIntAttribute(o); } ) );
-		cl.def( pybind11::init( [](HepMC3::UIntAttribute const &o){ return new HepMC3::UIntAttribute(o); } ) );
-		cl.def("from_string", (bool (HepMC3::UIntAttribute::*)(const std::string &)) &HepMC3::UIntAttribute::from_string, "Implementation of Attribute::from_string \n\nC++: HepMC3::UIntAttribute::from_string(const std::string &) --> bool", pybind11::arg("att"));
-		cl.def("to_string", (bool (HepMC3::UIntAttribute::*)(std::string &) const) &HepMC3::UIntAttribute::to_string, "Implementation of Attribute::to_string \n\nC++: HepMC3::UIntAttribute::to_string(std::string &) const --> bool", pybind11::arg("att"));
-		cl.def("value", (unsigned int (HepMC3::UIntAttribute::*)() const) &HepMC3::UIntAttribute::value, "get the value associated to this Attribute. \n\nC++: HepMC3::UIntAttribute::value() const --> unsigned int");
-		cl.def("set_value", (void (HepMC3::UIntAttribute::*)(const unsigned int &)) &HepMC3::UIntAttribute::set_value, "set the value associated to this Attribute. \n\nC++: HepMC3::UIntAttribute::set_value(const unsigned int &) --> void", pybind11::arg("i"));
-		cl.def("assign", (class HepMC3::UIntAttribute & (HepMC3::UIntAttribute::*)(const class HepMC3::UIntAttribute &)) &HepMC3::UIntAttribute::operator=, "C++: HepMC3::UIntAttribute::operator=(const class HepMC3::UIntAttribute &) --> class HepMC3::UIntAttribute &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+	{ // HepMC3::GenHeavyIon file:HepMC3/GenHeavyIon.h line:
+		pybind11::class_<HepMC3::GenHeavyIon, std::shared_ptr<HepMC3::GenHeavyIon>, PyCallBack_HepMC3_GenHeavyIon, HepMC3::Attribute> cl(M("HepMC3"), "GenHeavyIon", "");
+		cl.def( pybind11::init( [](){ return new HepMC3::GenHeavyIon(); }, [](){ return new PyCallBack_HepMC3_GenHeavyIon(); } ) );
+		cl.def( pybind11::init( [](PyCallBack_HepMC3_GenHeavyIon const &o){ return new PyCallBack_HepMC3_GenHeavyIon(o); } ) );
+		cl.def( pybind11::init( [](HepMC3::GenHeavyIon const &o){ return new HepMC3::GenHeavyIon(o); } ) );
+		cl.def_readwrite("Ncoll_hard", &HepMC3::GenHeavyIon::Ncoll_hard);
+		cl.def_readwrite("Npart_proj", &HepMC3::GenHeavyIon::Npart_proj);
+		cl.def_readwrite("Npart_targ", &HepMC3::GenHeavyIon::Npart_targ);
+		cl.def_readwrite("Ncoll", &HepMC3::GenHeavyIon::Ncoll);
+		cl.def_readwrite("spectator_neutrons", &HepMC3::GenHeavyIon::spectator_neutrons);
+		cl.def_readwrite("spectator_protons", &HepMC3::GenHeavyIon::spectator_protons);
+		cl.def_readwrite("N_Nwounded_collisions", &HepMC3::GenHeavyIon::N_Nwounded_collisions);
+		cl.def_readwrite("Nwounded_N_collisions", &HepMC3::GenHeavyIon::Nwounded_N_collisions);
+		cl.def_readwrite("Nwounded_Nwounded_collisions", &HepMC3::GenHeavyIon::Nwounded_Nwounded_collisions);
+		cl.def_readwrite("impact_parameter", &HepMC3::GenHeavyIon::impact_parameter);
+		cl.def_readwrite("event_plane_angle", &HepMC3::GenHeavyIon::event_plane_angle);
+		cl.def_readwrite("eccentricity", &HepMC3::GenHeavyIon::eccentricity);
+		cl.def_readwrite("sigma_inel_NN", &HepMC3::GenHeavyIon::sigma_inel_NN);
+		cl.def_readwrite("centrality", &HepMC3::GenHeavyIon::centrality);
+		cl.def_readwrite("user_cent_estimate", &HepMC3::GenHeavyIon::user_cent_estimate);
+		cl.def_readwrite("Nspec_proj_n", &HepMC3::GenHeavyIon::Nspec_proj_n);
+		cl.def_readwrite("Nspec_targ_n", &HepMC3::GenHeavyIon::Nspec_targ_n);
+		cl.def_readwrite("Nspec_proj_p", &HepMC3::GenHeavyIon::Nspec_proj_p);
+		cl.def_readwrite("Nspec_targ_p", &HepMC3::GenHeavyIon::Nspec_targ_p);
+		cl.def_readwrite("participant_plane_angles", &HepMC3::GenHeavyIon::participant_plane_angles);
+		cl.def_readwrite("eccentricities", &HepMC3::GenHeavyIon::eccentricities);
+		cl.def_readwrite("forceoldformat", &HepMC3::GenHeavyIon::forceoldformat);
+		cl.def("from_string", (bool (HepMC3::GenHeavyIon::*)(const std::string &)) &HepMC3::GenHeavyIon::from_string, "Implementation of Attribute::from_string.\n\nC++: HepMC3::GenHeavyIon::from_string(const std::string &) --> bool", pybind11::arg("att"));
+		cl.def("to_string", (bool (HepMC3::GenHeavyIon::*)(std::string &) const) &HepMC3::GenHeavyIon::to_string, "Implementation of Attribute::to_string.\n\nC++: HepMC3::GenHeavyIon::to_string(std::string &) const --> bool", pybind11::arg("att"));
+		cl.def("__eq__", (bool (HepMC3::GenHeavyIon::*)(const class HepMC3::GenHeavyIon &) const) &HepMC3::GenHeavyIon::operator==, "Operator ==\n\nC++: HepMC3::GenHeavyIon::operator==(const class HepMC3::GenHeavyIon &) const --> bool", pybind11::arg(""));
+		cl.def("__ne__", (bool (HepMC3::GenHeavyIon::*)(const class HepMC3::GenHeavyIon &) const) &HepMC3::GenHeavyIon::operator!=, "Operator !=\n\nC++: HepMC3::GenHeavyIon::operator!=(const class HepMC3::GenHeavyIon &) const --> bool", pybind11::arg(""));
+		cl.def("set", [](HepMC3::GenHeavyIon &o, const int & a0, const int & a1, const int & a2, const int & a3, const int & a4, const int & a5) -> void { return o.set(a0, a1, a2, a3, a4, a5); }, "", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"));
+		cl.def("set", [](HepMC3::GenHeavyIon &o, const int & a0, const int & a1, const int & a2, const int & a3, const int & a4, const int & a5, const int & a6) -> void { return o.set(a0, a1, a2, a3, a4, a5, a6); }, "", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"), pybind11::arg("nnw"));
+		cl.def("set", [](HepMC3::GenHeavyIon &o, const int & a0, const int & a1, const int & a2, const int & a3, const int & a4, const int & a5, const int & a6, const int & a7) -> void { return o.set(a0, a1, a2, a3, a4, a5, a6, a7); }, "", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"), pybind11::arg("nnw"), pybind11::arg("nwn"));
+		cl.def("set", [](HepMC3::GenHeavyIon &o, const int & a0, const int & a1, const int & a2, const int & a3, const int & a4, const int & a5, const int & a6, const int & a7, const int & a8) -> void { return o.set(a0, a1, a2, a3, a4, a5, a6, a7, a8); }, "", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"), pybind11::arg("nnw"), pybind11::arg("nwn"), pybind11::arg("nwnw"));
+		cl.def("set", [](HepMC3::GenHeavyIon &o, const int & a0, const int & a1, const int & a2, const int & a3, const int & a4, const int & a5, const int & a6, const int & a7, const int & a8, const double & a9) -> void { return o.set(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9); }, "", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"), pybind11::arg("nnw"), pybind11::arg("nwn"), pybind11::arg("nwnw"), pybind11::arg("im"));
+		cl.def("set", [](HepMC3::GenHeavyIon &o, const int & a0, const int & a1, const int & a2, const int & a3, const int & a4, const int & a5, const int & a6, const int & a7, const int & a8, const double & a9, const double & a10) -> void { return o.set(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10); }, "", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"), pybind11::arg("nnw"), pybind11::arg("nwn"), pybind11::arg("nwnw"), pybind11::arg("im"), pybind11::arg("pl"));
+		cl.def("set", [](HepMC3::GenHeavyIon &o, const int & a0, const int & a1, const int & a2, const int & a3, const int & a4, const int & a5, const int & a6, const int & a7, const int & a8, const double & a9, const double & a10, const double & a11) -> void { return o.set(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11); }, "", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"), pybind11::arg("nnw"), pybind11::arg("nwn"), pybind11::arg("nwnw"), pybind11::arg("im"), pybind11::arg("pl"), pybind11::arg("ec"));
+		cl.def("set", [](HepMC3::GenHeavyIon &o, const int & a0, const int & a1, const int & a2, const int & a3, const int & a4, const int & a5, const int & a6, const int & a7, const int & a8, const double & a9, const double & a10, const double & a11, const double & a12) -> void { return o.set(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12); }, "", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"), pybind11::arg("nnw"), pybind11::arg("nwn"), pybind11::arg("nwnw"), pybind11::arg("im"), pybind11::arg("pl"), pybind11::arg("ec"), pybind11::arg("s"));
+		cl.def("set", [](HepMC3::GenHeavyIon &o, const int & a0, const int & a1, const int & a2, const int & a3, const int & a4, const int & a5, const int & a6, const int & a7, const int & a8, const double & a9, const double & a10, const double & a11, const double & a12, const double & a13) -> void { return o.set(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13); }, "", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"), pybind11::arg("nnw"), pybind11::arg("nwn"), pybind11::arg("nwnw"), pybind11::arg("im"), pybind11::arg("pl"), pybind11::arg("ec"), pybind11::arg("s"), pybind11::arg("cent"));
+		cl.def("set", (void (HepMC3::GenHeavyIon::*)(const int &, const int &, const int &, const int &, const int &, const int &, const int &, const int &, const int &, const double &, const double &, const double &, const double &, const double &, const double &)) &HepMC3::GenHeavyIon::set, "Set all fields.\n\n HEPMC3_DEPRECATED(\"Set individual fields directly instead.\")\n \n\n Set all fields \n\nC++: HepMC3::GenHeavyIon::set(const int &, const int &, const int &, const int &, const int &, const int &, const int &, const int &, const int &, const double &, const double &, const double &, const double &, const double &, const double &) --> void", pybind11::arg("nh"), pybind11::arg("np"), pybind11::arg("nt"), pybind11::arg("nc"), pybind11::arg("ns"), pybind11::arg("nsp"), pybind11::arg("nnw"), pybind11::arg("nwn"), pybind11::arg("nwnw"), pybind11::arg("im"), pybind11::arg("pl"), pybind11::arg("ec"), pybind11::arg("s"), pybind11::arg("cent"), pybind11::arg("usrcent"));
+		cl.def("is_valid", (bool (HepMC3::GenHeavyIon::*)() const) &HepMC3::GenHeavyIon::is_valid, "Verify that the instance contains non-zero information.\n\n HEPMC3_DEPRECATED(\"Each filed now have default values meaning\n that they have not been set\")\n\nC++: HepMC3::GenHeavyIon::is_valid() const --> bool");
+		cl.def("assign", (class HepMC3::GenHeavyIon & (HepMC3::GenHeavyIon::*)(const class HepMC3::GenHeavyIon &)) &HepMC3::GenHeavyIon::operator=, "C++: HepMC3::GenHeavyIon::operator=(const class HepMC3::GenHeavyIon &) --> class HepMC3::GenHeavyIon &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 	}
 }

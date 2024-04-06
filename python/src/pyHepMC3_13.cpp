@@ -1,29 +1,11 @@
-#include <HepMC3/Attribute.h>
-#include <HepMC3/Data/GenEventData.h>
-#include <HepMC3/Data/GenRunInfoData.h>
-#include <HepMC3/FourVector.h>
-#include <HepMC3/GenCrossSection.h>
-#include <HepMC3/GenEvent.h>
-#include <HepMC3/GenHeavyIon.h>
-#include <HepMC3/GenParticle.h>
-#include <HepMC3/GenRunInfo.h>
-#include <HepMC3/GenVertex.h>
-#include <HepMC3/HEPEVT_Wrapper_Runtime.h>
-#include <HepMC3/Reader.h>
-#include <HepMC3/ReaderHEPEVT.h>
-#include <HepMC3/Writer.h>
-#include <HepMC3/WriterHEPEVT.h>
-#include <functional>
+#include <HepMC3/LHEF.h>
 #include <ios>
-#include <istream>
 #include <iterator>
-#include <map>
 #include <memory>
 #include <ostream>
 #include <sstream> // __str__
 #include <streambuf>
 #include <string>
-#include <utility>
 #include <vector>
 
 #include <functional>
@@ -33,8 +15,9 @@
 #include <HepMC3/Reader.h>
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
-#include <src/stl_binders.hpp>
+#include <pybind11/stl_bind.h>
 #include <src/binders.h>
+#include <pybind11/stl.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
@@ -44,361 +27,239 @@
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
-// HepMC3::WriterHEPEVT file:HepMC3/WriterHEPEVT.h line:
-struct PyCallBack_HepMC3_WriterHEPEVT : public HepMC3::WriterHEPEVT {
-	using HepMC3::WriterHEPEVT::WriterHEPEVT;
-
-	void write_hepevt_particle(int a0, bool a1) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "write_hepevt_particle");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0, a1);
-			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::override_caster_t<void> caster;
-				return pybind11::detail::cast_ref<void>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
-		}
-		return WriterHEPEVT::write_hepevt_particle(a0, a1);
-	}
-	void write_hepevt_event_header() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "write_hepevt_event_header");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::override_caster_t<void> caster;
-				return pybind11::detail::cast_ref<void>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
-		}
-		return WriterHEPEVT::write_hepevt_event_header();
-	}
-	void write_event(const class HepMC3::GenEvent & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "write_event");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::override_caster_t<void> caster;
-				return pybind11::detail::cast_ref<void>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
-		}
-		return WriterHEPEVT::write_event(a0);
-	}
-	void close() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "close");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::override_caster_t<void> caster;
-				return pybind11::detail::cast_ref<void>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
-		}
-		return WriterHEPEVT::close();
-	}
-	bool failed() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "failed");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return WriterHEPEVT::failed();
-	}
-	void set_run_info(class std::shared_ptr<class HepMC3::GenRunInfo> a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "set_run_info");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::override_caster_t<void> caster;
-				return pybind11::detail::cast_ref<void>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
-		}
-		return Writer::set_run_info(a0);
-	}
-	class std::shared_ptr<class HepMC3::GenRunInfo> run_info() const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "run_info");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<class std::shared_ptr<class HepMC3::GenRunInfo>>::value) {
-				static pybind11::detail::override_caster_t<class std::shared_ptr<class HepMC3::GenRunInfo>> caster;
-				return pybind11::detail::cast_ref<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o));
-		}
-		return Writer::run_info();
-	}
-	void set_options(const class std::map<std::string, std::string > & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "set_options");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::override_caster_t<void> caster;
-				return pybind11::detail::cast_ref<void>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
-		}
-		return Writer::set_options(a0);
-	}
-	using _binder_ret_0 = class std::map<std::string, std::string >;
-	_binder_ret_0 get_options() const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::WriterHEPEVT *>(this), "get_options");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<_binder_ret_0>::value) {
-				static pybind11::detail::override_caster_t<_binder_ret_0> caster;
-				return pybind11::detail::cast_ref<_binder_ret_0>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<_binder_ret_0>(std::move(o));
-		}
-		return Writer::get_options();
-	}
-};
-
-// HepMC3::ReaderHEPEVT file:HepMC3/ReaderHEPEVT.h line:
-struct PyCallBack_HepMC3_ReaderHEPEVT : public HepMC3::ReaderHEPEVT {
-	using HepMC3::ReaderHEPEVT::ReaderHEPEVT;
-
-	bool read_hepevt_event_header() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "read_hepevt_event_header");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return ReaderHEPEVT::read_hepevt_event_header();
-	}
-	bool read_hepevt_particle(int a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "read_hepevt_particle");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return ReaderHEPEVT::read_hepevt_particle(a0);
-	}
-	bool skip(const int a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "skip");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return ReaderHEPEVT::skip(a0);
-	}
-	bool read_event(class HepMC3::GenEvent & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "read_event");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return ReaderHEPEVT::read_event(a0);
-	}
-	void close() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "close");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::override_caster_t<void> caster;
-				return pybind11::detail::cast_ref<void>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
-		}
-		return ReaderHEPEVT::close();
-	}
-	bool failed() override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "failed");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<bool>::value) {
-				static pybind11::detail::override_caster_t<bool> caster;
-				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
-		}
-		return ReaderHEPEVT::failed();
-	}
-	class std::shared_ptr<class HepMC3::GenRunInfo> run_info() const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "run_info");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<class std::shared_ptr<class HepMC3::GenRunInfo>>::value) {
-				static pybind11::detail::override_caster_t<class std::shared_ptr<class HepMC3::GenRunInfo>> caster;
-				return pybind11::detail::cast_ref<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o));
-		}
-		return Reader::run_info();
-	}
-	void set_options(const class std::map<std::string, std::string > & a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "set_options");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::override_caster_t<void> caster;
-				return pybind11::detail::cast_ref<void>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
-		}
-		return Reader::set_options(a0);
-	}
-	using _binder_ret_0 = class std::map<std::string, std::string >;
-	_binder_ret_0 get_options() const override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "get_options");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>();
-			if (pybind11::detail::cast_is_temporary_value_reference<_binder_ret_0>::value) {
-				static pybind11::detail::override_caster_t<_binder_ret_0> caster;
-				return pybind11::detail::cast_ref<_binder_ret_0>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<_binder_ret_0>(std::move(o));
-		}
-		return Reader::get_options();
-	}
-	void set_run_info(class std::shared_ptr<class HepMC3::GenRunInfo> a0) override {
-		pybind11::gil_scoped_acquire gil;
-		pybind11::function overload = pybind11::get_overload(static_cast<const HepMC3::ReaderHEPEVT *>(this), "set_run_info");
-		if (overload) {
-			auto o = overload.operator()<pybind11::return_value_policy::reference>(a0);
-			if (pybind11::detail::cast_is_temporary_value_reference<void>::value) {
-				static pybind11::detail::override_caster_t<void> caster;
-				return pybind11::detail::cast_ref<void>(std::move(o), caster);
-			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
-		}
-		return Reader::set_run_info(a0);
-	}
-};
-
 void bind_pyHepMC3_13(std::function< pybind11::module &(std::string const &namespace_) > &M)
 {
-	{ // HepMC3::HEPEVT_Pointers file: line:
-		pybind11::class_<HepMC3::HEPEVT_Pointers<double>, std::shared_ptr<HepMC3::HEPEVT_Pointers<double>>> cl(M("HepMC3"), "HEPEVT_Pointers_double_t", "");
-		cl.def( pybind11::init( [](){ return new HepMC3::HEPEVT_Pointers<double>(); } ) );
-	}
-	{ // HepMC3::GenParticlePtr_greater file: line:
-		pybind11::class_<HepMC3::GenParticlePtr_greater, std::shared_ptr<HepMC3::GenParticlePtr_greater>> cl(M("HepMC3"), "GenParticlePtr_greater", "comparison of two particles ");
-		cl.def( pybind11::init( [](){ return new HepMC3::GenParticlePtr_greater(); } ) );
-		cl.def( pybind11::init( [](HepMC3::GenParticlePtr_greater const &o){ return new HepMC3::GenParticlePtr_greater(o); } ) );
-		cl.def("__call__", (bool (HepMC3::GenParticlePtr_greater::*)(class std::shared_ptr<const class HepMC3::GenParticle>, class std::shared_ptr<const class HepMC3::GenParticle>) const) &HepMC3::GenParticlePtr_greater::operator(), "comparison of two particles \n\nC++: HepMC3::GenParticlePtr_greater::operator()(class std::shared_ptr<const class HepMC3::GenParticle>, class std::shared_ptr<const class HepMC3::GenParticle>) const --> bool", pybind11::arg("lx"), pybind11::arg("rx"));
-	}
-	{ // HepMC3::pair_GenVertexPtr_int_greater file: line:
-		pybind11::class_<HepMC3::pair_GenVertexPtr_int_greater, std::shared_ptr<HepMC3::pair_GenVertexPtr_int_greater>> cl(M("HepMC3"), "pair_GenVertexPtr_int_greater", "Order vertices with equal paths. ");
-		cl.def( pybind11::init( [](){ return new HepMC3::pair_GenVertexPtr_int_greater(); } ) );
-		cl.def( pybind11::init( [](HepMC3::pair_GenVertexPtr_int_greater const &o){ return new HepMC3::pair_GenVertexPtr_int_greater(o); } ) );
-		cl.def("__call__", (bool (HepMC3::pair_GenVertexPtr_int_greater::*)(const struct std::pair<class std::shared_ptr<const class HepMC3::GenVertex>, int> &, const struct std::pair<class std::shared_ptr<const class HepMC3::GenVertex>, int> &) const) &HepMC3::pair_GenVertexPtr_int_greater::operator(), "Order vertices with equal paths. If the paths are equal, order in other quantities.\n We cannot use id, as it can be assigned in different way\n\nC++: HepMC3::pair_GenVertexPtr_int_greater::operator()(const struct std::pair<class std::shared_ptr<const class HepMC3::GenVertex>, int> &, const struct std::pair<class std::shared_ptr<const class HepMC3::GenVertex>, int> &) const --> bool", pybind11::arg("lx"), pybind11::arg("rx"));
-	}
-	// HepMC3::calculate_longest_path_to_top(class std::shared_ptr<const class HepMC3::GenVertex>, class std::map<class std::shared_ptr<const class HepMC3::GenVertex>, int> &) file: line:
-	M("HepMC3").def("calculate_longest_path_to_top", (void (*)(class std::shared_ptr<const class HepMC3::GenVertex>, class std::map<class std::shared_ptr<const class HepMC3::GenVertex>, int> &)) &HepMC3::calculate_longest_path_to_top, "Calculates the path to the top (beam) particles \n\nC++: HepMC3::calculate_longest_path_to_top(class std::shared_ptr<const class HepMC3::GenVertex>, class std::map<class std::shared_ptr<const class HepMC3::GenVertex>, int> &) --> void", pybind11::arg("v"), pybind11::arg("pathl"));
+	{ // LHEF::MergeInfo file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::MergeInfo, std::shared_ptr<LHEF::MergeInfo>, LHEF::TagBase> cl(M("LHEF"), "MergeInfo", "The MergeInfo class represents the information in a mergeinfo tag.");
+		cl.def( pybind11::init( [](){ return new LHEF::MergeInfo(); } ) );
+		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
-	// HepMC3::HEPEVT_to_GenEvent_nonstatic(class HepMC3::GenEvent *, const class HepMC3::HEPEVT_Wrapper_Runtime *) file: line:
-	M("HepMC3").def("HEPEVT_to_GenEvent_nonstatic", (bool (*)(class HepMC3::GenEvent *, const class HepMC3::HEPEVT_Wrapper_Runtime *)) &HepMC3::HEPEVT_to_GenEvent_nonstatic<const HepMC3::HEPEVT_Wrapper_Runtime>, "C++: HepMC3::HEPEVT_to_GenEvent_nonstatic(class HepMC3::GenEvent *, const class HepMC3::HEPEVT_Wrapper_Runtime *) --> bool", pybind11::arg("evt"), pybind11::arg("A"));
+		cl.def( pybind11::init( [](LHEF::MergeInfo const &o){ return new LHEF::MergeInfo(o); } ) );
+		cl.def_readwrite("iproc", &LHEF::MergeInfo::iproc);
+		cl.def_readwrite("mergingscale", &LHEF::MergeInfo::mergingscale);
+		cl.def_readwrite("maxmult", &LHEF::MergeInfo::maxmult);
+		cl.def("assign", (struct LHEF::MergeInfo & (LHEF::MergeInfo::*)(const struct LHEF::MergeInfo &)) &LHEF::MergeInfo::operator=, "C++: LHEF::MergeInfo::operator=(const struct LHEF::MergeInfo &) --> struct LHEF::MergeInfo &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 
-	// HepMC3::GenEvent_to_HEPEVT_nonstatic(const class HepMC3::GenEvent *, class HepMC3::HEPEVT_Wrapper_Runtime *) file: line:
-	M("HepMC3").def("GenEvent_to_HEPEVT_nonstatic", (bool (*)(const class HepMC3::GenEvent *, class HepMC3::HEPEVT_Wrapper_Runtime *)) &HepMC3::GenEvent_to_HEPEVT_nonstatic<HepMC3::HEPEVT_Wrapper_Runtime>, "C++: HepMC3::GenEvent_to_HEPEVT_nonstatic(const class HepMC3::GenEvent *, class HepMC3::HEPEVT_Wrapper_Runtime *) --> bool", pybind11::arg("evt"), pybind11::arg("A"));
-
-	{ // HepMC3::HEPEVT_Wrapper_Template file: line:
-		pybind11::class_<HepMC3::HEPEVT_Wrapper_Template<100000,double>, std::shared_ptr<HepMC3::HEPEVT_Wrapper_Template<100000,double>>> cl(M("HepMC3"), "HEPEVT_Wrapper_Template_100000_double_t", "");
-		cl.def( pybind11::init( [](){ return new HepMC3::HEPEVT_Wrapper_Template<100000,double>(); } ) );
-		cl.def( pybind11::init( [](HepMC3::HEPEVT_Wrapper_Template<100000,double> const &o){ return new HepMC3::HEPEVT_Wrapper_Template<100000,double>(o); } ) );
-		cl.def("zero_everything", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)()) &HepMC3::HEPEVT_Wrapper_Template<100000>::zero_everything, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::zero_everything() --> void");
-		cl.def("GenEvent_to_HEPEVT", (bool (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const class HepMC3::GenEvent *)) &HepMC3::HEPEVT_Wrapper_Template<100000>::GenEvent_to_HEPEVT, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::GenEvent_to_HEPEVT(const class HepMC3::GenEvent *) --> bool", pybind11::arg("evt"));
-		cl.def("HEPEVT_to_GenEvent", (bool (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(class HepMC3::GenEvent *) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::HEPEVT_to_GenEvent, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::HEPEVT_to_GenEvent(class HepMC3::GenEvent *) const --> bool", pybind11::arg("evt"));
-		cl.def("fix_daughters", (bool (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)()) &HepMC3::HEPEVT_Wrapper_Template<100000>::fix_daughters, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::fix_daughters() --> bool");
-		cl.def("allocate_internal_storage", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)()) &HepMC3::HEPEVT_Wrapper_Template<100000>::allocate_internal_storage, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::allocate_internal_storage() --> void");
-		cl.def("copy_to_internal_storage", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(char *, int)) &HepMC3::HEPEVT_Wrapper_Template<100000>::copy_to_internal_storage, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::copy_to_internal_storage(char *, int) --> void", pybind11::arg("c"), pybind11::arg("N"));
-		cl.def("set_max_number_entries", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(unsigned int)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_max_number_entries, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_max_number_entries(unsigned int) --> void", pybind11::arg("size"));
-		cl.def("set_hepevt_address", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(char *)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_hepevt_address, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_hepevt_address(char *) --> void", pybind11::arg("c"));
-		cl.def("max_number_entries", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)() const) &HepMC3::HEPEVT_Wrapper_Template<100000>::max_number_entries, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::max_number_entries() const --> int");
-		cl.def("event_number", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)() const) &HepMC3::HEPEVT_Wrapper_Template<100000>::event_number, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::event_number() const --> int");
-		cl.def("number_entries", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)() const) &HepMC3::HEPEVT_Wrapper_Template<100000>::number_entries, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::number_entries() const --> int");
-		cl.def("status", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::status, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::status(const int) const --> int", pybind11::arg("index"));
-		cl.def("id", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::id, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::id(const int) const --> int", pybind11::arg("index"));
-		cl.def("first_parent", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::first_parent, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::first_parent(const int) const --> int", pybind11::arg("index"));
-		cl.def("last_parent", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::last_parent, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::last_parent(const int) const --> int", pybind11::arg("index"));
-		cl.def("first_child", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::first_child, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::first_child(const int) const --> int", pybind11::arg("index"));
-		cl.def("last_child", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::last_child, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::last_child(const int) const --> int", pybind11::arg("index"));
-		cl.def("px", (double (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::px, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::px(const int) const --> double", pybind11::arg("index"));
-		cl.def("py", (double (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::py, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::py(const int) const --> double", pybind11::arg("index"));
-		cl.def("pz", (double (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::pz, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::pz(const int) const --> double", pybind11::arg("index"));
-		cl.def("e", (double (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::e, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::e(const int) const --> double", pybind11::arg("index"));
-		cl.def("m", (double (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::m, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::m(const int) const --> double", pybind11::arg("index"));
-		cl.def("x", (double (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::x, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::x(const int) const --> double", pybind11::arg("index"));
-		cl.def("y", (double (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::y, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::y(const int) const --> double", pybind11::arg("index"));
-		cl.def("z", (double (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::z, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::z(const int) const --> double", pybind11::arg("index"));
-		cl.def("t", (double (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::t, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::t(const int) const --> double", pybind11::arg("index"));
-		cl.def("number_parents", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::number_parents, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::number_parents(const int) const --> int", pybind11::arg("index"));
-		cl.def("number_children", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::number_children, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::number_children(const int) const --> int", pybind11::arg("index"));
-		cl.def("number_children_exact", (int (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int) const) &HepMC3::HEPEVT_Wrapper_Template<100000>::number_children_exact, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::number_children_exact(const int) const --> int", pybind11::arg("index"));
-		cl.def("set_event_number", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_event_number, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_event_number(const int) --> void", pybind11::arg("evtno"));
-		cl.def("set_number_entries", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_number_entries, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_number_entries(const int) --> void", pybind11::arg("noentries"));
-		cl.def("set_status", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int, const int)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_status, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_status(const int, const int) --> void", pybind11::arg("index"), pybind11::arg("status"));
-		cl.def("set_id", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int, const int)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_id, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_id(const int, const int) --> void", pybind11::arg("index"), pybind11::arg("id"));
-		cl.def("set_parents", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int, const int, const int)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_parents, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_parents(const int, const int, const int) --> void", pybind11::arg("index"), pybind11::arg("firstparent"), pybind11::arg("lastparent"));
-		cl.def("set_children", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int, const int, const int)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_children, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_children(const int, const int, const int) --> void", pybind11::arg("index"), pybind11::arg("firstchild"), pybind11::arg("lastchild"));
-		cl.def("set_momentum", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int, const double, const double, const double, const double)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_momentum, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_momentum(const int, const double, const double, const double, const double) --> void", pybind11::arg("index"), pybind11::arg("px"), pybind11::arg("py"), pybind11::arg("pz"), pybind11::arg("e"));
-		cl.def("set_mass", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int, double)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_mass, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_mass(const int, double) --> void", pybind11::arg("index"), pybind11::arg("mass"));
-		cl.def("set_position", (void (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const int, const double, const double, const double, const double)) &HepMC3::HEPEVT_Wrapper_Template<100000>::set_position, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::set_position(const int, const double, const double, const double, const double) --> void", pybind11::arg("index"), pybind11::arg("x"), pybind11::arg("y"), pybind11::arg("z"), pybind11::arg("t"));
-		cl.def("assign", (class HepMC3::HEPEVT_Wrapper_Template<100000> & (HepMC3::HEPEVT_Wrapper_Template<100000,double>::*)(const class HepMC3::HEPEVT_Wrapper_Template<100000> &)) &HepMC3::HEPEVT_Wrapper_Template<100000>::operator=, "C++: HepMC3::HEPEVT_Wrapper_Template<100000>::operator=(const class HepMC3::HEPEVT_Wrapper_Template<100000> &) --> class HepMC3::HEPEVT_Wrapper_Template<100000> &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		binder::custom_T_binder<LHEF::MergeInfo>(cl);
 	}
-	{ // HepMC3::WriterHEPEVT file:HepMC3/WriterHEPEVT.h line:
-		pybind11::class_<HepMC3::WriterHEPEVT, std::shared_ptr<HepMC3::WriterHEPEVT>, PyCallBack_HepMC3_WriterHEPEVT, HepMC3::Writer> cl(M("HepMC3"), "WriterHEPEVT", "");
-		cl.def( pybind11::init( [](const std::string & a0){ return new HepMC3::WriterHEPEVT(a0); }, [](const std::string & a0){ return new PyCallBack_HepMC3_WriterHEPEVT(a0); } ), "doc");
-		cl.def( pybind11::init<const std::string &, class std::shared_ptr<class HepMC3::GenRunInfo>>(), pybind11::arg("filename"), pybind11::arg("run") );
+	{ // LHEF::WeightInfo file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::WeightInfo, std::shared_ptr<LHEF::WeightInfo>, LHEF::TagBase> cl(M("LHEF"), "WeightInfo", "The WeightInfo class encodes the description of a given weight\n present for all events.");
+		cl.def( pybind11::init( [](){ return new LHEF::WeightInfo(); } ) );
+		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
 
-		cl.def("write_hepevt_particle", [](HepMC3::WriterHEPEVT &o, int const & a0) -> void { return o.write_hepevt_particle(a0); }, "", pybind11::arg("index"));
-		cl.def("write_hepevt_particle", (void (HepMC3::WriterHEPEVT::*)(int, bool)) &HepMC3::WriterHEPEVT::write_hepevt_particle, "Write particle to file\n\n  \n Particle to be serialized\n  \n\n Format of record\n\nC++: HepMC3::WriterHEPEVT::write_hepevt_particle(int, bool) --> void", pybind11::arg("index"), pybind11::arg("iflong"));
-		cl.def("write_hepevt_event_header", (void (HepMC3::WriterHEPEVT::*)()) &HepMC3::WriterHEPEVT::write_hepevt_event_header, "Write event header to file\n\n     \n\nC++: HepMC3::WriterHEPEVT::write_hepevt_event_header() --> void");
-		cl.def("write_event", (void (HepMC3::WriterHEPEVT::*)(const class HepMC3::GenEvent &)) &HepMC3::WriterHEPEVT::write_event, "Write event to file\n\n  \n Event to be serialized\n\nC++: HepMC3::WriterHEPEVT::write_event(const class HepMC3::GenEvent &) --> void", pybind11::arg("evt"));
-		cl.def("close", (void (HepMC3::WriterHEPEVT::*)()) &HepMC3::WriterHEPEVT::close, "Close file stream \n\nC++: HepMC3::WriterHEPEVT::close() --> void");
-		cl.def("failed", (bool (HepMC3::WriterHEPEVT::*)()) &HepMC3::WriterHEPEVT::failed, "Get stream error state flag \n\nC++: HepMC3::WriterHEPEVT::failed() --> bool");
-		cl.def("set_vertices_positions_present", (void (HepMC3::WriterHEPEVT::*)(bool)) &HepMC3::WriterHEPEVT::set_vertices_positions_present, "set flag if vertex positions are available.\n  Effectively this adds or removes key \"vertices_positions_are_absent\"\n  to/from the m_options.\n\nC++: HepMC3::WriterHEPEVT::set_vertices_positions_present(bool) --> void", pybind11::arg("iflong"));
-		cl.def("get_vertices_positions_present", (bool (HepMC3::WriterHEPEVT::*)() const) &HepMC3::WriterHEPEVT::get_vertices_positions_present, "get flag if vertex positions are available.\n The flag is deduced from m_options. If the m_options have the key\n \"vertices_positions_are_absent\" the result if false. True otherwise. \n\nC++: HepMC3::WriterHEPEVT::get_vertices_positions_present() const --> bool");
+		cl.def( pybind11::init( [](LHEF::WeightInfo const &o){ return new LHEF::WeightInfo(o); } ) );
+		cl.def_readwrite("inGroup", &LHEF::WeightInfo::inGroup);
+		cl.def_readwrite("isrwgt", &LHEF::WeightInfo::isrwgt);
+		cl.def_readwrite("name", &LHEF::WeightInfo::name);
+		cl.def_readwrite("muf", &LHEF::WeightInfo::muf);
+		cl.def_readwrite("mur", &LHEF::WeightInfo::mur);
+		cl.def_readwrite("pdf", &LHEF::WeightInfo::pdf);
+		cl.def_readwrite("pdf2", &LHEF::WeightInfo::pdf2);
+		cl.def("assign", (struct LHEF::WeightInfo & (LHEF::WeightInfo::*)(const struct LHEF::WeightInfo &)) &LHEF::WeightInfo::operator=, "C++: LHEF::WeightInfo::operator=(const struct LHEF::WeightInfo &) --> struct LHEF::WeightInfo &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+
+		binder::custom_T_binder<LHEF::WeightInfo>(cl);
 	}
-	{ // HepMC3::ReaderHEPEVT file:HepMC3/ReaderHEPEVT.h line:
-		pybind11::class_<HepMC3::ReaderHEPEVT, std::shared_ptr<HepMC3::ReaderHEPEVT>, PyCallBack_HepMC3_ReaderHEPEVT, HepMC3::Reader> cl(M("HepMC3"), "ReaderHEPEVT", "");
-		cl.def( pybind11::init<const std::string &>(), pybind11::arg("filename") );
+	{ // LHEF::WeightGroup file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::WeightGroup, std::shared_ptr<LHEF::WeightGroup>, LHEF::TagBase> cl(M("LHEF"), "WeightGroup", "The WeightGroup assigns a group-name to a set of WeightInfo objects.");
+		cl.def( pybind11::init( [](){ return new LHEF::WeightGroup(); } ) );
+		cl.def( pybind11::init<const struct LHEF::XMLTag &, int, class std::vector<struct LHEF::WeightInfo> &>(), pybind11::arg("tag"), pybind11::arg("groupIndex"), pybind11::arg("wiv") );
 
-		cl.def("read_hepevt_event_header", (bool (HepMC3::ReaderHEPEVT::*)()) &HepMC3::ReaderHEPEVT::read_hepevt_event_header, "Find and read event header line  from file\n\n    \n\nC++: HepMC3::ReaderHEPEVT::read_hepevt_event_header() --> bool");
-		cl.def("read_hepevt_particle", (bool (HepMC3::ReaderHEPEVT::*)(int)) &HepMC3::ReaderHEPEVT::read_hepevt_particle, "read particle from file\n\n \n Particle id\n\nC++: HepMC3::ReaderHEPEVT::read_hepevt_particle(int) --> bool", pybind11::arg("i"));
-		cl.def("skip", (bool (HepMC3::ReaderHEPEVT::*)(const int)) &HepMC3::ReaderHEPEVT::skip, "skip events\n\nC++: HepMC3::ReaderHEPEVT::skip(const int) --> bool", pybind11::arg(""));
-		cl.def("read_event", (bool (HepMC3::ReaderHEPEVT::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderHEPEVT::read_event, "Read event from file\n\nC++: HepMC3::ReaderHEPEVT::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
-		cl.def("close", (void (HepMC3::ReaderHEPEVT::*)()) &HepMC3::ReaderHEPEVT::close, "Close file stream \n\nC++: HepMC3::ReaderHEPEVT::close() --> void");
-		cl.def("failed", (bool (HepMC3::ReaderHEPEVT::*)()) &HepMC3::ReaderHEPEVT::failed, "Get stream error state \n\nC++: HepMC3::ReaderHEPEVT::failed() --> bool");
+		cl.def( pybind11::init( [](LHEF::WeightGroup const &o){ return new LHEF::WeightGroup(o); } ) );
+		cl.def_readwrite("type", &LHEF::WeightGroup::type);
+		cl.def_readwrite("combine", &LHEF::WeightGroup::combine);
+		cl.def("assign", (struct LHEF::WeightGroup & (LHEF::WeightGroup::*)(const struct LHEF::WeightGroup &)) &LHEF::WeightGroup::operator=, "C++: LHEF::WeightGroup::operator=(const struct LHEF::WeightGroup &) --> struct LHEF::WeightGroup &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+	}
+	{ // LHEF::Weight file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::Weight, std::shared_ptr<LHEF::Weight>, LHEF::TagBase> cl(M("LHEF"), "Weight", "The Weight class represents the information in a weight tag.");
+		cl.def( pybind11::init( [](){ return new LHEF::Weight(); } ) );
+		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
+
+		cl.def( pybind11::init( [](LHEF::Weight const &o){ return new LHEF::Weight(o); } ) );
+		cl.def_readwrite("name", &LHEF::Weight::name);
+		cl.def_readwrite("iswgt", &LHEF::Weight::iswgt);
+		cl.def_readwrite("born", &LHEF::Weight::born);
+		cl.def_readwrite("sudakov", &LHEF::Weight::sudakov);
+		cl.def_readwrite("weights", &LHEF::Weight::weights);
+		cl.def_readwrite("indices", &LHEF::Weight::indices);
+		cl.def("assign", (struct LHEF::Weight & (LHEF::Weight::*)(const struct LHEF::Weight &)) &LHEF::Weight::operator=, "C++: LHEF::Weight::operator=(const struct LHEF::Weight &) --> struct LHEF::Weight &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+
+		binder::custom_T_binder<LHEF::Weight>(cl);
+	}
+	{ // LHEF::Clus file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::Clus, std::shared_ptr<LHEF::Clus>, LHEF::TagBase> cl(M("LHEF"), "Clus", "The Clus class represents a clustering of two particle entries into\n one as defined in a clustering tag.");
+		cl.def( pybind11::init( [](){ return new LHEF::Clus(); } ) );
+		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
+
+		cl.def( pybind11::init( [](LHEF::Clus const &o){ return new LHEF::Clus(o); } ) );
+		cl.def_readwrite("p1", &LHEF::Clus::p1);
+		cl.def_readwrite("p2", &LHEF::Clus::p2);
+		cl.def_readwrite("p0", &LHEF::Clus::p0);
+		cl.def_readwrite("scale", &LHEF::Clus::scale);
+		cl.def_readwrite("alphas", &LHEF::Clus::alphas);
+		cl.def("assign", (struct LHEF::Clus & (LHEF::Clus::*)(const struct LHEF::Clus &)) &LHEF::Clus::operator=, "C++: LHEF::Clus::operator=(const struct LHEF::Clus &) --> struct LHEF::Clus &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+
+		binder::custom_T_binder<LHEF::Clus>(cl);
+	}
+	{ // LHEF::Scale file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::Scale, std::shared_ptr<LHEF::Scale>, LHEF::TagBase> cl(M("LHEF"), "Scale", "Store special scales from within a scales tag.");
+		cl.def( pybind11::init( [](){ return new LHEF::Scale(); } ), "doc" );
+		cl.def( pybind11::init( [](std::string const & a0){ return new LHEF::Scale(a0); } ), "doc" , pybind11::arg("st"));
+		cl.def( pybind11::init( [](std::string const & a0, int const & a1){ return new LHEF::Scale(a0, a1); } ), "doc" , pybind11::arg("st"), pybind11::arg("emtr"));
+		cl.def( pybind11::init<std::string, int, double>(), pybind11::arg("st"), pybind11::arg("emtr"), pybind11::arg("sc") );
+
+		cl.def( pybind11::init<const struct LHEF::XMLTag &>(), pybind11::arg("tag") );
+
+		cl.def( pybind11::init( [](LHEF::Scale const &o){ return new LHEF::Scale(o); } ) );
+		cl.def_readwrite("stype", &LHEF::Scale::stype);
+		cl.def_readwrite("emitter", &LHEF::Scale::emitter);
+		cl.def_readwrite("recoilers", &LHEF::Scale::recoilers);
+		cl.def_readwrite("emitted", &LHEF::Scale::emitted);
+		cl.def_readwrite("scale", &LHEF::Scale::scale);
+		cl.def("assign", (struct LHEF::Scale & (LHEF::Scale::*)(const struct LHEF::Scale &)) &LHEF::Scale::operator=, "C++: LHEF::Scale::operator=(const struct LHEF::Scale &) --> struct LHEF::Scale &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+
+		binder::custom_T_binder<LHEF::Scale>(cl);
+	}
+	{ // LHEF::Scales file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::Scales, std::shared_ptr<LHEF::Scales>, LHEF::TagBase> cl(M("LHEF"), "Scales", "Collect different scales relevant for an event.");
+		cl.def( pybind11::init( [](){ return new LHEF::Scales(); } ), "doc" );
+		cl.def( pybind11::init( [](double const & a0){ return new LHEF::Scales(a0); } ), "doc" , pybind11::arg("defscale"));
+		cl.def( pybind11::init<double, int>(), pybind11::arg("defscale"), pybind11::arg("npart") );
+
+		cl.def( pybind11::init( [](const struct LHEF::XMLTag & a0){ return new LHEF::Scales(a0); } ), "doc" , pybind11::arg("tag"));
+		cl.def( pybind11::init( [](const struct LHEF::XMLTag & a0, double const & a1){ return new LHEF::Scales(a0, a1); } ), "doc" , pybind11::arg("tag"), pybind11::arg("defscale"));
+		cl.def( pybind11::init<const struct LHEF::XMLTag &, double, int>(), pybind11::arg("tag"), pybind11::arg("defscale"), pybind11::arg("npart") );
+
+		cl.def( pybind11::init( [](LHEF::Scales const &o){ return new LHEF::Scales(o); } ) );
+		cl.def_readwrite("muf", &LHEF::Scales::muf);
+		cl.def_readwrite("mur", &LHEF::Scales::mur);
+		cl.def_readwrite("mups", &LHEF::Scales::mups);
+		cl.def_readwrite("SCALUP", &LHEF::Scales::SCALUP);
+		cl.def_readwrite("scales", &LHEF::Scales::scales);
+		cl.def("hasInfo", (bool (LHEF::Scales::*)() const) &LHEF::Scales::hasInfo, "Check if this object contains useful information besides SCALUP.\n\nC++: LHEF::Scales::hasInfo() const --> bool");
+		cl.def("getScale", (double (LHEF::Scales::*)(std::string, int, int, int) const) &LHEF::Scales::getScale, "Return the scale of type st for a given emission of particle type\n pdgem from the emitter with number emr and a recoiler rec. (Note\n that the indices for emr and rec starts at 1 and 0 is interpreted\n as any particle.) First it will check for Scale object with an\n exact match. If not found, it will search for an exact match for\n the emitter and recoiler with an undefined emitted particle. If\n not found, it will look for a match for only emitter and emitted,\n of if not found, a match for only the emitter. Finally a general\n Scale object will be used, or if nothing matches, the mups will\n be returned.\n\nC++: LHEF::Scales::getScale(std::string, int, int, int) const --> double", pybind11::arg("st"), pybind11::arg("pdgem"), pybind11::arg("emr"), pybind11::arg("rec"));
+		cl.def("assign", (struct LHEF::Scales & (LHEF::Scales::*)(const struct LHEF::Scales &)) &LHEF::Scales::operator=, "C++: LHEF::Scales::operator=(const struct LHEF::Scales &) --> struct LHEF::Scales &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+
+		binder::custom_T_binder<LHEF::Scales>(cl);
+	}
+	{ // LHEF::PDFInfo file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::PDFInfo, std::shared_ptr<LHEF::PDFInfo>, LHEF::TagBase> cl(M("LHEF"), "PDFInfo", "The PDFInfo class represents the information in a pdfinto tag.");
+		cl.def( pybind11::init( [](){ return new LHEF::PDFInfo(); } ), "doc" );
+		cl.def( pybind11::init<double>(), pybind11::arg("defscale") );
+
+		cl.def( pybind11::init( [](const struct LHEF::XMLTag & a0){ return new LHEF::PDFInfo(a0); } ), "doc" , pybind11::arg("tag"));
+		cl.def( pybind11::init<const struct LHEF::XMLTag &, double>(), pybind11::arg("tag"), pybind11::arg("defscale") );
+
+		cl.def( pybind11::init( [](LHEF::PDFInfo const &o){ return new LHEF::PDFInfo(o); } ) );
+		cl.def_readwrite("p1", &LHEF::PDFInfo::p1);
+		cl.def_readwrite("p2", &LHEF::PDFInfo::p2);
+		cl.def_readwrite("x1", &LHEF::PDFInfo::x1);
+		cl.def_readwrite("x2", &LHEF::PDFInfo::x2);
+		cl.def_readwrite("xf1", &LHEF::PDFInfo::xf1);
+		cl.def_readwrite("xf2", &LHEF::PDFInfo::xf2);
+		cl.def_readwrite("scale", &LHEF::PDFInfo::scale);
+		cl.def_readwrite("SCALUP", &LHEF::PDFInfo::SCALUP);
+		cl.def("assign", (struct LHEF::PDFInfo & (LHEF::PDFInfo::*)(const struct LHEF::PDFInfo &)) &LHEF::PDFInfo::operator=, "C++: LHEF::PDFInfo::operator=(const struct LHEF::PDFInfo &) --> struct LHEF::PDFInfo &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+
+		binder::custom_T_binder<LHEF::PDFInfo>(cl);
+	}
+	{ // LHEF::HEPRUP file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::HEPRUP, std::shared_ptr<LHEF::HEPRUP>, LHEF::TagBase> cl(M("LHEF"), "HEPRUP", "The HEPRUP class is a simple container corresponding to the Les Houches\n accord (<A HREF=\"http://arxiv.org/abs/hep-ph/0109068\">hep-ph/0109068</A>)\n common block with the same name. The members are named in the same\n way as in the common block. However, fortran arrays are represented\n by vectors, except for the arrays of length two which are\n represented by pair objects.");
+		cl.def( pybind11::init( [](){ return new LHEF::HEPRUP(); } ) );
+		cl.def( pybind11::init( [](LHEF::HEPRUP const &o){ return new LHEF::HEPRUP(o); } ) );
+		cl.def( pybind11::init<const struct LHEF::XMLTag &, int>(), pybind11::arg("tagin"), pybind11::arg("versin") );
+
+		cl.def_readwrite("IDBMUP", &LHEF::HEPRUP::IDBMUP);
+		cl.def_readwrite("EBMUP", &LHEF::HEPRUP::EBMUP);
+		cl.def_readwrite("PDFGUP", &LHEF::HEPRUP::PDFGUP);
+		cl.def_readwrite("PDFSUP", &LHEF::HEPRUP::PDFSUP);
+		cl.def_readwrite("IDWTUP", &LHEF::HEPRUP::IDWTUP);
+		cl.def_readwrite("NPRUP", &LHEF::HEPRUP::NPRUP);
+		cl.def_readwrite("XSECUP", &LHEF::HEPRUP::XSECUP);
+		cl.def_readwrite("XERRUP", &LHEF::HEPRUP::XERRUP);
+		cl.def_readwrite("XMAXUP", &LHEF::HEPRUP::XMAXUP);
+		cl.def_readwrite("LPRUP", &LHEF::HEPRUP::LPRUP);
+		cl.def_readwrite("xsecinfos", &LHEF::HEPRUP::xsecinfos);
+		cl.def_readwrite("eventfiles", &LHEF::HEPRUP::eventfiles);
+		cl.def_readwrite("cuts", &LHEF::HEPRUP::cuts);
+		cl.def_readwrite("ptypes", &LHEF::HEPRUP::ptypes);
+		cl.def_readwrite("procinfo", &LHEF::HEPRUP::procinfo);
+		cl.def_readwrite("mergeinfo", &LHEF::HEPRUP::mergeinfo);
+		cl.def_readwrite("generators", &LHEF::HEPRUP::generators);
+		cl.def_readwrite("weightinfo", &LHEF::HEPRUP::weightinfo);
+		cl.def_readwrite("weightmap", &LHEF::HEPRUP::weightmap);
+		cl.def_readwrite("weightgroup", &LHEF::HEPRUP::weightgroup);
+		cl.def_readwrite("junk", &LHEF::HEPRUP::junk);
+		cl.def_readwrite("version", &LHEF::HEPRUP::version);
+		cl.def_readwrite("dprec", &LHEF::HEPRUP::dprec);
+		cl.def("assign", (class LHEF::HEPRUP & (LHEF::HEPRUP::*)(const class LHEF::HEPRUP &)) &LHEF::HEPRUP::operator=, "Assignment operator.\n\nC++: LHEF::HEPRUP::operator=(const class LHEF::HEPRUP &) --> class LHEF::HEPRUP &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def("weightNameHepMC", (std::string (LHEF::HEPRUP::*)(int) const) &LHEF::HEPRUP::weightNameHepMC, "Return the name of the weight with given index suitable to ne\n used for HepMC3 output.\n\nC++: LHEF::HEPRUP::weightNameHepMC(int) const --> std::string", pybind11::arg("i"));
+		cl.def("clear", (void (LHEF::HEPRUP::*)()) &LHEF::HEPRUP::clear, "Clear all information.\n\nC++: LHEF::HEPRUP::clear() --> void");
+		cl.def("resize", (void (LHEF::HEPRUP::*)(int)) &LHEF::HEPRUP::resize, "Set the NPRUP variable, corresponding to the number of\n sub-processes, to  and resize all relevant vectors\n accordingly.\n\nC++: LHEF::HEPRUP::resize(int) --> void", pybind11::arg("nrup"));
+		cl.def("resize", (void (LHEF::HEPRUP::*)()) &LHEF::HEPRUP::resize, "Assuming the NPRUP variable, corresponding to the number of\n sub-processes, is correctly set, resize the relevant vectors\n accordingly.\n\nC++: LHEF::HEPRUP::resize() --> void");
+		cl.def("weightIndex", (int (LHEF::HEPRUP::*)(std::string) const) &LHEF::HEPRUP::weightIndex, "the index of the weight with the given \n   \n\nC++: LHEF::HEPRUP::weightIndex(std::string) const --> int", pybind11::arg("name"));
+		cl.def("nWeights", (int (LHEF::HEPRUP::*)() const) &LHEF::HEPRUP::nWeights, "the number of weights (including the nominial one).\n\nC++: LHEF::HEPRUP::nWeights() const --> int");
+		cl.def("getXSecInfo", [](LHEF::HEPRUP &o) -> LHEF::XSecInfo & { return o.getXSecInfo(); }, "", pybind11::return_value_policy::automatic);
+		cl.def("getXSecInfo", (struct LHEF::XSecInfo & (LHEF::HEPRUP::*)(std::string)) &LHEF::HEPRUP::getXSecInfo, "the XSecInfo object corresponding to the named weight \n If no such object exists, it will be created.\n\nC++: LHEF::HEPRUP::getXSecInfo(std::string) --> struct LHEF::XSecInfo &", pybind11::return_value_policy::automatic, pybind11::arg("weightname"));
+
+		binder::custom_T_binder<LHEF::HEPRUP>(cl);
+	}
+	{ // LHEF::EventGroup file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::EventGroup, std::shared_ptr<LHEF::EventGroup>, std::vector<LHEF::HEPEUP *>> cl(M("LHEF"), "EventGroup", "The EventGroup represents a set of events which are to be\n considered together.");
+		cl.def( pybind11::init( [](){ return new LHEF::EventGroup(); } ) );
+		cl.def( pybind11::init( [](LHEF::EventGroup const &o){ return new LHEF::EventGroup(o); } ) );
+		cl.def_readwrite("nreal", &LHEF::EventGroup::nreal);
+		cl.def_readwrite("ncounter", &LHEF::EventGroup::ncounter);
+		cl.def("assign", (struct LHEF::EventGroup & (LHEF::EventGroup::*)(const struct LHEF::EventGroup &)) &LHEF::EventGroup::operator=, "The assignment also copies the included HEPEUP object.\n\nC++: LHEF::EventGroup::operator=(const struct LHEF::EventGroup &) --> struct LHEF::EventGroup &", pybind11::return_value_policy::automatic, pybind11::arg(""));
+		cl.def("clear", (void (LHEF::EventGroup::*)()) &LHEF::EventGroup::clear, "Remove all subevents.\n\nC++: LHEF::EventGroup::clear() --> void");
+	}
+	{ // LHEF::HEPEUP file:HepMC3/LHEF.h line:
+		pybind11::class_<LHEF::HEPEUP, std::shared_ptr<LHEF::HEPEUP>, LHEF::TagBase> cl(M("LHEF"), "HEPEUP", "The HEPEUP class is a simple container corresponding to the Les Houches accord\n (<A HREF=\"http://arxiv.org/abs/hep-ph/0109068\">hep-ph/0109068</A>)\n common block with the same name. The members are named in the same\n way as in the common block. However, fortran arrays are represented\n by vectors, except for the arrays of length two which are\n represented by pair objects.");
+		cl.def( pybind11::init( [](){ return new LHEF::HEPEUP(); } ) );
+		cl.def( pybind11::init( [](LHEF::HEPEUP const &o){ return new LHEF::HEPEUP(o); } ) );
+		cl.def( pybind11::init<const struct LHEF::XMLTag &, class LHEF::HEPRUP &>(), pybind11::arg("tagin"), pybind11::arg("heprupin") );
+
+		cl.def_readwrite("NUP", &LHEF::HEPEUP::NUP);
+		cl.def_readwrite("IDPRUP", &LHEF::HEPEUP::IDPRUP);
+		cl.def_readwrite("XWGTUP", &LHEF::HEPEUP::XWGTUP);
+		cl.def_readwrite("XPDWUP", &LHEF::HEPEUP::XPDWUP);
+		cl.def_readwrite("SCALUP", &LHEF::HEPEUP::SCALUP);
+		cl.def_readwrite("AQEDUP", &LHEF::HEPEUP::AQEDUP);
+		cl.def_readwrite("AQCDUP", &LHEF::HEPEUP::AQCDUP);
+		cl.def_readwrite("IDUP", &LHEF::HEPEUP::IDUP);
+		cl.def_readwrite("ISTUP", &LHEF::HEPEUP::ISTUP);
+		cl.def_readwrite("MOTHUP", &LHEF::HEPEUP::MOTHUP);
+		cl.def_readwrite("ICOLUP", &LHEF::HEPEUP::ICOLUP);
+		cl.def_readwrite("PUP", &LHEF::HEPEUP::PUP);
+		cl.def_readwrite("VTIMUP", &LHEF::HEPEUP::VTIMUP);
+		cl.def_readwrite("SPINUP", &LHEF::HEPEUP::SPINUP);
+		cl.def_readwrite("namedweights", &LHEF::HEPEUP::namedweights);
+		cl.def_readwrite("weights", &LHEF::HEPEUP::weights);
+		cl.def_readwrite("clustering", &LHEF::HEPEUP::clustering);
+		cl.def_readwrite("pdfinfo", &LHEF::HEPEUP::pdfinfo);
+		cl.def_readwrite("PDFGUPsave", &LHEF::HEPEUP::PDFGUPsave);
+		cl.def_readwrite("PDFSUPsave", &LHEF::HEPEUP::PDFSUPsave);
+		cl.def_readwrite("scales", &LHEF::HEPEUP::scales);
+		cl.def_readwrite("ntries", &LHEF::HEPEUP::ntries);
+		cl.def_readwrite("isGroup", &LHEF::HEPEUP::isGroup);
+		cl.def_readwrite("subevents", &LHEF::HEPEUP::subevents);
+		cl.def_readwrite("junk", &LHEF::HEPEUP::junk);
+		cl.def("setEvent", (class LHEF::HEPEUP & (LHEF::HEPEUP::*)(const class LHEF::HEPEUP &)) &LHEF::HEPEUP::setEvent, "Copy information from the given HEPEUP. Sub event information is\n left untouched.\n\nC++: LHEF::HEPEUP::setEvent(const class LHEF::HEPEUP &) --> class LHEF::HEPEUP &", pybind11::return_value_policy::automatic, pybind11::arg("x"));
+		cl.def("assign", (class LHEF::HEPEUP & (LHEF::HEPEUP::*)(const class LHEF::HEPEUP &)) &LHEF::HEPEUP::operator=, "Assignment operator.\n\nC++: LHEF::HEPEUP::operator=(const class LHEF::HEPEUP &) --> class LHEF::HEPEUP &", pybind11::return_value_policy::automatic, pybind11::arg("x"));
+		cl.def("reset", (void (LHEF::HEPEUP::*)()) &LHEF::HEPEUP::reset, "Reset the HEPEUP object (does not touch the sub events).\n\nC++: LHEF::HEPEUP::reset() --> void");
+		cl.def("clear", (void (LHEF::HEPEUP::*)()) &LHEF::HEPEUP::clear, "Clear the HEPEUP object.\n\nC++: LHEF::HEPEUP::clear() --> void");
+		cl.def("resize", (void (LHEF::HEPEUP::*)(int)) &LHEF::HEPEUP::resize, "Set the NUP variable, corresponding to the number of particles in\n the current event, to  and resize all relevant vectors\n accordingly.\n\nC++: LHEF::HEPEUP::resize(int) --> void", pybind11::arg("nup"));
+		cl.def("totalWeight", [](LHEF::HEPEUP const &o) -> double { return o.totalWeight(); }, "");
+		cl.def("totalWeight", (double (LHEF::HEPEUP::*)(int) const) &LHEF::HEPEUP::totalWeight, "Return the total weight for this event (including all sub\n evenets) for the given index.\n\nC++: LHEF::HEPEUP::totalWeight(int) const --> double", pybind11::arg("i"));
+		cl.def("totalWeight", (double (LHEF::HEPEUP::*)(std::string) const) &LHEF::HEPEUP::totalWeight, "Return the total weight for this event (including all sub\n evenets) for the given weight name.\n\nC++: LHEF::HEPEUP::totalWeight(std::string) const --> double", pybind11::arg("name"));
+		cl.def("weight", [](LHEF::HEPEUP const &o) -> double { return o.weight(); }, "");
+		cl.def("weight", (double (LHEF::HEPEUP::*)(int) const) &LHEF::HEPEUP::weight, "Return the weight for the given index.\n\nC++: LHEF::HEPEUP::weight(int) const --> double", pybind11::arg("i"));
+		cl.def("weight", (double (LHEF::HEPEUP::*)(std::string) const) &LHEF::HEPEUP::weight, "Return the weight for the given weight name.\n\nC++: LHEF::HEPEUP::weight(std::string) const --> double", pybind11::arg("name"));
+		cl.def("setWeight", (void (LHEF::HEPEUP::*)(int, double)) &LHEF::HEPEUP::setWeight, "Set the weight with the given index.\n\nC++: LHEF::HEPEUP::setWeight(int, double) --> void", pybind11::arg("i"), pybind11::arg("w"));
+		cl.def("setWeight", (bool (LHEF::HEPEUP::*)(std::string, double)) &LHEF::HEPEUP::setWeight, "Set the weight with the given name.\n\nC++: LHEF::HEPEUP::setWeight(std::string, double) --> bool", pybind11::arg("name"), pybind11::arg("w"));
+		cl.def("resize", (void (LHEF::HEPEUP::*)()) &LHEF::HEPEUP::resize, "Assuming the NUP variable, corresponding to the number of\n particles in the current event, is correctly set, resize the\n relevant vectors accordingly.\n\nC++: LHEF::HEPEUP::resize() --> void");
+		cl.def("setWeightInfo", (bool (LHEF::HEPEUP::*)(unsigned int)) &LHEF::HEPEUP::setWeightInfo, "Setup the current event to use weight i. If zero, the default\n weight will be used.\n\nC++: LHEF::HEPEUP::setWeightInfo(unsigned int) --> bool", pybind11::arg("i"));
+		cl.def("setSubEvent", (bool (LHEF::HEPEUP::*)(unsigned int)) &LHEF::HEPEUP::setSubEvent, "Setup the current event to use sub event i. If zero, no sub event\n will be chsen.\n\nC++: LHEF::HEPEUP::setSubEvent(unsigned int) --> bool", pybind11::arg("i"));
+
+		binder::custom_T_binder<LHEF::HEPEUP>(cl);
 	}
 }

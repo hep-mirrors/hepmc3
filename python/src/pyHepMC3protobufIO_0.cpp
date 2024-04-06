@@ -24,6 +24,7 @@
 #include <HepMC3/Writerprotobuf.h>
 #include <HepMC3/Readerprotobuf.h>
 #include <src/protobufIObinders.h>
+#include <pybind11/stl.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
