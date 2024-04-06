@@ -20,7 +20,7 @@
 #include <HepMC3/Reader.h>
 #include <HepMC3/Writer.h>
 #include <HepMC3/Print.h>
-#include <pybind11/stl_bind.h>
+#include <src/stl_binders.hpp>
 #include <src/binders.h>
 #include <pybind11/stl.h>
 
