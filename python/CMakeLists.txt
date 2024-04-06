@@ -160,7 +160,6 @@ if (RERUN_BINDER AND ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_comp}includes.hpp ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3${_comp}.binder
         COMMAND ${BINDER} --flat --max-file-size=20000
                           --skip-line-number
-                          --include-pybind11-stl
                           --root-module pyHepMC3${_comp}
                           --prefix "${CMAKE_CURRENT_SOURCE_DIR}/src/"
                           --config ${CMAKE_CURRENT_SOURCE_DIR}/src/pyHepMC3${_comp}.binder   

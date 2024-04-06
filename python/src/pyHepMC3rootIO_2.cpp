@@ -21,7 +21,6 @@
 #include <HepMC3/ReaderRoot.h>
 #include <HepMC3/ReaderRootTree.h>
 #include <src/rootIObinders.h>
-#include <pybind11/stl.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER

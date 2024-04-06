@@ -15,7 +15,6 @@
 #include <HepMC3/Relatives.h>
 #include <HepMC3/Selector.h>
 #include <src/searchbinders.h>
-#include <pybind11/stl.h>
 
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
