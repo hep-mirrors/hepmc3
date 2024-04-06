@@ -19,10 +19,6 @@ The third party codes are distributed under their own licenses.
 # Copyright: 2016 Wenzel Jakob <wenzel.jakob@epfl.ch>, All rights reserved.
 ./python/include/pybind11/*
 
-# ./python/src/stl_binders.hpp
-# Type: MIT
-# Copyright (c) 2016 Sergey Lyskov <sergey.lyskov@jhu.edu>
-
 # Type: BSD-3 like
 # python/src/pystreambuf.h, see details in python/src/pystreambuf.h
 # cctbx Copyright (c) 2006, The Regents of the University of California
