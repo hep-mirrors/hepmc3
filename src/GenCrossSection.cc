@@ -12,9 +12,6 @@
 #include <cstring> // memcmp
 #include <iomanip>
 #include <sstream>
-#include <algorithm>
-#include <vector>
-#include <string>
 
 #include "HepMC3/GenCrossSection.h"
 #include "HepMC3/GenEvent.h"
@@ -29,11 +26,11 @@ int GenCrossSection::windx(const std::string& wName) const {
 }
 
 void GenCrossSection::set_cross_section(const double& xs, const double& xs_err, const long& n_acc, const long& n_att) {
-    const double cross_section       = xs;
-    const double cross_section_error = xs_err;
+    double cross_section       = xs;
+    double cross_section_error = xs_err;
     accepted_events     = n_acc;
     attempted_events    = n_att;
-    const size_t N = std::max( event() ? event()->weights().size() : 0, size_t{1});
+    size_t N = std::max( event() ? event()->weights().size() : 0, size_t{1});
     cross_sections = std::vector<double>(N, cross_section);
     cross_section_errors = std::vector<double>(N, cross_section_error);
 }
@@ -53,11 +50,11 @@ bool GenCrossSection::from_string(const std::string &att) {
     cross_section_errors.clear();
 
 
-    const double cross_section = atof(cursor);
+    double cross_section = atof(cursor);
     cross_sections.emplace_back(cross_section);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) {return false;}
-    const double cross_section_error = atof(cursor);
+    double cross_section_error = atof(cursor);
     cross_section_errors.emplace_back(cross_section_error);
 
     if ( !(cursor = strchr(cursor+1, ' ')) ) {accepted_events = -1; attempted_events = -1;}
@@ -67,7 +64,7 @@ bool GenCrossSection::from_string(const std::string &att) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) { attempted_events = -1; }
         else { attempted_events = atoi(cursor); }
     }
-    const size_t N = event() ? std::max(event()->weights().size(), size_t{1}) : size_t{1};
+    size_t N = event() ? std::max(event()->weights().size(), size_t{1}) : size_t{1};
     const size_t max_n_cross_sections = 1000;
     while (cross_sections.size() < max_n_cross_sections) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) break;
@@ -79,7 +76,7 @@ bool GenCrossSection::from_string(const std::string &att) {
         HEPMC3_WARNING("GenCrossSection::from_string: too many optional cross-sections  N=" << cross_sections.size() << " or ill-formed input:" << att)
     }
     // Use the default values to fill the vector to the size of N.
-    const size_t oldsize = cross_sections.size();
+    size_t oldsize = cross_sections.size();
     if (oldsize != N) {
         HEPMC3_WARNING("GenCrossSection::from_string: the number of cross-sections cross_sections.size()=" << cross_sections.size() << " does not match the number of weights " << event()->weights().size())
     }

@@ -24,7 +24,7 @@ InputInfo::InputInfo (const std::string &filename) {
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
         if (!(stat (filename.c_str(), &buffer) == 0))
 #else
-        if (!(stat (filename.c_str(), &buffer) == 0) || (!S_ISFIFO(buffer.st_mode) && !S_ISREG(buffer.st_mode) && !S_ISLNK(buffer.st_mode)))
+        if (!(stat (filename.c_str(), &buffer) == 0 && (S_ISFIFO(buffer.st_mode) || S_ISREG(buffer.st_mode) || S_ISLNK(buffer.st_mode))))
 #endif
         {
             HEPMC3_ERROR("deduce_reader: file " << filename << " does not exist or is not a regular file/FIFO/link");
