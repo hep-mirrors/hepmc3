@@ -37,6 +37,7 @@ inline Compression detect_type(const char* in_buff_start,const  char* in_buff_en
     if (in_buff_start + 3 <= in_buff_end && zstd_header) return zstd;
     return plaintext;
 }
+
 #if defined(BXZSTR_LZMA_STREAM_WRAPPER_HPP) || defined(BXZSTR_BZ_STREAM_WRAPPER_HPP) || defined(BXZSTR_Z_STREAM_WRAPPER_HPP) || defined(BXZSTR_ZSTD_STREAM_WRAPPER_HPP)
 inline void init_stream(const Compression &type, const bool is_input, const int level,
 			std::unique_ptr<detail::stream_wrapper> *strm_p) {
