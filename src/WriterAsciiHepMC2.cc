@@ -268,7 +268,7 @@ void WriterAsciiHepMC2::allocate_buffer()
 }
 
 
-std::string WriterAsciiHepMC2::escape(const std::string& s) const
+std::string WriterAsciiHepMC2::escape(const std::string& s)
 {
     std::string ret;
     ret.reserve(s.length()*2);
