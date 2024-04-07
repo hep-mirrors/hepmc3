@@ -189,7 +189,7 @@ bool ReaderLHEF::read_event(GenEvent& ev)
                 else { vertices[vertex_index]->add_particle_out(particles[i]);}
             }
         }
-        for ( auto v: vertices ) {
+        for ( auto& v: vertices ) {
             if (!v.second->particles_out().empty() && !v.second->particles_in().empty()) {
                 evt.add_vertex(v.second);
             }

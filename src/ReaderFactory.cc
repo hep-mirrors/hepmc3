@@ -1,7 +1,7 @@
 #include <memory>
 #include <string>
 #include <sys/stat.h>
-#include <string.h>
+#include <string>
 
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
@@ -69,8 +69,8 @@ InputInfo::InputInfo (const std::string &filename) {
         file->close();
     }
     // Assure there are at least two elements in the vector:
-    m_head.push_back("");
-    m_head.push_back("");
+    m_head.emplace_back("");
+    m_head.emplace_back("");
 
     classify();
     m_init = true;
@@ -83,7 +83,7 @@ void InputInfo::classify() {
     if ( strncmp(m_head.at(0).c_str(), "HepMC::Version", 14) == 0 && strncmp(m_head.at(1).c_str(), "HepMC::IO_GenEvent", 18) == 0 ) m_iogenevent = true;
     if ( strncmp(m_head.at(0).c_str(), "<LesHouchesEvents", 17) == 0) m_lhef=true;
 
-    std::stringstream st_e(m_head.at(0).c_str());
+    std::stringstream st_e(m_head.at(0));
     char attr = ' ';
     bool HEPEVT = true;
     int m_i = 0; 
@@ -112,26 +112,26 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
 {
     const size_t raw_header_size = 100;
     std::string raw_header(raw_header_size + 1,'\0');
-    auto fstream = dynamic_cast<std::ifstream*>(&stream);
+    auto* fstream = dynamic_cast<std::ifstream*>(&stream);
     if (fstream) {
-        fstream->read(&(raw_header[0]), raw_header_size);
+        fstream->read(&raw_header.front(), raw_header_size);
     } else {
-        stream.read(&(raw_header[0]), raw_header_size);
+        stream.read(&raw_header.front(), raw_header_size);
     }
     std::vector<std::string> head;
-    head.push_back("");
+    head.emplace_back("");
     for ( size_t i = 0; i < raw_header_size; ++i) {
         const char c = raw_header[i];
         if (c == '\0') break;
         if (c == '\n') {
             if (head.back().length() != 0) {
-                head.push_back("");
+                head.emplace_back("");
             }
         } else {
             head.back() += c;
         }
     }
-    head.push_back("");
+    head.emplace_back("");
     if (fstream)  {
         for (size_t i = 0; i < raw_header_size; ++i)  { static_cast<std::filebuf*>(fstream->rdbuf())->sungetc(); }
         HEPMC3_DEBUG(10, "After sungetc() fstream->good()=" + std::to_string(fstream->good()));
@@ -142,7 +142,7 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
     if (!stream)
     {
         HEPMC3_WARNING("Input stream is too short or invalid.");
-        return std::shared_ptr<Reader>(nullptr);
+        return {};
     }
     InputInfo input;
     input.m_head = head;
@@ -158,30 +158,30 @@ std::shared_ptr<Reader> deduce_reader(std::shared_ptr<std::istream> stream)
     if (!stream)
     {
         HEPMC3_WARNING("Input stream is too short or invalid.");
-        return std::shared_ptr<Reader>(nullptr);
+        return {};
     }
     const size_t raw_header_size = 100;
     std::string raw_header(raw_header_size + 1,'\0');
     auto fstream = std::dynamic_pointer_cast<std::ifstream>(stream);
     if (fstream) {
-        fstream->read(&(raw_header[0]), raw_header_size);
+        fstream->read(&raw_header.front(), raw_header_size);
     } else {
-        stream->read(&(raw_header[0]), raw_header_size);
+        stream->read(&raw_header.front(), raw_header_size);
     }
     std::vector<std::string> head;
-    head.push_back("");
+    head.emplace_back("");
     for ( size_t i = 0; i < raw_header_size; ++i) {
         const char c = raw_header[i];
         if (c == '\0') break;
         if (c == '\n') {
             if (head.back().length() != 0) {
-                head.push_back("");
+                head.emplace_back("");
             }
         } else {
             head.back() += c;
         }
     }
-    head.push_back("");
+    head.emplace_back("");
     if (fstream)  {
         for (size_t i = 0; i < raw_header_size; ++i)  { static_cast<std::filebuf*>(fstream->rdbuf())->sungetc(); }
         HEPMC3_DEBUG(10, "After sungetc() fstream->good()="+ std::to_string(fstream->good()));
@@ -193,7 +193,7 @@ std::shared_ptr<Reader> deduce_reader(std::shared_ptr<std::istream> stream)
     if (!stream)
     {
         HEPMC3_WARNING("Input stream is too short or invalid.");
-        return std::shared_ptr<Reader>(nullptr);
+        return {};
     }
 
     InputInfo input;
@@ -204,4 +204,4 @@ std::shared_ptr<Reader> deduce_reader(std::shared_ptr<std::istream> stream)
     }
     return input.native_reader(stream);
 }
-}
+} //End namespace HepMC3

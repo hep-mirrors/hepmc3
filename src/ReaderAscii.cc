@@ -509,7 +509,7 @@ bool ReaderAscii::parse_attribute(const char *buf) {
     cursor = cursor2+1;
 
     m_data.attribute_id.push_back(id);
-    m_data.attribute_name.push_back(name.data());
+    m_data.attribute_name.emplace_back(name.data());
     m_data.attribute_string.push_back(unescape(cursor));
 
     return true;
