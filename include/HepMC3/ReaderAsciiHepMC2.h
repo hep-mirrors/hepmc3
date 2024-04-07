@@ -66,7 +66,7 @@ private:
      *  @param[out] evt Event that will be filled with new data
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    int parse_event_information(GenEvent &evt, const char *buf);
+    static int parse_event_information(GenEvent &evt, const char *buf);
 
     /** @brief Parse units
      *
@@ -74,7 +74,7 @@ private:
      *  @param[out] evt Event that will be filled with unit information
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    bool parse_units(GenEvent &evt, const char *buf);
+    static bool parse_units(GenEvent &evt, const char *buf);
 
     /** @brief Parse vertex
      *
@@ -103,7 +103,7 @@ private:
      *  @param[out] evt Event that will be filled with new data
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    bool parse_heavy_ion(GenEvent &evt, const char *buf);
+    static bool parse_heavy_ion(GenEvent &evt, const char *buf);
 
     /** @brief Parse pdf information
      *
@@ -111,7 +111,7 @@ private:
      *  @param[out] evt Event that will be filled with new data
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    bool parse_pdf_info(GenEvent &evt, const char *buf);
+    static bool parse_pdf_info(GenEvent &evt, const char *buf);
 
 
     /** @brief Parse pdf information

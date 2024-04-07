@@ -81,7 +81,7 @@ private:
     void set_buffer_size(const size_t& size );
 
     /// @brief Escape '\' and '\n' characters in string
-    std::string escape(const std::string& s)  const;
+    static std::string escape(const std::string& s);
 
     /// Inline function flushing buffer to output stream when close to buffer capacity
     void flush();

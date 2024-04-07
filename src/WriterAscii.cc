@@ -225,7 +225,7 @@ void WriterAscii::allocate_buffer() {
 }
 
 
-std::string WriterAscii::escape(const std::string& s) const {
+std::string WriterAscii::escape(const std::string& s) {
     std::string ret;
     ret.reserve(s.length()*2);
     for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
