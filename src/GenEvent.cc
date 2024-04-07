@@ -421,7 +421,7 @@ const FourVector& GenEvent::event_pos() const {
 std::vector<ConstGenParticlePtr> GenEvent::beams(const int status) const {
     if (!status) return std::const_pointer_cast<const GenVertex>(m_rootvertex)->particles_out();
     std::vector<ConstGenParticlePtr> ret;
-    for (auto p: m_rootvertex->particles_out()) if (p->status() == status) ret.emplace_back(p);
+    for (auto& p: m_rootvertex->particles_out()) if (p->status() == status) ret.emplace_back(p);
     return ret;
 }
 
