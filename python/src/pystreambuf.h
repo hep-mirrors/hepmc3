@@ -429,7 +429,7 @@ class streambuf : public std::basic_streambuf<char>
       }
 
       // Sought position in "buffer coordinate"
-      off_type buf_sought;
+      off_type buf_sought = 0;
       if (way == std::ios_base::cur) {
         buf_sought = buf_cur + off;
       }
