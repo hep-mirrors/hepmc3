@@ -18,14 +18,14 @@ void WriterRootTreeOPAL::write_event(const GenEvent &evt)
 {
     m_Ievnt=evt.event_number();
     std::vector<HepMC3::ConstGenParticlePtr> beams;
-    for (auto particle : evt.particles()) {
-        if (particle->status()==4&&std::abs(particle->pid())==11)
+    for (const auto& particle : evt.particles()) {
+        if (particle->status() == 4 && std::abs(particle->pid()) == 11)
         { beams.push_back(particle);}
     }
-    if (beams.size()==2) {
-        m_Ebeam=std::abs(beams[0]->momentum().e());
+    if (beams.size() == 2) {
+        m_Ebeam = std::abs(beams[0]->momentum().e());
     } else {
-        m_Ebeam=std::abs(evt.particles().front()->momentum().e());
+        m_Ebeam = std::abs(evt.particles().front()->momentum().e());
     }
     WriterRootTree::write_event(evt);
 }

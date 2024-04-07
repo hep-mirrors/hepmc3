@@ -54,7 +54,7 @@ void WriterDOT::write_event(const GenEvent &evt)
     flush();
     m_cursor += sprintf(m_cursor, "digraph graphname%d {\n",evt.event_number());
     m_cursor += sprintf(m_cursor, "v0[label=\"Machine\"];\n");
-    for(auto v: evt.vertices() ) {
+    for(const auto& v: evt.vertices() ) {
         if (m_style != 0)
         {
             if (m_style == 1) //paint decay and fragmentation vertices in green
@@ -67,14 +67,14 @@ void WriterDOT::write_event(const GenEvent &evt)
         m_cursor += sprintf(m_cursor, "v%d[label=\"%d\"];\n", -v->id(),v->id());
         flush();
     }
-    for(auto p: evt.beams() ) {
+    for(const auto& p: evt.beams() ) {
         if (!p->end_vertex()) continue;
         m_cursor += sprintf(m_cursor, "node [shape=point];\n");
         m_cursor += sprintf(m_cursor, "v0 -> v%d [label=\"%d(%d)\"];\n", -p->end_vertex()->id(),p->id(),p->pid());
     }
 
-    for(auto v: evt.vertices() ) {
-        for(auto p: v->particles_out() ) {
+    for(const auto& v: evt.vertices() ) {
+        for(const auto& p: v->particles_out() ) {
             {
                 if (m_style != 0)
                 {

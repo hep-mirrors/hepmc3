@@ -12,26 +12,26 @@
 HepMC3::GenEvent* generate_event(const size_t  n,const  size_t  iterations)
 {
     auto* e=new HepMC3::GenEvent();
-    HepMC3::GenVertexPtr v0=std::make_shared<HepMC3::GenVertex>();
+    HepMC3::GenVertexPtr v0 = std::make_shared<HepMC3::GenVertex>();
     e->add_vertex(v0);
     size_t it=0;
     for (;;)
     {
         if (it>iterations)
         {
-            for (auto v: e->vertices())
+            for (const auto& v: e->vertices())
             {
                 if (!v->particles_out().empty()) continue;
-                for (size_t i=0; i<n; i++) v->add_particle_out(std::make_shared<HepMC3::GenParticle>());
+                for (size_t i = 0; i < n; ++i) v->add_particle_out(std::make_shared<HepMC3::GenParticle>());
             }
             break;
         }
         auto vertices=e->vertices();
-        for (auto v: vertices)
+        for (const auto& v: vertices)
         {
             if (!v->particles_out().empty()) continue;
-            for (size_t i=0; i<n; i++) v->add_particle_out(std::make_shared<HepMC3::GenParticle>());
-            for (auto p: v->particles_out())
+            for (size_t i = 0; i < n; ++i) v->add_particle_out(std::make_shared<HepMC3::GenParticle>());
+            for (const auto& p: v->particles_out())
             {
                 HepMC3::GenVertexPtr vx=std::make_shared<HepMC3::GenVertex>();
                 vx->add_particle_in(p);
@@ -47,7 +47,7 @@ int main()
 {
     std::cout<<"search_example: start"<<std::endl;
     auto start0 = std::chrono::system_clock::now();
-    for (int i=0; i<10000; i++)
+    for (int i = 0; i < 10000; ++i)
     {
         HepMC3::GenEvent* evt=generate_event(3,4);
         delete evt;
@@ -56,11 +56,11 @@ int main()
     std::cout<<"search_example: generation of events                                  "<<std::chrono::duration_cast<std::chrono::milliseconds>(end0 - start0).count()<<" ms"<<std::endl;
 
     auto start1 = std::chrono::system_clock::now();
-    size_t  np1=0;
-    for (int i=0; i<10000; i++)
+    size_t  np1 = 0;
+    for (int i = 0; i < 10000; ++i)
     {
         HepMC3::GenEvent* evt=generate_event(3,4);
-        for (auto p: evt->particles()) np1+=HepMC3::descendant_particles(p).size();
+        for (const auto& p: evt->particles()) np1 += HepMC3::descendant_particles(p).size();
         delete evt;
     }
     auto end1 = std::chrono::system_clock::now();
@@ -69,11 +69,11 @@ int main()
              << " total number of decandants: "<<np1<<std::endl;
 
     auto start2 = std::chrono::system_clock::now();
-    size_t  np2=0;
-    for (int i=0; i<10000; i++)
+    size_t  np2 = 0;
+    for (int i = 0; i < 10000; ++i)
     {
         HepMC3::GenEvent* evt=generate_event(3,4);
-        for (auto p: evt->particles()) np2+=(HepMC3::Relatives::DESCENDANTS(p)).size();
+        for (const auto& p: evt->particles()) np2 += (HepMC3::Relatives::DESCENDANTS(p)).size();
         delete evt;
     }
     auto end2 = std::chrono::system_clock::now();
@@ -82,11 +82,11 @@ int main()
              << " total number of decandants: "<<np2<<std::endl;
 
     auto start3 = std::chrono::system_clock::now();
-    size_t  np3=0;
-    for (int i=0; i<10000; i++)
+    size_t  np3 = 0;
+    for (int i = 0; i < 10000; ++i)
     {
         HepMC3::GenEvent* evt=generate_event(3,4);
-        for (auto p: evt->particles()) np3+=HepMC3::ancestor_particles(p).size();
+        for (const auto& p: evt->particles()) np3 += HepMC3::ancestor_particles(p).size();
         delete evt;
     }
     auto end3 = std::chrono::system_clock::now();
@@ -96,11 +96,11 @@ int main()
 
 
     auto start4 = std::chrono::system_clock::now();
-    size_t  np4=0;
-    for (int i=0; i<10000; i++)
+    size_t  np4 = 0;
+    for (int i = 0; i < 10000; ++i)
     {
         HepMC3::GenEvent* evt=generate_event(3,4);
-        for (auto p: evt->particles()) np4+=(HepMC3::Relatives::ANCESTORS(p)).size();
+        for (const auto& p: evt->particles()) np4 += (HepMC3::Relatives::ANCESTORS(p)).size();
         delete evt;
     }
     auto end4 = std::chrono::system_clock::now();
@@ -109,11 +109,11 @@ int main()
              << " total number of ancestors: "<<np4<<std::endl;
 
     auto start1o = std::chrono::system_clock::now();
-    size_t  np1o=0;
-    for (int i=0; i<10000; i++)
+    size_t  np1o = 0;
+    for (int i = 0; i < 10000; ++i)
     {
         HepMC3::GenEvent* evt=generate_event(3,4);
-        for (auto p: evt->particles()) np1o+=HepMC3::descendant_vertices(p).size();
+        for (const auto& p: evt->particles()) np1o+=HepMC3::descendant_vertices(p).size();
         delete evt;
     }
     auto end1o = std::chrono::system_clock::now();
@@ -123,11 +123,11 @@ int main()
 
 
     auto start3o = std::chrono::system_clock::now();
-    size_t  np3o=0;
-    for (int i=0; i<10000; i++)
+    size_t  np3o = 0;
+    for (int i = 0; i < 10000; ++i)
     {
         HepMC3::GenEvent* evt=generate_event(3,4);
-        for (auto p: evt->particles()) np3o+=HepMC3::ancestor_vertices(p).size();
+        for (const auto& p: evt->particles()) np3o += HepMC3::ancestor_vertices(p).size();
         delete evt;
     }
     auto end3o = std::chrono::system_clock::now();
