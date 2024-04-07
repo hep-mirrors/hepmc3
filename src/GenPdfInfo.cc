@@ -50,7 +50,7 @@ bool GenPdfInfo::from_string(const std::string &att) {
 }
 
 bool GenPdfInfo::to_string(std::string &att) const {
-    std::array<char, 255> buf;//Note: the format is fixed, so no reason for complicatied tratment
+    std::array<char, 255> buf{};//Note: the format is fixed, so no reason for complicatied tratment
 
     snprintf(buf.data(), buf.size(), "%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
              parton_id[0],

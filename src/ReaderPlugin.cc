@@ -85,7 +85,7 @@ ReaderPlugin::ReaderPlugin(const std::string& filename, const std::string &libna
 }
 ReaderPlugin::~ReaderPlugin() {
     if (m_reader) m_reader->close();
-    if (m_reader) delete m_reader;
+    delete m_reader;
 #ifdef WIN32
     if (dll_handle) {
         FreeLibrary((HINSTANCE)(dll_handle));

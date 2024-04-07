@@ -85,7 +85,7 @@ WriterAscii::WriterAscii(std::shared_ptr<std::ostream> s_stream, std::shared_ptr
 
 WriterAscii::~WriterAscii() {
     close();
-    if ( m_buffer ) delete[] m_buffer;
+    delete[] m_buffer;
 }
 
 

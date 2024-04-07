@@ -20,7 +20,7 @@ InputInfo::InputInfo (const std::string &filename) {
 
     if (!m_remote)
     {
-        struct stat   buffer;
+        struct stat   buffer{};
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)
         if (!(stat (filename.c_str(), &buffer) == 0))
 #else
@@ -86,7 +86,8 @@ void InputInfo::classify() {
     std::stringstream st_e(m_head.at(0).c_str());
     char attr = ' ';
     bool HEPEVT = true;
-    int m_i, m_p;
+    int m_i = 0; 
+    int m_p = 0;
     while (true)
     {
         if (!(st_e >> attr)) {

@@ -49,7 +49,7 @@ void WriterRoot::write_event(const GenEvent &evt) {
     GenEventData data;
     evt.write_data(data);
 
-    std::array<char,16> buf;
+    std::array<char,16> buf{};
     snprintf(buf.data(), buf.size(), "%15i", ++m_events_count);
 
     int nbytes = m_file->WriteObject(&data, buf.data());
