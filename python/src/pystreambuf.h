@@ -406,8 +406,8 @@ class streambuf : public std::basic_streambuf<char>
       off_type & result)
     {
       // Buffer range and current position
-      off_type buf_begin, buf_end, buf_cur, upper_bound;
-      off_type pos_of_buffer_end_in_py_file;
+      off_type buf_begin=0, buf_end=0, buf_cur=0, upper_bound=0;
+      off_type pos_of_buffer_end_in_py_file=0;
       if (which == std::ios_base::in) {
         pos_of_buffer_end_in_py_file = pos_of_read_buffer_end_in_py_file;
         buf_begin = reinterpret_cast<std::streamsize>(eback());
@@ -429,7 +429,7 @@ class streambuf : public std::basic_streambuf<char>
       }
 
       // Sought position in "buffer coordinate"
-      off_type buf_sought;
+      off_type buf_sought = 0;
       if (way == std::ios_base::cur) {
         buf_sought = buf_cur + off;
       }
@@ -551,7 +551,7 @@ namespace pybind11 { namespace detail {
 
     public:
         static constexpr auto name = _("io.BytesIO");
-        static handle cast(std::istream &src, return_value_policy policy, handle parent) {
+        static handle cast(std::istream &, return_value_policy , handle ) {
             return none().release();
         }
         operator std::istream*() { return value.get(); }
@@ -578,7 +578,7 @@ namespace pybind11 { namespace detail {
 
     public:
         static constexpr auto name = _("io.BytesIO");
-        static handle cast(std::ostream &src, return_value_policy policy, handle parent) {
+        static handle cast(std::ostream &, return_value_policy , handle ) {
             return none().release();
         }
         operator std::ostream*() { return value.get(); }
