@@ -23,12 +23,7 @@ namespace HepMC3
 
 WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, std::shared_ptr<GenRunInfo> run)
     : m_file(filename),
-      m_stream(&m_file),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144),
-      m_particle_counter(0)
+      m_stream(&m_file)
 {
     HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);
@@ -46,12 +41,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, std::shared_pt
 }
 
 WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
-    : m_stream(&stream),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144),
-      m_particle_counter(0)
+    : m_stream(&stream)
 {
     HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);
@@ -63,12 +53,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, std::shared_ptr<GenRu
 
 WriterAsciiHepMC2::WriterAsciiHepMC2(std::shared_ptr<std::ostream> s_stream, std::shared_ptr<GenRunInfo> run)
     : m_shared_stream(s_stream),
-      m_stream(s_stream.get()),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144),
-      m_particle_counter(0)
+      m_stream(s_stream.get())
 {
     HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);

@@ -20,8 +20,6 @@ namespace HepMC3
 HEPMC3_DECLARE_WRITER_FILE(WriterRootTree)
 
 WriterRootTree::WriterRootTree(const std::string &filename, std::shared_ptr<GenRunInfo> run):
-    m_tree(nullptr),
-    m_events_count(0),
     m_tree_name("hepmc3_tree"),
     m_branch_name("hepmc3_event")
 {
@@ -30,8 +28,6 @@ WriterRootTree::WriterRootTree(const std::string &filename, std::shared_ptr<GenR
 }
 
 WriterRootTree::WriterRootTree(const std::string &filename, const std::string &treename, const std::string &branchname, std::shared_ptr<GenRunInfo> run):
-    m_tree(nullptr),
-    m_events_count(0),
     m_tree_name(treename),
     m_branch_name(branchname)
 {
