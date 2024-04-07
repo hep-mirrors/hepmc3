@@ -58,7 +58,7 @@ ReaderHEPEVT::ReaderHEPEVT(std::shared_ptr<std::istream> s_stream)
 
 bool ReaderHEPEVT::skip(const int n)
 {
-    std::array<char, 262144> buf;
+    std::array<char, 262144> buf{};
     int nn = n;
     while (!failed()) {
         char peek(0);
@@ -75,7 +75,7 @@ bool ReaderHEPEVT::skip(const int n)
 
 bool ReaderHEPEVT::read_hepevt_event_header()
 {
-    std::array<char, 512> buf_e;
+    std::array<char, 512> buf_e{};
     bool eventline = false;
     int m_i = 0;
     int m_p = 0;
@@ -105,11 +105,11 @@ bool ReaderHEPEVT::read_hepevt_event_header()
 
 bool ReaderHEPEVT::read_hepevt_particle(int i)
 {
-    std::array<char, 512> buf_p;
-    std::array<char, 512> buf_v;
-    std::array<int, 6>   intcodes;
-    std::array<double, 5> fltcodes1;
-    std::array<double, 5> fltcodes2;
+    std::array<char, 512> buf_p{};
+    std::array<char, 512> buf_v{};
+    std::array<int, 6>   intcodes{};
+    std::array<double, 5> fltcodes1{};
+    std::array<double, 5> fltcodes2{};
     m_isstream ? m_stream->getline(buf_p.data(),buf_p.size()) : m_file.getline(buf_p.data(),buf_p.size());
     if ( strlen(buf_p.data()) == 0 ) return false;
     if (m_options.count("vertices_positions_are_absent") == 0)

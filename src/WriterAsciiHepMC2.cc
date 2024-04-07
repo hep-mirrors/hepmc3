@@ -67,7 +67,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::shared_ptr<std::ostream> s_stream, std
 WriterAsciiHepMC2::~WriterAsciiHepMC2()
 {
     close();
-    if ( m_buffer ) delete[] m_buffer;
+    delete[] m_buffer;
 }
 
 

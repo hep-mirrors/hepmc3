@@ -41,7 +41,7 @@ WriterHEPEVT::WriterHEPEVT(std::shared_ptr<std::ostream> s_stream,
 
 void WriterHEPEVT::write_hepevt_particle(int index, bool iflong)
 {
-    std::array<char, 512> buf;//Note: the format is fixed, so no reason for complicatied tratment
+    std::array<char, 512> buf{};//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor = buf.data();
     cursor += sprintf(cursor, "% 8i% 8i", m_hepevt_interface.status(index), m_hepevt_interface.id(index));
     if (iflong)
@@ -62,7 +62,7 @@ void WriterHEPEVT::write_hepevt_particle(int index, bool iflong)
 
 void WriterHEPEVT::write_hepevt_event_header()
 {
-    std::array<char, 512> buf;//Note: the format is fixed, so no reason for complicatied tratment
+    std::array<char, 512> buf{};//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor = buf.data();
     cursor += sprintf(cursor, "E% 8i %8i\n", m_hepevt_interface.event_number(), m_hepevt_interface.number_entries());
     unsigned long length = cursor - buf.data();

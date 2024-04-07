@@ -56,7 +56,7 @@ ReaderAsciiHepMC2::~ReaderAsciiHepMC2() { if (m_event_ghost) { m_event_ghost->cl
 
 bool ReaderAsciiHepMC2::skip(const int n)
 {
-    std::array<char, 262144> buf;
+    std::array<char, 262144> buf{};
     int nn = n;
     while (!failed()) {
         char peek(0);
@@ -73,7 +73,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
 
     char               peek = 0;
-    std::array<char, 262144> buf;
+    std::array<char, 262144> buf{};
     bool          parsed_event_header            = false;
     bool          is_parsing_successful          = true;
     int           parsing_result                 = 0;
