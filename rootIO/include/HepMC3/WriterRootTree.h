@@ -77,13 +77,13 @@ private:
 // Fields
 //
 private:
-    TFile* m_file;         //!< File handler
+    TFile* m_file = nullptr;         //!< File handler
 public:
-    TTree* m_tree;//!< Tree handler. Public to allow simple access, e.g. custom branches.
+    TTree* m_tree = nullptr;//!< Tree handler. Public to allow simple access, e.g. custom branches.
 private:
-    int   m_events_count; //!< Events count. Needed to read the tree
-    GenEventData* m_event_data; //!< Pointer to structure that holds event data
-    GenRunInfoData* m_run_info_data; //!< Pointer to structure that holds run info data
+    int   m_events_count = 0; //!< Events count. Needed to read the tree
+    GenEventData* m_event_data = nullptr; //!< Pointer to structure that holds event data
+    GenRunInfoData* m_run_info_data = nullptr; //!< Pointer to structure that holds run info data
     std::string m_tree_name;//!< Name of TTree
     std::string m_branch_name; //!< Name of TBranch in TTree
 };

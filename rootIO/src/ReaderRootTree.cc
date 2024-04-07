@@ -16,7 +16,7 @@ namespace HepMC3
 HEPMC3_DECLARE_READER_FILE(ReaderRootTree)
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
-    m_tree(nullptr), m_events_count(0), m_tree_name("hepmc3_tree"), m_branch_name("hepmc3_event")
+    m_tree_name("hepmc3_tree"), m_branch_name("hepmc3_event")
 {
     m_file = TFile::Open(filename.c_str());
     if (!init()) return;
@@ -24,7 +24,7 @@ ReaderRootTree::ReaderRootTree(const std::string &filename):
 
 
 ReaderRootTree::ReaderRootTree(const std::string &filename, const std::string &treename, const std::string &branchname):
-    m_tree(nullptr), m_events_count(0), m_tree_name(treename), m_branch_name(branchname)
+    m_tree_name(treename), m_branch_name(branchname)
 {
     m_file = TFile::Open(filename.c_str());
     if (!init()) return;

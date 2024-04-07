@@ -121,11 +121,11 @@ private:
     std::ofstream m_file; //!< Output file
     std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
-    int m_precision; //!< Output precision
-    char* m_buffer;  //!< Stream buffer
-    char* m_cursor;  //!< Cursor inside stream buffer
-    unsigned long m_buffer_size; //!< Buffer size
-    unsigned long m_particle_counter; //!< Used to set bar codes
+    int m_precision = 16; //!< Output precision
+    char* m_buffer = nullptr;  //!< Stream buffer
+    char* m_cursor = nullptr;  //!< Cursor inside stream buffer
+    unsigned long m_buffer_size = 262144; //!< Buffer size
+    unsigned long m_particle_counter = 0; //!< Used to set bar codes
     std::string m_float_printf_specifier; //!< the specifier of printf used for floats
 };
 

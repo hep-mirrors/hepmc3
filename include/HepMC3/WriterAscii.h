@@ -119,10 +119,10 @@ private:
     std::shared_ptr<std::ostream> m_shared_stream;///< Output temp. stream
     std::ostream* m_stream; //!< Output stream
 
-    int m_precision; //!< Output precision
-    char* m_buffer;  //!< Stream buffer
-    char* m_cursor;  //!< Cursor inside stream buffer
-    unsigned long m_buffer_size; //!< Buffer size
+    int m_precision = 16; //!< Output precision
+    char* m_buffer = nullptr;  //!< Stream buffer
+    char* m_cursor = nullptr;  //!< Cursor inside stream buffer
+    unsigned long m_buffer_size = 262144; //!< Buffer size
     std::string m_float_printf_specifier; //!< the specifier of printf used for floats
     std::string m_particle_printf_specifier; //!< the specifier of printf used for floats
     std::string m_vertex_short_printf_specifier; //!< the specifier of printf used for zero vertices
