@@ -33,7 +33,7 @@ The following commands will install the HepMC3 in the corresponding systems:
   For the Fedora and CentOS the ROOT interface packages ``HepMC3-rootIO`` and ``HepMC3-rootIO-devel``
   can be installed in the same way, but will bring root as a dependency.
   The python binding packages could have different names depending on the used system, e.g. these are
-  ``python2-HepMC3``, ``python34-HepMC3``, ``python36-HepMC3``, ``python2-HepMC3-rootIO``, ``python34-HepMC3-rootIO``
+  ``python36-HepMC3``,  ``python36-HepMC3-rootIO``
   and ``python36-HepMC3-rootIO`` for the CentOS7. Therefore, the simplest solution is to install bindings for all the
   available python version in the system using
   ```
@@ -107,8 +107,8 @@ action might result in a fully functional installation.
         -DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF        \
         -DHEPMC3_BUILD_DOCS:BOOL=OFF     \
         -DHEPMC3_ENABLE_PYTHON:BOOL=ON   \
-        -DHEPMC3_PYTHON_VERSIONS=2.7     \
-        -DHEPMC3_Python_SITEARCH27=../hepmc3-install/lib/python2.7/site-packages \
+        -DHEPMC3_PYTHON_VERSIONS=3.12     \
+        -DHEPMC3_Python_SITEARCH312=../hepmc3-install/lib/python3.12/site-packages \
         ../HepMC3-3.2.6
   make
   make install
@@ -273,10 +273,10 @@ cmake ...
 
 To specify the desired versions of Python to build the HepMC3 modules, pass the `HEPMC3_PYTHON_VERSIONS` option to `cmake`, e.g.
 ```
-cmake ... -DHEPMC3_PYTHON_VERSIONS=2,3.1,3.2
+cmake ... -DHEPMC3_PYTHON_VERSIONS=3.6,3.12
 ```
-will build Python modules for versions Python 2.x (any Python of version 2), Python 3.1 and Python 3.2.
-By default CMake will attempt to build the Python modules for both Python versions 2 and 3.
+will build Python modules for versions  Python 3.6 and Python 3.12.
+By default CMake will attempt to build the Python modules for Python version 3.
 
 
 10b
@@ -433,8 +433,7 @@ The examples use multiple parts of HepMC3, therefore to use all of them a full i
   - The major versions of HepMC3 are almost API backward compatible.
 
   - For HepMC3>3.2.6 the member functions in `GenEvent/GenVertex` that deal with raw pointers, e.g. `add_particle_in ( GenParticle *p )` will be removed.
-  - The Python2 is not in development anymore, therefore at some point the Python2 support will be removed.
-    As of version HepMC3=3.2.6 it is present `as is`.
+  - The Python2 is not in development anymore, therefore it was removed from HepMC3>3.2.7.
   - The class HepMC3::RelativesInterface are deprecated will be removed in the future.
     Use HepMC3::children_particles, HepMC3::descendant_particles, etc. instead.
   - The minimal required version of `cmake` slowly changes from version to version. It is recommented to use the `cmake`

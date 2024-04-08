@@ -191,51 +191,14 @@ SET( Python_VERSION_MAJOR "0")
 SET( Python_VERSION_MINOR "0")
 string(REPLACE "pypy" "" ver "${verin}")
 if (${verin} MATCHES pypy* )
-  set(Python2_FIND_IMPLEMENTATIONS PyPy)
   set(Python3_FIND_IMPLEMENTATIONS PyPy)
   set(IMPL PyPy)
   if(NOT (${CMAKE_VERSION} VERSION_GREATER "3.17"))
     message(STATUS "HepMC3 python: WARNING: Version of cmake ${CMAKE_VERSION} is too low to support PyPy. at least version 3.18 is required") 
   endif()
 else()
-  set(Python2_FIND_IMPLEMENTATIONS CPython)
   set(Python3_FIND_IMPLEMENTATIONS CPython)
   set(IMPL CPython)
-endif()
-
-
-#Compilation with CPython2
-if (${ver} STREQUAL 2)
-  message(STATUS "HepMC3 python: WARNING: The support of Python2 is deprecated and might be removed in the future!")
-  unset(Python2_FOUND CACHE)
-  unset(Python2_VERSION CACHE)
-  unset(Python2_Interpreter_FOUND CACHE)
-  unset(Python2_EXECUTABLE CACHE)
-  unset(Python2_INCLUDE_DIR CACHE)
-  unset(Python2_INCLUDE_DIRS CACHE)
-  unset(Python2_LIBRARIES CACHE)
-  unset(_Python2_EXECUTABLE CACHE) # Attempt to make FindPython reenterant
-  unset(_Python2_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
-    unset(_Python2_INTERPRETER_PROPERTIES CACHE) # Attempt to make FindPython reenterant
-
-  if (${verminor} STREQUAL X)
-    find_package (Python2 ${ver} COMPONENTS  Interpreter Development.Module)
-  else()
-    find_package (Python2 ${ver}.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
-  endif()
-  if (Python2_VERSION AND Python2_INCLUDE_DIRS AND Python2_EXECUTABLE  ) #something is set
-    SET( Python_VERSION       ${Python2_VERSION})
-    SET( Python_VERSION_MAJOR ${Python2_VERSION_MAJOR})
-    SET( Python_VERSION_MINOR ${Python2_VERSION_MINOR})
-    SET( Python_LIBRARIES     ${Python2_LIBRARIES})
-    SET( Python_SITEARCH      ${Python2_SITEARCH})
-    SET( Python_EXECUTABLE    ${Python2_EXECUTABLE})
-    SET( Python_INCLUDE_DIRS  ${Python2_INCLUDE_DIRS})
-    unset(_Python2_EXECUTABLE CACHE) # Attempt to make FindPython reenterant
-    unset(_Python2_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
-  unset(_Python2_INTERPRETER_PROPERTIES CACHE) # Attempt to make FindPython reenterant
-    
-  endif()
 endif()
 
 #Compilation with CPython3
@@ -251,9 +214,9 @@ if (${ver} STREQUAL 3)
   unset(_Python3_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
   unset(_Python3_INTERPRETER_PROPERTIES CACHE) # Attempt to make FindPython reenterant
   if (${verminor} STREQUAL X)
-    find_package (Python3 ${ver} COMPONENTS  Interpreter Development.Module )
+    find_package (Python3 3.6 COMPONENTS  Interpreter Development.Module )
   else()
-    find_package (Python3 ${ver}.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
+    find_package (Python3 3.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
   endif()
   if (Python3_VERSION AND Python3_INCLUDE_DIRS AND Python3_EXECUTABLE  ) #something is set
     SET( Python_VERSION       ${Python3_VERSION})
@@ -282,10 +245,6 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       set(__comp "") 
     else()
       set(__comp HepMC3::${_comp})   
-    endif()
-    if (${ver} STREQUAL 2)
-      Python2_add_library(${IMPL}pyHepMC3${_comp}${Python_VERSION} MODULE ${BN${_comp}})
-      set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3${_comp})
     endif()
     if (${ver} STREQUAL 3)
       Python3_add_library(${IMPL}pyHepMC3${_comp}${Python_VERSION} MODULE ${BN${_comp}})
@@ -447,7 +406,7 @@ endmacro(bindings)
 
 set(NN  "A" "B" "C" "D")
 if (NOT HEPMC3_PYTHON_VERSIONS)
-  set(HEPMC3_PYTHON_VERSIONS "2,3")
+  set(HEPMC3_PYTHON_VERSIONS "3")
 endif()
 string(REPLACE "," ";" TEMPVERSIONS ${HEPMC3_PYTHON_VERSIONS})
 list(SORT TEMPVERSIONS)
