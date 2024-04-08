@@ -6,8 +6,7 @@
 // -- Purpose: Test deduce_reader on gzipped protobuf streams
 //
 
-#if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) ||         \
-    defined(__FreeBSD__) || defined(__sun)
+#if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__sun)
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
@@ -89,8 +88,7 @@ int main() {
         return 10;
     }
 
-    return COMPARE_ASCII_FILES("fromfrominputReaderFactory4.hepmc",
-                               "inputReaderFactory1.hepmc");
+    return COMPARE_ASCII_FILES("fromfrominputReaderFactory4.hepmc","inputReaderFactory1.hepmc");
 }
 #else
 int main() { return 0; }
