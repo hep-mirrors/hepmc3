@@ -180,7 +180,7 @@ else()
 endif()
 
 set(compress_tests testIO9)
-if(HEPMC3_ENABLE_PROTOBUFIO)
+if(HEPMC3_ENABLE_PROTOBUFIO AND NOT WIN32)
   LIST(APPEND compress_tests testReaderFactory4)
 endif()
 
