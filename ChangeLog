@@ -1,4 +1,7 @@
   --------------------------  HepMC3.2.8-pre ----------------------
+2024-04-08 Mattias Ellert
+         * Add support for reading with uproot
+         * Drop Python2 support
 2023-10-24 Mattias Ellert
          * Fix compilation with Python 3.13.0a1.
            See: https://github.com/pybind/pybind11/pull/4902
