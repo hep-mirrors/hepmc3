@@ -74,7 +74,7 @@ public:
    *  @param[in] the number of events to skip
    *  @return Whether the reader can still be read from after skipping
    */
-  bool skip(const int the) override;
+  bool skip(const int n) override;
 
   /** @brief Read event from file
    *
