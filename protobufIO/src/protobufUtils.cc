@@ -88,7 +88,7 @@ std::string GenEvent(HepMC3::GenEvent const &evt) {
   }
 
   for (auto const &pdata : data.particles) {
-    auto particle_pb = ged_pb.add_particles();
+    auto* particle_pb = ged_pb.add_particles();
     particle_pb->set_pid(pdata.pid);
     particle_pb->set_status(pdata.status);
     particle_pb->set_is_mass_set(pdata.is_mass_set);
@@ -101,7 +101,7 @@ std::string GenEvent(HepMC3::GenEvent const &evt) {
   }
 
   for (auto const &vdata : data.vertices) {
-    auto vertex_pb = ged_pb.add_vertices();
+    auto* vertex_pb = ged_pb.add_vertices();
     vertex_pb->set_status(vdata.status);
 
     vertex_pb->mutable_position()->set_m_v1(vdata.position.x());
@@ -239,7 +239,7 @@ void FillGenEvent(HepMC3_pb::GenEventData const &ged_pb,
   evtdata.particles.clear();
   vector_size = ged_pb.particles_size();
   for (int it = 0; it < vector_size; ++it) {
-    auto particle_pb = ged_pb.particles(it);
+    const auto& particle_pb = ged_pb.particles(it);
 
     HepMC3::GenParticleData pdata;
 
@@ -258,7 +258,7 @@ void FillGenEvent(HepMC3_pb::GenEventData const &ged_pb,
   evtdata.vertices.clear();
   vector_size = ged_pb.vertices_size();
   for (int it = 0; it < vector_size; ++it) {
-    auto vertex_pb = ged_pb.vertices(it);
+    const auto& vertex_pb = ged_pb.vertices(it);
 
     HepMC3::GenVertexData vdata;
 
@@ -382,7 +382,7 @@ void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
   }
 
   // Restore links
-  for (unsigned int i = 0; i < data.links1_size(); ++i) {
+  for (unsigned int i = 0; i < (unsigned int)data.links1_size(); ++i) {
     const int id1 = data.links1(i);
     const int id2 = data.links2(i);
     /* @note:
@@ -404,20 +404,17 @@ void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
       continue;
     }
   }
-  for (auto &p : m_particles)
-    if (!p->production_vertex())
-      m_rootvertex->add_particle_out(p);
-
+  for (auto &p : m_particles) {
+    if (!p->production_vertex()) m_rootvertex->add_particle_out(p);
+  }
   // Read attributes
   std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-  for (unsigned int i = 0; i < data.attribute_id_size(); ++i) {
+  for (unsigned int i = 0; i < (unsigned int)data.attribute_id_size(); ++i) {
     /// Disallow empty strings
-    const std::string name = data.attribute_name(i);
-    if (name.length() == 0)
-      continue;
+    const std::string& name = data.attribute_name(i);
+    if (name.length() == 0) {continue;}
     const int id = data.attribute_id(i);
-    if (m_attributes.count(name) == 0)
-      m_attributes[name] = std::map<int, std::shared_ptr<Attribute>>();
+    if (m_attributes.count(name) == 0) { m_attributes[name] = std::map<int, std::shared_ptr<Attribute>>(); }
     auto att = std::make_shared<StringAttribute>(data.attribute_string(i));
     att->m_event = this;
     if (id > 0 && id <= int(m_particles.size())) {
