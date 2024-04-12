@@ -13,10 +13,10 @@ print(dir(hmrootIO))
 
 
 def test_IO8():
-   inputA = hm.ReaderAsciiHepMC2("inputIO8.hepmc")
+    inputA = hm.ReaderAsciiHepMC2("inputIO8.hepmc")
     if inputA.failed():
         sys.exit(1)
-    outputA = hm.WriterGZ("WriterAscii",python_label() + "frominputIO8.hepmc","zip")
+    outputA = hm.WriterGZ("WriterAscii",python_label() + "frominputIO8.hepmc","gzip")
     if outputA.failed():
         sys.exit(2)
     while not inputA.failed():
@@ -30,7 +30,7 @@ def test_IO8():
     inputA.close()
     outputA.close()
 
-    inputB = hm.ReaderGZ("ReaderAscii",python_label() + "frominputIO8.hepmc","zip")
+    inputB = hm.ReaderGZ("ReaderAscii",python_label() + "frominputIO8.hepmc","gzip")
     if inputB.failed():
         sys.exit(3)
     outputB = hm.WriterAsciiHepMC2(python_label() + "fromfrominputIO8.hepmc")
