@@ -349,6 +349,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
         test_IO1
         test_IO3
         test_IO4
+        test_IO8
         test_Boost
         test_Print
         test_Polarization
