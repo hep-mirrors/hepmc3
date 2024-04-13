@@ -348,11 +348,13 @@ inline void WriterAscii::write_string(const std::string &str) {
 
 
 void WriterAscii::close() {
+    if (!m_stream) return;
     auto* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     forced_flush();
     const std::string footer("HepMC::Asciiv3-END_EVENT_LISTING\n\n");
     if (m_stream) m_stream->write(footer.data(),footer.length());
+    m_stream = nullptr;
     if (ofs) ofs->close();
 }
 bool WriterAscii::failed() { return (bool)m_file.rdstate(); }

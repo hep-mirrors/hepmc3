@@ -431,11 +431,13 @@ inline void WriterAsciiHepMC2::write_string(const std::string &str)
 
 void WriterAsciiHepMC2::close()
 {
+    if (!m_stream) return;
     auto* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     forced_flush();
     const std::string footer("HepMC::IO_GenEvent-END_EVENT_LISTING\n\n");
     if (m_stream) m_stream->write(footer.data(),footer.length());
+    m_stream = nullptr;
     if (ofs) ofs->close();
 }
 bool WriterAsciiHepMC2::failed() { return (bool)m_file.rdstate(); }
