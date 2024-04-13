@@ -228,7 +228,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     auto fir = m_io_implicit_ids.rbegin();
     for (const auto& iofirst: m_io_explicit_ids) {
         for (;currid < iofirst; ++currid, ++fir) {
-            if (fir == m_io_implicit_ids.rend()) HEPMC3_ERROR("ReaderAscii: not enough implicit vertices")
+            if (fir == m_io_implicit_ids.rend()) { HEPMC3_ERROR("ReaderAscii: not enough implicit vertices") }
             /// Found a gap in ids, insert an implicit vertex into a list of gaps.
             m_io_explicit[currid] = std::move(m_io_implicit[*fir]);
         }

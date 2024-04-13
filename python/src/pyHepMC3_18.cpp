@@ -57,7 +57,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderLHEF::skip(a0);
 	}
@@ -70,7 +70,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderLHEF::read_event(a0);
 	}
@@ -83,7 +83,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return ReaderLHEF::close();
 	}
@@ -96,7 +96,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderLHEF::failed();
 	}
@@ -109,7 +109,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 				static pybind11::detail::override_caster_t<class std::shared_ptr<class HepMC3::GenRunInfo>> caster;
 				return pybind11::detail::cast_ref<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o));
+			return pybind11::detail::cast_safe<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o));
 		}
 		return Reader::run_info();
 	}
@@ -122,7 +122,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return Reader::set_options(a0);
 	}
@@ -136,7 +136,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 				static pybind11::detail::override_caster_t<_binder_ret_0> caster;
 				return pybind11::detail::cast_ref<_binder_ret_0>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<_binder_ret_0>(std::move(o));
+			return pybind11::detail::cast_safe<_binder_ret_0>(std::move(o));
 		}
 		return Reader::get_options();
 	}
@@ -149,7 +149,7 @@ struct PyCallBack_HepMC3_ReaderLHEF : public HepMC3::ReaderLHEF {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return Reader::set_run_info(a0);
 	}
@@ -168,7 +168,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderPlugin::skip(a0);
 	}
@@ -181,7 +181,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderPlugin::read_event(a0);
 	}
@@ -194,7 +194,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return ReaderPlugin::close();
 	}
@@ -207,7 +207,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ReaderPlugin::failed();
 	}
@@ -220,7 +220,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 				static pybind11::detail::override_caster_t<class std::shared_ptr<class HepMC3::GenRunInfo>> caster;
 				return pybind11::detail::cast_ref<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o));
+			return pybind11::detail::cast_safe<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o));
 		}
 		return ReaderPlugin::run_info();
 	}
@@ -233,7 +233,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return ReaderPlugin::set_options(a0);
 	}
@@ -247,7 +247,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 				static pybind11::detail::override_caster_t<_binder_ret_0> caster;
 				return pybind11::detail::cast_ref<_binder_ret_0>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<_binder_ret_0>(std::move(o));
+			return pybind11::detail::cast_safe<_binder_ret_0>(std::move(o));
 		}
 		return ReaderPlugin::get_options();
 	}
@@ -260,7 +260,7 @@ struct PyCallBack_HepMC3_ReaderPlugin : public HepMC3::ReaderPlugin {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return ReaderPlugin::set_run_info(a0);
 	}
@@ -279,7 +279,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterPlugin::write_event(a0);
 	}
@@ -292,7 +292,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterPlugin::close();
 	}
@@ -305,7 +305,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return WriterPlugin::failed();
 	}
@@ -318,7 +318,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 				static pybind11::detail::override_caster_t<class std::shared_ptr<class HepMC3::GenRunInfo>> caster;
 				return pybind11::detail::cast_ref<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o));
+			return pybind11::detail::cast_safe<class std::shared_ptr<class HepMC3::GenRunInfo>>(std::move(o));
 		}
 		return WriterPlugin::run_info();
 	}
@@ -331,7 +331,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterPlugin::set_options(a0);
 	}
@@ -345,7 +345,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 				static pybind11::detail::override_caster_t<_binder_ret_0> caster;
 				return pybind11::detail::cast_ref<_binder_ret_0>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<_binder_ret_0>(std::move(o));
+			return pybind11::detail::cast_safe<_binder_ret_0>(std::move(o));
 		}
 		return WriterPlugin::get_options();
 	}
@@ -358,7 +358,7 @@ struct PyCallBack_HepMC3_WriterPlugin : public HepMC3::WriterPlugin {
 				static pybind11::detail::override_caster_t<void> caster;
 				return pybind11::detail::cast_ref<void>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<void>(std::move(o));
+			return pybind11::detail::cast_safe<void>(std::move(o));
 		}
 		return WriterPlugin::set_run_info(a0);
 	}
