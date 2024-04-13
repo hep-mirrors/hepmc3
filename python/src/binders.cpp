@@ -26,7 +26,7 @@ void custom_deduce_reader(pybind11::module&  M){
     }
     std::string f = filename;
 #ifndef PYPY_VERSION
-    std::array<char,6> buf;
+    std::array<char,6> buf{};
     snprintf(buf.data(), 6, "%s", input.m_head.at(0).c_str());
     HepMC3::Compression det  = HepMC3::detect_compression_type(buf.data(), buf.data() + 5);    
     switch (det) {

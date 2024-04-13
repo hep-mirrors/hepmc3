@@ -178,8 +178,7 @@ void ReaderuprootTree::close(){}
 
 bool ReaderuprootTree::failed()
 {
-    if (m_events_count > m_tree_getEntries) return true;
-    return false;
+    return m_events_count > m_tree_getEntries;
 }
 ReaderuprootTree::~ReaderuprootTree()
 {
@@ -187,4 +186,4 @@ ReaderuprootTree::~ReaderuprootTree()
     if (m_run_info_data) {delete m_run_info_data; m_run_info_data=nullptr;}
 }
 
-}
+} // End namespace HepMC3
