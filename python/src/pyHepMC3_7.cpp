@@ -43,7 +43,7 @@ struct PyCallBack_HepMC3_GenCrossSection : public HepMC3::GenCrossSection {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return GenCrossSection::from_string(a0);
 	}
@@ -56,7 +56,7 @@ struct PyCallBack_HepMC3_GenCrossSection : public HepMC3::GenCrossSection {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return GenCrossSection::to_string(a0);
 	}
@@ -69,7 +69,7 @@ struct PyCallBack_HepMC3_GenCrossSection : public HepMC3::GenCrossSection {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -82,7 +82,7 @@ struct PyCallBack_HepMC3_GenCrossSection : public HepMC3::GenCrossSection {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}
