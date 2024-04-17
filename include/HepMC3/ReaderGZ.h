@@ -73,8 +73,8 @@ public:
 
 private:
     ///@brief Close file stream
-    std::shared_ptr< std::istream > m_zstr;  ///< Stream to read
-    std::shared_ptr<Reader> m_reader; ///< Actual reader
+    std::shared_ptr< std::istream > m_zstr = nullptr;  ///< Stream to read
+    std::shared_ptr<Reader> m_reader = nullptr; ///< Actual reader
 
 };
 
