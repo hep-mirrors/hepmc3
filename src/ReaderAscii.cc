@@ -22,7 +22,7 @@ namespace HepMC3 {
 
 
 ReaderAscii::ReaderAscii(const std::string &filename)
-    : m_file(filename), m_stream(nullptr), m_isstream(false)
+    : m_file(filename), m_isstream(false)
 {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderAscii: could not open input file: " << filename)
