@@ -52,9 +52,9 @@ public:
     ~ReaderLHEF() ;
 private:
     void init();                       ///< Init helper
-    std::shared_ptr<std::istream> m_shared_stream; ///< Holds temporary stream
-    std::shared_ptr<LHEF::Reader> m_reader;            ///< The actual reader
-    std::shared_ptr<HEPRUPAttribute> m_hepr; ///< Holder of attributes
+    std::shared_ptr<std::istream> m_shared_stream = nullptr; ///< Holds temporary stream
+    std::shared_ptr<LHEF::Reader> m_reader = nullptr;            ///< The actual reader
+    std::shared_ptr<HEPRUPAttribute> m_hepr = nullptr; ///< Holder of attributes
     int m_neve = 0;                         ///< Event counter
     bool m_failed = false;                      ///< State of reader
     std::deque<GenEvent> m_storage; ///<storage used for subevents.

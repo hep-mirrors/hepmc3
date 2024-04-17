@@ -23,7 +23,7 @@
 namespace HepMC3 {
 
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
-    m_file(filename), m_stream(nullptr), m_isstream(false) {
+    m_file(filename), m_isstream(false) {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input file: " << filename )
     }
@@ -744,7 +744,10 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
 
     return true;
 }
-bool ReaderAsciiHepMC2::failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+bool ReaderAsciiHepMC2::failed() { 
+	
+	bool a= m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); //printf("a=%i\n",a); 
+	return a; }
 
 void ReaderAsciiHepMC2::close() {
     if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr;}

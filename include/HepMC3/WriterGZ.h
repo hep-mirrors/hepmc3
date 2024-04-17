@@ -38,6 +38,12 @@ public:
         m_writer = std::make_shared<T>(*(m_zstr.get()), run);
     }
 
+    /// @brief Constructor from ostream
+    WriterGZ(std::shared_ptr<std::ostream> s_stream, std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>()) {
+        m_zstr = std::shared_ptr< std::ostream >(new ostream(*(s_stream.get()), C));
+        m_writer = std::make_shared<T>(m_zstr, run);
+    }
+
     /// @brief Destructor
     ~WriterGZ() {};
 
@@ -63,8 +69,8 @@ public:
     std::shared_ptr<GenRunInfo> run_info() const override { return m_writer?m_writer->run_info():nullptr; }
 
 private:
-    std::shared_ptr< std::ostream > m_zstr;  ///< Stream to write
-    std::shared_ptr<Writer> m_writer; //!< actual writter
+    std::shared_ptr< std::ostream > m_zstr = nullptr;  ///< Stream to write
+    std::shared_ptr<Writer> m_writer = nullptr; //!< actual writter
 
 };
 

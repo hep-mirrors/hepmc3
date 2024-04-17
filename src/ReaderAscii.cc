@@ -22,7 +22,7 @@ namespace HepMC3 {
 
 
 ReaderAscii::ReaderAscii(const std::string &filename)
-    : m_file(filename), m_stream(nullptr), m_isstream(false)
+    : m_file(filename), m_isstream(false)
 {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderAscii: could not open input file: " << filename)
@@ -88,8 +88,9 @@ bool ReaderAscii::skip(const int n)
 
 
 bool ReaderAscii::read_event(GenEvent &evt) {
+	printf("XX1->\n");
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
-
+printf("XX2->\n");
     char               peek(0);
     std::array<char, 262144> buf{};
     bool               event_context    = false;
@@ -115,11 +116,13 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     //
     // Parse event, vertex and particle information
     //
+printf("XX3->\n");    
     while (!failed()) {
+printf("XX4->\n");
         m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
 
         if ( strlen(buf.data()) == 0 ) continue;
-
+printf("XX5->\n");
         // Check for ReaderAscii header/footer
         if ( strncmp(buf.data(), "HepMC", 5) == 0 ) {
             if ( strncmp(buf.data(), "HepMC::Version", 14) != 0 && strncmp(buf.data(), "HepMC::Asciiv3", 14) != 0 )
@@ -134,7 +137,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
             }
             continue;
         }
-
+std::cout <<"XXX:" <<buf.data() << std::endl;
         switch (buf[0]) {
         case 'E':
             vertices_and_particles = parse_event_information( buf.data());
@@ -591,7 +594,7 @@ std::string ReaderAscii::unescape(const std::string& s) {
     return ret;
 }
 
-bool ReaderAscii::failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+bool ReaderAscii::failed() { bool b = m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); printf("b=%i\n",b); return b; }
 
 void ReaderAscii::close() {
     if ( !m_file.is_open()) return;

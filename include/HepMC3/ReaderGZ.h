@@ -40,7 +40,7 @@ public:
     /// @brief The ctor to read from shared pointer to stream
     ReaderGZ(std::shared_ptr<std::istream> s_stream) {
         m_zstr = s_stream;
-        m_reader = std::make_shared<T>(*(m_zstr.get()));
+        m_reader = std::make_shared<T>(m_zstr);
     }
 
     /// @brief Destructor
@@ -73,8 +73,8 @@ public:
 
 private:
     ///@brief Close file stream
-    std::shared_ptr< std::istream > m_zstr;  ///< Stream to read
-    std::shared_ptr<Reader> m_reader; ///< Actual reader
+    std::shared_ptr< std::istream > m_zstr = nullptr;  ///< Stream to read
+    std::shared_ptr<Reader> m_reader = nullptr; ///< Actual reader
 
 };
 

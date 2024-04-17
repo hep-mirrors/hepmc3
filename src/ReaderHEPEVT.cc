@@ -16,7 +16,7 @@ namespace HepMC3
 {
 
 ReaderHEPEVT::ReaderHEPEVT(const std::string &filename)
-    : m_file(filename), m_stream(nullptr), m_isstream(false)
+    : m_file(filename), m_isstream(false)
 {
     if ( !m_file.is_open() ) {
         HEPMC3_ERROR("ReaderHEPEVT: could not open input file: " << filename)
