@@ -220,6 +220,21 @@ struct XMLTag {
         continue;
       }
 
+      // Check for character data
+      if ( begin != end && str.find("<![CDATA[", curr) == begin ) {
+        pos_t endcom = str.find("]]>", begin);
+        tags.push_back(new XMLTag());
+        if ( endcom == end ) {
+          tags.back()->contents = str.substr(curr);
+          if ( leftover ) *leftover += str.substr(curr);
+          return tags;
+        }
+        tags.back()->contents = str.substr(curr, endcom - curr);
+        if ( leftover ) *leftover += str.substr(curr, endcom - curr);
+        curr = endcom;
+        continue;
+      }
+
       if ( begin != curr ) {
         tags.push_back(new XMLTag());
         tags.back()->contents = str.substr(curr, begin - curr);
