@@ -1,3 +1,8 @@
+/**
+ *  @file protobufUtils.cc
+ *  @brief Implementationof utility functions for protobufIO
+ *
+ */
 #include "HepMC3/protobufUtils.h"
 
 #include "HepMC3/GenParticle.h"

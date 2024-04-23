@@ -3,6 +3,11 @@
 // This file is part of HepMC3
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+/**
+ *  @file Pythia6ToHepMC3.cc
+ *  @brief A simple C-like interface to HepMC3 aimed to be used with Pythia6 
+ *
+ */
 #ifndef PYTHIA6_PYTHIA6TOHEPMC3_CC
 #define PYTHIA6_PYTHIA6TOHEPMC3_CC
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && !defined(__CYGWIN__)

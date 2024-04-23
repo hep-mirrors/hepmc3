@@ -136,7 +136,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         case 'V':
             // If starting new vertex: verify if previous was fully parsed
 
-            /** @bug HepMC2 files produced with Pythia8 are known to have wrong
+            /** HepMC2 files produced with Pythia8 are known to have wrong
                      information about number of particles in vertex. Hence '<' sign */
             if (current_vertex_particles_parsed < current_vertex_particles_count) {
                 is_parsing_successful = false;
@@ -197,7 +197,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     }
 
     // Check if all particles in last vertex were parsed
-    /** @bug HepMC2 files produced with Pythia8 are known to have wrong
+    /** HepMC2 files produced with Pythia8 are known to have wrong
              information about number of particles in vertex. Hence '<' sign */
     if (is_parsing_successful && current_vertex_particles_parsed < current_vertex_particles_count) {
         HEPMC3_ERROR("ReaderAsciiHepMC2: not all particles parsed")

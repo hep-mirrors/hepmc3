@@ -3,6 +3,11 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+/**
+ *  @file search_example.cc
+ *  @brief Basic example of use of HepMC3 search library: profiling the search of relatives of particles
+ *
+ */
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Print.h"
 #include "HepMC3/GenParticle.h"

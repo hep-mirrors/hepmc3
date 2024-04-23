@@ -3,6 +3,11 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+/**
+ *  @file ReaderFactory.h
+ *  @brief Declaration of \b deduce_reader and related functions
+ *
+ */
 #ifndef HEPMC3_READERFACTORY_H
 #define HEPMC3_READERFACTORY_H
 

@@ -3,6 +3,10 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+///
+/// @file  AnalysisExample.cc
+/// @brief Implementation of \b AnalysisExample class with toy physics analysis
+///
 #include "AnalysisExample.h"
 #include <limits>
 namespace HepMC3
