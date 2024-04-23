@@ -3,6 +3,11 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+/**
+ *  @file WriterDOT.cc
+ *  @brief Implementation of converter of GenEvent into .dot format which can be used for event vizualization. 
+ *
+ */
 #include "WriterDOT.h"
 namespace HepMC3
 {

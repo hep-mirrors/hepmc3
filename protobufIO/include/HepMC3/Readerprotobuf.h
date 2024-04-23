@@ -69,9 +69,9 @@ public:
   // Functions
   //
 public:
-  /** @brief skips the next N events
+  /** @brief skips the next n events
    *
-   *  @param[in] the number of events to skip
+   *  @param[in] n the number of events to skip
    *  @return Whether the reader can still be read from after skipping
    */
   bool skip(const int n) override;
@@ -108,9 +108,10 @@ private:
    *
    * @param[in] skip Whether to bother actually parsing this message to a
    * GenEvent
+   * @param[out] evt output GenEvent
    * @return Whether the reader can still be read from after reading
    */
-  bool read_GenEvent(bool skip, GenEvent &);
+  bool read_GenEvent(bool skip, GenEvent & evt);
 
   /** @brief Parse the next protobuf message as a Header message
    *
@@ -136,14 +137,14 @@ private:
    */
   std::istream *m_in_stream = nullptr;
 
-  std::unique_ptr<google::protobuf::io::FileInputStream> m_inf_zcstream;
-  std::unique_ptr<google::protobuf::io::IstreamInputStream> m_in_zcistream;
-  google::protobuf::io::ZeroCopyInputStream *m_in_zcstream = nullptr;
+  std::unique_ptr<google::protobuf::io::FileInputStream> m_inf_zcstream;       //!< File input
+  std::unique_ptr<google::protobuf::io::IstreamInputStream> m_in_zcistream;       //!< Stream input
+  google::protobuf::io::ZeroCopyInputStream *m_in_zcstream = nullptr;       //!< Zero copy input stream
 
-  HepMC3_pb::MessageDigest m_md_pb;
-  HepMC3_pb::Header m_hdr_pb;
-  HepMC3_pb::GenRunInfoData m_gri_pb;
-  HepMC3_pb::GenEventData m_evt_pb;
+  HepMC3_pb::MessageDigest m_md_pb;         //!< Message digest
+  HepMC3_pb::Header m_hdr_pb;               //!< Header
+  HepMC3_pb::GenRunInfoData m_gri_pb;       //!< GenRunInfo data
+  HepMC3_pb::GenEventData m_evt_pb;         //!< GenEventInfo data
 };
 
 } // namespace HepMC3

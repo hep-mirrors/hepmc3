@@ -1,14 +1,16 @@
 // -*- C++ -*-
 #ifndef HEPMC3_LHEF_H
 #define HEPMC3_LHEF_H
-//
-// This is the declaration of the Les Houches Event File classes,
-// implementing a simple C++ parser/writer for Les Houches Event files.
-// Copyright (C) 2009-2023 Leif Lonnblad
-//
-// The code is licenced under LGPLv3+, see COPYING for details.
-// Please respect the MCnet academic guidelines, see GUIDELINES for details.
-//
+
+/**
+ * @file LHEF.h 
+ * @brief This is the declaration of the Les Houches Event File classes,
+ * implementing a simple C++ parser/writer for Les Houches Event files.
+ * Copyright (C) 2009-2023 Leif Lonnblad
+ *
+ * The code is licenced under LGPLv3+, see COPYING for details.
+ * Please respect the MCnet academic guidelines, see GUIDELINES for details.
+ */
 
 #include <iostream>
 #include <iomanip>

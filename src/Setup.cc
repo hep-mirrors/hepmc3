@@ -5,7 +5,7 @@
 //
 /**
  *  @file Setup.cc
- *  @brief Implementation of Setup class
+ *  @brief Implementation of \b Setup class
  *
  */
 #include "HepMC3/Setup.h"
