@@ -1,15 +1,13 @@
 # One page HepMC3 documentation
   
-## Build instructions
+## 1 Build instructions
 For the full list of the installation options including the description of the flags to build the
 HepMC3 from the sources see  at [HepMC3 page at CERN GitLab](https://gitlab.cern.ch/hepmc/HepMC3).
 
 A quick minimalist build that requires only C++11 compiler and a
-recent version of cmake (3.15+) is described below.
-
-### Minimalist build with CMake
+recent version of CMake (3.15+) is described below.
 To build HepMC3 is  using CMake on the supported platforms, C++11 compiler
-and a recent cmake  is needed (3.15).
+and a recent CMake  is needed (3.15).
 The commands executed in the unpacked source tarball of HepMC3
 
 ```
@@ -20,11 +18,11 @@ The commands executed in the unpacked source tarball of HepMC3
 will configure the HepMC3 sources, compile them and install the library into "desired_installation_path".
 
 
-## Differences between HepMC2 and HepMC3
+## 2 Differences between HepMC2 and HepMC3
 The following is a list of main differences that should be taken into
 account when transitioning from HepMC2 to HepMC3.
 
-### Structure change and header file organisation
+### 2.1 Structure change and header file organisation
 Following changes in header files have been applied:
 
 ```
@@ -71,13 +69,13 @@ Following header files are no longer available:
   PythiaWrapper6_4_WIN32.h
 ```
 
-# Fortran generators
+### 2.2 Fortran generators
 An example of interface to Pythia6 Fortran blocks  is given in the examples.
 Please note that the provided interface Pythia6ToHepMC3.cc and Pythia6ToHepMC3.inc
 is an interface for HepMC3 from Pythia6 and not an interface to Pythia6 from HepMC,
 as it was in the case of the HepMC2.
 
-# Changes to the I/O handling
+### 2.3 Changes to the I/O handling
 Multiple file formats are supported. The implementation of reading  and writing
 is separated in HepMC3. All the reading operations are performed in
 "reader" objects inherited from HepMC::Reader and the writing operations in the "writer"
@@ -123,7 +121,7 @@ Please, note the difference in the behaviour of default Readers with respect to 
   templates readers/writers to handle the zip-,lzma-,bz2-compressed files (ReaderGZ and WriterGZ) and to perform multithread
   reading (ReaderMT).
 
-# Memory managed by shared pointers
+### 2.4 Memory managed by shared pointers
 Particles and vertices are managed using shared pointers, so they should 
 not be created through the call to 'new'.
 
@@ -148,7 +146,7 @@ not be created through the call to 'new'.
   event.add_vertex(v1);
 ```
 
-### Iterators
+### 2.5 Iterators
 The iterator-bases classes and access functions from HepMC2, e.g.
 
 ```
@@ -186,7 +184,7 @@ or alternatively
 
 
 
-### Topological order
+### 2.6 Topological order
 Particles and vertices in HepMC3 are stored in topological order. This means
   that when creating vertices, incoming particles must have id lower than
   any of the outgoing particles.
@@ -227,10 +225,8 @@ This forces the tree structure to be constructed top-to-bottom
 ```
 
 
-## Changes to user interface and to HepMC functionality
 
-
-### Deleting particles and vertices
+### 2.7 Deleting particles and vertices
 Deleting a particle using GenEvent::remove_particle() will also remove
   its end_vertex if this is the only particle that is on this vertex
   particles_in() list.
@@ -239,7 +235,7 @@ Deleting a vertex will delete all of its outgoing
   particles. (and subsequently, all of their decays).
 
 
-### Barcodes can no longer be se (Use constant ID instead)
+### 2.8 Barcodes can no longer be se (Use constant ID instead)
 The "barcode" integer in HepMC2 was an uncomfortable object, simultaneously
   declared in the code documentation to be a meaningless unique identifier for
   vertex and particle objects, and set to specific ranges by experiments'
@@ -258,7 +254,7 @@ The unique identifier of particles and vertices is now called id() to
   a particle or vertex is removed from the event, id's of other particles
   or vertices may change.
 
-### Flow is not a class on its own (it is an attribute).
+### 2.9 Flow is not a class on its own (it is an attribute).
 The Flow class has been removed, since it was unused by any widespread event
   generator, and to our knowledge the only active use-case is an abuse of it to
   provide more ints in which to encode provenance information. As this is now done
@@ -267,7 +263,7 @@ The Flow class has been removed, since it was unused by any widespread event
   one piece of user code and migration to the newer scheme should be simple.
 
 
-### Units are no longer defined at compilation time
+### 2.10 Units are no longer defined at compilation time
 The default units are set to GEV and MM. They can be provided as
   constructor parameters or changed later using HepMC::GenEvent::set_units
 
@@ -287,7 +283,7 @@ The default units are set to GEV and MM. They can be provided as
 ```
 
 
-### Deprecated code
+### 2.11 Deprecated code
 A lot of HepMC2 functions has been declared obsolete and are marked as
   deprecated. Warnings displayed at compilation time hint to what functions
   or classes should be used instead.
@@ -414,7 +410,7 @@ A lot of HepMC2 functions has been declared obsolete and are marked as
 ```
 
 
-### Standard attributes
+## 3 Standard attributes
 For the user convenience and backward compatibility the following standard attributes are
   supported for the
 
@@ -450,7 +446,7 @@ The presence of cycles in the event structure is indicated with an attribute
  that belong to a GenEvent object.
 
 
-## Interface to HEPEVT block
+## 4 Interface to HEPEVT block
 The most recent versions of HepMC3 has multiple implementations of the interfaces to HEPEVT Fortran common
   block. These are
 
@@ -472,7 +468,7 @@ The most recent versions of HepMC3 has multiple implementations of the interface
   The block can be held in the object. Multiple instances can exists.
 
 
-## GenRunInfo class
+## 5 GenRunInfo class
 A new class has been provided to store run-level information, such as
   weight names, names and description of tools used to generate the event,
   global attributes such as LHE run information or any other run information
@@ -480,7 +476,7 @@ A new class has been provided to store run-level information, such as
 
 
 
-## Attributes
+## 6 Attributes
 Attributes can be attached to GenEvent, GenParticle or GenVertex
   and they can have any format defined by the user
   (see @ref writing_attributes). An attribute is accessed through
@@ -513,7 +509,7 @@ Note: An event (or particle or vertex) can have more than one attribute
     to use just one instance named by its class name, as in these
     examples.
 
-### Writing custom attributes
+### 6.1 Writing custom attributes
 
 Any class that derives from HepMC::Attribute class can be used as
   an attribute that can be attached to the event, vertex or particle.
@@ -557,7 +553,7 @@ Example:
 
 
 
-## IO-related classes and interfaces
+## 7 IO-related classes and interfaces
 The main HepMC3 library contains the classes for the I/O of multiple event formats.
 
 Optionally the I/O capabilities can be implemented as plugin Reader/Writer classes compiled
@@ -610,7 +606,7 @@ This option will be the default on in the future.
 
 
 
-### Links
+### 7.1 Links
 The relations between vertices and particles in GenEventData are encoded via
   members links1 and links2, wich are std::vector<int> containing object ids.
   Direct manipulations with links1 and links2 can be useful. For instance,
@@ -664,7 +660,7 @@ The relations between vertices and particles in GenEventData are encoded via
   // Here we have cuts on electron
 ```
 
-## Search-related classes and interfaces
+## 8 Search-related classes and interfaces
 HepMC3 comes with an optional Search library for finding particles
   related to other particles or vertices.
   It provides a set of functions to perform simple search operations e.g.
@@ -682,7 +678,7 @@ and interfaces for a more advanced usage. For the latter two main interfaces are
   In addition, operator on Filters are also defined.
 
 
-## Relatives Interface
+### 8.1 Relatives Interface
 The Relatives interface is defined within search/include/HepMC3/Relatives.h.
   Classes that obey this interface must provide a set of operator functions
   that take either a GenParticlePtr, ConstGenParticlePtr, GenVertexPtr or
@@ -738,7 +734,7 @@ has a return type GenParticles_type that is a vector of GenParticlePtr that
   complicated relatives it avoids duplicated code.
 
 
-## Recursive Relatives
+### 8.2 Recursive Relatives
 In addition to the RelativesInterface wrapper, Relatives.h also contains a
   Recursive class that can wrap the underlying relation in recursion.  For
   example, recursion applied to the parents relationship provides all of the
@@ -753,7 +749,7 @@ In addition to the RelativesInterface wrapper, Relatives.h also contains a
 ```
 
 
-## Existing Relatives
+###  8.3 Existing Relatives
 The Relatives class contains static implementations of the Parents,
   Children, Ancestors and Descendants relatives, which can be accessed and
   used as follows
@@ -772,7 +768,7 @@ The Relatives class contains static implementations of the Parents,
 ```
 
 
-## Filters
+### 8.4 Filters
 A Filter is any object that has an operator that takes as input a
   ConstGenParticlePtr and returns a bool that reflects whether the input
   particle passes the filter requirements or not.  Filter is defined in
@@ -804,7 +800,7 @@ It is possible to define a Filter by hand.  However, there are some utility
   classes to define Filters based on features that can be obtained from GenParticles
 
 
-## Feature Interface
+### 8.5 Feature Interface
 The Feature interface is defined in Feature.h.  The interface is templated
   on a Feature_type that is any type that can be extracted from a GenParticle.
   This is very flexible, and the only criteria is that the Feature must have
@@ -856,7 +852,7 @@ Having created a Feature, it can be used to create Filters for particle
 Some standard features are contained within the non-templated Selector class
 
 
-## Selectors and SelectorWrapper
+## 9 Selectors and SelectorWrapper
 Selector is a simplified interface that contains some predefined Features
   that can be used to search.  Selector defines comparisons operators for
   both integral and floating point types, as well as the following selection
@@ -907,7 +903,7 @@ Note that the ATTRIBUTE selection is different from the others and does not
 ```
 
 
-## Applying Filters
+### 9.1 Applying Filters
 The function applyFilter is used to apply the Filter to a set of particles.
   See for example examples/BasicExamples/basic_tree.cc
 
@@ -918,7 +914,7 @@ The function applyFilter is used to apply the Filter to a set of particles.
 ```  
 
   
-## Python Bindings
+## 10 Python Bindings
 HepMC3 includes Python bindings codes suitable for compilation of python
   modules for Python3.
 
@@ -934,20 +930,20 @@ HepMC3 includes Python bindings codes suitable for compilation of python
   - Wenzel Jakob and Jason Rhinelander and Dean Moldovan,
   "pybind11 -- Seamless operability between C++11 and Python", 2017,  https://github.com/pybind/pybind11
 
-### Installation from repositories
+### 10.1 Installation from repositories
 The Python bindings together with the HepMC3 itself can be installed from PyPy and multiple other repositories.
   Please see [HepMC3 page](https://gitlab.cern.ch/hepmc/HepMC3) at CERN GitLab for details.
 
-### Installation from sources
+### 10.2 Installation from sources
 To turn on the compilation of bindings use -DHEPMC3_ENABLE_PYTHON = ON.
   By default the python modules will be generated for python3 if these are found in the system.
   In case the test suite is enabled, tests of python bindings with all the enabled versions will run as well.
 
   Despite not recommended, it should be possible to compile the python bindings using the installed version of HepMC3.
   To do this, copy the python directory outside of source tree,  uncomment #project(pyHepMC3 CXX) in  python/CMakeLists.txt and
-  run cmake inside python directory with -DUSE_INSTALLED_HEPMC3=ON  option.
+  run CMake inside python directory with -DUSE_INSTALLED_HEPMC3=ON  option.
 
-### Selected aspects of Python  bindings
+### 10.3 Selected aspects of Python  bindings
 In general, the syntax used in the python bindings is exactly the same as in the C++ code.
  However, some C++ classes and routines are don't have their Python equivalents, namsly:
  
@@ -961,11 +957,11 @@ In general, the syntax used in the python bindings is exactly the same as in the
  HepMC3 ROOTTree files can be read  with ReaderuprootTree.
 
 
-#LHEF Handling Les Houches Event Files
+## 11 Handling Les Houches Event Files
 This module contains helper classes and Reader and Writer classes
   for handling Les Houches event files - LHEF.
   
-## Introduction
+### 11.1 Introduction
 The Les Houches accord on an event file format (LHEF) to be used
   for passing events from a matrix element generator program (MEG)
   to an event generator program (EG) implementing parton showers,
@@ -984,7 +980,7 @@ The Les Houches accord on an event file format (LHEF) to be used
   documented. From now on these pages will serve as the defining
   information about the LHEF format.
   
-## Background
+### 11.2 Background
 The original Les Houches accord for communicating between MEGs and EGs
   was agreed upon in
   2001 [arXiv:hep-ph/0109068](http://archive.org/abs/hep-ph/0109068)
@@ -1007,7 +1003,7 @@ As the methods for combining MEGs and EGs has advanced since the first
   also those that were added a bit prematurely and later became
   deprecated.
   
-## The basic structure
+### 11.3 The basic structure
 The LHEF format is based on XML, but has some oddities that goes
   beyond pure XML. As the name indicates, XML is extensible, and anyone
   writing a LHEF file can add whatever information she or he wants,
@@ -1159,7 +1155,7 @@ The LHEF format is based on XML, but has some oddities that goes
   LHEF::HEPEUP with public members mimicking the Fortran common block
   variables.
   
-## LHEF-taglist Additional information
+### 11.4 LHEF-taglist Additional information
   
   Over the years several additional XML-tags has been formalised to
   specify information on top of what is given in the original Les
@@ -1177,7 +1173,7 @@ The LHEF format is based on XML, but has some oddities that goes
   In the following an attribute may be described as required (R) or
   optional with a default value (D).
   
-###  LHEF-init Standardised tags in the init block
+### 11.5  LHEF-init Standardised tags in the init block
   
   The <tt>&lt;init&gt;</tt> block contains information about the full run
   (similar to the information contained in HepMC3::GenRunInfo). The
@@ -1432,7 +1428,7 @@ The LHEF format is based on XML, but has some oddities that goes
   </li>
   </ul>
   
-###  LHEF-events Standardised tags in the events block.
+### 11.6  LHEF-events Standardised tags in the events block.
   
   After the <tt>init</tt> block any number of events can be given. In
   addition events can be given in separate files declared

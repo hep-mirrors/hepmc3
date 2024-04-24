@@ -246,7 +246,7 @@ https://github.com/HDembinski/pyhepmc.
 Please note that only the PyPi packages are officially supported.
 
 
-10a
+10.1
 
 The installation path for the Python modules can be tweaked with
 a set of dynamically named CMake variables:
@@ -279,7 +279,7 @@ will build Python modules for versions  Python 3.6 and Python 3.12.
 By default CMake will attempt to build the Python modules for Python version 3.
 
 
-10b
+10.2
 
 In addition to the standard CPython  modules, it is possible to build HepMC3 modules for PyPy.
 However, the PyPy support is experimental. To build the bindings against the `pypy-c` library use `pypy<version>`
