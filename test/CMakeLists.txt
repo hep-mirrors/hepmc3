@@ -113,6 +113,7 @@ set( HepMC_tests
         testBoost
         testFourVector
         testMass
+        testPrint
         testPrintBug
         testPolarization
         testUnits
