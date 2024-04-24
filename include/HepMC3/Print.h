@@ -80,6 +80,14 @@ public:
     }
 
     /// @brief Print one-line info
+    static void line(std::ostream& os, GenVertexPtr v, bool attributes=false);
+    /// @brief Print one-line info to std::cout
+    inline static void line(GenVertexPtr v, bool attributes=false) {
+        line(std::cout, v, attributes);
+        std::cout << std::endl;
+    }
+
+    /// @brief Print one-line info
     static void line(std::ostream& os, const FourVector& p);
     /// @brief Print one-line info to std::cout
     inline static void line(const FourVector& p) {
@@ -94,6 +102,15 @@ public:
         line(std::cout, p, attributes);
         std::cout << std::endl;
     }
+
+    /// @brief Print one-line info
+    static void line(std::ostream& os, GenParticlePtr p, bool attributes=false);
+    /// @brief Print one-line info to std::cout
+    inline static void line(GenParticlePtr p, bool attributes=false) {
+        line(std::cout, p, attributes);
+        std::cout << std::endl;
+    }
+
 
     /// @brief Print one-line info
     static void line(std::ostream& os, std::shared_ptr<GenCrossSection> &cs);
@@ -124,6 +141,7 @@ public:
 private:
     /// @brief Helper function for printing a vertex in listing format
     static void listing(std::ostream& os, ConstGenVertexPtr v);
+
 
     /// @brief Helper function for printing a particle in listing format
     static void listing(std::ostream& os, ConstGenParticlePtr p);
