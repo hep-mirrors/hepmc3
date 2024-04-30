@@ -71,6 +71,9 @@ public:
     /// Get the act reader's GenRunInfo object.
     std::shared_ptr<GenRunInfo> run_info() const override { return m_reader?m_reader->run_info():nullptr; }
 
+    /// Return reader
+    std::shared_ptr<Reader> writer() { return m_reader;}
+
 private:
     ///@brief Close file stream
     std::shared_ptr< std::istream > m_zstr = nullptr;  ///< Stream to read
