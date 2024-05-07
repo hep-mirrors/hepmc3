@@ -65,18 +65,15 @@ bool GenCrossSection::from_string(const std::string &att) {
         else { attempted_events = atoi(cursor); }
     }
     const size_t nweights = event() ? std::max(event()->weights().size(), size_t{1}) : size_t{1};
-    ///< @todo AB: Why are we imposing a limit on Nxsec (effectively on Nweights)?
-    const size_t max_n_cross_sections = 1000;
-    while (cross_sections.size() < max_n_cross_sections) {
+    for (;;) {
         if ( !(cursor = strchr(cursor+1, ' ')) ) break;
         cross_sections.emplace_back(atof(cursor));
         if ( !(cursor = strchr(cursor+1, ' ')) ) break;
         cross_section_errors.emplace_back(atof(cursor));
     }
-    ///< @todo AB: Why are we imposing a limit on Nxsec (effectively on Nweights)?
-    if (cross_sections.size() >= max_n_cross_sections) {
-        HEPMC3_WARNING("GenCrossSection::from_string: too many cross-sections (N = "
-                       << cross_sections.size() << ") or ill-formed input:" << att)
+    if (cross_sections.size() != cross_section_errors.size()) {
+        HEPMC3_WARNING("GenCrossSection::from_string: number of cross-sections and errors differ "
+                       << cross_sections.size() << " vs  "  << cross_section_errors.size() << "). Ill-formed input:" << att)
     }
     // Use the default values to fill the vector to the size of N.
     size_t oldxsecsize = cross_sections.size();
