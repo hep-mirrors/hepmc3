@@ -39,7 +39,7 @@ InputInfo::InputInfo (const std::string &filename) {
         if (!(stat (filename.c_str(), &buffer) == 0 && (S_ISFIFO(buffer.st_mode) || S_ISREG(buffer.st_mode) || S_ISLNK(buffer.st_mode))))
 #endif
         {
-            HEPMC3_ERROR("deduce_reader: file " << filename << " does not exist or is not a regular file/FIFO/link");
+            HEPMC3_ERROR_LEVEL(100,"deduce_reader: file " << filename << " does not exist or is not a regular file/FIFO/link")
             m_reader = std::shared_ptr<Reader> (nullptr);
             m_error = true;
             return;
@@ -48,13 +48,13 @@ InputInfo::InputInfo (const std::string &filename) {
         std::shared_ptr< std::ifstream > file = std::make_shared< std::ifstream >(filename);
         if (!file)
         {
-            HEPMC3_ERROR("deduce_reader could not open file for testing HepMC version: " << filename);
+            HEPMC3_ERROR_LEVEL(100,"deduce_reader could not open file for testing HepMC version: " << filename)
             m_reader = std::shared_ptr<Reader> (nullptr);
             m_error = true;
             return;
         }
         if (!file->is_open()) {
-            HEPMC3_ERROR("deduce_reader could not open file for testing HepMC version: " << filename);
+            HEPMC3_ERROR_LEVEL(100,"deduce_reader could not open file for testing HepMC version: " << filename)
             file->close();
             m_reader = std::shared_ptr<Reader> (nullptr);
             m_error = true;
@@ -155,7 +155,7 @@ std::shared_ptr<Reader> deduce_reader(std::istream &stream)
     }
     if (!stream)
     {
-        HEPMC3_WARNING("Input stream is too short or invalid.");
+        HEPMC3_WARNING_LEVEL(100,"Input stream is too short or invalid.")
         return {};
     }
     InputInfo input;
@@ -171,7 +171,7 @@ std::shared_ptr<Reader> deduce_reader(std::shared_ptr<std::istream> stream)
 {
     if (!stream)
     {
-        HEPMC3_WARNING("Input stream is too short or invalid.");
+        HEPMC3_WARNING_LEVEL(100,"Input stream is too short or invalid.")
         return {};
     }
     const size_t raw_header_size = 100;
@@ -206,7 +206,7 @@ std::shared_ptr<Reader> deduce_reader(std::shared_ptr<std::istream> stream)
 
     if (!stream)
     {
-        HEPMC3_WARNING("Input stream is too short or invalid.");
+        HEPMC3_WARNING_LEVEL(100,"Input stream is too short or invalid.")
         return {};
     }
 

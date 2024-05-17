@@ -53,7 +53,7 @@ bool ReaderuprootTree::init(const std::string &filename)
     bool result = false;
     if (!m_uproot_module || !m_numpy_module ) {
       pybind11::print( "ReaderuprootTree: cannot initialize python modules uproot and/or numpy. Please check your uproot and/or numpy instalation.");
-      HEPMC3_ERROR( "ReaderuprootTree: cannot initialize python modules uproot and/or numpy. Please check your uproot and/or numpy instalation.")
+      HEPMC3_ERROR_LEVEL(100,"ReaderuprootTree: cannot initialize python modules uproot and/or numpy. Please check your uproot and/or numpy instalation.")
       return result;
     }
 

@@ -1515,3 +1515,36 @@ The LHEF format is based on XML, but has some oddities that goes
   </ul>
   <hr>
 
+## 12 Handling of errors and warnings
+
+The errors and warnings since HepMC 3.3.0 have the following categories:
+
+ - 100 Generic I/O problem, i.e. cannot open a file, cannot import a python module from C++, etc.
+ - 200 Buffer overflows
+ - 300 Problem serializing attributes, problems with the momentum/lengths units
+ - 400 Math error 
+ - 500 Usupported expression in the input 
+ - 600 Warious event inconsistencies
+ - 700 Various operational warnings, e.g. adding a null particle to vertex
+ - 800 GenCrosssection warnings 
+ - 900 Outdate formats or objects 
+
+The categories are numbered approximatelly according to their importance and if the
+current warning/error level is set below the warning level of the category, the warnigs/errors from the category 
+will not be printed.
+
+The warning level can be obtained/set with ``int Setup::warnings_level()/void Setup::set_warnings_level(const int)`` functions.
+The functions ``bool Setup::print_warnings()/void Setup::set_print_errors(const bool flag)`` obtain/set the global flag for printing the warnings but don't change the warning levels.
+The default warning level is 750.
+
+
+
+The error level can be obtained/set with ``int Setup::errors_level()/void Setup::set_errors_level(const int)`` functions.
+The functions ``bool Setup::print_errors()/void Setup::set_print_errors(const bool flag)`` obtain/set the global flag for printing the errors but don't change the warning levels.
+The default error level is 1000.
+
+
+
+
+
+

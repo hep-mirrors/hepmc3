@@ -40,10 +40,7 @@ size_t write_message(std::ostream *out_stream, std::string const &msg_str,
   md.SerializeToString(&md_str);
 
   if (md_str.size() != MDBytesLength) {
-    HEPMC3_ERROR("When writing protobuf message, the message digest was not "
-                 "the expected length ("
-                 << MDBytesLength << " bytes), but was instead "
-                 << md_str.size() << " bytes.");
+    HEPMC3_ERROR_LEVEL(100,"When writing protobuf message, the message digest was not the expected length ("<< MDBytesLength << " bytes), but was instead "<< md_str.size() << " bytes.")
   }
 
   (*out_stream) << md_str;
@@ -66,7 +63,7 @@ Writerprotobuf::Writerprotobuf(const std::string &filename,
 
   // check that it is open
   if (!m_out_file->is_open()) {
-    HEPMC3_ERROR("Writerprotobuf: problem opening file: " << filename)
+    HEPMC3_ERROR_LEVEL(100,"Writerprotobuf: problem opening file: " << filename)
     return;
   }
 
@@ -79,8 +76,7 @@ Writerprotobuf::Writerprotobuf(std::ostream &stream,
     : m_out_file(nullptr), m_events_written(0), m_event_bytes_written(0) {
 
   if (!stream.good()) {
-    HEPMC3_ERROR(
-        "Cannot initialize Writerprotobuf on ostream which is not good().");
+    HEPMC3_ERROR_LEVEL(100,"Cannot initialize Writerprotobuf on ostream which is not good().")
     return;
   }
 
@@ -139,8 +135,7 @@ void Writerprotobuf::close() {
   }
 
   if (!m_events_written) {
-    HEPMC3_ERROR(
-        "No events were written, the output file will not be parseable.");
+    HEPMC3_ERROR_LEVEL(100,"No events were written, the output file will not be parseable.")
   }
 
   HepMC3_pb::Footer ftr;

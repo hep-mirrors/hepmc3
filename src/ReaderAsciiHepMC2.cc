@@ -25,7 +25,7 @@ namespace HepMC3 {
 ReaderAsciiHepMC2::ReaderAsciiHepMC2(const std::string& filename):
     m_file(filename), m_isstream(false) {
     if ( !m_file.is_open() ) {
-        HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input file: " << filename )
+        HEPMC3_ERROR_LEVEL(100,"ReaderAsciiHepMC2: could not open input file: " << filename )
     }
     set_run_info(std::make_shared<GenRunInfo>());
     m_event_ghost = new GenEvent();
@@ -35,7 +35,7 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream & stream)
     : m_stream(&stream), m_isstream(true)
 {
     if ( !m_stream->good() ) {
-        HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input stream ")
+        HEPMC3_ERROR_LEVEL(100,"ReaderAsciiHepMC2: could not open input stream ")
     }
     set_run_info(std::make_shared<GenRunInfo>());
     m_event_ghost = new GenEvent();
@@ -45,7 +45,7 @@ ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::shared_ptr<std::istream> s_stream)
     : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
 {
     if ( !m_stream->good() ) {
-        HEPMC3_ERROR("ReaderAsciiHepMC2: could not open input stream ")
+        HEPMC3_ERROR_LEVEL(100,"ReaderAsciiHepMC2: could not open input stream ")
     }
     set_run_info(std::make_shared<GenRunInfo>());
     m_event_ghost = new GenEvent();
@@ -102,7 +102,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         if ( strncmp(buf.data(), "HepMC", 5) == 0 ) {
             if ( strncmp(buf.data(), "HepMC::Version", 14) != 0 && strncmp(buf.data(), "HepMC::IO_GenEvent", 18) != 0 )
             {
-                HEPMC3_WARNING("ReaderAsciiHepMC2: found unsupported expression in header. Will close the input.")
+                HEPMC3_WARNING_LEVEL(500,"ReaderAsciiHepMC2: found unsupported expression in header. Will close the input.")
                 std::cout <<buf.data() << std::endl;
                 m_isstream ? m_stream->clear(std::ios::eofbit) : m_file.clear(std::ios::eofbit);
             }
@@ -117,7 +117,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             parsing_result = parse_event_information(evt, buf.data());
             if (parsing_result < 0) {
                 is_parsing_successful = false;
-                HEPMC3_ERROR("ReaderAsciiHepMC2: HEPMC3_ERROR parsing event information")
+                HEPMC3_ERROR_LEVEL(600,"ReaderAsciiHepMC2: HEPMC3_ERROR parsing event information")
             }
             else {
                 vertices_count = parsing_result;
@@ -148,7 +148,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
             if (parsing_result < 0) {
                 is_parsing_successful = false;
-                HEPMC3_ERROR("ReaderAsciiHepMC2: HEPMC3_ERROR parsing vertex information")
+                HEPMC3_ERROR_LEVEL(600,"ReaderAsciiHepMC2: HEPMC3_ERROR parsing vertex information")
             }
             else {
                 current_vertex_particles_count = parsing_result;
@@ -161,7 +161,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
             if (parsing_result < 0) {
                 is_parsing_successful = false;
-                HEPMC3_ERROR("ReaderAsciiHepMC2: HEPMC3_ERROR parsing particle information")
+                HEPMC3_ERROR_LEVEL(600,"ReaderAsciiHepMC2: HEPMC3_ERROR parsing particle information")
             }
             else {
                 ++current_vertex_particles_parsed;
@@ -184,7 +184,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             is_parsing_successful = parse_xs_info(evt, buf.data());
             break;
         default:
-            HEPMC3_WARNING("ReaderAsciiHepMC2: skipping unrecognised prefix: " << buf[0])
+            HEPMC3_WARNING_LEVEL(500,"ReaderAsciiHepMC2: skipping unrecognised prefix: " << buf[0])
             is_parsing_successful = true;
             break;
         }
@@ -200,17 +200,17 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     /** HepMC2 files produced with Pythia8 are known to have wrong
              information about number of particles in vertex. Hence '<' sign */
     if (is_parsing_successful && current_vertex_particles_parsed < current_vertex_particles_count) {
-        HEPMC3_ERROR("ReaderAsciiHepMC2: not all particles parsed")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAsciiHepMC2: not all particles parsed")
         is_parsing_successful = false;
     }
     // Check if all vertices were parsed
     else if (is_parsing_successful && m_vertex_cache.size() != vertices_count) {
-        HEPMC3_ERROR("ReaderAsciiHepMC2: not all vertices parsed")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAsciiHepMC2: not all vertices parsed")
         is_parsing_successful = false;
     }
 
     if ( !is_parsing_successful ) {
-        HEPMC3_ERROR("ReaderAsciiHepMC2: event parsing failed. Returning empty event")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAsciiHepMC2: event parsing failed. Returning empty event")
         HEPMC3_DEBUG(1, "Parsing failed at line:" << std::endl << buf.data())
         evt.clear();
         m_isstream ? m_stream->clear(std::ios::badbit) : m_file.clear(std::ios::badbit);
@@ -220,7 +220,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         run_info()->set_weight_names(std::vector<std::string> {"Default"});
     }
     if (evt.weights().empty()) {
-        HEPMC3_WARNING("ReaderAsciiHepMC2: weights are empty, an event weight 1.0 will be added.")
+        HEPMC3_WARNING_LEVEL(600,"ReaderAsciiHepMC2: weights are empty, an event weight 1.0 will be added.")
         evt.weights().push_back(1.0);
     }
 
