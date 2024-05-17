@@ -72,7 +72,7 @@ std::string GenEvent(HepMC3::GenEvent const &evt) {
     break;
   }
   default: {
-    HEPMC3_ERROR("Unknown momentum unit: " << data.momentum_unit);
+    HEPMC3_ERROR_LEVEL(300,"Unknown momentum unit: " << data.momentum_unit)
     return "ERROR";
   }
   }
@@ -87,7 +87,7 @@ std::string GenEvent(HepMC3::GenEvent const &evt) {
     break;
   }
   default: {
-    HEPMC3_ERROR("Unknown length unit: " << data.length_unit);
+    HEPMC3_ERROR_LEVEL(300,"Unknown length unit: " << data.length_unit)
     return "ERROR";
   }
   }
@@ -219,7 +219,7 @@ void FillGenEvent(HepMC3_pb::GenEventData const &ged_pb,
     break;
   }
   default: {
-    HEPMC3_ERROR("Unknown momentum unit: " << ged_pb.momentum_unit());
+    HEPMC3_ERROR_LEVEL(300,"Unknown momentum unit: " << ged_pb.momentum_unit())
     return;
   }
   }
@@ -234,7 +234,7 @@ void FillGenEvent(HepMC3_pb::GenEventData const &ged_pb,
     break;
   }
   default: {
-    HEPMC3_ERROR("Unknown length unit: " << ged_pb.length_unit());
+    HEPMC3_ERROR_LEVEL(300,"Unknown length unit: " << ged_pb.length_unit())
     return;
   }
   }
@@ -396,7 +396,7 @@ void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
     (-+)  --  particle  has production vertex
     */
     if ((id1 < 0 && id2 < 0) || (id1 > 0 && id2 > 0)) {
-      HEPMC3_WARNING("GenEvent::read_data: wrong link: " << id1 << " " << id2);
+      HEPMC3_WARNING_LEVEL(600,"GenEvent::read_data: wrong link: " << id1 << " " << id2)
       continue;
     }
 

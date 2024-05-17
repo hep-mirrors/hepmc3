@@ -25,12 +25,12 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, std::shared_pt
     : m_file(filename),
       m_stream(&m_file)
 {
-    HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
+    HEPMC3_WARNING_LEVEL(900,"WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);
     if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
     if ( !m_file.is_open() )
     {
-        HEPMC3_ERROR("WriterAsciiHepMC2: could not open output file: " << filename )
+        HEPMC3_ERROR_LEVEL(100,"WriterAsciiHepMC2: could not open output file: " << filename )
     }
     else
     {
@@ -43,7 +43,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, std::shared_pt
 WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
     : m_stream(&stream)
 {
-    HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
+    HEPMC3_WARNING_LEVEL(900,"WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);
     if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
     const std::string header = "HepMC::Version " + version() + "\nHepMC::IO_GenEvent-START_EVENT_LISTING\n";
@@ -55,7 +55,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::shared_ptr<std::ostream> s_stream, std
     : m_shared_stream(s_stream),
       m_stream(s_stream.get())
 {
-    HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
+    HEPMC3_WARNING_LEVEL(900,"WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);
     if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
     const std::string header = "HepMC::Version " + version() + "\nHepMC::IO_GenEvent-START_EVENT_LISTING\n";
@@ -210,7 +210,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         bool status = pi->to_string(st);
         if ( !status )
         {
-            HEPMC3_WARNING("WriterAsciiHepMC2::write_event: problem serializing GenPdfInfo attribute")
+            HEPMC3_WARNING_LEVEL(300,"WriterAsciiHepMC2::write_event: problem serializing GenPdfInfo attribute")
         } else {
             m_cursor += sprintf(m_cursor, "F ");
             flush();
@@ -254,13 +254,13 @@ void WriterAsciiHepMC2::allocate_buffer()
         } catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
-            HEPMC3_WARNING("WriterAsciiHepMC2::allocate_buffer:" << e.what() << " buffer size too large. Dividing by 2. New size: " << m_buffer_size)
+            HEPMC3_WARNING_LEVEL(200,"WriterAsciiHepMC2::allocate_buffer:" << e.what() << " buffer size too large. Dividing by 2. New size: " << m_buffer_size)
         }
     }
 
     if ( !m_buffer )
     {
-        HEPMC3_ERROR("WriterAsciiHepMC2::allocate_buffer: could not allocate buffer!")
+        HEPMC3_ERROR_LEVEL(200,"WriterAsciiHepMC2::allocate_buffer: could not allocate buffer!")
         return;
     }
 
