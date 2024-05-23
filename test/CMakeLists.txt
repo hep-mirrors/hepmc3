@@ -112,7 +112,7 @@ file(COPY ${INPUTFILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 set( HepMC_tests
         testBoost
         testFourVector
-        testFourSafeVector
+        testFourVectorSafe
         testMass
         testPrint
         testPrintBug
