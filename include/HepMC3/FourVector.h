@@ -175,17 +175,44 @@ public:
     /// Polar angle w.r.t. z direction
     double theta() const {  return std::atan2( perp(), z() ); }
     /// Pseudorapidity
-    double eta() const  { return ( p3mod() == 0.0 ) ? 0.0: (0.5*std::log( (p3mod() + pz()) / (p3mod() - pz()) )); }
+    double eta() const  { return ( p3mod() == 0.0 ) ? 0.0 : atanh( pz() / p3mod() ); }
+    /// Pseudorapidity, safe
+    /// Please note that here the equality for float should be used as e.g. std::atanh(1.0-std::numeric_limits<double>::epsilon()) is calculable and is not a large number.
+    double safe_eta(double maxvalue = std::numeric_limits<double>::max()) const  {
+      if ( p3mod() == 0.0 ) return  0.0;
+      double temp = pz() / p3mod();
+      if ( temp == 1.0 ) return maxvalue;
+      if ( temp == -1.0 ) return -maxvalue;
+      return atanh( temp );
+    }
     /// Rapidity
-    double rap() const {   return ( e() == 0.0 ) ? 0.0: (0.5*std::log( (e() + pz()) / (e() - pz()) )); }
+    double rap() const {   return ( e() == 0.0 ) ? 0.0 : atanh( pz() / e() ); }
+    /// Rapidity, safe
+    double safe_rap(double maxvalue = std::numeric_limits<double>::max()) const  {
+      if ( e() == 0.0 ) return  0.0;
+      double temp = pz() / e();
+      if ( temp == 1.0 ) return maxvalue;
+      if ( temp == -1.0 ) return -maxvalue;
+      return atanh( temp );
+    }
     /// Absolute pseudorapidity
     double abs_eta() const { return std::abs( eta() ); }
     /// Absolute rapidity
     double abs_rap() const { return std::abs( rap() ); }
+    /// Absolute pseudorapidity, safe
+    double safe_abs_eta(double maxvalue = std::numeric_limits<double>::max()) const { return std::abs( safe_eta(maxvalue) ); }
+    /// Absolute rapidity, safe
+    double safe_abs_rap(double maxvalue = std::numeric_limits<double>::max()) const { return std::abs( safe_rap(maxvalue) ); }
+
+
 
     /// Same as eta()
     /// @deprecated Prefer 'only one way to do it', and we don't have equivalent long names for e.g. pid, phi or eta
     double pseudoRapidity() const { return eta(); }
+    /// Same as eta(), safe
+    /// @deprecated Prefer 'only one way to do it', and we don't have equivalent long names for e.g. pid, phi or eta
+    double safe_pseudoRapidity(double maxvalue = std::numeric_limits<double>::max()) const { return safe_eta(maxvalue); }
+
 
     /// @}
 
