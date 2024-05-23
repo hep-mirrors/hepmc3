@@ -186,11 +186,11 @@ public:
       return atanh( temp );
     }
     /// Rapidity
-    double rap() const {   return ( e() == 0.0 ) ? 0.0 : atanh( pz() / e() ); }
+    double rap() const {   return ( e() == 0.0 ) ? 0.0 : atanh( pz() / std::abs(e() ) ); }
     /// Rapidity, safe
     double safe_rap(double maxvalue = std::numeric_limits<double>::max()) const  {
       if ( e() == 0.0 ) return  0.0;
-      double temp = pz() / e();
+      double temp = pz() / std::abs(e());
       if ( temp == 1.0 ) return maxvalue;
       if ( temp == -1.0 ) return -maxvalue;
       return atanh( temp );

@@ -1,4 +1,6 @@
   --------------------------  HepMC3.3.0-pre ----------------------
+2024-05-23 Andy Buckley
+         * Add "safe" functions to the FourVector. Redefine the rapidity as log(pz/|e|) to prevent problems with negative energy.
 2024-04-20 Andy Buckley
          * Suppress cross-section/weight count-mismatch warning if only one cross-section.
 2024-04-08 Mattias Ellert
