@@ -111,7 +111,7 @@ void Print::listing(std::ostream& os, const GenRunInfo &ri, unsigned short preci
     for (const auto& att: ri.attributes()) {
         std::string st;
         if ( !att.second->to_string(st) ) {
-            HEPMC3_WARNING("Print::listing: problem serializing attribute: " << att.first)
+            HEPMC3_WARNING_LEVEL(300,"Print::listing: problem serializing attribute: " << att.first)
         }
         else { os << att.first << " " << st;}
         os << std::endl;
@@ -224,7 +224,8 @@ void Print::line(std::ostream& os, const GenRunInfo::ToolInfo& t) {
     os << "GenRunInfo::ToolInfo " << t.name<< " " << t.version << " " << t.description;
 }
 
-void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
+template <class T>
+void line_v(std::ostream& os, T v, bool attributes) {
     if (!v) { os << "GenVertex: Empty" << std::endl; return;}
     os << "GenVertex:  " << v->id() << " stat: ";
     os.width(3);
@@ -247,6 +248,10 @@ void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) {
         }
     }
 }
+void Print::line(std::ostream& os, ConstGenVertexPtr v, bool attributes) { line_v(os,v,attributes); }
+void Print::line(std::ostream& os, GenVertexPtr v, bool attributes) { line_v(os,v,attributes); }
+
+
 
 void Print::line(std::ostream& os, const FourVector& p) {
     os << "FourVector: ";
@@ -267,7 +272,8 @@ void Print::line(std::ostream& os, const FourVector& p) {
     os.precision(prec);
 }
 
-void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
+template <class T>
+void line_p(std::ostream& os, T p, bool attributes) {
     if (!p) { os << "GenParticle: Empty" << std::endl; return;}
     os << "GenParticle: ";
     os.width(3);
@@ -314,6 +320,9 @@ void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) {
         }
     }
 }
+
+void Print::line(std::ostream& os, ConstGenParticlePtr p, bool attributes) { line_p(os,p,attributes); }
+void Print::line(std::ostream& os, GenParticlePtr p, bool attributes) { line_p(os,p,attributes); }
 
 void Print::line(std::ostream& os, std::shared_ptr<GenCrossSection> &cs) {
     if (!cs) {os << " GenCrossSection: Empty"; return;}

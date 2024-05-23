@@ -38,7 +38,7 @@ Readerprotobuf::Readerprotobuf(const std::string &filename) {
 
   int fd = open(filename.c_str(), O_RDONLY);
   if (fd < 0) {
-    HEPMC3_ERROR("Readerprotobuf: Problem opening file: " << filename)
+    HEPMC3_ERROR_LEVEL(100,"Readerprotobuf: Problem opening file: " << filename)
     perror(filename.c_str());
     return;
   }
@@ -49,9 +49,7 @@ Readerprotobuf::Readerprotobuf(const std::string &filename) {
   m_inf_zcstream->SetCloseOnDelete(true);
 
   if (m_inf_zcstream->GetErrno()) {
-    HEPMC3_ERROR("Readerprotobuf: Problem opening file: "
-                 << filename << "\n"
-                 << strerror(m_inf_zcstream->GetErrno()));
+    HEPMC3_ERROR_LEVEL(100,"Readerprotobuf: Problem opening file: "<< filename << "\n"<< strerror(m_inf_zcstream->GetErrno()))
     m_inf_zcstream.reset();
     return;
   }
@@ -64,8 +62,7 @@ Readerprotobuf::Readerprotobuf(const std::string &filename) {
 Readerprotobuf::Readerprotobuf(std::istream &stream) : m_in_stream(&stream) {
 
   if (!stream.good()) {
-    HEPMC3_ERROR(
-        "Cannot initialize Readerprotobuf on istream which is not good().");
+    HEPMC3_ERROR_LEVEL(100,"Cannot initialize Readerprotobuf on istream which is not good().")
     return;
   }
 
@@ -90,10 +87,7 @@ bool Readerprotobuf::read_file_start() {
   // Check the first four bytes it should read "hmpb"
   if (strncmp(static_cast<const char *>(MagicIntro),
               ProtobufMagicHeader.c_str(), ProtobufMagicHeaderBytes) != 0) {
-    HEPMC3_ERROR("Failed to find expected Magic first "
-                 << ProtobufMagicHeaderBytes
-                 << " bytes, is this really "
-                    "a hmpb file?");
+    HEPMC3_ERROR_LEVEL(100,"Failed to find expected Magic first "<< ProtobufMagicHeaderBytes<< " bytes, is this really a hmpb file?")
     return false;
   }
 
@@ -101,16 +95,12 @@ bool Readerprotobuf::read_file_start() {
   m_in_zcstream->BackUp(nbytes - ProtobufMagicHeaderBytes);
 
   if (!read_Header()) {
-    HEPMC3_ERROR("Readerprotobuf: Problem parsing start of file, expected to "
-                 "find Header, but instead found message type: "
-                 << m_md_pb.message_type());
+    HEPMC3_ERROR_LEVEL(100,"Readerprotobuf: Problem parsing start of file, expected to find Header, but instead found message type: "<< m_md_pb.message_type())
     return false;
   }
 
   if (!read_GenRunInfo()) {
-    HEPMC3_ERROR("Readerprotobuf: Problem parsing start of file, expected to "
-                 "find RunInfo, but instead found message type: "
-                 << m_md_pb.message_type());
+    HEPMC3_ERROR_LEVEL(100,"Readerprotobuf: Problem parsing start of file, expected to find RunInfo, but instead found message type: "<< m_md_pb.message_type())
     return false;
   }
 

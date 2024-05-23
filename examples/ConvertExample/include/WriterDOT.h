@@ -7,7 +7,7 @@
 #define HEPMC3_WRITERDOT_H
 ///
 /// @file  WriterDOT.h
-/// @brief Definition of class \b WriterDOT
+/// @brief Definition of class \b WriterDOT converter of GenEvent into .dot format
 ///
 /// @class HepMC3::WriterDOT
 /// @brief GenEvent I/O output to dot files that should be processed by graphviz or other software

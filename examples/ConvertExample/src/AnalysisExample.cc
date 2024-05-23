@@ -3,6 +3,10 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+///
+/// @file  AnalysisExample.cc
+/// @brief Implementation of \b AnalysisExample class with toy physics analysis
+///
 #include "AnalysisExample.h"
 #include <limits>
 namespace HepMC3
@@ -14,7 +18,7 @@ AnalysisExample::AnalysisExample(const std::string &filename,std::shared_ptr<Gen
     m_stream(&m_file)
 {
     if ( !m_file.is_open() ) {
-        HEPMC3_ERROR( "AnalysisExample: could not open output file: "<<filename )
+        HEPMC3_ERROR_LEVEL(100,"AnalysisExample: could not open output file: "<<filename )
     }
     m_sum_of_weights=0;
     m_sum_of_weights2=0;

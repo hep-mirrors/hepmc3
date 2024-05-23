@@ -37,10 +37,22 @@ public:
     /// set error messages printing flag
     static void set_print_errors(const bool flag);
 
+    /// Get error messages printing level
+    static int errors_level();
+    /// set error messages printing level
+    static void set_errors_level(const int flag);
+
+
     /// Get warning messages printing flag
     static bool print_warnings();
     /// Set warning messages printing flag
     static void set_print_warnings(const bool flag);
+
+    /// Get warning messages printing level
+    static int warnings_level();
+    /// Set warning messages printing level
+    static void set_warnings_level(const int flag);
+
 
     /// Get debug level
     static int  debug_level();
@@ -62,6 +74,8 @@ public:
 
 private:
 
+    static int m_errors_level;   //!< Level for printing error messages
+    static int m_warnings_level;   //!< Level for printing warnings messages
     static bool m_is_printing_errors;   //!< Flag for printing error messages
     static bool m_is_printing_warnings; //!< Flag for printing warning messages
     static int  m_debug_level;          //!< Level of debug messages printed out

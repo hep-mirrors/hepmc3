@@ -7,7 +7,7 @@
 #define HEPMC3_ANALYSISEXAMPLE_H
 ///
 /// @file  AnalysisExample.h
-/// @brief Definition of class \b AnalysisExample
+/// @brief Definition of class \b AnalysisExample, which implements a toy physics analysis
 ///
 /// @class HepMC3::AnalysisExample
 /// @brief Example analysis. Produces a rapidity distribution of final state particles.

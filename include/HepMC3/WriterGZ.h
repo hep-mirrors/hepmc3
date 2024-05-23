@@ -68,6 +68,9 @@ public:
     /// Get the act writer's GenRunInfo object.
     std::shared_ptr<GenRunInfo> run_info() const override { return m_writer?m_writer->run_info():nullptr; }
 
+    /// Return writer
+    std::shared_ptr<Writer> writer() { return m_writer;}
+
 private:
     std::shared_ptr< std::ostream > m_zstr = nullptr;  ///< Stream to write
     std::shared_ptr<Writer> m_writer = nullptr; //!< actual writter

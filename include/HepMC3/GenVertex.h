@@ -131,21 +131,6 @@ public:
     /// @brief Get attribute of any type as string
     std::string attribute_as_string(const std::string& name) const;
 
-    /// @name Deprecated functionality
-    /// @{
-
-
-    /// Add incoming particle by raw pointer
-    /// @deprecated Use GenVertex::add_particle_in( const GenParticlePtr &p ) instead
-    void add_particle_in ( GenParticle *p ) { add_particle_in( GenParticlePtr(p) ); }
-
-    /// Add outgoing particle by raw pointer
-    /// @deprecated Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead
-    void add_particle_out( GenParticle *p ) { add_particle_out( GenParticlePtr(p) ); }
-
-
-    /// @}
-
 
 private:
 

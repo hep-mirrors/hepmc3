@@ -39,7 +39,7 @@ bool WriterRootTree::init(std::shared_ptr<GenRunInfo> run )
 {
     if ( !m_file->IsOpen() )
     {
-        HEPMC3_ERROR("WriterRootTree: problem opening file: " << m_file->GetName())
+        HEPMC3_ERROR_LEVEL(100,"WriterRootTree: problem opening file: " << m_file->GetName())
         return false;
     }
     m_event_data = new GenEventData();

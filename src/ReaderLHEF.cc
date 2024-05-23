@@ -100,11 +100,11 @@ void ReaderLHEF::init()
     weightnames.reserve(N);
     for ( size_t i = 0; i < N; ++i ) weightnames.emplace_back(m_hepr->heprup.weightNameHepMC(i));
     if (nweights == 0) {
-        HEPMC3_WARNING("ReaderLHEF::init: no weights in the LHEF file.")
+        HEPMC3_WARNING_LEVEL(600,"ReaderLHEF::init: no weights in the LHEF file.")
         nweights=1;
     }
     if (weightnames.empty()) {
-        HEPMC3_WARNING("ReaderLHEF::init: empty weightinfo in the LHEF file.")
+        HEPMC3_WARNING_LEVEL(600,"ReaderLHEF::init: empty weightinfo in the LHEF file.")
         for ( size_t i = weightnames.size(); i < nweights; ++i ) weightnames.emplace_back(std::to_string(i));
     }
     run_info()->set_weight_names(weightnames);

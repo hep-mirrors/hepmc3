@@ -249,8 +249,9 @@ void GenEvent::remove_vertex(GenVertexPtr v) {
     v->m_event = nullptr;
     v->m_id    = 0;
 }
-/// @todo This looks dangerously similar to the recusive event traversel that we forbade in the
-///       Core library due to wories about generator dependence
+/* This looks dangerously similar to the recusive event traversel that we forbade in the
+       Core library due to wories about generator dependence
+*/
 static bool visit_children(std::map<ConstGenVertexPtr, int>  &a, const ConstGenVertexPtr& v)
 {
     for (const ConstGenParticlePtr& p: v->particles_out()) {
@@ -375,7 +376,7 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
                 ++((*next++)->m_id);
             }
         } else {
-            HEPMC3_WARNING("GenEvent::add_tree Suspicious looking rootvertex found. Will try to cope.")
+            HEPMC3_WARNING_LEVEL(700,"GenEvent::add_tree Suspicious looking rootvertex found. Will try to cope.")
         }
     }
 
@@ -515,7 +516,7 @@ bool GenEvent::reflect(const int axis)
 {
     if ( axis > 3 || axis < 0 )
     {
-        HEPMC3_WARNING("GenEvent::reflect: wrong axis")
+        HEPMC3_WARNING_LEVEL(400,"GenEvent::reflect: wrong axis")
         return false;
     }
     switch (axis)
@@ -548,17 +549,17 @@ bool GenEvent::boost(const FourVector&  delta)
     double deltalength2 = delta.length2();
     if (deltalength2 > 1.0)
     {
-        HEPMC3_WARNING("GenEvent::boost: wrong large boost vector. Will leave event as is.")
+        HEPMC3_WARNING_LEVEL(400,"GenEvent::boost: wrong large boost vector. Will leave event as is.")
         return false;
     }
     if (std::abs(deltalength2-1.0) < std::numeric_limits<double>::epsilon())
     {
-        HEPMC3_WARNING("GenEvent::boost: too large gamma. Will leave event as is.")
+        HEPMC3_WARNING_LEVEL(400,"GenEvent::boost: too large gamma. Will leave event as is.")
         return false;
     }
     if (std::abs(deltalength2) < std::numeric_limits<double>::epsilon())
     {
-        HEPMC3_WARNING("GenEvent::boost: wrong small boost vector. Will leave event as is.")
+        HEPMC3_WARNING_LEVEL(400,"GenEvent::boost: wrong small boost vector. Will leave event as is.")
         return true;
     }
     long double deltaX = delta.x();
@@ -666,7 +667,7 @@ void GenEvent::write_data(GenEventData& data) const {
             bool status = vt2.second->to_string(st);
 
             if ( !status ) {
-                HEPMC3_WARNING("GenEvent::write_data: problem serializing attribute: " << vt1.first)
+                HEPMC3_WARNING_LEVEL(300,"GenEvent::write_data: problem serializing attribute: " << vt1.first)
             }
             else {
                 data.attribute_id.emplace_back(vt2.first);
@@ -714,7 +715,10 @@ void GenEvent::read_data(const GenEventData &data) {
         (+-)  --  particle has end vertex
         (-+)  --  particle  has production vertex
         */
-        if ((id1 < 0 && id2 <0) || (id1 > 0 && id2 > 0))   { HEPMC3_WARNING("GenEvent::read_data: wrong link: " << id1 << " " << id2); continue;}
+        if ((id1 < 0 && id2 <0) || (id1 > 0 && id2 > 0))   {
+          HEPMC3_WARNING_LEVEL(600,"GenEvent::read_data: wrong link: " << id1 << " " << id2); 
+          continue;
+        }
 
         if ( id1 > 0 ) { m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] ); continue; }
         if ( id1 < 0 ) { m_vertices[ (-id1)-1 ]->add_particle_out( m_particles[ id2-1 ] );   continue; }
@@ -754,12 +758,12 @@ void GenEvent::set_beam_particles(GenParticlePtr p1, GenParticlePtr p2) {
 void GenEvent::add_beam_particle(GenParticlePtr p1) {
     if (!p1)
     {
-        HEPMC3_WARNING("Attempting to add an empty particle as beam particle. Ignored.")
+        HEPMC3_WARNING_LEVEL(700,"Attempting to add an empty particle as beam particle. Ignored.")
         return;
     }
     if (p1->in_event() && p1->parent_event() != this)
     {
-        HEPMC3_WARNING("Attempting to add particle from another event. Ignored.")
+        HEPMC3_WARNING_LEVEL(700,"Attempting to add particle from another event. Ignored.")
         return;
     }
     if (p1->production_vertex())  p1->production_vertex()->remove_particle_out(p1);

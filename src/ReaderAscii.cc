@@ -25,7 +25,7 @@ ReaderAscii::ReaderAscii(const std::string &filename)
     : m_file(filename), m_isstream(false)
 {
     if ( !m_file.is_open() ) {
-        HEPMC3_ERROR("ReaderAscii: could not open input file: " << filename)
+        HEPMC3_ERROR_LEVEL(100,"ReaderAscii: could not open input file: " << filename)
     }
     set_run_info(std::make_shared<GenRunInfo>());
 }
@@ -34,7 +34,7 @@ ReaderAscii::ReaderAscii(std::istream & stream)
     : m_stream(&stream), m_isstream(true)
 {
     if ( !m_stream->good() ) {
-        HEPMC3_ERROR("ReaderAscii: could not open input stream ")
+        HEPMC3_ERROR_LEVEL(100,"ReaderAscii: could not open input stream ")
     }
     set_run_info(std::make_shared<GenRunInfo>());
 }
@@ -44,7 +44,7 @@ ReaderAscii::ReaderAscii(std::shared_ptr<std::istream> s_stream)
     : m_shared_stream(s_stream), m_stream(s_stream.get()), m_isstream(true)
 {
     if ( !m_stream->good() ) {
-        HEPMC3_ERROR("ReaderAscii: could not open input stream ")
+        HEPMC3_ERROR_LEVEL(100,"ReaderAscii: could not open input stream ")
     }
     set_run_info(std::make_shared<GenRunInfo>());
 }
@@ -127,7 +127,7 @@ printf("XX5->\n");
         if ( strncmp(buf.data(), "HepMC", 5) == 0 ) {
             if ( strncmp(buf.data(), "HepMC::Version", 14) != 0 && strncmp(buf.data(), "HepMC::Asciiv3", 14) != 0 )
             {
-                HEPMC3_WARNING("ReaderAscii: found unsupported expression in header. Will close the input.")
+                HEPMC3_WARNING_LEVEL(500,"ReaderAscii: found unsupported expression in header. Will close the input.")
                 std::cout << buf.data() << std::endl;
                 m_isstream ? m_stream->clear(std::ios::eofbit) : m_file.clear(std::ios::eofbit);
             }
@@ -202,7 +202,7 @@ std::cout <<"XXX:" <<buf.data() << std::endl;
             }
             break;
         default:
-            HEPMC3_WARNING("ReaderAscii: skipping unrecognised prefix: " << buf[0])
+            HEPMC3_WARNING_LEVEL(500,"ReaderAscii: skipping unrecognised prefix: " << buf[0])
             is_parsing_successful = true;
             break;
         }
@@ -231,7 +231,9 @@ std::cout <<"XXX:" <<buf.data() << std::endl;
     auto fir = m_io_implicit_ids.rbegin();
     for (const auto& iofirst: m_io_explicit_ids) {
         for (;currid < iofirst; ++currid, ++fir) {
-            if (fir == m_io_implicit_ids.rend()) { HEPMC3_ERROR("ReaderAscii: not enough implicit vertices") }
+            if (fir == m_io_implicit_ids.rend()) {
+              HEPMC3_ERROR_LEVEL(600,"ReaderAscii: not enough implicit vertices") 
+            }
             /// Found a gap in ids, insert an implicit vertex into a list of gaps.
             m_io_explicit[currid] = std::move(m_io_implicit[*fir]);
         }
@@ -246,30 +248,30 @@ std::cout <<"XXX:" <<buf.data() << std::endl;
 
     // Check if all particles and vertices were parsed
     if ((int)evt.particles().size() > vertices_and_particles.second) {
-        HEPMC3_ERROR("ReaderAscii: too many particles were parsed")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAscii: too many particles were parsed")
         printf("%zu  vs  %i expected\n", evt.particles().size(), vertices_and_particles.second);
         is_parsing_successful = false;
     }
     if ((int)evt.particles().size() < vertices_and_particles.second) {
-        HEPMC3_ERROR("ReaderAscii: too few  particles were parsed")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAscii: too few  particles were parsed")
         printf("%zu  vs  %i expected\n", evt.particles().size(), vertices_and_particles.second);
         is_parsing_successful = false;
     }
 
     if ((int)evt.vertices().size()  > vertices_and_particles.first) {
-        HEPMC3_ERROR("ReaderAscii: too many vertices were parsed")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAscii: too many vertices were parsed")
         printf("%zu  vs  %i expected\n", evt.vertices().size(), vertices_and_particles.first);
         is_parsing_successful =  false;
     }
 
     if ((int)evt.vertices().size()  < vertices_and_particles.first) {
-        HEPMC3_ERROR("ReaderAscii: too few vertices were parsed")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAscii: too few vertices were parsed")
         printf("%zu  vs  %i expected\n", evt.vertices().size(), vertices_and_particles.first);
         is_parsing_successful =  false;
     }
     // Check if there were HEPMC3_ERRORs during parsing
     if ( !is_parsing_successful ) {
-        HEPMC3_ERROR("ReaderAscii: event parsing failed. Returning empty event")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAscii: event parsing failed. Returning empty event")
         HEPMC3_DEBUG(1, "Parsing failed at line:" << std::endl << buf.data())
 
         evt.clear();
@@ -438,7 +440,7 @@ bool ReaderAscii::parse_particle_information(const char *buf) {
 
     int id = atoi(cursor);
     if ( id < 1 || id > static_cast<int>(m_data.particles.size()) ) {
-        HEPMC3_ERROR("ReaderAscii: particle ID is out of expected range.")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAscii: particle ID is out of expected range.")
         return false;
     }
 
@@ -447,7 +449,7 @@ bool ReaderAscii::parse_particle_information(const char *buf) {
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;
     mother_id = atoi(cursor);
     if ( mother_id < -static_cast<int>(m_data.vertices.size()) || mother_id > static_cast<int>(m_data.particles.size()) ) {
-        HEPMC3_ERROR("ReaderAscii: ID of particle mother is out of expected range.")
+        HEPMC3_ERROR_LEVEL(600,"ReaderAscii: ID of particle mother is out of expected range.")
         return false;
     }
 
