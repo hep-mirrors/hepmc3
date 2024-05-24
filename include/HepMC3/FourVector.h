@@ -191,7 +191,7 @@ public:
     double safe_rap(double maxvalue = std::numeric_limits<double>::max()) const  {
       if ( e() == 0.0 ) return  0.0;
       double temp = pz() / std::abs(e());
-      if ( temp => 1.0 ) return maxvalue;
+      if ( temp >= 1.0 ) return maxvalue;
       if ( temp <= -1.0 ) return -maxvalue;
       return atanh( temp );
     }
