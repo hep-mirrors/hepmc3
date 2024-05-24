@@ -6,7 +6,7 @@
  * @file LHEF.h 
  * @brief This is the declaration of the Les Houches Event File classes,
  * implementing a simple C++ parser/writer for Les Houches Event files.
- * Copyright (C) 2009-2023 Leif Lonnblad
+ * Copyright (C) 2009-2024 Leif Lonnblad
  *
  * The code is licenced under LGPLv3+, see COPYING for details.
  * Please respect the MCnet academic guidelines, see GUIDELINES for details.
@@ -49,7 +49,7 @@ struct OAttr {
   /**
    * Constructor
    */
-  OAttr(std::string n, const T & v): name(n), val(v) {}
+  OAttr(const std::string & n, const T & v): name(n), val(v) {}
 
   /**
    * The name of the attribute being printed.
@@ -139,7 +139,7 @@ struct XMLTag {
    * Find an attribute named \a n and set the double variable \a v to
    * the corresponding value. @return false if no attribute was found.
    */
-  bool getattr(std::string n, double & v) const {
+  bool getattr(const std::string & n, double & v) const {
     AttributeMap::const_iterator it = attr.find(n);
     if ( it == attr.end() ) return false;
     v = std::atof(it->second.c_str());
@@ -151,7 +151,7 @@ struct XMLTag {
    * true if the corresponding value is "yes". @return false if no
    * attribute was found.
    */
-  bool getattr(std::string n, bool & v) const {
+  bool getattr(const std::string & n, bool & v) const {
     AttributeMap::const_iterator it = attr.find(n);
     if ( it == attr.end() ) return false;
     if ( it->second == "yes" ) v = true;
@@ -162,7 +162,7 @@ struct XMLTag {
    * Find an attribute named \a n and set the long variable \a v to
    * the corresponding value. @return false if no attribute was found.
    */
-  bool getattr(std::string n, long & v) const {
+  bool getattr(const std::string & n, long & v) const {
     AttributeMap::const_iterator it = attr.find(n);
     if ( it == attr.end() ) return false;
     v = std::atoi(it->second.c_str());
@@ -173,7 +173,7 @@ struct XMLTag {
    * Find an attribute named \a n and set the long variable \a v to
    * the corresponding value. @return false if no attribute was found.
    */
-  bool getattr(std::string n, int & v) const {
+  bool getattr(const std::string & n, int & v) const {
     AttributeMap::const_iterator it = attr.find(n);
     if ( it == attr.end() ) return false;
     v = int(std::atoi(it->second.c_str()));
@@ -184,7 +184,7 @@ struct XMLTag {
    * Find an attribute named \a n and set the string variable \a v to
    * the corresponding value. @return false if no attribute was found.
    */
-  bool getattr(std::string n, std::string & v) const {
+  bool getattr(const std::string &n, std::string & v) const {
     AttributeMap::const_iterator it = attr.find(n);
     if ( it == attr.end() ) return false;
     v = it->second;
@@ -374,7 +374,8 @@ struct TagBase {
   /**
    * Main constructor stores the attributes and contents of a tag.
    */
-  TagBase(const AttributeMap & attr, std::string conts = std::string()): attributes(attr), contents(conts) {}
+  TagBase(const AttributeMap & attr, const std::string &conts = std::string())
+    : attributes(attr), contents(conts) {}
 
   /**
    * Find an attribute named \a n and set the double variable \a v to
@@ -382,7 +383,7 @@ struct TagBase {
    * the list if found and \a erase is true. @return false if no
    * attribute was found.
    */
-  bool getattr(std::string n, double & v, bool erase = true) {
+  bool getattr(const std::string & n, double & v, bool erase = true) {
     AttributeMap::iterator it = attributes.find(n);
     if ( it == attributes.end() ) return false;
     v = std::atof(it->second.c_str());
@@ -396,7 +397,7 @@ struct TagBase {
    * attribute from the list if found and \a erase is true. @return
    * false if no attribute was found.
    */
-  bool getattr(std::string n, bool & v, bool erase = true) {
+  bool getattr(const std::string & n, bool & v, bool erase = true) {
     AttributeMap::iterator it = attributes.find(n);
     if ( it == attributes.end() ) return false;
     if ( it->second == "yes" ) v = true;
@@ -410,7 +411,7 @@ struct TagBase {
    * the list if found and \a erase is true. @return false if no
    * attribute was found.
    */
-  bool getattr(std::string n, long & v, bool erase = true) {
+  bool getattr(const std::string & n, long & v, bool erase = true) {
     AttributeMap::iterator it = attributes.find(n);
     if ( it == attributes.end() ) return false;
     v = std::atoi(it->second.c_str());
@@ -424,7 +425,7 @@ struct TagBase {
    * the list if found and \a erase is true. @return false if no
    * attribute was found.
    */
-  bool getattr(std::string n, int & v, bool erase = true) {
+  bool getattr(const std::string & n, int & v, bool erase = true) {
     AttributeMap::iterator it = attributes.find(n);
     if ( it == attributes.end() ) return false;
     v = int(std::atoi(it->second.c_str()));
@@ -438,7 +439,7 @@ struct TagBase {
    * the list if found and \a erase is true. @return false if no
    * attribute was found.
    */
-  bool getattr(std::string n, std::string & v, bool erase = true) {
+  bool getattr(const std::string & n, std::string & v, bool erase = true) {
     AttributeMap::iterator it = attributes.find(n);
     if ( it == attributes.end() ) return false;
     v = it->second;
@@ -459,7 +460,7 @@ struct TagBase {
    * Print out end of tag marker. Print contents if not empty else
    * print simple close tag.
    */
-  void closetag(std::ostream & file, std::string tag) const {
+  void closetag(std::ostream & file, const std::string & tag) const {
     if ( contents.empty() )
       file << "/>\n";
     else if ( contents.find('\n') != std::string::npos )
@@ -1912,7 +1913,7 @@ public:
   /**
    * @return the index of the weight with the given \a name
    */
-  int weightIndex(std::string name) const {
+  int weightIndex(const std::string & name) const {
     std::map<std::string, int>::const_iterator it = weightmap.find(name);
     if ( it != weightmap.end() ) return it->second;
     return 0;
@@ -2460,7 +2461,7 @@ public:
    * Return the total weight for this event (including all sub
    * evenets) for the given weight name.
    */
-  double totalWeight(std::string name) const {
+  double totalWeight(const std::string & name) const {
     return totalWeight(heprup->weightIndex(name));
   }
 
@@ -2474,7 +2475,7 @@ public:
   /**
    * Return the weight for the given weight name.
    */
-  double weight(std::string name) const {
+  double weight(const std::string & name) const {
     return weight(heprup->weightIndex(name));
   }
 
@@ -2487,7 +2488,7 @@ public:
   /**
    * Set the weight with the given name.
    */
-  bool setWeight(std::string name, double w) {
+  bool setWeight(const std::string & name, double w) {
     int i = heprup->weightIndex(name);
     if ( i >= int(weights.size()) ) return false;
     setWeight(i, w);
@@ -3158,6 +3159,7 @@ public:
     }
     *file << "</LesHouchesEvents>" << std::endl;
   }
+
   /**
    * Add header lines consisting of XML code with this stream.
    */
@@ -3382,7 +3384,7 @@ private:
 
 }
 
-/* \example LHEFCat.cc This is a main function which simply reads a
+/** \example LHEFCat.cc This is a main function which simply reads a
     Les Houches Event File from the standard input and writes it again
     to the standard output.
     This file can be downloaded from
@@ -3392,7 +3394,7 @@ private:
     to try it on.
 */
 
-/* \mainpage Les Houches Event File
+/**\mainpage Les Houches Event File
 
 Here are some example classes for reading and writing Les Houches
 Event Files according to the
