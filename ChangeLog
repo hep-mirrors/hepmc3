@@ -1,4 +1,6 @@
   --------------------------  HepMC3.3.0-pre ----------------------
+2024-05-26 Andy Buckley
+         * Explicitly return for inf-generating eta / massless rapidity along pz, to avoid FPE triggering.
 2024-04-20 Andy Buckley
          * Suppress cross-section/weight count-mismatch warning if only one cross-section.
 2024-04-08 Mattias Ellert
