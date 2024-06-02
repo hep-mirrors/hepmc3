@@ -5,7 +5,7 @@
 //
 /**
  *  @file Pythia6ToHepMC3.cc
- *  @brief A simple C-like interface to HepMC3 aimed to be used with Pythia6 
+ *  @brief A simple C-like interface to HepMC3 aimed to be used with Pythia6
  *
  */
 #ifndef PYTHIA6_PYTHIA6TOHEPMC3_CC

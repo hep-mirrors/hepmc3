@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3 LANGUAGES CXX)
-set(PROJECT_VERSION 3.02.08)
-SET(HEPMC3_VERSION 3.02.08)
+set(PROJECT_VERSION 3.03.00)
+SET(HEPMC3_VERSION 3.03.00)
 SET(HEPMC3_VERSION_MAJOR  3)
-SET(HEPMC3_VERSION_MINOR  2)
-SET(HEPMC3_VERSION_PATCH  8)
+SET(HEPMC3_VERSION_MINOR  3)
+SET(HEPMC3_VERSION_PATCH  0)
 
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 #This module respects HFS, e.g. defines lib or lib64 when it is needed.
@@ -437,7 +437,6 @@ if (ASTYLE)
     test/*cc
     test/*h
     interfaces/*/include/*.h
-    interfaces/*/include/*/*.h
     interfaces/*/include/*/*.cc
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
   )
@@ -479,8 +478,8 @@ set(CPACK_PACKAGE_VENDOR "HepMC3 Developers")
 #Should the version be defined above?
 set(CPACK_PACKAGE_VERSION 3)
 set(CPACK_PACKAGE_VERSION_MAJOR 3)
-set(CPACK_PACKAGE_VERSION_MINOR 2)
-set(CPACK_PACKAGE_VERSION_PATCH 8)
+set(CPACK_PACKAGE_VERSION_MINOR 3)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
 set(CPACK_PACKAGE_RELEASE 0)
 set(CPACK_PACKAGE_FILE_NAME "HepMC3")
 set(CPACK_PACKAGE_DESCRIPTION "Event record library for high energy physics Monte Carlo")

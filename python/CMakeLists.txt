@@ -1,6 +1,6 @@
 #project(pyHepMC3 CXX)
 #Should be fixed
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.5.0)
 if(${CMAKE_VERSION} VERSION_LESS "3.14.00")
 SET_PROPERTY (GLOBAL PROPERTY CMAKE_ROLE "PROJECT")
 endif()
@@ -12,9 +12,9 @@ if (RERUN_BINDER)
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 if (USE_INSTALLED_HEPMC3)
-  set(${PROJECT_NAME}_VERSION 3.2.8)
+  set(${PROJECT_NAME}_VERSION 3.3.0)
   set(THIS_PROJECT_NAME ${PROJECT_NAME})
-  set(THIS_PROJECT_NAME_VERSION 3.2.8)
+  set(THIS_PROJECT_NAME_VERSION 3.3.0)
   option(HEPMC3_ENABLE_TEST "Enable tests" ON)
 
 
