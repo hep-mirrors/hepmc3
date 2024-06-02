@@ -82,17 +82,17 @@ constexpr std::array<Compression, 4> known_compression_types{
 inline std::string to_string(HepMC3::Compression & c) {
     switch (c) {
     case HepMC3::Compression::z:
-        return string("z");
+        return std::string("z");
     case HepMC3::Compression::lzma:
-        return string("lzma");
+        return std::string("lzma");
     case HepMC3::Compression::bz2:
-        return string("bz2");
+        return std::string("bz2");
     case HepMC3::Compression::zstd:
-        return string("zstd");
+        return std::string("zstd");
     default:
         break;
     }
-    return string("plaintext");
+    return std::string("plaintext");
 }
 
 }
