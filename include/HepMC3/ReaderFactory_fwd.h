@@ -45,15 +45,15 @@ const std::string libHepMC3rootIO = "HepMC3rootIO.dll";
     - is it LHEF file
     - is it HEPEVT
 
-    It can also return a reader 
+    It can also return a reader
 */
 class InputInfo {
 public:
-    /// @brief Constructor 
+    /// @brief Constructor
     InputInfo() {};
-    /// @brief Constructor 
+    /// @brief Constructor
     InputInfo(const std::string &filename);
-    /// @brief Classify input 
+    /// @brief Classify input
     void classify();
     std::vector<std::string> m_head;
     bool m_remote = false;
@@ -67,7 +67,7 @@ public:
     bool m_lhef = false;
     bool m_hepevt = false;
     std::shared_ptr<Reader> m_reader = nullptr;
-    /// @brief Get native (built-in) reader 
+    /// @brief Get native (built-in) reader
     template <class T> std::shared_ptr<Reader> native_reader(T& argument);
 };
 
