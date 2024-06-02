@@ -65,7 +65,7 @@ bool ReaderRoot::read_event(GenEvent& evt) {
         size_t geneventdata31 = strncmp(cl, "HepMC3::GenEventData", 20);
         if ( geneventdata31 == 0 || geneventdata30 == 0 ) {
             if (geneventdata30 == 0) {
-              HEPMC3_WARNING_LEVEL(900,"ReaderRoot::read_event: The object was written with HepMC3 version 3.0")
+                HEPMC3_WARNING_LEVEL(900,"ReaderRoot::read_event: The object was written with HepMC3 version 3.0")
             }
             data = reinterpret_cast<GenEventData*>(key->ReadObj());
             break;

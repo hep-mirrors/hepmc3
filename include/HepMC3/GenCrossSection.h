@@ -64,7 +64,7 @@ public:
     /// @{
     /** @brief Set all fields
         @deprecated Use set_cross_section(const std::vector<double>& xs, const std::vector<double>& xs_err instead
-       
+
         @param xs Cross section
         @param xs_err Uncertainty on cross-section
         @param n_acc Number of accepted events
