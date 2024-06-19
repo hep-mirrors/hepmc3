@@ -266,7 +266,8 @@ class streambuf : public std::basic_streambuf<char>
       }
       farthest_pptr = (std::max)(farthest_pptr, pptr());
       off_type n_written = (off_type)(farthest_pptr - pbase());
-      py::bytes chunk(pbase(), n_written);
+      py::ssize_t py_n_written = (py::ssize_t)n_written;
+      py::bytes chunk(pbase(), py_n_written);
       py_write(chunk);
       if (!traits_type::eq_int_type(c, traits_type::eof())) {
         char cs = traits_type::to_char_type(c);
