@@ -5,7 +5,12 @@
 ## @configure_input@
 #The line below assures at least some relocation.
 if [ "$(uname)" == "Darwin" ]; then
-PACKAGE_BIN_DIR=$(dirname $(greadlink -f $0))
+    # greadlink is only available through 'brew install coreutils'
+    if [ ! -z "$(command -v greadlink)" ]; then
+        PACKAGE_BIN_DIR=$(dirname $(greadlink -f $0))
+    else
+        PACKAGE_BIN_DIR=$(dirname $(readlink -f $0))
+    fi
 else
 PACKAGE_BIN_DIR=$(dirname $(readlink -f $0))
 fi
