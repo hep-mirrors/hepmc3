@@ -213,9 +213,11 @@ public:
         shift_position_by(delta);
     }
 
-    /// @brief Boost event using x,y,z components of @a delta as velocities
+    /// @brief Boost event using x,y,z components of @a delta as velocity fractions
     bool boost( const FourVector&  delta );
     /// @brief Rotate event using x,y,z components of @a delta as rotation angles
+    ///
+    /// @todo Clarify orders of rotations?
     bool rotate( const FourVector&  delta );
     /// @brief Change sign of @a axis
     bool reflect(const int axis);
