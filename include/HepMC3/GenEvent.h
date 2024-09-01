@@ -86,7 +86,7 @@ public:
 
     /// @name Particle and vertex access
     /// @{
-  
+
     /// @brief Particles size, HepMC2 compatibility
     inline int particles_size() const { return m_particles.size(); }
     /// @brief Particles empty, HepMC2 compatibility

@@ -146,8 +146,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
                 parsed_weights = false;
                 parsed_particles_or_vertices = false;
             }
-            
-            
+
+
             run_info_context   = false;
             break;
         case 'V':
@@ -221,15 +221,15 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         if ( event_context &&  peek == 'T' ) break;
 
     }
-    
+
     /// Insert the implicit vertices in the gaps of explicit vertices:
     /// Find the gaps looping over the explicit vertices
     int currid = -static_cast<int>(m_data.vertices.size());
     auto fir = m_io_implicit_ids.rbegin();
     for (const auto& iofirst: m_io_explicit_ids) {
-        for (;currid < iofirst; ++currid, ++fir) {
+        for (; currid < iofirst; ++currid, ++fir) {
             if (fir == m_io_implicit_ids.rend()) {
-              HEPMC3_ERROR_LEVEL(600,"ReaderAscii: not enough implicit vertices") 
+                HEPMC3_ERROR_LEVEL(600,"ReaderAscii: not enough implicit vertices")
             }
             /// Found a gap in ids, insert an implicit vertex into a list of gaps.
             m_io_explicit[currid] = std::move(m_io_implicit[*fir]);
@@ -238,8 +238,8 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     }
 
     for (const auto& io: m_io_explicit) {
-      for (const auto& i: io.second.first) { m_data.links1.push_back(i); m_data.links2.push_back(io.first); }
-      for (const auto& o: io.second.second) { m_data.links1.push_back(io.first); m_data.links2.push_back(o); }
+        for (const auto& i: io.second.first) { m_data.links1.push_back(i); m_data.links2.push_back(io.first); }
+        for (const auto& o: io.second.second) { m_data.links1.push_back(io.first); m_data.links2.push_back(o); }
     }
     evt.read_data(m_data);
 
@@ -394,8 +394,8 @@ bool ReaderAscii::parse_vertex_information(const char *buf) {
 
         // add incoming particle to the vertex
         if (particle_in > 0) {
-                //If the particle has not been red yet, we store its id to add the particle later.
-                m_io_explicit[id].first.insert(particle_in);
+            //If the particle has not been red yet, we store its id to add the particle later.
+            m_io_explicit[id].first.insert(particle_in);
         }
 
         // check for next particle or end of particle list
@@ -457,8 +457,8 @@ bool ReaderAscii::parse_particle_information(const char *buf) {
         m_io_implicit[mother_id].first.insert(mother_id);
         m_io_implicit[mother_id].second.insert(id);
     } else {
-      m_io_explicit[mother_id].second.insert(id);
-      m_io_explicit_ids.insert(mother_id);
+        m_io_explicit[mother_id].second.insert(id);
+        m_io_explicit_ids.insert(mother_id);
     }
     // pdg id
     if ( !(cursor = strchr(cursor+1, ' ')) ) return false;

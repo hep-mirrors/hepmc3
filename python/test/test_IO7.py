@@ -14,14 +14,20 @@ print(dir(hmrootIO))
 
 def test_IO7():
     try:
-      import uproot
-      import numpy
-      if (int(uproot.__version__.split('.')[2])+int(uproot.__version__.split('.')[1])*100+int(uproot.__version__.split('.')[0])*10000 < 40000):
-        print("uproot version is too old. Exit.\n")
-        return 0
+        import uproot
+        import numpy
+
+        if (
+            int(uproot.__version__.split(".")[2])
+            + int(uproot.__version__.split(".")[1]) * 100
+            + int(uproot.__version__.split(".")[0]) * 10000
+            < 40000
+        ):
+            print("uproot version is too old. Exit.\n")
+            return 0
     except ImportError as e:
-      print("uproot and/or numpy are not installed. Exit.\n")
-      return 0
+        print("uproot and/or numpy are not installed. Exit.\n")
+        return 0
     inputA = hmrootIO.ReaderRootTree("inputIO7.root")
     if inputA.failed():
         sys.exit(1)
@@ -45,7 +51,7 @@ def test_IO7():
         evt.clear()
     inputA.close()
     outputA.close()
-    tocA = time.perf_counter()    
+    tocA = time.perf_counter()
     ticB = time.perf_counter()
     while not inputB.failed():
         evt = hm.GenEvent()
@@ -58,8 +64,10 @@ def test_IO7():
     inputB.close()
     outputB.close()
     tocB = time.perf_counter()
-    assert 0 == COMPARE_ASCII_FILES(python_label() + "ReaderRootTreeinputIO7.hepmc", python_label() + "ReaderuprootTreeinputIO7.hepmc")
-    print("ReaderRootTree: "+str(1000*(tocA-ticA)), "ReaderuprootTree: "+str(1000*(tocB-ticB)))
+    assert 0 == COMPARE_ASCII_FILES(
+        python_label() + "ReaderRootTreeinputIO7.hepmc", python_label() + "ReaderuprootTreeinputIO7.hepmc"
+    )
+    print("ReaderRootTree: " + str(1000 * (tocA - ticA)), "ReaderuprootTree: " + str(1000 * (tocB - ticB)))
     return 0
 
 

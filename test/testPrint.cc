@@ -17,7 +17,7 @@ int main()
     ConstGenVertexPtr const_vertex = std::make_shared<const GenVertex>();
     GenParticlePtr particle = std::make_shared<GenParticle>(FourVector(1,2,3,4),1,2);
     ConstGenParticlePtr const_particle = std::make_shared<const GenParticle>(FourVector(1,2,3,4),1,2);
-    
+
     std::cout << vertex << std::endl;
     std::cout << const_vertex << std::endl;
 

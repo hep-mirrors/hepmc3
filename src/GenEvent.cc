@@ -484,7 +484,7 @@ bool GenEvent::rotate(const FourVector&  delta)
     {
         const FourVector& pos = v->position();
         if (pos.is_zero()) continue;
-        
+
         long double tempX = pos.x();
         long double tempY = pos.y();
         long double tempZ = pos.z();
@@ -716,8 +716,8 @@ void GenEvent::read_data(const GenEventData &data) {
         (-+)  --  particle  has production vertex
         */
         if ((id1 < 0 && id2 <0) || (id1 > 0 && id2 > 0))   {
-          HEPMC3_WARNING_LEVEL(600,"GenEvent::read_data: wrong link: " << id1 << " " << id2); 
-          continue;
+            HEPMC3_WARNING_LEVEL(600,"GenEvent::read_data: wrong link: " << id1 << " " << id2);
+            continue;
         }
 
         if ( id1 > 0 ) { m_vertices[ (-id2)-1 ]->add_particle_in ( m_particles[ id1-1 ] ); continue; }
