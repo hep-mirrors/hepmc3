@@ -85,10 +85,10 @@ test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3search"
 tmp=$( echo "$*" | egrep -- '--\<protobufIO\>')
 test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3protobufIO"
 
-fi
-
 tmp=$( echo "$*" | egrep -- '--\<rootIO\>')
-test -n "$tmp" && OUT="$OUT -L@PACKAGE_HEPMC3_ROOTIO_INSTALL_LIBDIR@ @HEPMC3_ROOTIO_LIBRARY@"
+test -n "$tmp" && OUT="$OUT -L@PACKAGE_HEPMC3_ROOTIO_INSTALL_LIBDIR@ -lHepMC3rootIO"
+
+fi
 
 tmp=$( echo "$*" | egrep -- '--\<features\>')
 test -n "$tmp" && OUT="$OUT @HEPMC3_FEATURES@"
