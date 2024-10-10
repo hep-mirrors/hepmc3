@@ -19,7 +19,11 @@ PACKAGE_PREFIX_DIR=$(dirname ${PACKAGE_BIN_DIR})
 tmp=$(echo $* | egrep -- '--\<help\>|-\<h\>')
 if test $# -eq 0 || test -n "$tmp"; then
     echo "@PROJECT_NAME@-config: configuration tool for the @PROJECT_NAME@ library"
-    echo
+    echo 
+    echo "Note: the portability of this script is limited, it does not expose all features of @PROJECT_NAME@."
+    echo "It is recommended to use cmake for builds with @PROJECT_NAME@ to reach a reasonable portability and"
+    echo "make sure all @PROJECT_NAME@ features can be used. This script might be deleted in the future."
+    echo 
     echo "Usage: $( basename $0 ) [--help|-h] | "
     echo "           [--{prefix,libdir,includedir,interfacesdir}] | "
     echo "           [--{cxxflags,ldflags,libs}] | "
