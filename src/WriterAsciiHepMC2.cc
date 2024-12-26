@@ -299,7 +299,7 @@ void WriterAsciiHepMC2::write_vertex(const ConstGenVertexPtr& v)
         weights.reserve(100);
         for (int i = 0; i < 100; i++)
         {
-            std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string((long long unsigned int)i));
+            std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string(static_cast<long long unsigned int>(i)));
             if (!rs) break;
             weights.emplace_back(rs->value());
         }

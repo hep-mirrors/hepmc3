@@ -38,7 +38,7 @@ ReaderPlugin::ReaderPlugin(std::shared_ptr<std::istream> stream, const std::stri
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_reader = nullptr; return;  }
     using f_funci = Reader *(*)(std::shared_ptr<std::istream>);
-    auto newReader = reinterpret_cast<f_funci>((dlsym(dll_handle, newreader.c_str()));
+    auto newReader = reinterpret_cast<f_funci>((dlsym(dll_handle, newreader.c_str())));
     if (!newReader) { printf("Error  while loading function %s from  library %s: %s\n", newreader.c_str(), libname.c_str(), dlerror()); m_reader = nullptr; return;   }
     m_reader = reinterpret_cast<Reader*>(newReader(stream));
 #endif
@@ -58,7 +58,7 @@ ReaderPlugin::ReaderPlugin(std::istream & stream, const std::string &libname, co
     dll_handle = dlopen(libname.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     if (!dll_handle) { printf("Error  while loading library %s: %s\n", libname.c_str(), dlerror()); m_reader = nullptr; return;  }
     using f_funci = Reader *(*)(std::istream &);
-    auto newReader =  reinterpret_cast<f_funci>((dlsym(dll_handle, newreader.c_str()));
+    auto newReader =  reinterpret_cast<f_funci>((dlsym(dll_handle, newreader.c_str())));
     if (!newReader) { printf("Error  while loading function %s from  library %s: %s\n", newreader.c_str(), libname.c_str(), dlerror()); m_reader = nullptr; return;   }
     m_reader = reinterpret_cast<Reader*>(newReader(stream));
 #endif

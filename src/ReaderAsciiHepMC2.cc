@@ -503,7 +503,7 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
 
     m_vertex_cache_ghost.emplace_back(data_ghost);
 
-    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: V: " << -(int)m_vertex_cache.size() << " (old barcode " << barcode << ") " << num_particles_out << " particles)")
+    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: V: " << -static_cast<int>(m_vertex_cache.size()) << " (old barcode " << barcode << ") " << num_particles_out << " particles)")
 
     return num_particles_out;
 }
