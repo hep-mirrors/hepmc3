@@ -2264,7 +2264,7 @@ public:
     namedweights.clear();
     weights.clear();
     weights.resize(heprup->nWeights(),
-                   std::make_pair(XWGTUP, (WeightInfo*)(0)));
+                   std::make_pair(XWGTUP, nullptr));
     weights.front().first = XWGTUP;
     for ( int i = 1, N = weights.size(); i < N; ++i )
       weights[i].second =  &heprup->weightinfo[i - 1];
@@ -2276,7 +2276,7 @@ public:
 
       if ( tag.name == "weights" ) {
         weights.resize(heprup->nWeights(),
-                       std::make_pair(XWGTUP, (WeightInfo*)(0)));
+                       std::make_pair(XWGTUP, nullptr));
         weights.front().first = XWGTUP;
         for ( int ii = 1, NN = weights.size(); ii < NN; ++ii )
           weights[ii].second =  &heprup->weightinfo[ii - 1];
@@ -2287,7 +2287,7 @@ public:
           if ( ++iii < int(weights.size()) )
             weights[iii].first = w;
           else
-            weights.push_back(std::make_pair(w, (WeightInfo*)(0)));
+            weights.push_back(std::make_pair(w, nullptr));
       }
       if ( tag.name == "weight" ) {
         namedweights.push_back(Weight(tag));
@@ -2321,12 +2321,12 @@ public:
         namedweights[i].indices[0] = indx;
       } else {
         weights.push_back(std::make_pair(namedweights[i].weights[0],
-                                         (WeightInfo*)(0)));
+                                         nullptr));
         namedweights[i].indices[0] = weights.size() - 1;
       }
       for ( int j = 1, M = namedweights[i].weights.size(); j < M; ++j ) {
         weights.push_back(std::make_pair(namedweights[i].weights[j],
-                                         (WeightInfo*)(0)));
+                                         nullptr));
         namedweights[i].indices[j] = weights.size() - 1;
       }
     }

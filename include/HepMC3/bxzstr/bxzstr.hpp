@@ -164,7 +164,7 @@ class istreambuf : public std::streambuf {
     Compression type;
     std::streampos out_buff_end_abs;
 
-    static const std::size_t default_buff_size = (std::size_t)1 << 20;
+    static const std::size_t default_buff_size = static_cast<std::size_t>(1) << 20;
 }; // class istreambuf
 
 class ostreambuf : public std::streambuf {
@@ -249,7 +249,7 @@ class ostreambuf : public std::streambuf {
     Compression type;
     int level;
 
-    static const std::size_t default_buff_size = (std::size_t)1 << 20;
+    static const std::size_t default_buff_size = static_cast<std::size_t>(1) << 20;
 }; // class ostreambuf
 
 class istream : public std::istream {

@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
     int events_parsed = 0;
 
     // Get GenRunInfo, if available
-    auto *my_run = (MyRunClass*)fo.Get("MyRunClass");
+    auto *my_run = reinterpret_cast<MyRunClass*>(fo.Get("MyRunClass"));
     std::shared_ptr<GenRunInfo> run_info;
 
     if( my_run ) run_info.reset(my_run->GetRunInfo());

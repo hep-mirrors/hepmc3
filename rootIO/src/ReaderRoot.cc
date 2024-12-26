@@ -51,7 +51,7 @@ bool ReaderRoot::read_event(GenEvent& evt) {
     GenEventData *data = nullptr;
 
     while (true) {
-        TKey *key = (TKey*) (*m_next)();
+        TKey *key =  reinterpret_cast<TKey*> ( (*m_next)());
 
         if ( !key ) {
             m_file->Close();
