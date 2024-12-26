@@ -101,7 +101,7 @@ void GenEvent::add_vertex(GenVertexPtr v) {
     m_vertices.emplace_back(v);
 
     v->m_event = this;
-    v->m_id = -(int)vertices().size();
+    v->m_id = -static_cast<int>(vertices().size());
 
     // Add all incoming and outgoing particles and restore their production/end vertices
     for (const auto& p: v->particles_in()) {
@@ -356,7 +356,7 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
     if ( m_rootvertex->id() != 0 ) {
         const int vx = -1 - m_rootvertex->id();
         const int rootid = m_rootvertex->id();
-        if ( vx >= 0 && vx < (int) m_vertices.size() && m_vertices[vx] == m_rootvertex ) {
+        if ( vx >= 0 && vx < static_cast<int>(m_vertices.size()) && m_vertices[vx] == m_rootvertex ) {
             auto next = m_vertices.erase(m_vertices.begin() + vx);
             std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
             for (auto & vt1: m_attributes) {

@@ -148,7 +148,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, " %zu", m_random_states.size());
     for (size_t q = 0; q < m_random_states.size(); q++)
     {
-        m_cursor += sprintf(m_cursor, " %i", (int)q);
+        m_cursor += sprintf(m_cursor, " %i", static_cast<int> (q));
         flush();
     }
     flush();
