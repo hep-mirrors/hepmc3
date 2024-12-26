@@ -198,7 +198,7 @@ struct XMLTag {
    * by leftover (if not null).
    */
   static std::vector<XMLTag*> findXMLTags(std::string str,
-                                          std::string * leftover = 0) {
+                                          std::string * leftover = nullptr) {
     std::vector<XMLTag*> tags;
     pos_t curr = 0;
 
@@ -1769,7 +1769,7 @@ public:
    */
   std::string weightNameHepMC(int i) const {
     std::string name;
-    if ( i < 0 || i >= (int)weightinfo.size() ) return name;
+    if ( i < 0 || i >= static_cast<int>(weightinfo.size()) ) return name;
     if ( weightinfo[i].inGroup >= 0 )
       name = weightgroup[weightinfo[i].inGroup].type + "/"
         +  weightgroup[weightinfo[i].inGroup].combine + "/";
@@ -2144,7 +2144,7 @@ public:
    */
   HEPEUP()
     : NUP(0), IDPRUP(0), XWGTUP(0.0), XPDWUP(0.0, 0.0),
-      SCALUP(0.0), AQEDUP(0.0), AQCDUP(0.0), heprup(0), currentWeight(0),
+      SCALUP(0.0), AQEDUP(0.0), AQCDUP(0.0), heprup(nullptr), currentWeight(nullptr),
       ntries(1), isGroup(false) {}
 
   /**
@@ -2218,7 +2218,7 @@ public:
   HEPEUP(const XMLTag & tagin, HEPRUP & heprupin)
     : TagBase(tagin.attr), NUP(0), IDPRUP(0), XWGTUP(0.0), XPDWUP(0.0, 0.0),
       SCALUP(0.0), AQEDUP(0.0), AQCDUP(0.0), heprup(&heprupin),
-      currentWeight(0), ntries(1), isGroup(tagin.name == "eventgroup") {
+      currentWeight(nullptr), ntries(1), isGroup(tagin.name == "eventgroup") {
 
     if ( heprup->NPRUP < 0 )
       throw std::runtime_error("Tried to read events but no processes defined "
@@ -2554,7 +2554,7 @@ public:
       for ( int ii = 1, N = subevents.size(); ii < N; ++ii )
         for ( int j = 0, M = weights.size(); j < M; ++j )
           weights[j].first += subevents[ii]->weights[j].first;
-      currentWeight = 0;
+      currentWeight = nullptr;
     } else {
       setEvent(*subevents[i - 1]);
     }
@@ -2968,7 +2968,7 @@ protected:
    * Used internally to read a single line from the stream.
    */
   bool getline() {
-    return ( (bool)std::getline(*file, currentLine) );
+    return ( static_cast<bool> (std::getline(*file, currentLine)) );
   }
 
   /**

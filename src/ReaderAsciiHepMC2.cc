@@ -284,7 +284,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if (cached_attributes.count("flows") != 0) {
         const std::map<int, std::shared_ptr<Attribute> >& flows = cached_attributes.at("flows");
         if (m_options.count("particle_flows_are_separated") == 0) {
-            for (const auto& f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {  m_particle_cache[f.first-1]->add_attribute("flows", f.second);}
+            for (const auto& f: flows) if (f.first > 0 && f.first <= static_cast<int>(m_particle_cache.size())) {  m_particle_cache[f.first-1]->add_attribute("flows", f.second);}
         } else  {
             for (const auto& f: flows) {
                 if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {
@@ -299,18 +299,18 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
     if (cached_attributes.count("phi") != 0) {
         const std::map<int, std::shared_ptr<Attribute> >& phi = cached_attributes.at("phi");
-        for (const auto& f: phi) if (f.first > 0 &&f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("phi", f.second);
+        for (const auto& f: phi) if (f.first > 0 &&f.first <= static_cast<int>(m_particle_cache.size()))  m_particle_cache[f.first-1]->add_attribute("phi", f.second);
     }
 
     if (cached_attributes.count("theta") != 0) {
         const std::map<int, std::shared_ptr<Attribute> >& theta = cached_attributes.at("theta");
-        for (const auto& f: theta) if (f.first > 0 && f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("theta", f.second);
+        for (const auto& f: theta) if (f.first > 0 && f.first <= static_cast<int>(m_particle_cache.size()))  m_particle_cache[f.first-1]->add_attribute("theta", f.second);
     }
 
     if (cached_attributes.count("weights") != 0) {
         const std::map<int, std::shared_ptr<Attribute> >& weights = cached_attributes.at("weights");
         if (m_options.count("vertex_weights_are_separated") == 0) {
-            for (const auto& f: weights) { if (f.first < 0 && f.first >= -(int)m_vertex_cache.size())  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);}
+            for (const auto& f: weights) { if (f.first < 0 && f.first >= -static_cast<int>(m_vertex_cache.size()))  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);}
         } else {
             for (const auto& f: weights) {
                 if (f.first < 0 && f.first >= -(int)m_vertex_cache.size()) {
@@ -744,10 +744,10 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
 
     return true;
 }
-bool ReaderAsciiHepMC2::failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+bool ReaderAsciiHepMC2::failed() { return m_isstream ? static_cast<bool>(m_stream->rdstate()) : static_cast<bool>(m_file.rdstate()); }
 
 void ReaderAsciiHepMC2::close() {
-    if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr;}
+    if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost = nullptr;}
     if ( !m_file.is_open() ) return;
     m_file.close();
 }

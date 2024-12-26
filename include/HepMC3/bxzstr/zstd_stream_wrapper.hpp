@@ -102,9 +102,9 @@ class zstd_stream_wrapper : public stream_wrapper {
     long avail_out() const override { return this->buffOutSize; }
 
     void set_next_in(const unsigned char* in) override { this->buffIn = (void*)in; }
-    void set_avail_in(long in) override { this->buffInSize = (size_t)in; }
+    void set_avail_in(long in) override { this->buffInSize = static_cast<size_t> (in); }
     void set_next_out(const unsigned char* in) override { this->buffOut = (void*)in; }
-    void set_avail_out(long in) override { this->buffOutSize = (size_t)in; }
+    void set_avail_out(long in) override { this->buffOutSize = static_cast<size_t> (in); }
 
   private:
     bool isInput;

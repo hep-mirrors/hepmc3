@@ -89,13 +89,13 @@ class lzma_stream_wrapper : public lzma_stream, public stream_wrapper {
     int decompress(const int = 0) override {
 	ret = lzma_code(this, LZMA_RUN);
 	if (ret != LZMA_OK && ret != LZMA_STREAM_END && ret) throw lzmaException(ret);
-	return (int)ret;
+	return static_cast<int> (ret);
     }
     int compress(const int _flags = LZMA_RUN) override {
 	ret = lzma_code(this, (lzma_action)_flags);
 	if (ret != LZMA_OK && ret != LZMA_STREAM_END && ret != LZMA_BUF_ERROR)
 	    throw lzmaException(ret);
-	return (int)ret;
+	return static_cast<int> (ret);
     }
     bool stream_end() const override { return this->ret == LZMA_STREAM_END; }
     bool done() const override { return (this->ret == LZMA_BUF_ERROR || this->stream_end()); }

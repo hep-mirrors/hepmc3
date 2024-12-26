@@ -108,14 +108,14 @@ class bz_stream_wrapper : public bz_stream, public stream_wrapper {
     bool stream_end() const override { return this->ret == BZ_STREAM_END; }
     bool done() const override { return this->stream_end(); }
 
-    const uint8_t* next_in() const override { return (uint8_t*)bz_stream::next_in; }
+    const uint8_t* next_in() const override { return  reinterpret_cast<uint8_t*> (bz_stream::next_in); }
     long avail_in() const override { return bz_stream::avail_in; }
-    uint8_t* next_out() const override { return (uint8_t*)bz_stream::next_out; }
+    uint8_t* next_out() const override { return reinterpret_cast<uint8_t*> (bz_stream::next_out); }
     long avail_out() const override { return bz_stream::avail_out; }
 
-    void set_next_in(const unsigned char* in) override { bz_stream::next_in = (char*)in; }
+    void set_next_in(const unsigned char* in) override { bz_stream::next_in = reinterpret_cast<char*>(in); }
     void set_avail_in(const long in) override { bz_stream::avail_in = in; }
-    void set_next_out(const uint8_t* in) override { bz_stream::next_out = (char*)in; }
+    void set_next_out(const uint8_t* in) override { bz_stream::next_out = reinterpret_cast<char*>(in); }
     void set_avail_out(const long in) override { bz_stream::avail_out = in; }
 
   private:
