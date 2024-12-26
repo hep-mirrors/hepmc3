@@ -198,7 +198,7 @@ struct XMLTag {
    * by leftover (if not null).
    */
   static std::vector<XMLTag*> findXMLTags(std::string str,
-                                          std::string * leftover = 0) {
+                                          std::string * leftover = nullptr) {
     std::vector<XMLTag*> tags;
     pos_t curr = 0;
 
@@ -1769,7 +1769,7 @@ public:
    */
   std::string weightNameHepMC(int i) const {
     std::string name;
-    if ( i < 0 || i >= (int)weightinfo.size() ) return name;
+    if ( i < 0 || i >= static_cast<int>(weightinfo.size()) ) return name;
     if ( weightinfo[i].inGroup >= 0 )
       name = weightgroup[weightinfo[i].inGroup].type + "/"
         +  weightgroup[weightinfo[i].inGroup].combine + "/";
@@ -2144,7 +2144,7 @@ public:
    */
   HEPEUP()
     : NUP(0), IDPRUP(0), XWGTUP(0.0), XPDWUP(0.0, 0.0),
-      SCALUP(0.0), AQEDUP(0.0), AQCDUP(0.0), heprup(0), currentWeight(0),
+      SCALUP(0.0), AQEDUP(0.0), AQCDUP(0.0), heprup(nullptr), currentWeight(nullptr),
       ntries(1), isGroup(false) {}
 
   /**
@@ -2218,7 +2218,7 @@ public:
   HEPEUP(const XMLTag & tagin, HEPRUP & heprupin)
     : TagBase(tagin.attr), NUP(0), IDPRUP(0), XWGTUP(0.0), XPDWUP(0.0, 0.0),
       SCALUP(0.0), AQEDUP(0.0), AQCDUP(0.0), heprup(&heprupin),
-      currentWeight(0), ntries(1), isGroup(tagin.name == "eventgroup") {
+      currentWeight(nullptr), ntries(1), isGroup(tagin.name == "eventgroup") {
 
     if ( heprup->NPRUP < 0 )
       throw std::runtime_error("Tried to read events but no processes defined "
@@ -2264,7 +2264,7 @@ public:
     namedweights.clear();
     weights.clear();
     weights.resize(heprup->nWeights(),
-                   std::make_pair(XWGTUP, (WeightInfo*)(0)));
+                   std::make_pair(XWGTUP, nullptr));
     weights.front().first = XWGTUP;
     for ( int i = 1, N = weights.size(); i < N; ++i )
       weights[i].second =  &heprup->weightinfo[i - 1];
@@ -2276,7 +2276,7 @@ public:
 
       if ( tag.name == "weights" ) {
         weights.resize(heprup->nWeights(),
-                       std::make_pair(XWGTUP, (WeightInfo*)(0)));
+                       std::make_pair(XWGTUP, nullptr));
         weights.front().first = XWGTUP;
         for ( int ii = 1, NN = weights.size(); ii < NN; ++ii )
           weights[ii].second =  &heprup->weightinfo[ii - 1];
@@ -2287,7 +2287,7 @@ public:
           if ( ++iii < int(weights.size()) )
             weights[iii].first = w;
           else
-            weights.push_back(std::make_pair(w, (WeightInfo*)(0)));
+            weights.push_back(std::make_pair(w, nullptr));
       }
       if ( tag.name == "weight" ) {
         namedweights.push_back(Weight(tag));
@@ -2321,12 +2321,12 @@ public:
         namedweights[i].indices[0] = indx;
       } else {
         weights.push_back(std::make_pair(namedweights[i].weights[0],
-                                         (WeightInfo*)(0)));
+                                         nullptr));
         namedweights[i].indices[0] = weights.size() - 1;
       }
       for ( int j = 1, M = namedweights[i].weights.size(); j < M; ++j ) {
         weights.push_back(std::make_pair(namedweights[i].weights[j],
-                                         (WeightInfo*)(0)));
+                                         nullptr));
         namedweights[i].indices[j] = weights.size() - 1;
       }
     }
@@ -2554,7 +2554,7 @@ public:
       for ( int ii = 1, N = subevents.size(); ii < N; ++ii )
         for ( int j = 0, M = weights.size(); j < M; ++j )
           weights[j].first += subevents[ii]->weights[j].first;
-      currentWeight = 0;
+      currentWeight = nullptr;
     } else {
       setEvent(*subevents[i - 1]);
     }
@@ -2968,7 +2968,7 @@ protected:
    * Used internally to read a single line from the stream.
    */
   bool getline() {
-    return ( (bool)std::getline(*file, currentLine) );
+    return ( static_cast<bool> (std::getline(*file, currentLine)) );
   }
 
   /**

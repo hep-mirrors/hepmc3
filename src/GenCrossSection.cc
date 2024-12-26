@@ -111,7 +111,7 @@ bool GenCrossSection::to_string(std::string &att) const {
 }
 
 bool GenCrossSection::operator==(const GenCrossSection& a) const {
-    return ( memcmp( (void*)this, (void*) &a, sizeof(class GenCrossSection) ) == 0 );
+    return ( memcmp( static_cast<const void*>(this), static_cast<const void*>(&a), sizeof(class GenCrossSection) ) == 0 );
 }
 
 bool GenCrossSection::operator!=(const GenCrossSection& a) const {

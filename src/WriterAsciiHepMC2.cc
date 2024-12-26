@@ -440,7 +440,7 @@ void WriterAsciiHepMC2::close()
     m_stream = nullptr;
     if (ofs) ofs->close();
 }
-bool WriterAsciiHepMC2::failed() { return (bool)m_file.rdstate(); }
+bool WriterAsciiHepMC2::failed() { return static_cast<bool>(m_file.rdstate()); }
 
 void WriterAsciiHepMC2::set_precision(const int& prec ) {
     if (prec < 2 || prec > 24) return;
