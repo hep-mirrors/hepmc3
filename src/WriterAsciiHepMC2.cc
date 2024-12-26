@@ -108,7 +108,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         m_random_states.reserve(100);
         for (int i = 0; i < 100; i++)
         {
-            std::shared_ptr<LongAttribute> rs = evt.attribute<LongAttribute>("random_states"+std::to_string((long long unsigned int)i));
+            std::shared_ptr<LongAttribute> rs = evt.attribute<LongAttribute>("random_states"+std::to_string(static_cast<long long unsigned int>(i)));
             if (!rs) break;
             m_random_states.emplace_back(rs->value());
         }
@@ -148,7 +148,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, " %zu", m_random_states.size());
     for (size_t q = 0; q < m_random_states.size(); q++)
     {
-        m_cursor += sprintf(m_cursor, " %i", (int)q);
+        m_cursor += sprintf(m_cursor, " %i", static_cast<int> (q));
         flush();
     }
     flush();
@@ -299,7 +299,7 @@ void WriterAsciiHepMC2::write_vertex(const ConstGenVertexPtr& v)
         weights.reserve(100);
         for (int i = 0; i < 100; i++)
         {
-            std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string((long long unsigned int)i));
+            std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string(static_cast<long long unsigned int>(i)));
             if (!rs) break;
             weights.emplace_back(rs->value());
         }
