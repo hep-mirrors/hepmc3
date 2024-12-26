@@ -109,7 +109,7 @@ public:
 //
 public:
     static void   set_max_number_entries( unsigned int size ) { if (size != NMXHEP) printf("This implementation does not support change of the block size.\n"); assert(size == NMXHEP); }//!< Set block size
-    static void   set_hepevt_address(char *c) { hepevtptr = (struct HEPEVT*)c;          } //!< Set Fortran block address
+    static void   set_hepevt_address(char *c) { hepevtptr = reinterpret_cast<struct HEPEVT*> (c);          } //!< Set Fortran block address
     static int    max_number_entries()      { return NMXHEP;                              } //!< Block size
     static int    event_number()            { return hepevtptr->nevhep;             } //!< Get event number
     static int    number_entries()          { return hepevtptr->nhep;               } //!< Get number of entries

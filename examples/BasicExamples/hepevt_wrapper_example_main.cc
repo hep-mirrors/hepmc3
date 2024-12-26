@@ -104,7 +104,7 @@ int main() {
     std::cout << std::endl << "HEPEVT wrapper example - FORTRAN EVENT" << std::endl;
     std::cout <<         "--------------------------------------" << std::endl;
 
-    HEPEVT_Wrapper::set_hepevt_address((char*)(&hepevt_));
+    HEPEVT_Wrapper::set_hepevt_address(reinterpret_cast<char*> ((&hepevt_)));
 
     FC_SIMPLE_TAU_HEPEVT_EVENT();
 
