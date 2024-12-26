@@ -92,7 +92,7 @@ class lzma_stream_wrapper : public lzma_stream, public stream_wrapper {
 	return static_cast<int> (ret);
     }
     int compress(const int _flags = LZMA_RUN) override {
-	ret = lzma_code(this, (lzma_action)_flags);
+	ret = lzma_code(this, static_cast<lzma_action>(_flags));
 	if (ret != LZMA_OK && ret != LZMA_STREAM_END && ret != LZMA_BUF_ERROR)
 	    throw lzmaException(ret);
 	return static_cast<int> (ret);

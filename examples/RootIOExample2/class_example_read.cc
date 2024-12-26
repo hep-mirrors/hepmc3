@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     TIter next(fo.GetListOfKeys());
     TKey *key = nullptr;
 
-    while ((key=(TKey*)next()))
+    while (key = static_cast<TKey*> (next()))
     {
         const char *cl = key->GetClassName();
 
