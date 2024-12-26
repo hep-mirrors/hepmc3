@@ -145,7 +145,7 @@ LCG_99_x86_64-centos7-gcc8-opt:
     - cd $TTOP
 
 .cmake: &cmake
-    - $CMAKE -S . -B BUILD -DCMAKE_INSTALL_PREFIX=$(pwd)/INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
+    - $CMAKE -S . -B BUILD -DCMAKE_INSTALL_PREFIX=$(pwd)/INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra -Werror=lto-type-mismatch -Wshadow -Wzero-as-null-pointer-constant -Wold-style-cast"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
     - $CMAKE --build BUILD -j 10  --verbose
     - $CMAKE --install BUILD
     - cd BUILD
@@ -155,7 +155,7 @@ LCG_99_x86_64-centos7-gcc8-opt:
 .oldcmake: &oldcmake
     - mkdir -p BUILD
     - cd  BUILD
-    - $CMAKE ..  -DCMAKE_INSTALL_PREFIX=$(pwd)/../INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
+    - $CMAKE ..  -DCMAKE_INSTALL_PREFIX=$(pwd)/../INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra -Werror=lto-type-mismatch -Wshadow -Wzero-as-null-pointer-constant -Wold-style-cast"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
     - make -j 10  SHELL='sh -x'
     - make install
     - $CTEST -j 5 --output-on-failure
