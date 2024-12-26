@@ -28,7 +28,7 @@ static  char*  create_image_from_dot(char* m_buffer)
     err = gvRenderData(gvc, g, "png", &data, &length);
     if (err)
         return NULL;
-    data = (char*)realloc(data, length + 1);
+    data =  static_cast<char*>(realloc(data, length + 1));
     gvFreeLayout(gvc, g);
     agclose(g);
     gvFreeContext(gvc);

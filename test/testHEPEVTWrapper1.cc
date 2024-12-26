@@ -52,29 +52,29 @@ int main()
     GenEvent evt1 = generate1();
     HEPEVT_Wrapper_Runtime  test1;
     test1.set_max_number_entries(HEPMC3_HEPEVT_NMXHEP);
-    test1.set_hepevt_address((char*)&X);
+    test1.set_hepevt_address(reinterpret_cast<char*> (&X));
     test1.GenEvent_to_HEPEVT(&evt1);
 
     HEPEVT_Wrapper_Template<HEPMC3_HEPEVT_NMXHEP,double>  test2;
     GenEvent evt2;
-    test2.set_hepevt_address((char*)&X);
+    test2.set_hepevt_address(reinterpret_cast<char*> (&X));
     test2.HEPEVT_to_GenEvent(&evt2);
 
     HEPEVT_Wrapper_Template<20000,double>  test3;
     GenEvent evt3;
     test3.allocate_internal_storage();
-    test3.copy_to_internal_storage((char*)&X, HEPMC3_HEPEVT_NMXHEP);
+    test3.copy_to_internal_storage(reinterpret_cast<char*> (&X), HEPMC3_HEPEVT_NMXHEP);
     test3.HEPEVT_to_GenEvent(&evt3);
 
     GenEvent evt4;
     HEPEVT_Wrapper_Runtime_Static::set_max_number_entries(HEPMC3_HEPEVT_NMXHEP);
-    HEPEVT_Wrapper_Runtime_Static::set_hepevt_address((char*)&X);
+    HEPEVT_Wrapper_Runtime_Static::set_hepevt_address(reinterpret_cast<char*> (&X));
     HEPEVT_Wrapper_Runtime_Static::print_hepevt();
     HEPEVT_Wrapper_Runtime_Static::HEPEVT_to_GenEvent(&evt4);
 
 
     GenEvent evt5;
-    HEPEVT_Wrapper::set_hepevt_address((char*)&X);
+    HEPEVT_Wrapper::set_hepevt_address(reinterpret_cast<char*> (&X));
     HEPEVT_Wrapper::HEPEVT_to_GenEvent(&evt5);
 
 
@@ -82,7 +82,7 @@ int main()
     HEPEVT_Wrapper_Runtime  test6;
     test6.set_max_number_entries(20000);
     test6.allocate_internal_storage();
-    test6.copy_to_internal_storage((char*)&X,HEPMC3_HEPEVT_NMXHEP);
+    test6.copy_to_internal_storage(reinterpret_cast<char*> (&X),HEPMC3_HEPEVT_NMXHEP);
     test6.HEPEVT_to_GenEvent(&evt6);
 
 
