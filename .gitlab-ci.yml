@@ -327,13 +327,13 @@ build_image_Archlinux0:
 
 ###########################################################################
 Fedora40-GNU:
-  variables: { OS: Fedora, FREL: 40, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  variables: { OS: Fedora, FREL: 40, TOOLSET: GNU,  EXTRACMAKEFLAGS: -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON }
   extends: .any-cmake
   needs:
     - job: build_image_Fedora40
 
 Fedora38-GNU:
-  variables: { OS: Fedora, FREL: 38, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  variables: { OS: Fedora, FREL: 38, TOOLSET: GNU,  EXTRACMAKEFLAGS: -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON }
   extends: .any-cmake
   needs:
     - job: build_image_Fedora38
