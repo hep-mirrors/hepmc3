@@ -51,7 +51,7 @@ int main()
 
     WriterAscii       outputA("frominputDelete.hepmc");
     if(outputA.failed()) return 2;
-    for (size_t i=0; i<evts.size(); i++) outputA.write_event(evts[i]);
+    for (size_t ii=0; ii<evts.size(); ii++) outputA.write_event(evts[ii]);
     evts.clear();
     outputA.close();
 

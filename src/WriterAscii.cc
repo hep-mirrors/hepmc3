@@ -355,7 +355,7 @@ void WriterAscii::close() {
     m_stream = nullptr;
     if (ofs) ofs->close();
 }
-bool WriterAscii::failed() { return (bool)m_file.rdstate(); }
+bool WriterAscii::failed() { return static_cast<bool> (m_file.rdstate()); }
 
 void WriterAscii::set_precision(const int& prec ) {
     if (prec < 2 || prec > 24) return;

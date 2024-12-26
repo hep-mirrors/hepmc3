@@ -14,7 +14,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "%s: cannot run in batch mode\n", argv[0]);
         return 1;
     }
-    HepMC3ViewerFrame *G=new HepMC3ViewerFrame(gClient->GetRoot(), 350, 80);
+    HepMC3ViewerFrame *G = new HepMC3ViewerFrame(gClient->GetRoot(), 350, 80);
     if (theApp.Argc() > 1) G->ReadFile(theApp.Argv()[1]);
     theApp.Run();
 }

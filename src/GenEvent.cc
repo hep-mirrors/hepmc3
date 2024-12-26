@@ -101,7 +101,7 @@ void GenEvent::add_vertex(GenVertexPtr v) {
     m_vertices.emplace_back(v);
 
     v->m_event = this;
-    v->m_id = -(int)vertices().size();
+    v->m_id = -static_cast<int>(vertices().size());
 
     // Add all incoming and outgoing particles and restore their production/end vertices
     for (const auto& p: v->particles_in()) {
@@ -356,7 +356,7 @@ void GenEvent::add_tree(const std::vector<GenParticlePtr> &parts) {
     if ( m_rootvertex->id() != 0 ) {
         const int vx = -1 - m_rootvertex->id();
         const int rootid = m_rootvertex->id();
-        if ( vx >= 0 && vx < (int) m_vertices.size() && m_vertices[vx] == m_rootvertex ) {
+        if ( vx >= 0 && vx < static_cast<int>(m_vertices.size()) && m_vertices[vx] == m_rootvertex ) {
             auto next = m_vertices.erase(m_vertices.begin() + vx);
             std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
             for (auto & vt1: m_attributes) {
@@ -703,7 +703,7 @@ void GenEvent::read_data(const GenEventData &data) {
     for ( const GenVertexData &vd: data.vertices ) {
         m_vertices.emplace_back(std::make_shared<GenVertex>(vd));
         m_vertices.back()->m_event = this;
-        m_vertices.back()->m_id    = -(int)m_vertices.size();
+        m_vertices.back()->m_id    = -static_cast<int> (m_vertices.size());
     }
 
     // Restore links
@@ -735,10 +735,10 @@ void GenEvent::read_data(const GenEventData &data) {
         if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
         auto att = std::make_shared<StringAttribute>(data.attribute_string[i]);
         att->m_event = this;
-        if ( id > 0 && id <= int(m_particles.size()) ) {
+        if ( id > 0 && id <= static_cast<int>(m_particles.size()) ) {
             att->m_particle = m_particles[id - 1];
         }
-        if ( id < 0 && -id <= int(m_vertices.size()) ) {
+        if ( id < 0 && -id <= static_cast<int>(m_vertices.size()) ) {
             att->m_vertex = m_vertices[-id - 1];
         }
         m_attributes[name][id] = att;
@@ -802,10 +802,10 @@ void GenEvent::add_attribute(const std::string &name, const std::shared_ptr<Attr
     if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
     m_attributes[name][id] = att;
     att->m_event = this;
-    if ( id > 0 && id <= int(particles().size()) ) {
+    if ( id > 0 && id <= static_cast<int>(particles().size()) ) {
         att->m_particle = particles()[id - 1];
     }
-    if ( id < 0 && -id <= int(vertices().size()) ) {
+    if ( id < 0 && -id <= static_cast<int>(vertices().size()) ) {
         att->m_vertex = vertices()[-id - 1];
     }
 }
@@ -825,8 +825,8 @@ void GenEvent::add_attributes(const std::vector<std::string> &names, const std::
     for (const auto& name: unames) {
         if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
     }
-    const int particles_size = int(m_particles.size());
-    const int vertices_size = int(m_vertices.size());
+    const int particles_size = static_cast<int>(m_particles.size());
+    const int vertices_size = static_cast<int>(m_vertices.size());
     for (size_t i = 0; i < N; i++) {
         ///Disallow empty strings
         if (names.at(i).length() == 0) continue;
@@ -852,8 +852,8 @@ void GenEvent::add_attributes(const std::string& name, const std::vector<std::sh
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
     auto& tmap = m_attributes[name];
-    const int particles_size = int(m_particles.size());
-    const int vertices_size = int(m_vertices.size());
+    const int particles_size = static_cast<int>(m_particles.size());
+    const int vertices_size = static_cast<int>(m_vertices.size());
     for (size_t i = 0; i < N; i++) {
         ///Disallow empty strings
         if (!atts[i])  continue;
@@ -874,8 +874,8 @@ void GenEvent::add_attributes(const std::string& name, const std::vector<std::pa
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
     if (m_attributes.count(name) == 0) m_attributes[name] = std::map<int, std::shared_ptr<Attribute> >();
     auto& tmap = m_attributes[name];
-    const int particles_size = int(m_particles.size());
-    const int vertices_size = int(m_vertices.size());
+    const int particles_size = static_cast<int>(m_particles.size());
+    const int vertices_size = static_cast<int>(m_vertices.size());
     for (const auto& att: atts) {
         ///Disallow empty strings
         if (!att.second)  continue;

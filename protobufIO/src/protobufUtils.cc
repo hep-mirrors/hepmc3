@@ -383,11 +383,11 @@ void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
     for (auto const &vd : data.vertices()) {
         m_vertices.emplace_back(std::make_shared<GenVertex>(vd));
         m_vertices.back()->m_event = this;
-        m_vertices.back()->m_id = -(int)m_vertices.size();
+        m_vertices.back()->m_id = -static_cast<int>(m_vertices.size());
     }
 
     // Restore links
-    for (unsigned int i = 0; i < (unsigned int)data.links1_size(); ++i) {
+    for (unsigned int i = 0; i < static_cast<unsigned int>(data.links1_size()); ++i) {
         const int id1 = data.links1(i);
         const int id2 = data.links2(i);
         /* @note:
@@ -414,7 +414,7 @@ void GenEvent::read_data(HepMC3_pb::GenEventData const &data) {
     }
     // Read attributes
     std::lock_guard<std::recursive_mutex> lock(m_lock_attributes);
-    for (unsigned int i = 0; i < (unsigned int)data.attribute_id_size(); ++i) {
+    for (unsigned int i = 0; i < static_cast<unsigned int>(data.attribute_id_size()); ++i) {
         /// Disallow empty strings
         const std::string& name = data.attribute_name(i);
         if (name.length() == 0) {continue;}
