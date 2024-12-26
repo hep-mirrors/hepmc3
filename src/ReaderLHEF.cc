@@ -86,11 +86,6 @@ void ReaderLHEF::init()
     run_info()->add_attribute("EBMUP1",std::make_shared<DoubleAttribute>(m_hepr->heprup.EBMUP.first));
     run_info()->add_attribute("EBMUP2",std::make_shared<DoubleAttribute>(m_hepr->heprup.EBMUP.second));
 
-
-
-
-
-
     // We want to be able to convey the different event weights to
     // HepMC. In particular we need to add the names of the weights to
     // the GenRunInfo object.
@@ -111,7 +106,7 @@ void ReaderLHEF::init()
 
     // We also want to convey the information about which generators was
     // used.
-    for ( int i = 0, N = m_hepr->heprup.generators.size(); i < N; ++i )
+    for ( int i = 0, NN = m_hepr->heprup.generators.size(); i < NN; ++i )
     {
         GenRunInfo::ToolInfo tool;
         tool.name =  m_hepr->heprup.generators[i].name;
