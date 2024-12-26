@@ -71,7 +71,7 @@ class zstd_stream_wrapper : public stream_wrapper {
 
 	this->update_stream_state();
 
-	return (int)ret;
+	return static_cast<int> (ret);
     }
 
     int compress(const int endStream) override {
@@ -90,7 +90,7 @@ class zstd_stream_wrapper : public stream_wrapper {
 
 	this->update_stream_state();
 
-	return (int)ret;
+	return static_cast<int> (ret);
     }
 
     bool stream_end() const override { return this->ret == 0; }

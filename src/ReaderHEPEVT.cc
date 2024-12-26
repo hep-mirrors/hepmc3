@@ -188,7 +188,7 @@ void ReaderHEPEVT::close()
 
 bool ReaderHEPEVT::failed()
 {
-    return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate();
+    return m_isstream ? static_cast<bool>(m_stream->rdstate()) : static_cast<bool> (m_file.rdstate());
 }
 
 } // namespace HepMC3

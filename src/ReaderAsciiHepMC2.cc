@@ -273,7 +273,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         if (random_states_a) {
             std::vector<long int> random_states_v = random_states_a->value();
             for (size_t i = 0; i < random_states_v.size(); ++i ) {
-                evt.add_attribute("random_states" + std::to_string((long long unsigned int)i), std::make_shared<IntAttribute>(random_states_v[i]));
+                evt.add_attribute("random_states" + std::to_string(static_cast<long long unsigned int>(i)), std::make_shared<IntAttribute>(random_states_v[i]));
             }
             evt.remove_attribute("random_states");
         }
@@ -287,7 +287,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             for (const auto& f: flows) if (f.first > 0 && f.first <= static_cast<int>(m_particle_cache.size())) {  m_particle_cache[f.first-1]->add_attribute("flows", f.second);}
         } else  {
             for (const auto& f: flows) {
-                if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {
+                if (f.first > 0 && f.first <= static_cast<int>(m_particle_cache.size())) {
                     std::shared_ptr<VectorIntAttribute>  casted = std::dynamic_pointer_cast<VectorIntAttribute>(f.second);
                     if (!casted) continue;//Should not happen
                     std::vector<int> this_p_flow = casted->value();
@@ -313,7 +313,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
             for (const auto& f: weights) { if (f.first < 0 && f.first >= -static_cast<int>(m_vertex_cache.size()))  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);}
         } else {
             for (const auto& f: weights) {
-                if (f.first < 0 && f.first >= -(int)m_vertex_cache.size()) {
+                if (f.first < 0 && f.first >= -static_cast<int>(m_vertex_cache.size())) {
                     std::shared_ptr<VectorDoubleAttribute>  casted = std::dynamic_pointer_cast<VectorDoubleAttribute>(f.second);
                     if (!casted) continue;//Should not happen
                     std::vector<double> this_v_weight = casted->value();

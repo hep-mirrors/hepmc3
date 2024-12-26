@@ -341,8 +341,8 @@ bool ReaderAscii::parse_weight_values(const char *buf) {
     if ( run_info() && !run_info()->weight_names().empty()
             && run_info()->weight_names().size() != wts.size() ) {
         throw std::logic_error("ReaderAscii::parse_weight_values: "
-                               "The number of weights ("+std::to_string((long long int)(wts.size()))+") does not match "
-                               "the  number weight names("+std::to_string((long long int)(run_info()->weight_names().size()))+") in the GenRunInfo object");
+                               "The number of weights ("+std::to_string(static_cast<long long int>(wts.size()))+") does not match "
+                               "the  number weight names("+std::to_string(static_cast<long long int>(run_info()->weight_names().size()))+") in the GenRunInfo object");
     }
     m_data.weights = wts;
 

@@ -62,7 +62,7 @@ public:
     void   allocate_internal_storage(); //!< Allocates m_internal_storage storage in smart pointer to hold HEPEVT of fixed size
     void   copy_to_internal_storage( char *c, int N ); //!< Copies the content of foreign common block into the internal storage
     void   set_max_number_entries( unsigned int size ) { if (size != max_particles) printf("This implementation does not support change of the block size.\n"); assert(size == max_particles); }//!< Set block size
-    void   set_hepevt_address(char *c) { m_hepevtptr = (struct HEPEVT_Templated<max_particles, momentum_type>*)c;          } //!< Set Fortran block address
+    void   set_hepevt_address(char *c) { m_hepevtptr = reinterpret_cast<struct HEPEVT_Templated<max_particles, momentum_type>*>(c);          } //!< Set Fortran block address
     int    max_number_entries()   const    { return max_particles;                              } //!< Block size
     int    event_number()       const      { return m_hepevtptr->nevhep;             } //!< Get event number
     int    number_entries()     const      { return m_hepevtptr->nhep;               } //!< Get number of entries

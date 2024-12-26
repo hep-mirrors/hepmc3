@@ -108,7 +108,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         m_random_states.reserve(100);
         for (int i = 0; i < 100; i++)
         {
-            std::shared_ptr<LongAttribute> rs = evt.attribute<LongAttribute>("random_states"+std::to_string((long long unsigned int)i));
+            std::shared_ptr<LongAttribute> rs = evt.attribute<LongAttribute>("random_states"+std::to_string(static_cast<long long unsigned int>(i)));
             if (!rs) break;
             m_random_states.emplace_back(rs->value());
         }
@@ -440,7 +440,7 @@ void WriterAsciiHepMC2::close()
     m_stream = nullptr;
     if (ofs) ofs->close();
 }
-bool WriterAsciiHepMC2::failed() { return (bool)m_file.rdstate(); }
+bool WriterAsciiHepMC2::failed() { return static_cast<bool>(m_file.rdstate()); }
 
 void WriterAsciiHepMC2::set_precision(const int& prec ) {
     if (prec < 2 || prec > 24) return;

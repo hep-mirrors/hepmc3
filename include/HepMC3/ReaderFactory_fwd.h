@@ -79,20 +79,20 @@ template <class T> std::shared_ptr<Reader> InputInfo::native_reader(T& argument)
 
     if (m_asciiv3) {
         HEPMC3_DEBUG(10, "Attempt ReaderAscii");
-        return std::shared_ptr<Reader>((Reader*) ( new ReaderAscii(argument)));
+        return std::shared_ptr<Reader>(reinterpret_cast<Reader*> ( new ReaderAscii(argument)));
     }
     if (m_iogenevent) {
         HEPMC3_DEBUG(10, "Attempt ReaderAsciiHepMC2");
-        return std::shared_ptr<Reader>((Reader*) ( new ReaderAsciiHepMC2(argument)));
+        return std::shared_ptr<Reader>(reinterpret_cast<Reader*> ( new ReaderAsciiHepMC2(argument)));
     }
     if (m_lhef) {
         HEPMC3_DEBUG(10, "Attempt ReaderLHEF");
 
-        return std::shared_ptr<Reader>((Reader*) ( new ReaderLHEF(argument)));
+        return std::shared_ptr<Reader>(reinterpret_cast<Reader*>( new ReaderLHEF(argument)));
     }
     if (m_hepevt)  {
         HEPMC3_DEBUG(10, "Attempt ReaderHEPEVT");
-        return std::shared_ptr<Reader>((Reader*) ( new ReaderHEPEVT(argument)));
+        return std::shared_ptr<Reader>(reinterpret_cast<Reader*> ( new ReaderHEPEVT(argument)));
     }
     HEPMC3_DEBUG(10, "deduce_reader: all attempts failed");
     return std::shared_ptr<Reader>(nullptr);
