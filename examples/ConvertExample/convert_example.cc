@@ -131,6 +131,13 @@ int main(int argc, char** argv)
     std::shared_ptr<Reader>      input_file;
     bool input_is_stdin = (std::string(ai.inputs[0]) == std::string("-"));
     if (input_is_stdin) std::ios_base::sync_with_stdio(false);
+#ifdef _LIBCPP_VERSION
+    if (input_is_stdin) {
+		printf("The program cannot process inputs from standard input as std::ios_base::sync_with_stdio(bool) is not implemented in libc++, please use another C++ standard library.\n");
+		exit(4);
+    }
+#endif    
+    
     bool ignore_writer = false;
     switch (format_map.at(std::string(ai.input_format_arg)))
     {
