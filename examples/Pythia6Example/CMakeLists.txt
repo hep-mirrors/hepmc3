@@ -16,6 +16,7 @@ if ( (USE_INSTALLED_HEPMC3 AND HEPMC3_INTERFACES_DIR) OR (NOT  USE_INSTALLED_HEP
   target_compile_definitions(pythia6_example.exe PRIVATE PYTHIA6HEPEVTSIZE=4000)
   set_target_properties(pythia6_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
   set_target_properties(pythia6_example.exe PROPERTIES LINKER_LANGUAGE Fortran)
+  set_target_properties(pythia6_example.exe PROPERTIES INTERPROCEDURAL_OPTIMIZATION ${INTERPROCEDURAL_OPTIMIZATION})
   if (USE_INSTALLED_HEPMC3)
     install(TARGETS pythia6_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
   endif()
