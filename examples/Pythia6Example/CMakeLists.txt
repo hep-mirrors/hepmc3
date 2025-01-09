@@ -18,6 +18,8 @@ if ( (USE_INSTALLED_HEPMC3 AND HEPMC3_INTERFACES_DIR) OR (NOT  USE_INSTALLED_HEP
   set_target_properties(pythia6_example.exe PROPERTIES LINKER_LANGUAGE Fortran)
   if (hepmc3_ipo_output AND CMAKE_INTERPROCEDURAL_OPTIMIZATION)
     set_target_properties(pythia6_example.exe PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+  else()
+    message(STATUS "HepMC3 Examples: hepmc3_ipo_output=${hepmc3_ipo_output}")
   endif()
   if (USE_INSTALLED_HEPMC3)
     install(TARGETS pythia6_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
