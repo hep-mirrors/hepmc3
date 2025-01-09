@@ -11,6 +11,9 @@ C...All real arithmetic in double precision.
       IMPLICIT DOUBLE PRECISION(A-H, O-Z)
 C...Three Pythia functions return integers, so need declaring.
       INTEGER PYK,PYCHGE,PYCOMP
+      
+C      INTEGER MSTI
+C      DOUBLE PRECISION PARI,MSTP
 
 C...EXTERNAL statement links PYDATA on most machines.
       EXTERNAL PYDATA
@@ -45,6 +48,7 @@ C...HepMC3
 CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC
       include "Pythia6ToHepMC3.inc"
       INTEGER OUTID(2), HEPMC3STATUS
+      INTEGER PDF1,PDF2
 
 C-----------------------------------------------------------------
 
@@ -138,9 +142,12 @@ C...Note: no explicit XS uncertainty
      &    1.0E9*XSEC(0,3),
      &    1.0E9*XSEC(0,3)/sqrt(1.0*NGEN(0,3)),
      &    NGEN(0,3),0)
-          HEPMC3STATUS=hepmc3_set_pdf_info(OUTID(ICA),
-     &    MSTI(15),MSTI(16),PARI(33),PARI(34),PARI(23),
-     &    MSTP(51),MSTP(52))
+          PDF1=1
+          PDF2=1
+C    int hepmc3_set_pdf_info_(const int & position, const int& parton_id1, const int& parton_id2, const double& x1, const double& x2, const double& scale_in, const double& xf1, const double& xf2, const int& pdf_id1, const int& pdf_id2) 
+C          HEPMC3STATUS=hepmc3_set_pdf_info(OUTID(ICA),
+C     &    MSTI(15),MSTI(16),PARI(33),PARI(34),PARI(23),
+C     &    MSTP(51),MSTP(52),PDF1,PDF2)
 C...The values below are not always meaningful
           HEPMC3STATUS=hepmc3_set_attribute_int(OUTID(ICA),-1,
      &   'mpi'//char(0))

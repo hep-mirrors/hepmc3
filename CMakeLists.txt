@@ -20,8 +20,8 @@ endif(CMAKE_BUILD_TYPE)
 
 message(STATUS "HepMC3: CMAKE_VERSION=${CMAKE_VERSION}")
 if (${CMAKE_VERSION} VERSION_GREATER "3.8")
-  include(CheckIPOSupported)
   cmake_policy(SET CMP0069 NEW)
+  include(CheckIPOSupported)
 endif()
 
 
