@@ -50,7 +50,9 @@ extern "C" {
         return -1;
     }
 
-    int hepmc3_set_pdf_info_(const int & position, const int& parton_id1, const int& parton_id2, const double& x1, const double& x2, const double& scale_in, const double& xf1, const double& xf2, const int& pdf_id1, const int& pdf_id2)
+    int hepmc3_set_pdf_info_(const int & position, const int& parton_id1, const int& parton_id2, const double& x1, const double& x2,
+                             const double& scale_in, const double& xf1, const double& xf2,
+                             const int& pdf_id1, const int& pdf_id2)
     {
         return -1;
     }
@@ -182,7 +184,9 @@ extern "C" {
         return 0;
     }
 
-    int hepmc3_set_pdf_info_(const int & position, const int& parton_id1, const int& parton_id2, const double& x1, const double& x2, const double& scale_in, const double& xf1, const double& xf2, const int& pdf_id1, const int& pdf_id2)
+    int hepmc3_set_pdf_info_(const int & position, const int& parton_id1, const int& parton_id2, const double& x1, const double& x2,
+                             const double& scale_in, const double& xf1, const double& xf2,
+                             const int& pdf_id1, const int& pdf_id2)
     {
         if (hepmc3_gWriters.count(position) == 0) {
             printf("Warning in %s: Writer at position %i does not exist\n", __FUNCTION__, position);
@@ -302,7 +306,7 @@ extern "C" {
             printf("Warning in %s: Writer at position %i does not exist\n", __FUNCTION__, position);
             return 1;
         }
-        hepmc3_new_weight_(position, name,0);
+        hepmc3_new_weight_(position, name, strlen(name));
         hepmc3_gWriters[position].second->weight(std::string(name)) = val;
         return 0;
     }

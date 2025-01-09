@@ -24,7 +24,6 @@ if (${CMAKE_VERSION} VERSION_GREATER "3.8")
   include(CheckIPOSupported)
 endif()
 
-
 string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 
 #-------------Options-------------------------------------------------------
