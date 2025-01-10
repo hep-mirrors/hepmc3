@@ -24,10 +24,10 @@ static  char*  create_image_from_dot(char* m_buffer)
     unsigned int length;
 
     if (!g)
-        return NULL;
+        return nullptr;
     err = gvRenderData(gvc, g, "png", &data, &length);
     if (err)
-        return NULL;
+        return nullptr;
     data =  static_cast<char*>(realloc(data, length + 1));
     gvFreeLayout(gvc, g);
     agclose(g);
