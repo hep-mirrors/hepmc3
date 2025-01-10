@@ -48,7 +48,7 @@ class Attribute {
 public:
     /** @brief Default constructor */
     //Note: m_event should be set to nullptr in case event is deleted!
-    Attribute():m_is_parsed(true) {    m_event=nullptr; }
+    Attribute():m_is_parsed(true) {    m_event = nullptr; }
 
     /** @brief Virtual destructor */
     virtual ~Attribute() {}
@@ -63,7 +63,7 @@ protected:
      *  @note There should be no need for user class to ever use this constructor
      */
     //Note: m_event should be set to nullptr n case event is deleted!
-    explicit Attribute(const std::string &st):m_is_parsed(false),m_string(st) { m_event=nullptr; }
+    explicit Attribute(const std::string &st):m_is_parsed(false),m_string(st) { m_event = nullptr; }
 
     /** @brief GenEvent is a friend */
     friend class GenEvent;
@@ -487,7 +487,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const std::string &att) override {
-        m_val = strtold( att.c_str(),NULL);
+        m_val = strtold( att.c_str(), nullptr);
         set_is_parsed(true);
         return true;
     }
@@ -536,7 +536,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const std::string &att)  override {
-        m_val = strtoul(att.c_str(), NULL, 0);
+        m_val = strtoul(att.c_str(), nullptr, 0);
         set_is_parsed(true);
         return true;
     }
@@ -581,7 +581,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const std::string &att)  override {
-        m_val = strtoul(att.c_str(), NULL, 0);
+        m_val = strtoul(att.c_str(), nullptr, 0);
         set_is_parsed(true);
         return true;
     }
@@ -625,7 +625,7 @@ public:
 
     /** @brief Implementation of Attribute::from_string */
     bool from_string(const std::string &att)  override {
-        m_val = strtoull(att.c_str(), NULL, 0);
+        m_val = strtoull(att.c_str(), nullptr, 0);
         set_is_parsed(true);
         return true;
     }
