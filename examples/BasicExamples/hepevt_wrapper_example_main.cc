@@ -15,16 +15,6 @@
  *  is needed to use this wrapper.
  */
 
-
-/* These two define statements can be used to change HEPEVT definition.
-   They must be defined before including HepMC/HEPEVT_Wrapper.h
-   For this test, if these values were to be changed, the same changes
-   must be included in FORTRAN code
-
-   NOTE: default is NMXHEP=10000 and double precision */
-
-//#define HEPMC3_HEPEVT_NMXHEP 4000
-//#define HEPMC3_HEPEVT_PRECISION float
 #include "HepMC3/HEPEVT_Wrapper.h"
 
 #include <iostream>
@@ -39,7 +29,7 @@ using  namespace HepMC3;
 #endif
 extern "C"  void FC_SIMPLE_TAU_HEPEVT_EVENT(); //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
 extern "C" void FC_PHODMP();                  //!< Forward declaration of function defined in hepevt_wrapper_example_fortran.f
-extern "C" struct HEPEVT hepevt_;                   //!< Forward declaration of fortran block pointer
+extern "C" struct HEPEVT_Templated_Simple<10000,double> hepevt_;                   //!< Forward declaration of fortran block pointer
 
 
 /** @brief Add single particle to HEPEVT event */
