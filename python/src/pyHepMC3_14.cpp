@@ -35,7 +35,7 @@ void bind_pyHepMC3_14(std::function< pybind11::module &(std::string const &names
 {
 	{ // LHEF::OAttr file:HepMC3/LHEF.h line:
 		pybind11::class_<LHEF::OAttr<std::string>, std::shared_ptr<LHEF::OAttr<std::string>>> cl(M("LHEF"), "OAttr_std_string_t", "");
-		cl.def( pybind11::init<std::string, const std::string &>(), pybind11::arg("n"), pybind11::arg("v") );
+		cl.def( pybind11::init<const std::string &, const std::string &>(), pybind11::arg("n"), pybind11::arg("v") );
 
 		cl.def( pybind11::init( [](LHEF::OAttr<std::string> const &o){ return new LHEF::OAttr<std::string>(o); } ) );
 		cl.def_readwrite("name", &LHEF::OAttr<std::string>::name);
@@ -46,7 +46,7 @@ void bind_pyHepMC3_14(std::function< pybind11::module &(std::string const &names
 	}
 	{ // LHEF::OAttr file:HepMC3/LHEF.h line:
 		pybind11::class_<LHEF::OAttr<long>, std::shared_ptr<LHEF::OAttr<long>>> cl(M("LHEF"), "OAttr_long_t", "");
-		cl.def( pybind11::init<std::string, const long &>(), pybind11::arg("n"), pybind11::arg("v") );
+		cl.def( pybind11::init<const std::string &, const long &>(), pybind11::arg("n"), pybind11::arg("v") );
 
 		cl.def( pybind11::init( [](LHEF::OAttr<long> const &o){ return new LHEF::OAttr<long>(o); } ) );
 		cl.def_readwrite("name", &LHEF::OAttr<long>::name);
@@ -57,7 +57,7 @@ void bind_pyHepMC3_14(std::function< pybind11::module &(std::string const &names
 	}
 	{ // LHEF::OAttr file:HepMC3/LHEF.h line:
 		pybind11::class_<LHEF::OAttr<double>, std::shared_ptr<LHEF::OAttr<double>>> cl(M("LHEF"), "OAttr_double_t", "");
-		cl.def( pybind11::init<std::string, const double &>(), pybind11::arg("n"), pybind11::arg("v") );
+		cl.def( pybind11::init<const std::string &, const double &>(), pybind11::arg("n"), pybind11::arg("v") );
 
 		cl.def( pybind11::init( [](LHEF::OAttr<double> const &o){ return new LHEF::OAttr<double>(o); } ) );
 		cl.def_readwrite("name", &LHEF::OAttr<double>::name);
@@ -68,7 +68,7 @@ void bind_pyHepMC3_14(std::function< pybind11::module &(std::string const &names
 	}
 	{ // LHEF::OAttr file:HepMC3/LHEF.h line:
 		pybind11::class_<LHEF::OAttr<int>, std::shared_ptr<LHEF::OAttr<int>>> cl(M("LHEF"), "OAttr_int_t", "");
-		cl.def( pybind11::init<std::string, const int &>(), pybind11::arg("n"), pybind11::arg("v") );
+		cl.def( pybind11::init<const std::string &, const int &>(), pybind11::arg("n"), pybind11::arg("v") );
 
 		cl.def( pybind11::init( [](LHEF::OAttr<int> const &o){ return new LHEF::OAttr<int>(o); } ) );
 		cl.def_readwrite("name", &LHEF::OAttr<int>::name);
@@ -97,11 +97,11 @@ void bind_pyHepMC3_14(std::function< pybind11::module &(std::string const &names
 		cl.def_readwrite("attr", &LHEF::XMLTag::attr);
 		cl.def_readwrite("tags", &LHEF::XMLTag::tags);
 		cl.def_readwrite("contents", &LHEF::XMLTag::contents);
-		cl.def("getattr", (bool (LHEF::XMLTag::*)(std::string, double &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the double variable  to\n the corresponding value. \n\n false if no attribute was found.\n\nC++: LHEF::XMLTag::getattr(std::string, double &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
-		cl.def("getattr", (bool (LHEF::XMLTag::*)(std::string, bool &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the bool variable  to\n true if the corresponding value is \"yes\". \n\n false if no\n attribute was found.\n\nC++: LHEF::XMLTag::getattr(std::string, bool &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
-		cl.def("getattr", (bool (LHEF::XMLTag::*)(std::string, long &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the long variable  to\n the corresponding value. \n\n false if no attribute was found.\n\nC++: LHEF::XMLTag::getattr(std::string, long &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
-		cl.def("getattr", (bool (LHEF::XMLTag::*)(std::string, int &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the long variable  to\n the corresponding value. \n\n false if no attribute was found.\n\nC++: LHEF::XMLTag::getattr(std::string, int &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
-		cl.def("getattr", (bool (LHEF::XMLTag::*)(std::string, std::string &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the string variable  to\n the corresponding value. \n\n false if no attribute was found.\n\nC++: LHEF::XMLTag::getattr(std::string, std::string &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::XMLTag::*)(const std::string &, double &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the double variable  to\n the corresponding value. \n\n false if no attribute was found.\n\nC++: LHEF::XMLTag::getattr(const std::string &, double &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::XMLTag::*)(const std::string &, bool &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the bool variable  to\n true if the corresponding value is \"yes\". \n\n false if no\n attribute was found.\n\nC++: LHEF::XMLTag::getattr(const std::string &, bool &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::XMLTag::*)(const std::string &, long &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the long variable  to\n the corresponding value. \n\n false if no attribute was found.\n\nC++: LHEF::XMLTag::getattr(const std::string &, long &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::XMLTag::*)(const std::string &, int &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the long variable  to\n the corresponding value. \n\n false if no attribute was found.\n\nC++: LHEF::XMLTag::getattr(const std::string &, int &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::XMLTag::*)(const std::string &, std::string &) const) &LHEF::XMLTag::getattr, "Find an attribute named  and set the string variable  to\n the corresponding value. \n\n false if no attribute was found.\n\nC++: LHEF::XMLTag::getattr(const std::string &, std::string &) const --> bool", pybind11::arg("n"), pybind11::arg("v"));
 		cl.def_static("findXMLTags", [](std::string const & a0) -> std::vector<struct LHEF::XMLTag *> { return LHEF::XMLTag::findXMLTags(a0); }, "", pybind11::arg("str"));
 		cl.def_static("findXMLTags", (class std::vector<struct LHEF::XMLTag *> (*)(std::string, std::string *)) &LHEF::XMLTag::findXMLTags, "Scan the given string and return all XML tags found as a vector\n of pointers to XMLTag objects. Text which does not belong to any\n tag is stored in tags without name and in the string pointed to\n by leftover (if not null).\n\nC++: LHEF::XMLTag::findXMLTags(std::string, std::string *) --> class std::vector<struct LHEF::XMLTag *>", pybind11::arg("str"), pybind11::arg("leftover"));
 		cl.def_static("deleteAll", (void (*)(class std::vector<struct LHEF::XMLTag *> &)) &LHEF::XMLTag::deleteAll, "Delete all tags in a vector.\n\nC++: LHEF::XMLTag::deleteAll(class std::vector<struct LHEF::XMLTag *> &) --> void", pybind11::arg("tags"));
@@ -116,21 +116,21 @@ void bind_pyHepMC3_14(std::function< pybind11::module &(std::string const &names
 		pybind11::class_<LHEF::TagBase, std::shared_ptr<LHEF::TagBase>> cl(M("LHEF"), "TagBase", "This is the base class of all classes representing xml tags.");
 		cl.def( pybind11::init( [](){ return new LHEF::TagBase(); } ) );
 		cl.def( pybind11::init( [](const class std::map<std::string, std::string > & a0){ return new LHEF::TagBase(a0); } ), "doc" , pybind11::arg("attr"));
-		cl.def( pybind11::init<const class std::map<std::string, std::string > &, std::string>(), pybind11::arg("attr"), pybind11::arg("conts") );
+		cl.def( pybind11::init<const class std::map<std::string, std::string > &, const std::string &>(), pybind11::arg("attr"), pybind11::arg("conts") );
 
 		cl.def( pybind11::init( [](LHEF::TagBase const &o){ return new LHEF::TagBase(o); } ) );
 		cl.def_readwrite("attributes", &LHEF::TagBase::attributes);
 		cl.def_readwrite("contents", &LHEF::TagBase::contents);
-		cl.def("getattr", [](LHEF::TagBase &o, std::string const & a0, double & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
-		cl.def("getattr", (bool (LHEF::TagBase::*)(std::string, double &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the double variable  to\n the corresponding value. Remove the correspondig attribute from\n the list if found and  is true. \n\n false if no\n attribute was found.\n\nC++: LHEF::TagBase::getattr(std::string, double &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
-		cl.def("getattr", [](LHEF::TagBase &o, std::string const & a0, bool & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
-		cl.def("getattr", (bool (LHEF::TagBase::*)(std::string, bool &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the bool variable  to\n true if the corresponding value is \"yes\". Remove the correspondig\n attribute from the list if found and  is true. \n\n\n false if no attribute was found.\n\nC++: LHEF::TagBase::getattr(std::string, bool &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
-		cl.def("getattr", [](LHEF::TagBase &o, std::string const & a0, long & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
-		cl.def("getattr", (bool (LHEF::TagBase::*)(std::string, long &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the long variable  to\n the corresponding value. Remove the correspondig attribute from\n the list if found and  is true. \n\n false if no\n attribute was found.\n\nC++: LHEF::TagBase::getattr(std::string, long &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
-		cl.def("getattr", [](LHEF::TagBase &o, std::string const & a0, int & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
-		cl.def("getattr", (bool (LHEF::TagBase::*)(std::string, int &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the long variable  to\n the corresponding value. Remove the correspondig attribute from\n the list if found and  is true. \n\n false if no\n attribute was found.\n\nC++: LHEF::TagBase::getattr(std::string, int &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
-		cl.def("getattr", [](LHEF::TagBase &o, std::string const & a0, std::string & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
-		cl.def("getattr", (bool (LHEF::TagBase::*)(std::string, std::string &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the string variable  to\n the corresponding value. Remove the correspondig attribute from\n the list if found and  is true. \n\n false if no\n attribute was found.\n\nC++: LHEF::TagBase::getattr(std::string, std::string &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
+		cl.def("getattr", [](LHEF::TagBase &o, const std::string & a0, double & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::TagBase::*)(const std::string &, double &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the double variable  to\n the corresponding value. Remove the correspondig attribute from\n the list if found and  is true. \n\n false if no\n attribute was found.\n\nC++: LHEF::TagBase::getattr(const std::string &, double &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
+		cl.def("getattr", [](LHEF::TagBase &o, const std::string & a0, bool & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::TagBase::*)(const std::string &, bool &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the bool variable  to\n true if the corresponding value is \"yes\". Remove the correspondig\n attribute from the list if found and  is true. \n\n\n false if no attribute was found.\n\nC++: LHEF::TagBase::getattr(const std::string &, bool &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
+		cl.def("getattr", [](LHEF::TagBase &o, const std::string & a0, long & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::TagBase::*)(const std::string &, long &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the long variable  to\n the corresponding value. Remove the correspondig attribute from\n the list if found and  is true. \n\n false if no\n attribute was found.\n\nC++: LHEF::TagBase::getattr(const std::string &, long &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
+		cl.def("getattr", [](LHEF::TagBase &o, const std::string & a0, int & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::TagBase::*)(const std::string &, int &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the long variable  to\n the corresponding value. Remove the correspondig attribute from\n the list if found and  is true. \n\n false if no\n attribute was found.\n\nC++: LHEF::TagBase::getattr(const std::string &, int &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
+		cl.def("getattr", [](LHEF::TagBase &o, const std::string & a0, std::string & a1) -> bool { return o.getattr(a0, a1); }, "", pybind11::arg("n"), pybind11::arg("v"));
+		cl.def("getattr", (bool (LHEF::TagBase::*)(const std::string &, std::string &, bool)) &LHEF::TagBase::getattr, "Find an attribute named  and set the string variable  to\n the corresponding value. Remove the correspondig attribute from\n the list if found and  is true. \n\n false if no\n attribute was found.\n\nC++: LHEF::TagBase::getattr(const std::string &, std::string &, bool) --> bool", pybind11::arg("n"), pybind11::arg("v"), pybind11::arg("erase"));
 		cl.def_static("yes", (std::string (*)()) &LHEF::TagBase::yes, "Static string token for truth values.\n\nC++: LHEF::TagBase::yes() --> std::string");
 		cl.def("assign", (struct LHEF::TagBase & (LHEF::TagBase::*)(const struct LHEF::TagBase &)) &LHEF::TagBase::operator=, "C++: LHEF::TagBase::operator=(const struct LHEF::TagBase &) --> struct LHEF::TagBase &", pybind11::return_value_policy::automatic, pybind11::arg(""));
 

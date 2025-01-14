@@ -14,12 +14,12 @@
 #include <string>
 
 /// HepMC version string
-#define HEPMC3_VERSION "3.02.08"
+#define HEPMC3_VERSION "3.03.00"
 
 /// @brief HepMC version as an integer, HepMC X.Y.Z = 1000000*X + 1000*Y + Z
 ///
 /// Use like "#if HEPMC3_VERSION_CODE < 3001004" for < 3.01.04
-#define HEPMC3_VERSION_CODE 3002008
+#define HEPMC3_VERSION_CODE 3003000
 namespace HepMC3 {
 /// Get the HepMC library version string
 inline std::string version() {

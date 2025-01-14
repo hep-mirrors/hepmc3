@@ -2,6 +2,10 @@
 #------------------
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
 #
+if (${CMAKE_VERSION} VERSION_GREATER "3.8")
+  cmake_policy(SET CMP0069 NEW)
+  include(CheckIPOSupported)
+endif()
 
 #---Add executables------------------------------------------------------------
 add_executable(basic_tree.exe ${CMAKE_CURRENT_SOURCE_DIR}/basic_tree.cc)
@@ -20,6 +24,9 @@ else()
     set_target_properties(hepevt_wrapper_example.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/$<0:>)
     if (USE_INSTALLED_HEPMC3)
       install(TARGETS hepevt_wrapper_example.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
+    endif()
+    if (NOT "${CMAKE_Fortran_COMPILER_ID}" STREQUAL  "${CMAKE_CXX_COMPILER_ID}")
+      set_target_properties(hepevt_wrapper_example.exe PROPERTIES  INTERPROCEDURAL_OPTIMIZATION OFF)
     endif()
   else()
     message(STATUS "HepMC3: No Fortran compiler - dissabling HepEvt example.")

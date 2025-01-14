@@ -40,7 +40,7 @@ AnalysisExample::AnalysisExample(std::ostream &stream, std::shared_ptr<GenRunInf
 
 void AnalysisExample::write_event(const GenEvent &evt)
 {
-    double w = evt.weight();
+    double w = (evt.weights().size() ? evt.weight() : 1.);
     m_sum_of_weights += w;
     m_sum_of_weights2 += w*w;
     for(const auto& p: evt.particles() )
@@ -56,6 +56,7 @@ void AnalysisExample::write_event(const GenEvent &evt)
 
 void AnalysisExample::close() {
     if (!m_stream) return;
+    if (std::abs(m_sum_of_weights) < std::numeric_limits<double>::epsilon()) m_sum_of_weights = 1.0;
     auto* ofs = dynamic_cast<std::ofstream*>(m_stream);
     for (size_t i = 1; i < m_vals["rapidity"].size()-1; i++)
     {

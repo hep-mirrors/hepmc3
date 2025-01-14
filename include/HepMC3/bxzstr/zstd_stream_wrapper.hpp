@@ -12,6 +12,9 @@
 
 #include <zstd.h>
 
+#ifndef ZSTD_CLEVEL_DEFAULT
+#define ZSTD_CLEVEL_DEFAULT 5
+#endif
 #include <string>
 #include <exception>
 
@@ -38,7 +41,7 @@ namespace detail {
 class zstd_stream_wrapper : public stream_wrapper {
   public:
     zstd_stream_wrapper(const bool _isInput = true,
-			const int level = ZSTD_defaultCLevel(), const int = 0)
+			const int level = ZSTD_CLEVEL_DEFAULT, const int = 0)
 	    : isInput(_isInput) {
 	if (this->isInput) {
 	    this->dctx = ZSTD_createDCtx();
@@ -47,9 +50,8 @@ class zstd_stream_wrapper : public stream_wrapper {
 	    this->cctx = ZSTD_createCCtx();
 	    if (this->cctx == NULL) throw zstdException("ZSTD_createCCtx() failed!");
 	    this->ret = ZSTD_CCtx_setParameter(cctx, ZSTD_c_compressionLevel, level);
+	    if (ZSTD_isError(this->ret)) throw zstdException(this->ret);
 	}
-	if (ZSTD_isError(this->ret)) throw zstdException(this->ret);
-
     }
 
     ~zstd_stream_wrapper() {

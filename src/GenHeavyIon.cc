@@ -107,7 +107,7 @@ bool GenHeavyIon::to_string(std::string &att) const {
 #ifndef HEPMC3_NO_DEPRECATED
 
 bool GenHeavyIon::operator==(const GenHeavyIon& a) const {
-    return ( memcmp( (void*) this, (void*) &a, sizeof(class GenHeavyIon) ) == 0 );
+    return ( memcmp( static_cast<const void*>(this), static_cast<const void*>(&a), sizeof(class GenHeavyIon) ) == 0 );
 }
 
 bool GenHeavyIon::operator!=(const GenHeavyIon& a) const {

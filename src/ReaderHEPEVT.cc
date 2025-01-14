@@ -121,20 +121,20 @@ bool ReaderHEPEVT::read_hepevt_particle(int i)
     std::stringstream st_v(buf_v.data());
     if (m_options.count("vertices_positions_are_absent") == 0)
     {
-        if (!static_cast<bool>(st_p >> intcodes[0] >> intcodes[1] >> intcodes[2] >> intcodes[3] >> intcodes[4] >> intcodes[5] >> fltcodes1[0] >> fltcodes1[1] >> fltcodes1[2] >> fltcodes1[3] >> fltcodes1[4])) { 
+        if (!static_cast<bool>(st_p >> intcodes[0] >> intcodes[1] >> intcodes[2] >> intcodes[3] >> intcodes[4] >> intcodes[5] >> fltcodes1[0] >> fltcodes1[1] >> fltcodes1[2] >> fltcodes1[3] >> fltcodes1[4])) {
             HEPMC3_ERROR_LEVEL(100,"ReaderHEPEVT: HEPMC3_ERROR reading particle momenta")
             return false;
         }
-        if (!static_cast<bool>(st_v >> fltcodes2[0] >> fltcodes2[1] >> fltcodes2[2] >> fltcodes2[3])) { 
-           HEPMC3_ERROR_LEVEL(100,"ReaderHEPEVT: HEPMC3_ERROR reading particle vertex")
-           return false;
+        if (!static_cast<bool>(st_v >> fltcodes2[0] >> fltcodes2[1] >> fltcodes2[2] >> fltcodes2[3])) {
+            HEPMC3_ERROR_LEVEL(100,"ReaderHEPEVT: HEPMC3_ERROR reading particle vertex")
+            return false;
         }
     }
     else
     {
         if (!static_cast<bool>(st_p>> intcodes[0]>> intcodes[1] >> intcodes[4] >> intcodes[5] >> fltcodes1[0] >> fltcodes1[1] >> fltcodes1[2] >> fltcodes1[4])) {
-          HEPMC3_ERROR_LEVEL(100,"ReaderHEPEVT: HEPMC3_ERROR reading particle momenta")
-          return false;
+            HEPMC3_ERROR_LEVEL(100,"ReaderHEPEVT: HEPMC3_ERROR reading particle momenta")
+            return false;
         }
         intcodes[2] = 0;//FIXME! This is a feature of this format, but maybe there are better ideas.
         intcodes[3] = 0;//FIXME! This is a feature of this format, but maybe there are better ideas.
@@ -188,7 +188,7 @@ void ReaderHEPEVT::close()
 
 bool ReaderHEPEVT::failed()
 {
-    return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate();
+    return m_isstream ? static_cast<bool>(m_stream->rdstate()) : static_cast<bool> (m_file.rdstate());
 }
 
 } // namespace HepMC3

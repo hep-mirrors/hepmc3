@@ -5,7 +5,7 @@
 //
 /**
  *  @file WriterDOT.cc
- *  @brief Implementation of converter of GenEvent into .dot format which can be used for event vizualization. 
+ *  @brief Implementation of converter of GenEvent into .dot format which can be used for event vizualization.
  *
  */
 #include "WriterDOT.h"
