@@ -213,6 +213,10 @@ LCG_x86_64-alma9:
 
 ###########################################################################
 #Check commit messages
+check_commit_Fedora41:
+  variables: { OS: Fedora, FREL: 41}
+  extends: .check_commit
+
 check_commit_Fedora40:
   variables: { OS: Fedora, FREL: 40}
   extends: .check_commit
@@ -245,6 +249,10 @@ check_commit_Fedora23:
   variables: { OS: Fedora, FREL: 23}
   extends: .check_commit
 
+check_commit_CentOS10:
+  variables: { OS: CentOS, FREL: 10}
+  extends: .check_commit
+
 check_commit_CentOS9:
   variables: { OS: CentOS, FREL: 9}
   extends: .check_commit
@@ -263,6 +271,12 @@ check_commit_Archlinux0:
 
 ###########################################################################
 #Build images
+build_image_Fedora41:
+  variables: { OS: Fedora, FREL: 41}
+  extends: .build_image
+  needs:
+    - job: check_commit_Fedora41
+
 build_image_Fedora40:
   variables: { OS: Fedora, FREL: 40}
   extends: .build_image
@@ -311,6 +325,12 @@ build_image_Fedora23:
   needs:
     - job: check_commit_Fedora23
 
+build_image_CentOS10:
+  variables: { OS: CentOS, FREL: 10}
+  extends: .build_image
+  needs:
+    - job: check_commit_CentOS10
+    
 build_image_CentOS9:
   variables: { OS: CentOS, FREL: 9}
   extends: .build_image
@@ -336,6 +356,12 @@ build_image_Archlinux0:
     - job: check_commit_Archlinux0
 
 ###########################################################################
+Fedora41-GNU:
+  variables: { OS: Fedora, FREL: 41, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  extends: .any-cmake
+  needs:
+    - job: build_image_Fedora41
+
 Fedora40-GNU:
   variables: { OS: Fedora, FREL: 40, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
   extends: .any-cmake
@@ -395,6 +421,12 @@ Fedora23-GNU-noroot-nopython-noprotobuf:
   extends: .any-oldcmake-no-python
   needs:
     - job: build_image_Fedora23
+
+CentOS10-GNU:
+  variables: { OS: CentOS, FREL: 10, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  extends: .any-cmake
+  needs:
+    - job: build_image_CentOS10
 
 #CentOS9-INTEL:
 #  variables: { OS: CentOS, FREL: 9, TOOLSET: INTEL, EXTRACMAKEFLAGS: -DCMAKE_EXE_LINKER_FLAGS=-lstdc++}

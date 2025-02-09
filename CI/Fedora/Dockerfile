@@ -10,7 +10,8 @@ RUN  yum -y  install  dnf-plugins-core \
                       python3 python3-devel  python3-numpy   \
                       && yum -y clean all
 
-RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -gt  23 ]; then yum -y  install protobuf protobuf-devel root-core root root-physics python3 python3-devel python2 python2-devel; fi  && yum -y clean all
+RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -gt  23 ]; then yum -y  install protobuf protobuf-devel root-core root root-physics python3 python3-devel ; fi  && yum -y clean all
+RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -gt  23 ]; then  if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -lt  41 ]; then yum -y  install python2 python2-devel ; fi fi  && yum -y clean all
 RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -eq  24 ]; then sed -i 's@message(FATAL_ERROR \"The imported @message(STATUS \"The imported@g' /usr/share/root/cmake/ROOTConfig-targets.cmake ; fi
 RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -eq  33 ]; then yum -y  install pypy pypy-devel; fi && yum -y clean all
 RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -gt  30 ]; then yum -y  install liburing  liburing-devel; fi && yum -y clean all
