@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)
 #----------------------------------------------------------------------------
 project(HepMC3 LANGUAGES CXX)
 set(PROJECT_VERSION 3.03.00)

@@ -1,3 +1,6 @@
+  --------------------------  HepMC3.3.1-pre ----------------------
+2024-02-27 Andrii Verbytskyi
+         * Require cmake>3.10 for compatibility with cmake4
   --------------------------  HepMC3.3.0-pre ----------------------
 2024-05-23 Andrii Verbytskyi
          * Update python bindings with binder 1.4.2
