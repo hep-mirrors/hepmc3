@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9"]
+        python-version: ["3.12"]
         config:
         - {
             name: "MacOSX-13",
@@ -52,21 +52,21 @@ jobs:
             #os: macos-13-xlarge,
             #cxx: "g++-14"
           #}
-        #- {
-            #name: "MacOSX-14",
-            #os: macos-14,
-            #cxx: "g++-14"
-          #}
+        - {
+            name: "MacOSX-14",
+            os: macos-14,
+            cxx: "g++-14"
+          }
         #- {
             #name: "MacOSX-14",
             #os: macos-14-xlarge,
             #cxx: "g++-14"
           #}
-        #- {
-            #name: "MacOSX-15",
-            #os: macos-15,
-            #cxx: "g++-14"
-          #}
+        - {
+            name: "MacOSX-15",
+            os: macos-15,
+            cxx: "g++-14"
+          }
         #- {
             #name: "MacOSX-15",
             #os: macos-15-xlarge,
@@ -96,7 +96,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10"]
+        python-version: ["3.12"]
         config:
         - {
             name: "Windows Latest MSVC",
@@ -121,7 +121,7 @@ jobs:
           dir   C:\vcpkg\packages\protobuf_x64-windows\bin
       - name: Build
         run:  |
-          cmake -S. -B BUILD -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DProtobuf_PROTOC_EXECUTABLE=C:\vcpkg\packages\protobuf_x64-windows\bin\protoc.exe  -DProtobuf_INCLUDE_DIR=C:\vcpkg\packages\protobuf_x64-windows\include -DProtobuf_LIBRARY=C:\vcpkg\packages\protobuf_x64-windows\lib\libprotobuf.lib -DCMAKE_INSTALL_PREFIX=C:\INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF  -DHEPMC3_BUILD_EXAMPLES:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
+          cmake -S. -B BUILD -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DProtobuf_PROTOC_EXECUTABLE=C:\vcpkg\packages\protobuf_x64-windows\bin\protoc.exe  -DProtobuf_INCLUDE_DIR=C:\vcpkg\packages\protobuf_x64-windows\include -DProtobuf_LIBRARY=C:\vcpkg\packages\protobuf_x64-windows\lib\libprotobuf.lib -DCMAKE_INSTALL_PREFIX=C:\INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF  -DHEPMC3_BUILD_EXAMPLES:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
           cmake --build BUILD
           cmake --install BUILD
           chdir BUILD
