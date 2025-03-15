@@ -10,33 +10,68 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9"]
+        python-version: ["3.12"]
         config:
-        - {
-            name: "MacOSX-12",
-            os: macos-12,
-            cc: "clang",
-            cxx: "clang++"
-          }
-        - {
-            name: "MacOSX-11",
-            os: macos-11,
-            cc: "clang",
-            cxx: "clang++"
-          }
         - {
             name: "MacOSX-13",
             os: macos-13,
-            cc: "clang",
             cxx: "clang++"
           }
+        #- {
+            #name: "MacOSX-13",
+            #os: macos-13-xlarge,
+            #cxx: "clang++"
+          #}
+        #- {
+            #name: "MacOSX-14",
+            #os: macos-14,
+            #cxx: "clang++"
+          #}
+        #- {
+            #name: "MacOSX-14",
+            #os: macos-14-xlarge,
+            #cxx: "clang++"
+          #}
+        #- {
+            #name: "MacOSX-15",
+            #os: macos-15,
+            #cxx: "clang++"
+          #}
+        #- {
+            #name: "MacOSX-15",
+            #os: macos-15-xlarge,
+            #cxx: "clang++"
+          #}
+        #- {
+            #name: "MacOSX-13",
+            #os: macos-13,
+            #cxx: "g++-14"
+          #}
+        #- {
+            #name: "MacOSX-13",
+            #os: macos-13-xlarge,
+            #cxx: "g++-14"
+          #}
         - {
             name: "MacOSX-14",
             os: macos-14,
-            cc: "clang",
-            cxx: "clang++"
+            cxx: "g++-14"
           }
-
+        #- {
+            #name: "MacOSX-14",
+            #os: macos-14-xlarge,
+            #cxx: "g++-14"
+          #}
+        - {
+            name: "MacOSX-15",
+            os: macos-15,
+            cxx: "g++-14"
+          }
+        #- {
+            #name: "MacOSX-15",
+            #os: macos-15-xlarge,
+            #cxx: "g++-14"
+          #}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -47,7 +82,9 @@ jobs:
       run:  |
         brew install protobuf
         brew install doxygen
-        cmake -S. -B BUILD -DCMAKE_INSTALL_PREFIX=./INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
+        set -x
+        uname -m
+        cmake -S. -B BUILD  -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}} -DCMAKE_C_COMPILER=${{matrix.config.cc}} -DCMAKE_INSTALL_PREFIX=./INSTALL -DHEPMC3_ENABLE_PYTHON=OFF -DHEPMC3_BUILD_DOCS:BOOL=OFF -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
         cmake --build BUILD
         cmake --install BUILD
         cd BUILD
@@ -59,7 +96,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10"]
+        python-version: ["3.12"]
         config:
         - {
             name: "Windows Latest MSVC",
@@ -84,7 +121,7 @@ jobs:
           dir   C:\vcpkg\packages\protobuf_x64-windows\bin
       - name: Build
         run:  |
-          cmake -S. -B BUILD -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DProtobuf_PROTOC_EXECUTABLE=C:\vcpkg\packages\protobuf_x64-windows\bin\protoc.exe  -DProtobuf_INCLUDE_DIR=C:\vcpkg\packages\protobuf_x64-windows\include -DProtobuf_LIBRARY=C:\vcpkg\packages\protobuf_x64-windows\lib\libprotobuf.lib -DCMAKE_INSTALL_PREFIX=C:\INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF  -DHEPMC3_BUILD_EXAMPLES:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
+          cmake -S. -B BUILD -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DProtobuf_PROTOC_EXECUTABLE=C:\vcpkg\packages\protobuf_x64-windows\bin\protoc.exe  -DProtobuf_INCLUDE_DIR=C:\vcpkg\packages\protobuf_x64-windows\include -DProtobuf_LIBRARY=C:\vcpkg\packages\protobuf_x64-windows\lib\libprotobuf.lib -DCMAKE_INSTALL_PREFIX=C:\INSTALL -DHEPMC3_BUILD_DOCS:BOOL=OFF  -DHEPMC3_BUILD_EXAMPLES:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_PYTHON_VERSIONS=3
           cmake --build BUILD
           cmake --install BUILD
           chdir BUILD

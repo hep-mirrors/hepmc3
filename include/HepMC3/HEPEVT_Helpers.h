@@ -48,6 +48,26 @@ struct HEPEVT_Templated
     momentum_type vhep  [max_particles][4];  //!< Time-space position: x, y, z, t
 };
 
+/** @struct HEPEVT_Templated
+ *  @brief  C structure representing Fortran common block HEPEVT
+ * T. Sjöstrand et al., "A proposed standard event record",
+ *  in `Z physics at LEP 1', eds. G. Altarelli, R. Kleiss and C. Verzegnassi,
+ * Geneva, Switzerland, September 4-5, 1989, CERN 89-08 (Geneva, 1989), Vol. 3, p. 327
+ * Disk representation is given by Fortran WRITE/READ format.
+ */
+template <int max_particles, typename momentum_type = double>
+struct HEPEVT_Templated_Simple
+{
+    int        nevhep;             //!< Event number
+    int        nhep;               //!< Number of entries in the event
+    int        isthep[max_particles];     //!< Status code
+    int        idhep [max_particles];     //!< PDG ID
+    int        jmohep[max_particles*2];  //!< Position of 1st and 2nd (or last!) mother
+    int        jdahep[max_particles*2];  //!< Position of 1nd and 2nd (or last!) daughter
+    momentum_type phep  [max_particles*5];  //!< Momentum: px, py, pz, e, m
+    momentum_type vhep  [max_particles*4];  //!< Time-space position: x, y, z, t
+};
+
 /** @struct HEPEVT_Pointers
  *  @brief  C structure representing Fortran common block HEPEVT
  * T. Sjöstrand et al., "A proposed standard event record",

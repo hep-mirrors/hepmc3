@@ -273,7 +273,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         if (random_states_a) {
             std::vector<long int> random_states_v = random_states_a->value();
             for (size_t i = 0; i < random_states_v.size(); ++i ) {
-                evt.add_attribute("random_states" + std::to_string((long long unsigned int)i), std::make_shared<IntAttribute>(random_states_v[i]));
+                evt.add_attribute("random_states" + std::to_string(static_cast<long long unsigned int>(i)), std::make_shared<IntAttribute>(random_states_v[i]));
             }
             evt.remove_attribute("random_states");
         }
@@ -284,10 +284,10 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if (cached_attributes.count("flows") != 0) {
         const std::map<int, std::shared_ptr<Attribute> >& flows = cached_attributes.at("flows");
         if (m_options.count("particle_flows_are_separated") == 0) {
-            for (const auto& f: flows) if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {  m_particle_cache[f.first-1]->add_attribute("flows", f.second);}
+            for (const auto& f: flows) if (f.first > 0 && f.first <= static_cast<int>(m_particle_cache.size())) {  m_particle_cache[f.first-1]->add_attribute("flows", f.second);}
         } else  {
             for (const auto& f: flows) {
-                if (f.first > 0 && f.first <= (int)m_particle_cache.size()) {
+                if (f.first > 0 && f.first <= static_cast<int>(m_particle_cache.size())) {
                     std::shared_ptr<VectorIntAttribute>  casted = std::dynamic_pointer_cast<VectorIntAttribute>(f.second);
                     if (!casted) continue;//Should not happen
                     std::vector<int> this_p_flow = casted->value();
@@ -299,21 +299,21 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
 
     if (cached_attributes.count("phi") != 0) {
         const std::map<int, std::shared_ptr<Attribute> >& phi = cached_attributes.at("phi");
-        for (const auto& f: phi) if (f.first > 0 &&f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("phi", f.second);
+        for (const auto& f: phi) if (f.first > 0 &&f.first <= static_cast<int>(m_particle_cache.size()))  m_particle_cache[f.first-1]->add_attribute("phi", f.second);
     }
 
     if (cached_attributes.count("theta") != 0) {
         const std::map<int, std::shared_ptr<Attribute> >& theta = cached_attributes.at("theta");
-        for (const auto& f: theta) if (f.first > 0 && f.first <= (int)m_particle_cache.size())  m_particle_cache[f.first-1]->add_attribute("theta", f.second);
+        for (const auto& f: theta) if (f.first > 0 && f.first <= static_cast<int>(m_particle_cache.size()))  m_particle_cache[f.first-1]->add_attribute("theta", f.second);
     }
 
     if (cached_attributes.count("weights") != 0) {
         const std::map<int, std::shared_ptr<Attribute> >& weights = cached_attributes.at("weights");
         if (m_options.count("vertex_weights_are_separated") == 0) {
-            for (const auto& f: weights) { if (f.first < 0 && f.first >= -(int)m_vertex_cache.size())  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);}
+            for (const auto& f: weights) { if (f.first < 0 && f.first >= -static_cast<int>(m_vertex_cache.size()))  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);}
         } else {
             for (const auto& f: weights) {
-                if (f.first < 0 && f.first >= -(int)m_vertex_cache.size()) {
+                if (f.first < 0 && f.first >= -static_cast<int>(m_vertex_cache.size())) {
                     std::shared_ptr<VectorDoubleAttribute>  casted = std::dynamic_pointer_cast<VectorDoubleAttribute>(f.second);
                     if (!casted) continue;//Should not happen
                     std::vector<double> this_v_weight = casted->value();
@@ -503,7 +503,7 @@ int ReaderAsciiHepMC2::parse_vertex_information(const char *buf) {
 
     m_vertex_cache_ghost.emplace_back(data_ghost);
 
-    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: V: " << -(int)m_vertex_cache.size() << " (old barcode " << barcode << ") " << num_particles_out << " particles)")
+    HEPMC3_DEBUG(10, "ReaderAsciiHepMC2: V: " << -static_cast<int>(m_vertex_cache.size()) << " (old barcode " << barcode << ") " << num_particles_out << " particles)")
 
     return num_particles_out;
 }
@@ -744,10 +744,10 @@ bool ReaderAsciiHepMC2::parse_pdf_info(GenEvent &evt, const char *buf) {
 
     return true;
 }
-bool ReaderAsciiHepMC2::failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+bool ReaderAsciiHepMC2::failed() { return m_isstream ? static_cast<bool>(m_stream->rdstate()) : static_cast<bool>(m_file.rdstate()); }
 
 void ReaderAsciiHepMC2::close() {
-    if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost=nullptr;}
+    if (m_event_ghost) { m_event_ghost->clear(); delete m_event_ghost; m_event_ghost = nullptr;}
     if ( !m_file.is_open() ) return;
     m_file.close();
 }

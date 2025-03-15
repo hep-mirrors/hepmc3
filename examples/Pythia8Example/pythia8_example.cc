@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
     std::vector<std::string> names;
     for (int iWeight = 0; iWeight < pythia.info.nWeights(); ++iWeight) {
         std::string s = pythia.info.weightLabel(iWeight);
-        if (!s.length()) s = std::to_string((long long int)iWeight);
+        if (!s.length()) s = std::to_string(static_cast<long long int>(iWeight));
         names.push_back(s);
     }
     if (names.empty()) names.emplace_back("default");

@@ -1,6 +1,6 @@
 variables:
   DOCKER_DRIVER: overlay2
-  STANDARDFLAGS: -DHEPMC3_TEST_VALGRIND=ON  -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_ROOTIO:BOOL=ON -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON
+  STANDARDFLAGS: -DHEPMC3_TEST_VALGRIND=ON  -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=ON -DHEPMC3_ENABLE_ROOTIO:BOOL=ON -DHEPMC3_BUILD_EXAMPLES:BOOL=ON -DHEPMC3_ENABLE_TEST:BOOL=ON -DHEPMC3_TEST_VALGRIND:BOOL=ON -DHEPMC3_ENABLE_PYTHON:BOOL=ON -DHEPMC3_INSTALL_INTERFACES:BOOL=ON -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON -DHEPMC3_BUILD_DOCS:BOOL=ON  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON 
   #-DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"
 stages:
   - check_if_dockerfile_updated
@@ -8,52 +8,62 @@ stages:
   - build
   - LCG
 ########################################################################
-.LCGcmake: &LCGcmake
-    - mkdir BUILD
-    - cd BUILD
-    - set -x
-    - cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" ${STANDARDFLAGS} ${LARG}  ${EXTRACMAKEFLAGS}
-    - set +x
-    - make -j $(nproc)
-    - make -j $(nproc) install
-    - ctest -j 5 --output-on-failure
 
-LCG_99_x86_64-centos7-gcc8-opt:
+LCG_x86_64-alma9:
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
-  image: gitlab-registry.cern.ch/sft/docker:lcg-cc7
+  image: gitlab-registry.cern.ch/sft/docker/alma9-core:latest
   tags:
     - k8s-cvmfs
   stage: LCG
-  before_script:
-    - export LCGPLATFORM=x86_64-centos7-gcc8-opt
-    - export LCG_LOCATION=/cvmfs/sft.cern.ch/lcg/releases/LCG_99
-    - source /cvmfs/sft.cern.ch/lcg/contrib/gcc/8.2.0/${LCGPLATFORM}/setup.sh
-    - source ${LCG_LOCATION}/ROOT/v6.22.06/${LCGPLATFORM}/ROOT-env.sh
-    - export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/latest/Linux-x86_64/bin/:${PATH}
-    - export ROOTSYS=${LCG_LOCATION}/ROOT/v6.22.06/${LCGPLATFORM}/
-    - source ${LCG_LOCATION}/valgrind/3.16.1/${LCGPLATFORM}/valgrind-env.sh
-    - source ${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/graphviz-env.sh
-    - source ${LCG_LOCATION}/zlib/1.2.11/${LCGPLATFORM}/zlib-env.sh
-    - source ${LCG_LOCATION}/Python/3.8.6/${LCGPLATFORM}/Python-env.sh
-    - source ${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/HepMC-env.sh
-    - source ${LCG_LOCATION}/protobuf/2.5.0/${LCGPLATFORM}/protobuf-env.sh
-#LCG 99 calls its variable Protobuf__HOME instead of Protobuf_HOME
-    - export Protobuf_ROOT=$(pkg-config protobuf --variable=prefix)
   script:
-    - export
-    - LARG=" "
-    - LARG="$LARG "-DPYTHIA8_ROOT_DIR=${LCG_LOCATION}/MCGenerators/pythia8/244/${LCGPLATFORM}
-    - LARG="$LARG "-DHEPMC2_ROOT_DIR=${LCG_LOCATION}/HepMC/2.06.11/${LCGPLATFORM}/
-    - LARG="$LARG "-DGRAPHVIZ_ROOT=${LCG_LOCATION}/graphviz/2.40.1/${LCGPLATFORM}/
-    - LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
-    - LARG="$LARG "-DProtobuf_LIBRARY=${Protobuf_ROOT}/lib/libprotobuf.so
-    - LARG="$LARG "-DHEPMC3_USE_INTERFACE_FROM_PYTHIA8:BOOL=OFF
-    - LARG="$LARG "-DHEPMC3_PYTHON_VERSIONS=3
-    - LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
-    - LARG="$LARG "-DHEPMC3_Python_SITEARCH38=$(pwd)/install/lib/python3.8/site-packages
-    - *LCGcmake
+    - |
+      export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
+      uname -m
+      export LCGRELEASE=LCG_106a_ATLAS_8 
+      UNAME=$(uname -m)
+      export GCCV=13
+      set -x
+      export LCGPLATFORM=$UNAME"-el9-gcc"$GCCV"-opt"
+      export LCGLOCATION=/cvmfs/sft.cern.ch/lcg/releases/$LCGRELEASE
+      export HM3_ROOT_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'ROOT;' | cut -f 3 -d';' | tr -d ' ')
+      export HM3_VALGRIND_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'valgrind;' | cut -f 3 -d';' | tr -d ' ')
+      export HM3_GRAPHVIZ_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep '^graphviz;' | cut -f 3 -d';' | tr -d ' ')
+      export HM3_PYTHON_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'Python;' | cut -f 3 -d';' | tr -d ' ')
+      export PYTHON3VERSION=$(echo $HM3_PYTHON_VERSION | cut -f 1,2 -d. | tr -d .)
+      export PYTHON3DOTVERSION=$(echo $HM3_PYTHON_VERSION | cut -f 1,2 -d. )
+      export HM3_HEPMC_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'HepMC;' | cut -f 3 -d';' | tr -d ' ')
+      export HM3_PROTOBUF_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'protobuf;' | cut -f 3 -d';' | tr -d ' ')
+      export HM3_PROTOBUF2_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'protobuf2;' | cut -f 3 -d';' | tr -d ' ')
+      export HM3_PYTHIA8_VERSION=$(cat  $LCGLOCATION/LCG_generators_$LCGPLATFORM'.txt' | grep 'pythia8;' | cut -f 3 -d';' | tr -d ' ')
+      source /cvmfs/sft.cern.ch/lcg/contrib/gcc/${GCCV}/${LCGPLATFORM}/setup.sh
+      export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/latest/Linux-x86_64/bin/:${PATH}
+      source ${LCGLOCATION}/ROOT/${HM3_ROOT_VERSION}/${LCGPLATFORM}/ROOT-env.sh
+      export ROOTSYS=${LCGLOCATION}/ROOT/${HM3_ROOT_VERSION}/${LCGPLATFORM}/
+      source ${LCGLOCATION}/valgrind/${HM3_VALGRIND_VERSION}/${LCGPLATFORM}/valgrind-env.sh
+      source ${LCGLOCATION}/graphviz/${HM3_GRAPHVIZ_VERSION}/${LCGPLATFORM}/graphviz-env.sh
+      source ${LCGLOCATION}/Python/${HM3_PYTHON_VERSION}/${LCGPLATFORM}/Python-env.sh
+      source ${LCGLOCATION}/HepMC/${HM3_HEPMC_VERSION}/${LCGPLATFORM}/HepMC-env.sh
+      source ${LCGLOCATION}/protobuf2/${HM3_PROTOBUF2_VERSION}/${LCGPLATFORM}/protobuf2-env.sh
+      export Protobuf_ROOT=$(pkg-config protobuf --variable=prefix)
+      export LARG=" "
+      export LARG="$LARG "-DPYTHIA8_ROOT_DIR=${LCGLOCATION}/MCGenerators/pythia8/${HM3_PYTHIA8_VERSION}/${LCGPLATFORM}
+      export LARG="$LARG "-DHEPMC2_ROOT_DIR=${LCGLOCATION}/HepMC/${HM3_HEPMC_VERSION}/${LCGPLATFORM}/
+      export LARG="$LARG "-DGRAPHVIZ_ROOT=${LCGLOCATION}/graphviz/${HM3_GRAPHVIZ_VERSION}/${LCGPLATFORM}/
+      export LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
+      export LARG="$LARG "-DProtobuf_LIBRARY=${Protobuf_ROOT}/lib/libprotobuf.so
+      export LARG="$LARG "-DHEPMC3_USE_INTERFACE_FROM_PYTHIA8:BOOL=OFF
+      export LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
+      export LARG="$LARG "-DHEPMC3_Python_SITEARCH${PYTHON3VERSION}=$(pwd)/install/lib/python${PYTHON3DOTVERSION}/site-packages
+      mkdir BUILD
+      cd BUILD
+      set -x
+      cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" ${STANDARDFLAGS} ${LARG}  ${EXTRACMAKEFLAGS}
+      set +x
+      make -j $(nproc)
+      make -j $(nproc) install
+      ctest -j 5 --output-on-failure
 
 .check_commit: &check_commit
   stage: check_if_dockerfile_updated
@@ -145,7 +155,7 @@ LCG_99_x86_64-centos7-gcc8-opt:
     - cd $TTOP
 
 .cmake: &cmake
-    - $CMAKE -S . -B BUILD -DCMAKE_INSTALL_PREFIX=$(pwd)/INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
+    - $CMAKE -S . -B BUILD -DCMAKE_INSTALL_PREFIX=$(pwd)/INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  -DCMAKE_Fortran_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
     - $CMAKE --build BUILD -j 10  --verbose
     - $CMAKE --install BUILD
     - cd BUILD
@@ -155,7 +165,7 @@ LCG_99_x86_64-centos7-gcc8-opt:
 .oldcmake: &oldcmake
     - mkdir -p BUILD
     - cd  BUILD
-    - $CMAKE ..  -DCMAKE_INSTALL_PREFIX=$(pwd)/../INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
+    - $CMAKE ..  -DCMAKE_INSTALL_PREFIX=$(pwd)/../INSTALL -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DCMAKE_Fortran_FLAGS="-Wpedantic -Wall -Wextra"  ${STANDARDFLAGS} ${EXTRACMAKEFLAGS} $CACHINGFLAGS
     - make -j 10  SHELL='sh -x'
     - make install
     - $CTEST -j 5 --output-on-failure
@@ -203,6 +213,10 @@ LCG_99_x86_64-centos7-gcc8-opt:
 
 ###########################################################################
 #Check commit messages
+check_commit_Fedora41:
+  variables: { OS: Fedora, FREL: 41}
+  extends: .check_commit
+
 check_commit_Fedora40:
   variables: { OS: Fedora, FREL: 40}
   extends: .check_commit
@@ -227,12 +241,16 @@ check_commit_Fedora33:
   variables: { OS: Fedora, FREL: 33}
   extends: .check_commit
 
-check_commit_Fedora24:
-  variables: { OS: Fedora, FREL: 24}
+check_commit_Fedora27:
+  variables: { OS: Fedora, FREL: 27}
   extends: .check_commit
 
-check_commit_Fedora23:
-  variables: { OS: Fedora, FREL: 23}
+#check_commit_Fedora23:
+  #variables: { OS: Fedora, FREL: 23}
+  #extends: .check_commit
+
+check_commit_CentOS10:
+  variables: { OS: CentOS, FREL: 10}
   extends: .check_commit
 
 check_commit_CentOS9:
@@ -253,6 +271,12 @@ check_commit_Archlinux0:
 
 ###########################################################################
 #Build images
+build_image_Fedora41:
+  variables: { OS: Fedora, FREL: 41}
+  extends: .build_image
+  needs:
+    - job: check_commit_Fedora41
+
 build_image_Fedora40:
   variables: { OS: Fedora, FREL: 40}
   extends: .build_image
@@ -289,18 +313,24 @@ build_image_Fedora33:
   needs:
     - job: check_commit_Fedora33
 
-build_image_Fedora24:
-  variables: { OS: Fedora, FREL: 24}
+build_image_Fedora27:
+  variables: { OS: Fedora, FREL: 27}
   extends: .build_image
   needs:
-    - job: check_commit_Fedora24
+    - job: check_commit_Fedora27
 
-build_image_Fedora23:
-  variables: { OS: Fedora, FREL: 23}
+#build_image_Fedora23:
+  #variables: { OS: Fedora, FREL: 23}
+  #extends: .build_image
+  #needs:
+    #- job: check_commit_Fedora23
+
+build_image_CentOS10:
+  variables: { OS: CentOS, FREL: 10}
   extends: .build_image
   needs:
-    - job: check_commit_Fedora23
-
+    - job: check_commit_CentOS10
+    
 build_image_CentOS9:
   variables: { OS: CentOS, FREL: 9}
   extends: .build_image
@@ -326,6 +356,12 @@ build_image_Archlinux0:
     - job: check_commit_Archlinux0
 
 ###########################################################################
+Fedora41-GNU:
+  variables: { OS: Fedora, FREL: 41, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  extends: .any-cmake
+  needs:
+    - job: build_image_Fedora41
+
 Fedora40-GNU:
   variables: { OS: Fedora, FREL: 40, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
   extends: .any-cmake
@@ -339,7 +375,7 @@ Fedora38-GNU:
     - job: build_image_Fedora38
 
 Fedora37-LLVM:
-  variables: { OS: Fedora, FREL: 37, TOOLSET: LLVM,  EXTRACMAKEFLAGS: }
+  variables: { OS: Fedora, FREL: 37, TOOLSET: LLVM,  EXTRACMAKEFLAGS: -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF}
   extends: .any-cmake
   needs:
     - job: build_image_Fedora37
@@ -357,7 +393,7 @@ Fedora34-GNU:
     - job: build_image_Fedora34
 
 Fedora34-LLVM:
-  variables: { OS: Fedora, FREL: 34, TOOLSET: LLVM,  EXTRACMAKEFLAGS: }
+  variables: { OS: Fedora, FREL: 34, TOOLSET: LLVM,  EXTRACMAKEFLAGS:  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF}
   extends: .any-cmake
   needs:
     - job: build_image_Fedora34
@@ -368,23 +404,29 @@ Fedora33-GNU-pypy:
   needs:
     - job: build_image_Fedora33
 
-Fedora24-GNU:
-  variables: { OS: Fedora, FREL: 24, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
+Fedora27-GNU:
+  variables: { OS: Fedora, FREL: 27, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
   extends: .any-oldcmake
   needs:
-    - job: build_image_Fedora24
+    - job: build_image_Fedora27
 
-Fedora23-LLVM-noroot-nopython-noprotobuf:
-  variables: { OS: Fedora, FREL: 23, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
-  extends: .any-oldcmake-no-python
-  needs:
-    - job: build_image_Fedora23
+#Fedora23-LLVM-noroot-nopython-noprotobuf:
+  #variables: { OS: Fedora, FREL: 23, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
+  #extends: .any-oldcmake-no-python
+  #needs:
+    #- job: build_image_Fedora23
 
-Fedora23-GNU-noroot-nopython-noprotobuf:
-  variables: { OS: Fedora, FREL: 23, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
-  extends: .any-oldcmake-no-python
+#Fedora23-GNU-noroot-nopython-noprotobuf:
+  #variables: { OS: Fedora, FREL: 23, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
+  #extends: .any-oldcmake-no-python
+  #needs:
+    #- job: build_image_Fedora23
+
+CentOS10-GNU:
+  variables: { OS: CentOS, FREL: 10, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  extends: .any-cmake
   needs:
-    - job: build_image_Fedora23
+    - job: build_image_CentOS10
 
 #CentOS9-INTEL:
 #  variables: { OS: CentOS, FREL: 9, TOOLSET: INTEL, EXTRACMAKEFLAGS: -DCMAKE_EXE_LINKER_FLAGS=-lstdc++}

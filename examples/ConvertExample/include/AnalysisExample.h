@@ -36,7 +36,7 @@ public:
     void write_event(const GenEvent &evt)  override;
     /// @brief Return status of the stream
     bool failed() override {
-        return (bool)m_file.rdstate();
+        return static_cast<bool> (m_file.rdstate());
     }
     /// @brief Close file stream
     void close() override;

@@ -176,10 +176,10 @@ class streambuf : public std::basic_streambuf<char>
       py_seek (getattr(python_file_obj, "seek", py::none())),
       py_tell (getattr(python_file_obj, "tell", py::none())),
       buffer_size(buffer_size_ != 0 ? buffer_size_ : default_buffer_size),
-      write_buffer(0),
+      write_buffer(nullptr),
       pos_of_read_buffer_end_in_py_file(0),
       pos_of_write_buffer_end_in_py_file(buffer_size),
-      farthest_pptr(0)
+      farthest_pptr(nullptr)
     {
       assert(buffer_size != 0);
       /* Some Python file objects (e.g. sys.stdout and sys.stdin)
@@ -207,7 +207,7 @@ class streambuf : public std::basic_streambuf<char>
       }
       else {
         // The first attempt at output will result in a call to overflow
-        setp(0, 0);
+        setp(nullptr, nullptr);
       }
 
       if (!py_tell.is_none()){
@@ -245,7 +245,7 @@ class streambuf : public std::basic_streambuf<char>
       py::ssize_t py_n_read;
       if (PYBIND11_BYTES_AS_STRING_AND_SIZE(read_buffer.ptr(),
             &read_buffer_data, &py_n_read) == -1) {
-        setg(0, 0, 0);
+        setg(nullptr, nullptr, nullptr);
         throw std::invalid_argument(
           "The method 'read' of the Python file object "
           "did not return a string.");

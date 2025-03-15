@@ -138,10 +138,17 @@ C...Note: no explicit XS uncertainty
      &    1.0E9*XSEC(0,3),
      &    1.0E9*XSEC(0,3)/sqrt(1.0*NGEN(0,3)),
      &    NGEN(0,3),0)
-          HEPMC3STATUS=hepmc3_set_pdf_info(OUTID(ICA),
-     &    MSTI(15),MSTI(16),PARI(33),PARI(34),PARI(23),
-     &    MSTP(51),MSTP(52))
+C    int hepmc3_set_pdf_info_(const int & position, 
+C                             const int& parton_id1, const int& parton_id2, 
+C                             const double& x1, const double& x2, const double& scale_in, 
+C                             const double& xf1, const double& xf2, 
+C                             const int& pdf_id1, const int& pdf_id2) 
 C...The values below are not always meaningful
+           HEPMC3STATUS=hepmc3_set_pdf_info(OUTID(ICA),
+     &    MSTI(15),MSTI(16),
+     &    PARI(33),PARI(34),PARI(23),
+     &    1.0D0, 1.0D0,
+     &    MSTP(52),MSTP(52))
           HEPMC3STATUS=hepmc3_set_attribute_int(OUTID(ICA),-1,
      &   'mpi'//char(0))
           HEPMC3STATUS=hepmc3_set_attribute_int(OUTID(ICA),MSUB(1),

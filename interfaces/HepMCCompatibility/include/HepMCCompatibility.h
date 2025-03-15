@@ -49,7 +49,7 @@ HepMC::GenEvent* ConvertHepMCGenEvent_3to2(const HepMC3::GenEvent& evt)
             else {
                 for (size_t ii=0; ii<100; ii++)
                 {
-                    std::shared_ptr<HepMC3::DoubleAttribute> rs=v3->attribute<HepMC3::DoubleAttribute>("weight"+std::to_string((long long unsigned int)ii));
+                    std::shared_ptr<HepMC3::DoubleAttribute> rs=v3->attribute<HepMC3::DoubleAttribute>("weight"+std::to_string(static_cast<long long unsigned int>(ii)));
                     if (!rs) break;
                     vweights.push_back(rs->value());
                 }
@@ -182,7 +182,7 @@ HepMC::GenEvent* ConvertHepMCGenEvent_3to2(const HepMC3::GenEvent& evt)
     std::vector<long> random_states;
     for (int i=0; i<100; i++)
     {
-        std::shared_ptr<HepMC3::IntAttribute> rs=evt.attribute<HepMC3::IntAttribute>("random_states"+std::to_string((long long unsigned int)i));
+        std::shared_ptr<HepMC3::IntAttribute> rs=evt.attribute<HepMC3::IntAttribute>("random_states"+std::to_string(static_cast<long long unsigned int>(i)));
         if (!rs) break;
         random_states.push_back(rs->value());
     }

@@ -87,7 +87,7 @@ void WriterHEPEVT::close()
 
 bool WriterHEPEVT::failed()
 {
-    return (bool)m_file.rdstate();
+    return static_cast<bool>(m_file.rdstate());
 }
 
 void WriterHEPEVT::set_vertices_positions_present(bool iflong) { if (iflong) m_options["vertices_positions_are_absent"] = ""; else m_options.erase("vertices_positions_are_absent"); }

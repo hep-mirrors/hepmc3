@@ -60,27 +60,27 @@ extern "C" {
     {
         return -1;
     }
-    int hepmc3_set_attribute_int_(const int & position, const int & attval, const char* attname)
+    int hepmc3_set_attribute_int_(const int & position, const int & attval, const char* attname, size_t)
     {
         return -1;
     }
-    int hepmc3_set_attribute_double_(const int & position, const double & attval, const char* attname)
+    int hepmc3_set_attribute_double_(const int & position, const double & attval, const char* attname, size_t)
     {
         return -1;
     }
-    int hepmc3_new_writer_(const int & position, const int & mode, const char* ffilename)
+    int hepmc3_new_writer_(const int & position, const int & mode, const char* ffilename, size_t)
     {
         return  -1;
     }
-    int hepmc3_new_weight_(const int & position, const char* name)
+    int hepmc3_new_weight_(const int & position, const char* name, size_t)
     {
         return -1;
     }
-    int hepmc3_set_weight_by_index_(const int & position, const double& val, const int & pos)
+    int hepmc3_set_weight_by_index_(const int & position, const double& val, const int & pos, size_t)
     {
         return -1;
     }
-    int hepmc3_set_weight_by_name_(const int & position, const double& val, const char* name)
+    int hepmc3_set_weight_by_name_(const int & position, const double& val, const char* name, size_t)
     {
         return -1;
     }
@@ -203,7 +203,7 @@ extern "C" {
         hepmc3_gInterface.set_hepevt_address((char*)a);
         return 0;
     }
-    int hepmc3_set_attribute_int_(const int & position, const int & attval, const char* attname)
+    int hepmc3_set_attribute_int_(const int & position, const int & attval, const char* attname, size_t)
     {
         if (hepmc3_gWriters.count(position) == 0) {
             printf("Warning in %s: Writer at position %i does not exist\n", __FUNCTION__, position);
@@ -212,7 +212,7 @@ extern "C" {
         hepmc3_gWriters[position].second->add_attribute(attname, std::make_shared<IntAttribute>(attval));
         return 0;
     }
-    int hepmc3_set_attribute_double_(const int & position, const double & attval, const char* attname)
+    int hepmc3_set_attribute_double_(const int & position, const double & attval, const char* attname, size_t)
     {
         if (hepmc3_gWriters.count(position) == 0) {
             printf("Warning in %s: Writer at position %i does not exist\n", __FUNCTION__, position);
@@ -222,7 +222,7 @@ extern "C" {
         return 0;
     }
 
-    int hepmc3_new_writer_(const int & position, const int & mode, const char* ffilename)
+    int hepmc3_new_writer_(const int & position, const int & mode, const char* ffilename, size_t)
     {
         std::string libHepMC3rootIO="libHepMC3rootIO.so";
 #ifdef __darwin__
@@ -274,7 +274,7 @@ extern "C" {
         }
         return  r_position;
     }
-    int hepmc3_new_weight_(const int & position, const char* name)
+    int hepmc3_new_weight_(const int & position, const char* name, size_t)
     {
         if (hepmc3_gGenRunInfos.count(position) == 0) {
             printf("Warning in %s: RunInfo at position %i does not exist\n", __FUNCTION__, position);
@@ -300,13 +300,13 @@ extern "C" {
         hepmc3_gWriters[position].second->weights()[index] = val;
         return 0;
     }
-    int hepmc3_set_weight_by_name_(const int & position, const double& val, const char* name)
+    int hepmc3_set_weight_by_name_(const int & position, const double& val, const char* name, size_t)
     {
         if (hepmc3_gWriters.count(position) == 0) {
             printf("Warning in %s: Writer at position %i does not exist\n", __FUNCTION__, position);
             return 1;
         }
-        hepmc3_new_weight_(position, name);
+        hepmc3_new_weight_(position, name, strlen(name));
         hepmc3_gWriters[position].second->weight(std::string(name)) = val;
         return 0;
     }

@@ -244,24 +244,24 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     evt.read_data(m_data);
 
     // Check if all particles and vertices were parsed
-    if ((int)evt.particles().size() > vertices_and_particles.second) {
+    if (static_cast<int>(evt.particles().size()) > vertices_and_particles.second) {
         HEPMC3_ERROR_LEVEL(600,"ReaderAscii: too many particles were parsed")
         printf("%zu  vs  %i expected\n", evt.particles().size(), vertices_and_particles.second);
         is_parsing_successful = false;
     }
-    if ((int)evt.particles().size() < vertices_and_particles.second) {
+    if (static_cast<int>(evt.particles().size()) < vertices_and_particles.second) {
         HEPMC3_ERROR_LEVEL(600,"ReaderAscii: too few  particles were parsed")
         printf("%zu  vs  %i expected\n", evt.particles().size(), vertices_and_particles.second);
         is_parsing_successful = false;
     }
 
-    if ((int)evt.vertices().size()  > vertices_and_particles.first) {
+    if (static_cast<int>(evt.vertices().size())  > vertices_and_particles.first) {
         HEPMC3_ERROR_LEVEL(600,"ReaderAscii: too many vertices were parsed")
         printf("%zu  vs  %i expected\n", evt.vertices().size(), vertices_and_particles.first);
         is_parsing_successful =  false;
     }
 
-    if ((int)evt.vertices().size()  < vertices_and_particles.first) {
+    if (static_cast<int>(evt.vertices().size())  < vertices_and_particles.first) {
         HEPMC3_ERROR_LEVEL(600,"ReaderAscii: too few vertices were parsed")
         printf("%zu  vs  %i expected\n", evt.vertices().size(), vertices_and_particles.first);
         is_parsing_successful =  false;
@@ -341,8 +341,8 @@ bool ReaderAscii::parse_weight_values(const char *buf) {
     if ( run_info() && !run_info()->weight_names().empty()
             && run_info()->weight_names().size() != wts.size() ) {
         throw std::logic_error("ReaderAscii::parse_weight_values: "
-                               "The number of weights ("+std::to_string((long long int)(wts.size()))+") does not match "
-                               "the  number weight names("+std::to_string((long long int)(run_info()->weight_names().size()))+") in the GenRunInfo object");
+                               "The number of weights ("+std::to_string(static_cast<long long int>(wts.size()))+") does not match "
+                               "the  number weight names("+std::to_string(static_cast<long long int>(run_info()->weight_names().size()))+") in the GenRunInfo object");
     }
     m_data.weights = wts;
 
@@ -506,7 +506,7 @@ bool ReaderAscii::parse_attribute(const char *buf) {
     ++cursor;
 
     if ( !(cursor2 = strchr(cursor, ' ')) ) return false;
-    snprintf(name.data(), name.size(), "%.*s", (int)(cursor2-cursor), cursor);
+    snprintf(name.data(), name.size(), "%.*s", static_cast<int>(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
 
@@ -526,7 +526,7 @@ bool ReaderAscii::parse_run_attribute(const char *buf) {
     ++cursor;
 
     if ( !(cursor2 = strchr(cursor, ' ')) ) return false;
-    snprintf(name.data(), name.size(), "%.*s", (int)(cursor2-cursor), cursor);
+    snprintf(name.data(), name.size(), "%.*s", static_cast<int>(cursor2-cursor), cursor);
 
     cursor = cursor2+1;
 
@@ -593,7 +593,7 @@ std::string ReaderAscii::unescape(const std::string& s) {
     return ret;
 }
 
-bool ReaderAscii::failed() { return m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); }
+bool ReaderAscii::failed() { return m_isstream ? static_cast<bool>(m_stream->rdstate()) :static_cast<bool>(m_file.rdstate()); }
 
 void ReaderAscii::close() {
     if ( !m_file.is_open()) return;
