@@ -1,0 +1,7 @@
+#! /usr/bin/env bash
+
+set -e
+
+tmp=$(HepMC3-config --cflags)
+echo $tmp
+test -n "$tmp"

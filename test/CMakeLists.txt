@@ -1,4 +1,4 @@
-#Beacause of LZMA targets
+#Because of LZMA targets
 if (HEPMC3_TEST_LZMA)
   cmake_minimum_required(VERSION 3.14.0 FATAL_ERROR)
 endif()
@@ -439,3 +439,5 @@ if(MEMORYCHECK_COMMAND)
   endforeach ( test ${HepMC_memcheck_tests} )
 endif()
 
+## HepMC3-config test
+add_test(testHepMC3config ${CMAKE_CURRENT_SOURCE_DIR}/testHepMC3config)
