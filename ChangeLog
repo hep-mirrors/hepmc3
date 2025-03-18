@@ -1,10 +1,22 @@
-  --------------------------  HepMC3.3.1 --------------------------
+--------------------------  HepMC3.3.1 --------------------------
+
 2024-02-27 Andrii Verbytskyi
-         * Require cmake>3.10 for compatibility with cmake4. 
+         * Require cmake>3.10 for compatibility with cmake4.
            Thanks to Mattias Ellert
-         * Multiple bugfixes and improvements.
+	 * Multiple bugfixes and improvements.
            Mattias Ellert, Matthew Feickert
-  --------------------------  HepMC3.3.0-pre ----------------------
+2024-12-26 Andrii Verbytskyi
+	 * Add uproot5 to the tests
+2024-11-29 Andrii Verbytskyi
+	 * Add static libraries and other fixes to HepMC3-config.
+2024-08-30 Andrii Verbytskyi
+	 * Fix weights usage in the AnalysisExample.cc file.
+	 * Update convert_example.cc to allow for one argument for the "dump" format.
+2024-06-19 Andrii Verbytskyi
+         * Fix for a "Conditional jump or move depends on uninitialised value(s)" problem detected by valgrind
+
+--------------------------  HepMC3.3.0 --------------------------
+
 2024-05-23 Andrii Verbytskyi
          * Update python bindings with binder 1.4.2
          * Update bxzstr to bxzstr 1.2.2 + patches
@@ -22,110 +34,122 @@
 2023-09-15 Andrii Verbytskyi for HepMC
          * Major update of the build system, removed most of the custom modules.
 2023-09-03 Andrii Verbytskyi for HepMC
-         * Removed functions that operate on raw pointers.
-  --------------------------  HepMC3.2.7 ----------------------
+        * Removed functions that operate on raw pointers.
+
+--------------------------  HepMC3.2.7 ----------------------
+
 2023-10-02 Andrii Verbytskyi for HepMC
-         * Patch release to fix the problem with vertex attributes removal.
-  --------------------------  HepMC3.2.6 ----------------------
+        * Patch release to fix the problem with vertex attributes removal.
+
+--------------------------  HepMC3.2.6 ----------------------
+
 2023-03-30 Andrii Verbytskyi for HepMC
-         * Deprecated the set_cross_section function with double in favour of those with vector of doubles.
+        * Deprecated the set_cross_section function with double in favour of those with vector of doubles.
 2023-03-03 Andrii Verbytskyi for HepMC
-         * Preparation to the release 3.2.6.
+        * Preparation to the release 3.2.6.
 2023-03-03 Andrii Verbytskyi for HepMC
-         * Better Doxygen documentation for code
+        * Better Doxygen documentation for code
 2023-03-02 Andrii Verbytskyi for HepMC
-         * Improvements in ReaderFactory that should help detect the file type more successfully.
+        * Improvements in ReaderFactory that should help detect the file type more successfully.
 2023-02-14 Andrii Verbytskyi for HepMC
-         * Multiple optimizations inspired by clang-tidy
+        * Multiple optimizations inspired by clang-tidy
 2023-02-10 Andrii Verbytskyi for HepMC
-         * The Attributes are now set to be parsed after calls to from_string or set_value
+        * The Attributes are now set to be parsed after calls to from_string or set_value
 2023-02-07 Andrii Verbytskyi for HepMC
-         * API breaking changes in the search module: pass by const reference
+        * API breaking changes in the search module: pass by const reference
 2023-01-24 Andrii Verbytskyi for HepMC
-         * Update python bindings
+        * Update python bindings
 2022-11-20 Luke Pickering for HepMC
-         * Modernisation of cmake
+        * Modernisation of cmake
 2022-09-12 Andrii Verbytskyi for HepMC
-         * Fix output value of ReaderLHEF::read_event
+        * Fix output value of ReaderLHEF::read_event
 2022-09-12 Andrii Verbytskyi for HepMC
-         * Better documentation for standalone examples
+        * Better documentation for standalone examples
 2022-06-07 Luke Pickering for HepMC
-         * Adds a protobuf-based HepMC3::Reader/Writer
+        * Adds a protobuf-based HepMC3::Reader/Writer
 2022-05-25 Andrii Verbytskyi for HepMC
-         * Update pybind11 headers to fix python 3.11. Reported by Mattias Ellert.
-         * License update.
-         * Make the R/W plugins transparent - the set/get functions call the handled object
-  --------------------------  HepMC3.2.5 ----------------------
+        * Update pybind11 headers to fix python 3.11. Reported by Mattias Ellert.
+        * License update.
+        * Make the R/W plugins transparent - the set/get functions call the handled object
+
+--------------------------  HepMC3.2.5 ----------------------
+
 2022-01-02 Andrii Verbytskyi for HepMC
-         * Added implementation for Relatives class that works in Windows.
-         * (Implemented earlier) Improved MSYS2 support
+        * Added implementation for Relatives class that works in Windows.
+        * (Implemented earlier) Improved MSYS2 support
 2021-12-28 Andrii Verbytskyi for HepMC
-         * New interfaces for HEPEVT and update of python interface
-         * (Implemented earlier) More functions in GenEvent to deal with attributes
-         * (Implemented earlier) Implemented Compressed I/O with zip, lzma and bz2 via bxzst library
+        * New interfaces for HEPEVT and update of python interface
+        * (Implemented earlier) More functions in GenEvent to deal with attributes
+        * (Implemented earlier) Implemented Compressed I/O with zip, lzma and bz2 via bxzst library
 2021-10-16 Andrii Verbytskyi for HepMC
-         * Fixes to documentation of some examples thanks to Rakesh Naik for report.
-         * Removal of unused codes and comments
+        * Fixes to documentation of some examples thanks to Rakesh Naik for report.
+        * Removal of unused codes and comments
 2021-10-17 Andrii Verbytskyi for HepMC
-         * Fixes to Pythia8ToHepMC3.py by Ahmed Hussein
+        * Fixes to Pythia8ToHepMC3.py by Ahmed Hussein
 2021-07-14 Andrii Verbytskyi for HepMC
-         * Added Reader/Write interfaces with smart pointers
+        * Added Reader/Write interfaces with smart pointers
 2021-07-12 Andrii Verbytskyi for HepMC
-         * Fixed #ifdefs for non-Linux system to allow the usage of Reader/Writer plugins.
-         * Added MT reader
+        * Fixed #ifdefs for non-Linux system to allow the usage of Reader/Writer plugins.
+        * Added MT reader
 2021-07-09 Andrii Verbytskyi for HepMC
-         * Remove outdated interfaces to MCEGs
-  --------------------------  HepMC3.2.4 --------------------------
+        * Remove outdated interfaces to MCEGs
+
+--------------------------  HepMC3.2.4 --------------------------
+
 2021-07-06 Andrii Verbytskyi for HepMC
-         * Minor fixes to the CMake configuration of examples
+        * Minor fixes to the CMake configuration of examples
 2021-06-29 Andrii Verbytskyi for HepMC
-         * Minor fixes in Pythia6 interface.
+        * Minor fixes in Pythia6 interface.
 2021-06-22 Andrii Verbytskyi for HepMC
-         * Bugfix for HI output in WiterAsciiHepMC2.
+        * Bugfix for HI output in WriterAsciiHepMC2.
 2021-06-16 Andrii Verbytskyi for HepMC
-         * Speed optimizations for ReaderAsciiHepMC2.
+        * Speed optimizations for ReaderAsciiHepMC2.
 2021-06-08 Andrii Verbytskyi for HepMC
-         * Deprecate Pythia8, MC-TESTER, Taoulapp and Photospp interfaces, as these were picked-up by the upstream.
+        * Deprecate Pythia8, MC-TESTER, Taoulapp and Photospp interfaces, as these were picked-up by the upstream.
 2021-06-04 Andrii Verbytskyi for HepMC
-         * Bugfix: avoid creation of empty attributes in ReaderAsciiHepMC2. Thanks to Pavel Demin for a hint.
+        * Bugfix: avoid creation of empty attributes in ReaderAsciiHepMC2. Thanks to Pavel Demin for a hint.
 2021-06-03 Andrii Verbytskyi for HepMC
-         * Removal of trailing empty lines by Mattias Ellert.
+        * Removal of trailing empty lines by Mattias Ellert.
 2021-05-28 Andrii Verbytskyi for HepMC
-         * Multiple fixes to style and printf by Mattias Ellert.
+        * Multiple fixes to style and printf by Mattias Ellert.
 2021-05-26 Andrii Verbytskyi for HepMC
-         * Fix WriterAscii* to avoid problems with memory tests on aarch64. Thanks to Mattias Ellert for reporting.
+        * Fix WriterAscii* to avoid problems with memory tests on aarch64. Thanks to Mattias Ellert for reporting.
 2021-05-08 Andrii Verbytskyi for HepMC
-         * Fix buffer overflow in WritterAscii/WriterAsciiHepMC2. Thanks for Fabian Klimpel for help with debug.
+        * Fix buffer overflow in WritterAscii/WriterAsciiHepMC2. Thanks for Fabian Klimpel for help with debug.
 2021-03-24 Andrii Verbytskyi for HepMC
-         * Enable reading of multiple run info objects from ASCII files.
-         * Fixes to the tests.
+        * Enable reading of multiple run info objects from ASCII files.
+        * Fixes to the tests.
 2021-03-24 Andrii Verbytskyi for HepMC
-         * Drop cmake2 support
-         * Update cmake so the c++ standard is deduced from the ROOT configuration if ROOT is used. Otherwise c++11 is used.
-         * Fix a bug in GenCrossSection: access to non-existing vector element in to_string() function. Happened for incomplete objects.
-         * Fixed formatting.
-         * Added compiler flags to reduce the amount of warnings.
-         * Fixed a bug in Tauola test, which was not reading proper config.
-         * Streamlined cmake for PGI.
-         * Fixed some tests to make them return non 0 in case of problems.
-         * Updated CI.
+        * Drop cmake2 support
+        * Update cmake so the c++ standard is deduced from the ROOT configuration if ROOT is used. Otherwise c++11 is used.
+        * Fix a bug in GenCrossSection: access to non-existing vector element in to_string() function. Happened for incomplete objects.
+        * Fixed formatting.
+        * Added compiler flags to reduce the amount of warnings.
+        * Fixed a bug in Tauola test, which was not reading proper config.
+        * Streamlined cmake for PGI.
+        * Fixed some tests to make them return non 0 in case of problems.
+        * Updated CI.
 2021-03-10  Andy Buckley  <andy.buckley@cern.ch>
-         * Reduce debug-printout verbosity in ReaderFactory format autodetection.
+        * Reduce debug-printout verbosity in ReaderFactory format autodetection.
 2021-03-05 Andrii Verbytskyi for HepMC
-         * Added uproot-based reader to examples.
-         * Fixed cmake configuration to allow multiple Python versions.
-         * Fixes of compilation warnings by Mattias Ellert.
-  --------------------------  HepMC3.2.3 --------------------------
+        * Added uproot-based reader to examples.
+        * Fixed cmake configuration to allow multiple Python versions.
+        * Fixes of compilation warnings by Mattias Ellert.
+
+--------------------------  HepMC3.2.3 --------------------------
+
 2020-11-08 Andrii Verbytskyi for HepMC
-         * Documentation and copyright years were updated.
-         * Python bindings were regenerated with binder 1.1.0 and the pybind11 copy updated to 2.6.0.
-         * The #ifdefs around the functions that had to be excluded from bindings but binder 1.0.0 was not doing that were removed.
-         * A Python test with attributes was added.
-         * ReaderLHEF was fixed for to treat correctly more complicated input. Inspired by discussion with Bryan Foo and Christopher Palmer.
+        * Documentation and copyright years were updated.
+        * Python bindings were regenerated with binder 1.1.0 and the pybind11 copy updated to 2.6.0.
+        * The #ifdefs around the functions that had to be excluded from bindings but binder 1.0.0 was not doing that were removed.
+        * A Python test with attributes was added.
+        * ReaderLHEF was fixed for to treat correctly more complicated input. Inspired by discussion with Bryan Foo and Christopher Palmer.	
 2020-06-19 Andrii Verbytskyi for HepMC
-         * Included updates to many Python scripts from Marian Heil.
-         * Included updates to CMake scripts from Marian Heil.
-  --------------------------  HepMC3.2.2 --------------------------
+        * Included updates to many Python scripts from Marian Heil.
+        * Included updates to CMake scripts from Marian Heil.
+
+--------------------------  HepMC3.2.2 --------------------------
+
 2020-06-10 Andrii Verbytskyi for HepMC
         * Bugfix release
         * Fixed treatment of the weights in case of different number of weights and weight names. Reported by Frank Siegert.
@@ -142,7 +166,9 @@
         * The previous point bumps .so version of the libHepMC3search to 4.
         * Improved the configuration of Pythia8 for tests (minimal version requirement).
         * Fixed compatibility of ROOT trees written with HepMC 3.0 and removed the typedefs in the dictionaries.
-  --------------------------  HepMC3.2.1 --------------------------
+
+--------------------------  HepMC3.2.1 --------------------------
+
 2020-03-17 Andrii Verbytskyi for HepMC
         * Bugfix release.
         * Explicit usage of namespaces.
@@ -156,7 +182,9 @@
         * Improvement in the attribute parsing. Thanks to Peter Onyisi.
         * Added an option to handle Python 3.9. Thanks to Mattias Ellert.
         * Implemented special treatment of some broken HepMC2 events. Thanks to Christian Holm Christensen.
-  --------------------------  HepMC3.2.0 --------------------------
+
+--------------------------  HepMC3.2.0 --------------------------
+
 2019-11-27 Andrii Verbytskyi for HepMC
         * First release with Python bindings
         * Added ReaderPlugin and WriterPlugin and macros to declare plugins
@@ -174,11 +202,14 @@
         * use delete/override for class members
         * The ** marked changes should be taken into account during the migration to 3.2
         * Thanks to Dominik Muller
-  --------------------------  HepMC3.1.2 pre  --------------------------
+
+--------------------------  HepMC3.1.2  ----------------------------
+
 2019-08-22  Andy Buckley  <andy.buckley@cern.ch>
         * Add GenParticle::abs_pid() to match FourVector::abs_eta(), abs_rap().
         Experience from Rivet and ATLAS is that these convenience wrappers are genuinely welcomed.
         * Add FourVector component-setting functions in HepMC method naming convention; deprecate old camelCase ones.
+
 2019-08-17 Andrii Verbytskyi for HepMC
         * Bugfix release. Fixed some typos and minor bugs.
         * Fixed name of ROOT dictionary
@@ -191,12 +222,16 @@
         * Thanks to
         * Hans Dembinski, John Chapman, Mattias Ellert, Marian Heil,
         *  Attila Krasznahorkay, Dominik Muller, Juergen Reuter
-  --------------------------  HepMC3.1.1  --------------------------
+
+--------------------------  HepMC3.1.1  --------------------------
+
 2019-03-02 Andrii Verbytskyi for HepMC
         * Bugfix release. Fixed some typos and minor bugs.
         * Improved treatment of events with cycles.
         * Improved documentation and examples.
-  --------------------------  HepMC3.1.0  --------------------------
+
+--------------------------  HepMC3.1.0  --------------------------
+
 2019-02-08 Andrii Verbytskyi for HepMC
         * Multiple changes for 3.1 release
         * Renaming the namespace, header directory and library name to HepMC3
@@ -210,7 +245,9 @@
         * Removal of most deprecated functions and  multiple bugfixes
         * Implemented test suite
         * Improved examples and documentation
-  --------------------------  HepMC3.0.0  --------------------------
+
+--------------------------  HepMC3.0.0  --------------------------
+
 2017-03-20 Witek Pokorski
 
 	* tagging HepMC3.0.0
@@ -247,23 +284,23 @@
 
 2016-04-29 Andrii Verbytskyi
 
-	* fixing Fortran flags
+	* Fixing Fortran flags
 
 2016-04-27 Witek Pokorski
 
-	* moving GenEvent and GenRunInfo root streamers to a separate file
+	* Moving GenEvent and GenRunInfo root streamers to a separate file
 
-  --------------------------  HepMC3-beta2.0  --------------------------
+--------------------------  HepMC3-beta2.0  --------------------------
 
 2016-01-18 Andrii Verbytskyi
 
-	*Builds of Debian packages
+	* Builds of Debian packages
 
 2016-01-12 Andrii Verbytskyi
 
-	*Update of cmake files to allow proper RedHat x86_64 directory structure
-	*Add section to build rpms and debs with cpack
-	*ROOT IO is enabled if ROOTConfig.cmake or FindROOT.cmake set ROOT_FOUND
+	* Update of cmake files to allow proper RedHat x86_64 directory structure
+	* Add section to build rpms and debs with cpack
+	* ROOT IO is enabled if ROOTConfig.cmake or FindROOT.cmake set ROOT_FOUND
 
 2016-01-06 Andrii Verbytskyi
 
@@ -293,8 +330,7 @@
 
 2015-04-03 Witek Pokorski
 
-	* optimisations in read_data method
-
+	* Optimisations in read_data method
 
 2015-03-27  Andy Buckley  <andy.buckley@cern.ch>
 
@@ -339,11 +375,11 @@
 
 2015-03-09 Witek Pokorski
 
-	* implemented ROOT I/O custom streamer for GenEvent
+	* Implemented ROOT I/O custom streamer for GenEvent
 
 2015-02-19 Leif Lonnblad
 
-	* implemented the LHEF attributes classes
+	* Implemented the LHEF attributes classes
 
 2015-02-15  Andy Buckley  <andy.buckley@cern.ch>
 
@@ -381,21 +417,22 @@
 
 2014-11-18  Witold Pokorski
 
-	* fix in cmake for rootIO library to work with ROOT6
-	* made DHEPMC_ENABLE_CPP11 option ON by default
+	* Fix in cmake for rootIO library to work with ROOT6
+
+	* Made DHEPMC_ENABLE_CPP11 option ON by default
 
 2014-11-07  Witold Pokorski
 
-	* fixes in cmake to export also rootIO library, removed obsolete forcing of .so on Mac
-
+	* Fixes in cmake to export also rootIO library, removed obsolete forcing of .so on Mac
 
 2014-11-05  Witold Pokorski
 
-	* redesign of ROOT I/O, moved to a separate library
+	* Redesign of ROOT I/O, moved to a separate library
 
-	* added .exe in examples executables names
+	* Added .exe in examples executables names
 
-	* improvement in Pythia8 example; possibility of setting number of events and passing conf and output file names as arguments
+	* Improvement in Pythia8 example; possibility of setting number of
+	events and passing conf and output file names as arguments
 
 2014-10-22  Tomasz Przedzinski & Witold Pokorski
 
