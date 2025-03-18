@@ -246,7 +246,7 @@ The "barcode" integer in HepMC2 was an uncomfortable object, simultaneously
 
 Hence, barcodes are no longer available. Use attributes to provide additional
   information that was previously encoded using barcodes
-  (see module @ref attributes).
+  (see [Attributes](#attributes)).
 
 The unique identifier of particles and vertices is now called id() to
   separate its role from barcodes. Id is set automatically and cannot
@@ -476,11 +476,11 @@ A new class has been provided to store run-level information, such as
 
 
 
-## 6 Attributes
+## [6 Attributes]{#attributes}
 Attributes can be attached to GenEvent, GenParticle or GenVertex
   and they can have any format defined by the user
-  (see @ref writing_attributes). An attribute is accessed through
-  a shared pointer and identified by its name.
+  (see [Writing custom attributes](#writing_attributes)).
+  An attribute is accessed through a shared pointer and identified by its name.
 
 Example of reading an attribute from the event:
 
@@ -509,7 +509,7 @@ Note: An event (or particle or vertex) can have more than one attribute
     to use just one instance named by its class name, as in these
     examples.
 
-### 6.1 Writing custom attributes
+### [6.1 Writing custom attributes]{#writing_attributes}
 
 Any class that derives from HepMC::Attribute class can be used as
   an attribute that can be attached to the event, vertex or particle.
@@ -940,7 +940,7 @@ To turn on the compilation of bindings use -DHEPMC3_ENABLE_PYTHON = ON.
   In case the test suite is enabled, tests of python bindings with all the enabled versions will run as well.
 
   Despite not recommended, it should be possible to compile the python bindings using the installed version of HepMC3.
-  To do this, copy the python directory outside of source tree,  uncomment #project(pyHepMC3 CXX) in  python/CMakeLists.txt and
+  To do this, copy the python directory outside of source tree,  uncomment \#project(pyHepMC3 CXX) in  python/CMakeLists.txt and
   run CMake inside python directory with -DUSE_INSTALLED_HEPMC3=ON  option.
 
 ### 10.3 Selected aspects of Python  bindings
