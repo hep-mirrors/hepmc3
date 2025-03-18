@@ -1,5 +1,5 @@
 ## Introduction
-The HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation.
+The HepMC package is an object oriented, C++ event record for High Energy Physics (HEP) Monte Carlo event generators and simulation.
     
 It is described in [A. Buckley et al.,The HepMC3 Event Record Library for Monte Carlo Event Generators (Comput.Phys.Commun. 260 (2021) 107310)](https://doi.org/10.1016/j.cpc.2020.107310).
 
@@ -8,7 +8,8 @@ The predecessor library is described in [M. Dobbs and J.B. Hansen,
     
 Since the first implementation, the package has undergone several modifications and in particular,
     the latest HepMC3 series is a completely new re-write using currently available C++11 techniques,
-    and have out-of-the-box interfaces for the widely used in HEP community ROOT and Python.
+    and features out-of-the-box interfaces for the Python language and the ROOT analysis toolkit,
+    both heavily used in the HEP community.
 
 Further documentation that might be useful for the users of HepMC3 can be found in the following documents:
    - [S. Gardiner, J. Isaacson and L. Pickering, NuHepMC: A standardized event record format for neutrino event generators](https://arxiv.org/abs/2310.13211)
@@ -19,6 +20,7 @@ Further documentation that might be useful for the users of HepMC3 can be found 
    - [J. Butterworth et al., THE TOOLS AND MONTE CARLO WORKING GROUP Summary Report from the Les Houches 2009 Workshop on TeV Colliders](http://arxiv.org/abs/1003.1643) 
    - [J. R. Andersen et al., Les Houches 2013: Physics at TeV Colliders: Standard Model Working Group Report](http://arxiv.org/abs/1405.1067)
 
+
 ## Project documentation, code and contacts
 
 Project documentation, code and contacts
@@ -26,6 +28,7 @@ Project documentation, code and contacts
    -  [HepMC3 CERN GitLab repository](https://gitlab.cern.ch/hepmc/HepMC3)
    -  [hepmc-dev@NOSPAM.cern.ch mailing list](mailto:hepmc-dev@cern.ch)
    -  [CERN GitLab issues tracker](https://gitlab.cern.ch/hepmc/HepMC3/-/issues)
+
 
 ## Available tarfiles
 
@@ -42,11 +45,12 @@ Releases
    -  [HepMC3-3.2.0.tar.gz, 27.Nov.2019](releases/HepMC3-3.2.0.tar.gz)
    -  [HepMC3-3.1.2.tar.gz, 23.Aug.2019](releases/HepMC3-3.1.2.tar.gz)
 
+
 ## Related projects
     
 ### HepMC2
-The HepMC2 series development has been essentially stopped and in particular
-    HepMC2.06.x (with the latest being 2.06.11) versions are frozen. 
+The HepMC2 series development has been stopped, with the final interface
+   and implementation frozen at version 2.06.11.
 
    - [HepMC2 CERN GitLab repository](https://gitlab.cern.ch/hepmc/HepMC)    
     
@@ -62,4 +66,3 @@ The HepMC2 series development has been essentially stopped and in particular
 ### HepPDT
 HepPDT tarballs
    - [HepPDT-3.04.01.tar.gz](releases/HepPDT-3.04.01.tar.gz)
-
