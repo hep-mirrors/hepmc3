@@ -1,4 +1,4 @@
-# One page HepMC3 documentation
+# One-page HepMC3 documentation
   
 ## 1 Build instructions
 
@@ -271,7 +271,7 @@ int`).
 
 Hence, barcodes are no longer available. Use attributes to provide
 additional information that was previously encoded using barcodes (see
-module @ref attributes).
+[Attributes](#attributes)).
 
 The unique identifier of particles and vertices is now called `id()`
 to separate its role from barcodes. The ID is set automatically and
@@ -508,12 +508,12 @@ information provided by user. See `HepMC::GenRunInfo` class
 description for details.
 
 
-## 6 Attributes
+## [6 Attributes]{#attributes}
 
 Attributes can be attached to GenEvent, GenParticle or GenVertex and
-they can have any format defined by the user (see @ref
-writing_attributes). An attribute is accessed through a shared pointer
-and identified by its name.
+they can have any format defined by the user (see [Writing custom
+attributes](#writing_attributes)). An attribute is accessed through a
+shared pointer and identified by its name.
 
 Example of reading an attribute from the event:
 
@@ -541,7 +541,7 @@ might be useful in some applications, however, we encourage to use
 just one instance named to match its class name, as in these examples.
 
 
-### 6.1 Writing custom attributes
+### [6.1 Writing custom attributes]{#writing_attributes}
 
 Any class that derives from HepMC::Attribute class can be used as
 an attribute that can be attached to the event, vertex or particle.
@@ -966,6 +966,7 @@ The Python bindings together with the HepMC3 itself can be installed
 from PyPy and multiple other repositories.  Please see [HepMC3
 page](https://gitlab.cern.ch/hepmc/HepMC3) at CERN GitLab for details.
 
+
 ### 10.2 Installation from sources
 
 To turn on the compilation of bindings use -DHEPMC3_ENABLE_PYTHON =
@@ -977,8 +978,10 @@ well.
 Despite not being recommended, it should be possible to compile the
 Python bindings using the installed version of HepMC3.  To do this,
 copy the Python directory outside the source tree, uncomment
-`#project(pyHepMC3 CXX)` in `python/CMakeLists.txt` and run CMake inside
-the `python/` directory with the `-DUSE_INSTALLED_HEPMC3=ON` option.
+`#project(pyHepMC3 CXX)` in `python/CMakeLists.txt` and run CMake
+inside the `python/` directory with the `-DUSE_INSTALLED_HEPMC3=ON`
+option.
+
 
 ### 10.3 Selected aspects of Python bindings
 
