@@ -1,3 +1,8 @@
+--------------------------  HepMC3.3.2 --------------------------
+
+2024-04-11 Luke Pickering
+  * Tweaks ReaderAscii logic to be more flexible about the number of space characters
+
 --------------------------  HepMC3.3.1 --------------------------
 
 2024-02-27 Andrii Verbytskyi
