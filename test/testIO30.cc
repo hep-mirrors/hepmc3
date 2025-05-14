@@ -4,7 +4,7 @@
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
 // -- Purpose: Test that we can correctly read ASCII events with additional
-// whiotespace
+// whitespace
 //
 
 // These are the only headers in ReaderPlugin, so including these firstmakes
@@ -36,10 +36,8 @@ auto get_parts_with(HepMC3::GenEvent const &ev, int status, int pid) {
 
 int main() {
 
-  HepMC3::Setup::set_print_errors(999);
   HepMC3::Setup::set_print_errors(true);
   HepMC3::Setup::set_errors_level(999);
-  HepMC3::Setup::set_errors_level(true);
   HepMC3::Setup::set_print_warnings(true);
   HepMC3::Setup::set_warnings_level(999);
   HepMC3::Setup::set_debug_level(999);
