@@ -96,7 +96,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     bool               parsed_weights    = false;
     bool               parsed_particles_or_vertices    = false;
     bool               run_info_context    = false;
-    bool               is_parsing_successful  = true;
+    bool               is_parsing_successful  = false;
     std::pair<int, int> vertices_and_particles(0, 0);
 
     evt.clear();
@@ -130,6 +130,10 @@ bool ReaderAscii::read_event(GenEvent &evt) {
             }
             if (event_context) {
                 is_parsing_successful = true;
+                //  clear the eofbit if no trailing newline so that a failed()
+                //  check after read_event shows (correctly) that the last event
+                //  was parsed correctly.
+                m_isstream ? m_stream->clear() : m_file.clear();
                 break;
             }
             continue;
@@ -237,7 +241,6 @@ bool ReaderAscii::read_event(GenEvent &evt) {
               if (fir == m_io_implicit_ids.rend()) {
                   HEPMC3_ERROR_LEVEL(600,"ReaderAscii: not enough implicit vertices")
               }
-              std::cout << "arghhh: " << m_io_implicit_ids.size() << std::endl;
               /// Found a gap in ids, insert an implicit vertex into a list of gaps.
               m_io_explicit[currid] = std::move(m_io_implicit[*fir]);
           }
@@ -275,7 +278,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         is_parsing_successful =  false;
     }
     // Check if there were HEPMC3_ERRORs during parsing
-    if ( !is_parsing_successful ) {
+    if (event_context && !is_parsing_successful ) {
         HEPMC3_ERROR_LEVEL(600,"ReaderAscii: event parsing failed. Returning empty event")
         HEPMC3_DEBUG(1, "Parsing failed at line:" << std::endl << buf.data())
 
@@ -283,12 +286,6 @@ bool ReaderAscii::read_event(GenEvent &evt) {
         m_isstream ? m_stream->clear(std::ios::badbit) : m_file.clear(std::ios::badbit);
 
         return false;
-    }
-
-    if(failed()){
-      HEPMC3_ERROR_LEVEL(600,"ReaderAscii: Successfully parsed event but immediately failed, "
-        "this probably means that you have skipped the last event because the input file doesn't "
-        "contain a trailing newline.")
     }
 
     return true;
