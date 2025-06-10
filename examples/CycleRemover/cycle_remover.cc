@@ -14,7 +14,7 @@ int main() {
     auto v1 = std::make_shared<GenVertex>();
     auto v2 = std::make_shared<GenVertex>();
     auto v3 = std::make_shared<GenVertex>();
-    
+
     event->add_vertex(v0);
     event->add_vertex(v1);
     event->add_vertex(v2);
@@ -26,17 +26,17 @@ int main() {
     auto p23 = std::make_shared<GenParticle>();
     auto p30 = std::make_shared<GenParticle>(); // Introduces a cycle
 
-v0->add_particle_out(p01);
-v1->add_particle_in(p01);
+    v0->add_particle_out(p01);
+    v1->add_particle_in(p01);
 
-v1->add_particle_out(p12);
-v2->add_particle_in(p12);
+    v1->add_particle_out(p12);
+    v2->add_particle_in(p12);
 
-v2->add_particle_out(p23);
-v3->add_particle_in(p23);
+    v2->add_particle_out(p23);
+    v3->add_particle_in(p23);
 
-v3->add_particle_out(p30);
-v0->add_particle_in(p30); // Closing cycle
+    v3->add_particle_out(p30);
+    v0->add_particle_in(p30); // Closing cycle
 
 
     v0->add_particle_out(p01);

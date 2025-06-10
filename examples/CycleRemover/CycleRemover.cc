@@ -3,9 +3,9 @@
 namespace HepMC3 {
 
 std::shared_ptr<GenEvent> CycleRemover::mergeCycle() {
-	std::shared_ptr<GenEvent> m_event = std::make_shared<HepMC3::GenEvent>(*(m_original_event.get()));
-	
-	
+    std::shared_ptr<GenEvent> m_event = std::make_shared<HepMC3::GenEvent>(*(m_original_event.get()));
+
+
     std::unordered_set<HepMC3::GenVertexPtr> cycleVertices;
 
     // Detect cycle using DFS
@@ -64,7 +64,7 @@ bool CycleRemover::detectCycleDFS(HepMC3::GenVertexPtr v, HepMC3::GenVertexPtr p
         auto nextVertex = p->end_vertex();
         if (nextVertex && nextVertex != parent) {
             if (visited.find(nextVertex) != visited.end() ||
-                detectCycleDFS(nextVertex, v, visited, cycleNodes)) {
+                    detectCycleDFS(nextVertex, v, visited, cycleNodes)) {
                 return true;
             }
         }
