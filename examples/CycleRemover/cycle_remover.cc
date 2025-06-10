@@ -51,7 +51,7 @@ v0->add_particle_in(p30); // Closing cycle
 
     //CycleRemover processor(event);
     //auto new_event = processor.mergeCycle();
-    auto new_event = std::make_shared<CycleRemover>(event)->mergeCycle();
+    auto new_event = CycleRemover(event).mergeCycle();
 
     cout << "\nAfter merging cycle:" << endl;
     for (auto v : new_event->vertices()) {
