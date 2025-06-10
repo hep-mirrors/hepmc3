@@ -5,16 +5,15 @@
 #include "CycleRemover.h"
 
 using namespace HepMC3;
-using namespace std;
 
 int main() {
-    auto event = make_shared<GenEvent>();
+    auto event = std::make_shared<GenEvent>();
 
     // Create example vertices using shared_ptr
-    auto v0 = make_shared<GenVertex>();
-    auto v1 = make_shared<GenVertex>();
-    auto v2 = make_shared<GenVertex>();
-    auto v3 = make_shared<GenVertex>();
+    auto v0 = std::make_shared<GenVertex>();
+    auto v1 = std::make_shared<GenVertex>();
+    auto v2 = std::make_shared<GenVertex>();
+    auto v3 = std::make_shared<GenVertex>();
     
     event->add_vertex(v0);
     event->add_vertex(v1);
@@ -22,19 +21,23 @@ int main() {
     event->add_vertex(v3);
 
     // Create example particles (edges) using shared_ptr
-    auto p01 = make_shared<GenParticle>();
-    auto p12 = make_shared<GenParticle>();
-    auto p23 = make_shared<GenParticle>();
-    auto p30 = make_shared<GenParticle>(); // Introduces a cycle
+    auto p01 = std::make_shared<GenParticle>();
+    auto p12 = std::make_shared<GenParticle>();
+    auto p23 = std::make_shared<GenParticle>();
+    auto p30 = std::make_shared<GenParticle>(); // Introduces a cycle
 
-    p01->set_production_vertex(v0);
-    p01->set_end_vertex(v1);
-    p12->set_production_vertex(v1);
-    p12->set_end_vertex(v2);
-    p23->set_production_vertex(v2);
-    p23->set_end_vertex(v3);
-    p30->set_production_vertex(v3);
-    p30->set_end_vertex(v0); // Closing cycle
+v0->add_particle_out(p01);
+v1->add_particle_in(p01);
+
+v1->add_particle_out(p12);
+v2->add_particle_in(p12);
+
+v2->add_particle_out(p23);
+v3->add_particle_in(p23);
+
+v3->add_particle_out(p30);
+v0->add_particle_in(p30); // Closing cycle
+
 
     v0->add_particle_out(p01);
     v1->add_particle_out(p12);
@@ -46,11 +49,12 @@ int main() {
         cout << "Vertex: " << v << " connected to " << v->particles_out().size() << " particles." << endl;
     }
 
-    CycleRemover processor;
-    processor.mergeCycle(event);
+    //CycleRemover processor(event);
+    //auto new_event = processor.mergeCycle();
+    auto new_event = std::make_shared<CycleRemover>(event)->mergeCycle();
 
     cout << "\nAfter merging cycle:" << endl;
-    for (auto v : event->vertices()) {
+    for (auto v : new_event->vertices()) {
         cout << "Vertex: " << v << " connected to " << v->particles_out().size() << " particles." << endl;
     }
 

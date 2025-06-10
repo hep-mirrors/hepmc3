@@ -2,13 +2,16 @@
 
 namespace HepMC3 {
 
-void CycleRemover::mergeCycle(std::shared_ptr<GenEvent> event) {
-    std::unordered_set<std::shared_ptr<GenVertex>> cycleVertices;
+std::shared_ptr<GenEvent> CycleRemover::mergeCycle() {
+	std::shared_ptr<GenEvent> m_event = std::make_shared<HepMC3::GenEvent>(*(m_original_event.get()));
+	
+	
+    std::unordered_set<HepMC3::GenVertexPtr> cycleVertices;
 
     // Detect cycle using DFS
-    auto cycleStart = std::shared_ptr<GenVertex>{nullptr};
-    for (auto v : event->vertices()) {
-        std::unordered_set<std::shared_ptr<GenVertex>> visited;
+    auto cycleStart = HepMC3::GenVertexPtr{nullptr};
+    for (auto v : m_event->vertices()) {
+        std::unordered_set<HepMC3::GenVertexPtr> visited;
         if (detectCycleDFS(v, nullptr, visited, cycleVertices)) {
             cycleStart = v;
             break;
@@ -17,40 +20,39 @@ void CycleRemover::mergeCycle(std::shared_ptr<GenEvent> event) {
 
     if (!cycleStart || cycleVertices.empty()) {
         std::cout << "No cycle detected." << std::endl;
-        return;
+        return m_event;
     }
 
     // Create a new merged vertex
     auto mergedVertex = std::make_shared<GenVertex>();
-    event->add_vertex(mergedVertex);
+    m_event->add_vertex(mergedVertex);
 
     // Redirect edges to the new merged vertex
     for (auto v : cycleVertices) {
         for (auto p : v->particles_out()) {
             if (cycleVertices.find(p->end_vertex()) == cycleVertices.end()) {
                 mergedVertex->add_particle_in(p);
-                p->set_end_vertex(mergedVertex);
             }
         }
         for (auto p : v->particles_in()) {
             if (cycleVertices.find(p->production_vertex()) == cycleVertices.end()) {
                 mergedVertex->add_particle_out(p);
-                p->set_production_vertex(mergedVertex);
             }
         }
     }
 
     // Remove old cycle vertices
     for (auto v : cycleVertices) {
-        event->remove_vertex(v);
+        m_event->remove_vertex(v);
     }
 
     std::cout << "Merged cycle vertices into a single vertex." << std::endl;
+    return m_event;
 }
 
-bool CycleRemover::detectCycleDFS(std::shared_ptr<GenVertex> v, std::shared_ptr<GenVertex> parent,
-                                  std::unordered_set<std::shared_ptr<GenVertex>>& visited,
-                                  std::unordered_set<std::shared_ptr<GenVertex>>& cycleNodes) {
+bool CycleRemover::detectCycleDFS(HepMC3::GenVertexPtr v, HepMC3::GenVertexPtr parent,
+                                  std::unordered_set<HepMC3::GenVertexPtr>& visited,
+                                  std::unordered_set<HepMC3::GenVertexPtr>& cycleNodes) {
     if (!v || visited.find(v) != visited.end()) {
         return false;
     }
