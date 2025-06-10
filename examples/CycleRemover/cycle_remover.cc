@@ -6,7 +6,7 @@
 
 using namespace HepMC3;
 
-int main() {
+int main(int argc, char ** argv) {
     auto event = std::make_shared<GenEvent>();
 
     // Create example vertices using shared_ptr
@@ -43,6 +43,12 @@ int main() {
     v1->add_particle_out(p12);
     v2->add_particle_out(p23);
     v3->add_particle_out(p30);
+
+    // Assign "original" attribute to each particle
+    for (auto& particle : event->particles()) {
+        particle->add_attribute("original", std::make_shared<HepMC3::IntAttribute>(particle->id()));
+    }
+
 
     cout << "Before merging cycle:" << endl;
     for (auto v : event->vertices()) {
