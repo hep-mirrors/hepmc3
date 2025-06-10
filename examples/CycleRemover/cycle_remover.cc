@@ -1,68 +1,38 @@
-#include <iostream>
-#include <unordered_set>
-#include <memory>
-#include "HepMC3/GenEvent.h"
 #include "CycleRemover.h"
+#include "HepMC3/GenEvent.h"
+#include "HepMC3/ReaderFactory.h"
+#include "WriterDOTCycleRemover.h"
+#include <iostream>
+#include <memory>
+#include <unordered_set>
 
 using namespace HepMC3;
 
-int main(int argc, char ** argv) {
-    auto event = std::make_shared<GenEvent>();
+int main(int argc, char **argv) {
+  if (argc < 2)
+    return 1;
+  std::shared_ptr<Reader> input_file = deduce_reader(argv[1]);
+  if (!input_file)
+    return 2;
+  while (!input_file->failed()) {
+    GenEvent evt(Units::GEV, Units::MM);
+    bool res_read = input_file->read_event(evt);
 
-    // Create example vertices using shared_ptr
-    auto v0 = std::make_shared<GenVertex>();
-    auto v1 = std::make_shared<GenVertex>();
-    auto v2 = std::make_shared<GenVertex>();
-    auto v3 = std::make_shared<GenVertex>();
-
-    event->add_vertex(v0);
-    event->add_vertex(v1);
-    event->add_vertex(v2);
-    event->add_vertex(v3);
-
-    // Create example particles (edges) using shared_ptr
-    auto p01 = std::make_shared<GenParticle>();
-    auto p12 = std::make_shared<GenParticle>();
-    auto p23 = std::make_shared<GenParticle>();
-    auto p30 = std::make_shared<GenParticle>(); // Introduces a cycle
-
-    v0->add_particle_out(p01);
-    v1->add_particle_in(p01);
-
-    v1->add_particle_out(p12);
-    v2->add_particle_in(p12);
-
-    v2->add_particle_out(p23);
-    v3->add_particle_in(p23);
-
-    v3->add_particle_out(p30);
-    v0->add_particle_in(p30); // Closing cycle
-
-
-    v0->add_particle_out(p01);
-    v1->add_particle_out(p12);
-    v2->add_particle_out(p23);
-    v3->add_particle_out(p30);
-
+    if (input_file->failed()) {
+      printf("End of file reached. Exit.\n");
+      break;
+    }
     // Assign "original" attribute to each particle
-    for (auto& particle : event->particles()) {
-        particle->add_attribute("original", std::make_shared<HepMC3::IntAttribute>(particle->id()));
+    for (auto &particle : evt.particles()) {
+      particle->add_attribute("original", std::make_shared<HepMC3::IntAttribute>(particle->id()));
     }
-
-
-    cout << "Before merging cycle:" << endl;
-    for (auto v : event->vertices()) {
-        cout << "Vertex: " << v << " connected to " << v->particles_out().size() << " particles." << endl;
-    }
-
-    //CycleRemover processor(event);
-    //auto new_event = processor.mergeCycle();
-    auto new_event = CycleRemover(event).mergeCycle();
-
-    cout << "\nAfter merging cycle:" << endl;
-    for (auto v : new_event->vertices()) {
-        cout << "Vertex: " << v << " connected to " << v->particles_out().size() << " particles." << endl;
-    }
-
-    return 0;
+    WriterDOTCycleRemover(std::string("before_") + std::to_string(evt.event_number()) + ".dot").write_event(evt);
+    auto new_event0 = CycleRemover(evt).merge_cycle(0);
+    WriterDOTCycleRemover(std::string("after0_") + std::to_string(evt.event_number()) + ".dot").write_event(*new_event0.get());
+    auto new_event1 = CycleRemover(evt).merge_cycle(1);
+    WriterDOTCycleRemover(std::string("after1_") + std::to_string(evt.event_number()) + ".dot").write_event(*new_event1.get());
+  }
+  if (input_file)
+    input_file->close();
+  return 0;
 }
