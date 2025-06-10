@@ -6,17 +6,18 @@
 #include <memory>
 #include "HepMC3/GenEvent.h"
 
-using namespace HepMC3;
-using namespace std;
+namespace HepMC3 {
 
 class CycleRemover {
 public:
-    void mergeCycle(shared_ptr<GenEvent> event);
+    void mergeCycle(std::shared_ptr<GenEvent> event);
 
 private:
-    bool detectCycleDFS(shared_ptr<GenVertex> v, shared_ptr<GenVertex> parent,
-                        unordered_set<shared_ptr<GenVertex>>& visited,
-                        unordered_set<shared_ptr<GenVertex>>& cycleNodes);
+    bool detectCycleDFS(std::shared_ptr<GenVertex> v, std::shared_ptr<GenVertex> parent,
+                        std::unordered_set<std::shared_ptr<GenVertex>>& visited,
+                        std::unordered_set<std::shared_ptr<GenVertex>>& cycleNodes);
 };
+
+} // namespace HepMC3
 
 #endif // CYCLE_REMOVER_H
