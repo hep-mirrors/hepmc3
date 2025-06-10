@@ -114,6 +114,7 @@ endif()
 
 
 add_subdirectory(ConvertExample)
+add_subdirectory(CycleRemover)
 add_subdirectory(Pythia8Example)
 if (HEPMC3_ENABLE_SEARCH)
   add_subdirectory(SearchExample)
