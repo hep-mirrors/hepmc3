@@ -23,6 +23,7 @@ namespace HepMC3
 class WriterPlugin : public Writer
 {
 public:
+
     /** @brief Constructor  to write to stream */
     WriterPlugin(std::shared_ptr<std::ostream> stream, const std::string &libname, const std::string &newwriter, std::shared_ptr<HepMC3::GenRunInfo> run = std::shared_ptr<GenRunInfo>());
 

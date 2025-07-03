@@ -1,6 +1,6 @@
 # building examples
 #------------------
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)
 include_directories(${PROJECT_SOURCE_DIR}/include )
 if (${CMAKE_VERSION} VERSION_GREATER "3.8")
   cmake_policy(SET CMP0069 NEW)
@@ -86,7 +86,7 @@ if (CMAKE_Fortran_COMPILER)
   message(STATUS "HepMC3 examples: Fortran compiler found, Pythia6 example enabled. Fortran_COMPILER_NAME=${Fortran_COMPILER_NAME}  CMAKE_Fortran_COMPILER_ID=${CMAKE_Fortran_COMPILER_ID}")
   set(${CMAKE_Fortran_COMPILER_ID}_Fortran_FLAGS_TO_CHECK "")
   set( GNU_Fortran_FLAGS_TO_CHECK "-Wno-unused-label;-Wno-conversion;-Wno-unused-parameter;-Wno-maybe-uninitialized;-Wno-unused-dummy-argument;-Wno-integer-division;-Wno-compare-reals;-Wno-function-elimination;-Wno-tabs;-Wno-unused-variable;-Wno-do-subscript;-fno-automatic;-fno-backslash;-ffixed-line-length-132;-std=legacy")
-  set( IntelLLVM_Fortran_FLAGS_TO_CHECK "-extend-source:132;-noauto;-extend-source 132;-diag-disable 8291;-diag-disable 7784")
+  set( IntelLLVM_Fortran_FLAGS_TO_CHECK  "-noauto;-extend-source 132;-diag-disable 8291;-diag-disable 7784")
   set( Intel_Fortran_FLAGS_TO_CHECK "/noauto;/extend-source:132;-noauto;-extend-source 132;-diag-disable 8291;-diag-disable 7784")
   set( PGI_Fortran_FLAGS_TO_CHECK "-Mpreprocess;-Mextend;-Mnosave;-Mnofree;-noswitcherror")
   set( NVHPC_Fortran_FLAGS_TO_CHECK "-Mpreprocess;-Mextend;-Mnosave;-Mnofree;-noswitcherror")

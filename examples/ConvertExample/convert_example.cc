@@ -83,10 +83,10 @@ int main(int argc, char** argv)
     if (cmdline_parser (argc, argv, &ai) != 0) {
         exit(1);
     }
-    if ( !( 
-        ( ai.inputs_num == 2 && ( std::string(ai.output_format_arg) !=  "none" && std::string(ai.output_format_arg) !=  "dump" )) ||  
-        ( ai.inputs_num == 1 && ( std::string(ai.output_format_arg) ==  "none" || std::string(ai.output_format_arg) ==  "dump" ))  
-        )   
+    if ( !(
+                ( ai.inputs_num == 2 && ( std::string(ai.output_format_arg) !=  "none" && std::string(ai.output_format_arg) !=  "dump" )) ||
+                ( ai.inputs_num == 1 && ( std::string(ai.output_format_arg) ==  "none" || std::string(ai.output_format_arg) ==  "dump" ))
+            )
        )
     {
         printf("Exactly two arguments are requred: the name of input and output files if the output format in not \"none\" or \"dump\" \n");
@@ -133,11 +133,11 @@ int main(int argc, char** argv)
     if (input_is_stdin) std::ios_base::sync_with_stdio(false);
 #ifdef _LIBCPP_VERSION
     if (input_is_stdin) {
-		printf("The program cannot process inputs from standard input as std::ios_base::sync_with_stdio(bool) is not implemented in libc++, please use another C++ standard library.\n");
-		exit(4);
+        printf("The program cannot process inputs from standard input as std::ios_base::sync_with_stdio(bool) is not implemented in libc++, please use another C++ standard library.\n");
+        exit(4);
     }
-#endif    
-    
+#endif
+
     bool ignore_writer = false;
     switch (format_map.at(std::string(ai.input_format_arg)))
     {
