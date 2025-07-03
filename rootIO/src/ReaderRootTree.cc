@@ -79,8 +79,6 @@ bool ReaderRootTree::skip(const int n)
     return m_events_count < m_tree->GetEntries();
 }
 
-
-
 bool ReaderRootTree::read_event(GenEvent& evt)
 {
     if (m_events_count >= m_tree->GetEntries()) { m_events_count++; return false;}
@@ -108,6 +106,40 @@ bool ReaderRootTree::read_event(GenEvent& evt)
     m_events_count++;
     return true;
 }
+
+bool ReaderRootTree::read_event_at_index(GenEvent& evt, const Long64_t index)
+{
+
+    if(index >= m_tree->GetEntries()) return false;
+
+    m_event_data->particles.clear();
+    m_event_data->vertices.clear();
+    m_event_data->links1.clear();
+    m_event_data->links2.clear();
+    m_event_data->attribute_id.clear();
+    m_event_data->attribute_name.clear();
+    m_event_data->attribute_string.clear();
+
+    m_run_info_data->weight_names.clear();
+    m_run_info_data->tool_name.clear();
+    m_run_info_data->tool_version.clear();
+    m_run_info_data->tool_description.clear();
+    m_run_info_data->attribute_name.clear();
+    m_run_info_data->attribute_string.clear();
+
+    m_tree->GetEntry(index);
+    evt.read_data(*m_event_data);
+    run_info()->read_data(*m_run_info_data);
+    evt.set_run_info(run_info());
+
+    return true;
+}
+
+
+
+
+
+
 
 void ReaderRootTree::close()
 {

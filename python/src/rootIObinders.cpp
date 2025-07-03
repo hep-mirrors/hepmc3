@@ -1,4 +1,5 @@
 #include "rootIObinders.h"
+#include "Rtypes.h"
 
 namespace binder {
 
@@ -45,6 +46,13 @@ namespace binder {
 		cl.def("skip", (bool (HepMC3::ReaderRootTree::*)(const int)) &HepMC3::ReaderRootTree::skip, "skip events\n\nC++: HepMC3::ReaderRootTree::skip(const int) --> bool", pybind11::arg(""));
 
 		cl.def("read_event", (bool (HepMC3::ReaderRootTree::*)(class HepMC3::GenEvent &)) &HepMC3::ReaderRootTree::read_event, "Read event from file\n\n  \n Contains parsed event\n\nC++: HepMC3::ReaderRootTree::read_event(class HepMC3::GenEvent &) --> bool", pybind11::arg("evt"));
+
+		// read_event method currently unique to ReaderRootTree, with an index parameter
+		cl.def("read_event_at_index",
+			static_cast<bool (HepMC3::ReaderRootTree::*)(HepMC3::GenEvent &, const Long64_t)>(&HepMC3::ReaderRootTree::read_event_at_index),
+			"Read event from file at specific index\n\n  \n Contains parsed event\n  \n Event index\n\nC++: HepMC3::ReaderRootTree::read_event_at_index(class HepMC3::GenEvent &, const int) --> bool",
+			pybind11::arg("evt"), pybind11::arg("index"));
+
 		cl.def("close", (void (HepMC3::ReaderRootTree::*)()) &HepMC3::ReaderRootTree::close, "Close file \n\nC++: HepMC3::ReaderRootTree::close() --> void");
 		cl.def("failed", (bool (HepMC3::ReaderRootTree::*)()) &HepMC3::ReaderRootTree::failed, "Get file  error state \n\nC++: HepMC3::ReaderRootTree::failed() --> bool");
 
