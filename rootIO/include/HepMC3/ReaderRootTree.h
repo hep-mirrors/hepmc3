@@ -25,6 +25,7 @@
 #include "HepMC3/Data/GenRunInfoData.h"
 
 // ROOT header files
+#include "Rtypes.h" // not strictly necessary given the other includes, but Long64_t should be def'd here
 #include "TFile.h"
 #include "TTree.h"
 #include "TBranch.h"
@@ -55,6 +56,8 @@ public:
      *  @param[out] evt Contains parsed event
      */
     bool read_event(GenEvent &evt)   override;
+
+    bool read_event_at_index(GenEvent &evt, const Long64_t index);
 
     /** @brief Close file */
     void close()  override;
