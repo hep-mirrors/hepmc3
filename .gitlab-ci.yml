@@ -65,9 +65,8 @@ LCG_x86_64-alma9:
       make -j $(nproc) install
       ctest -j 5 --output-on-failure
 
-.check_commitxx: &check_commitxx
+.check_commit: &check_commit
   stage: check_if_dockerfile_updated
-  name: "check_commit-${OS}-${FREL}"
   image:
         name: alpine/git
         entrypoint: [""]
@@ -92,8 +91,7 @@ LCG_x86_64-alma9:
 
 ########################################################################
 
-.build_imagexx: &build_imagexx
-  name: "build_docker_image-${OS}-${FREL}"
+.build_image: &build_image
   stage: build_docker_image
   image:
         name: gcr.io/kaniko-project/executor:debug
@@ -215,6 +213,7 @@ LCG_x86_64-alma9:
 
 check_commit:
   stage: check_if_dockerfile_updated
+  extends: .check_commit
   parallel:
     matrix:
       - { OS: Fedora,    FREL: 41 }
@@ -231,31 +230,10 @@ check_commit:
       - { OS: CentOS,    FREL: 8  }
       - { OS: CentOS,    FREL: 7  }
       - { OS: Archlinux, FREL: 0  }
-  name: "check_commit-${OS}-${FREL}"
-  image:
-        name: alpine/git
-        entrypoint: [""]
-  script:
-        - rm -rf todo-$OS'_'$FREL.txt
-        - export SUFFIX=
-        - set -x
-        - if [ $OS == "CentOS" ]; then export SUFFIX=$FREL; fi
-        - git log -1 | grep $OS'Dockerfile'$FREL | head -n 1 >> todo-$OS'_'$FREL.txt || touch todo-$OS'_'$FREL.txt
-        - git diff --name-only HEAD HEAD~1 | grep CI/$OS/Dockerfile$SUFFIX | head -n 1 >> todo-$OS'_'$FREL.txt || touch todo-$OS'_'$FREL.txt
-        - if [ -s todo-$OS'_'$FREL.txt ]; then cat CI/$OS/Dockerfile$SUFFIX | sed 's/fedora:35/fedora:'$FREL'/g' > todo-$OS'_'$FREL.txt; fi
-        - if [ $CI_PIPELINE_SOURCE == "schedule" ]; then cat CI/$OS/Dockerfile$SUFFIX | sed 's/fedora:35/fedora:'$FREL'/g' > todo-$OS'_'$FREL.txt; fi
-        - cat todo-$OS'_'$FREL.txt
-        - exit 0
-  variables:
-    GIT_DEPTH: "3"
-  artifacts:
-    paths:
-      - todo-${OS}_${FREL}.txt
-    expire_in: 1 day
 
-  
 build_image:
   stage: build_docker_image
+  extends: .build_image
   parallel:
     matrix:
       - { OS: Fedora,    FREL: 41 }
@@ -273,18 +251,7 @@ build_image:
       - { OS: CentOS,    FREL: 7  }
       - { OS: Archlinux, FREL: 0  }
   needs:
-    - job: "check_commit-${OS}-${FREL}"
-  name: "build_docker_image-${OS}-${FREL}"
-  stage: build_docker_image
-  image:
-        name: gcr.io/kaniko-project/executor:debug
-        entrypoint: [""]
-  script:
-        - echo $CI_REGISTRY_IMAGE:$OS_$FREL $CI_PROJECT_DIR
-        - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-        - if [ -s todo-${OS}_${FREL}.txt ]; then /kaniko/executor --context $CI_PROJECT_DIR --dockerfile todo-${OS}_${FREL}.txt --destination $CI_REGISTRY_IMAGE:${OS}_${FREL} ; fi
-  variables:
-    GIT_DEPTH: "2"
+    - job: check_commit
 
 cmake_build:
   stage: build
@@ -299,7 +266,6 @@ cmake_build:
       - { OS: Fedora,    FREL: 34, TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
       - { OS: Fedora,    FREL: 34, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF" }
       - { OS: Fedora,    FREL: 33, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy2" }
-      - { OS: Fedora,    FREL: 27, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF" }
       - { OS: CentOS,    FREL: 10, TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
       - { OS: CentOS,    FREL: 9,  TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
       # - { OS: CentOS,    FREL: 9,  TOOLSET: INTEL, EXTRACMAKEFLAGS: "-DCMAKE_EXE_LINKER_FLAGS=-lstdc++" }
@@ -307,5 +273,13 @@ cmake_build:
       - { OS: CentOS,    FREL: 7,  TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3.6" }
       - { OS: Archlinux, FREL: 0,  TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
   needs:
-    - job: "build_docker_image-${OS}-${FREL}"
+    - job: build_image
 
+oldcmake_build:
+  stage: build
+  extends: .any-oldcmake
+  parallel:
+    matrix:
+      - { OS: Fedora,    FREL: 27, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF" }
+  needs:
+    - job: build_image
