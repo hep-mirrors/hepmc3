@@ -212,7 +212,7 @@ LCG_x86_64-alma9:
 
 
 check_commit:
-  stage: check
+  stage: check_if_dockerfile_updated
   extends: .check_commit
   parallel:
     matrix:
@@ -232,7 +232,7 @@ check_commit:
       - { OS: Archlinux, FREL: 0  }
 
 build_image:
-  stage: build
+  stage: build_docker_image
   extends: .build_image
   parallel:
     matrix:
@@ -254,7 +254,7 @@ build_image:
     - job: check_commit
 
 cmake_build:
-  stage: test
+  stage: build
   extends: .any-cmake
   parallel:
     matrix:
