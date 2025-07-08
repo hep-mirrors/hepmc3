@@ -1,6 +1,9 @@
 name: HepMC3 Build Matrix for Windows and MacOSX
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   nativeosx:
