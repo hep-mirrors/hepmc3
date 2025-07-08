@@ -211,251 +211,68 @@ LCG_x86_64-alma9:
       - *oldstandaloneexamples
 
 
-###########################################################################
-#Check commit messages
-check_commit_Fedora41:
-  variables: { OS: Fedora, FREL: 41}
+check_commit:
+  stage: check
   extends: .check_commit
+  parallel:
+    matrix:
+      - { OS: Fedora,    FREL: 41 }
+      - { OS: Fedora,    FREL: 40 }
+      - { OS: Fedora,    FREL: 38 }
+      - { OS: Fedora,    FREL: 37 }
+      - { OS: Fedora,    FREL: 35 }
+      - { OS: Fedora,    FREL: 34 }
+      - { OS: Fedora,    FREL: 33 }
+      - { OS: Fedora,    FREL: 27 }
+      # - { OS: Fedora,    FREL: 23 }
+      - { OS: CentOS,    FREL: 10 }
+      - { OS: CentOS,    FREL: 9  }
+      - { OS: CentOS,    FREL: 8  }
+      - { OS: CentOS,    FREL: 7  }
+      - { OS: Archlinux, FREL: 0  }
 
-check_commit_Fedora40:
-  variables: { OS: Fedora, FREL: 40}
-  extends: .check_commit
-
-check_commit_Fedora38:
-  variables: { OS: Fedora, FREL: 38}
-  extends: .check_commit
-
-check_commit_Fedora37:
-  variables: { OS: Fedora, FREL: 37}
-  extends: .check_commit
-
-check_commit_Fedora35:
-  variables: { OS: Fedora, FREL: 35}
-  extends: .check_commit
-
-check_commit_Fedora34:
-  variables: { OS: Fedora, FREL: 34}
-  extends: .check_commit
-
-check_commit_Fedora33:
-  variables: { OS: Fedora, FREL: 33}
-  extends: .check_commit
-
-check_commit_Fedora27:
-  variables: { OS: Fedora, FREL: 27}
-  extends: .check_commit
-
-#check_commit_Fedora23:
-  #variables: { OS: Fedora, FREL: 23}
-  #extends: .check_commit
-
-check_commit_CentOS10:
-  variables: { OS: CentOS, FREL: 10}
-  extends: .check_commit
-
-check_commit_CentOS9:
-  variables: { OS: CentOS, FREL: 9}
-  extends: .check_commit
-
-check_commit_CentOS8:
-  variables: { OS: CentOS, FREL: 8}
-  extends: .check_commit
-
-check_commit_CentOS7:
-  variables: { OS: CentOS, FREL: 7}
-  extends: .check_commit
-
-check_commit_Archlinux0:
-  variables: {OS: Archlinux, FREL: 0}
-  extends: .check_commit
-
-###########################################################################
-#Build images
-build_image_Fedora41:
-  variables: { OS: Fedora, FREL: 41}
+build_image:
+  stage: build
   extends: .build_image
+  parallel:
+    matrix:
+      - { OS: Fedora,    FREL: 41 }
+      - { OS: Fedora,    FREL: 40 }
+      - { OS: Fedora,    FREL: 38 }
+      - { OS: Fedora,    FREL: 37 }
+      - { OS: Fedora,    FREL: 35 }
+      - { OS: Fedora,    FREL: 34 }
+      - { OS: Fedora,    FREL: 33 }
+      - { OS: Fedora,    FREL: 27 }
+      # - { OS: Fedora,    FREL: 23 }
+      - { OS: CentOS,    FREL: 10 }
+      - { OS: CentOS,    FREL: 9  }
+      - { OS: CentOS,    FREL: 8  }
+      - { OS: CentOS,    FREL: 7  }
+      - { OS: Archlinux, FREL: 0  }
   needs:
-    - job: check_commit_Fedora41
+    - job: check_commit
 
-build_image_Fedora40:
-  variables: { OS: Fedora, FREL: 40}
-  extends: .build_image
-  needs:
-    - job: check_commit_Fedora40
-
-build_image_Fedora38:
-  variables: { OS: Fedora, FREL: 38}
-  extends: .build_image
-  needs:
-    - job: check_commit_Fedora38
-
-build_image_Fedora37:
-  variables: { OS: Fedora, FREL: 37}
-  extends: .build_image
-  needs:
-    - job: check_commit_Fedora37
-
-build_image_Fedora35:
-  variables: { OS: Fedora, FREL: 35}
-  extends: .build_image
-  needs:
-    - job: check_commit_Fedora35
-
-build_image_Fedora34:
-  variables: { OS: Fedora, FREL: 34}
-  extends: .build_image
-  needs:
-    - job: check_commit_Fedora34
-
-build_image_Fedora33:
-  variables: { OS: Fedora, FREL: 33}
-  extends: .build_image
-  needs:
-    - job: check_commit_Fedora33
-
-build_image_Fedora27:
-  variables: { OS: Fedora, FREL: 27}
-  extends: .build_image
-  needs:
-    - job: check_commit_Fedora27
-
-#build_image_Fedora23:
-  #variables: { OS: Fedora, FREL: 23}
-  #extends: .build_image
-  #needs:
-    #- job: check_commit_Fedora23
-
-build_image_CentOS10:
-  variables: { OS: CentOS, FREL: 10}
-  extends: .build_image
-  needs:
-    - job: check_commit_CentOS10
-    
-build_image_CentOS9:
-  variables: { OS: CentOS, FREL: 9}
-  extends: .build_image
-  needs:
-    - job: check_commit_CentOS9
-
-build_image_CentOS8:
-  variables: { OS: CentOS, FREL: 8}
-  extends: .build_image
-  needs:
-    - job: check_commit_CentOS8
-
-build_image_CentOS7:
-  variables: { OS: CentOS, FREL: 7}
-  extends: .build_image
-  needs:
-    - job: check_commit_CentOS7
-
-build_image_Archlinux0:
-  variables: { OS: Archlinux, FREL: 0}
-  extends: .build_image
-  needs:
-    - job: check_commit_Archlinux0
-
-###########################################################################
-Fedora41-GNU:
-  variables: { OS: Fedora, FREL: 41, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+cmake_build:
+  stage: test
   extends: .any-cmake
+  parallel:
+    matrix:
+      - { OS: Fedora,    FREL: 41, TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
+      - { OS: Fedora,    FREL: 40, TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
+      - { OS: Fedora,    FREL: 38, TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
+      - { OS: Fedora,    FREL: 37, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF" }
+      - { OS: Fedora,    FREL: 35, TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
+      - { OS: Fedora,    FREL: 34, TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
+      - { OS: Fedora,    FREL: 34, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF" }
+      - { OS: Fedora,    FREL: 33, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy2" }
+      - { OS: Fedora,    FREL: 27, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF" }
+      - { OS: CentOS,    FREL: 10, TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
+      - { OS: CentOS,    FREL: 9,  TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
+      # - { OS: CentOS,    FREL: 9,  TOOLSET: INTEL, EXTRACMAKEFLAGS: "-DCMAKE_EXE_LINKER_FLAGS=-lstdc++" }
+      - { OS: CentOS,    FREL: 8,  TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
+      - { OS: CentOS,    FREL: 7,  TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3.6" }
+      - { OS: Archlinux, FREL: 0,  TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
   needs:
-    - job: build_image_Fedora41
-
-Fedora40-GNU:
-  variables: { OS: Fedora, FREL: 40, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
-  extends: .any-cmake
-  needs:
-    - job: build_image_Fedora40
-
-Fedora38-GNU:
-  variables: { OS: Fedora, FREL: 38, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
-  extends: .any-cmake
-  needs:
-    - job: build_image_Fedora38
-
-Fedora37-LLVM:
-  variables: { OS: Fedora, FREL: 37, TOOLSET: LLVM,  EXTRACMAKEFLAGS: -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF}
-  extends: .any-cmake
-  needs:
-    - job: build_image_Fedora37
-
-Fedora35-GNU:
-  variables: { OS: Fedora, FREL: 35, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
-  extends: .any-cmake
-  needs:
-    - job: build_image_Fedora35
-
-Fedora34-GNU:
-  variables: { OS: Fedora, FREL: 34, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
-  extends: .any-cmake
-  needs:
-    - job: build_image_Fedora34
-
-Fedora34-LLVM:
-  variables: { OS: Fedora, FREL: 34, TOOLSET: LLVM,  EXTRACMAKEFLAGS:  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF}
-  extends: .any-cmake
-  needs:
-    - job: build_image_Fedora34
-
-Fedora33-GNU-pypy:
-  variables: { OS: Fedora, FREL: 33, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy2" }
-  extends: .any-cmake
-  needs:
-    - job: build_image_Fedora33
-
-Fedora27-GNU:
-  variables: { OS: Fedora, FREL: 27, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
-  extends: .any-oldcmake
-  needs:
-    - job: build_image_Fedora27
-
-#Fedora23-LLVM-noroot-nopython-noprotobuf:
-  #variables: { OS: Fedora, FREL: 23, TOOLSET: LLVM, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
-  #extends: .any-oldcmake-no-python
-  #needs:
-    #- job: build_image_Fedora23
-
-#Fedora23-GNU-noroot-nopython-noprotobuf:
-  #variables: { OS: Fedora, FREL: 23, TOOLSET: GNU, EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF"}
-  #extends: .any-oldcmake-no-python
-  #needs:
-    #- job: build_image_Fedora23
-
-CentOS10-GNU:
-  variables: { OS: CentOS, FREL: 10, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
-  extends: .any-cmake
-  needs:
-    - job: build_image_CentOS10
-
-#CentOS9-INTEL:
-#  variables: { OS: CentOS, FREL: 9, TOOLSET: INTEL, EXTRACMAKEFLAGS: -DCMAKE_EXE_LINKER_FLAGS=-lstdc++}
-#  extends: .any-cmake
-#  needs:
-#    - job: build_image_CentOS9
-
-CentOS9-GNU:
-  variables: { OS: CentOS, FREL: 9, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
-  extends: .any-cmake
-  needs:
-    - job: build_image_CentOS9
-
-CentOS8-GNU:
-  variables: { OS: CentOS, FREL: 8, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
-  extends: .any-cmake
-  needs:
-    - job: build_image_CentOS8
-
-CentOS7-GNU:
-  variables: { OS: CentOS, FREL: 7, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3.6"}
-  extends: .any-cmake
-  needs:
-    - job: build_image_CentOS7
-
-Archlinux0-GNU:
-  variables: { OS: Archlinux, FREL: 0, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
-  extends: .any-cmake
-  needs:
-    - job: build_image_Archlinux0
-
+    - job: build_image
 
