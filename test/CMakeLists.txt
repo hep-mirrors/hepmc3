@@ -1,9 +1,13 @@
-#Beacause of LZMA targets
+#Because of LZMA targets
 if (HEPMC3_TEST_LZMA)
-  cmake_minimum_required(VERSION 3.14.0 FATAL_ERROR)
+  if(${CMAKE_VERSION} VERSION_LESS "3.14")
+    message(FATAL_ERROR "HepMC3: CMake >= 3.14 is required to use HEPMC3_TEST_LZMA=ON. Found ${CMAKE_VERSION}")
+  endif()
 endif()
 if (HEPMC3_TEST_BZIP2)
-  cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
+  if(${CMAKE_VERSION} VERSION_LESS "3.12")
+    message(FATAL_ERROR "HepMC3: CMake >= 3.12 is required to use HEPMC3_TEST_BZIP2=ON. Found ${CMAKE_VERSION}")
+  endif()
 endif()
 
 

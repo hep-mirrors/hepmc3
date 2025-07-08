@@ -90,7 +90,7 @@ if (USE_INSTALLED_HEPMC3)
   install(DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/ DESTINATION ${CMAKE_INSTALL_BINDIR}  FILES_MATCHING PATTERN "*env.sh*" )
 endif()
 
-#This is an option for developers only
+#This option is for developers only
 if ( HEPMC3_USE_GENGETOPT )
   find_program(GENGETOPT gengetopt)
   if( NOT GENGETOPT )

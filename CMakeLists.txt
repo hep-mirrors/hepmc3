@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10.0...4.0.3)
 #----------------------------------------------------------------------------
 project(HepMC3 LANGUAGES CXX)
 set(PROJECT_VERSION 3.03.01)
@@ -19,10 +19,7 @@ else(CMAKE_BUILD_TYPE)
 endif(CMAKE_BUILD_TYPE)
 
 message(STATUS "HepMC3: CMAKE_VERSION=${CMAKE_VERSION}")
-if (${CMAKE_VERSION} VERSION_GREATER "3.8")
-  cmake_policy(SET CMP0069 NEW)
-  include(CheckIPOSupported)
-endif()
+include(CheckIPOSupported)
 
 string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
 

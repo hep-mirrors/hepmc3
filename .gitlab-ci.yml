@@ -458,4 +458,82 @@ Archlinux0-GNU:
   needs:
     - job: build_image_Archlinux0
 
+########################################################################
 
+.excmake: &excmake |
+  wget https://github.com/Kitware/CMake/releases/download/v${CMAKEVERSION}/cmake-${CMAKEVERSION}-linux-x86_64.sh
+  mkdir -p "$(pwd)/${CMAKEVERSION}"
+  sh cmake-${CMAKEVERSION}-linux-x86_64.sh --skip-license --prefix="$(pwd)/${CMAKEVERSION}"
+  export PATH="$(pwd)/${CMAKEVERSION}/bin:$PATH"
+  export CCACHE_BASEDIR="$(pwd)/CACHES/cache-${OS}-${FREL}-${TOOLSET}-${CMAKEVERSION}"
+  if [ "${TOOLSET}" == "LLVM" ]; then
+    export CXX=clang++; export CC=clang; export FC=gfortran
+  fi
+  if [ "${TOOLSET}" == "GNU" ]; then
+    export CXX=g++; export CC=gcc; export FC=gfortran
+  fi
+  if [ "${TOOLSET}" == "INTEL" ]; then
+    source /opt/intel/oneapi/setvars.sh
+    export CXX=icx; export CC=icx; export FC=ifx
+  fi
+  export CCACHE_DIR="${CCACHE_BASEDIR}/ccache"
+  mkdir -p "$CCACHE_DIR"
+  export CCACHE_COMPILERCHECK=content
+  export CMAKE=cmake
+  export CTEST=ctest
+  if [ "${FREL}" == "7" ]; then
+    export CMAKE=cmake3; export CTEST=ctest3
+  fi
+  if [ "${FREL}" == "0" ] || [ "${FREL}" == "23" ]; then
+    export CMAKE=cmake; export CTEST=ctest
+  fi
+  export CACHINGFLAGS="-DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache"
+  $CMAKE --version
+  $CTEST --version
+
+
+
+CentOS10-GNU-cmake-ranges:
+  stage: LCG
+  needs:
+    - job: build_image_CentOS10
+  when: manual
+  allow_failure: true
+  parallel:
+    matrix:
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.16.0" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.18.0" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.20.0" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.22.0" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.24.0" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.26.0" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.28.0" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.30.0" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.31.8" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "4.0.3" }
+  extends: .any
+  script:
+      - *excmake
+      - *cmake
+      - *standalone  
+
+
+CentOS10-GNU-oldcmake-ranges:
+  stage: LCG
+  needs:
+    - job: build_image_CentOS10
+  when: manual
+  allow_failure: true
+  parallel:
+    matrix:
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.10.0", EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF -DHEPMC3_TEST_BZIP2:BOOL=OFF -DHEPMC3_ENABLE_PYTHON:BOOL=OFF -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.12.0", EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF"  }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.13.0", EXTRACMAKEFLAGS: "-DHEPMC3_TEST_LZMA:BOOL=OFF"  }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.14.0" }
+     - { OS: CentOS, FREL: 10, TOOLSET: GNU,  CMAKEVERSION: "3.15.0" }
+  extends: .any
+  script:
+      - *excmake
+      - *oldcmake
+      - *oldstandaloneexamples
+      - *oldstandalonepython
