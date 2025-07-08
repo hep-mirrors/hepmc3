@@ -592,7 +592,6 @@ bool ReaderAscii::parse_attribute(const char *buf) {
 bool ReaderAscii::parse_run_attribute(const char *buf) {
     const char     *cursor  = buf + 1;
     const char     *cursor2 = buf + 1;
-    char * after_parse = nullptr;
     std::array<char, 512> name{};
 
     if ( !(cursor = find_next_token(cursor)) ) return false;
