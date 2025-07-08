@@ -230,7 +230,8 @@ check_commit:
       - { OS: CentOS,    FREL: 8  }
       - { OS: CentOS,    FREL: 7  }
       - { OS: Archlinux, FREL: 0  }
-
+  name: "check_commit-${OS}-${FREL}"
+  
 build_image:
   stage: build_docker_image
   extends: .build_image
@@ -250,8 +251,9 @@ build_image:
       - { OS: CentOS,    FREL: 8  }
       - { OS: CentOS,    FREL: 7  }
       - { OS: Archlinux, FREL: 0  }
+  name: "build_docker_image-${OS}-${FREL}"
   needs:
-    - job: check_commit
+    - job: "check_commit-${OS}-${FREL}"
 
 cmake_build:
   stage: build
@@ -274,5 +276,5 @@ cmake_build:
       - { OS: CentOS,    FREL: 7,  TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3.6" }
       - { OS: Archlinux, FREL: 0,  TOOLSET: GNU,  EXTRACMAKEFLAGS: "" }
   needs:
-    - job: build_image
+    - job: "build_docker_image-${OS}-${FREL}"
 
