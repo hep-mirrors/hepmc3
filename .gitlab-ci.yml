@@ -231,7 +231,6 @@ check_commit:
       - { OS: CentOS,    FREL: 8  }
       - { OS: CentOS,    FREL: 7  }
       - { OS: Archlinux, FREL: 0  }
-  stage: check_if_dockerfile_updated
   name: "check_commit-${OS}-${FREL}"
   image:
         name: alpine/git
