@@ -14,7 +14,7 @@
 #include "HepMC3/ReaderFactory.h"
 #include "HepMC3/Setup.h"
 
-auto get_parts_with(HepMC3::GenEvent const &ev, int status, int pid) {
+std::vector<HepMC3::ConstGenParticlePtr> get_parts_with(HepMC3::GenEvent const &ev, int status, int pid) {
   std::vector<HepMC3::ConstGenParticlePtr> out_parts;
 
   for (auto const &p : ev.particles()) {
