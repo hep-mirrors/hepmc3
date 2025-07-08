@@ -67,6 +67,7 @@ LCG_x86_64-alma9:
 
 .check_commit: &check_commit
   stage: check_if_dockerfile_updated
+  name: "check_commit-${OS}-${FREL}"
   image:
         name: alpine/git
         entrypoint: [""]
@@ -92,6 +93,7 @@ LCG_x86_64-alma9:
 ########################################################################
 
 .build_image: &build_image
+  name: "build_docker_image-${OS}-${FREL}"
   stage: build_docker_image
   image:
         name: gcr.io/kaniko-project/executor:debug
@@ -230,7 +232,6 @@ check_commit:
       - { OS: CentOS,    FREL: 8  }
       - { OS: CentOS,    FREL: 7  }
       - { OS: Archlinux, FREL: 0  }
-  name: "check_commit-${OS}-${FREL}"
   
 build_image:
   stage: build_docker_image
@@ -251,7 +252,6 @@ build_image:
       - { OS: CentOS,    FREL: 8  }
       - { OS: CentOS,    FREL: 7  }
       - { OS: Archlinux, FREL: 0  }
-  name: "build_docker_image-${OS}-${FREL}"
   needs:
     - job: "check_commit-${OS}-${FREL}"
 
