@@ -1,13 +1,10 @@
 #project(pyHepMC3 CXX)
 #Should be fixed
-cmake_minimum_required(VERSION 3.10.0)
+cmake_minimum_required(VERSION 3.10.0...4.0.3)
 if(${CMAKE_VERSION} VERSION_LESS "3.14.00")
   SET_PROPERTY (GLOBAL PROPERTY CMAKE_ROLE "PROJECT")
 endif()
-if (${CMAKE_VERSION} VERSION_GREATER "3.8")
-  cmake_policy(SET CMP0069 NEW)
-  include(CheckIPOSupported)
-endif()
+include(CheckIPOSupported)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
 option(USE_INSTALLED_HEPMC3 "Use HepMC3 bindings as a standalone package" OFF)

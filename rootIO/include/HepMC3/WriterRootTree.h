@@ -48,9 +48,19 @@ public:
      */
     WriterRootTree(const std::string &filename,
                    std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
+
+    /** @brief Constructor with append mode flag. */
+    WriterRootTree(const std::string &filename,
+                   std::shared_ptr<GenRunInfo> run,
+                   bool append);
+
     /** @brief Constructor with tree name*/
     WriterRootTree(const std::string &filename, const std::string &treename, const std::string &branchname,
                    std::shared_ptr<GenRunInfo> run = std::shared_ptr<GenRunInfo>());
+
+    /** @brief Constructor with tree name and append mode flag*/
+       WriterRootTree(const std::string &filename, const std::string &treename, const std::string &branchname,
+                   std::shared_ptr<GenRunInfo> run, bool append);
 //
 // Functions
 //

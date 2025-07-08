@@ -1,10 +1,13 @@
 name: HepMC3 Build Matrix for Windows and MacOSX
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   nativeosx:
-    if: "contains(github.event.head_commit.message, 'githubosxci')"
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'githubosxci')
     name: "${{ matrix.config.name }} ${{ matrix.python-version }}"
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -37,11 +40,11 @@ jobs:
             #os: macos-15,
             #cxx: "clang++"
           #}
-        #- {
-            #name: "MacOSX-15",
-            #os: macos-15-xlarge,
-            #cxx: "clang++"
-          #}
+        - {
+            name: "MacOSX-15",
+            os: macos-15,
+            cxx: "clang++"
+          }
         #- {
             #name: "MacOSX-13",
             #os: macos-13,
@@ -62,6 +65,7 @@ jobs:
             #os: macos-14-xlarge,
             #cxx: "g++-14"
           #}
+# This one is broken, see https://github.com/munich-quantum-toolkit/core/issues/979
         - {
             name: "MacOSX-15",
             os: macos-15,
@@ -90,7 +94,7 @@ jobs:
         cd BUILD
         ctest . --output-on-failure
   nativewin:
-    if: "contains(github.event.head_commit.message, 'githubwinci')"
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, 'githubwinci')
     name: "${{ matrix.config.name }} ${{ matrix.python-version }}"
     runs-on: ${{ matrix.config.os }}
     strategy:
