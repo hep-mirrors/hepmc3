@@ -171,6 +171,7 @@ set( HepMC_tests
         testHEPEVTWrapper1
         testOrder
         testVertexAttributes
+        testSherpa140Crash
          )
                  
 set( HepMC_unix_tests
