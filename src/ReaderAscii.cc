@@ -89,6 +89,7 @@ bool ReaderAscii::skip(const int n)
 
 bool ReaderAscii::read_event(GenEvent &evt) {
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
+
     char               peek(0);
     std::array<char, 262144> buf{};
     bool               event_context    = false;
@@ -669,8 +670,7 @@ std::string ReaderAscii::unescape(const std::string& s) {
     return ret;
 }
 
-bool ReaderAscii::failed() { bool b = m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); 
-	return b; }
+bool ReaderAscii::failed() { return m_isstream ? static_cast<bool>(m_stream->rdstate()) :static_cast<bool>(m_file.rdstate()); }
 
 void ReaderAscii::close() {
     if ( !m_file.is_open()) return;
