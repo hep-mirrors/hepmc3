@@ -88,9 +88,7 @@ bool ReaderAscii::skip(const int n)
 
 
 bool ReaderAscii::read_event(GenEvent &evt) {
-//	printf("XX1->\n");
     if ( (!m_file.is_open()) && (!m_isstream) ) return false;
-//printf("XX2->\n");
     char               peek(0);
     std::array<char, 262144> buf{};
     bool               event_context    = false;
@@ -116,9 +114,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     //
     // Parse event, vertex and particle information
     //
-//printf("XX3->\n");    
     while (!failed()) {
-//printf("XX4->\n");
         m_isstream ? m_stream->getline(buf.data(), buf.size()) : m_file.getline(buf.data(), buf.size());
 
         if ( std::strlen(buf.data()) < 2 ) continue;
@@ -674,7 +670,6 @@ std::string ReaderAscii::unescape(const std::string& s) {
 }
 
 bool ReaderAscii::failed() { bool b = m_isstream ? (bool)m_stream->rdstate() :(bool)m_file.rdstate(); 
-	//printf("b=%i\n",b); 
 	return b; }
 
 void ReaderAscii::close() {
