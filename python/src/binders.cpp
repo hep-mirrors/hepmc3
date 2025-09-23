@@ -18,26 +18,11 @@ void custom_deduce_reader(pybind11::module&  M){
       try{
       auto mzstd = pybind11::module::import(format.c_str());
       if (!pybind11::hasattr(mzstd,"open")) { pybind11::print(format + " module has no open function");  return nullptr;}
-      
       auto zstdfile = mzstd.attr("open")(filename.c_str(),"rb");
-      pybind11::print(zstdfile);
-      //auto a = std::shared_ptr< std::istream >(new pystream::istream(zstdfile,512*512));
       auto aa = new pystream::istream(zstdfile,512*512);
-//      if (classname == "ReaderAscii" ) return std::make_shared<HepMC3::ReaderAscii>(a);
-      pybind11::print("HHHH1\n");
-      if (classname == "ReaderAscii" ) { 
-		  
-		   auto q =  HepMC3::deduce_reader(*aa);
-		//  auto q = std::shared_ptr<HepMC3::Reader>((HepMC3::Reader*) ( new HepMC3::ReaderAscii(a)));  
-		  
-		  pybind11::print("HHHH2  \n   bbb="+std::to_string(q->failed()));
-		  HepMC3::GenEvent ev;
-		  q->read_event(ev);
-		  //pybind11::print("HHHH2  \n   bbb="+std::to_string(q->failed()));
-		  return q;
-		  }
-  //    if (classname == "ReaderAsciiHepMC2" ) return std::make_shared<HepMC3::ReaderAsciiHepMC2>(a);
-    //  if (classname == "ReaderHEPEVT" ) return std::make_shared<HepMC3::ReaderHEPEVT>(a);
+      if (classname == "ReaderAscii" ) return std::make_shared<HepMC3::ReaderAscii>(*aa);	  
+      if (classname == "ReaderAsciiHepMC2" ) return std::make_shared<HepMC3::ReaderAsciiHepMC2>(*aa);
+      if (classname == "ReaderHEPEVT" ) return std::make_shared<HepMC3::ReaderHEPEVT>(*aa);
       return nullptr;
       } catch (pybind11::import_error &e) { pybind11::print("Cannot import " + format + "  module");  return nullptr;}
       }, 
@@ -48,10 +33,10 @@ void custom_deduce_reader(pybind11::module&  M){
       auto mzstd = pybind11::module::import(format.c_str());
       if (!pybind11::hasattr(mzstd,"open")) { pybind11::print(format + " module has no open function");  return nullptr;}
       auto zstdfile = mzstd.attr("open")(filename.c_str(),"wb");
-      pybind11::print(zstdfile);
-      if (classname == "WriterAscii" ) return std::make_shared<HepMC3::WriterAscii>(std::shared_ptr< std::ostream >(new pystream::ostream(zstdfile)));
-      if (classname == "WriterAsciiHepMC2" ) return std::make_shared<HepMC3::WriterAsciiHepMC2>(std::shared_ptr< std::ostream >(new pystream::ostream(zstdfile)));
-      if (classname == "WriterHEPEVT" ) return std::make_shared<HepMC3::WriterHEPEVT>(std::shared_ptr< std::ostream >(new pystream::ostream(zstdfile)));
+      auto aa = new pystream::ostream(zstdfile);
+      if (classname == "WriterAscii" ) return std::make_shared<HepMC3::WriterAscii>(std::shared_ptr< std::ostream >(aa));
+      if (classname == "WriterAsciiHepMC2" ) return std::make_shared<HepMC3::WriterAsciiHepMC2>(std::shared_ptr< std::ostream >(aa));
+      if (classname == "WriterHEPEVT" ) return std::make_shared<HepMC3::WriterHEPEVT>(std::shared_ptr< std::ostream >(aa));
       return nullptr;
       } catch (pybind11::import_error &e) { pybind11::print("Cannot import " + format + " module");  return nullptr;}
       }, 
