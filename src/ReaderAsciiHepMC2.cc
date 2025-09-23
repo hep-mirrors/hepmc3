@@ -310,10 +310,10 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
     if (cached_attributes.count("weights") != 0) {
         const std::map<int, std::shared_ptr<Attribute> >& weights = cached_attributes.at("weights");
         if (m_options.count("vertex_weights_are_separated") == 0) {
-            for (const auto& f: weights) { if (f.first < 0 && f.first >= -static_cast<int>(m_vertex_cache.size()))  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);}
+            for (const auto& f: weights) { if (f.first < 0 && f.first >= -static_cast<int>(m_vertex_cache.size()) && m_vertex_cache.at(-f.first-1))  m_vertex_cache[-f.first-1]->add_attribute("weights", f.second);}
         } else {
             for (const auto& f: weights) {
-                if (f.first < 0 && f.first >= -static_cast<int>(m_vertex_cache.size())) {
+                if (f.first < 0 && f.first >= -static_cast<int>(m_vertex_cache.size()) && m_vertex_cache.at(-f.first-1)) {
                     std::shared_ptr<VectorDoubleAttribute>  casted = std::dynamic_pointer_cast<VectorDoubleAttribute>(f.second);
                     if (!casted) continue;//Should not happen
                     std::vector<double> this_v_weight = casted->value();
@@ -329,6 +329,7 @@ bool ReaderAsciiHepMC2::read_event(GenEvent &evt) {
         {
             if (i >= m_vertex_barcodes.size()) continue;//this should not happen!
             if (signal_process_vertex_barcode_value != m_vertex_barcodes.at(i)) continue;
+            if (!m_vertex_cache.at(i)) continue;//this should not happen!
             std::shared_ptr<IntAttribute> signal_process_vertex = std::make_shared<IntAttribute>(m_vertex_cache.at(i)->id());
             evt.add_attribute("signal_process_vertex", signal_process_vertex);
             break;
