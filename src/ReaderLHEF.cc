@@ -189,15 +189,69 @@ bool ReaderLHEF::read_event(GenEvent& ev)
                 evt.add_vertex(v.second);
             }
         }
-        if (particles.size() > 1)
-        {
-            particles[0]->set_status(4);
-            particles[1]->set_status(4);
-            evt.set_beam_particles(particles[0], particles[1]);
+
+        // Create proper beam particles from the init block information
+
+        /// @note If beam IDs (IDBMUP) are set to zero, no beam particle will be 
+        /// created for that side. This allows for single-beam or no-beam configurations.
+
+        // Requirements:
+        // 1. First N particles in the event must have status -1 (incoming) where N = number of non-zero beam IDs (N = 0, 1, or 2)
+        // 2. Beam energies (EBMUP) are used to give the beams opposite signs along pz
+        // 3. Each beam particle gets connected to its corresponding incoming parton via a vertex
+
+        int particle_from_beam_index = 0;
+
+        // First beam (positive z-direction)
+        if (m_hepr->heprup.IDBMUP.first != 0) {
+            // Create beam particle with momentum (0, 0, +E, E) where E = beam energy
+            FourVector beam_mom(0, 0, m_hepr->heprup.EBMUP.first, m_hepr->heprup.EBMUP.first);
+            GenParticlePtr beam = std::make_shared<GenParticle>(beam_mom, m_hepr->heprup.IDBMUP.first, 4);
+            evt.add_beam_particle(beam);
+            // Validate that we have enough particles and the first one is incoming (status -1)
+            if (particles.size() > particle_from_beam_index) {
+                if (particles[particle_from_beam_index]->status() != -1) {
+                    HEPMC3_ERROR("ReaderLHEF::read_event: beam particle in the event is not an incoming particle (status != -1).")
+                    return false;
+                }
+                // Connect beam to the corresponding incoming parton via a vertex
+                GenVertexPtr v = std::make_shared<GenVertex>();
+                v->add_particle_out(particles[particle_from_beam_index]);
+                particle_from_beam_index++;
+                v->add_particle_in(beam);
+                evt.add_vertex(v);
+            }
+            else {
+                HEPMC3_ERROR("ReaderLHEF::read_event: fewer particles than beams in the event, cannot add beam particle(s).")
+                return false;
+            }
         }
+        // Second beam (negative z-direction)
+        if (m_hepr->heprup.IDBMUP.second != 0) {
+            // Create beam particle with momentum (0, 0, -E, E) where E = beam energy
+            FourVector beam_mom(0, 0, -m_hepr->heprup.EBMUP.second, m_hepr->heprup.EBMUP.second);
+            GenParticlePtr beam = std::make_shared<GenParticle>(beam_mom, m_hepr->heprup.IDBMUP.second, 4);
+            evt.add_beam_particle(beam);
+            // Validate that we have enough particles and the next one is incoming (status -1)
+            if (particles.size() > particle_from_beam_index) {
+                if (particles[particle_from_beam_index]->status() != -1) {
+                    HEPMC3_ERROR("ReaderLHEF::read_event: beam particle in the event is not an incoming particle (status != -1).")
+                    return false;
+                }
+                // Connect beam to the corresponding incoming parton via a vertex
+                GenVertexPtr v = std::make_shared<GenVertex>();
+                v->add_particle_out(particles[particle_from_beam_index]);
+                particle_from_beam_index++;
+                v->add_particle_in(beam);
+                evt.add_vertex(v);
+            }
+            else {
+                HEPMC3_ERROR("ReaderLHEF::read_event: fewer particles than beams in the event, cannot add beam particle(s).")
+                return false;
+            }
+        }
+
         // And we also want to add the weights.
-
-
         std::vector<double> wts;
         size_t N = ahepeup->weights.size();
         wts.reserve(N);
