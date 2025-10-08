@@ -1,4 +1,7 @@
 --------------------------  HepMC3.3.2 --------------------------
+2025-10-02 Alexander Puck Neuwirth
+  * Fixes for ReaderLHEF to properly report beams from LHE init block instead of first particles in event record.
+    Further an error is raised now if there are fewer particles than beams in the event.
 2025-07-11 Andrii Verbytskyi
   * Require cmake>3.10 and allow for cmake policies to be in range that correspond 3.10.0...4.0.3. Add cmake version testing in CI.
   * Thanks to  Matthew Feickert and Henry Schreiner.
