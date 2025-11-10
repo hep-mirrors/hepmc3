@@ -422,6 +422,12 @@ Fedora27-GNU:
   #needs:
     #- job: build_image_Fedora23
 
+CentOS10-GNU-NO-DEPRECTAED:
+  variables: { OS: CentOS, FREL: 10, TOOLSET: GNU,  EXTRACMAKEFLAGS: -DHEPMC3_NO_DEPRECATED=1 }
+  extends: .any-cmake
+  needs:
+    - job: build_image_CentOS10
+
 CentOS10-GNU:
   variables: { OS: CentOS, FREL: 10, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
   extends: .any-cmake
