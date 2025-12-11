@@ -21,10 +21,10 @@ LCG_x86_64-alma9:
     - |
       export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
       uname -m
-      export LCGRELEASE=LCG_106a_ATLAS_8 
+      export LCGRELEASE=LCG_108
       UNAME=$(uname -m)
       export GCCV=13
-      set -x
+      set +x
       export LCGPLATFORM=$UNAME"-el9-gcc"$GCCV"-opt"
       export LCGLOCATION=/cvmfs/sft.cern.ch/lcg/releases/$LCGRELEASE
       export HM3_ROOT_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'ROOT;' | cut -f 3 -d';' | tr -d ' ')
@@ -37,6 +37,9 @@ LCG_x86_64-alma9:
       export HM3_PROTOBUF_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'protobuf;' | cut -f 3 -d';' | tr -d ' ')
       export HM3_PROTOBUF2_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'protobuf2;' | cut -f 3 -d';' | tr -d ' ')
       export HM3_PYTHIA8_VERSION=$(cat  $LCGLOCATION/LCG_generators_$LCGPLATFORM'.txt' | grep 'pythia8;' | cut -f 3 -d';' | tr -d ' ')
+      export HM3_PODIO_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'podio;' | cut -f 3 -d';' | tr -d ' ')
+      export HM3_PDT_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'HepPDT;' | cut -f 3 -d';' | tr -d ' ')
+      export HM3_EDM4HEP_VERSION=$(cat  $LCGLOCATION/LCG_externals_$LCGPLATFORM'.txt' | grep 'EDM4hep;' | cut -f 3 -d';' | tr -d ' ')
       source /cvmfs/sft.cern.ch/lcg/contrib/gcc/${GCCV}/${LCGPLATFORM}/setup.sh
       export PATH=/cvmfs/sft.cern.ch/lcg/contrib/CMake/latest/Linux-x86_64/bin/:${PATH}
       source ${LCGLOCATION}/ROOT/${HM3_ROOT_VERSION}/${LCGPLATFORM}/ROOT-env.sh
@@ -47,19 +50,52 @@ LCG_x86_64-alma9:
       source ${LCGLOCATION}/HepMC/${HM3_HEPMC_VERSION}/${LCGPLATFORM}/HepMC-env.sh
       source ${LCGLOCATION}/protobuf2/${HM3_PROTOBUF2_VERSION}/${LCGPLATFORM}/protobuf2-env.sh
       export Protobuf_ROOT=$(pkg-config protobuf --variable=prefix)
+      source ${LCGLOCATION}/podio/${HM3_PODIO_VERSION}/${LCGPLATFORM}/podio-env.sh
+      source ${LCGLOCATION}/HepPDT/${HM3_PDT_VERSION}/${LCGPLATFORM}/HepPDT-env.sh
+      source ${LCGLOCATION}/EDM4hep/${HM3_EDM4HEP_VERSION}/${LCGPLATFORM}/EDM4hep-env.sh
       export LARG=" "
       export LARG="$LARG "-DPYTHIA8_ROOT_DIR=${LCGLOCATION}/MCGenerators/pythia8/${HM3_PYTHIA8_VERSION}/${LCGPLATFORM}
       export LARG="$LARG "-DHEPMC2_ROOT_DIR=${LCGLOCATION}/HepMC/${HM3_HEPMC_VERSION}/${LCGPLATFORM}/
       export LARG="$LARG "-DGRAPHVIZ_ROOT=${LCGLOCATION}/graphviz/${HM3_GRAPHVIZ_VERSION}/${LCGPLATFORM}/
       export LARG="$LARG "-DProtobuf_INCLUDE_DIR=${Protobuf_ROOT}/include
       export LARG="$LARG "-DProtobuf_LIBRARY=${Protobuf_ROOT}/lib/libprotobuf.so
+      export LARG="$LARG "-Dpodio_DIR=${LCGLOCATION}/podio/${HM3_PODIO_VERSION}/${LCGPLATFORM}/
+      export LARG="$LARG "-DHepPDT_DIR=${LCGLOCATION}/HepPDT/${HM3_PDT_VERSION}/${LCGPLATFORM}/
+      export LARG="$LARG "-DEDM4hep_DIR=${LCGLOCATION}/EDM4hep/${HM3_EDM4HEP_VERSION}/${LCGPLATFORM}/
+      export LARG="$LARG "-DHEPMC3_ENABLE_EDM4HEP:BOOL=ON
       export LARG="$LARG "-DHEPMC3_USE_INTERFACE_FROM_PYTHIA8:BOOL=OFF
       export LARG="$LARG "-DCMAKE_INSTALL_PREFIX=$(pwd)/install
       export LARG="$LARG "-DHEPMC3_Python_SITEARCH${PYTHON3VERSION}=$(pwd)/install/lib/python${PYTHON3DOTVERSION}/site-packages
       mkdir BUILD
       cd BUILD
       set -x
-      cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" ${STANDARDFLAGS} ${LARG}  ${EXTRACMAKEFLAGS}
+      cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" ${STANDARDFLAGS} ${LARG}  ${EXTRACMAKEFLAGS} -DHEPMC3_BUILD_EXAMPLES=ON
+      set +x
+      make -j $(nproc)
+      make -j $(nproc) install
+      ctest -j 5 --output-on-failure
+
+EDM4HEP-CVMFS:
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch"
+  image: gitlab-registry.cern.ch/sft/docker/alma9-core:latest
+  tags:
+    - k8s-cvmfs
+  stage: LCG
+  script:
+    - |
+      # set up key4hep nightly
+      source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh -r 2025-12-11
+      export LARG=" "
+      export LARG="$LARG "-DHEPMC3_ENABLE_EDM4HEP:BOOL=ON
+      py_major_v=$(python -c 'import sys; print(sys.version_info.major)')
+      py_minor_v=$(python -c 'import sys; print(sys.version_info.minor)')      
+      export LARG="$LARG "-DHEPMC3_Python_SITEARCH${py_major_v}${py_minor_v}=$(pwd)/install/lib/python${py_major_v}.${py_minor_v}/site-packages
+      mkdir BUILD
+      cd BUILD
+      set -x
+      cmake .. -DCMAKE_CXX_FLAGS="-Wpedantic -Wall -Wextra" -DHEPMC3_BUILD_EXAMPLES:BOOL=ON ${LARG}  ${EXTRACMAKEFLAGS} -DHEPMC3_BUILD_EXAMPLES=ON
       set +x
       make -j $(nproc)
       make -j $(nproc) install
