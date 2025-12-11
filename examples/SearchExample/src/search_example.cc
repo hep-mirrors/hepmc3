@@ -8,7 +8,7 @@
  *  @brief Basic example of use of HepMC3 search library: profiling the search of relatives of particles
  *
  */
-#include <chrono> 
+#include <chrono>
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/Print.h"
 #include "HepMC3/GenParticle.h"

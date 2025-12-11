@@ -644,3 +644,20 @@ deals with search of relations between particles in the event.
 9. The `doc/` directory contains files used for generation of library source code documentation with
 the Doxygen system. The `doc/CMakeLists.txt` file is used by CMake
 to build the documentation.
+
+# Building and Running the ConvertExample with the output EDM4HEP
+
+Setup your favorite KEY4HEP nightly:
+```
+source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+```
+or release:
+```
+source /cvmfs/sw.hsf.org/key4hep/setup.sh
+```
+
+Then build with KEY4HEP by adding the following flag to the cmake command:
+```
+-DHEPMC3_ENABLE_EDM4HEP=ON -DHEPMC3_BUILD_EXAMPLES=ON
+```
+The flag will initiate some sanity checks. The converter resides in the examples files therefore these have to be turned on as well
