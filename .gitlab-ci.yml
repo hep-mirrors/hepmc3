@@ -230,6 +230,12 @@ EDM4HEP-CVMFS:
       - *ex
       - *cmake
       - *standalone
+      
+.any-cmake-no-python: &any-cmake-no-python
+  extends: .any
+  script:
+      - *ex
+      - *cmake
 
 .any-oldcmake: &any-oldcmake
   extends: .any
@@ -478,7 +484,7 @@ CentOS9-GNU:
 
 CentOS8-GNU:
   variables: { OS: CentOS, FREL: 8, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PYTHON:BOOL=OFF" }
-  extends: .any-cmake
+  extends: .any-cmake-no-python
   needs:
     - job: build_image_CentOS8
 
