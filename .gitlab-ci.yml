@@ -435,7 +435,7 @@ Fedora34-LLVM:
     - job: build_image_Fedora34
 
 Fedora33-GNU-pypy:
-  variables: { OS: Fedora, FREL: 33, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy2" }
+  variables: { OS: Fedora, FREL: 33, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy3" }
   extends: .any-cmake
   needs:
     - job: build_image_Fedora33
