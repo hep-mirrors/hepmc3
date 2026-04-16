@@ -222,7 +222,7 @@ if (${ver} STREQUAL 3)
   unset(_Python3_INCLUDE_DIR CACHE) # Attempt to make FindPython reenterant
   unset(_Python3_INTERPRETER_PROPERTIES CACHE) # Attempt to make FindPython reenterant
   if (${verminor} STREQUAL X)
-    find_package (Python3 3.6 COMPONENTS  Interpreter Development.Module)
+    find_package (Python3 3.8 COMPONENTS  Interpreter Development.Module)
   else()
     find_package (Python3 3.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
   endif()

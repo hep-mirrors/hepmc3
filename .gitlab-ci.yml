@@ -483,13 +483,13 @@ CentOS9-GNU:
     - job: build_image_CentOS9
 
 CentOS8-GNU:
-  variables: { OS: CentOS, FREL: 8, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  variables: { OS: CentOS, FREL: 8, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PYTHON:BOOL=OFF" }
   extends: .any-cmake
   needs:
     - job: build_image_CentOS8
 
 CentOS7-GNU:
-  variables: { OS: CentOS, FREL: 7, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3.6"}
+  variables: { OS: CentOS, FREL: 7, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_ENABLE_PYTHON:BOOL=OFF"}
   extends: .any-cmake
   needs:
     - job: build_image_CentOS7
