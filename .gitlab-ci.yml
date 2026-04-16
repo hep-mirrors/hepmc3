@@ -86,7 +86,7 @@ EDM4HEP-CVMFS:
   script:
     - |
       # set up key4hep nightly
-      source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh -r 2025-12-11
+      source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
       export LARG=" "
       export LARG="$LARG "-DHEPMC3_ENABLE_EDM4HEP:BOOL=ON
       py_major_v=$(python -c 'import sys; print(sys.version_info.major)')
