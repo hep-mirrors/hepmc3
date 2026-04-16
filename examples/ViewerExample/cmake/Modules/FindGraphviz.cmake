@@ -7,6 +7,7 @@
 #  Graphviz_INCLUDE_DIRS (not cached)
 #  Graphviz_CGRAPH_LIBRARY
 #  Graphviz_GVC_LIBRARY
+#  Graphviz_VERSION
 if (Graphviz_DIR OR GRAPHVIZ_DIR OR (DEFINED ENV{Graphviz_DIR}) OR (DEFINED ENV{GRAPHVIZ_DIR}) )
   set(Graphviz_SEARCH_DIRS "" CACHE STRING "" FORCE)
   if (Graphviz_DIR)
@@ -33,6 +34,24 @@ else()
   find_library(Graphviz_GVC_LIBRARY NAMES gvc PATHS_SUFFIXES lib lib64)
 endif()
 
+set(Graphviz_VERSION_MAJOR 0)
+set(Graphviz_VERSION_MINOR 0)
+set(Graphviz_VERSION_PATCH 0)
+set(_gv_version_header "${Graphviz_INCLUDE_DIR}/graphviz/graphviz_version.h")
+if(EXISTS "${_gv_version_header}")
+    file(READ "${_gv_version_header}" _gv_version_content)
+    string(REGEX MATCH "#define[ \t]+PACKAGE_VERSION[ \t]+\"([0-9]+)\\.([0-9]+)\\.([0-9]+)\""  _gv_version_match "${_gv_version_content}")
+    if(_gv_version_match)
+        set(Graphviz_VERSION_MAJOR "${CMAKE_MATCH_1}")
+        set(Graphviz_VERSION_MINOR "${CMAKE_MATCH_2}")
+        set(Graphviz_VERSION_PATCH "${CMAKE_MATCH_3}")
+    endif()
+endif()
+set(Graphviz_VERSION "${Graphviz_VERSION_MAJOR}.${Graphviz_VERSION_MINOR}.${Graphviz_VERSION_PATCH}")
+# Compute Graphviz version code: MAJOR*10000 + MINOR*100 + PATCH
+math(EXPR Graphviz_VERSION_CODE "${Graphviz_VERSION_MAJOR} * 10000 + ${Graphviz_VERSION_MINOR} * 100 + ${Graphviz_VERSION_PATCH}")
+
+
 set(Graphviz_INCLUDE_DIRS ${Graphviz_INCLUDE_DIR} ${Graphviz_INCLUDE_DIR}/graphviz)
 get_filename_component(Graphviz_LIBRARY_DIR ${Graphviz_GVC_LIBRARY} PATH)
 set ( TEST_SOURCE "#include <graphviz/gvc.h>\n#include <string>\n #include <graphviz/cdt.h>\n int main(){\nreturn strcmp(\"XX\",\"XXY\");\n}\n")
@@ -42,14 +61,14 @@ endif()
 check_cxx_source_compiles("${TEST_SOURCE}" TEST_SOURCE_NOAST_COMPILES )
 check_cxx_source_compiles("#define _PACKAGE_ast 1\n${TEST_SOURCE}" TEST_SOURCE_AST_COMPILES )
 if (TEST_SOURCE_AST_COMPILES AND (NOT TEST_SOURCE_NOAST_COMPILES))
-  set(Graphviz_DEFINES "_PACKAGE_ast=1")
+  set(Graphviz_DEFINES "_PACKAGE_ast=1;GRAPHVIZ_VERSION_CODE=${Graphviz_VERSION_CODE}")
 else()
-  set(Graphviz_DEFINES "_UNUSED_DUMMY_DEFINE")  
+  set(Graphviz_DEFINES "_UNUSED_DUMMY_DEFINE;GRAPHVIZ_VERSION_CODE=${Graphviz_VERSION_CODE}")  
 endif()
 
 INCLUDE(FindPackageHandleStandardArgs)
 
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(Graphviz FOUND_VAR Graphviz_FOUND REQUIRED_VARS Graphviz_DEFINES Graphviz_INCLUDE_DIR Graphviz_CGRAPH_LIBRARY Graphviz_GVC_LIBRARY  HANDLE_COMPONENTS)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Graphviz FOUND_VAR Graphviz_FOUND REQUIRED_VARS Graphviz_DEFINES Graphviz_INCLUDE_DIR Graphviz_CGRAPH_LIBRARY Graphviz_GVC_LIBRARY VERSION_VAR Graphviz_VERSION  HANDLE_COMPONENTS)
 
 
 if(Graphviz_FOUND AND NOT TARGET Graphviz::CGRAPH)
