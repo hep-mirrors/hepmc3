@@ -13,11 +13,8 @@ if (USE_INSTALLED_HEPMC3)
   set(THIS_PROJECT_NAME ${PROJECT_NAME})
   set(THIS_PROJECT_NAME_VERSION 3.3.1)
   option(HEPMC3_ENABLE_TEST "Enable tests" ON)
-
-
   find_package(HepMC3 ${${PROJECT_NAME}_VERSION} REQUIRED  )
   include(CheckCXXCompilerFlag)
-
   message(STATUS "HEPMC3_LIB: ${HEPMC3_LIB}")
   include(GNUInstallDirs)
   if (HEPMC3_ROOTIO_LIB)
@@ -91,26 +88,22 @@ else()
   set (HEPMC3_LOADABLE_LIBRARIES_DIR ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
 endif()
 
-
-
 if (MSVC)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 else()
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR})
 endif()
-ROOT_GENERATE_DICTIONARY(G__HepMC3rootIO include/rootIO_Classes.hh LINKDEF include/LinkDef.hh NOINSTALL OPTIONS -inlineInputHeader)
-set_source_files_properties(G__HepMC3rootIO.cxx PROPERTIES SKIP_LINTING ON)
-add_library(HepMC3rootIO SHARED ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRoot.cc ${PROJECT_SOURCE_DIR}/rootIO/src/WriterRootTree.cc ${PROJECT_SOURCE_DIR}/rootIO/src/ReaderRootTree.cc ${PROJECT_SOURCE_DIR}/rootIO/src/Streamers.cc G__HepMC3rootIO.cxx)
+add_library(HepMC3rootIO SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterRoot.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/ReaderRoot.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/WriterRootTree.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/ReaderRootTree.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/Streamers.cc)
 target_compile_definitions(HepMC3rootIO PUBLIC HEPMC3_ROOTIO)
 set_property(TARGET HepMC3rootIO PROPERTY POSITION_INDEPENDENT_CODE 1)
-
 target_link_libraries(HepMC3rootIO PUBLIC ROOT::Tree ROOT::RIO ROOT::Core HepMC3::HepMC3)
-
 target_include_directories(HepMC3rootIO PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>
   ${ROOT_INCLUDE_DIRS})
+ROOT_GENERATE_DICTIONARY(G__HepMC3rootIO include/rootIO_Classes.hh MODULE HepMC3rootIO LINKDEF include/LinkDef.hh NOINSTALL OPTIONS -inlineInputHeader)
+set_source_files_properties(G__HepMC3rootIO.cxx PROPERTIES SKIP_LINTING ON)
 
 set_target_properties(HepMC3rootIO PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   EXPORT_NAME HepMC3::rootIO)
