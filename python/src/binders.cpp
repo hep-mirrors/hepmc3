@@ -10,16 +10,22 @@
 
 namespace binder {
 void custom_deduce_reader(pybind11::module&  M){
-    M.def("ReaderuprootTree", [](const std::string & filename) -> std::shared_ptr<class HepMC3::Reader>{ 
+#ifndef PYPY_VERSION
+    M.def("ReaderuprootTree", [](const std::string & filename) -> std::shared_ptr<class HepMC3::Reader>{
       return std::make_shared<HepMC3::ReaderuprootTree>(filename); }, 
     "This function creates a reader using uproot ", pybind11::arg("filename"));
+#endif
     M.def("deduce_reader", [](const std::string & filename) -> std::shared_ptr<class HepMC3::Reader>{ 
     HepMC3::InputInfo input(filename);
     if (input.m_init && !input.m_error && input.m_reader) return input.m_reader;
     if (input.m_root || input.m_remote) {
         auto ret = std::make_shared<HepMC3::ReaderPlugin>(filename, HepMC3::libHepMC3rootIO, std::string("newReaderRootTreefile"));
+#ifndef PYPY_VERSION
         if (ret) return ret;
         return std::make_shared<HepMC3::ReaderuprootTree>(filename);
+#else
+        return ret;
+#endif
     }
     if (input.m_protobuf) {
         return std::make_shared<HepMC3::ReaderPlugin>(filename, HepMC3::libHepMC3protobufIO, std::string("newReaderprotobuffile"));
@@ -33,7 +39,7 @@ void custom_deduce_reader(pybind11::module&  M){
      case HepMC3::Compression::zstd: {
           try {
           auto mzstd = pybind11::module::import("zstandard");
-          if (!pybind11::hasattr(mzstd,"open")) { pybind11::print("zstandard module has no open function");  return nullptr;}
+          if (!pybind11::hasattr(mzstd, "open")) { pybind11::print("zstandard module has no open function");  return nullptr;}
           auto zstdfile = mzstd.attr("open")(f.c_str(),"rb");
           return HepMC3::deduce_reader(std::shared_ptr< std::istream >(new pystream::istream(zstdfile)));
           } catch (pybind11::import_error &e) { pybind11::print("Cannot import zstandard module");  return nullptr;}
@@ -41,7 +47,7 @@ void custom_deduce_reader(pybind11::module&  M){
      case HepMC3::Compression::bz2: {
           try {
           auto mbz2 = pybind11::module::import("bz2");
-          if (!pybind11::hasattr(mbz2,"open")) { pybind11::print("bz2 module has no open function");  return nullptr;}
+          if (!pybind11::hasattr(mbz2, "open")) { pybind11::print("bz2 module has no open function");  return nullptr;}
           auto bz2file = mbz2.attr("open")(f.c_str(),"rb");
           return HepMC3::deduce_reader(std::shared_ptr< std::istream >(new pystream::istream(bz2file)));
           } catch (pybind11::import_error &e) { pybind11::print("Cannot import bz2 module"); return nullptr;}
@@ -50,7 +56,7 @@ void custom_deduce_reader(pybind11::module&  M){
      case HepMC3::Compression::z: {
           try {
           auto mgzip = pybind11::module::import("gzip");
-          if (!pybind11::hasattr(mgzip,"open")) { pybind11::print("gzip module has no open function");  return nullptr;}
+          if (!pybind11::hasattr(mgzip, "open")) { pybind11::print("gzip module has no open function");  return nullptr;}
           auto gzipfile = mgzip.attr("open")(f.c_str(),"rb");
           return HepMC3::deduce_reader(std::shared_ptr< std::istream >(new pystream::istream(gzipfile)));
           } catch (pybind11::import_error &e) { pybind11::print("Cannot import gzip module");  return nullptr;}
@@ -60,7 +66,7 @@ void custom_deduce_reader(pybind11::module&  M){
      case HepMC3::Compression::lzma: {
           try {
           auto mlzma = pybind11::module::import("lzma");
-          if (!pybind11::hasattr(mlzma,"open")) { pybind11::print("lzma module has no open function");  return nullptr;}
+          if (!pybind11::hasattr(mlzma, "open")) { pybind11::print("lzma module has no open function");  return nullptr;}
           auto lzmafile = mlzma.attr("open")(f.c_str(),"rb");
           return HepMC3::deduce_reader(std::shared_ptr< std::istream >(new pystream::istream(lzmafile)));
           } catch (pybind11::import_error &e) { pybind11::print("Cannot import lzma module");  return nullptr;}

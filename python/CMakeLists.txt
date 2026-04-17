@@ -240,7 +240,10 @@ if (${ver} STREQUAL 3)
 
   endif()
 endif()
-
+if (HEPMC3_${IMPL}_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
+  message(STATUS "HepMC3 python: variable HEPMC3_${IMPL}_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} will override HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}")
+  set (HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} "${HEPMC3_${IMPL}_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}}")
+endif()
 
 if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     AND ((${Python_VERSION_MAJOR} STREQUAL ${ver} AND ${verminor} STREQUAL "X")
@@ -254,16 +257,22 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     else()
       set(__comp HepMC3::${_comp})   
     endif()
-    if (${ver} STREQUAL 3)
+#See https://gitlab.kitware.com/cmake/cmake/-/work_items/24121
+    message(STATUS "HepMC3 python: Original Python_SOABI = ${Python_SOABI}")
+    if(CMAKE_VERSION VERSION_LESS 3.17)
+      execute_process(
+        COMMAND ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_config_var('EXT_SUFFIX').split('.')[1])"
+        OUTPUT_VARIABLE Python_SOABI
+        OUTPUT_STRIP_TRAILING_WHITESPACE COMMAND_ECHO STDOUT
+      )
+  
       Python3_add_library(${IMPL}pyHepMC3${_comp}${Python_VERSION} MODULE ${BN${_comp}})
+      set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION} PROPERTIES PREFIX "" SUFFIX "${Python_SOABI}.${CMAKE_SHARED_MODULE_SUFFIX}" OUTPUT_NAME pyHepMC3${_comp})
+    else()
+      Python3_add_library(${IMPL}pyHepMC3${_comp}${Python_VERSION} MODULE WITH_SOABI ${BN${_comp}})
       set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION} PROPERTIES  OUTPUT_NAME pyHepMC3${_comp})
     endif()
-    if (${verin} MATCHES pypy* )
-      execute_process( COMMAND ${Python_EXECUTABLE} -c "import  sys;v=sys.pypy_version_info;print(str(v[0])+str(v[1]))" 
-      OUTPUT_VARIABLE PyPy_PyPy_VERSION OUTPUT_STRIP_TRAILING_WHITESPACE)
-      set_target_properties(${IMPL}pyHepMC3${_comp}${Python_VERSION}
-      PROPERTIES PREFIX "" OUTPUT_NAME pyHepMC3${_comp}.pypy-${PyPy_PyPy_VERSION})
-    endif()
+    message(STATUS "HepMC3 python: Corrected Python_SOABI = ${Python_SOABI}")  
     if (RERUN_BINDER)
       add_dependencies(${IMPL}pyHepMC3${_comp}${Python_VERSION} generate_${_comp})
     endif()
@@ -284,8 +293,8 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
                 )
   endforeach()
 
-  message(STATUS "HepMC3 python: For this platforrm CMAKE_SHARED_LIBRARY_PREFIX=${CMAKE_SHARED_LIBRARY_PREFIX}, CMAKE_SHARED_LIBRARY_SUFFIX=${CMAKE_SHARED_LIBRARY_SUFFIX}")
-  message(STATUS "HepMC3 python: For this platforrm CMAKE_IMPORT_LIBRARY_PREFIX=${CMAKE_IMPORT_LIBRARY_PREFIX}, CMAKE_IMPORT_LIBRARY_SUFFIX=${CMAKE_IMPORT_LIBRARY_SUFFIX}")
+  message(STATUS "HepMC3 python: For this platform CMAKE_SHARED_LIBRARY_PREFIX=${CMAKE_SHARED_LIBRARY_PREFIX}, CMAKE_SHARED_LIBRARY_SUFFIX=${CMAKE_SHARED_LIBRARY_SUFFIX}")
+  message(STATUS "HepMC3 python: For this platform CMAKE_IMPORT_LIBRARY_PREFIX=${CMAKE_IMPORT_LIBRARY_PREFIX}, CMAKE_IMPORT_LIBRARY_SUFFIX=${CMAKE_IMPORT_LIBRARY_SUFFIX}")
 
   if (WIN32)
 #Python is insane
@@ -308,7 +317,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       endforeach()
     endif()
   endif()
-  message(STATUS "HepMC3 python: Tweak HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings.")
+  message(STATUS "HepMC3 python: Tweak HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings. Use HEPMC3_PyPy_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} and HEPMC3_CPython_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} to distinguish PyPy/CPython implementations.")
   if (WIN32)
     if (NOT HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
       set (HEPMC3_Python_SITEARCH ${CMAKE_INSTALL_LIBDIR}/${Python_VERSION})

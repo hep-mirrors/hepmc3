@@ -26,16 +26,16 @@ class ReaderuprootTree : public Reader
 {
 public:
     /** @brief Constructor with tree and branch names*/
-    ReaderuprootTree(const std::string &filename,const std::string &treename="hepmc3_tree",const std::string &branchname="hepmc3_event");
+    ReaderuprootTree(const std::string &filename, const std::string &treename = "hepmc3_tree", const std::string &branchname = "hepmc3_event");
 
     /// @brief skip events
-    bool skip(const int)  override;
+    bool skip(const int) override;
 
     /** @brief Read event from file
      *
      *  @param[out] evt Contains parsed event
      */
-    bool read_event(GenEvent &evt)   override;
+    bool read_event(GenEvent &evt) override;
 
     /** @brief Close file */
     void close()  override;
@@ -59,7 +59,7 @@ private:
     pybind11::object m_uproot_module;              //!< Python module
     pybind11::object m_numpy_module;              //!< Python module
     long int m_tree_getEntries = 0;             //!< number of processed events
-    template <class T> std::vector<T> get_vector(pybind11::object& tr,const std::string& array_name); //!< Get arrays
+    template <class T> std::vector<T> get_vector(pybind11::object& tr, const std::string& array_name); //!< Get arrays
 };
 
 }
