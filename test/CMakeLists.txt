@@ -413,7 +413,7 @@ if(MEMORYCHECK_COMMAND)
      file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/intelHepMC3.supp" "{\n<HepMC3_at_Linux_with_Intel_1>\nMemcheck:Addr32\nfun:__intel_*\n}\n{\n<HepMC3_at_Linux_with_Intel_2>\nMemcheck:Cond\nfun:*strchr\n}\n"  )
      set( MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --suppressions=${CMAKE_CURRENT_BINARY_DIR}/IntelHepMC3.supp")
   endif()
-elseif()
+else()
   message(STATUS "HepMC3 test: valgrind package not found or disabled.  memory check tests disabled.")
 endif()
 

@@ -72,7 +72,7 @@ bool WriterRootTree::init(std::shared_ptr<GenRunInfo> run )
 
     m_tree = dynamic_cast<TTree*>(m_file->Get(m_tree_name.c_str()));
 
-    if(m_tree)
+    if (m_tree)
     { // tree exists -> check if the branches exist. If so, just need to set branch addresses
         // check the branches
         std::vector<std::pair<std::string, TClass*>> required_branches =
@@ -81,18 +81,18 @@ bool WriterRootTree::init(std::shared_ptr<GenRunInfo> run )
                 {"GenRunInfo",  TClass::GetClass(typeid(GenRunInfoData))}
         };
 
-        for(const std::pair<std::string, TClass*> branch_info : required_branches)
+        for (const auto& branch_info : required_branches)
         {
             TBranch* branch = m_tree->GetBranch(branch_info.first.c_str());
 
-            if(!branch) // existence check
+            if (!branch) // existence check
             {
                 HEPMC3_ERROR_LEVEL(100, "WriterRootTree: existing tree '" << m_tree_name
                                 << "' missing required branch '" << branch_info.first << "'")
                 return false;
             }
 
-            if (std::strcmp(branch->GetClassName(),branch_info.second->GetName()) != 0) // check that it's of the right type
+            if (std::strcmp(branch->GetClassName(), branch_info.second->GetName()) != 0) // check that it's of the right type
             {
                 HEPMC3_ERROR_LEVEL(100, "WriterRootTree: branch '" << branch_info.first
                                 << "' has incompatible type: " << branch->GetClassName()
@@ -128,7 +128,7 @@ void WriterRootTree::write_event(const GenEvent &evt)
 {
     if ( !m_file->IsOpen() ) return;
     bool refill = false;
-    if ( evt.run_info()&&(!run_info() || (run_info() != evt.run_info())))  { set_run_info(evt.run_info()); refill = true;}
+    if ( evt.run_info() && (!run_info() || (run_info() != evt.run_info())))  { set_run_info(evt.run_info()); refill = true;}
     if (refill)
     {
         m_run_info_data->weight_names.clear();
