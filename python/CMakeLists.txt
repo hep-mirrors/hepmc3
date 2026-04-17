@@ -240,7 +240,10 @@ if (${ver} STREQUAL 3)
 
   endif()
 endif()
-
+if (HEPMC3_${IMPL}_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
+  message(STATUS "HepMC3 python: variable HEPMC3_${IMPL}_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} will override HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}")
+  set (HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} "${HEPMC3_${IMPL}_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}}")
+endif()
 
 if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     AND ((${Python_VERSION_MAJOR} STREQUAL ${ver} AND ${verminor} STREQUAL "X")
@@ -284,8 +287,8 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
                 )
   endforeach()
 
-  message(STATUS "HepMC3 python: For this platforrm CMAKE_SHARED_LIBRARY_PREFIX=${CMAKE_SHARED_LIBRARY_PREFIX}, CMAKE_SHARED_LIBRARY_SUFFIX=${CMAKE_SHARED_LIBRARY_SUFFIX}")
-  message(STATUS "HepMC3 python: For this platforrm CMAKE_IMPORT_LIBRARY_PREFIX=${CMAKE_IMPORT_LIBRARY_PREFIX}, CMAKE_IMPORT_LIBRARY_SUFFIX=${CMAKE_IMPORT_LIBRARY_SUFFIX}")
+  message(STATUS "HepMC3 python: For this platform CMAKE_SHARED_LIBRARY_PREFIX=${CMAKE_SHARED_LIBRARY_PREFIX}, CMAKE_SHARED_LIBRARY_SUFFIX=${CMAKE_SHARED_LIBRARY_SUFFIX}")
+  message(STATUS "HepMC3 python: For this platform CMAKE_IMPORT_LIBRARY_PREFIX=${CMAKE_IMPORT_LIBRARY_PREFIX}, CMAKE_IMPORT_LIBRARY_SUFFIX=${CMAKE_IMPORT_LIBRARY_SUFFIX}")
 
   if (WIN32)
 #Python is insane
@@ -308,7 +311,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       endforeach()
     endif()
   endif()
-  message(STATUS "HepMC3 python: Tweak HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings.")
+  message(STATUS "HepMC3 python: Tweak HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings. Use HEPMC3_PyPy_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} for the PyPy version.")
   if (WIN32)
     if (NOT HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
       set (HEPMC3_Python_SITEARCH ${CMAKE_INSTALL_LIBDIR}/${Python_VERSION})
