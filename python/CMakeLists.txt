@@ -311,7 +311,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
       endforeach()
     endif()
   endif()
-  message(STATUS "HepMC3 python: Tweak HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings. Use HEPMC3_PyPy_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} for the PyPy version.")
+  message(STATUS "HepMC3 python: Tweak HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} option to set the installation path for the python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} bindings. Use HEPMC3_PyPy_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} and HEPMC3_CPython_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} to distinguish PyPy/CPython implementations.")
   if (WIN32)
     if (NOT HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR})
       set (HEPMC3_Python_SITEARCH ${CMAKE_INSTALL_LIBDIR}/${Python_VERSION})

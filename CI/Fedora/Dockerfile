@@ -3,7 +3,7 @@ RUN  yum -y  install  dnf-plugins-core \
                       bc make doxygen cmake binutils git wget diffutils file sed gawk grep which \
                       gcc-gfortran gcc-c++ clang bzip2   openssl-devel openssl \
                       libzip-devel  zlib zlib-devel pythia8-devel pythia8 \
-                      valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel zlib-static libzstd \
+                      valgrind HepMC HepMC-devel xz xz-devel bzip2 bzip2-devel zlib zlib-devel.x86_64 zlib-static libzstd \
                       libzstd-devel.x86_64 graphviz graphviz-devel pythia8 pythia8-devel \
                       ccache  \
                       protobuf protobuf-devel  \
