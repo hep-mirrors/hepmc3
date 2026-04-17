@@ -12,9 +12,6 @@
 
 #include <zstd.h>
 
-#ifndef ZSTD_CLEVEL_DEFAULT
-#define ZSTD_CLEVEL_DEFAULT 5
-#endif
 #include <string>
 #include <exception>
 

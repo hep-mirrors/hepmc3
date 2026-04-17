@@ -73,8 +73,6 @@ class lzma_stream_wrapper : public lzma_stream, public stream_wrapper {
     lzma_stream_wrapper(const bool _is_input = true, const int _level = 2, const int _flags = 0)
 	    : lzma_stream(LZMA_STREAM_INIT), is_input(_is_input) {
 	lzma_ret ret;
-	lzma_stream::next_in = NULL;//AV
-	lzma_stream::next_out = NULL;//AV
 	if (is_input) {
 	    lzma_stream::avail_in = 0;
 	    lzma_stream::next_in = NULL;
