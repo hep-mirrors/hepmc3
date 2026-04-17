@@ -19,7 +19,7 @@ RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -gt  
 # Uproot5
 RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -gt  39 ]; then yum -y  install xxhash xxhash-devel python3-xxhash python3-cramjam python3-fsspec python3-packaging; fi && yum -y clean all
 RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -gt  39 ]; then pip install uproot --upgrade --upgrade-strategy only-if-needed; fi 
-RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -gt  43 ]; then yum -y  install  zlib.x86_64 --skip-unavailable; fi  && yum -y clean all
+RUN                   if [ $(cat /etc/fedora-release  | grep -Eo '[0-9]+') -gt  40 ]; then yum -y  install zlib-ng-compat zlib-ng-compat-devel zlib.x86_64 --skip-unavailable; fi  && yum -y clean all
 
 # cat /etc/fedora-release | grep -Eo '[0-9]+'
 # 22 -- cmake is too old, no libzstd libzstd-devel
