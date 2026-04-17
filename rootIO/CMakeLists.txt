@@ -13,7 +13,7 @@ if (USE_INSTALLED_HEPMC3)
   set(THIS_PROJECT_NAME ${PROJECT_NAME})
   set(THIS_PROJECT_NAME_VERSION 3.3.1)
   option(HEPMC3_ENABLE_TEST "Enable tests" ON)
-  find_package(HepMC3 ${${PROJECT_NAME}_VERSION} REQUIRED COMPONENTS main)
+  find_package(HepMC3 ${${PROJECT_NAME}_VERSION} REQUIRED COMPONENTS " ")
     message(STATUS "HepMC3 rootIO: HEPMC3_LIB=${HEPMC3_LIB}")
 
   include(CheckCXXCompilerFlag)
