@@ -141,7 +141,6 @@ if(HEPMC3_ENABLE_ROOTIO)
     if(EXISTS "${ROOT_NEWMACROS_FILE}")
       include(${ROOT_NEWMACROS_FILE})
     endif()
-    add_definitions(-DHEPMC3_ROOTIO)
 # Use ROOT_CXX_STANDARD if defined, otherwise deduce from ROOT_CXX_FLAGS
     if(DEFINED ROOT_CXX_STANDARD)
       set(HEPMC3_CXX_STANDARD ${ROOT_CXX_STANDARD})

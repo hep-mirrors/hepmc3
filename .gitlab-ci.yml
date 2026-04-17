@@ -169,6 +169,12 @@ EDM4HEP-CVMFS:
     - cd BUILD
     - $CTEST -j 5 --output-on-failure
     - cd $TTOP
+    - cd rootIO
+    - $CMAKE -S . -B BUILD -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/ -DHEPMC3_ENABLE_TEST=ON $CACHINGFLAGS
+    - $CMAKE --build BUILD 
+    - cd BUILD
+    - $CTEST -j 5 --output-on-failure
+    - cd $TTOP
 
 .oldstandaloneexamples: &oldstandaloneexamples
     - export TTOP=$(pwd)
@@ -180,9 +186,20 @@ EDM4HEP-CVMFS:
     - $CMAKE .. -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/
     - make -j 4
     - cd $TTOP
+
 .oldstandalonepython: &oldstandalonepython
     - export TTOP=$(pwd)
     - cd python
+    - mkdir -p BUILD
+    - cd BUILD 
+    - $CMAKE .. -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/ -DHEPMC3_ENABLE_TEST=ON $CACHINGFLAGS
+    - make -j 4
+    - $CTEST -j 5 --output-on-failure
+    - cd $TTOP
+
+.oldstandalonerootIO: &oldstandalonerootIO
+    - export TTOP=$(pwd)
+    - cd rootIO
     - mkdir -p BUILD
     - cd BUILD 
     - $CMAKE .. -DUSE_INSTALLED_HEPMC3=ON -DHepMC3_DIR=$TTOP/INSTALL/share/HepMC3/cmake/ -DHEPMC3_ENABLE_TEST=ON $CACHINGFLAGS
@@ -238,6 +255,8 @@ EDM4HEP-CVMFS:
       - *oldcmake
       - *oldstandaloneexamples
       - *oldstandalonepython
+      - *oldstandalonerootIO
+
 
 .any-oldcmake-no-python: &any-oldcmake-no-python
   extends: .any
@@ -245,7 +264,7 @@ EDM4HEP-CVMFS:
       - *ex
       - *oldcmake
       - *oldstandaloneexamples
-
+      - *oldstandalonerootIO
 
 ###########################################################################
 #Check commit messages
@@ -573,3 +592,4 @@ CentOS10-GNU-oldcmake-ranges:
       - *oldcmake
       - *oldstandaloneexamples
       - *oldstandalonepython
+      - *oldstandalonerootIO
