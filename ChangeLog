@@ -1,6 +1,6 @@
 --------------------------  HepMC3.3.2 --------------------------
 2026-09-02 Andrii Verbytskyi
-  * CMake fixes: Fix the way ENVORONMENT is set in tests and use canonical name for components in CMake config.
+  * CMake fixes: Fix the way ENVORONMENT is set in tests, use canonical name for components in CMake config, checks for c++29
 2026-09-02 Andrii Verbytskyi
   * Add a GitLab CI rule to require a ChangeLog entry before a merge request is considered ready.
 2025-10-02 Alexander Puck Neuwirth
