@@ -10,6 +10,25 @@ if (HEPMC3_TEST_BZIP2)
   endif()
 endif()
 
+macro(hepmc_set_test_environment testname path_prefix)
+  if(WIN32)
+    set(_hepmc_path_sep "\\;")
+  else()
+    set(_hepmc_path_sep ":")
+  endif()
+
+  set(_hepmc_env_path "PATH=${path_prefix}${_hepmc_path_sep}$ENV{PATH}")
+
+  if(WIN32)
+    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${_hepmc_env_path}")
+  elseif(APPLE)
+    set(_hepmc_env_dyld "DYLD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/${_hepmc_path_sep}$ENV{DYLD_LIBRARY_PATH}")
+    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${_hepmc_env_path};${_hepmc_env_dyld}")
+  else()
+    set(_hepmc_env_ld "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/${_hepmc_path_sep}$ENV{LD_LIBRARY_PATH}")
+    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${_hepmc_env_path};${_hepmc_env_ld}")
+  endif()
+endmacro()
 
 macro( hepmc_test testname )
   message( STATUS "HepMC3 test: building ${testname} for ${testname}" )
@@ -22,10 +41,7 @@ macro( hepmc_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${CMAKE_CURRENT_BINARY_DIR}/${testname} )
-  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}"
-  ENVIRONMENT "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{LD_LIBRARY_PATH}"
-  ENVIRONMENT "DYLD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{DYLD_LIBRARY_PATH}"
-  )
+  hepmc_set_test_environment(${testname} "${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/")
   file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   string(REPLACE "test" "" ${testname} name)
@@ -52,10 +68,7 @@ macro( hepmc_unix_test testname )
   file(GLOB RUN${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/run${testname}*" )
   file(COPY ${RUN${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   add_test( NAME ${testname} COMMAND sh ${CMAKE_CURRENT_BINARY_DIR}/run${testname}.sh WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/;$ENV{PATH}"
-  ENVIRONMENT "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{LD_LIBRARY_PATH}"
-  ENVIRONMENT "DYLD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{DYLD_LIBRARY_PATH}"
-  )
+  hepmc_set_test_environment(${testname} "${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/")
 endmacro( hepmc_unix_test )
 
 
@@ -71,10 +84,7 @@ macro( hepmc_root_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${testname} )
-  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}"
-  ENVIRONMENT "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{LD_LIBRARY_PATH}"
-  ENVIRONMENT "DYLD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{DYLD_LIBRARY_PATH}"
-  )
+  hepmc_set_test_environment(${testname} "${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/")
   file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   string(REPLACE "test" "" ${testname} name)

@@ -1,5 +1,7 @@
 --------------------------  HepMC3.3.2 --------------------------
 2026-09-02 Andrii Verbytskyi
+  * CMake fixes: Fix the way ENVORONMENT is set in tests and use canonical name for components in CMake config.
+2026-09-02 Andrii Verbytskyi
   * Add a GitLab CI rule to require a ChangeLog entry before a merge request is considered ready.
 2025-10-02 Alexander Puck Neuwirth
   * Fixes for ReaderLHEF to properly report beams from LHE init block instead of first particles in event record.
