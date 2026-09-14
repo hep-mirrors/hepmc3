@@ -117,6 +117,16 @@ endmacro( hepmc_protobuf_test )
 set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
 cmake_policy(SET CMP0057 NEW)
 
+add_test(
+  NAME package-config-downstream-old-policy
+  COMMAND ${CMAKE_COMMAND}
+    -DHEPMC3_BINARY_DIR=${PROJECT_BINARY_DIR}
+    -DHEPMC3_INSTALL_DATADIR=${CMAKE_INSTALL_DATADIR}
+    -DHEPMC3_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+    -DHEPMC3_TEST_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}/package-config-downstream
+    -DHEPMC3_TEST_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}/package-config-downstream
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/test_package_config_downstream.cmake)
+
 option(HEPMC3_TEST_THREADS   "Use Threads in tests if available" ON)
 option(HEPMC3_TEST_HEPMC2    "Use HepMC2 in tests if available" ON)
 option(HEPMC3_TEST_VALGRIND  "Use valgrind in tests if available" OFF)
@@ -478,4 +488,3 @@ if(MEMORYCHECK_COMMAND)
     set_tests_properties(memcheck_${test} PROPERTIES DEPENDS ${test})
   endforeach ( test ${HepMC_memcheck_tests} )
 endif()
-

@@ -1,4 +1,12 @@
 --------------------------  HepMC3.3.2 --------------------------
+2026-09-01 Andrii Verbytskyi
+  * Add Python compressed I/O helpers `ReaderGZ` and `WriterGZ` for binding compressed input/output streams through Python compression modules.
+  * Increase default `pystreambuf` buffer size to improve performance for Python-based compressed stream I/O.
+  * Add `python/test/test_IO8.py` and `python/test/inputIO8.hepmc` to validate gzip round-trip support and install the new test.
+2026-09-10 Leif Lonnblad
+  * Fix LHEF header init weight confusion
+2026-09-07 Andrii Verbytskyi
+  * Avoid potentially empty  tag in Reader in LHEF.h
 2026-09-03 Andrii Verbytskyi
   * Implement suggestions from clang-tidy for tests.
 2026-09-03 Andrii Verbytskyi
