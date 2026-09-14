@@ -162,7 +162,7 @@ int main()
         evt7.clear();
         evt8.clear();
     }
-    bool passed=(
+    const bool passed=(
                     (COMPARE_ASCII_FILES("testMultipleCopies1.out","testMultipleCopies2.out")==0)
                     &&
                     (COMPARE_ASCII_FILES("testMultipleCopies1.out","testMultipleOriginals.out")==0)

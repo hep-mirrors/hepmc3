@@ -17,37 +17,34 @@
 #include "zstd_stream_wrapper.hpp"
 
 namespace bxz {
-    enum Compression { z, bz2, lzma, zstd, plaintext };
-inline Compression detect_type(char* in_buff_start, char* in_buff_end) {
-    unsigned char b0 = *reinterpret_cast< unsigned char * >(in_buff_start);
-    unsigned char b1 = *reinterpret_cast< unsigned char * >(in_buff_start + 1);
-#if defined(BXZSTR_Z_STREAM_WRAPPER_HPP) || defined(BXZSTR_BZ_STREAM_WRAPPER_HPP) || defined(BXZSTR_LZMA_STREAM_WRAPPER_HPP) || defined(BXZSTR_ZSTD_STREAM_WRAPPER_HPP)
+    enum Compression { z, bz2, lzma, zstd, plaintext, none };
+inline Compression detect_type(const char* in_buff_start,const  char* in_buff_end) {
+    const unsigned char b0 = *reinterpret_cast<const  unsigned char * >(in_buff_start);
+    const unsigned char b1 = *reinterpret_cast<const  unsigned char * >(in_buff_start + 1);
     bool gzip_header = (b0 == 0x1F && b1 == 0x8B);
     bool zlib_header = (b0 == 0x78 && (b1 == 0x01 || b1 == 0x9C || b1 == 0xDA));
     if (in_buff_start + 1 <= in_buff_end && (gzip_header || zlib_header)) return z;
-#endif
-#if defined(BXZSTR_BZ_STREAM_WRAPPER_HPP) || defined(BXZSTR_LZMA_STREAM_WRAPPER_HPP) || defined(BXZSTR_ZSTD_STREAM_WRAPPER_HPP)
-    unsigned char b2 = *reinterpret_cast< unsigned char * >(in_buff_start + 2);
+    const unsigned char b2 = *reinterpret_cast<const  unsigned char * >(in_buff_start + 2);
     bool bz2_header = (b0 == 0x42 && b1 == 0x5a && b2 == 0x68);
     if (in_buff_start + 2 <= in_buff_end && bz2_header) return bz2;
-#endif
-#if defined(BXZSTR_LZMA_STREAM_WRAPPER_HPP) || defined(BXZSTR_ZSTD_STREAM_WRAPPER_HPP)
-    unsigned char b3 = *reinterpret_cast< unsigned char * >(in_buff_start + 3);
-    unsigned char b4 = *reinterpret_cast< unsigned char * >(in_buff_start + 4);
-    unsigned char b5 = *reinterpret_cast< unsigned char * >(in_buff_start + 5);
+    const unsigned char b3 = *reinterpret_cast<const  unsigned char * >(in_buff_start + 3);
+    const unsigned char b4 = *reinterpret_cast<const  unsigned char * >(in_buff_start + 4);
+    const unsigned char b5 = *reinterpret_cast<const  unsigned char * >(in_buff_start + 5);
     bool lzma_header = (b0 == 0xFD && b1 == 0x37 && b2 == 0x7A
 			&& b3 == 0x58 && b4 == 0x5A && b5 == 0x00);
     if (in_buff_start + 5 <= in_buff_end && lzma_header) return lzma;
-#endif
-#if defined(BXZSTR_ZSTD_STREAM_WRAPPER_HPP)
     bool zstd_header = (b0 == 0x28 && b1 == 0xB5 && b2 == 0x2F && b3 == 0xFD);
     if (in_buff_start + 3 <= in_buff_end && zstd_header) return zstd;
-#endif
     return plaintext;
 }
 
+#if defined(BXZSTR_LZMA_STREAM_WRAPPER_HPP) || defined(BXZSTR_BZ_STREAM_WRAPPER_HPP) || defined(BXZSTR_Z_STREAM_WRAPPER_HPP) || defined(BXZSTR_ZSTD_STREAM_WRAPPER_HPP)
 inline void init_stream(const Compression &type, const bool is_input, const int level,
 			std::unique_ptr<detail::stream_wrapper> *strm_p) {
+#else
+inline void init_stream(const Compression &type, const bool, const int,
+			std::unique_ptr<detail::stream_wrapper> *) {
+#endif
     switch (type) {
 #ifdef BXZSTR_LZMA_STREAM_WRAPPER_HPP
         case lzma : strm_p->reset(new detail::lzma_stream_wrapper(is_input, level));

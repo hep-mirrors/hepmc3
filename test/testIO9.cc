@@ -1,7 +1,7 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2024 The HepMC collaboration (see AUTHORS for details)
 //
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAscii.h"
@@ -32,6 +32,10 @@ int main()
             writersGZ.push_back(std::shared_ptr<Writer>(new WriterGZ<WriterAsciiHepMC2,Compression::bz2>("frominputIO9.hepmc."+HepMC3::to_string(w))));
             break;
         }
+        case Compression::zstd: {
+            writersGZ.push_back(std::shared_ptr<Writer>(new WriterGZ<WriterAsciiHepMC2,Compression::zstd>("frominputIO9.hepmc."+HepMC3::to_string(w))));
+            break;
+        }
         default: {
             return 9;
         }
@@ -47,11 +51,11 @@ int main()
             printf("End of file reached. Exit.\n");
             break;
         }
-        for (auto w: writersGZ) w->write_event(evt);
+        for (auto& w: writersGZ) w->write_event(evt);
         evt.clear();
     }
     inputA.close();
-    for (auto w: writersGZ) w->close();
+    for (auto& w: writersGZ) w->close();
     writersGZ.clear();
 
     int result = 0;

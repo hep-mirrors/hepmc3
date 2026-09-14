@@ -5,16 +5,24 @@
 ## @configure_input@
 #The line below assures at least some relocation.
 if [ "$(uname)" == "Darwin" ]; then
-PACKAGE_BIN_DIR=$(dirname $(greadlink -f $0))
+    # greadlink is only available through 'brew install coreutils'
+    if [ ! -z "$(command -v greadlink)" ]; then
+        PACKAGE_BIN_DIR=$(dirname $(greadlink -f $0))
+    else
+        PACKAGE_BIN_DIR=$(dirname $(readlink -f $0))
+    fi
 else
 PACKAGE_BIN_DIR=$(dirname $(readlink -f $0))
 fi
 PACKAGE_PREFIX_DIR=$(dirname ${PACKAGE_BIN_DIR})
 
-tmp=$(echo $* | egrep -- '--\<help\>|-\<h\>')
+tmp=$(echo $* | grep -E -- '--\<help\>|-\<h\>')
 if test $# -eq 0 || test -n "$tmp"; then
     echo "@PROJECT_NAME@-config: configuration tool for the @PROJECT_NAME@ library"
-    echo
+    echo 
+    echo "Note: the features and portability of this script are limited. Projects"
+    echo "using CMake are encouraged to use HepMC3's CMake utilities instead."
+    echo 
     echo "Usage: $( basename $0 ) [--help|-h] | "
     echo "           [--{prefix,libdir,includedir,interfacesdir}] | "
     echo "           [--{cxxflags,ldflags,libs}] | "
@@ -41,54 +49,75 @@ fi
 
 OUT=""
 
-tmp=$( echo "$*" | egrep -- '--\<prefix\>')
+tmp=$( echo "$*" | grep -E -- '--\<prefix\>')
 test -n "$tmp" && OUT="$OUT ${PACKAGE_PREFIX_DIR}"
 
-tmp=$( echo "$*" | egrep -- '--\<includedir\>')
+tmp=$( echo "$*" | grep -E -- '--\<includedir\>')
 test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_INCLUDEDIR@"
 
-tmp=$( echo "$*" | egrep -- '--\<libdir\>')
+tmp=$( echo "$*" | grep -E -- '--\<libdir\>')
 test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@"
 
-tmp=$( echo "$*" | egrep -- '--\<interfacesdir\>')
+tmp=$( echo "$*" | grep -E -- '--\<interfacesdir\>')
 test -n "$tmp" && OUT="$OUT @PACKAGE_INTERFACES_INSTALL_DIR@"
 
-tmp=$( echo "$*" | egrep -- '--\<cflags|cppflags|cxxflags\>')
+tmp=$( echo "$*" | grep -E -- '--\<cflags|cppflags|cxxflags\>')
 test -n "$tmp" && OUT="$OUT -I@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@"
 
 
-tmp=$( echo "$*" | egrep -- '--\<static\>')
+tmp=$( echo "$*" | grep -E -- '--\<static\>')
 if test -n "$tmp"; then
 
-tmp=$( echo "$*" | egrep -- '--\<ldflags|libs\>')
-OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3-static.a"
+    st=$( echo "@HEPMC3_FEATURES@" | grep -E -w -- 'lib_static')
+    if test -n "$st"; then
+        tmp=$( echo "$*" | grep -E -- '--\<ldflags|libs\>')
+        OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3-static.a"
+    fi
 
-tmp=$( echo "$*" | egrep -- '--\<search\>')
-test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3search-static.a"
+    st=$( echo "@HEPMC3_FEATURES@" | grep -E -w -- 'search_static')
+    if test -n "$st"; then
+        tmp=$( echo "$*" | grep -E -- '--\<search\>')
+        test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3search-static.a"
+    fi
 
-tmp=$( echo "$*" | egrep -- '--\<protobufIO\>')
-test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3protobufIO_static.a"
+    st=$( echo "@HEPMC3_FEATURES@" | grep -E -w -- 'protobufIO_static')
+    if test -n "$st"; then
+        tmp=$( echo "$*" | grep -E -- '--\<protobufIO\>')
+        test -n "$tmp" && OUT="$OUT @PACKAGE_CMAKE_INSTALL_LIBDIR@/libHepMC3protobufIO_static.a"
+    fi
 
 else
 
-tmp=$( echo "$*" | egrep -- '--\<ldflags|libs\>')
-test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3"
+    st=$( echo "@HEPMC3_FEATURES@" | grep -E -w -- 'lib')
+    if test -n "$st"; then
+        tmp=$( echo "$*" | grep -E -- '--\<ldflags|libs\>')
+        test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3"
+    fi
 
-tmp=$( echo "$*" | egrep -- '--\<search\>')
-test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3search"
+    st=$( echo "@HEPMC3_FEATURES@" | grep -E -w -- 'search')
+    if test -n "$st"; then
+        tmp=$( echo "$*" | grep -E -- '--\<search\>')
+        test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3search"
+    fi
 
-tmp=$( echo "$*" | egrep -- '--\<protobufIO\>')
-test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3protobufIO"
+    st=$( echo "@HEPMC3_FEATURES@" | grep -E -w -- 'protobufIO')
+    if test -n "$st"; then
+        tmp=$( echo "$*" | grep -E -- '--\<protobufIO\>')
+        test -n "$tmp" && OUT="$OUT -L@PACKAGE_CMAKE_INSTALL_LIBDIR@ -lHepMC3protobufIO"
+    fi
+
+    st=$( echo "@HEPMC3_FEATURES@" | grep -E -w -- 'rootIO')
+    if test -n "$st"; then
+        tmp=$( echo "$*" | grep -E -- '--\<rootIO\>')
+        test -n "$tmp" && OUT="$OUT -L@PACKAGE_HEPMC3_ROOTIO_INSTALL_LIBDIR@ -lHepMC3rootIO"
+    fi
 
 fi
 
-tmp=$( echo "$*" | egrep -- '--\<rootIO\>')
-test -n "$tmp" && OUT="$OUT -L@PACKAGE_HEPMC3_ROOTIO_INSTALL_LIBDIR@ @HEPMC3_ROOTIO_LIBRARY@"
-
-tmp=$( echo "$*" | egrep -- '--\<features\>')
+tmp=$( echo "$*" | grep -E -- '--\<features\>')
 test -n "$tmp" && OUT="$OUT @HEPMC3_FEATURES@"
 
-tmp=$( echo "$*" | egrep -- '--\<version\>')
+tmp=$( echo "$*" | grep -E -- '--\<version\>')
 test -n "$tmp" && echo @PROJECT_VERSION@ && exit 0
 
 echo $OUT

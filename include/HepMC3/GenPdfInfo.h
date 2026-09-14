@@ -19,7 +19,7 @@
  *
  *  @note The contents of pdf1 and pdf2 are expected to be x*f(x).
  *        The LHAPDF set ids are the entries in the first column of
- *        http:///projects.hepforge.org/lhapdf/PDFsets.index
+ *        https://lhapdf.hepforge.org/pdfsets.html
  *
  *  @ingroup attributes
  *

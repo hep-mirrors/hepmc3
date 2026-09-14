@@ -1,6 +1,7 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR})
 
 ROOT_GENERATE_DICTIONARY(myclass_Classes include/myclass_Classes.h LINKDEF include/LinkDef.h OPTIONS -inlineInputHeader -DHEPMC3_ROOTIO)
+set_source_files_properties(myclass_Classes.cxx PROPERTIES SKIP_LINTING ON)
 
 add_custom_target (dictionary DEPENDS myclass_Classes.cxx)
 

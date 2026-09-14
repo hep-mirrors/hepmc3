@@ -66,7 +66,7 @@ private:
      *  @param[out] evt Event that will be filled with new data
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    int parse_event_information(GenEvent &evt, const char *buf);
+    static int parse_event_information(GenEvent &evt, const char *buf);
 
     /** @brief Parse units
      *
@@ -74,7 +74,7 @@ private:
      *  @param[out] evt Event that will be filled with unit information
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    bool parse_units(GenEvent &evt, const char *buf);
+    static bool parse_units(GenEvent &evt, const char *buf);
 
     /** @brief Parse vertex
      *
@@ -103,7 +103,7 @@ private:
      *  @param[out] evt Event that will be filled with new data
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    bool parse_heavy_ion(GenEvent &evt, const char *buf);
+    static bool parse_heavy_ion(GenEvent &evt, const char *buf);
 
     /** @brief Parse pdf information
      *
@@ -111,7 +111,7 @@ private:
      *  @param[out] evt Event that will be filled with new data
      *  @param[in]  buf Line of text that needs to be parsed
      */
-    bool parse_pdf_info(GenEvent &evt, const char *buf);
+    static bool parse_pdf_info(GenEvent &evt, const char *buf);
 
 
     /** @brief Parse pdf information
@@ -129,8 +129,8 @@ private:
 //
 private:
     std::ifstream m_file; //!< Input file
-    std::shared_ptr<std::istream> m_shared_stream; ///< For ctor when reading from temp stream
-    std::istream* m_stream; ///< For ctor when reading from stream
+    std::shared_ptr<std::istream> m_shared_stream = nullptr; ///< For ctor when reading from temp stream
+    std::istream* m_stream = nullptr; ///< For ctor when reading from stream
     bool m_isstream; ///< toggles usage of m_file or m_stream
 
     std::vector<GenVertexPtr>   m_vertex_cache;        //!< Vertex cache

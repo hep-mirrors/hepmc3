@@ -7,7 +7,7 @@
 #define HEPMC3_WRITERDOT_H
 ///
 /// @file  WriterDOT.h
-/// @brief Definition of class \b WriterDOT
+/// @brief Definition of class \b WriterDOT converter of GenEvent into .dot format
 ///
 /// @class HepMC3::WriterDOT
 /// @brief GenEvent I/O output to dot files that should be processed by graphviz or other software
@@ -37,7 +37,7 @@ public:
     void write_event(const GenEvent &evt) override;
     /// @brief Return status of the stream
     bool failed() override {
-        return (bool)m_file.rdstate();
+        return static_cast<bool>(m_file.rdstate());
     }
     /// @brief Close file stream
     void close() override;

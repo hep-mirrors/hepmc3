@@ -181,6 +181,8 @@ using Descendants = RelativesInterface<Recursive<_children> >;
  */
 class Relatives {
 public:
+    /// @brief Destructor
+    virtual ~Relatives() = default;
     /// @brief Operator
     virtual std::vector<GenParticlePtr> operator()(GenParticlePtr input) const = 0;
     /// @brief Operator

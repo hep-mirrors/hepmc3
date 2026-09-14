@@ -20,7 +20,7 @@
 #include "HepMC3/GenParticle_fwd.h"
 #include "HepMC3/GenVertex_fwd.h"
 
-#ifdef HEPMC3_PROTOBUFIO
+#if defined(HEPMC3_PROTOBUFIO) || defined(DOXYGEN)
 namespace HepMC3_pb {
 class GenEventData_GenParticleData;
 }
@@ -47,7 +47,7 @@ public:
     /// @brief Constructor based on particle data
     GenParticle( const GenParticleData &data );
 
-#ifdef HEPMC3_PROTOBUFIO
+#if defined(HEPMC3_PROTOBUFIO) || defined(DOXYGEN)
     /// @brief Constructor based on protobuf messages
     GenParticle( HepMC3_pb::GenEventData_GenParticleData const &data );
 #endif
@@ -57,7 +57,7 @@ public:
 //
 public:
     /// @brief Check if this particle belongs to an event
-    bool in_event() const { return (bool) (m_event); }
+    bool in_event() const { return static_cast<bool>((m_event)); }
 
     /// @brief Get the parent event
     GenEvent* parent_event() { return m_event; }

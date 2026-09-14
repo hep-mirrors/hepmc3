@@ -6,8 +6,7 @@
 // -- Purpose: Test deduce_reader on gzipped protobuf streams
 //
 
-#if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) ||         \
-    defined(__FreeBSD__) || defined(__sun)
+#if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__sun)
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
@@ -82,15 +81,14 @@ void reader_function(int *result) {
 int main() {
     std::vector<int> results{0, 0};
     writer_function(&(results[1]));
-    reader_function(&(results[0]));
+    reader_function(results.data());
     if (results[0] != 0 || results[1] != 0) {
         printf("Something went wrong during reading/writing %i %i\n", results[0],
                results[1]);
         return 10;
     }
 
-    return COMPARE_ASCII_FILES("fromfrominputReaderFactory4.hepmc",
-                               "inputReaderFactory1.hepmc");
+    return COMPARE_ASCII_FILES("fromfrominputReaderFactory4.hepmc","inputReaderFactory1.hepmc");
 }
 #else
 int main() { return 0; }

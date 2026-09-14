@@ -24,15 +24,11 @@ namespace HepMC3 {
 
 WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo> run)
     : m_file(filename),
-      m_stream(&m_file),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144)
+      m_stream(&m_file)
 {
     set_run_info(run);
     if ( !m_file.is_open() ) {
-        HEPMC3_ERROR("WriterAscii: could not open output file: " << filename)
+        HEPMC3_ERROR_LEVEL(200,"WriterAscii: could not open output file: " << filename)
     } else {
         const std::string header = "HepMC::Version " + version() + "\nHepMC::Asciiv3-START_EVENT_LISTING\n";
         m_file.write(header.data(), header.length());
@@ -51,11 +47,7 @@ WriterAscii::WriterAscii(const std::string &filename, std::shared_ptr<GenRunInfo
 
 
 WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
-    : m_stream(&stream),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144)
+    : m_stream(&stream)
 {
     set_run_info(run);
     const std::string header = "HepMC::Version " + version() + "\nHepMC::Asciiv3-START_EVENT_LISTING\n";
@@ -74,11 +66,7 @@ WriterAscii::WriterAscii(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
 
 WriterAscii::WriterAscii(std::shared_ptr<std::ostream> s_stream, std::shared_ptr<GenRunInfo> run)
     : m_shared_stream(s_stream),
-      m_stream(s_stream.get()),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144)
+      m_stream(s_stream.get())
 {
     set_run_info(run);
     const std::string header = "HepMC::Version " + version() + "\nHepMC::Asciiv3-START_EVENT_LISTING\n";
@@ -97,7 +85,7 @@ WriterAscii::WriterAscii(std::shared_ptr<std::ostream> s_stream, std::shared_ptr
 
 WriterAscii::~WriterAscii() {
     close();
-    if ( m_buffer ) delete[] m_buffer;
+    delete[] m_buffer;
 }
 
 
@@ -127,9 +115,7 @@ void WriterAscii::write_event(const GenEvent &evt) {
         write_run_info();
     } else {
         if ( evt.run_info() && (run_info() != evt.run_info()) ) {
-            HEPMC3_WARNING("WriterAscii::write_event: GenEvents contain "
-                           "different GenRunInfo objects from - only the "
-                           "first such object will be serialized.")
+            HEPMC3_WARNING_LEVEL(600,"WriterAscii::write_event: GenEvents contain different GenRunInfo objects from - only the first such object will be serialized.")
         }
     }
 
@@ -168,10 +154,10 @@ void WriterAscii::write_event(const GenEvent &evt) {
     for ( const auto& vt1: evt.attributes() ) {
         for ( const auto& vt2: vt1.second ) {
             std::string st;
-            bool status = vt2.second->to_string(st);
+            const bool status = vt2.second->to_string(st);
 
             if ( !status ) {
-                HEPMC3_WARNING("WriterAscii::write_event: problem serializing attribute: " << vt1.first)
+                HEPMC3_WARNING_LEVEL(300,"WriterAscii::write_event: problem serializing attribute: " << vt1.first)
             }
             else {
                 m_cursor += sprintf(m_cursor, "A %i ", vt2.first);
@@ -225,19 +211,19 @@ void WriterAscii::allocate_buffer() {
         } catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
-            HEPMC3_WARNING("WriterAscii::allocate_buffer:" << e.what() << " buffer size too large. Dividing by 2. New size: " << m_buffer_size)
+            HEPMC3_WARNING_LEVEL(200,"WriterAscii::allocate_buffer:" << e.what() << " buffer size too large. Dividing by 2. New size: " << m_buffer_size)
         }
     }
 
     if ( !m_buffer ) {
-        HEPMC3_ERROR("WriterAscii::allocate_buffer: could not allocate buffer!")
+        HEPMC3_ERROR_LEVEL(200,"WriterAscii::allocate_buffer: could not allocate buffer!")
         return;
     }
     m_cursor = m_buffer;
 }
 
 
-std::string WriterAscii::escape(const std::string& s) const {
+std::string WriterAscii::escape(const std::string& s) {
     std::string ret;
     ret.reserve(s.length()*2);
     for ( std::string::const_iterator it = s.begin(); it != s.end(); ++it ) {
@@ -280,7 +266,7 @@ inline void WriterAscii::flush() {
     // using WriterAscii::write_string) should not be larger than 256. This is a safe value as
     // we will not allow precision larger than 24 anyway
     if ( m_buffer + m_buffer_size < m_cursor + 512 ) {
-        std::ptrdiff_t length = m_cursor - m_buffer;
+        const std::ptrdiff_t length = m_cursor - m_buffer;
         m_stream->write(m_buffer, length);
         m_cursor = m_buffer;
     }
@@ -288,7 +274,7 @@ inline void WriterAscii::flush() {
 
 
 inline void WriterAscii::forced_flush() {
-    std::ptrdiff_t length = m_cursor - m_buffer;
+    const std::ptrdiff_t length = m_cursor - m_buffer;
     m_stream->write(m_buffer, length);
     m_cursor = m_buffer;
 }
@@ -314,7 +300,7 @@ void WriterAscii::write_run_info() {
     }
 
     for (const auto& tool: run_info()->tools()) {
-        std::string out = "T " + tool.name + "\n" + tool.version + "\n" + tool.description;
+        const std::string out = "T " + tool.name + "\n" + tool.version + "\n" + tool.description;
         write_string(escape(out));
         m_cursor += sprintf(m_cursor, "\n");
     }
@@ -323,7 +309,7 @@ void WriterAscii::write_run_info() {
     for ( const auto& att: run_info()->attributes() ) {
         std::string st;
         if ( !att.second->to_string(st) ) {
-            HEPMC3_WARNING("WriterAscii::write_run_info: problem serializing attribute: " << att.first)
+            HEPMC3_WARNING_LEVEL(300,"WriterAscii::write_run_info: problem serializing attribute: " << att.first)
         }
         else {
             m_cursor += sprintf(m_cursor, "A ");
@@ -360,14 +346,16 @@ inline void WriterAscii::write_string(const std::string &str) {
 
 
 void WriterAscii::close() {
+    if (!m_stream) return;
     auto* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     forced_flush();
     const std::string footer("HepMC::Asciiv3-END_EVENT_LISTING\n\n");
     if (m_stream) m_stream->write(footer.data(),footer.length());
+    m_stream = nullptr;
     if (ofs) ofs->close();
 }
-bool WriterAscii::failed() { return (bool)m_file.rdstate(); }
+bool WriterAscii::failed() { return static_cast<bool> (m_file.rdstate()); }
 
 void WriterAscii::set_precision(const int& prec ) {
     if (prec < 2 || prec > 24) return;

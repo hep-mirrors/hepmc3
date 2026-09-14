@@ -1,6 +1,6 @@
 FROM archlinux:latest
 RUN  pacman -Syu --noconfirm \
                       bc make  cmake binutils git wget  file sed gawk grep which  \
-                      pkgconf  root protobuf   \
+                      pkgconf  root cern-vdt protobuf   \
                       gcc gcc-fortran clang  \
-                      libzip   ccache  && pacman -Scc --noconfirm
+                      libzip  hdf5  ccache  && pacman -Scc --noconfirm

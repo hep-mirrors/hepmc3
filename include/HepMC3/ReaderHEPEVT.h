@@ -72,8 +72,8 @@ public:
     char* hepevtbuffer = nullptr; //!< Pointer to HEPEVT Fortran common block/C struct
 private:
     std::ifstream m_file; //!< Input file
-    std::shared_ptr<std::istream> m_shared_stream; //!< For ctor when reading from temp stream
-    std::istream* m_stream; //!< For ctor when reading from stream
+    std::shared_ptr<std::istream> m_shared_stream = nullptr; //!< For ctor when reading from temp stream
+    std::istream* m_stream = nullptr; //!< For ctor when reading from stream
     bool m_isstream; //!< toggles usage of m_file or m_stream
     HEPEVT_Wrapper_Template<100000> m_hepevt_interface; //!< Templated HEPEVT interface
 };

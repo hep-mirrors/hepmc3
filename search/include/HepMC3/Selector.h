@@ -5,7 +5,7 @@
 //
 ///
 /// @file Selector.h
-/// @brief definition of /b Selector class
+/// @brief definition of \b Selector class
 ///
 #ifndef HEPMC3_SELECTOR_H
 #define HEPMC3_SELECTOR_H

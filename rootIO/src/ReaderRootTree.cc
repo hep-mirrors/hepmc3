@@ -16,7 +16,7 @@ namespace HepMC3
 HEPMC3_DECLARE_READER_FILE(ReaderRootTree)
 
 ReaderRootTree::ReaderRootTree(const std::string &filename):
-    m_tree(nullptr), m_events_count(0), m_tree_name("hepmc3_tree"), m_branch_name("hepmc3_event")
+    m_tree_name("hepmc3_tree"), m_branch_name("hepmc3_event")
 {
     m_file = TFile::Open(filename.c_str());
     if (!init()) return;
@@ -24,7 +24,7 @@ ReaderRootTree::ReaderRootTree(const std::string &filename):
 
 
 ReaderRootTree::ReaderRootTree(const std::string &filename, const std::string &treename, const std::string &branchname):
-    m_tree(nullptr), m_events_count(0), m_tree_name(treename), m_branch_name(branchname)
+    m_tree_name(treename), m_branch_name(branchname)
 {
     m_file = TFile::Open(filename.c_str());
     if (!init()) return;
@@ -34,7 +34,7 @@ bool ReaderRootTree::init()
 {
     if ( !m_file->IsOpen() )
     {
-        HEPMC3_ERROR("ReaderRootTree: problem opening file: " << m_file->GetName())
+        HEPMC3_ERROR_LEVEL(100,"ReaderRootTree: problem opening file: " << m_file->GetName())
         return false;
     }
 
@@ -42,30 +42,30 @@ bool ReaderRootTree::init()
     m_tree = reinterpret_cast<TTree*>(m_file->Get(m_tree_name.c_str()));
     if (!m_tree)
     {
-        HEPMC3_ERROR("ReaderRootTree: problem opening tree:  " << m_tree_name)
+        HEPMC3_ERROR_LEVEL(100,"ReaderRootTree: problem opening tree:  " << m_tree_name)
         return false;
     }
     m_event_data = new GenEventData();
     int result = m_tree->SetBranchAddress(m_branch_name.c_str(), &m_event_data);
     if (result < 0)
     {
-        HEPMC3_ERROR("ReaderRootTree: problem reading branch tree:  " << m_tree_name)
+        HEPMC3_ERROR_LEVEL(100,"ReaderRootTree: problem reading branch tree:  " << m_tree_name)
         return false;
     }
     m_run_info_data = new GenRunInfoData();
     result = m_tree->SetBranchAddress("GenRunInfo", &m_run_info_data);
     if (result < 0)
     {
-        HEPMC3_WARNING("ReaderRootTree: problem reading branch tree: GenRunInfo. Will attempt to read GenRunInfoData object.")
+        HEPMC3_WARNING_LEVEL(100,"ReaderRootTree: problem reading branch tree: GenRunInfo. Will attempt to read GenRunInfoData object.")
         std::shared_ptr<GenRunInfo> ri = std::make_shared<GenRunInfo>();
         auto *run = reinterpret_cast<GenRunInfoData*>(m_file->Get("GenRunInfoData"));
         if (run) {
             ri->read_data(*run);
             delete run;
             set_run_info(ri);
-            HEPMC3_WARNING("ReaderRootTree::init The object was written with HepMC3 version 3.0")
+            HEPMC3_WARNING_LEVEL(900,"ReaderRootTree::init The object was written with HepMC3 version 3.0")
         } else {
-            HEPMC3_ERROR("ReaderRootTree: problem reading object GenRunInfoData")
+            HEPMC3_ERROR_LEVEL(100,"ReaderRootTree: problem reading object GenRunInfoData")
             return false;
         }
     }
@@ -78,8 +78,6 @@ bool ReaderRootTree::skip(const int n)
     m_events_count+=n;
     return m_events_count < m_tree->GetEntries();
 }
-
-
 
 bool ReaderRootTree::read_event(GenEvent& evt)
 {
@@ -108,6 +106,40 @@ bool ReaderRootTree::read_event(GenEvent& evt)
     m_events_count++;
     return true;
 }
+
+bool ReaderRootTree::read_event_at_index(GenEvent& evt, const Long64_t index)
+{
+
+    if(index >= m_tree->GetEntries()) return false;
+
+    m_event_data->particles.clear();
+    m_event_data->vertices.clear();
+    m_event_data->links1.clear();
+    m_event_data->links2.clear();
+    m_event_data->attribute_id.clear();
+    m_event_data->attribute_name.clear();
+    m_event_data->attribute_string.clear();
+
+    m_run_info_data->weight_names.clear();
+    m_run_info_data->tool_name.clear();
+    m_run_info_data->tool_version.clear();
+    m_run_info_data->tool_description.clear();
+    m_run_info_data->attribute_name.clear();
+    m_run_info_data->attribute_string.clear();
+
+    m_tree->GetEntry(index);
+    evt.read_data(*m_event_data);
+    run_info()->read_data(*m_run_info_data);
+    evt.set_run_info(run_info());
+
+    return true;
+}
+
+
+
+
+
+
 
 void ReaderRootTree::close()
 {

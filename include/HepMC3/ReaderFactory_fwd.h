@@ -48,32 +48,32 @@ const std::string libHepMC3rootIO = "HepMC3rootIO.dll";
     - is it LHEF file
     - is it HEPEVT
 
-    It can also return a reader 
+    It can also return a reader
 */
 class InputInfo {
 public:
-    /// @brief Constructor 
+    /// @brief Constructor
     InputInfo() {};
-    /// @brief Constructor 
+    /// @brief Constructor
     InputInfo(const std::string &filename);
-    /// @brief Classify input 
+    /// @brief Classify input
     void classify();
-    std::vector<std::string> m_head;
-    bool m_remote = false;
-    bool m_pipe = false;
-    bool m_error = false;
-    bool m_init = false;
-    bool m_root = false;
-    bool m_protobuf = false;
-    bool m_asciiv3 = false;
-    bool m_iogenevent = false;
-    bool m_lhef = false;
-    bool m_hepevt = false;
+    std::vector<std::string> m_head; ///< Non-empty lines from the input header.
+    bool m_remote = false; ///< Whether the input is addressed by a remote URL.
+    bool m_pipe = false; ///< Whether the input is a named pipe.
+    bool m_error = false; ///< Whether input inspection encountered an error.
+    bool m_init = false; ///< Whether input inspection completed.
+    bool m_root = false; ///< Whether the input is a ROOT file.
+    bool m_protobuf = false; ///< Whether the input is a protobuf file.
+    bool m_asciiv3 = false; ///< Whether the input uses HepMC3 ASCII format.
+    bool m_iogenevent = false; ///< Whether the input uses HepMC2 IO_GenEvent format.
+    bool m_lhef = false; ///< Whether the input uses LHEF format.
+    bool m_hepevt = false; ///< Whether the input uses HEPEVT format.
     bool m_OSCAR2013 = false;
     bool m_OSCAR1999 = false;
     bool m_OSCAR1997 = false;
-    std::shared_ptr<Reader> m_reader = nullptr;
-    /// @brief Get native (built-in) reader 
+    std::shared_ptr<Reader> m_reader = nullptr; ///< Native reader selected during inspection.
+    /// @brief Get native (built-in) reader
     template <class T> std::shared_ptr<Reader> native_reader(T& argument);
 };
 

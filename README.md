@@ -2,7 +2,7 @@
 
 HepMC3 is a new version of the HepMC event record. It uses shared pointers for in-memory navigation and the POD concept for persistency.
 Visit the home page of the project http://hepmc.web.cern.ch/hepmc/ or the CERN GitLab repository https://gitlab.cern.ch/hepmc/HepMC3 for more information.
-A short information on the compatibility between the HePMC3 versions and deprecation of some functionality see below.
+A short information on the compatibility between the HepMC3 versions and deprecation of some functionality see below.
 You can also send bug reports, feature requests and questions about HepMC3 to hepmc-devATcern.ch.
 
 
@@ -10,7 +10,7 @@ You can also send bug reports, feature requests and questions about HepMC3 to he
 # Quick-start (applicable to recent versions):
 
 0. On the Linux platform HepMC3 is available from the standard repositories of multiple many
-linux distributions:  Fedora, CentOS(EPEL),  Arch Linux, Mageia, openSUSE Tumbleweed, Debian (outdated) etc.
+linux distributions:  Fedora, CentOS(EPEL), Arch Linux, Mageia, openSUSE Tumbleweed, Debian (outdated) etc.
 It is recommended to use the system package manager to install HepMC3 for these systems.
 The following commands will install the HepMC3 in the corresponding systems:
   - Fedora:
@@ -33,7 +33,7 @@ The following commands will install the HepMC3 in the corresponding systems:
   For the Fedora and CentOS the ROOT interface packages ``HepMC3-rootIO`` and ``HepMC3-rootIO-devel``
   can be installed in the same way, but will bring root as a dependency.
   The python binding packages could have different names depending on the used system, e.g. these are
-  ``python2-HepMC3``, ``python34-HepMC3``, ``python36-HepMC3``, ``python2-HepMC3-rootIO``, ``python34-HepMC3-rootIO``
+  ``python36-HepMC3``,  ``python36-HepMC3-rootIO``
   and ``python36-HepMC3-rootIO`` for the CentOS7. Therefore, the simplest solution is to install bindings for all the
   available python version in the system using
   ```
@@ -107,8 +107,8 @@ action might result in a fully functional installation.
         -DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF        \
         -DHEPMC3_BUILD_DOCS:BOOL=OFF     \
         -DHEPMC3_ENABLE_PYTHON:BOOL=ON   \
-        -DHEPMC3_PYTHON_VERSIONS=2.7     \
-        -DHEPMC3_Python_SITEARCH27=../hepmc3-install/lib/python2.7/site-packages \
+        -DHEPMC3_PYTHON_VERSIONS=3.12     \
+        -DHEPMC3_Python_SITEARCH312=../hepmc3-install/lib/python3.12/site-packages \
         ../HepMC3-3.2.6
   make
   make install
@@ -203,7 +203,7 @@ On Windows (in Unix-compatible shell) one can use
 ```
 cmake --build ./
 ```
-instead
+instead.
 
 Please note that you have to have permissions to install HepMC3 into the selected directory.
 
@@ -237,16 +237,16 @@ The number of potential combinations of compiler suites, Python versions and ope
 therefore it is recommended to install the HepMC3 form the default repositories of the used operating system.
 If not possible, the following options are available
 - compile the Python package from sources
-- use the precompiled binaries from pypi: https://pypi.org/project/HepMC3/
+- use the precompiled binaries from PyPi: https://pypi.org/project/HepMC3/
 - use the https://anaconda.org/conda-forge/hepmc3
 In addition to that part of the bindings are implemented in the pyhepmc project
 
 https://github.com/HDembinski/pyhepmc.
 
-Please note that
+Please note that only the PyPi packages are officially supported.
 
 
-10a
+10.1
 
 The installation path for the Python modules can be tweaked with
 a set of dynamically named CMake variables:
@@ -273,13 +273,13 @@ cmake ...
 
 To specify the desired versions of Python to build the HepMC3 modules, pass the `HEPMC3_PYTHON_VERSIONS` option to `cmake`, e.g.
 ```
-cmake ... -DHEPMC3_PYTHON_VERSIONS=2,3.1,3.2
+cmake ... -DHEPMC3_PYTHON_VERSIONS=3.6,3.12
 ```
-will build Python modules for versions Python 2.x (any Python of version 2), Python 3.1 and Python 3.2.
-By default CMake will attempt to build the Python modules for both Python versions 2 and 3.
+will build Python modules for versions  Python 3.6 and Python 3.12.
+By default CMake will attempt to build the Python modules for Python version 3.
 
 
-10b
+10.2
 
 In addition to the standard CPython  modules, it is possible to build HepMC3 modules for PyPy.
 However, the PyPy support is experimental. To build the bindings against the `pypy-c` library use `pypy<version>`
@@ -287,6 +287,7 @@ for the `HEPMC3_PYTHON_VERSIONS` option, e.g.
 ```
 -DHEPMC3_PYTHON_VERSIONS=pypy2
 ```
+This also requires quite a recent CMake.
 
 11.
 
@@ -314,7 +315,8 @@ To include an existing build of HepMC3 in your project, you can use find_package
 find_package(HepMC3 3.2.0 REQUIRED)
 ```
 
-This will set up a number of CMake variables targets depending on the features that were built with the found version of HepMC3. Some useful CMake variables that will be set are included below:
+This will set up a number of CMake variables targets depending on the features that were built with the found version of HepMC3. 
+Some useful CMake variables that will be set are included below:
 
 ```
 HEPMC3_VERSION
@@ -329,7 +331,8 @@ HEPMC3_ROOTIO_LIB
 HEPMC3_PROTOBUFIO_LIB
 ```
 
-Generally in modern CMake projects you should use exported targets to model dependencies, rather than setting your own compiler and linker options using the values of variables like the above. Modern HepMC3 exports a number of targets, reproduced below:
+Generally in modern CMake projects you should use exported targets to model dependencies, rather than setting your own compiler and 
+linker options using the values of variables like the above. Modern HepMC3 exports a number of targets, reproduced below:
 
 ```
 HepMC3::All
@@ -350,15 +353,22 @@ To link a target, `MyLibrary`, from your project to the main HepMC3 library you 
 target_link_libraries(MyLibrary PUBLIC HepMC3::All)
 ```
 
-_N.B._ That these exported targets container their own dependencies, the above _should_ be all that is needed to correctly set up the relevant compiler options, include directories, and link options on `MyLibrary`. This includes, for example, if you need to write out using the rootIO module, `HepMC3::All` links to `HepMC::rootIO`, which depends on a number of ROOT libraries and the ROOT include directory.
+_N.B._ That these exported targets container their own dependencies, the above _should_ be all that is needed to correctly 
+set up the relevant compiler options, include directories, and link options on `MyLibrary`. This includes, for example, 
+if you need to write out using the rootIO module, `HepMC3::All` links to `HepMC::rootIO`, which depends on a number of 
+ROOT libraries and the ROOT include directory.
 
 ### A ROOT Gotcha
 
-The way that the dependency on ROOT is currently included, means that paths to the ROOT include directory and ROOT libraries are hard-coded in the exported targets. This means that if your version of HepMC3 was built against one install of ROOT and other parts of your project pick up a different install of ROOT, you could have conflicts.
+The way that the dependency on ROOT is currently included, means that paths to the ROOT include directory and ROOT libraries 
+are hard-coded in the exported targets. This means that if your version of HepMC3 was built against one install of ROOT and 
+other parts of your project pick up a different install of ROOT, you could have conflicts.
 
 ## Adding a dependency to HepMC3 with CPM.cmake
 
-[CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) wraps modern CMake builtins to provide an intuitive interface for specifying dependencies within a CMake project that can be fetched and built automatically if they are not found. To include HepMC3 in your CMake project via CPM.cmake include something like:
+[CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) wraps modern CMake builtins to provide an intuitive interface for 
+specifying dependencies within a CMake project that can be fetched and built automatically if they are not found. 
+To include HepMC3 in your CMake project via CPM.cmake include something like:
 
 ```
 CPMAddPackage(
@@ -383,9 +393,12 @@ CPMAddPackage(
 
 To use this version of HepMC3 in your CMake project, follow the [instructions above](#using-a-binary-distribution-of-hepmc3-in-your-cmake-project).
 
-During the configuration step of your project, the HepMC3 source of the specified version will be fetched and its CMake project run and targets set up and exposed to your project such that the dependent build and installation is automatically run as required by your project targets.
+During the configuration step of your project, the HepMC3 source of the specified version will be fetched and its 
+CMake project run and targets set up and exposed to your project such that the dependent build and installation 
+is automatically run as required by your project targets.
 
-You can optionally try and find an existing HepMC3 installation, rather than build a dependent one, by using `CPMFindPackage` instead of `CPMAddPackage`.
+You can optionally try and find an existing HepMC3 installation, rather than build a dependent one, by using 
+`CPMFindPackage` instead of `CPMAddPackage`.
 
 # Installation troubleshooting
 
@@ -433,8 +446,7 @@ The examples use multiple parts of HepMC3, therefore to use all of them a full i
   - The major versions of HepMC3 are almost API backward compatible.
 
   - For HepMC3>3.2.6 the member functions in `GenEvent/GenVertex` that deal with raw pointers, e.g. `add_particle_in ( GenParticle *p )` will be removed.
-  - The Python2 is not in development anymore, therefore at some point the Python2 support will be removed.
-    As of version HepMC3=3.2.6 it is present `as is`.
+  - The Python2 is not in development anymore, therefore it was removed from HepMC3>3.2.7.
   - The class HepMC3::RelativesInterface are deprecated will be removed in the future.
     Use HepMC3::children_particles, HepMC3::descendant_particles, etc. instead.
   - The minimal required version of `cmake` slowly changes from version to version. It is recommented to use the `cmake`
@@ -515,7 +527,7 @@ python/root_includes.hpp.in
 python/search_includes.hpp.in
 ```
 
-The directory contain the files that are used to build a Python package and installation:
+The directory contains the files that are used to build a Python package and installation:
 ```
 python/src/__init__.py
 python/src/search/__init__.py
@@ -545,7 +557,7 @@ The files in `test/` can be split in two groups:
 ./test/testIO4.cc
 ./test/inputIO4.root
 ```
-
+The tests ib both directories can also serve as examples for usage of HepMC3.
 
 7. The subdirectory `cmake/Modules` contains files needed for the CMake configuration
 The subdirectory `cmake/Templates` contains templates needed for generation
@@ -632,3 +644,20 @@ deals with search of relations between particles in the event.
 9. The `doc/` directory contains files used for generation of library source code documentation with
 the Doxygen system. The `doc/CMakeLists.txt` file is used by CMake
 to build the documentation.
+
+# Building and Running the ConvertExample with the output EDM4HEP
+
+Setup your favorite KEY4HEP nightly:
+```
+source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
+```
+or release:
+```
+source /cvmfs/sw.hsf.org/key4hep/setup.sh
+```
+
+Then build with KEY4HEP by adding the following flag to the cmake command:
+```
+-DHEPMC3_ENABLE_EDM4HEP=ON -DHEPMC3_BUILD_EXAMPLES=ON
+```
+The flag will initiate some sanity checks. The converter resides in the examples files therefore these have to be turned on as well

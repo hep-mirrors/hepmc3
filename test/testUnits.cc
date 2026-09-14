@@ -11,14 +11,14 @@ using namespace HepMC3;
 double conversion_factor( Units::MomentumUnit from, Units::MomentumUnit  to )
 {
     FourVector m( 0.5*RAND_MAX-std::rand(), 0.5*RAND_MAX-std::rand(), 0.5*RAND_MAX-std::rand(), 0.5*RAND_MAX-std::rand());
-    FourVector msave(m);
+    const FourVector msave(m);
     Units::convert(m,from,to );
     return m.e()/msave.e();//NAN?
 }
 double conversion_factor( Units::LengthUnit from, Units::LengthUnit  to )
 {
     FourVector m( 0.5*RAND_MAX-std::rand(), 0.5*RAND_MAX-std::rand(), 0.5*RAND_MAX-std::rand(), 0.5*RAND_MAX-std::rand());
-    FourVector msave(m);
+    const FourVector msave(m);
     Units::convert(m,from,to );
     return m.e()/msave.e();//NAN?
 }

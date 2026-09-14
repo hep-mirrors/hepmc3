@@ -185,6 +185,12 @@ public:
     Feature(Evaluator_type functor) : GenericFeature<Feature_type>(functor) {}
     /// @brief  Copy
     Feature(const Feature &copy) : GenericFeature<Feature_type>(copy) {}
+    /** @brief Move constructor */
+    Feature(Feature && ) = default;
+    /** @brief = */
+    Feature& operator=(const Feature&) = default;
+    /** @brief = */
+    Feature& operator=(Feature&&) = default;
 
     /// @brief  Abs function
     Feature<Feature_type> abs() const {
@@ -229,6 +235,13 @@ public:
     Feature(Evaluator_type functor) : GenericFeature<Feature_type>(functor) {}
     /// @brief  Feature
     Feature(const Feature &copy) : GenericFeature<Feature_type>(copy) {}
+    /** @brief Move constructor */
+    Feature(Feature && ) = default;
+    /** @brief = */
+    Feature& operator=(const Feature&) = default;
+    /** @brief = */
+    Feature& operator=(Feature&&) = default;
+
 
     /// @brief abs function
     Feature<Feature_type> abs() const {
@@ -297,6 +310,14 @@ public:
     Feature(Evaluator_type functor) : GenericFeature<Feature_type>(functor) {}
     /// @brief Copy
     Feature(const Feature &copy) : GenericFeature<Feature_type>(copy) {}
+
+    /** @brief Move constructor */
+    Feature(Feature && ) = default;
+    /** @brief = */
+    Feature& operator=(const Feature&) = default;
+    /** @brief = */
+    Feature& operator=(Feature&&) = default;
+
 
     /// @brief abs function
     Feature<Feature_type> abs() const {

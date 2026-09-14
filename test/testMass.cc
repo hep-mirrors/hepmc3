@@ -51,7 +51,7 @@ int main()
     GenEvent evt;
     while ( !ascii_in.failed() )
     {
-        bool readOK=ascii_in.read_event(evt);
+        const bool readOK=ascii_in.read_event(evt);
         if (!readOK) return 1;
         icount++;
         if ( icount%50==1 ) {std::cout << "Processing Event Number " << icount<< " its # " << evt.event_number() << std::endl;}
@@ -122,7 +122,7 @@ int main()
     int ixin=0;
     while ( !xin.failed() )
     {
-        bool readOK=xin.read_event(evt);
+        const bool readOK = xin.read_event(evt);
         if (!readOK) return 1;
         ixin++;
         std::cout << "reading Event " << evt.event_number() << std::endl;
@@ -149,10 +149,10 @@ int main()
 
 bool massInfo( const GenEvent& e, std::ostream& os )
 {
-    for (ConstGenParticlePtr  p: e.particles()) {
-        double gm = p->generated_mass();
-        double m = p->momentum().m();
-        double d = std::abs(m-gm);
+    for (const auto&  p: e.particles()) {
+        const double gm = p->generated_mass();
+        const double m = p->momentum().m();
+        const double d = std::abs(m-gm);
         if( d > 1.0e-4 && gm>1.0e-4)
         {
             os << "Event " << e.event_number()

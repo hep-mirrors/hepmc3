@@ -25,6 +25,7 @@
 #include "HepMC3/Data/GenRunInfoData.h"
 
 // ROOT header files
+#include "Rtypes.h" // not strictly necessary given the other includes, but Long64_t should be def'd here
 #include "TFile.h"
 #include "TTree.h"
 #include "TBranch.h"
@@ -56,6 +57,9 @@ public:
      */
     bool read_event(GenEvent &evt)   override;
 
+    /** @brief Read the event at the specified index from the ROOT tree. */
+    bool read_event_at_index(GenEvent &evt, const Long64_t index);
+
     /** @brief Close file */
     void close()  override;
 
@@ -69,13 +73,13 @@ private:
 // Fields
 //
 private:
-    TFile* m_file;         //!< File handler
+    TFile* m_file = nullptr;         //!< File handler
 public:
-    TTree* m_tree;//!< Tree handler. Public to allow simple access, e.g. custom branches.
+    TTree* m_tree = nullptr;//!< Tree handler. Public to allow simple access, e.g. custom branches.
 private:
-    int   m_events_count; //!< Events count. Needed to read the tree
-    GenEventData* m_event_data; //!< Pointer to structure that holds event data
-    GenRunInfoData* m_run_info_data; //!< Pointer to structure that holds run info data
+    int   m_events_count = 0; //!< Events count. Needed to read the tree
+    GenEventData* m_event_data = nullptr; //!< Pointer to structure that holds event data
+    GenRunInfoData* m_run_info_data = nullptr; //!< Pointer to structure that holds run info data
     std::string m_tree_name; //!< Name of TTree
     std::string m_branch_name; //!< Name of TBranch in TTree
 };

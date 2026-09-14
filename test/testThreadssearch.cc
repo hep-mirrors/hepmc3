@@ -28,7 +28,7 @@ std::shared_ptr<GenEvent> generate(const int Z) {
     evt->add_vertex(v1);
     for (int z = 0; z < Z; z++) {
         auto particles = evt->particles();
-        for (auto p: particles) {
+        for (auto& p: particles) {
             if (p->end_vertex()) continue;
             GenParticlePtr p2 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0+0.01*evt->particles().size(),  7000.0  ),2212,  3 );
             GenParticlePtr p1 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191+0.01*evt->particles().size(),  32.238),   1,  3 );
@@ -60,6 +60,7 @@ int main()
     std::random_device rd;
     std::mt19937 g(rd());
     std::vector<std::vector<std::shared_ptr<GenEvent>>> thr_evts;
+    thr_evts.reserve(NinputCopies);
     for (size_t i=0; i<NinputCopies; i++) {
         thr_evts.emplace_back(evts);
         std::shuffle(thr_evts[i].begin(), thr_evts[i].end(), g);
@@ -67,9 +68,10 @@ int main()
     std::vector<std::map<int,int>> res(NinputCopies);
     std::vector<std::thread> threads;
 
+    threads.reserve(NinputCopies);
 
     for (size_t i = 0; i < NinputCopies; i++) {
-        threads.emplace_back(std::thread(attribute_function1,std::cref(thr_evts[i]), std::ref(res[i])));
+        threads.emplace_back(attribute_function1, std::cref(thr_evts[i]), std::ref(res[i]));
     }
     for (auto& th : threads) {th.join();}
     threads.clear();

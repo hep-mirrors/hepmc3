@@ -19,6 +19,10 @@ const Descendants Relatives::DESCENDANTS;
 thread_local const Ancestors   Relatives::ANCESTORS;
 thread_local const Descendants Relatives::DESCENDANTS;
 #endif
+template class RelativesInterface<_parents>;
+template class RelativesInterface<_children>;
+template class RelativesInterface<Recursive<_parents>>;
+template class RelativesInterface<Recursive<_children>>;
 } // namespace HepMC3
 
 namespace HepMC3 {

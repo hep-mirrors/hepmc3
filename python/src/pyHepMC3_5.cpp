@@ -25,8 +25,8 @@
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
 	#define BINDER_PYBIND11_TYPE_CASTER
-	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>)
-	PYBIND11_DECLARE_HOLDER_TYPE(T, T*)
+	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>, false)
+	PYBIND11_DECLARE_HOLDER_TYPE(T, T*, false)
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
@@ -43,7 +43,7 @@ struct PyCallBack_HepMC3_ULongAttribute : public HepMC3::ULongAttribute {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ULongAttribute::from_string(a0);
 	}
@@ -56,7 +56,7 @@ struct PyCallBack_HepMC3_ULongAttribute : public HepMC3::ULongAttribute {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ULongAttribute::to_string(a0);
 	}
@@ -69,7 +69,7 @@ struct PyCallBack_HepMC3_ULongAttribute : public HepMC3::ULongAttribute {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -82,7 +82,7 @@ struct PyCallBack_HepMC3_ULongAttribute : public HepMC3::ULongAttribute {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}
@@ -101,7 +101,7 @@ struct PyCallBack_HepMC3_ULongLongAttribute : public HepMC3::ULongLongAttribute 
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ULongLongAttribute::from_string(a0);
 	}
@@ -114,7 +114,7 @@ struct PyCallBack_HepMC3_ULongLongAttribute : public HepMC3::ULongLongAttribute 
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return ULongLongAttribute::to_string(a0);
 	}
@@ -127,7 +127,7 @@ struct PyCallBack_HepMC3_ULongLongAttribute : public HepMC3::ULongLongAttribute 
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -140,7 +140,7 @@ struct PyCallBack_HepMC3_ULongLongAttribute : public HepMC3::ULongLongAttribute 
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}
@@ -159,7 +159,7 @@ struct PyCallBack_HepMC3_BoolAttribute : public HepMC3::BoolAttribute {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return BoolAttribute::from_string(a0);
 	}
@@ -172,7 +172,7 @@ struct PyCallBack_HepMC3_BoolAttribute : public HepMC3::BoolAttribute {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return BoolAttribute::to_string(a0);
 	}
@@ -185,7 +185,7 @@ struct PyCallBack_HepMC3_BoolAttribute : public HepMC3::BoolAttribute {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -198,7 +198,7 @@ struct PyCallBack_HepMC3_BoolAttribute : public HepMC3::BoolAttribute {
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}
@@ -217,7 +217,7 @@ struct PyCallBack_HepMC3_VectorCharAttribute : public HepMC3::VectorCharAttribut
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorCharAttribute::from_string(a0);
 	}
@@ -230,7 +230,7 @@ struct PyCallBack_HepMC3_VectorCharAttribute : public HepMC3::VectorCharAttribut
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorCharAttribute::to_string(a0);
 	}
@@ -243,7 +243,7 @@ struct PyCallBack_HepMC3_VectorCharAttribute : public HepMC3::VectorCharAttribut
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -256,7 +256,7 @@ struct PyCallBack_HepMC3_VectorCharAttribute : public HepMC3::VectorCharAttribut
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}
@@ -275,7 +275,7 @@ struct PyCallBack_HepMC3_VectorFloatAttribute : public HepMC3::VectorFloatAttrib
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorFloatAttribute::from_string(a0);
 	}
@@ -288,7 +288,7 @@ struct PyCallBack_HepMC3_VectorFloatAttribute : public HepMC3::VectorFloatAttrib
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorFloatAttribute::to_string(a0);
 	}
@@ -301,7 +301,7 @@ struct PyCallBack_HepMC3_VectorFloatAttribute : public HepMC3::VectorFloatAttrib
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -314,7 +314,7 @@ struct PyCallBack_HepMC3_VectorFloatAttribute : public HepMC3::VectorFloatAttrib
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}
@@ -333,7 +333,7 @@ struct PyCallBack_HepMC3_VectorLongDoubleAttribute : public HepMC3::VectorLongDo
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorLongDoubleAttribute::from_string(a0);
 	}
@@ -346,7 +346,7 @@ struct PyCallBack_HepMC3_VectorLongDoubleAttribute : public HepMC3::VectorLongDo
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorLongDoubleAttribute::to_string(a0);
 	}
@@ -359,7 +359,7 @@ struct PyCallBack_HepMC3_VectorLongDoubleAttribute : public HepMC3::VectorLongDo
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -372,7 +372,7 @@ struct PyCallBack_HepMC3_VectorLongDoubleAttribute : public HepMC3::VectorLongDo
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}
@@ -391,7 +391,7 @@ struct PyCallBack_HepMC3_VectorLongLongAttribute : public HepMC3::VectorLongLong
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorLongLongAttribute::from_string(a0);
 	}
@@ -404,7 +404,7 @@ struct PyCallBack_HepMC3_VectorLongLongAttribute : public HepMC3::VectorLongLong
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorLongLongAttribute::to_string(a0);
 	}
@@ -417,7 +417,7 @@ struct PyCallBack_HepMC3_VectorLongLongAttribute : public HepMC3::VectorLongLong
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -430,7 +430,7 @@ struct PyCallBack_HepMC3_VectorLongLongAttribute : public HepMC3::VectorLongLong
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}
@@ -449,7 +449,7 @@ struct PyCallBack_HepMC3_VectorUIntAttribute : public HepMC3::VectorUIntAttribut
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorUIntAttribute::from_string(a0);
 	}
@@ -462,7 +462,7 @@ struct PyCallBack_HepMC3_VectorUIntAttribute : public HepMC3::VectorUIntAttribut
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorUIntAttribute::to_string(a0);
 	}
@@ -475,7 +475,7 @@ struct PyCallBack_HepMC3_VectorUIntAttribute : public HepMC3::VectorUIntAttribut
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -488,7 +488,7 @@ struct PyCallBack_HepMC3_VectorUIntAttribute : public HepMC3::VectorUIntAttribut
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}
@@ -507,7 +507,7 @@ struct PyCallBack_HepMC3_VectorULongAttribute : public HepMC3::VectorULongAttrib
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorULongAttribute::from_string(a0);
 	}
@@ -520,7 +520,7 @@ struct PyCallBack_HepMC3_VectorULongAttribute : public HepMC3::VectorULongAttrib
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return VectorULongAttribute::to_string(a0);
 	}
@@ -533,7 +533,7 @@ struct PyCallBack_HepMC3_VectorULongAttribute : public HepMC3::VectorULongAttrib
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init();
 	}
@@ -546,7 +546,7 @@ struct PyCallBack_HepMC3_VectorULongAttribute : public HepMC3::VectorULongAttrib
 				static pybind11::detail::override_caster_t<bool> caster;
 				return pybind11::detail::cast_ref<bool>(std::move(o), caster);
 			}
-			else return pybind11::detail::cast_safe<bool>(std::move(o));
+			return pybind11::detail::cast_safe<bool>(std::move(o));
 		}
 		return Attribute::init(a0);
 	}

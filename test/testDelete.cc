@@ -38,12 +38,12 @@ int main()
     }
     evts[i].remove_particles(evts[j].particles());
 
-    for (GenParticlePtr p: evts.at(i).particles()) {
+    for (const auto& p: evts.at(i).particles()) {
         evts[j].remove_particle(p);
     }
 
-    for (GenParticlePtr p: evts.at(i).particles()) {
-        for (GenVertexPtr v: evts.at(j).vertices()) {
+    for (const auto& p: evts.at(i).particles()) {
+        for (const auto& v: evts.at(j).vertices()) {
             (v)->remove_particle_in(p);
             (v)->remove_particle_out(p);
         }
@@ -51,7 +51,7 @@ int main()
 
     WriterAscii       outputA("frominputDelete.hepmc");
     if(outputA.failed()) return 2;
-    for (size_t i=0; i<evts.size(); i++) outputA.write_event(evts[i]);
+    for (size_t ii=0; ii<evts.size(); ii++) outputA.write_event(evts[ii]);
     evts.clear();
     outputA.close();
 

@@ -37,7 +37,7 @@ public:
         if ( name.compare(0,3,"GEV") == 0 ) return GEV;
         if ( name.compare(0,3,"MEV") == 0 ) return MEV;
 
-        HEPMC3_ERROR("Units::momentum_unit: unrecognised unit name: '" << name <<"', setting to GEV" )
+        HEPMC3_ERROR_LEVEL(300,"Units::momentum_unit: unrecognised unit name: '" << name <<"', setting to GEV" )
 
         return GEV;
     }
@@ -47,7 +47,7 @@ public:
         if ( name.compare(0,2,"CM") == 0 ) return CM;
         if ( name.compare(0,2,"MM") == 0 ) return MM;
 
-        HEPMC3_ERROR("Units::length_unit: unrecognised unit name: '" << name <<"', setting to CM" )
+        HEPMC3_ERROR_LEVEL(300,"Units::length_unit: unrecognised unit name: '" << name <<"', setting to CM" )
 
         return CM;
     }

@@ -23,7 +23,7 @@ GenEvent generate1() {
     evt.add_vertex(v1);
     for (size_t z= 0; z < 12; z++) {
         auto particles = evt.particles();
-        for (auto p: particles) {
+        for (const auto& p: particles) {
             if (p->end_vertex()) continue;
             GenParticlePtr p1 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
             GenParticlePtr p2 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
@@ -68,7 +68,7 @@ GenEvent generate2() {
     ids.reserve(2048);
     for (size_t z= 0; z < 12; z++) {
         auto particles = evt.particles();
-        for (auto p: particles) {
+        for (const auto& p: particles) {
             if (p->end_vertex()) continue;
             GenParticlePtr p1 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
             GenParticlePtr p2 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
@@ -106,12 +106,12 @@ GenEvent generate2() {
 
 GenEvent generate3() {
     GenEvent evt;
-    std::shared_ptr<GenRunInfo> run = std::make_shared<GenRunInfo>();
+    auto run = std::make_shared<GenRunInfo>();
     evt.set_run_info(run);
-    GenParticlePtr b1 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
-    GenParticlePtr b2 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
-    GenParticlePtr b3 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
-    GenVertexPtr v1 = std::make_shared<GenVertex>();
+    auto b1 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
+    auto b2 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
+    auto b3 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
+    auto v1 = std::make_shared<GenVertex>();
     v1->add_particle_in (b1);
     v1->add_particle_in(b2);
     v1->add_particle_out(b3);
@@ -131,7 +131,7 @@ GenEvent generate3() {
 
     for (size_t z= 0; z < 12; z++) {
         auto particles = evt.particles();
-        for (auto p: particles) {
+        for (const auto& p: particles) {
             if (p->end_vertex()) continue;
             GenParticlePtr p1 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
             GenParticlePtr p2 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
@@ -183,7 +183,7 @@ GenEvent generate4() {
 
     for (size_t z= 0; z < 12; z++) {
         auto particles = evt.particles();
-        for (auto p: particles) {
+        for (const auto& p: particles) {
             if (p->end_vertex()) continue;
             GenParticlePtr p1 = std::make_shared<GenParticle>( FourVector( 0.0,    0.0,   7000.0,  7000.0  ),2212,  3 );
             GenParticlePtr p2 = std::make_shared<GenParticle>( FourVector( 0.750, -1.569,   32.191,  32.238),   1,  3 );
@@ -192,13 +192,13 @@ GenEvent generate4() {
             v->add_particle_out(p1);
             v->add_particle_out(p2);
             evt.add_vertex(v);
-            attsb.emplace_back(std::pair<int,std::shared_ptr<Attribute> >  (v->id(), std::make_shared<HepMC3::IntAttribute>(-20)));
-            attst.emplace_back(std::pair<int,std::shared_ptr<Attribute> >  (p1->id(),  std::make_shared<HepMC3::DoubleAttribute>(0.1)));
-            attsp.emplace_back(std::pair<int,std::shared_ptr<Attribute> >  (p1->id(),std::make_shared<HepMC3::DoubleAttribute>(0.1)));
-            attsb.emplace_back(std::pair<int,std::shared_ptr<Attribute> >  (p1->id(),std::make_shared<HepMC3::IntAttribute>(10)));
-            attst.emplace_back(std::pair<int,std::shared_ptr<Attribute> >  (p2->id(),std::make_shared<HepMC3::DoubleAttribute>(0.1)));
-            attsp.emplace_back(std::pair<int,std::shared_ptr<Attribute> >  (p2->id(),std::make_shared<HepMC3::DoubleAttribute>(0.1)));
-            attsb.emplace_back(std::pair<int,std::shared_ptr<Attribute> >  (p2->id(),std::make_shared<HepMC3::IntAttribute>(10)));
+            attsb.emplace_back(v->id(), std::make_shared<HepMC3::IntAttribute>(-20));
+            attst.emplace_back(p1->id(), std::make_shared<HepMC3::DoubleAttribute>(0.1));
+            attsp.emplace_back(p1->id(), std::make_shared<HepMC3::DoubleAttribute>(0.1));
+            attsb.emplace_back(p1->id(), std::make_shared<HepMC3::IntAttribute>(10));
+            attst.emplace_back(p2->id(), std::make_shared<HepMC3::DoubleAttribute>(0.1));
+            attsp.emplace_back(p2->id(), std::make_shared<HepMC3::DoubleAttribute>(0.1));
+            attsb.emplace_back(p2->id(), std::make_shared<HepMC3::IntAttribute>(10));
         }
     }
     evt.add_attributes("barcode", attsb);
@@ -210,8 +210,8 @@ GenEvent generate4() {
 using Clock =  std::chrono::high_resolution_clock;
 int main()
 {
-    int N = 10;
-    auto rawstart1= Clock::now();
+    const int N = 10;
+    auto rawstart1 = Clock::now();
     for (int i = 0; i < N; i++) generate1();
     auto now1 = Clock::now();
 

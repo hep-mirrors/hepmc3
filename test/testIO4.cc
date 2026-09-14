@@ -21,32 +21,32 @@ const Int_t kMaxvertices = 2000;
 class SomeAnalysis
 {
 public :
-    TChain         *fChain;   //!pointer to the analyzed TTree or TChain
+    TChain         *fChain = nullptr;   //!pointer to the analyzed TTree or TChain
     // Declaration of leaf types
 //GenEventData *hepmc3_event;
-    Int_t           event_number;
-    Int_t           momentum_unit;
-    Int_t           length_unit;
-    Int_t           particles_;
-    Int_t           particles_pid[kMaxparticles];   //[particles_]
-    Int_t           particles_status[kMaxparticles];   //[particles_]
-    Bool_t          particles_is_mass_set[kMaxparticles];   //[particles_]
-    Double_t        particles_mass[kMaxparticles];   //[particles_]
-    Double_t        particles_momentum_m_v1[kMaxparticles];   //[particles_]
-    Double_t        particles_momentum_m_v2[kMaxparticles];   //[particles_]
-    Double_t        particles_momentum_m_v3[kMaxparticles];   //[particles_]
-    Double_t        particles_momentum_m_v4[kMaxparticles];   //[particles_]
-    Int_t           vertices_;
-    Int_t           vertices_status[kMaxvertices];   //[vertices_]
-    Double_t        vertices_position_m_v1[kMaxvertices];   //[vertices_]
-    Double_t        vertices_position_m_v2[kMaxvertices];   //[vertices_]
-    Double_t        vertices_position_m_v3[kMaxvertices];   //[vertices_]
-    Double_t        vertices_position_m_v4[kMaxvertices];   //[vertices_]
+    Int_t           event_number{0};
+    Int_t           momentum_unit{0};
+    Int_t           length_unit{0};
+    Int_t           particles_{0};
+    Int_t           particles_pid[kMaxparticles]{};   //[particles_]
+    Int_t           particles_status[kMaxparticles]{};   //[particles_]
+    Bool_t          particles_is_mass_set[kMaxparticles]{};   //[particles_]
+    Double_t        particles_mass[kMaxparticles]{};   //[particles_]
+    Double_t        particles_momentum_m_v1[kMaxparticles]{};   //[particles_]
+    Double_t        particles_momentum_m_v2[kMaxparticles]{};   //[particles_]
+    Double_t        particles_momentum_m_v3[kMaxparticles]{};   //[particles_]
+    Double_t        particles_momentum_m_v4[kMaxparticles]{};   //[particles_]
+    Int_t           vertices_{0};
+    Int_t           vertices_status[kMaxvertices]{};   //[vertices_]
+    Double_t        vertices_position_m_v1[kMaxvertices]{};   //[vertices_]
+    Double_t        vertices_position_m_v2[kMaxvertices]{};   //[vertices_]
+    Double_t        vertices_position_m_v3[kMaxvertices]{};   //[vertices_]
+    Double_t        vertices_position_m_v4[kMaxvertices]{};   //[vertices_]
     vector<double>  weights;
-    Double_t        event_pos_m_v1;
-    Double_t        event_pos_m_v2;
-    Double_t        event_pos_m_v3;
-    Double_t        event_pos_m_v4;
+    Double_t        event_pos_m_v1{0.0};
+    Double_t        event_pos_m_v2{0.0};
+    Double_t        event_pos_m_v3{0.0};
+    Double_t        event_pos_m_v4{0.0};
     vector<int>     links1;
     vector<int>     links2;
     vector<int>     attribute_id;
@@ -54,34 +54,34 @@ public :
     vector<string>  attribute_string;
 
     // List of branches
-    TBranch        *b_hepmc3_event_event_number;   //!
-    TBranch        *b_hepmc3_event_momentum_unit;   //!
-    TBranch        *b_hepmc3_event_length_unit;   //!
-    TBranch        *b_hepmc3_event_particles_;   //!
-    TBranch        *b_particles_pid;   //!
-    TBranch        *b_particles_status;   //!
-    TBranch        *b_particles_is_mass_set;   //!
-    TBranch        *b_particles_mass;   //!
-    TBranch        *b_particles_momentum_m_v1;   //!
-    TBranch        *b_particles_momentum_m_v2;   //!
-    TBranch        *b_particles_momentum_m_v3;   //!
-    TBranch        *b_particles_momentum_m_v4;   //!
-    TBranch        *b_hepmc3_event_vertices_;   //!
-    TBranch        *b_vertices_status;   //!
-    TBranch        *b_vertices_position_m_v1;   //!
-    TBranch        *b_vertices_position_m_v2;   //!
-    TBranch        *b_vertices_position_m_v3;   //!
-    TBranch        *b_vertices_position_m_v4;   //!
-    TBranch        *b_hepmc3_event_weights;   //!
-    TBranch        *b_hepmc3_event_event_pos_m_v1;   //!
-    TBranch        *b_hepmc3_event_event_pos_m_v2;   //!
-    TBranch        *b_hepmc3_event_event_pos_m_v3;   //!
-    TBranch        *b_hepmc3_event_event_pos_m_v4;   //!
-    TBranch        *b_hepmc3_event_links1;   //!
-    TBranch        *b_hepmc3_event_links2;   //!
-    TBranch        *b_hepmc3_event_attribute_id;   //!
-    TBranch        *b_hepmc3_event_attribute_name;   //!
-    TBranch        *b_hepmc3_event_attribute_string;   //!
+    TBranch        *b_hepmc3_event_event_number = nullptr;   //!
+    TBranch        *b_hepmc3_event_momentum_unit = nullptr;   //!
+    TBranch        *b_hepmc3_event_length_unit = nullptr;   //!
+    TBranch        *b_hepmc3_event_particles_ = nullptr;   //!
+    TBranch        *b_particles_pid = nullptr;   //!
+    TBranch        *b_particles_status = nullptr;   //!
+    TBranch        *b_particles_is_mass_set = nullptr;   //!
+    TBranch        *b_particles_mass = nullptr;   //!
+    TBranch        *b_particles_momentum_m_v1 = nullptr;   //!
+    TBranch        *b_particles_momentum_m_v2 = nullptr;   //!
+    TBranch        *b_particles_momentum_m_v3 = nullptr;   //!
+    TBranch        *b_particles_momentum_m_v4 = nullptr;   //!
+    TBranch        *b_hepmc3_event_vertices_ = nullptr;   //!
+    TBranch        *b_vertices_status = nullptr;   //!
+    TBranch        *b_vertices_position_m_v1 = nullptr;   //!
+    TBranch        *b_vertices_position_m_v2 = nullptr;   //!
+    TBranch        *b_vertices_position_m_v3 = nullptr;   //!
+    TBranch        *b_vertices_position_m_v4 = nullptr;   //!
+    TBranch        *b_hepmc3_event_weights = nullptr;   //!
+    TBranch        *b_hepmc3_event_event_pos_m_v1 = nullptr;   //!
+    TBranch        *b_hepmc3_event_event_pos_m_v2 = nullptr;   //!
+    TBranch        *b_hepmc3_event_event_pos_m_v3 = nullptr;   //!
+    TBranch        *b_hepmc3_event_event_pos_m_v4 = nullptr;   //!
+    TBranch        *b_hepmc3_event_links1 = nullptr;   //!
+    TBranch        *b_hepmc3_event_links2 = nullptr;   //!
+    TBranch        *b_hepmc3_event_attribute_id = nullptr;   //!
+    TBranch        *b_hepmc3_event_attribute_name = nullptr;   //!
+    TBranch        *b_hepmc3_event_attribute_string = nullptr;   //!
 
 
     void Init(TChain *tree)
@@ -119,15 +119,15 @@ public :
         fChain->SetBranchAddress("attribute_name", &attribute_name, &b_hepmc3_event_attribute_name);
         fChain->SetBranchAddress("attribute_string", &attribute_string, &b_hepmc3_event_attribute_string);
 
-        fChain->SetBranchStatus("*",0);
-        fChain->SetBranchStatus("particles",1);
-        fChain->SetBranchStatus("particles.pid",1);
-        fChain->SetBranchStatus("particles.status",1);
-        fChain->SetBranchStatus("particles.momentum.m_v1",1);
-        fChain->SetBranchStatus("particles.momentum.m_v2",1);
+        fChain->SetBranchStatus("*", kFALSE);
+        fChain->SetBranchStatus("particles", kTRUE);
+        fChain->SetBranchStatus("particles.pid", kTRUE);
+        fChain->SetBranchStatus("particles.status", kTRUE);
+        fChain->SetBranchStatus("particles.momentum.m_v1", kTRUE);
+        fChain->SetBranchStatus("particles.momentum.m_v2", kTRUE);
 
     }
-    SomeAnalysis(const std::string& file)
+    explicit SomeAnalysis(const std::string& file)
     {
         TChain* TempChain= new TChain("hepmc3_tree");
         TempChain->Add(file.c_str());
@@ -163,7 +163,7 @@ int main()
             printf("End of file reached. Exit.\n");
             break;
         }
-        for (ConstGenParticlePtr p: evt.particles()) {
+        for (const auto& p: evt.particles()) {
             if ( std::abs(p->status()) == 1 && (std::abs(p->pdg_id()) == 211||std::abs(p->pdg_id()) == 11) )
             {   H2.Fill( p->momentum().perp());
             }

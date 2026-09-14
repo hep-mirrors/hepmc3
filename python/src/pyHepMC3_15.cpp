@@ -21,8 +21,8 @@
 
 #ifndef BINDER_PYBIND11_TYPE_CASTER
 	#define BINDER_PYBIND11_TYPE_CASTER
-	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>)
-	PYBIND11_DECLARE_HOLDER_TYPE(T, T*)
+	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>, false)
+	PYBIND11_DECLARE_HOLDER_TYPE(T, T*, false)
 	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>)
 #endif
 
@@ -64,6 +64,7 @@ void bind_pyHepMC3_15(std::function< pybind11::module &(std::string const &names
 		cl.def( pybind11::init<const struct LHEF::XMLTag &, int, class std::vector<struct LHEF::WeightInfo> &>(), pybind11::arg("tag"), pybind11::arg("groupIndex"), pybind11::arg("wiv") );
 
 		cl.def( pybind11::init( [](LHEF::WeightGroup const &o){ return new LHEF::WeightGroup(o); } ) );
+		cl.def_readwrite("name", &LHEF::WeightGroup::name);
 		cl.def_readwrite("type", &LHEF::WeightGroup::type);
 		cl.def_readwrite("combine", &LHEF::WeightGroup::combine);
 		cl.def("assign", (struct LHEF::WeightGroup & (LHEF::WeightGroup::*)(const struct LHEF::WeightGroup &)) &LHEF::WeightGroup::operator=, "C++: LHEF::WeightGroup::operator=(const struct LHEF::WeightGroup &) --> struct LHEF::WeightGroup &", pybind11::return_value_policy::automatic, pybind11::arg(""));
@@ -195,7 +196,7 @@ void bind_pyHepMC3_15(std::function< pybind11::module &(std::string const &names
 		cl.def("clear", (void (LHEF::HEPRUP::*)()) &LHEF::HEPRUP::clear, "Clear all information.\n\nC++: LHEF::HEPRUP::clear() --> void");
 		cl.def("resize", (void (LHEF::HEPRUP::*)(int)) &LHEF::HEPRUP::resize, "Set the NPRUP variable, corresponding to the number of\n sub-processes, to  and resize all relevant vectors\n accordingly.\n\nC++: LHEF::HEPRUP::resize(int) --> void", pybind11::arg("nrup"));
 		cl.def("resize", (void (LHEF::HEPRUP::*)()) &LHEF::HEPRUP::resize, "Assuming the NPRUP variable, corresponding to the number of\n sub-processes, is correctly set, resize the relevant vectors\n accordingly.\n\nC++: LHEF::HEPRUP::resize() --> void");
-		cl.def("weightIndex", (int (LHEF::HEPRUP::*)(std::string) const) &LHEF::HEPRUP::weightIndex, "the index of the weight with the given \n   \n\nC++: LHEF::HEPRUP::weightIndex(std::string) const --> int", pybind11::arg("name"));
+		cl.def("weightIndex", (int (LHEF::HEPRUP::*)(const std::string &) const) &LHEF::HEPRUP::weightIndex, "the index of the weight with the given \n   \n\nC++: LHEF::HEPRUP::weightIndex(const std::string &) const --> int", pybind11::arg("name"));
 		cl.def("nWeights", (int (LHEF::HEPRUP::*)() const) &LHEF::HEPRUP::nWeights, "the number of weights (including the nominial one).\n\nC++: LHEF::HEPRUP::nWeights() const --> int");
 		cl.def("getXSecInfo", [](LHEF::HEPRUP &o) -> LHEF::XSecInfo & { return o.getXSecInfo(); }, "", pybind11::return_value_policy::automatic);
 		cl.def("getXSecInfo", (struct LHEF::XSecInfo & (LHEF::HEPRUP::*)(std::string)) &LHEF::HEPRUP::getXSecInfo, "the XSecInfo object corresponding to the named weight \n If no such object exists, it will be created.\n\nC++: LHEF::HEPRUP::getXSecInfo(std::string) --> struct LHEF::XSecInfo &", pybind11::return_value_policy::automatic, pybind11::arg("weightname"));
@@ -249,12 +250,12 @@ void bind_pyHepMC3_15(std::function< pybind11::module &(std::string const &names
 		cl.def("resize", (void (LHEF::HEPEUP::*)(int)) &LHEF::HEPEUP::resize, "Set the NUP variable, corresponding to the number of particles in\n the current event, to  and resize all relevant vectors\n accordingly.\n\nC++: LHEF::HEPEUP::resize(int) --> void", pybind11::arg("nup"));
 		cl.def("totalWeight", [](LHEF::HEPEUP const &o) -> double { return o.totalWeight(); }, "");
 		cl.def("totalWeight", (double (LHEF::HEPEUP::*)(int) const) &LHEF::HEPEUP::totalWeight, "Return the total weight for this event (including all sub\n evenets) for the given index.\n\nC++: LHEF::HEPEUP::totalWeight(int) const --> double", pybind11::arg("i"));
-		cl.def("totalWeight", (double (LHEF::HEPEUP::*)(std::string) const) &LHEF::HEPEUP::totalWeight, "Return the total weight for this event (including all sub\n evenets) for the given weight name.\n\nC++: LHEF::HEPEUP::totalWeight(std::string) const --> double", pybind11::arg("name"));
+		cl.def("totalWeight", (double (LHEF::HEPEUP::*)(const std::string &) const) &LHEF::HEPEUP::totalWeight, "Return the total weight for this event (including all sub\n evenets) for the given weight name.\n\nC++: LHEF::HEPEUP::totalWeight(const std::string &) const --> double", pybind11::arg("name"));
 		cl.def("weight", [](LHEF::HEPEUP const &o) -> double { return o.weight(); }, "");
 		cl.def("weight", (double (LHEF::HEPEUP::*)(int) const) &LHEF::HEPEUP::weight, "Return the weight for the given index.\n\nC++: LHEF::HEPEUP::weight(int) const --> double", pybind11::arg("i"));
-		cl.def("weight", (double (LHEF::HEPEUP::*)(std::string) const) &LHEF::HEPEUP::weight, "Return the weight for the given weight name.\n\nC++: LHEF::HEPEUP::weight(std::string) const --> double", pybind11::arg("name"));
+		cl.def("weight", (double (LHEF::HEPEUP::*)(const std::string &) const) &LHEF::HEPEUP::weight, "Return the weight for the given weight name.\n\nC++: LHEF::HEPEUP::weight(const std::string &) const --> double", pybind11::arg("name"));
 		cl.def("setWeight", (void (LHEF::HEPEUP::*)(int, double)) &LHEF::HEPEUP::setWeight, "Set the weight with the given index.\n\nC++: LHEF::HEPEUP::setWeight(int, double) --> void", pybind11::arg("i"), pybind11::arg("w"));
-		cl.def("setWeight", (bool (LHEF::HEPEUP::*)(std::string, double)) &LHEF::HEPEUP::setWeight, "Set the weight with the given name.\n\nC++: LHEF::HEPEUP::setWeight(std::string, double) --> bool", pybind11::arg("name"), pybind11::arg("w"));
+		cl.def("setWeight", (bool (LHEF::HEPEUP::*)(const std::string &, double)) &LHEF::HEPEUP::setWeight, "Set the weight with the given name.\n\nC++: LHEF::HEPEUP::setWeight(const std::string &, double) --> bool", pybind11::arg("name"), pybind11::arg("w"));
 		cl.def("resize", (void (LHEF::HEPEUP::*)()) &LHEF::HEPEUP::resize, "Assuming the NUP variable, corresponding to the number of\n particles in the current event, is correctly set, resize the\n relevant vectors accordingly.\n\nC++: LHEF::HEPEUP::resize() --> void");
 		cl.def("setWeightInfo", (bool (LHEF::HEPEUP::*)(unsigned int)) &LHEF::HEPEUP::setWeightInfo, "Setup the current event to use weight i. If zero, the default\n weight will be used.\n\nC++: LHEF::HEPEUP::setWeightInfo(unsigned int) --> bool", pybind11::arg("i"));
 		cl.def("setSubEvent", (bool (LHEF::HEPEUP::*)(unsigned int)) &LHEF::HEPEUP::setSubEvent, "Setup the current event to use sub event i. If zero, no sub event\n will be chsen.\n\nC++: LHEF::HEPEUP::setSubEvent(unsigned int) --> bool", pybind11::arg("i"));

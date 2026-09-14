@@ -23,8 +23,16 @@ namespace HepMC3 {
 /** @brief Macro for printing error messages */
 #define HEPMC3_ERROR(MESSAGE)   if ( Setup::print_errors() )   { std::cerr << "ERROR::" << MESSAGE << std::endl; }
 
+/** @brief Macro for printing error messages */
+#define HEPMC3_ERROR_LEVEL(LEVEL,MESSAGE)   if ( Setup::errors_level()>=(LEVEL) && Setup::print_errors() )   { std::cerr << "ERROR::" << MESSAGE << std::endl; }
+
+
 /** @brief Macro for printing HEPMC3_HEPMC3_WARNING messages */
 #define HEPMC3_WARNING(MESSAGE) if ( Setup::print_warnings() ) { std::cout << "WARNING::" << MESSAGE << std::endl; }
+
+/** @brief Macro for printing HEPMC3_HEPMC3_WARNING messages */
+#define HEPMC3_WARNING_LEVEL(LEVEL,MESSAGE) if ( Setup::warnings_level()>=(LEVEL) && Setup::print_warnings() ) { std::cout << "WARNING::" << MESSAGE << std::endl; }
+
 
 // Debug messages and code that will not go to the release version
 #ifndef HEPMC3_RELEASE_VERSION

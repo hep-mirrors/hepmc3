@@ -46,9 +46,9 @@ int main()
         {
             std::vector<std::thread> threads;
 
-            int j1=-((long)thr_evts[i].at(e).vertices().size());
+            int j1 = -static_cast<long>(thr_evts[i].at(e).vertices().size());
             int j2=thr_evts[i].at(e).particles().size();
-            int d=((long)(j2)-(long)(j1))/NmaxThreads;
+            int d = (static_cast<long>(j2) - static_cast<long>(j1))/NmaxThreads;
             std::vector<int> ids;
             ids.push_back(0);
             for (int j=j1; j<j2; j+=d) {
@@ -60,7 +60,7 @@ int main()
             has to be wrapped (e.g. with std::ref or std::cref).
             */
             for (size_t j=0; j<ids.size(); j++) {
-                threads.emplace_back(std::thread(attribute_function1,std::cref(thr_evts[i].at(e)),ids[j]));
+                threads.emplace_back(attribute_function1, std::cref(thr_evts[i].at(e)), ids[j]);
             }
             for (auto& th : threads) {th.join();}
             threads.clear();

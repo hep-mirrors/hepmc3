@@ -23,19 +23,14 @@ namespace HepMC3
 
 WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, std::shared_ptr<GenRunInfo> run)
     : m_file(filename),
-      m_stream(&m_file),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144),
-      m_particle_counter(0)
+      m_stream(&m_file)
 {
-    HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
+    HEPMC3_WARNING_LEVEL(900,"WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);
     if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
     if ( !m_file.is_open() )
     {
-        HEPMC3_ERROR("WriterAsciiHepMC2: could not open output file: " << filename )
+        HEPMC3_ERROR_LEVEL(100,"WriterAsciiHepMC2: could not open output file: " << filename )
     }
     else
     {
@@ -46,14 +41,9 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(const std::string &filename, std::shared_pt
 }
 
 WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, std::shared_ptr<GenRunInfo> run)
-    : m_stream(&stream),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144),
-      m_particle_counter(0)
+    : m_stream(&stream)
 {
-    HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
+    HEPMC3_WARNING_LEVEL(900,"WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);
     if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
     const std::string header = "HepMC::Version " + version() + "\nHepMC::IO_GenEvent-START_EVENT_LISTING\n";
@@ -63,14 +53,9 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream &stream, std::shared_ptr<GenRu
 
 WriterAsciiHepMC2::WriterAsciiHepMC2(std::shared_ptr<std::ostream> s_stream, std::shared_ptr<GenRunInfo> run)
     : m_shared_stream(s_stream),
-      m_stream(s_stream.get()),
-      m_precision(16),
-      m_buffer(nullptr),
-      m_cursor(nullptr),
-      m_buffer_size(262144),
-      m_particle_counter(0)
+      m_stream(s_stream.get())
 {
-    HEPMC3_WARNING("WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
+    HEPMC3_WARNING_LEVEL(900,"WriterAsciiHepMC2::WriterAsciiHepMC2: HepMC2 IO_GenEvent format is outdated. Please use HepMC3 Asciiv3 format instead.")
     set_run_info(run);
     if ( !run_info() ) set_run_info(std::make_shared<GenRunInfo>());
     const std::string header = "HepMC::Version " + version() + "\nHepMC::IO_GenEvent-START_EVENT_LISTING\n";
@@ -82,7 +67,7 @@ WriterAsciiHepMC2::WriterAsciiHepMC2(std::shared_ptr<std::ostream> s_stream, std
 WriterAsciiHepMC2::~WriterAsciiHepMC2()
 {
     close();
-    if ( m_buffer ) delete[] m_buffer;
+    delete[] m_buffer;
 }
 
 
@@ -123,7 +108,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
         m_random_states.reserve(100);
         for (int i = 0; i < 100; i++)
         {
-            std::shared_ptr<LongAttribute> rs = evt.attribute<LongAttribute>("random_states"+std::to_string((long long unsigned int)i));
+            std::shared_ptr<LongAttribute> rs = evt.attribute<LongAttribute>("random_states"+std::to_string(static_cast<long long unsigned int>(i)));
             if (!rs) break;
             m_random_states.emplace_back(rs->value());
         }
@@ -163,7 +148,7 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     m_cursor += sprintf(m_cursor, " %zu", m_random_states.size());
     for (size_t q = 0; q < m_random_states.size(); q++)
     {
-        m_cursor += sprintf(m_cursor, " %i", (int)q);
+        m_cursor += sprintf(m_cursor, " %i", static_cast<int> (q));
         flush();
     }
     flush();
@@ -222,10 +207,10 @@ void WriterAsciiHepMC2::write_event(const GenEvent &evt)
     if (pi) {
         std::string st;
         // We use it here because the HepMC3 GenPdfInfo has the same format as in HepMC2 IO_GenEvent and get error handeling for free.
-        bool status = pi->to_string(st);
+        const bool status = pi->to_string(st);
         if ( !status )
         {
-            HEPMC3_WARNING("WriterAsciiHepMC2::write_event: problem serializing GenPdfInfo attribute")
+            HEPMC3_WARNING_LEVEL(300,"WriterAsciiHepMC2::write_event: problem serializing GenPdfInfo attribute")
         } else {
             m_cursor += sprintf(m_cursor, "F ");
             flush();
@@ -269,13 +254,13 @@ void WriterAsciiHepMC2::allocate_buffer()
         } catch (const std::bad_alloc& e) {
             delete[] m_buffer;
             m_buffer_size /= 2;
-            HEPMC3_WARNING("WriterAsciiHepMC2::allocate_buffer:" << e.what() << " buffer size too large. Dividing by 2. New size: " << m_buffer_size)
+            HEPMC3_WARNING_LEVEL(200,"WriterAsciiHepMC2::allocate_buffer:" << e.what() << " buffer size too large. Dividing by 2. New size: " << m_buffer_size)
         }
     }
 
     if ( !m_buffer )
     {
-        HEPMC3_ERROR("WriterAsciiHepMC2::allocate_buffer: could not allocate buffer!")
+        HEPMC3_ERROR_LEVEL(200,"WriterAsciiHepMC2::allocate_buffer: could not allocate buffer!")
         return;
     }
 
@@ -283,7 +268,7 @@ void WriterAsciiHepMC2::allocate_buffer()
 }
 
 
-std::string WriterAsciiHepMC2::escape(const std::string& s) const
+std::string WriterAsciiHepMC2::escape(const std::string& s)
 {
     std::string ret;
     ret.reserve(s.length()*2);
@@ -314,7 +299,7 @@ void WriterAsciiHepMC2::write_vertex(const ConstGenVertexPtr& v)
         weights.reserve(100);
         for (int i = 0; i < 100; i++)
         {
-            std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string((long long unsigned int)i));
+            std::shared_ptr<DoubleAttribute> rs = v->attribute<DoubleAttribute>("weight"+std::to_string(static_cast<long long unsigned int>(i)));
             if (!rs) break;
             weights.emplace_back(rs->value());
         }
@@ -356,7 +341,7 @@ inline void WriterAsciiHepMC2::flush()
     // we will not allow precision larger than 24 anyway
     if ( m_buffer + m_buffer_size < m_cursor + 512 )
     {
-        std::ptrdiff_t length = m_cursor - m_buffer;
+        const std::ptrdiff_t length = m_cursor - m_buffer;
         m_stream->write(m_buffer, length);
         m_cursor = m_buffer;
     }
@@ -365,7 +350,7 @@ inline void WriterAsciiHepMC2::flush()
 
 inline void WriterAsciiHepMC2::forced_flush()
 {
-    std::ptrdiff_t length = m_cursor - m_buffer;
+    const std::ptrdiff_t length = m_cursor - m_buffer;
     m_stream->write(m_buffer, length);
     m_cursor = m_buffer;
 }
@@ -376,7 +361,7 @@ void WriterAsciiHepMC2::write_run_info() {}
 void WriterAsciiHepMC2::write_particle(const ConstGenParticlePtr& p, int /*second_field*/)
 {
     flush();
-    m_cursor += sprintf(m_cursor, "P %i", int(10001+m_particle_counter));
+    m_cursor += sprintf(m_cursor, "P %i", static_cast<int>(10001 + m_particle_counter));
     m_particle_counter++;
     m_cursor += sprintf(m_cursor, " %i", p->pid() );
     m_cursor += sprintf(m_cursor, m_float_printf_specifier.c_str(), p->momentum().px() );
@@ -446,14 +431,16 @@ inline void WriterAsciiHepMC2::write_string(const std::string &str)
 
 void WriterAsciiHepMC2::close()
 {
+    if (!m_stream) return;
     auto* ofs = dynamic_cast<std::ofstream*>(m_stream);
     if (ofs && !ofs->is_open()) return;
     forced_flush();
     const std::string footer("HepMC::IO_GenEvent-END_EVENT_LISTING\n\n");
     if (m_stream) m_stream->write(footer.data(),footer.length());
+    m_stream = nullptr;
     if (ofs) ofs->close();
 }
-bool WriterAsciiHepMC2::failed() { return (bool)m_file.rdstate(); }
+bool WriterAsciiHepMC2::failed() { return static_cast<bool>(m_file.rdstate()); }
 
 void WriterAsciiHepMC2::set_precision(const int& prec ) {
     if (prec < 2 || prec > 24) return;

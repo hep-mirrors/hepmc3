@@ -14,7 +14,7 @@
 #include "HepMC3/Data/GenVertexData.h"
 #include "HepMC3/FourVector.h"
 
-#ifdef HEPMC3_PROTOBUFIO
+#if defined(HEPMC3_PROTOBUFIO) || defined(DOXYGEN)
 namespace HepMC3_pb {
 class GenEventData_GenVertexData;
 }
@@ -41,7 +41,7 @@ public:
     /// Constructor based on vertex data
     GenVertex( const GenVertexData& data );
 
-#ifdef HEPMC3_PROTOBUFIO
+#if defined(HEPMC3_PROTOBUFIO) || defined(DOXYGEN)
     /// Constructor based on protobuf messages
     GenVertex( HepMC3_pb::GenEventData_GenVertexData const &data );
 #endif
@@ -130,21 +130,6 @@ public:
 
     /// @brief Get attribute of any type as string
     std::string attribute_as_string(const std::string& name) const;
-
-    /// @name Deprecated functionality
-    /// @{
-
-
-    /// Add incoming particle by raw pointer
-    /// @deprecated Use GenVertex::add_particle_in( const GenParticlePtr &p ) instead
-    void add_particle_in ( GenParticle *p ) { add_particle_in( GenParticlePtr(p) ); }
-
-    /// Add outgoing particle by raw pointer
-    /// @deprecated Use GenVertex::add_particle_out( const GenParticlePtr &p ) instead
-    void add_particle_out( GenParticle *p ) { add_particle_out( GenParticlePtr(p) ); }
-
-
-    /// @}
 
 
 private:

@@ -68,7 +68,7 @@ int main(int /*argc*/, char ** /*argv*/) {
         // information outside the LHEF <event> tags, which we may want to
         // add.
         std::shared_ptr<HEPEUPAttribute> hepe = std::make_shared<HEPEUPAttribute>();
-        if ( reader.outsideBlock.length() ){
+        if ( !reader.outsideBlock.empty() ){
             hepe->tags = LHEF:: XMLTag::findXMLTags(reader.outsideBlock);
 		}
         hepe->hepeup = reader.hepeup;
@@ -98,19 +98,19 @@ int main(int /*argc*/, char ** /*argv*/) {
             if (vertices.find(vertex_index)==vertices.end()) {vertices[vertex_index]=std::make_shared<GenVertex>();}
             vertices[vertex_index]->add_particle_out(particles.back());
         }
-        for ( auto v: vertices )
+        for ( auto& v: vertices )
         {
             std::pair<int,int> vertex_index=v.first;
             GenVertexPtr          vertex=v.second;
-            for (int i=vertex_index.first-1; i<vertex_index.second; i++) {if (i>=0&&i<(int)particles.size()) vertex->add_particle_in(particles[i]);}
+            for (int i=vertex_index.first-1; i<vertex_index.second; i++) {if (i >= 0 && i < static_cast<int>(particles.size())) vertex->add_particle_in(particles[i]);}
         }
-        for ( auto v: vertices ) {ev.add_vertex(v.second);}
+        for ( auto& v: vertices ) {ev.add_vertex(v.second);}
 
         // And we also want to add the weights.
         std::vector<double> wts;
         for ( int i = 0, N = hepe->hepeup.weights.size(); i < N; ++i ){
             wts.push_back(hepe->hepeup.weights[i].first);
-		}
+        }
         ev.weights() = wts;
 
         // Let's see if we can associate p1 and p2.
@@ -163,7 +163,7 @@ int main(int /*argc*/, char ** /*argv*/) {
             // This is just a test that we can access other attributes
             // included in the GenRunInfo.
             hepr->heprup.NPRUP =
-                int(input.run_info()->attribute<FloatAttribute>("NPRUP")->value());
+                static_cast<int>(input.run_info()->attribute<FloatAttribute>("NPRUP")->value());
 
             // Then we write out the HEPRUP object.
             writer.heprup = hepr->heprup;

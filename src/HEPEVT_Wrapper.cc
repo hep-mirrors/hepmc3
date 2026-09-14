@@ -93,6 +93,7 @@ void calculate_longest_path_to_top(ConstGenVertexPtr v, std::map<ConstGenVertexP
 }
 
 /** @brief pointer to the common block */
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 HEPMC3_EXPORT_API struct HEPEVT*  hepevtptr = nullptr;
 HEPMC3_EXPORT_API std::shared_ptr<struct HEPEVT_Pointers<double> >  HEPEVT_Wrapper_Runtime_Static::m_hepevtptr = nullptr;
 HEPMC3_EXPORT_API int HEPEVT_Wrapper_Runtime_Static::m_max_particles = 0;
@@ -101,21 +102,21 @@ HEPMC3_EXPORT_API int HEPEVT_Wrapper_Runtime_Static::m_max_particles = 0;
 void HEPEVT_Wrapper_Runtime::set_hepevt_address(char *c) {
     m_hepevtptr = std::make_shared<struct HEPEVT_Pointers<double> >();
     char* x = c;
-    m_hepevtptr->nevhep = (int*)x;
+    m_hepevtptr->nevhep = reinterpret_cast<int*> (x);
     x += sizeof(int);
-    m_hepevtptr->nhep = (int*)(x);
+    m_hepevtptr->nhep = reinterpret_cast<int*> (x);
     x += sizeof(int);
-    m_hepevtptr->isthep = (int*)(x);
+    m_hepevtptr->isthep = reinterpret_cast<int*> (x);
     x += sizeof(int)*m_max_particles;
-    m_hepevtptr->idhep = (int*)(x);
+    m_hepevtptr->idhep = reinterpret_cast<int*> (x);
     x += sizeof(int)*m_max_particles;
-    m_hepevtptr->jmohep = (int*)(x);
+    m_hepevtptr->jmohep = reinterpret_cast<int*> (x);
     x += sizeof(int)*m_max_particles*2;
-    m_hepevtptr->jdahep = (int*)(x);
+    m_hepevtptr->jdahep = reinterpret_cast<int*> (x);
     x += sizeof(int)*m_max_particles*2;
-    m_hepevtptr->phep = (double*)(x);
+    m_hepevtptr->phep = reinterpret_cast<double*> (x);
     x += sizeof(double)*m_max_particles*5;
-    m_hepevtptr->vhep = (double*)(x);
+    m_hepevtptr->vhep = reinterpret_cast<double*> (x);
 }
 
 
@@ -132,7 +133,7 @@ void HEPEVT_Wrapper_Runtime::print_hepevt( std::ostream& ostr ) const
 
 void HEPEVT_Wrapper_Runtime::print_hepevt_particle( int index, std::ostream& ostr ) const
 {
-    std::array<char, 255> buf;//Note: the format is fixed, so no reason for complicated treatment
+    std::array<char, 255> buf{};//Note: the format is fixed, so no reason for complicated treatment
 
     snprintf(buf.data(), buf.size(), "%5i %6i%4i - %4i  %4i - %4i %8.2f %8.2f %8.2f %8.2f %8.2f",
              index, m_hepevtptr->idhep[index-1],

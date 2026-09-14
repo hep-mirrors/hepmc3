@@ -15,7 +15,7 @@ int main()
     GenEvent p_event(Units::GEV, Units::MM);
     for(int i=0; i<10; i++)
     {
-        FourVector vector(1.0,1.0,1.0,1.0);
+        const FourVector vector(1.0,1.0,1.0,1.0);
         GenVertexPtr vertex=std::make_shared<GenVertex>();
         vertex->set_position(vector);
         for(int j=0; j<3; j++)

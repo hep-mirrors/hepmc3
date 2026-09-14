@@ -70,29 +70,29 @@ int main()
     v1->add_particle_in( p1 );
     p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
     p1->add_attribute("flow1", std::make_shared<IntAttribute>(231));
-    p1->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p1->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p1->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI));
+    p1->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI*2));
 
     GenVertexPtr v2 = std::make_shared<GenVertex>();
     evt.add_vertex( v2 );
     GenParticlePtr p2 = std::make_shared<GenParticle>(  FourVector(0,0,-7000,7000),2212, 3 );
     v2->add_particle_in( p2 );
     p2->add_attribute("flow1", std::make_shared<IntAttribute>(243));
-    p2->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p2->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p2->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI));
+    p2->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI*2));
     //
     // create the outgoing particles of v1 and v2
     GenParticlePtr p3 = std::make_shared<GenParticle>( FourVector(.750,-1.569,32.191,32.238),1, 3 );
     v1->add_particle_out( p3 );
     p3->add_attribute("flow1", std::make_shared<IntAttribute>(231));
-    p3->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p3->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p3->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI));
+    p3->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI*2));
 
     GenParticlePtr p4 = std::make_shared<GenParticle>( FourVector(-3.047,-19.,-54.629,57.920),-2, 3 );
     v2->add_particle_out( p4 );
     p4->add_attribute("flow1", std::make_shared<IntAttribute>(243));
-    p4->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p4->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p4->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI));
+    p4->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI*2));
     //
     // create v3
     GenVertexPtr v3 = std::make_shared<GenVertex>();
@@ -102,14 +102,14 @@ int main()
     GenParticlePtr p6 = std::make_shared<GenParticle>(  FourVector(-3.813,0.113,-1.833,4.233 ),22, 1 );
     evt.add_particle( p6 );
     p6->add_attribute("flow1", std::make_shared<IntAttribute>(231));
-    p6->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p6->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p6->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI));
+    p6->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI*2));
     v3->add_particle_out( p6 );
     GenParticlePtr p5 = std::make_shared<GenParticle>( FourVector(1.517,-20.68,-20.605,85.925),-24, 3 );
     v3->add_particle_out( p5 );
     p5->add_attribute("flow1", std::make_shared<IntAttribute>(243));
-    p5->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI));
-    p5->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/double(RAND_MAX)*M_PI*2));
+    p5->add_attribute("theta", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI));
+    p5->add_attribute("phi", std::make_shared<DoubleAttribute>(std::rand()/static_cast<double>(RAND_MAX)*M_PI*2));
 
     //
     // create v4
@@ -187,6 +187,6 @@ int main()
         Nxin2++;
     }
     xin2.close();
-    int ret = 10*std::abs(Nxin1-1)+std::abs(Nxin2-1);
+    const int ret = 10 * std::abs(Nxin1 - 1) + std::abs(Nxin2 - 1);
     return ret;
 }

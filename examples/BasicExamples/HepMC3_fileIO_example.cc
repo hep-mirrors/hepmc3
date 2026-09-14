@@ -59,19 +59,19 @@ int main(int argc, char **argv) {
                 std::cout << " Has GenCrossSection:   ";
                 Print::line(cs);
             }
-            else std::cout << " No GenCrossSection " << std::endl;
+            else {std::cout << " No GenCrossSection " << std::endl;}
 
             if(pi) {
                 std::cout << " Has GenPdfInfo:        ";
                 Print::line(pi);
             }
-            else std::cout << " No GenPdfInfo " << std::endl;
+            else {std::cout << " No GenPdfInfo " << std::endl;}
 
             if(hi) {
                 std::cout << " Has GenHeavyIon:       ";
                 Print::line(hi);
             }
-            else std::cout << " No GenHeavyIon " << std::endl;
+            else {std::cout << " No GenHeavyIon " << std::endl;}
         }
 
         ++events_parsed;

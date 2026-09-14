@@ -16,7 +16,7 @@ int main()
     while( !inputA.failed() )
     {
         GenEvent evt(Units::GEV,Units::MM);
-        bool read_res =  inputA.read_event(evt);
+        const bool read_res = inputA.read_event(evt);
         if (!read_res && !inputA.failed()) {
             printf("Error reading event from LHE file. Exit.\n");
             return 1;

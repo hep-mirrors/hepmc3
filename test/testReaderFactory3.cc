@@ -80,7 +80,7 @@ void  reader_function(int * result)
 int main()
 {
     unlink("frominputReaderFactory3.hepmc");
-    int  returnValuemkfifo = mkfifo("frominputReaderFactory3.hepmc", 0666);
+    const int  returnValuemkfifo = mkfifo("frominputReaderFactory3.hepmc", 0666);
     if ( returnValuemkfifo == 0 ) {
         printf("FIFO created.\n");
     } else {
@@ -91,7 +91,7 @@ int main()
     std::vector<std::thread> threads;
     threads.reserve(2);
     std::vector<int> results{0,0};
-    std::thread readt(reader_function, &(results[0]));
+    std::thread readt(reader_function, results.data());
     std::thread writet(writer_function, &(results[1]));
     readt.join();
     writet.join();
@@ -101,7 +101,7 @@ int main()
 
     }
 
-    int returnValueunlink = unlink("frominputReaderFactory3.hepmc");
+    const int returnValueunlink = unlink("frominputReaderFactory3.hepmc");
     if (returnValueunlink == 0) {
         printf("FIFO deleted.\n");
     } else {

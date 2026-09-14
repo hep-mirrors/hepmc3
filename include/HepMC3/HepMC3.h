@@ -13,6 +13,41 @@
 
 #include "HepMC3/Version.h"
 
+/**
+ * @defgroup HepMC3 HepMC3
+ * Core HepMC3 classes and utilities.
+ */
+
+/**
+ * @defgroup LHEF LHEF
+ * Support for Les Houches Event File (LHEF) I/O.
+ */
+
+/**
+ * @defgroup attributes Attributes
+ * Support for HepMC3 attribute handling.
+ */
+
+/**
+ * @defgroup IO IO
+ * Input/output classes and utilities.
+ */
+
+/**
+ * @defgroup data Data
+ * Classes used for data interchange and serialization.
+ */
+
+/**
+ * @defgroup searchengine Search Engine
+ * Search engine helper classes.
+ */
+
+/**
+ * @defgroup Examples Examples
+ * Example helper classes and writers.
+ */
+
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"

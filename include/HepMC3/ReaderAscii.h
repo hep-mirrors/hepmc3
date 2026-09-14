@@ -48,12 +48,8 @@ public:
     /// @param[out] evt Event to be filled
     bool read_event(GenEvent& evt)  override;
 
-    /// @todo No-arg version returning GenEvent?
-
     /// @brief Return status of the stream
     bool failed()  override;
-
-    /// @todo Implicit cast to bool = !failed()?
 
     /// @brief Close file stream
     void close()  override;
@@ -61,7 +57,7 @@ public:
 private:
 
     /// @brief Unsecape '\' and '\n' characters in string
-    std::string unescape(const std::string& s);
+    static std::string unescape(const std::string& s);
 
     /// @name Read helpers
     /// @{
@@ -115,7 +111,6 @@ private:
     /// @brief Parse particle
     ///
     /// Helper routine for parsing single particle information
-    /// @param[out] evt Event that will contain parsed particle
     /// @param[in] buf Line of text that needs to be parsed
     bool parse_particle_information(const char *buf);
 
@@ -150,8 +145,8 @@ private:
 private:
 
     std::ifstream m_file; //!< Input file
-    std::shared_ptr<std::istream> m_shared_stream;///< For ctor when reading from temp. stream
-    std::istream* m_stream; ///< For ctor when reading from stream
+    std::shared_ptr<std::istream> m_shared_stream = nullptr;///< For ctor when reading from temp. stream
+    std::istream* m_stream = nullptr; ///< For ctor when reading from stream
     bool m_isstream; ///< toggles usage of m_file or m_stream
 
     /** @brief Temp storage for sets of incoming/outgoing ids for explicit vertices.*/
@@ -162,8 +157,8 @@ private:
     std::vector<int> m_io_implicit_ids;
     /** @brief Temp storage to keep the order of explicit vertices.*/
     std::set<int> m_io_explicit_ids;
-    
-    GenEventData m_data;
+
+    GenEventData m_data; //!< To hold event information.
 };
 
 

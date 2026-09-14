@@ -1,11 +1,34 @@
-#Beacause of LZMA targets
+#Because of LZMA targets
 if (HEPMC3_TEST_LZMA)
-  cmake_minimum_required(VERSION 3.14.0 FATAL_ERROR)
+  if(${CMAKE_VERSION} VERSION_LESS "3.14")
+    message(FATAL_ERROR "HepMC3: CMake >= 3.14 is required to use HEPMC3_TEST_LZMA=ON. Found ${CMAKE_VERSION}")
+  endif()
 endif()
 if (HEPMC3_TEST_BZIP2)
-  cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
+  if(${CMAKE_VERSION} VERSION_LESS "3.12")
+    message(FATAL_ERROR "HepMC3: CMake >= 3.12 is required to use HEPMC3_TEST_BZIP2=ON. Found ${CMAKE_VERSION}")
+  endif()
 endif()
 
+macro(hepmc_set_test_environment testname path_prefix)
+  if(WIN32)
+    set(_hepmc_path_sep "\\;")
+  else()
+    set(_hepmc_path_sep ":")
+  endif()
+
+  set(_hepmc_env_path "PATH=${path_prefix}${_hepmc_path_sep}$ENV{PATH}")
+
+  if(WIN32)
+    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${_hepmc_env_path}")
+  elseif(APPLE)
+    set(_hepmc_env_dyld "DYLD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/${_hepmc_path_sep}$ENV{DYLD_LIBRARY_PATH}")
+    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${_hepmc_env_path};${_hepmc_env_dyld}")
+  else()
+    set(_hepmc_env_ld "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/${_hepmc_path_sep}$ENV{LD_LIBRARY_PATH}")
+    set_tests_properties(${testname} PROPERTIES ENVIRONMENT "${_hepmc_env_path};${_hepmc_env_ld}")
+  endif()
+endmacro()
 
 macro( hepmc_test testname )
   message( STATUS "HepMC3 test: building ${testname} for ${testname}" )
@@ -18,13 +41,36 @@ macro( hepmc_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${CMAKE_CURRENT_BINARY_DIR}/${testname} )
-  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}")
+  hepmc_set_test_environment(${testname} "${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/")
   file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   string(REPLACE "test" "" ${testname} name)
   file(GLOB INPUT${name}  "${CMAKE_CURRENT_SOURCE_DIR}/input${name}*" )
   file(COPY ${INPUT${name}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 endmacro( hepmc_test )
+
+macro( hepmc_unix_test testname )
+  message( STATUS "HepMC3 test: building UNIX test ${testname} " )
+  find_file( ${testname}_source ${testname}.cc ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} )
+  ADD_EXECUTABLE(${testname} ${${testname}_source}  ${ARGN} )
+  target_include_directories(${testname} BEFORE
+  PUBLIC  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src )
+  target_link_libraries(${testname} PRIVATE HepMC3::HepMC3 )
+  set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
+  set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
+
+  string(REPLACE "test" "" ${testname} name)
+  file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
+  file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  file(GLOB INPUT${name}  "${CMAKE_CURRENT_SOURCE_DIR}/input${name}*" )
+  file(COPY ${INPUT${name}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  file(GLOB RUN${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/run${testname}*" )
+  file(COPY ${RUN${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  add_test( NAME ${testname} COMMAND sh ${CMAKE_CURRENT_BINARY_DIR}/run${testname}.sh WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+  hepmc_set_test_environment(${testname} "${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/")
+endmacro( hepmc_unix_test )
+
 
 macro( hepmc_root_test testname )
   message( STATUS "HepMC3 test: building ROOT test ${testname} " )
@@ -38,10 +84,7 @@ macro( hepmc_root_test testname )
   set(srcdir ${CMAKE_CURRENT_SOURCE_DIR} )
   set(builddir ${CMAKE_CURRENT_BINARY_DIR} )
   add_test( ${testname} ${testname} )
-  SET_TESTS_PROPERTIES( ${testname} PROPERTIES ENVIRONMENT "PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{PATH}"
-  ENVIRONMENT "LD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{LD_LIBRARY_PATH}"
-  ENVIRONMENT "DYLD_LIBRARY_PATH=${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/;$ENV{DYLD_LIBRARY_PATH}"
-  )
+  hepmc_set_test_environment(${testname} "${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/")
   file(GLOB INPUT${testname}  "${CMAKE_CURRENT_SOURCE_DIR}/input${testname}*" )
   file(COPY ${INPUT${testname}} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
   string(REPLACE "test" "" ${testname} name)
@@ -73,6 +116,16 @@ endmacro( hepmc_protobuf_test )
 
 set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
 cmake_policy(SET CMP0057 NEW)
+
+add_test(
+  NAME package-config-downstream-old-policy
+  COMMAND ${CMAKE_COMMAND}
+    -DHEPMC3_BINARY_DIR=${PROJECT_BINARY_DIR}
+    -DHEPMC3_INSTALL_DATADIR=${CMAKE_INSTALL_DATADIR}
+    -DHEPMC3_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+    -DHEPMC3_TEST_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}/package-config-downstream
+    -DHEPMC3_TEST_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}/package-config-downstream
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/test_package_config_downstream.cmake)
 
 option(HEPMC3_TEST_THREADS   "Use Threads in tests if available" ON)
 option(HEPMC3_TEST_HEPMC2    "Use HepMC2 in tests if available" ON)
@@ -112,7 +165,9 @@ file(COPY ${INPUTFILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 set( HepMC_tests
         testBoost
         testFourVector
+        testGenHeavyIon
         testMass
+        testPrint
         testPrintBug
         testPolarization
         testUnits
@@ -133,13 +188,20 @@ set( HepMC_tests
         testIO15
 #         testIO16
         testIO17
+        testIO30
+        testIO31
         testReaderFactory1
         testSingleVertexHepMC2
         testAttributes
         testHEPEVTWrapper1
         testOrder
         testVertexAttributes
+        testSherpa140Crash
          )
+                 
+set( HepMC_unix_tests
+        testReaderFactory5
+)
 set( HepMC_root_tests
         testIO2
         testIO4
@@ -186,7 +248,7 @@ else()
 endif()
 
 set(compress_tests testIO9)
-if(HEPMC3_ENABLE_PROTOBUFIO)
+if(HEPMC3_ENABLE_PROTOBUFIO AND NOT WIN32)
   LIST(APPEND compress_tests testReaderFactory4)
 endif()
 
@@ -212,9 +274,9 @@ if ("bzip2" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
   endif()
 endif()
 if ("zstd" IN_LIST HEPMC3_TEST_PACKAGES_LIST)
-  #find_package(ZSTD)#FIXME!
-  if(ZSTD_FOUND)
-    message(STATUS "HepMC3 test: Zstd library found.  Zstd tests enabled")
+  find_package(zstd 1.4.0)
+  if(zstd_FOUND)
+    message(STATUS "HepMC3 test: Zstd library version ${zstd_VERSION} found.  Zstd tests enabled")
     list( APPEND HepMC_tests ${compress_tests} )
   endif()
 endif()
@@ -272,13 +334,13 @@ if (WIN32)
        file(COPY ${libbz2dll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
      endif()
    endif()
-   #if ("zstd" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND ZSTD_FOUND)
-     #get_filename_component(b ${ZSTD_LIBRARIES} DIRECTORY)
-     #find_file(zstddll NAME libzstd.dll PATHS ${b} ${b}/../bin/)
-     #if (zstddll)
-       #file(COPY ${zstddll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
-     #endif()
-   #endif()
+   if ("zstd" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND zstd_FOUND)
+     get_filename_component(b ${zstd_LIBRARY} DIRECTORY)
+     find_file(zstddll NAME libzstd.dll PATHS ${b} ${b}/../bin/)
+     if (zstddll)
+       file(COPY ${zstddll} DESTINATION ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
+     endif()
+   endif()
 endif()
 
 foreach ( ctest ${compress_tests} )
@@ -297,12 +359,11 @@ foreach ( ctest ${compress_tests} )
     target_compile_options(${ctest} PUBLIC "-DHEPMC3_BZ2_SUPPORT=1")
     target_link_libraries(${ctest} PRIVATE BZip2::BZip2 )
   endif()
-  #if ("zstd" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND ZSTD_FOUND)
-    #target_compile_options(${ctest} PUBLIC "-DHEPMC3_USE_COMPRESSION")
-    #target_compile_options(${ctest} PUBLIC "-DHEPMC3_ZSTD_SUPPORT=1")
-    #target_link_libraries(${ctest} PRIVATE "${ZSTD_LIBRARIES}" )
-    #target_include_directories(${ctest} PRIVATE "${ZSTD_INCLUDE_DIRS}" )
-  #endif()
+  if ("zstd" IN_LIST HEPMC3_TEST_PACKAGES_LIST AND zstd_FOUND)
+    target_compile_options(${ctest} PUBLIC "-DHEPMC3_USE_COMPRESSION")
+    target_compile_options(${ctest} PUBLIC "-DHEPMC3_ZSTD_SUPPORT=1")
+    target_link_libraries(${ctest} PRIVATE zstd::libzstd_shared )
+  endif()
 endforeach ( ctest ${compress_tests} )
 
 if(HEPMC3_ENABLE_PROTOBUFIO AND "testReaderFactory4" IN_LIST compress_tests)
@@ -317,6 +378,11 @@ if(HEPMC3_ENABLE_ROOTIO AND (NOT WIN32) )
   target_link_libraries(testIO4 PRIVATE ROOT::Hist)
 endif()
 
+if(NOT WIN32)
+  foreach ( test ${HepMC_unix_tests} )
+    hepmc_unix_test( ${test} )
+  endforeach ( test ${HepMC_unix_tests} )
+endif()
 
 set( convert_tests )
 
@@ -371,7 +437,7 @@ if(MEMORYCHECK_COMMAND)
      file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/intelHepMC3.supp" "{\n<HepMC3_at_Linux_with_Intel_1>\nMemcheck:Addr32\nfun:__intel_*\n}\n{\n<HepMC3_at_Linux_with_Intel_2>\nMemcheck:Cond\nfun:*strchr\n}\n"  )
      set( MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --suppressions=${CMAKE_CURRENT_BINARY_DIR}/IntelHepMC3.supp")
   endif()
-elseif()
+else()
   message(STATUS "HepMC3 test: valgrind package not found or disabled.  memory check tests disabled.")
 endif()
 
@@ -404,4 +470,3 @@ if(MEMORYCHECK_COMMAND)
     set_tests_properties(memcheck_${test} PROPERTIES DEPENDS ${test})
   endforeach ( test ${HepMC_memcheck_tests} )
 endif()
-

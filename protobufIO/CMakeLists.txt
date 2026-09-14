@@ -12,7 +12,7 @@ set(HepMC3protobufIO_sources
   src/Readerprotobuf.cc
   src/protobufUtils.cc
   ${PROTO_SRCS})
-
+set_source_files_properties(${PROTO_SRCS} PROPERTIES SKIP_LINTING ON)
 #---Define dynamic library---------------------------------------------------
 add_library(HepMC3protobufIO SHARED ${HepMC3protobufIO_sources})
 add_dependencies(HepMC3protobufIO copy_pb_header)

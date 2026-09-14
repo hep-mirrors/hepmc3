@@ -15,12 +15,12 @@
 PYBIND11_NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 PYBIND11_NAMESPACE_BEGIN(detail)
 
-#if PY_VERSION_HEX >= 0x03030000 && !defined(PYPY_VERSION)
+#if !defined(PYPY_VERSION)
 #    define PYBIND11_BUILTIN_QUALNAME
 #    define PYBIND11_SET_OLDPY_QUALNAME(obj, nameobj)
 #else
-// In pre-3.3 Python, we still set __qualname__ so that we can produce reliable function type
-// signatures; in 3.3+ this macro expands to nothing:
+// In PyPy, we still set __qualname__ so that we can produce reliable function type
+// signatures; in CPython this macro expands to nothing:
 #    define PYBIND11_SET_OLDPY_QUALNAME(obj, nameobj)                                             \
         setattr((PyObject *) obj, "__qualname__", nameobj)
 #endif
@@ -86,16 +86,15 @@ inline PyTypeObject *make_static_property_type() {
     type->tp_descr_get = pybind11_static_get;
     type->tp_descr_set = pybind11_static_set;
 
-    if (PyType_Ready(type) < 0) {
-        pybind11_fail("make_static_property_type(): failure in PyType_Ready()!");
-    }
-
 #    if PY_VERSION_HEX >= 0x030C0000
-    // PRE 3.12 FEATURE FREEZE. PLEASE REVIEW AFTER FREEZE.
     // Since Python-3.12 property-derived types are required to
     // have dynamic attributes (to set `__doc__`)
     enable_dynamic_attributes(heap_type);
 #    endif
+
+    if (PyType_Ready(type) < 0) {
+        pybind11_fail("make_static_property_type(): failure in PyType_Ready()!");
+    }
 
     setattr((PyObject *) type, "__module__", str("pybind11_builtins"));
     PYBIND11_SET_OLDPY_QUALNAME(type, name_obj);
@@ -165,7 +164,6 @@ extern "C" inline int pybind11_meta_setattro(PyObject *obj, PyObject *name, PyOb
     }
 }
 
-#if PY_MAJOR_VERSION >= 3
 /**
  * Python 3's PyInstanceMethod_Type hides itself via its tp_descr_get, which prevents aliasing
  * methods via cls.attr("m2") = cls.attr("m1"): instead the tp_descr_get returns a plain function,
@@ -180,7 +178,6 @@ extern "C" inline PyObject *pybind11_meta_getattro(PyObject *obj, PyObject *name
     }
     return PyType_Type.tp_getattro(obj, name);
 }
-#endif
 
 /// metaclass `__call__` function that is used to create all pybind11 objects.
 extern "C" inline PyObject *pybind11_meta_call(PyObject *type, PyObject *args, PyObject *kwargs) {
@@ -191,12 +188,10 @@ extern "C" inline PyObject *pybind11_meta_call(PyObject *type, PyObject *args, P
         return nullptr;
     }
 
-    // This must be a pybind11 instance
-    auto *instance = reinterpret_cast<detail::instance *>(self);
-
     // Ensure that the base __init__ function(s) were called
-    for (const auto &vh : values_and_holders(instance)) {
-        if (!vh.holder_constructed()) {
+    values_and_holders vhs(self);
+    for (const auto &vh : vhs) {
+        if (!vh.holder_constructed() && !vhs.is_redundant_value_and_holder(vh)) {
             PyErr_Format(PyExc_TypeError,
                          "%.200s.__init__() must be called when overriding __init__",
                          get_fully_qualified_tp_name(vh.type->type).c_str());
@@ -276,9 +271,7 @@ inline PyTypeObject *make_default_metaclass() {
     type->tp_call = pybind11_meta_call;
 
     type->tp_setattro = pybind11_meta_setattro;
-#if PY_MAJOR_VERSION >= 3
     type->tp_getattro = pybind11_meta_getattro;
-#endif
 
     type->tp_dealloc = pybind11_meta_dealloc;
 
@@ -379,7 +372,7 @@ extern "C" inline PyObject *pybind11_object_new(PyTypeObject *type, PyObject *, 
 extern "C" inline int pybind11_object_init(PyObject *self, PyObject *, PyObject *) {
     PyTypeObject *type = Py_TYPE(self);
     std::string msg = get_fully_qualified_tp_name(type) + ": No constructor defined!";
-    PyErr_SetString(PyExc_TypeError, msg.c_str());
+    set_error(PyExc_TypeError, msg.c_str());
     return -1;
 }
 
@@ -449,9 +442,17 @@ inline void clear_instance(PyObject *self) {
 /// Instance destructor function for all pybind11 types. It calls `type_info.dealloc`
 /// to destroy the C++ object itself, while the rest is Python bookkeeping.
 extern "C" inline void pybind11_object_dealloc(PyObject *self) {
+    auto *type = Py_TYPE(self);
+
+    // If this is a GC tracked object, untrack it first
+    // Note that the track call is implicitly done by the
+    // default tp_alloc, which we never override.
+    if (PyType_HasFeature(type, Py_TPFLAGS_HAVE_GC) != 0) {
+        PyObject_GC_UnTrack(self);
+    }
+
     clear_instance(self);
 
-    auto *type = Py_TYPE(self);
     type->tp_free(self);
 
 #if PY_VERSION_HEX < 0x03080000
@@ -468,6 +469,8 @@ extern "C" inline void pybind11_object_dealloc(PyObject *self) {
     Py_DECREF(type);
 #endif
 }
+
+std::string error_string();
 
 /** Create the type which can be used as a common base for all classes.  This is
     needed in order to satisfy Python's requirements for multiple inheritance.
@@ -504,7 +507,7 @@ inline PyObject *make_object_base_type(PyTypeObject *metaclass) {
     type->tp_weaklistoffset = offsetof(instance, weakrefs);
 
     if (PyType_Ready(type) < 0) {
-        pybind11_fail("PyType_Ready failed in make_object_base_type():" + error_string());
+        pybind11_fail("PyType_Ready failed in make_object_base_type(): " + error_string());
     }
 
     setattr((PyObject *) type, "__module__", str("pybind11_builtins"));
@@ -514,42 +517,29 @@ inline PyObject *make_object_base_type(PyTypeObject *metaclass) {
     return (PyObject *) heap_type;
 }
 
-/// dynamic_attr: Support for `d = instance.__dict__`.
-extern "C" inline PyObject *pybind11_get_dict(PyObject *self, void *) {
-    PyObject *&dict = *_PyObject_GetDictPtr(self);
-    if (!dict) {
-        dict = PyDict_New();
-    }
-    Py_XINCREF(dict);
-    return dict;
-}
-
-/// dynamic_attr: Support for `instance.__dict__ = dict()`.
-extern "C" inline int pybind11_set_dict(PyObject *self, PyObject *new_dict, void *) {
-    if (!PyDict_Check(new_dict)) {
-        PyErr_Format(PyExc_TypeError,
-                     "__dict__ must be set to a dictionary, not a '%.200s'",
-                     get_fully_qualified_tp_name(Py_TYPE(new_dict)).c_str());
-        return -1;
-    }
-    PyObject *&dict = *_PyObject_GetDictPtr(self);
-    Py_INCREF(new_dict);
-    Py_CLEAR(dict);
-    dict = new_dict;
-    return 0;
-}
-
 /// dynamic_attr: Allow the garbage collector to traverse the internal instance `__dict__`.
 extern "C" inline int pybind11_traverse(PyObject *self, visitproc visit, void *arg) {
+#if PY_VERSION_HEX >= 0x030D0000
+    PyObject_VisitManagedDict(self, visit, arg);
+#else
     PyObject *&dict = *_PyObject_GetDictPtr(self);
     Py_VISIT(dict);
+#endif
+// https://docs.python.org/3/c-api/typeobj.html#c.PyTypeObject.tp_traverse
+#if PY_VERSION_HEX >= 0x03090000
+    Py_VISIT(Py_TYPE(self));
+#endif
     return 0;
 }
 
 /// dynamic_attr: Allow the GC to clear the dictionary.
 extern "C" inline int pybind11_clear(PyObject *self) {
+#if PY_VERSION_HEX >= 0x030D0000
+    PyObject_ClearManagedDict(self);
+#else
     PyObject *&dict = *_PyObject_GetDictPtr(self);
     Py_CLEAR(dict);
+#endif
     return 0;
 }
 
@@ -557,14 +547,26 @@ extern "C" inline int pybind11_clear(PyObject *self) {
 inline void enable_dynamic_attributes(PyHeapTypeObject *heap_type) {
     auto *type = &heap_type->ht_type;
     type->tp_flags |= Py_TPFLAGS_HAVE_GC;
+#if PY_VERSION_HEX < 0x030B0000
     type->tp_dictoffset = type->tp_basicsize;           // place dict at the end
     type->tp_basicsize += (ssize_t) sizeof(PyObject *); // and allocate enough space for it
+#else
+    type->tp_flags |= Py_TPFLAGS_MANAGED_DICT;
+#endif
     type->tp_traverse = pybind11_traverse;
     type->tp_clear = pybind11_clear;
 
-    static PyGetSetDef getset[] = {
-        {const_cast<char *>("__dict__"), pybind11_get_dict, pybind11_set_dict, nullptr, nullptr},
-        {nullptr, nullptr, nullptr, nullptr, nullptr}};
+    static PyGetSetDef getset[] = {{
+#if PY_VERSION_HEX < 0x03070000
+                                       const_cast<char *>("__dict__"),
+#else
+                                       "__dict__",
+#endif
+                                       PyObject_GenericGetDict,
+                                       PyObject_GenericSetDict,
+                                       nullptr,
+                                       nullptr},
+                                   {nullptr, nullptr, nullptr, nullptr, nullptr}};
     type->tp_getset = getset;
 }
 
@@ -582,7 +584,7 @@ extern "C" inline int pybind11_getbuffer(PyObject *obj, Py_buffer *view, int fla
         if (view) {
             view->obj = nullptr;
         }
-        PyErr_SetString(PyExc_BufferError, "pybind11_getbuffer(): Internal error");
+        set_error(PyExc_BufferError, "pybind11_getbuffer(): Internal error");
         return -1;
     }
     std::memset(view, 0, sizeof(Py_buffer));
@@ -590,7 +592,7 @@ extern "C" inline int pybind11_getbuffer(PyObject *obj, Py_buffer *view, int fla
     if ((flags & PyBUF_WRITABLE) == PyBUF_WRITABLE && info->readonly) {
         delete info;
         // view->obj = nullptr;  // Was just memset to 0, so not necessary
-        PyErr_SetString(PyExc_BufferError, "Writable buffer requested for readonly storage");
+        set_error(PyExc_BufferError, "Writable buffer requested for readonly storage");
         return -1;
     }
     view->obj = obj;
@@ -623,9 +625,6 @@ extern "C" inline void pybind11_releasebuffer(PyObject *, Py_buffer *view) {
 /// Give this type a buffer interface.
 inline void enable_buffer_protocol(PyHeapTypeObject *heap_type) {
     heap_type->ht_type.tp_as_buffer = &heap_type->as_buffer;
-#if PY_MAJOR_VERSION < 3
-    heap_type->ht_type.tp_flags |= Py_TPFLAGS_HAVE_NEWBUFFER;
-#endif
 
     heap_type->as_buffer.bf_getbuffer = pybind11_getbuffer;
     heap_type->as_buffer.bf_releasebuffer = pybind11_releasebuffer;
@@ -638,12 +637,8 @@ inline PyObject *make_new_python_type(const type_record &rec) {
 
     auto qualname = name;
     if (rec.scope && !PyModule_Check(rec.scope.ptr()) && hasattr(rec.scope, "__qualname__")) {
-#if PY_MAJOR_VERSION >= 3
         qualname = reinterpret_steal<object>(
             PyUnicode_FromFormat("%U.%U", rec.scope.attr("__qualname__").ptr(), name.ptr()));
-#else
-        qualname = str(rec.scope.attr("__qualname__").cast<std::string>() + "." + rec.name);
-#endif
     }
 
     object module_;
@@ -707,15 +702,10 @@ inline PyObject *make_new_python_type(const type_record &rec) {
     type->tp_as_number = &heap_type->as_number;
     type->tp_as_sequence = &heap_type->as_sequence;
     type->tp_as_mapping = &heap_type->as_mapping;
-#if PY_VERSION_HEX >= 0x03050000
     type->tp_as_async = &heap_type->as_async;
-#endif
 
     /* Flags */
     type->tp_flags |= Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HEAPTYPE;
-#if PY_MAJOR_VERSION < 3
-    type->tp_flags |= Py_TPFLAGS_CHECKTYPES;
-#endif
     if (!rec.is_final) {
         type->tp_flags |= Py_TPFLAGS_BASETYPE;
     }
@@ -733,7 +723,7 @@ inline PyObject *make_new_python_type(const type_record &rec) {
     }
 
     if (PyType_Ready(type) < 0) {
-        pybind11_fail(std::string(rec.name) + ": PyType_Ready failed (" + error_string() + ")!");
+        pybind11_fail(std::string(rec.name) + ": PyType_Ready failed: " + error_string());
     }
 
     assert(!rec.dynamic_attr || PyType_HasFeature(type, Py_TPFLAGS_HAVE_GC));

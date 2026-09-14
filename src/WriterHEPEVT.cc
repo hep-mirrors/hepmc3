@@ -21,27 +21,27 @@ namespace HepMC3
 WriterHEPEVT::WriterHEPEVT(const std::string &filename,
                            std::shared_ptr<GenRunInfo> /*run*/): m_file(filename), m_stream(&m_file)
 {
-    HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
+    HEPMC3_WARNING_LEVEL(900,"WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     m_hepevt_interface.allocate_internal_storage();
 }
 
 WriterHEPEVT::WriterHEPEVT(std::ostream& stream,
                            std::shared_ptr<GenRunInfo> /*run*/): m_stream(&stream)
 {
-    HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
+    HEPMC3_WARNING_LEVEL(900,"WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     m_hepevt_interface.allocate_internal_storage();
 }
 
 WriterHEPEVT::WriterHEPEVT(std::shared_ptr<std::ostream> s_stream,
                            std::shared_ptr<GenRunInfo> /*run*/): m_shared_stream(s_stream), m_stream(s_stream.get())
 {
-    HEPMC3_WARNING("WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
+    HEPMC3_WARNING_LEVEL(900,"WriterHEPEVT::WriterHEPEVT: HEPEVT format is outdated. Please use HepMC3 format instead.")
     m_hepevt_interface.allocate_internal_storage();
 }
 
 void WriterHEPEVT::write_hepevt_particle(int index, bool iflong)
 {
-    std::array<char, 512> buf;//Note: the format is fixed, so no reason for complicatied tratment
+    std::array<char, 512> buf{};//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor = buf.data();
     cursor += sprintf(cursor, "% 8i% 8i", m_hepevt_interface.status(index), m_hepevt_interface.id(index));
     if (iflong)
@@ -56,16 +56,16 @@ void WriterHEPEVT::write_hepevt_particle(int index, bool iflong)
         cursor += sprintf(cursor, "% 8i% 8i", m_hepevt_interface.first_child(index), m_hepevt_interface.last_child(index));
         cursor += sprintf(cursor, "% 19.8E% 19.8E% 19.8E% 19.8E\n", m_hepevt_interface.px(index), m_hepevt_interface.py(index), m_hepevt_interface.pz(index), m_hepevt_interface.m(index));
     }
-    unsigned long length = cursor - buf.data();
+    const unsigned long length = cursor - buf.data();
     m_stream->write(buf.data(), length);
 }
 
 void WriterHEPEVT::write_hepevt_event_header()
 {
-    std::array<char, 512> buf;//Note: the format is fixed, so no reason for complicatied tratment
+    std::array<char, 512> buf{};//Note: the format is fixed, so no reason for complicatied tratment
     char* cursor = buf.data();
     cursor += sprintf(cursor, "E% 8i %8i\n", m_hepevt_interface.event_number(), m_hepevt_interface.number_entries());
-    unsigned long length = cursor - buf.data();
+    const unsigned long length = cursor - buf.data();
     m_stream->write(buf.data(), length);
 }
 
@@ -87,7 +87,7 @@ void WriterHEPEVT::close()
 
 bool WriterHEPEVT::failed()
 {
-    return (bool)m_file.rdstate();
+    return static_cast<bool>(m_file.rdstate());
 }
 
 void WriterHEPEVT::set_vertices_positions_present(bool iflong) { if (iflong) m_options["vertices_positions_are_absent"] = ""; else m_options.erase("vertices_positions_are_absent"); }

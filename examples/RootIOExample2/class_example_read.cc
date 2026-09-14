@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
     int events_parsed = 0;
 
     // Get GenRunInfo, if available
-    auto *my_run = (MyRunClass*)fo.Get("MyRunClass");
+    auto *my_run = dynamic_cast<MyRunClass*>(fo.Get("MyRunClass"));
     std::shared_ptr<GenRunInfo> run_info;
 
     if( my_run ) run_info.reset(my_run->GetRunInfo());
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
     TIter next(fo.GetListOfKeys());
     TKey *key = nullptr;
 
-    while ((key=(TKey*)next()))
+    while ((key = dynamic_cast<TKey*>(next())))
     {
         const char *cl = key->GetClassName();
 

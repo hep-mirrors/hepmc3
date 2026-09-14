@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
         //
         std::ostringstream os;
         os << events_parsed;
-        std::string stevt = "Event_" + os.str();
+        const std::string stevt = "Event_" + os.str();
         const char* chevt = stevt.c_str();
 
         std::cout << "writing " << stevt << std::endl;

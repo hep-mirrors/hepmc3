@@ -117,7 +117,7 @@ int main() {
         cs->set_cross_section(-1.0,0.0);
         Print::line(cs);
     }
-    else std::cout << "Problem accessing attribute!" <<std::endl;
+    else {std::cout << "Problem accessing attribute!" <<std::endl;}
 
     // remove attribute
     evt.remove_attribute("GenCrossSection");

@@ -59,14 +59,14 @@
 #include "WriterDOT.h"
 #endif
 
-
+#include <cstdint>
 #include "cmdline.h"
 using namespace HepMC3;
 enum formats {autodetect, hepmc2, hepmc3, hpe,root, treeroot, treerootopal, hpezeus, lhef, dump, dot,  plugin, none, proto, oscar1997, oscar1999, oscar2013};
 
 template <class T>
 std::shared_ptr<Reader> get_input_file(const char* name, const bool input_is_stdin, const bool use_compression) {
-    std::string n(name);
+    const std::string n(name);
 #if  HEPMC3_USE_COMPRESSION
     if (use_compression) {
         return (input_is_stdin?std::make_shared<ReaderGZ<T> >(std::cin):std::make_shared<ReaderGZ<T> >(n));
@@ -76,7 +76,7 @@ std::shared_ptr<Reader> get_input_file(const char* name, const bool input_is_std
 }
 template <class T>
 std::shared_ptr<Writer> get_output_file(const char* name, const char* use_compression) {
-    std::string n(name);
+    const std::string n(name);
 #if HEPMC3_USE_COMPRESSION
     if (std::string(use_compression) == "z" )  return std::make_shared< WriterGZ<T,Compression::z> >(n);
     if (std::string(use_compression) == "lzma" )  return std::make_shared< WriterGZ<T,Compression::lzma> >(n);
@@ -87,14 +87,17 @@ std::shared_ptr<Writer> get_output_file(const char* name, const char* use_compre
 
 int main(int argc, char** argv)
 {
-    gengetopt_args_info ai;
+    gengetopt_args_info ai{};
     if (cmdline_parser (argc, argv, &ai) != 0) {
         exit(1);
     }
-    if ( !( ( ai.inputs_num == 2 && ( std::string(ai.output_format_arg) !=  "none" )) || ( ai.inputs_num == 1 && ( std::string(ai.output_format_arg) ==  "none") ) )   )
+    auto validarguments = ( ai.inputs_num == 2 &&  std::string(ai.output_format_arg) !=  "none" && std::string(ai.output_format_arg) !=  "dump" ) ||
+                ( ai.inputs_num == 1 && ( std::string(ai.output_format_arg) ==  "none" || std::string(ai.output_format_arg) ==  "dump" ));
+
+    if ( !validarguments )
     {
-        printf("Exactly two arguments are requred: the name of input and output files if the output format in not \"none\"\n");
-        printf("In case the output format is \"none\" exactly one argument should be given: the name of input file.\n");
+        printf("Exactly two arguments are requred: the name of input and output files if the output format in not \"none\" or \"dump\" \n");
+        printf("In case the output format is \"none\" or \"dump\" exactly one argument should be given: the name of input file.\n");
         exit(1);
     }
     std::map<std::string,formats> format_map;
@@ -118,17 +121,17 @@ int main(int argc, char** argv)
     std::map<std::string, std::string> options;
     for (size_t i=0; i<ai.extensions_given; i++)
     {
-        std::string optarg(ai.extensions_arg[i]);
-        size_t pos = optarg.find_first_of('=');
+        const std::string optarg(ai.extensions_arg[i]);
+        const size_t pos = optarg.find_first_of('=');
         if ( pos < optarg.length() ) {
             options[std::string(optarg,0,pos)] = std::string(optarg, pos+1, optarg.length());
         }
     }
     long int  events_parsed = 0;
-    long int  events_limit = ai.events_limit_arg;
-    long int  first_event_number = ai.first_event_number_arg;
-    long int  last_event_number = ai.last_event_number_arg;
-    long int  print_each_events_parsed = ai.print_every_events_parsed_arg;
+    const long int  events_limit = ai.events_limit_arg;
+    const long int  first_event_number = ai.first_event_number_arg;
+    const long int  last_event_number = ai.last_event_number_arg;
+    const long int  print_each_events_parsed = ai.print_every_events_parsed_arg;
     std::string InputPluginLibrary;
     std::string InputPluginName;
 
@@ -136,12 +139,19 @@ int main(int argc, char** argv)
     std::string OutputPluginName;
 
     std::shared_ptr<Reader>      input_file;
-    bool input_is_stdin = (std::string(ai.inputs[0]) == std::string("-"));
+    const bool input_is_stdin = (std::string(ai.inputs[0]) == std::string("-"));
     if (input_is_stdin) std::ios_base::sync_with_stdio(false);
+#ifdef _LIBCPP_VERSION
+    if (input_is_stdin) {
+        printf("The program cannot process inputs from standard input as std::ios_base::sync_with_stdio(bool) is not implemented in libc++, please use another C++ standard library.\n");
+        exit(4);
+    }
+#endif
+
     bool ignore_writer = false;
     switch (format_map.at(std::string(ai.input_format_arg)))
     {
-    case autodetect:
+    case formats::autodetect:
         input_file = (input_is_stdin?deduce_reader(std::cin):deduce_reader(ai.inputs[0]));
         if (!input_file)
         {
@@ -149,16 +159,20 @@ int main(int argc, char** argv)
             exit(2);
         }
         break;
-    case hepmc2:
+    case formats::hepmc2:
         input_file = get_input_file<ReaderAsciiHepMC2>(ai.inputs[0], input_is_stdin, ai.compressed_input_flag);
         break;
-    case hepmc3:
+    case formats::hepmc3:
         input_file = get_input_file<ReaderAscii>(ai.inputs[0], input_is_stdin, ai.compressed_input_flag);
         break;
-    case hpe:
+    case formats::EDM4hep:
+        printf("Input format %s  is not supported\n", ai.input_format_arg);
+        exit(2);
+        break;
+    case formats::hpe:
         input_file = get_input_file<ReaderHEPEVT>(ai.inputs[0], input_is_stdin,ai.compressed_input_flag);
         break;
-    case lhef:
+    case formats::lhef:
         input_file = get_input_file<ReaderLHEF>(ai.inputs[0], input_is_stdin, ai.compressed_input_flag);
         break;
     case oscar1997:
@@ -178,7 +192,7 @@ int main(int argc, char** argv)
         printf("Input format %s  is not supported\n", ai.input_format_arg);
         exit(2);
 #endif
-    case root:
+    case formats::root:
 #ifdef HEPMC3_ROOTIO
         input_file = std::make_shared<ReaderRoot>(ai.inputs[0]);
         break;
@@ -186,7 +200,7 @@ int main(int argc, char** argv)
         printf("Input format %s  is not supported\n", ai.input_format_arg);
         exit(2);
 #endif
-    case proto:
+    case formats::proto:
 #ifdef HEPMC3_PROTOBUFIO
         input_file = std::make_shared<Readerprotobuf>(ai.inputs[0]);
         break;
@@ -194,17 +208,21 @@ int main(int argc, char** argv)
         printf("Input format %s  is not supported\n", ai.input_format_arg);
         exit(2);
 #endif
-    case plugin:
+    case formats::plugin:
         if (options.find("InputPluginLibrary") == options.end())         {
             printf("InputPluginLibrary option required\n");
             exit(2);
         }
-        else InputPluginLibrary = options.at("InputPluginLibrary");
+        else {
+			InputPluginLibrary = options.at("InputPluginLibrary");
+        }
         if (options.find("InputPluginName") == options.end())            {
             printf("InputPluginName option required\n");
             exit(2);
         }
-        else InputPluginName = options.at("InputPluginName");
+        else {
+			InputPluginName = options.at("InputPluginName");
+        }
         input_file = std::make_shared<ReaderPlugin>(std::string(ai.inputs[0]), InputPluginLibrary, InputPluginName);
         if (input_file->failed()) {
             printf("Plugin initialization failed\n");
@@ -219,13 +237,22 @@ int main(int argc, char** argv)
     std::shared_ptr<Writer>      output_file;
     switch (format_map.at(std::string(ai.output_format_arg)))
     {
-    case hepmc2:
+    case formats::hepmc2:
         output_file = get_output_file<WriterAsciiHepMC2>(ai.inputs[1], ai.compressed_output_arg);
         break;
-    case hepmc3:
+    case formats::hepmc3:
         output_file = get_output_file<WriterAscii>(ai.inputs[1], ai.compressed_output_arg);
         break;
-    case hpe:
+    case formats::EDM4hep:
+#ifdef HEPMC3_EDM4HEP
+        //      output_file = get_output_file<WriterEDM4HEP>(ai.inputs[1], ai.compressed_output_arg);
+        output_file = std::make_shared<WriterEDM4HEP>(ai.inputs[1]);
+#else
+        printf("Output format %s  is not supported, you need to run cmake with -DHEPMC3_ENABLE_EDM4HEP=ON and link with KEY4HEP\n", ai.input_format_arg);
+        exit(2);
+#endif
+        break;
+    case formats::hpe:
         output_file = get_output_file<WriterHEPEVT>(ai.inputs[1], ai.compressed_output_arg);
         break;
     case oscar1997:
@@ -245,7 +272,7 @@ int main(int argc, char** argv)
         printf("Output format %s  is not supported\n", ai.output_format_arg);
         exit(2);
 #endif
-    case proto:
+    case formats::proto:
 #ifdef HEPMC3_PROTOBUFIO
         output_file = std::make_shared<Writerprotobuf>(ai.inputs[1]);
         break;
@@ -253,7 +280,7 @@ int main(int argc, char** argv)
         printf("Output format %s  is not supported\n", ai.output_format_arg);
         exit(2);
 #endif
-    case treeroot:
+    case formats::treeroot:
 #ifdef HEPMC3_ROOTIO
         output_file = std::make_shared<WriterRootTree>(ai.inputs[1]);
         break;
@@ -262,7 +289,7 @@ int main(int argc, char** argv)
         exit(2);
 #endif
     /* Extension example*/
-    case treerootopal:
+    case formats::treerootopal:
 #ifdef HEPMCCONVERT_EXTENSION_ROOTTREEOPAL
         output_file = std::make_shared<WriterRootTreeOPAL>(ai.inputs[1]);
         (std::dynamic_pointer_cast<WriterRootTreeOPAL>(output_file))->init_branches();
@@ -273,7 +300,7 @@ int main(int argc, char** argv)
         exit(2);
         break;
 #endif
-    case hpezeus:
+    case formats::hpezeus:
 #ifdef HEPMCCONVERT_EXTENSION_HEPEVTZEUS
         output_file = std::make_shared<WriterHEPEVTZEUS>(ai.inputs[1]);
         break;
@@ -281,7 +308,7 @@ int main(int argc, char** argv)
         printf("Output format %s  is not supported\n",ai.output_format_arg);
         exit(2);
 #endif
-    case dot:
+    case formats::dot:
 #ifdef HEPMCCONVERT_EXTENSION_DOT
         output_file = std::make_shared<WriterDOT>(ai.inputs[1]);
         if (options.find("Style") != options.end()) (std::dynamic_pointer_cast<WriterDOT>(output_file))->set_style(std::atoi(options.at("Style").c_str()));
@@ -291,27 +318,27 @@ int main(int argc, char** argv)
         exit(2);
         break;
 #endif
-    case plugin:
+    case formats::plugin:
         if (options.find("OutputPluginLibrary") == options.end())         {
             printf("OutputPluginLibrary option required, e.g. OutputPluginLibrary=libAnalysis.so\n");
             exit(2);
         }
-        else OutputPluginLibrary = options.at("OutputPluginLibrary");
+        else {OutputPluginLibrary = options.at("OutputPluginLibrary");}
         if (options.find("OutputPluginName") == options.end())            {
             printf("OutputPluginName option required, e.g. OutputPluginName=newAnalysisExamplefile\n");
             exit(2);
         }
-        else OutputPluginName = options.at("OutputPluginName");
+        else {OutputPluginName = options.at("OutputPluginName");}
         output_file = std::make_shared<WriterPlugin>(std::string(ai.inputs[1]), OutputPluginLibrary, OutputPluginName);
         if (output_file->failed()) {
             printf("Plugin initialization failed\n");
             exit(2);
         }
         break;
-    case dump:
+    case formats::dump:
         output_file = nullptr;
         break;
-    case none:
+    case formats::none:
         output_file = nullptr;
         ignore_writer = true;
         break;
@@ -323,7 +350,7 @@ int main(int argc, char** argv)
     while( !input_file->failed() )
     {
         GenEvent evt(Units::GEV, Units::MM);
-        bool res_read = input_file->read_event(evt);
+        const bool res_read = input_file->read_event(evt);
 
         if( input_file->failed() )  {
             printf("End of file reached. Exit.\n");

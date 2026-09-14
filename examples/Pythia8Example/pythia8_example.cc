@@ -31,14 +31,14 @@ int main(int argc, char **argv) {
     std::vector<std::string> names;
     for (int iWeight = 0; iWeight < pythia.info.nWeights(); ++iWeight) {
         std::string s = pythia.info.weightLabel(iWeight);
-        if (!s.length()) s = std::to_string((long long int)iWeight);
+        if (s.empty()) s = std::to_string(static_cast<long long int>(iWeight));
         names.push_back(s);
     }
     if (names.empty()) names.emplace_back("default");
     run->set_weight_names(names);
     WriterAscii file(argv[2],run);
 
-    int nEvent = pythia.mode("Main:numberOfEvents");
+    const int nEvent = pythia.mode("Main:numberOfEvents");
 
     for( int i = 0; i < nEvent; ++i ) {
         if( !pythia.next() ) continue;

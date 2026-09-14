@@ -3,18 +3,23 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+/**
+ *  @file Version.h
+ *  @brief Declaration of the Verrion functions and some macros
+ *
+ */
 #ifndef HEPMC3_VERSION_H
 #define HEPMC3_VERSION_H
 
 #include <string>
 
 /// HepMC version string
-#define HEPMC3_VERSION "3.02.08"
+#define HEPMC3_VERSION "3.03.01"
 
 /// @brief HepMC version as an integer, HepMC X.Y.Z = 1000000*X + 1000*Y + Z
 ///
 /// Use like "#if HEPMC3_VERSION_CODE < 3001004" for < 3.01.04
-#define HEPMC3_VERSION_CODE 3002008
+#define HEPMC3_VERSION_CODE 3003001
 namespace HepMC3 {
 /// Get the HepMC library version string
 inline std::string version() {

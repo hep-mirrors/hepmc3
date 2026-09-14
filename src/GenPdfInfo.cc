@@ -50,7 +50,7 @@ bool GenPdfInfo::from_string(const std::string &att) {
 }
 
 bool GenPdfInfo::to_string(std::string &att) const {
-    std::array<char, 255> buf;//Note: the format is fixed, so no reason for complicatied tratment
+    std::array<char, 255> buf{};//Note: the format is fixed, so no reason for complicatied tratment
 
     snprintf(buf.data(), buf.size(), "%i %i %.8e %.8e %.8e %.8e %.8e %i %i",
              parton_id[0],
@@ -83,7 +83,7 @@ void GenPdfInfo::set(const int& parton_id1, const int& parton_id2, const double&
 }
 
 bool GenPdfInfo::operator==(const GenPdfInfo& a) const {
-    return ( memcmp( (void*)this, (void*)&a, sizeof(class GenPdfInfo) ) == 0 );
+    return ( memcmp( static_cast<const void*>(this), static_cast<const void*>(&a), sizeof(class GenPdfInfo) ) == 0 );
 }
 
 bool GenPdfInfo::operator!=(const GenPdfInfo& a) const {
