@@ -24,18 +24,16 @@ else()
     endif()
     execute_process(
       COMMAND "${CMAKE_COMMAND}" --install "${HEPMC3_BINARY_DIR}" --prefix "${_install_prefix}" --component "${_component}"
-      RESULT_VARIABLE _install_result_component
-      OUTPUT_VARIABLE _install_stdout_component
-      ERROR_VARIABLE _install_stderr_component)
-      if(NOT _install_result_component EQUAL 0)
+      RESULT_VARIABLE _install_result
+      OUTPUT_VARIABLE _install_stdout
+      ERROR_VARIABLE _install_stderr)
+      if(NOT _install_result EQUAL 0)
         message(FATAL_ERROR
         "Could not install HepMC3 for the downstream package-config test:\n"
-        "${_install_stdout_component}${_install_stderr_component} for ${component}")
+        "${_install_stdout}${_install_stderr} for ${component}")
       endif()
   endforeach()
 endif()
-
-
 
 if(CMAKE_VERSION VERSION_LESS 3.13)
   file(MAKE_DIRECTORY "${_consumer_binary_dir}")

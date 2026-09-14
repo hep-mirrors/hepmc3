@@ -2,6 +2,8 @@
 2026-09-12 Andrii Verbytskyi
   * Add pybind11 v3.1.0  headers as a separate directory to support the newest python. Move the old headers of v2.12.0 into a separate directory.
 2026-09-01 Andrii Verbytskyi
+  * Fix of cmake integration test.
+2026-09-01 Andrii Verbytskyi
   * Add Python compressed I/O helpers `ReaderGZ` and `WriterGZ` for binding compressed input/output streams through Python compression modules.
   * Increase default `pystreambuf` buffer size to improve performance for Python-based compressed stream I/O.
   * Add `python/test/test_IO8.py` and `python/test/inputIO8.hepmc` to validate gzip round-trip support and install the new test.

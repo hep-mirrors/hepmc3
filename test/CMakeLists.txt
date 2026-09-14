@@ -126,7 +126,6 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.15 OR NOT HEPMC3_ENABLE_PYTHON)
       -DHEPMC3_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/package-config-downstream-old-policy/${CMAKE_INSTALL_PREFIX}
       -DHEPMC3_TEST_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}/package-config-downstream
       -DHEPMC3_TEST_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}/package-config-downstream
-      -DHEPMC3_ENABLE_PYTHON=OFF
       -P ${CMAKE_CURRENT_SOURCE_DIR}/test_package_config_downstream.cmake)
 endif()
 
