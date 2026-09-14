@@ -117,15 +117,18 @@ endmacro( hepmc_protobuf_test )
 set( CMAKE_INCLUDE_DIRECTORIES_BEFORE ON )
 cmake_policy(SET CMP0057 NEW)
 
-add_test(
-  NAME package-config-downstream-old-policy
-  COMMAND ${CMAKE_COMMAND}
-    -DHEPMC3_BINARY_DIR=${PROJECT_BINARY_DIR}
-    -DHEPMC3_INSTALL_DATADIR=${CMAKE_INSTALL_DATADIR}
-    -DHEPMC3_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-    -DHEPMC3_TEST_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}/package-config-downstream
-    -DHEPMC3_TEST_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}/package-config-downstream
-    -P ${CMAKE_CURRENT_SOURCE_DIR}/test_package_config_downstream.cmake)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.15 OR NOT HEPMC3_ENABLE_PYTHON)
+  add_test(
+    NAME package-config-downstream-old-policy
+    COMMAND ${CMAKE_COMMAND}
+      -DHEPMC3_BINARY_DIR=${PROJECT_BINARY_DIR}
+      -DHEPMC3_INSTALL_DATADIR=${CMAKE_INSTALL_DATADIR}
+      -DHEPMC3_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/package-config-downstream-old-policy/${CMAKE_INSTALL_PREFIX}
+      -DHEPMC3_TEST_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}/package-config-downstream
+      -DHEPMC3_TEST_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR}/package-config-downstream
+      -DHEPMC3_ENABLE_PYTHON=OFF
+      -P ${CMAKE_CURRENT_SOURCE_DIR}/test_package_config_downstream.cmake)
+endif()
 
 option(HEPMC3_TEST_THREADS   "Use Threads in tests if available" ON)
 option(HEPMC3_TEST_HEPMC2    "Use HepMC2 in tests if available" ON)
