@@ -10,6 +10,9 @@
 #include <HepMC3/LHEF.h>
 #include <HepMC3/HEPEVT_Wrapper_Runtime.h>
 #include <pybind11/pybind11.h>
+#ifndef PYPY_VERSION
+#include "pystreambuf.h"
+#endif
 namespace binder {
 void custom_HEPEVT_Wrapper_Runtime_binder(pybind11::class_<HepMC3::HEPEVT_Wrapper_Runtime, std::shared_ptr<HepMC3::HEPEVT_Wrapper_Runtime>> cl);
 void custom_GenEvent_binder(pybind11::class_<HepMC3::GenEvent, std::shared_ptr<HepMC3::GenEvent>> cl);
@@ -29,6 +32,20 @@ void custom_LHEFTagBase_binder (pybind11::class_<LHEF::TagBase, std::shared_ptr<
 void custom_LHEFReader_binder (pybind11::class_<LHEF::Reader, std::shared_ptr<LHEF::Reader>> cl);
 void print_binder(pybind11::module &M);
 void custom_deduce_reader(pybind11::module &M);
+
+template <typename T>  void custom_stream_writer (pybind11::class_<T, std::shared_ptr<T>> cl)
+{
+#ifndef PYPY_VERSION	
+cl.def(pybind11::init([](pybind11::object file) { auto stream = std::make_shared<pystream::ostream>(file, 512 * 512); return std::make_shared<T>(stream); }));	
+#endif
+}
+template <typename T>  void custom_stream_reader (pybind11::class_<T, std::shared_ptr<T>> cl)
+{
+#ifndef PYPY_VERSION	
+cl.def(pybind11::init([](pybind11::object file) { auto stream = std::make_shared<pystream::istream>(file, 512 * 512); return std::make_shared<T>(stream); }));	
+#endif
+}
+
 } // namespace binder
 
 #endif

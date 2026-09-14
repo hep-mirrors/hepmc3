@@ -1,6 +1,6 @@
 
 add_executable(LHEF_example_cat.exe ${CMAKE_CURRENT_SOURCE_DIR}/LHEF_example_cat.cc)
-target_link_libraries(LHEF_example_cat.exe HepMC3::HepMC3 ROOT::Tree ROOT::RIO ROOT::Core)
+target_link_libraries(LHEF_example_cat.exe HepMC3::HepMC3)
 set_target_properties(LHEF_example_cat.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 
 # create environment scripts

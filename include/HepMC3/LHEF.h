@@ -1706,15 +1706,17 @@ public:
       if ( tag.name.empty() ) junk += tag.contents;
 
       if ( tag.name == "initrwgt" ) {
-        for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
-          if ( tag.tags[j]->name == "weightgroup" )
-            weightgroup.push_back(WeightGroup(*tag.tags[j], weightgroup.size(),
-                                              weightinfo));
-          if ( tag.tags[j]->name == "weight" )
-            weightinfo.push_back(WeightInfo(*tag.tags[j]));
-
-        }
+        readInitrwgt(tag);
       }
+      //   for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
+      //     if ( tag.tags[j]->name == "weightgroup" )
+      //       weightgroup.push_back(WeightGroup(*tag.tags[j], weightgroup.size(),
+      //                                         weightinfo));
+      //     if ( tag.tags[j]->name == "weight" )
+      //       weightinfo.push_back(WeightInfo(*tag.tags[j]));
+
+      //   }
+      // }
       if ( tag.name == "weightinfo" ) {
         weightinfo.push_back(WeightInfo(tag));
       }
@@ -1761,10 +1763,34 @@ public:
 
     }
 
+    mapWeightNames();
+
+  }
+
+
+  /**
+   * Create a map of all wewightnames to the corresponding indices in
+   * the weigthinfo.
+   */
+  void mapWeightNames() {
     weightmap.clear();
     for ( int i = 0, N = weightinfo.size(); i < N; ++i )
       weightmap[weightinfo[i].name] = i + 1;
+  }
 
+  /**
+   * Helper function to read in weight information if present.
+   */
+  void readInitrwgt(const XMLTag & tag) {
+    if ( tag.name == "initrwgt" ) {
+      for ( int j = 0, M = tag.tags.size(); j < M; ++j ) {
+        if ( tag.tags[j]->name == "weightgroup" )
+          weightgroup.push_back(WeightGroup(*tag.tags[j], weightgroup.size(),
+                                            weightinfo));
+        if ( tag.tags[j]->name == "weight" )
+          weightinfo.push_back(WeightInfo(*tag.tags[j]));   
+      }
+    }
   }
 
   /// @}
@@ -2879,6 +2905,24 @@ private:
         break;
       }
     XMLTag::deleteAll(tags);
+
+    // Check if there was any initrwgt tags found in the init block.
+    bool foundrwgt = false;
+    for ( auto wi : heprup.weightinfo )
+      if ( wi.isrwgt ) { foundrwgt = true; break; }
+    
+    // If that was not the case it is possible that it was instead placed in the header block by mistake.
+    if ( !foundrwgt ) {
+      tags = XMLTag::findXMLTags(headerBlock);
+      for ( auto & htag : tags )
+        if ( htag->name == "header" ) {
+          for ( auto & tag : htag->tags )
+            if ( tag->name == "initrwgt") heprup.readInitrwgt(*tag);
+          heprup.mapWeightNames();
+         break;
+        }
+      XMLTag::deleteAll(tags);
+    }
 
     if ( !heprup.eventfiles.empty() ) openeventfile(0);
 
