@@ -18,14 +18,20 @@
 -class std::streambuf
 -class std::_Ios_Seekdir
 
-
++add_on_binder HepMC3::WriterAsciiHepMC2   binder::custom_stream_writer<HepMC3::WriterAsciiHepMC2>
 -function HepMC3::WriterAsciiHepMC2::WriterAsciiHepMC2(std::ostream&,std::shared_ptr<HepMC3::GenRunInfo>)
++add_on_binder HepMC3::WriterAscii   binder::custom_stream_writer<HepMC3::WriterAscii>
 -function HepMC3::WriterAscii::WriterAscii(std::ostream&,std::shared_ptr<HepMC3::GenRunInfo>)
++add_on_binder HepMC3::WriterHEPEVT   binder::custom_stream_writer<HepMC3::WriterHEPEVT>
 -function HepMC3::WriterHEPEVT::WriterHEPEVT(std::ostream&,std::shared_ptr<HepMC3::GenRunInfo>)
 
++add_on_binder HepMC3::ReaderAsciiHepMC2   binder::custom_stream_reader<HepMC3::ReaderAsciiHepMC2>
 -function HepMC3::ReaderAsciiHepMC2::ReaderAsciiHepMC2(std::istream&)
++add_on_binder HepMC3::ReaderAscii   binder::custom_stream_reader<HepMC3::ReaderAscii>
 -function HepMC3::ReaderAscii::ReaderAscii(std::istream&)
++add_on_binder HepMC3::ReaderHEPEVT   binder::custom_stream_reader<HepMC3::ReaderHEPEVT>
 -function HepMC3::ReaderHEPEVT::ReaderHEPEVT(std::istream&)
++add_on_binder HepMC3::ReaderLHEF   binder::custom_stream_reader<HepMC3::ReaderLHEF>
 -function HepMC3::ReaderLHEF::ReaderLHEF(std::istream&)
 
 -function LHEF::Writer::Writer(std::ostream &)

@@ -151,5 +151,7 @@ void bind_pyHepMC3_11(std::function< pybind11::module &(std::string const &names
 		cl.def("close", (void (HepMC3::WriterAscii::*)()) &HepMC3::WriterAscii::close, "Close file stream\n\nC++: HepMC3::WriterAscii::close() --> void");
 		cl.def("set_precision", (void (HepMC3::WriterAscii::*)(const int &)) &HepMC3::WriterAscii::set_precision, "Set output precision\n\n So far available range is [2,24]. Default is 16.\n\nC++: HepMC3::WriterAscii::set_precision(const int &) --> void", pybind11::arg("prec"));
 		cl.def("precision", (int (HepMC3::WriterAscii::*)() const) &HepMC3::WriterAscii::precision, "Return output precision\n\nC++: HepMC3::WriterAscii::precision() const --> int");
+
+		binder::custom_stream_writer<HepMC3::WriterAscii>(cl);
 	}
 }

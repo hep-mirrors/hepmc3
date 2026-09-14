@@ -305,19 +305,6 @@ average = event_norm ! Normalize events to sum or average to the X sect.
  0.50109086E+02 0.89185414E-01 0.50109093E+02     66
   <weightinfo name="test" muf="2.0" />
   <xsecinfo totxsec="0.50109093E+02" neve="59" />
-  <initrwgt>                                     
-    <weightgroup type="scale_variation" combine="envelope">               
-      <weight id="1001"> muR=0.10000E+01 muF=0.10000E+01 </weight>        
-      <weight id="1002"> muR=0.10000E+01 muF=0.20000E+01 </weight>        
-      <weight id="1003"> muR=0.10000E+01 muF=0.50000E+00 </weight>        
-      <weight id="1004"> muR=0.20000E+01 muF=0.10000E+01 </weight>        
-      <weight id="1005"> muR=0.20000E+01 muF=0.20000E+01 </weight>        
-      <weight id="1006"> muR=0.20000E+01 muF=0.50000E+00 </weight>        
-      <weight id="1007"> muR=0.50000E+00 muF=0.10000E+01 </weight>        
-      <weight id="1008"> muR=0.50000E+00 muF=0.20000E+01 </weight>        
-      <weight id="1009"> muR=0.50000E+00 muF=0.50000E+00 </weight>        
-    </weightgroup>                                                        
-  </initrwgt>                                                             
 Just some random garbage...
 <generator name="SomeGen1" version="1.2.3"> some additional comments </generator>
 <generator name="SomeGen2" version="a.x.3"> some other comments </generator>

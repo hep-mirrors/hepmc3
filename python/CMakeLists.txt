@@ -380,6 +380,9 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
         test_HEPEVT
         test_IO10
   )
+  if (NOT "${IMPL}" STREQUAL "PyPy")
+    list(APPEND HepMC_python_tests test_IO8)
+  endif()
 #Workaround for nvc++ for this particular test
   if (${CMAKE_CXX_COMPILER_ID} MATCHES "PGI")
     list(REMOVE_ITEM HepMC_python_tests  test_Print)
