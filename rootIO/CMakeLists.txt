@@ -149,6 +149,8 @@ add_library(HepMC3::rootIO ALIAS HepMC3rootIO)
 
 set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/cmake)
 
+include(CMakePackageConfigHelpers)
+
 configure_package_config_file(cmake/Templates/HepMC3rootIOConfig.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/outputs/share/HepMC3/cmake/HepMC3rootIOConfig.cmake
   INSTALL_DESTINATION ${CONFIG_INSTALL_DIR}
