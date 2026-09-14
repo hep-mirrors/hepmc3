@@ -64,6 +64,7 @@ void bind_pyHepMC3_15(std::function< pybind11::module &(std::string const &names
 		cl.def( pybind11::init<const struct LHEF::XMLTag &, int, class std::vector<struct LHEF::WeightInfo> &>(), pybind11::arg("tag"), pybind11::arg("groupIndex"), pybind11::arg("wiv") );
 
 		cl.def( pybind11::init( [](LHEF::WeightGroup const &o){ return new LHEF::WeightGroup(o); } ) );
+		cl.def_readwrite("name", &LHEF::WeightGroup::name);
 		cl.def_readwrite("type", &LHEF::WeightGroup::type);
 		cl.def_readwrite("combine", &LHEF::WeightGroup::combine);
 		cl.def("assign", (struct LHEF::WeightGroup & (LHEF::WeightGroup::*)(const struct LHEF::WeightGroup &)) &LHEF::WeightGroup::operator=, "C++: LHEF::WeightGroup::operator=(const struct LHEF::WeightGroup &) --> struct LHEF::WeightGroup &", pybind11::return_value_policy::automatic, pybind11::arg(""));

@@ -162,7 +162,7 @@ class streambuf : public std::basic_streambuf<char>
     /** They are respectively used to buffer data read from and data written to
         the Python file object. It can be modified from Python.
     */
-    static const std::size_t default_buffer_size = 1024;
+    static const std::size_t default_buffer_size = 262144*2;
 
     /// Construct from a Python file object
     /** if buffer_size is 0 the current default_buffer_size is used.
@@ -173,6 +173,7 @@ class streambuf : public std::basic_streambuf<char>
     :
       py_read (getattr(python_file_obj, "read", py::none())),
       py_write (getattr(python_file_obj, "write", py::none())),
+      py_close(getattr(python_file_obj, "close", py::none())),
       py_seek (getattr(python_file_obj, "seek", py::none())),
       py_tell (getattr(python_file_obj, "tell", py::none())),
       buffer_size(buffer_size_ != 0 ? buffer_size_ : default_buffer_size),
@@ -220,6 +221,14 @@ class streambuf : public std::basic_streambuf<char>
     /// Mundane destructor freeing the allocated resources
     virtual ~streambuf() {
       if (write_buffer) delete[] write_buffer;
+      if (!py_close.is_none() && !py_write.is_none()) {
+        try {
+          py_close();
+        } catch (py::error_already_set &err) {
+          err.restore();
+          PyErr_Clear();
+        }
+      }
     }
 
     /// C.f. C++ standard section 27.5.2.4.3
@@ -298,10 +307,26 @@ class streambuf : public std::basic_streambuf<char>
         off_type delta = pptr() - farthest_pptr;
         int_type status = overflow();
         if (traits_type::eq_int_type(status, traits_type::eof())) result = -1;
-        if (!py_seek.is_none()) py_seek(delta, 1);
+        if (!py_seek.is_none()) {
+          try {
+            py_seek(delta, 1);
+          }
+          catch (py::error_already_set &err) {
+            err.restore();
+            PyErr_Clear();
+          }
+        }
       }
       else if (gptr() && gptr() < egptr()) {
-        if (!py_seek.is_none()) py_seek(gptr() - egptr(), 1);
+        if (!py_seek.is_none()) {
+          try {
+            py_seek(gptr() - egptr(), 1);
+          }
+          catch (py::error_already_set &err) {
+            err.restore();
+            PyErr_Clear();
+          }
+        }
       }
       return result;
     }
@@ -379,7 +404,7 @@ class streambuf : public std::basic_streambuf<char>
     }
 
   private:
-    py::object py_read, py_write, py_seek, py_tell;
+    py::object py_read, py_write, py_close, py_seek, py_tell;
 
     std::size_t buffer_size;
 
