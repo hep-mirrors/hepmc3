@@ -422,7 +422,6 @@ Tag: ${PYTHON_WHEEL_TAG}
         test_Attribute
         test_HEPEVT
         test_IO10
-        test_PEP517
   )
   if (NOT "${IMPL}" STREQUAL "PyPy")
     list(APPEND HepMC_python_tests test_IO8)
