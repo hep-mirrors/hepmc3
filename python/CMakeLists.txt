@@ -136,7 +136,9 @@ foreach(_comp IN ITEMS " " ${HEPMC3_COMPONENTS})
   else()
     set(_dotcomp ".${_comp}")   
   endif()
-  configure_file("pyHepMC3${_dotcomp}.egg-info.in" "pyHepMC3${_dotcomp}.egg-info" IMMEDIATE @ONLY)
+  configure_file("pyHepMC3${_dotcomp}.metadata.in" "pyHepMC3${_dotcomp}.metadata" IMMEDIATE @ONLY)
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3${_dotcomp}.record" "" )
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3${_dotcomp}.installer" "cmake\n")
 endforeach()
 if (RERUN_BINDER AND ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
   find_program (BINDER binder HINTS $ENV{HOME}/bin /usr/bin)
@@ -198,6 +200,29 @@ if (RERUN_BINDER AND ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
     message(FATAL_ERROR "HepMC3  python: binder not found and/or the C++ is not GNU!  Automatic generatin of code for python bindings is not possible.")
   endif()
 endif()
+
+# Helper to compute the wheel platform tag
+function(compute_wheel_tag python_executable out_tag)
+    execute_process(
+        COMMAND ${python_executable} -c
+            "import sysconfig, platform
+s = sysconfig.get_platform().replace('-','_').replace('.','_')
+vi = sysconfig.get_config_var('py_version_nodot') or ''
+soabi = sysconfig.get_config_var('SOABI') or ''
+# Extract just the abi tag from SOABI (e.g. cp311-cp311 from cp311-cp311-linux_x86_64)
+parts = soabi.split('-')
+if len(parts) >= 2:
+    pytag = parts[0]
+    abitag = parts[1]
+else:
+    pytag = 'cp' + vi
+    abitag = pytag
+print(f'{pytag}-{abitag}-{s}')"
+        OUTPUT_VARIABLE _tag
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    set(${out_tag} "${_tag}" PARENT_SCOPE)
+endfunction()
 
 macro(bindings verin verminor)
 SET( Python_VERSION_MAJOR "0")
@@ -265,7 +290,6 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     AND ((${Python_VERSION_MAJOR} STREQUAL ${ver} AND ${verminor} STREQUAL "X")
         OR "${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}" STREQUAL "${ver}.${verminor}" ))
   message(STATUS "HepMC3 python: Python verson ${ver}.${verminor} found in ${Python_EXECUTABLE}. Python bindings generation is possible.")
-
   foreach(_comp IN ITEMS " " ${HEPMC3_COMPONENTS} )
     if (${_comp} STREQUAL " ")
       set(_comp "") 
@@ -356,7 +380,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     message(STATUS "HepMC3 python: WARNING: The installation path of the python modules is outside of the global instalation path CMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}.")
     message(STATUS "HepMC3 python: WARNING: You can use the HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR} variable to set the desired installation path for the Python${Python_VERSION_MAJOR}${Python_VERSION_MINOR} modules.")
   endif()
-
+    compute_wheel_tag(${Python_EXECUTABLE} PYTHON_WHEEL_TAG)
     foreach(_comp IN ITEMS " " ${HEPMC3_COMPONENTS} )
        if (${_comp} STREQUAL " ")
          set(_comp "") 
@@ -370,11 +394,30 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/${_comp}/__init__.py
       DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3/${_comp}
       COMPONENT python${_comp})
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/../pyHepMC3${_dotcomp}.egg-info
-      DESTINATION  ${HEPMC3_Python_SITEARCH}
-      RENAME pyHepMC3${_dotcomp}-${THIS_PROJECT_NAME_VERSION}-py${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}.egg-info
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/../pyHepMC3${_dotcomp}.metadata
+      DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3${_dotcomp}-${THIS_PROJECT_NAME_VERSION}.dist-info
+      RENAME METADATA
       COMPONENT python${_comp})
-  endforeach()
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/../pyHepMC3${_dotcomp}.installer"
+        DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3${_dotcomp}-${THIS_PROJECT_NAME_VERSION}.dist-info
+        RENAME INSTALLER
+        COMPONENT python${_comp})
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/../pyHepMC3${_dotcomp}.record"
+        DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3${_dotcomp}-${THIS_PROJECT_NAME_VERSION}.dist-info
+        RENAME RECORD
+        COMPONENT python${_comp})
+    #Wheel is version dependent
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3${_dotcomp}.wheel" 
+"Wheel-Version: 1.0
+Generator: cmake
+Root-Is-Purelib: false
+Tag: ${PYTHON_WHEEL_TAG}
+")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3${_dotcomp}.wheel"
+        DESTINATION  ${HEPMC3_Python_SITEARCH}/pyHepMC3${_dotcomp}-${THIS_PROJECT_NAME_VERSION}.dist-info
+        RENAME WHEEL
+        COMPONENT python${_comp})
+        endforeach()
   set( HepMC_python_tests
         test_IO1
         test_IO3
