@@ -3,9 +3,9 @@ set(_consumer_binary_dir "${HEPMC3_TEST_BINARY_DIR}/build")
 
 file(REMOVE_RECURSE "${HEPMC3_TEST_BINARY_DIR}")
 
+set(_install_root "${HEPMC3_TEST_BINARY_DIR}/stage")
+set(_install_prefix "${_install_root}${HEPMC3_INSTALL_PREFIX}")
 if(CMAKE_VERSION VERSION_LESS 3.15)
-  set(_install_root "${HEPMC3_TEST_BINARY_DIR}/stage")
-  set(_install_prefix "${_install_root}${HEPMC3_INSTALL_PREFIX}")
   execute_process(
     COMMAND "${CMAKE_COMMAND}" -E env "DESTDIR=${_install_root}"
       "${CMAKE_COMMAND}" --build "${HEPMC3_BINARY_DIR}" --target install
@@ -14,7 +14,8 @@ if(CMAKE_VERSION VERSION_LESS 3.15)
     ERROR_VARIABLE _install_stderr)
 else()
   execute_process(
-    COMMAND "${CMAKE_COMMAND}" --install "${HEPMC3_BINARY_DIR}" --prefix "${_install_prefix}"
+    COMMAND "${CMAKE_COMMAND}" -E env "DESTDIR=${_install_root}"
+      "${CMAKE_COMMAND}" --install "${HEPMC3_BINARY_DIR}" --prefix "${HEPMC3_INSTALL_PREFIX}"
     RESULT_VARIABLE _install_result
     OUTPUT_VARIABLE _install_stdout
     ERROR_VARIABLE _install_stderr)
