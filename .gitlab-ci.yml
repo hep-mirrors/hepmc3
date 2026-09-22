@@ -336,7 +336,7 @@ check_commit_Archlinux0:
 ###########################################################################
 #Build images
 build_image_Gentoo:
-  timeout: 24h
+  timeout: 2h
   variables: { OS: Gentoo, FREL: 0}
   extends: .build_image
   needs:
