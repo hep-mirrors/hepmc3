@@ -5,12 +5,7 @@ COPY --from=portage-base /var/db/repos/gentoo /var/db/repos/gentoo
 # Create the necessary directories for Portage environment files
 RUN install -m 0750 -o portage -g portage -d /etc/portage/{env,repos.conf} /etc/portage/package.{accept_keywords,env,unmask,use}
 RUN chown -R portage:portage /var/cache/distfiles
-RUN install -d -o portage -g portage "$CI_PROJECT_DIR/.ccache"
-RUN
-# CCACHE config
-RUN printf 'FEATURES="${FEATURES} ccache"\n' >> /etc/portage/make.conf
-RUN printf 'CCACHE_DIR="%s"\n' "$CI_PROJECT_DIR/.ccache" >> /etc/portage/make.conf
-RUN printf 'CCACHE_SIZE="2G"\n' >> /etc/portage/make.conf
+
 # Test config
 RUN printf 'COMMON_FLAGS="-O2 -pipe -frecord-gcc-switches"\nCFLAGS="${COMMON_FLAGS}"\nCXXFLAGS="${COMMON_FLAGS}"\nFCFLAGS="${COMMON_FLAGS}"\nFFLAGS="${COMMON_FLAGS}"\nLDFLAGS="${LDFLAGS} -Wl,--defsym=__gentoo_check_ldflags__=0"\nFEATURES="collision-protect ipc-sandbox network-sandbox sandbox split-log split-elog strict test userfetch userpriv usersandbox"\nFEATURES="${FEATURES} -parallel-install"\nPORTAGE_ELOG_CLASSES="log warn error qa"\nPORTAGE_ELOG_SYSTEM="echo save"\nDISTUTILS_STRICT_ENTRY_POINTS=1\nALLOW_TEST="network"\nIWDT_ALL=y\nQA_CMP=y\nQA_CMP_ARGS="-xS"\nQA_SED=y\nQA_VDB=y' > /etc/portage/env/test.conf
 

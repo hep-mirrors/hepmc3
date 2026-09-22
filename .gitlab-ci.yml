@@ -633,6 +633,13 @@ Gentoo-Portage:
 
   script:
     - |
+
+      # CCACHE config, we use it here, because we recompile the same package multiple times with different USE flags
+      install -d -o portage -g portage "$CI_PROJECT_DIR/.ccache"
+      printf 'FEATURES="${FEATURES} ccache"\n' >> /etc/portage/make.conf
+      printf 'CCACHE_DIR="%s"\n' "$CI_PROJECT_DIR/.ccache" >> /etc/portage/make.conf
+      printf 'CCACHE_SIZE="2G"\n' >> /etc/portage/make.conf
+
       # Obtain changes in the merge request or empty
       if [[ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]]; then
         git diff "$CI_MERGE_REQUEST_DIFF_BASE_SHA"...HEAD > /tmp/hepmc.patch
