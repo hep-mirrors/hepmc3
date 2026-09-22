@@ -8,6 +8,7 @@ stages:
   - build_docker_image
   - build
   - LCG
+  - packaging
 ########################################################################
 
 changelog_check:
@@ -276,6 +277,10 @@ check_commit_Fedora45:
   variables: { OS: Fedora, FREL: 45}
   extends: .check_commit
 
+check_commit_Gentoo:
+  variables: { OS: Gentoo, FREL: 0}
+  extends: .check_commit
+
 check_commit_Fedora44:
   variables: { OS: Fedora, FREL: 44}
   extends: .check_commit
@@ -339,6 +344,13 @@ build_image_Fedora45:
   extends: .build_image
   needs:
     - job: check_commit_Fedora45
+
+build_image_Gentoo:
+  timeout: 2h
+  variables: { OS: Gentoo, FREL: 0}
+  extends: .build_image
+  needs:
+    - job: check_commit_Gentoo
 
 build_image_Fedora44:
   variables: { OS: Fedora, FREL: 44}
@@ -431,11 +443,17 @@ Fedora45-GNU-pypy:
   needs:
     - job: build_image_Fedora45
 
+Gentoo-GNU:
+  variables: { OS: Gentoo, FREL: 0, TOOLSET: GNU, EXTRACMAKEFLAGS: -DHEPMC3_ENABLE_PROTOBUFIO=OFF}
+  extends: .any-cmake
+  needs:
+    - job: build_image_Gentoo
+
 Fedora44-GNU-pypy:
   variables: { OS: Fedora, FREL: 44, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy3"}
   extends: .any-cmake
   needs:
-    - job: build_image_Fedora44
+    - job: build_image_Gentoo
 
 Fedora41-GNU:
   variables: { OS: Fedora, FREL: 41, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
@@ -612,3 +630,40 @@ CentOS10-GNU-oldcmake-ranges:
       - *oldcmake
       - *oldstandaloneexamples
       - *oldstandalonepython
+
+Gentoo-Portage:
+  stage: packaging
+  # TODO remove this mirror
+  image: gitlab-registry.cern.ch/hepmc/hepmc3:Gentoo_0
+  needs: 
+    - job: build_image_Gentoo
+
+  # We use ccache
+  cache:
+    key: gentoo-ccache-${CI_COMMIT_REF_SLUG}
+    fallback_keys:
+      - gentoo-ccache-${CI_DEFAULT_BRANCH}
+      - gentoo-ccache-default
+    paths:
+      - .ccache/
+    policy: pull-push
+
+  script:
+    - |
+
+      # CCACHE config, we use it here, because we recompile the same package multiple times with different USE flags
+      install -d -o portage -g portage "$CI_PROJECT_DIR/.ccache"
+      printf 'FEATURES="${FEATURES} ccache"\n' >> /etc/portage/make.conf
+      printf 'CCACHE_DIR="%s"\n' "$CI_PROJECT_DIR/.ccache" >> /etc/portage/make.conf
+      printf 'CCACHE_SIZE="2G"\n' >> /etc/portage/make.conf
+
+      # Obtain changes in the merge request or empty
+      if [[ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]]; then
+        git diff "$CI_MERGE_REQUEST_DIFF_BASE_SHA"...HEAD > /tmp/hepmc.patch
+      else
+        : > /tmp/hepmc.patch
+      fi
+
+
+      # Run the tests
+      pkg-testing-tool -asu -adu --append-emerge "-q -g --usepkg-exclude 'sci-physics/hepmc' --autounmask=y --autounmask-write --autounmask-continue --autounmask-use=y --autounmask-backtrack=y" --test-feature-scope force --extra-env-file 'test.conf' -p =sci-physics/hepmc-9999 --patch /tmp/hepmc.patch
