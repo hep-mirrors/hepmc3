@@ -1,6 +1,8 @@
 --------------------------  HepMC3.3.2 --------------------------
 2026-09-04 Andrii Verbytskyi
    * Implement compressed I/O for LHEF and create base I/O classes for LHEF.
+2026-09-19 Alexander Puck Neuwirth
+  * Add CI for gentoo linux which tests cmake configuration randomly.
 2026-09-10 Andrii Verbytskyi
   * Update installation of Python metadata
 2026-09-12 Andrii Verbytskyi
