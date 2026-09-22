@@ -650,4 +650,4 @@ Gentoo-Portage:
 
 
       # Run the tests
-      pkg-testing-tool -asu -adu --fail-fast --append-emerge "-g --usepkg-exclude 'sci-physics/hepmc' --autounmask=y --autounmask-write --autounmask-continue --autounmask-use=y --autounmask-backtrack=y" --test-feature-scope force --extra-env-file 'test.conf' -p =sci-physics/hepmc-9999 --patch /tmp/hepmc.patch
+      pkg-testing-tool -asu -adu --append-emerge "-q -g --usepkg-exclude 'sci-physics/hepmc' --autounmask=y --autounmask-write --autounmask-continue --autounmask-use=y --autounmask-backtrack=y" --test-feature-scope force --extra-env-file 'test.conf' -p =sci-physics/hepmc-9999 --patch /tmp/hepmc.patch
