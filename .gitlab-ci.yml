@@ -272,6 +272,10 @@ EDM4HEP-CVMFS:
 
 ###########################################################################
 #Check commit messages
+check_commit_Fedora45:
+  variables: { OS: Fedora, FREL: 45}
+  extends: .check_commit
+
 check_commit_Fedora44:
   variables: { OS: Fedora, FREL: 44}
   extends: .check_commit
@@ -330,6 +334,12 @@ check_commit_Archlinux0:
 
 ###########################################################################
 #Build images
+build_image_Fedora45:
+  variables: { OS: Fedora, FREL: 45}
+  extends: .build_image
+  needs:
+    - job: check_commit_Fedora45
+
 build_image_Fedora44:
   variables: { OS: Fedora, FREL: 44}
   extends: .build_image
@@ -415,6 +425,12 @@ build_image_Archlinux0:
     - job: check_commit_Archlinux0
 
 ###########################################################################
+Fedora45-GNU-pypy:
+  variables: { OS: Fedora, FREL: 45, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy3"}
+  extends: .any-cmake
+  needs:
+    - job: build_image_Fedora45
+
 Fedora44-GNU-pypy:
   variables: { OS: Fedora, FREL: 44, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy3"}
   extends: .any-cmake

@@ -1,4 +1,6 @@
 --------------------------  HepMC3.3.2 --------------------------
+2026-09-22 Andrii Verbytskyi
+  * Added Fedora45 to CI
 2026-09-10 Andrii Verbytskyi
   * Update installation of Python metadata
 2026-09-12 Andrii Verbytskyi
