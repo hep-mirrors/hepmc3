@@ -8,6 +8,7 @@ stages:
   - build_docker_image
   - build
   - LCG
+  - packaging
 ########################################################################
 
 changelog_check:
@@ -272,6 +273,10 @@ EDM4HEP-CVMFS:
 
 ###########################################################################
 #Check commit messages
+check_commit_Gentoo:
+  variables: { OS: Gentoo, FREL: 0}
+  extends: .check_commit
+
 check_commit_Fedora44:
   variables: { OS: Fedora, FREL: 44}
   extends: .check_commit
@@ -330,6 +335,12 @@ check_commit_Archlinux0:
 
 ###########################################################################
 #Build images
+build_image_Gentoo:
+  variables: { OS: Gentoo, FREL: 0}
+  extends: .build_image
+  needs:
+    - job: check_commit_Gentoo
+
 build_image_Fedora44:
   variables: { OS: Fedora, FREL: 44}
   extends: .build_image
@@ -415,11 +426,17 @@ build_image_Archlinux0:
     - job: check_commit_Archlinux0
 
 ###########################################################################
+Gentoo-GNU:
+  variables: { OS: Gentoo, FREL: 0, TOOLSET: GNU}
+  extends: .any-cmake
+  needs:
+    - job: build_image_Gentoo
+
 Fedora44-GNU-pypy:
   variables: { OS: Fedora, FREL: 44, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy3"}
   extends: .any-cmake
   needs:
-    - job: build_image_Fedora44
+    - job: build_image_Gentoo
 
 Fedora41-GNU:
   variables: { OS: Fedora, FREL: 41, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
@@ -596,3 +613,33 @@ CentOS10-GNU-oldcmake-ranges:
       - *oldcmake
       - *oldstandaloneexamples
       - *oldstandalonepython
+
+Gentoo-Portage:
+  stage: packaging
+  # TODO remove this mirror
+  image: gitlab-registry.cern.ch/hepmc/hepmc3:Gentoo_0
+  needs: 
+    - job: build_image_Gentoo
+
+  # We use ccache
+  cache:
+    key: gentoo-ccache-${CI_COMMIT_REF_SLUG}
+    fallback_keys:
+      - gentoo-ccache-${CI_DEFAULT_BRANCH}
+      - gentoo-ccache-default
+    paths:
+      - .ccache/
+    policy: pull-push
+
+  script:
+    - |
+      # Obtain changes in the merge request or empty
+      if [[ -n "$CI_MERGE_REQUEST_DIFF_BASE_SHA" ]]; then
+        git diff "$CI_MERGE_REQUEST_DIFF_BASE_SHA"...HEAD > /tmp/hepmc.patch
+      else
+        : > /tmp/hepmc.patch
+      fi
+
+
+      # Run the tests
+      pkg-testing-tool -asu -adu --fail-fast --append-emerge "-g --usepkg-exclude 'sci-physics/hepmc' --autounmask=y --autounmask-write --autounmask-continue --autounmask-use=y --autounmask-backtrack=y" --test-feature-scope force --extra-env-file 'test.conf' -p =sci-physics/hepmc-9999 --patch /tmp/hepmc.patch
