@@ -11,14 +11,15 @@ RUN printf 'COMMON_FLAGS="-O2 -pipe -frecord-gcc-switches"\nCFLAGS="${COMMON_FLA
 
 
 # Add the package.accept_keywords entries 
-RUN printf '%s\n' '=app-portage/pkg-testing-tools-9999 **' > /etc/portage/package.accept_keywords/pkg-testing-tools
-RUN printf '%s\n' '=sci-physics/hepmc-9999 **' > /etc/portage/package.accept_keywords/hepmc
-RUN printf '%s\n' 'sci-mathematics/unuran ~*' > /etc/portage/package.accept_keywords/unuran
-RUN printf '%s\n' 'sci-physics/root -X -qt5 -asimage -opengl -jupyter' > /etc/portage/package.use/root
+RUN printf '%s\n' '=app-portage/pkg-testing-tools-9999 **' > /etc/portage/package.accept_keywords/pkg-testing-tools && \
+ printf '%s\n' '=sci-physics/hepmc-9999 **' > /etc/portage/package.accept_keywords/hepmc && \
+ printf '%s\n' 'sci-mathematics/unuran ~*' > /etc/portage/package.accept_keywords/unuran && \
+ printf '%s\n' 'sci-physics/root -X -qt5 -asimage -opengl -jupyter' > /etc/portage/package.use/root
 
 # Install tools
-RUN emerge -q -g dev-util/ccache
-RUN emerge -q -g =app-portage/pkg-testing-tools-9999
+RUN emerge -q -g \
+ dev-util/ccache \
+ =app-portage/pkg-testing-tools-9999
 # missing root deps: https://github.com/gentoo/gentoo/pull/46793/changes
 RUN emerge -q -g media-libs/giflib media-libs/libjpeg-turbo
 # Get HepMC dependencies
