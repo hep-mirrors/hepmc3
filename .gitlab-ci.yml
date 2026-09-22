@@ -428,7 +428,7 @@ build_image_Archlinux0:
 
 ###########################################################################
 Gentoo-GNU:
-  variables: { OS: Gentoo, FREL: 0, TOOLSET: GNU}
+  variables: { OS: Gentoo, FREL: 0, TOOLSET: GNU, EXTRACMAKEFLAGS: -DHEPMC3_ENABLE_PROTOBUFIO=OFF}
   extends: .any-cmake
   needs:
     - job: build_image_Gentoo
