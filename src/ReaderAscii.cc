@@ -107,6 +107,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
     m_io_explicit_ids.clear();
     m_data.particles.clear();
     m_data.vertices.clear();
+    m_data.event_pos = FourVector::ZERO_VECTOR();
     m_data.links1.clear();
     m_data.links2.clear();
     m_data.attribute_id.clear();
@@ -149,6 +150,7 @@ bool ReaderAscii::read_event(GenEvent &evt) {
             vertices_and_particles = parse_event_information( buf.data());
             if (vertices_and_particles.second < 0) {
                 is_parsing_successful = false;
+                event_context = true;
             } else {
                 is_parsing_successful = true;
                 event_context   = true;
@@ -336,7 +338,7 @@ std::pair<int, int> ReaderAscii::parse_event_information(const char *buf) {
     // check if there is position information
     if ( (cursor = std::strchr(cursor, '@')) ) {
         // x
-        if ( !(cursor = find_next_token(cursor)) ) return err;
+        if ( !(cursor = find_next_token(cursor+1)) ) return err;
         position.setX(std::strtod(cursor, &after_parse));
         if(cursor == after_parse) return err;
         cursor = after_parse;
