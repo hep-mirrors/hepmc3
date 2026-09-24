@@ -3,6 +3,7 @@
   * Fix reading event positions in ReaderAscii by skipping the '@' marker.
   * Reset the event position before each read to avoid keeping the previous event's position.
   * Report event header parsing errors instead of returning an empty event as a success.
+  * Add ReaderAscii tests for event positions, position reset, invalid headers, and read/write round trips.
 2026-09-19 Alexander Puck Neuwirth
   * Add CI for gentoo linux which tests cmake configuration randomly.
 2026-09-10 Andrii Verbytskyi
