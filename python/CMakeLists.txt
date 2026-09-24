@@ -43,6 +43,7 @@ if (USE_INSTALLED_HEPMC3)
 # Use ROOT_CXX_STANDARD if defined, otherwise deduce from ROOT_CXX_FLAGS
       if(NOT DEFINED ROOT_CXX_STANDARD)
         string(REPLACE " " ";" ROOT_CXX_FLAGS_LIST ${ROOT_CXX_FLAGS})
+        set(ROOT_CXX_STANDARD ${HEPMC3_CXX_STANDARD})
         foreach(fl ${ROOT_CXX_FLAGS_LIST})
           if ("${fl}" MATCHES   ".*\\+\\+14$" OR "${fl}" MATCHES   ".*\\+\\+1y$" )
             set(ROOT_CXX_STANDARD 14)
