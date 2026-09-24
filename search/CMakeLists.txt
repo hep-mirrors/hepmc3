@@ -10,10 +10,14 @@ ${PROJECT_SOURCE_DIR}/search/src/Selector.cc)
 add_library(HepMC3search SHARED ${hepmc3search_sources})
 target_link_libraries(HepMC3search HepMC3)
 set_target_properties(HepMC3search PROPERTIES OUTPUT_NAME HepMC3search   SOVERSION 5
+  CXX_STANDARD ${HEPMC3_CXX_STANDARD}
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
   ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   EXPORT_NAME HepMC3::search)
+target_compile_features(HepMC3search PUBLIC cxx_std_${HEPMC3_CXX_STANDARD})
 
 target_include_directories(HepMC3search PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -40,10 +44,14 @@ if (HEPMC3_BUILD_STATIC_LIBS)
 
   target_compile_definitions(HepMC3search_static PRIVATE HEPMC3search_NO_StandardSelector_EXPORTS HEPMC3search_NO_Relatives_EXPORTS)
   set_target_properties(HepMC3search_static PROPERTIES OUTPUT_NAME HepMC3search-static
+    CXX_STANDARD ${HEPMC3_CXX_STANDARD}
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
     ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
     LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
     RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
     EXPORT_NAME HepMC3::search_static)
+  target_compile_features(HepMC3search_static PUBLIC cxx_std_${HEPMC3_CXX_STANDARD})
   install(TARGETS HepMC3search_static
     EXPORT HepMC3searchTargets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
