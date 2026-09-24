@@ -433,6 +433,16 @@ if(MEMORYCHECK_COMMAND)
      file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/intelHepMC3.supp" "{\n<HepMC3_at_Linux_with_Intel_1>\nMemcheck:Addr32\nfun:__intel_*\n}\n{\n<HepMC3_at_Linux_with_Intel_2>\nMemcheck:Cond\nfun:*strchr\n}\n"  )
      set( MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --suppressions=${CMAKE_CURRENT_BINARY_DIR}/IntelHepMC3.supp")
   endif()
+  if (HEPMC3_ENABLE_PROTOBUFIO)
+#protobuf/abseil register their descriptor tables in library-load-time static initializers;
+#the "possibly lost" blocks they allocate live for the process lifetime and are not real leaks.
+     file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/protobufHepMC3.supp"
+"{\n<HepMC3_protobuf_possibly_lost_1>\nMemcheck:Leak\nmatch-leak-kinds: possible\nfun:_Znwm\nobj:*libabsl_raw_hash_set*\nobj:*libabsl_raw_hash_set*\nfun:*MessageFactory*InternalRegisterGeneratedFile*\nobj:*libprotobuf*\nfun:call_init\nfun:call_init\nfun:_dl_init\nobj:*ld-linux*\n}\n\
+{\n<HepMC3_protobuf_possibly_lost_2>\nMemcheck:Leak\nmatch-leak-kinds: possible\nfun:_Znwm\nobj:*libprotobuf*\nfun:*DescriptorPool*Tables*C1Ev\nfun:*DescriptorPool*C1E*\nfun:*DescriptorPool*internal_generated_pool*\nfun:*DescriptorPool*InternalAddGeneratedFile*\nfun:*AddDescriptors*\nobj:*libprotobuf*\nfun:call_init\nfun:call_init\nfun:_dl_init\nobj:*ld-linux*\n}\n\
+{\n<HepMC3_protobuf_possibly_lost_3>\nMemcheck:Leak\nmatch-leak-kinds: possible\nfun:_Znwm\nobj:*libabsl_raw_hash_set*\nobj:*libabsl_raw_hash_set*\nfun:*DescriptorPool*Tables*C1Ev\nfun:*DescriptorPool*C1E*\nfun:*DescriptorPool*internal_generated_pool*\nfun:*DescriptorPool*InternalAddGeneratedFile*\nfun:*AddDescriptors*\nobj:*libprotobuf*\nfun:call_init\nfun:call_init\nfun:_dl_init\nobj:*ld-linux*\n}\n"
+     )
+     set( MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --suppressions=${CMAKE_CURRENT_BINARY_DIR}/protobufHepMC3.supp")
+  endif()
 else()
   message(STATUS "HepMC3 test: valgrind package not found or disabled.  memory check tests disabled.")
 endif()
