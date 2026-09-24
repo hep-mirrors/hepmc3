@@ -1,4 +1,6 @@
 --------------------------  HepMC3.3.2 --------------------------
+2026-09-24 Andrii Verbytskyi
+  * Update the logic of defining thedard for each component.
 2026-09-24 Dmitri Konstantinov
   * Fix reading event positions in ReaderAscii by skipping the '@' marker.
   * Reset the event position before each read to avoid keeping the previous event's position.

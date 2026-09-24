@@ -141,11 +141,14 @@ if(HEPMC3_ENABLE_ROOTIO)
     message(STATUS "HepMC3: ROOT_DEFINITIONS=${ROOT_DEFINITIONS}")
     message(STATUS "HepMC3: ROOT_CXX_FLAGS=${ROOT_CXX_FLAGS}")
     string(REPLACE "ROOTUseFile.cmake" "modules/RootNewMacros.cmake" ROOT_NEWMACROS_FILE "${ROOT_USE_FILE}")
+    #ROOT >= 6.08: reliably found via replacing ROOTUseFile.cmake with modules/RootNewMacros.cmake in the path
+    #ROOT >= 6.24 -- may not exist
     if(EXISTS "${ROOT_NEWMACROS_FILE}")
       include(${ROOT_NEWMACROS_FILE})
     endif()
     add_definitions(-DHEPMC3_ROOTIO)
 # Use ROOT_CXX_STANDARD if defined, otherwise deduce from ROOT_CXX_FLAGS
+# ROOT_CXX_STANDARD was introduced in ROOT 6.20 (released January 2020).
     if(NOT DEFINED ROOT_CXX_STANDARD)
       string(REPLACE " " ";" ROOT_CXX_FLAGS_LIST ${ROOT_CXX_FLAGS})
       foreach(fl ${ROOT_CXX_FLAGS_LIST})
