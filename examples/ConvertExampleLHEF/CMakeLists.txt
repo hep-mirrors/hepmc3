@@ -5,11 +5,11 @@ set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c PROPERTIES LAN
 
 add_executable(convert_example_LHEF.exe  ${basic_sources} )
 target_include_directories(convert_example_LHEF.exe  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_compile_features(convert_example_LHEF.exe PRIVATE cxx_std_11)
 
 set(bindir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 set(libdir ${basic_libdir})
 set_target_properties(convert_example_LHEF.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/$<0:>)
-
 
 # installs
 if (USE_INSTALLED_HEPMC3)
