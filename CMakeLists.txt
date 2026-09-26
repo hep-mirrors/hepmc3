@@ -141,36 +141,39 @@ if(HEPMC3_ENABLE_ROOTIO)
     message(STATUS "HepMC3: ROOT_DEFINITIONS=${ROOT_DEFINITIONS}")
     message(STATUS "HepMC3: ROOT_CXX_FLAGS=${ROOT_CXX_FLAGS}")
     string(REPLACE "ROOTUseFile.cmake" "modules/RootNewMacros.cmake" ROOT_NEWMACROS_FILE "${ROOT_USE_FILE}")
+    #ROOT >= 6.08: reliably found via replacing ROOTUseFile.cmake with modules/RootNewMacros.cmake in the path
+    #ROOT >= 6.24 -- may not exist
     if(EXISTS "${ROOT_NEWMACROS_FILE}")
       include(${ROOT_NEWMACROS_FILE})
     endif()
     add_definitions(-DHEPMC3_ROOTIO)
 # Use ROOT_CXX_STANDARD if defined, otherwise deduce from ROOT_CXX_FLAGS
-    if(DEFINED ROOT_CXX_STANDARD)
-      set(HEPMC3_CXX_STANDARD ${ROOT_CXX_STANDARD})
-    else()
+# ROOT_CXX_STANDARD was introduced in ROOT 6.20 (released January 2020).
+    if(NOT DEFINED ROOT_CXX_STANDARD)
       string(REPLACE " " ";" ROOT_CXX_FLAGS_LIST ${ROOT_CXX_FLAGS})
+      set(ROOT_CXX_STANDARD ${HEPMC3_CXX_STANDARD})
       foreach(fl ${ROOT_CXX_FLAGS_LIST})
           if ("${fl}" MATCHES   ".*\\+\\+14$" OR "${fl}" MATCHES   ".*\\+\\+1y$" )
-            set(HEPMC3_CXX_STANDARD 14)
+            set(ROOT_CXX_STANDARD 14)
           endif()
           if ("${fl}" MATCHES   ".*\\+\\+17$" OR "${fl}" MATCHES   ".*\\+\\+1z$" )
-            set(HEPMC3_CXX_STANDARD 17)
+            set(ROOT_CXX_STANDARD 17)
           endif()
           if ("${fl}" MATCHES   ".*\\+\\+20$" OR "${fl}" MATCHES   ".*\\+\\+2a$" )
-            set(HEPMC3_CXX_STANDARD 20)
+            set(ROOT_CXX_STANDARD 20)
           endif()
           if ("${fl}" MATCHES   ".*\\+\\+23$" OR "${fl}" MATCHES   ".*\\+\\+2b$" )
-            set(HEPMC3_CXX_STANDARD 23)
+            set(ROOT_CXX_STANDARD 23)
           endif()
           if ("${fl}" MATCHES   ".*\\+\\+26$" OR "${fl}" MATCHES   ".*\\+\\+2c$" )
-            set(HEPMC3_CXX_STANDARD 26)
+            set(ROOT_CXX_STANDARD 26)
           endif()
           if ("${fl}" MATCHES   ".*\\+\\+29$" OR "${fl}" MATCHES   ".*\\+\\+2d$" )
-            set(HEPMC3_CXX_STANDARD 29)
+            set(ROOT_CXX_STANDARD 29)
           endif()
       endforeach(fl ${ROOT_CXX_FLAGS_LIST})
     endif()
+    message(STATUS "HepMC3: ROOT_CXX_STANDARD=${ROOT_CXX_STANDARD}")
   else()
     message(STATUS "HepMC3 warning: ROOT needed for ROOTIO but not found")
     message(STATUS "HepMC3 warning: Skipping HepMC ROOT IO libraries")
@@ -180,15 +183,29 @@ endif()
 
 if(HEPMC3_ENABLE_PROTOBUFIO)
   find_package(Protobuf 2.4 REQUIRED)
+
   if(Protobuf_PROTOC_EXECUTABLE STREQUAL "Protobuf_PROTOC_EXECUTABLE-NOTFOUND" OR NOT EXISTS ${Protobuf_PROTOC_EXECUTABLE})
     message(FATAL_ERROR "Found libprotobuf, but cannot find proto compiler, protoc, which is required.")
   endif()
   add_definitions(-DHEPMC3_PROTOBUFIO)
+# Detect the C++ standard required by protobuf::libprotobuf, otherwise fall back to HEPMC3_CXX_STANDARD
+  if(NOT DEFINED PROTOBUF_CXX_STANDARD)
+    set(PROTOBUF_CXX_STANDARD ${HEPMC3_CXX_STANDARD})
+    if(TARGET protobuf::libprotobuf)
+      get_target_property(_protobuf_compile_features protobuf::libprotobuf INTERFACE_COMPILE_FEATURES)
+      if(_protobuf_compile_features)
+        foreach(_feature ${_protobuf_compile_features})
+          if("${_feature}" MATCHES "^cxx_std_([0-9]+)$")
+            set(PROTOBUF_CXX_STANDARD ${CMAKE_MATCH_1})
+          endif()
+        endforeach()
+      endif()
+      unset(_protobuf_compile_features)
+    endif()
+  endif()
+  message(STATUS "HepMC3: PROTOBUF_CXX_STANDARD=${PROTOBUF_CXX_STANDARD}")
 endif()
 #Compiler-specifc flags
-set(CMAKE_CXX_STANDARD ${HEPMC3_CXX_STANDARD})
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 set(${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK "")
 set(MSVC_CXX_FLAGS_TO_CHECK "/bigobj;/D_CRT_SECURE_NO_WARNINGS;/wd4267;/wd4244;/wd4477;/wd4251;/wd4065;/wd4101")
 set(PGI_CXX_FLAGS_TO_CHECK "-Wc,--pending_instantiations=0;-noswitcherror;--diag_suppress=code_is_unreachable;--diag_suppress=offset_in_non_POD_nonstandard;--diag_suppress=set_but_not_used")
@@ -245,10 +262,14 @@ target_include_directories(HepMC3 PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 set_target_properties(HepMC3 PROPERTIES OUTPUT_NAME HepMC3 SOVERSION 4
+  CXX_STANDARD ${HEPMC3_CXX_STANDARD}
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
   ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
   EXPORT_NAME HepMC3::HepMC3)
+target_compile_features(HepMC3 PUBLIC cxx_std_${HEPMC3_CXX_STANDARD})
 
 # Alias for packages that include this as a sub-project but
 # want to use the namespaced target names
@@ -268,10 +289,14 @@ if (HEPMC3_BUILD_STATIC_LIBS)
     $<INSTALL_INTERFACE:include>)
   target_compile_definitions(HepMC3_static PRIVATE HEPMC3_NO_EXPORTS)
   set_target_properties(HepMC3_static PROPERTIES OUTPUT_NAME HepMC3-static
+    CXX_STANDARD ${HEPMC3_CXX_STANDARD}
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
     ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
     LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
     RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
     EXPORT_NAME HepMC3::HepMC3_static)
+  target_compile_features(HepMC3_static PUBLIC cxx_std_${HEPMC3_CXX_STANDARD})
 
   target_link_libraries(HepMC3_static PRIVATE ${CMAKE_DL_LIBS})
 #---Install build products---------------------------------------------------

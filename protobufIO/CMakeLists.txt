@@ -25,6 +25,7 @@ target_include_directories(HepMC3protobufIO PUBLIC
   $<INSTALL_INTERFACE:include>)
 
 target_link_libraries(HepMC3protobufIO HepMC3 protobuf::libprotobuf)
+target_compile_features(HepMC3protobufIO PUBLIC cxx_std_${PROTOBUF_CXX_STANDARD})
 
 set_target_properties(HepMC3protobufIO
   PROPERTIES
@@ -78,6 +79,7 @@ if (HEPMC3_BUILD_STATIC_LIBS)
       LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
       RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
       EXPORT_NAME HepMC3::protobufIO_static)
+  target_compile_features(HepMC3protobufIO_static PUBLIC cxx_std_${PROTOBUF_CXX_STANDARD})
 
 #---Install static build products---------------------------------------------------
   install(TARGETS HepMC3protobufIO_static
