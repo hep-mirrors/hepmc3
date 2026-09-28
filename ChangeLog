@@ -3,8 +3,10 @@
   * Add comments/documentation to C++ tests.
 2026-09-22 Andrii Verbytskyi
   * Added Fedora45 to CI
+2026-09-28 Andrii Verbytskyi
+  * Add documentation to Python tests
 2026-09-24 Andrii Verbytskyi
-  * Update the logic of defining thedard for each component.
+  * Update the logic of defining the C++ standard for each component.
 2026-09-24 Dmitri Konstantinov
   * Fix reading event positions in ReaderAscii by skipping the '@' marker.
   * Reset the event position before each read to avoid keeping the previous event's position.
