@@ -1,3 +1,4 @@
+# Test IO7: Compare ROOT tree reading (ReaderRootTree) with uproot reading (ReaderuprootTree) for performance and correctness.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 import time

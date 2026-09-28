@@ -1,3 +1,5 @@
+    # Test documentation strings for Pythonization: ensure that module docstrings and
+    # function docstrings are present and correctly exposed when imported.
 from pyHepMC3TestUtils import update_path
 import sys
 

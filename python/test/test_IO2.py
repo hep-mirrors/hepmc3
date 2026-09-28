@@ -1,3 +1,6 @@
+# Test IO2: Convert an ASCII HepMC file to ROOT format and back, then compare.
+# This verifies that the ReaderAsciiHepMC2 (IO_GENEVENT) and WriterRootTree (and the reverse)
+# correctly preserve event information.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 

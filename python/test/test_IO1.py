@@ -1,3 +1,4 @@
+# Test IO1: Verify round‑trip conversion from IO_GENEVENT format to asciiv3 format and back.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 
