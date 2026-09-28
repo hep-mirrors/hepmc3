@@ -104,6 +104,10 @@ By defult only three jobs are executed, but it makes sens to test the builds wit
 To Do that add to the commit message "FedoraCI" to run all Fedora-based jobs and "CentOSCI" to
 run all CentOS-based jobs.
 
+A ChangeLog entry is recommended for most merge requests, including
+technical changes. It helps users and developers understand what changed.
+If an entry would not be useful, add the `skip-changelog` label.
+
 
 --------------
 TODOS BEFORE RELEASE
