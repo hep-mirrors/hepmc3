@@ -16,21 +16,27 @@ changelog_check:
   image: gitlab-registry.cern.ch/sft/docker/alma9-core:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - ChangeLog
+      variables:
+        CHANGELOG_CHANGED: "true"
       when: always
     - if: '$CI_MERGE_REQUEST_IID'
       when: always
   script:
     - |
-      if [ -n "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" ]; then
-        git fetch --no-tags origin "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" --depth=1
-        if git diff --name-only "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}"...HEAD -- ChangeLog | grep -q .; then
-          echo "Changelog entry present."
-        else
-          echo "ERROR: Merge requests must include a ChangeLog entry before they are Ready."
-          exit 1
-        fi
+      if [ "${CHANGELOG_CHANGED:-}" = "true" ]; then
+        echo "This merge request changes the ChangeLog."
       else
-        echo "Not a merge request pipeline; skipping changelog enforcement."
+        case ",${CI_MERGE_REQUEST_LABELS:-}," in
+          *,skip-changelog,*)
+            echo "This merge request has the skip-changelog label, so no ChangeLog change is needed."
+            ;;
+          *)
+            echo "ERROR: Add a ChangeLog entry, or add the skip-changelog label if no entry is needed."
+            exit 1
+            ;;
+        esac
       fi
 
 LCG_x86_64-alma9:
