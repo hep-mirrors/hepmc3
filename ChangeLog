@@ -7,6 +7,9 @@
   * Make the translation of LHE weight structure to HepMC weight names more compliant with the arXiv:2203.08230 standard and downstream tools.
 2026-09-22 Andrii Verbytskyi
   * Added Fedora45 jobs to CI.
+  * Added Fedora45 to CI
+2026-09-28 Andrii Verbytskyi
+  * Add documentation to Python tests
 2026-09-24 Andrii Verbytskyi
   * Update the logic of defining the C++ standard for each component.
 2026-09-24 Dmitri Konstantinov
