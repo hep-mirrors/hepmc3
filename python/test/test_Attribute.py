@@ -1,3 +1,7 @@
+# Test Attribute handling: verifies creation and manipulation of various attribute
+# types (IntAttribute, DoubleAttribute, VectorIntAttribute, VectorDoubleAttribute)
+# on events, vertices, and particles. Mirrors the C++ testPolarization example.
+#
 # Translated into python using testPolarization.cc (garren@fnal.gov, Oct. 2010) as an example
 #
 # andrii.verbytskyi@mpp.mpg.org, Nov. 2018

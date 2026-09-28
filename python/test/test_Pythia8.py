@@ -1,3 +1,4 @@
+# Test Pythia8 integration: verify conversion of Pythia8 events to HepMC3 format using the Pythia8ToHepMC3 utility.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 

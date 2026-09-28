@@ -1,3 +1,5 @@
+# Test Pythonization of GenEvent: ensure that a GenEvent can be created,
+# particles and vertices can be added, and that basic attributes are accessible.
 from pyHepMC3TestUtils import update_path
 import sys
 

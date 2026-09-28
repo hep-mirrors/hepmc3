@@ -1,3 +1,5 @@
+# Test Pythonization of GenRunInfo: verify creation of GenRunInfo and its nested
+# ToolInfo objects, and that attributes can be set from Python.
 from pyHepMC3TestUtils import update_path
 import sys
 

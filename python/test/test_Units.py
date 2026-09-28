@@ -1,3 +1,5 @@
+# Test Units handling: verify that GenEvent correctly stores and reports momentum
+# and length units (GEV/MM, etc.) and that conversions work as expected.
 from pyHepMC3TestUtils import update_path
 import sys
 

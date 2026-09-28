@@ -1,3 +1,4 @@
+# Test Protobuf I/O: verify conversion between IO_GENEVENT and Protobuf format and back.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 

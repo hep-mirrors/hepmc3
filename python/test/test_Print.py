@@ -1,3 +1,5 @@
+# Test Print utilities: ensure that HepMC3.Print functions correctly output
+# event information in both detailed and listing formats.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 

@@ -1,3 +1,5 @@
+# Utility module for test helpers: provides functions for path handling, file labeling,
+# and other common utilities used across the Python test suite.
 import re
 import sys, os, math
 

@@ -1,3 +1,8 @@
+# Test IO4: Verify compression and decompression of HepMC ASCII files using
+# various algorithms (gzip, bzip2, lzma, and optionally zstandard). The test
+# compresses an input file, reads it back with HepMC's deduce_reader, writes it
+# out as asciiv3 format, and compares the result with the original to ensure
+# lossless round‑trip.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 

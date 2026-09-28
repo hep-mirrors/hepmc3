@@ -1,3 +1,4 @@
+# Test Boost utilities: verify that Lorentz boost operations on events and particles work correctly.
 from pyHepMC3TestUtils import update_path
 import sys, os
 

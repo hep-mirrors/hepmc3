@@ -1,3 +1,5 @@
+# Test IO3: Use HepMC's deduce_reader to automatically detect file format,
+# then perform round‑trip conversion to IO_GENEVENT and asciiv3 formats and compare.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 
