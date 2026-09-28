@@ -1,3 +1,4 @@
+# Test IO5: Verify ROOT tree reading and writing, including sequential and append modes.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 

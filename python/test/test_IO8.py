@@ -1,3 +1,8 @@
+# Test: Round‑trip conversion of HepMC ASCII files through various compressed formats.
+# This test reads an input ASCII HepMC file, writes it out using different compression
+# algorithms (gzip, bzip2, lzma, zstandard if available), then reads the compressed file
+# back and writes it again as an uncompressed ASCII file. Finally it compares the
+# resulting file with the original to ensure lossless conversion.
 from pyHepMC3TestUtils import update_path, python_label
 #Round-trip conversion: ASCII files --> compressed ASCII --> ASCII files for multiple compression algorithms.
 import sys

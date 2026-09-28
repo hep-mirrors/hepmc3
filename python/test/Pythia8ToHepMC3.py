@@ -1,3 +1,6 @@
+# Utility class for converting Pythia8 events to HepMC3 format.
+# Provides methods to map Pythia8 event structures onto HepMC3 GenEvent objects.
+# Similar to the official Pythia8 to HepMC3 conversion C++ implementation.
 from pyHepMC3 import HepMC3 as hm
 import sys
 

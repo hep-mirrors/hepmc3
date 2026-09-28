@@ -1,3 +1,4 @@
+# Test Pythonization Search: verify that the HepMC3 search module can be imported and used to query events.
 from pyHepMC3TestUtils import update_path
 import sys
 

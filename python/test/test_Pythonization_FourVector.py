@@ -1,3 +1,4 @@
+# Test Pythonization of FourVector: verify creation, indexing, and mutation of FourVector objects.
 from pyHepMC3TestUtils import update_path
 import sys
 

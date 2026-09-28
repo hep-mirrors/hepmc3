@@ -1,3 +1,4 @@
+# Test IO10: Verify multithreaded reading of IO_GENEVENT format and writing to asciiv3 format.
 from pyHepMC3TestUtils import update_path, python_label
 import sys
 

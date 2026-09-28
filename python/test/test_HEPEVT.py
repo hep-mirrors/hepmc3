@@ -1,3 +1,4 @@
+# Test HEPEVT conversion: verify building of events from HEPEVT format using HepMC3.
 # Event building example translated into python using testPolarization.cc (garren@fnal.gov, Oct. 2010)
 
 from pyHepMC3TestUtils import update_path, python_label
