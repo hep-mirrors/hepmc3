@@ -39,13 +39,15 @@ several years.
   )
   ```
 
-- Whenever you need an output for debugging, always use an appropriately
-  commented `HEPMC3_DEBUG( 10, "info" )` block. This will make things easier
-  if you later decide it's worth to leave the debug info in the code.
+- Whenever you need an output for debugging, always use an
+  appropriately commented `HEPMC3_DEBUG( 10, "info" )` block. This
+  will make things easier if you later decide it's worth to leave the
+  debug info in the code.
 
-- `HEPMC3_DEBUG` and `HEPMC3_DEBUG_CODE_BLOCK` statements are not compiled
-   in release mode so use them at will. To avoid information flooding, use
-   appropriate debug levels for specific types of debug information:
+- `HEPMC3_DEBUG` and `HEPMC3_DEBUG_CODE_BLOCK` statements are not
+   compiled in release mode so use them at will. To avoid information
+   flooding, use appropriate debug levels for specific types of debug
+   information:
    - level 1: critical, short info;
    - level 10: less important, longer info.
 
@@ -87,19 +89,26 @@ to format the Python code with `black`.
 - Keep all of your code documented. building with `-D HEPMC3_BUILD_DOCS=ON`
   should give no warnings about missing documentation.
 
-- Use `@bug` and `@todo` keywords to mark problems found in the code. They
-  go into separate lists in the documentation so we can keep track of them
-  at any time. Remove these keywords after fixing the issue.
+- Use `@bug` and `@todo` keywords to mark problems found in the
+  code. They go into separate lists in the documentation so we can
+  keep track of them at any time. Remove these keywords after fixing
+  the issue.
 
 
 ## COMMITS AND REPOSITORY
 
-Direct pushes into master are forbidden; all contributions should be via merge requests.
-Check success of CI jobs, and squash commits as standard (this is set in the GitLab config).
+Direct pushes into master are forbidden; all contributions should be
+via merge requests.  Check success of CI jobs, and squash commits as
+standard (this is set in the GitLab config).
 
-By default only three jobs are executed, but it makes sense to test the builds with more.
-To Do that add to the commit message "FedoraCI" to run all Fedora-based jobs and "CentOSCI" to
-run all CentOS-based jobs.
+By default only three jobs are executed, but it makes sense to test
+the builds with more.  To Do that add to the commit message "FedoraCI"
+to run all Fedora-based jobs and "CentOSCI" to run all CentOS-based
+jobs.
+
+A change-log entry is recommended for most merge requests, including
+technical changes. It helps users and developers understand what changed.
+If an entry would not be useful, add the `skip-changelog` label.
 
 
 ## BEFORE RELEASE
