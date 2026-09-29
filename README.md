@@ -37,7 +37,7 @@ $ HepMC3-config --version
 ```
 
 For linking against HepMC3 with CMake, the `.cmake` files are located under
-`$LCIO/share/HepMC3/cmake/`, e.g.
+`$LCG_VIEW_DIR/share/HepMC3/cmake/`, e.g.
 `/cvmfs/sft.cern.ch/lcg/views/LCG_110/x86_64-el9-gcc16-opt/share/HepMC3/cmake/`.
 
 ## Conda/Pixi
