@@ -279,6 +279,10 @@ EDM4HEP-CVMFS:
 
 ###########################################################################
 #Check commit messages
+check_commit_Fedora45:
+  variables: { OS: Fedora, FREL: 45}
+  extends: .check_commit
+
 check_commit_Gentoo:
   variables: { OS: Gentoo, FREL: 0}
   extends: .check_commit
@@ -341,6 +345,12 @@ check_commit_Archlinux0:
 
 ###########################################################################
 #Build images
+build_image_Fedora45:
+  variables: { OS: Fedora, FREL: 45}
+  extends: .build_image
+  needs:
+    - job: check_commit_Fedora45
+
 build_image_Gentoo:
   timeout: 2h
   variables: { OS: Gentoo, FREL: 0}
@@ -433,6 +443,12 @@ build_image_Archlinux0:
     - job: check_commit_Archlinux0
 
 ###########################################################################
+Fedora45-GNU-pypy:
+  variables: { OS: Fedora, FREL: 45, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy3"}
+  extends: .any-cmake
+  needs:
+    - job: build_image_Fedora45
+
 Gentoo-GNU:
   variables: { OS: Gentoo, FREL: 0, TOOLSET: GNU, EXTRACMAKEFLAGS: -DHEPMC3_ENABLE_PROTOBUFIO=OFF}
   extends: .any-cmake
