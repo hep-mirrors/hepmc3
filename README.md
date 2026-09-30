@@ -10,9 +10,8 @@ persistency-friendly [passive data
 structure](https://en.wikipedia.org/wiki/Passive_data_structure) for
 the event graph, addressing endemic issues with the previous HepMC1
 and HepMC2 series. The current version additionally provides support
-for embedded [Les Houches Event Format partonic event
-records](https://arxiv.org/abs/hep-ph/0609017), an Python interface,
-and multiple event-persistency formats.
+for [Les Houches Event Format partonic event records](https://arxiv.org/abs/hep-ph/0609017),
+a Python interface, and multiple event-persistency formats.
 
 Visit the [home page of the project](https://hepmc.web.cern.ch/) for
 more information.  For brief information on the compatibility between
