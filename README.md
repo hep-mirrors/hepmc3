@@ -164,7 +164,7 @@ possible or is not desired, you can build HepMC3 from the source. The
 minimal requirements are:
 
 - A C++ compiler with C++11 standard support.
-- CMake version 3.X.
+- CMake version >= 3.10.
 
 
 ## Quick-start
