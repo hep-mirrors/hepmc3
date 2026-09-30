@@ -180,13 +180,14 @@ for the `HEPMC3_PYTHON_VERSIONS` option, e.g.
 This also requires quite a recent CMake.
 
 
-## MC-generator interfaces (deprecated)
+## MC-generator interfaces
 
-HepMC3 is shipped with interfaces to some MC event generators/codes
-located in the interfaces/ directory.  This is done to allow the usage
-of HepMC3 with codes that do not have native HepMC3 interfaces. In the
-future the codes from the interfaces will be submitted to the upstream
-of corresponding projects and removed from HepMC3.
+HepMC3 is shipped with interfaces to some legacy MC event
+generators/codes located in the interfaces/ directory, to allow the
+usage of HepMC3 with codes that do not have native HepMC3
+interfaces. In the future the codes from the interfaces will be
+submitted to the upstream of corresponding projects and removed from
+HepMC3.
 
 To enable the installation of interfaces use
 `-D HEPMC3_INSTALL_INTERFACES:BOOL=ON` option for `cmake`.
