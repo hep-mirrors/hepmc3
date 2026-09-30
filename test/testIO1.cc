@@ -3,6 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+// -- Purpose: Verifies round-trip conversion between IO_GenEvent and asciiv3 formats.
+//
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAscii.h"
 #include "HepMC3/WriterAscii.h"

@@ -3,6 +3,9 @@
 //
 // garren@fnal.gov, Oct. 2010
 // andrii.verbytskyi@mpp.mpg.org, Nov. 2018 translated into HepMC3
+//
+// -- Purpose: Verifies spin polarization handling in particles.
+//
 //////////////////////////////////////////////////////////////////////////
 
 #include <iostream>

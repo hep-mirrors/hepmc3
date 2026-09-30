@@ -8,6 +8,8 @@
 // Add arbitrary HeavyIon information to one of the good events
 // Write the selected events and read them back in using an istream
 //-------------------------------------------------------------------
+// -- Purpose: Verifies mass calculations and related utilities.
+//
 
 #include <cmath>	// for min()
 #include <ostream>

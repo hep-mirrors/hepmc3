@@ -1,7 +1,9 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
+//
+// -- Purpose: Verifies reading and writing of HepMC3 IO_GenEvent/asciiv3 files.
 //
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAscii.h"
