@@ -175,7 +175,7 @@ HepMC3 modules for PyPy. However, the PyPy support is experimental. To
 build the bindings against the `pypy-c` library use `pypy<version>`
 for the `HEPMC3_PYTHON_VERSIONS` option, e.g.
 ```sh
--D HEPMC3_PYTHON_VERSIONS=pypy2
+-D HEPMC3_PYTHON_VERSIONS=pypy3
 ```
 This also requires quite a recent CMake.
 
