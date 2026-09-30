@@ -173,8 +173,7 @@ It is strongly recommended to read this documentation completely
 before the installation.  However, if for some reason that is not
 possible, here is a set of commands for the installation that can
 be copied and pasted into a Unix terminal with a few version-number
-replacements for HepMC and Python. In some cases this action might
-even result in a functional installation!
+replacements for HepMC and Python:
 
 ```sh
   wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.Y.Z.tar.gz -O- | tar xz
