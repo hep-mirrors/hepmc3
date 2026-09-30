@@ -15,7 +15,9 @@
 2026-09-25 Andrii Verbytskyi
   * Add examples/convert_example_LHEF, the LHEF counterpart of examples/convert_example  to convert between (potentially multiple) LHEf foramts.
 2026-09-28 Andrii Verbytskyi
+2026-09-28,2026-09-30 Andrii Verbytskyi
   * Add documentation to Python tests
+  * Add comments/documentation to C++ tests.
 2026-09-24 Andrii Verbytskyi
   * Update the logic of defining the C++ standard for each component.
 2026-09-24 Dmitri Konstantinov
