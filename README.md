@@ -64,7 +64,7 @@ or
 pixi add hepmc3
 ```
 
-## Linux package repos
+## Linux package repositories
 
 For those with administrator access to their OS, HepMC3 is available
 from the standard package-repositories of multiple Linux
