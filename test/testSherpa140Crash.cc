@@ -1,7 +1,9 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2025 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
+//
+// -- Purpose: Reproduces a crash scenario observed with Sherpa 1.4.0 output.
 //
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"

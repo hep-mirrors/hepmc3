@@ -3,6 +3,9 @@
 //
 // garren@fnal.gov, January 2010
 // test Weights
+//
+// -- Purpose: Verifies handling of event weights.
+//
 //////////////////////////////////////////////////////////////////////////
 
 #include <cassert>

@@ -1,7 +1,9 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
+//
+// -- Purpose: Verifies HEPEVT wrapper functionality.
 //
 ///We set some non-default value
 // NOLINTNEXTLINE(cppcoreguidelines-macro-usage)

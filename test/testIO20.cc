@@ -1,10 +1,9 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
 //
-// -- Purpose: Test that we can correctly deduce the reader type when passed a
-// binary protobuf file
+// -- Purpose: Verifies deducing reader type for binary protobuf files.
 //
 
 // These are the only headers in ReaderPlugin, so including these firstmakes

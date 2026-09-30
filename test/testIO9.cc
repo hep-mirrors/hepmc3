@@ -1,7 +1,9 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2024 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
+//
+// -- Purpose: Verifies compression support via GZ readers/writers.
 //
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAscii.h"
