@@ -149,8 +149,8 @@ add this to the arguments of `cmake`:
 By default, the
 `HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}`
 variables are set to the path of the system installation of Python,
-not its equivalent within the HepMC3 installation directory. (Python
-and Conda virtual environments may change this behaviour.) If you do
+which may be outside the HepMC3 installation directory `${CMAKE_INSTALL_DIR}`.
+(Python and Conda virtual environments may change this behaviour.) If you do
 not have permissions to install the Python modules to the system-Python
 module directory, manual specification is mandatory; a natural choice is
 the Python module directory inside your installation prefix, e.g.
