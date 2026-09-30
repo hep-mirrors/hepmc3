@@ -25,14 +25,21 @@
 
 
 3. Configure the build and installation with CMake; the simplest command is:
+
   ```sh
   cmake ../HepMC3/ -D CMAKE_INSTALL_PREFIX=/path/to/installation/
   ```
-  On some systems the appropriate CMake executable is called `cmake3` or similar.
-  Note that you have to have permissions to install HepMC3 into the indicated directory.
 
-  You can add further flags to the `cmake` command-line to add/remove HepMC3
-  optional features:
+  (Note that by default the ROOT I/O plugin is enabled, and this
+  `cmake` command requires that your ROOT installation is findable.
+  To disable ROOT I/O, add `-D HEPMC3_ENABLE_ROOTIO=OFF` to the command.)
+
+  On some systems the appropriate CMake executable is called `cmake3`
+  or similar.  Note that you have to have permissions to install
+  HepMC3 into the indicated directory.
+
+  You can add further flags to the `cmake` command-line to add/remove
+  HepMC3 optional features:
 
   - To build the example programs, add
     ```sh
@@ -74,7 +81,8 @@
     Python environments (e.g. in a virtual environment) and for compatibility with PyPy.
 
 
-  - To build with ROOT I/O, add the following flags:
+  - ROOT I/O is assumed on by default, but to specify the ROOT installation
+    to use, add the following flags:
     ```sh
     -D HEPMC3_ENABLE_ROOTIO=ON -DROOT_DIR=/path/to/ROOT/installation/
     ```
@@ -83,7 +91,10 @@
     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/path/to/ROOT6/libraries/
     ```
 
-  - To build with PROTOBUF I/O put the following flags:
+    To *disable* ROOT, add `-D HEPMC3_ENABLE_ROOTIO=ON` to the default
+    `cmake` call.
+
+  - To build with PROTOBUF I/O add the following flags:
     ```sh
     -D HEPMC3_ENABLE_PROTOBUFIO=ON
     ```
