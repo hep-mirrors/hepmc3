@@ -171,25 +171,27 @@ minimal requirements are:
 
 It is strongly recommended to read this documentation completely
 before the installation.  However, if for some reason that is not
-possible, here is a set of commands for the installation that can
-be copied and pasted into a Unix terminal with a few version-number
-replacements for HepMC and Python:
+possible, here is a set of commands for the installation that can be
+copied and pasted into a Unix terminal (updating the HepMC version
+in the first line if needed):
 
 ```sh
-  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-3.Y.Z.tar.gz -O- | tar xz
+  VERSION=3.3.2
+  PYVERSION=$(python -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+  wget http://hepmc.web.cern.ch/hepmc/releases/HepMC3-$VERSION.tar.gz -O- | tar xz
   mkdir hepmc3-build
   cd hepmc3-build
   cmake -DCMAKE_INSTALL_PREFIX=../hepmc3-install   \
-        -DHEPMC3_ENABLE_ROOTIO:BOOL=OFF            \
-        -DHEPMC3_ENABLE_PROTOBUFIO:BOOL=OFF        \
-        -DHEPMC3_ENABLE_TEST:BOOL=OFF              \
-        -DHEPMC3_INSTALL_INTERFACES:BOOL=ON        \
-        -DHEPMC3_BUILD_STATIC_LIBS:BOOL=OFF        \
-        -DHEPMC3_BUILD_DOCS:BOOL=OFF     \
-        -DHEPMC3_ENABLE_PYTHON:BOOL=ON   \
-        -DHEPMC3_PYTHON_VERSIONS=3.14     \
-        -DHEPMC3_Python_SITEARCH314=../hepmc3-install/lib/python3.14/site-packages \
-        ../HepMC3-3.Y.Z/
+        -DHEPMC3_ENABLE_ROOTIO=OFF            \
+        -DHEPMC3_ENABLE_PROTOBUFIO=OFF        \
+        -DHEPMC3_ENABLE_TEST=OFF              \
+        -DHEPMC3_INSTALL_INTERFACES=ON        \
+        -DHEPMC3_BUILD_STATIC_LIBS=OFF        \
+        -DHEPMC3_BUILD_DOCS=OFF     \
+        -DHEPMC3_ENABLE_PYTHON=ON   \
+        -DHEPMC3_PYTHON_VERSIONS=$PYVERSION   \
+        -DHEPMC3_Python_SITEARCH${PYVERSION/./}=../hepmc3-install/lib/python$PYVERSION/site-packages \
+        ../HepMC3-$VERSION/
   make
   make install
   ```

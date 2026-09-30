@@ -149,7 +149,7 @@ add this to the arguments of `cmake`:
 By default, the
 `HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}`
 variables are set to the path of the system installation of Python,
-which may be outside the HepMC3 installation directory `${CMAKE_INSTALL_DIR}`.
+which may be outside the HepMC3 installation directory `$CMAKE_INSTALL_DIR`.
 (Python and Conda virtual environments may change this behaviour.) If you do
 not have permissions to install the Python modules to the system-Python
 module directory, manual specification is mandatory; a natural choice is
@@ -184,7 +184,7 @@ This also requires quite a recent CMake.
 
 HepMC3 is shipped with interfaces to some MC event generators/codes
 located in the interfaces/ directory.  This is done to allow the usage
-of HepMC3 with codes that so far don't have HepMC3 interfaces.  In the
+of HepMC3 with codes that do not have native HepMC3 interfaces. In the
 future the codes from the interfaces will be submitted to the upstream
 of corresponding projects and removed from HepMC3.
 
