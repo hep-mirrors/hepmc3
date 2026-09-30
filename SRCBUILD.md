@@ -135,7 +135,7 @@ The pre-built packages and [PyPI package](https://pypi.org/project/HepMC3/)
 already set up their Python bindings appropriately.
 
 The installation path for the Python modules can be tweaked with a set
-of dynamically named CMake variables with the structure:
+of version-specific CMake variables with the structure:
 ```sh
 HEPMC3_Python_SITEARCH${Python_VERSION_MAJOR}${Python_VERSION_MINOR}
 ```
