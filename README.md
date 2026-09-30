@@ -22,7 +22,7 @@ via the CERN GitLab repository https://gitlab.cern.ch/hepmc/HepMC3 or
 by email to hepmc-devATcern.ch .
 
 
-# Installing pre-built packages
+## Installing pre-built packages
 
 HepMC is available from the LHC Computing Grid (LCG) package archives
 (latest always available), in the Conda userspace packaging system,
@@ -30,7 +30,7 @@ and in several Linux-distribution package repositories
 (version-support varies). Installation from source is also a
 reasonable option in many use-cases.
 
-## LCG platforms
+### LCG platforms
 
 The HepMC3 package is available for multiple LCG platforms, with the
 latest versions in the latest LCG "view" version, `LCG_xx`,
@@ -48,7 +48,7 @@ For linking against HepMC3 with CMake, the `.cmake` files are located
 under `$LCG_VIEW_DIR/share/HepMC3/cmake/`, e.g.
 `/cvmfs/sft.cern.ch/lcg/views/LCG_110/x86_64-el9-gcc16-opt/share/HepMC3/cmake/`.
 
-## Conda/Pixi
+### Conda/Pixi
 
 Pre-built HepMC can be installed in a user-level Conda environment
 from the standard [conda-forge
@@ -64,7 +64,7 @@ or
 pixi add hepmc3
 ```
 
-## Linux package repositories
+### Linux package repositories
 
 For those with administrator access to their OS, HepMC3 is available
 from the standard package-repositories of multiple Linux
@@ -75,7 +75,7 @@ source.)
 The following commands will install HepMC3 in the corresponding
 systems:
 
-### Fedora
+#### Fedora
 The package is available from the standard repository. To install:
 
 ```sh
@@ -84,7 +84,7 @@ sudo dnf install HepMC3 HepMC3-devel HepMC3-search HepMC3-search-devel HepMC3-in
 
 To have a full installation of the HepMC3-doc package, add the option `--setopt=tsflags=''`
 
-### RHEL, CentOS and compatible
+#### RHEL, CentOS and compatible
 The package is available from the EPEL repository. To install:
 
 ```sh
@@ -103,7 +103,7 @@ available Python versions, you can use:
 sudo yum install python*-HepMC3
 ```
 
-### openSUSE/Leap
+#### openSUSE/Leap
 HepMC3 is available from the standard repositories
 https://build.opensuse.org/package/show/openSUSE:Leap:15.2:Update/HepMC.
 To install:
@@ -114,7 +114,7 @@ sudo zypper install HepMC3
 
 This package does not include the ROOT interface.
 
-### Arch and compatible
+#### Arch and compatible
 HepMC3 is available from
 https://www.archlinux.org/packages/community/x86_64/hepmc/.  To
 install:
@@ -125,7 +125,7 @@ sudo pacman -Syu hepmc
 
 The dependencies can vary.
 
-### Gentoo
+#### Gentoo
 The package is available in the standard repository
 https://packages.gentoo.org/packages/sci-physics/hepmc.
 To install:
@@ -134,7 +134,8 @@ To install:
 sudo emerge --ask hepmc:3
 ```
 
-## MacOSX
+### MacOSX
+
 The HepMC3 package is available in the ``homebrew-hep``
 repository https://davidchall.github.io/homebrew-hep/.
 To install:
@@ -146,7 +147,8 @@ brew install hepmc3
 
 The package optionally includes the ROOT interface.
 
-## Windows
+### Windows
+
 Precompiled HepMC3 packages are available for Windows and other
 platforms via PyPI. Windows users can use `pip` to install HepMC3:
 
@@ -157,7 +159,7 @@ pip install HepMC3
 The packages from `pip` do not include the ROOT interface.
 
 
-# Build from source
+## Build from source
 
 If using pre-built HepMC3 installation from the repositories is not
 possible or is not desired, you can build HepMC3 from the source. The
@@ -167,7 +169,7 @@ minimal requirements are:
 - CMake version >= 3.10.
 
 
-## Quick-start
+### Quick-start
 
 It is strongly recommended to read this documentation completely
 before the installation.  However, if for some reason that is not
@@ -196,11 +198,13 @@ in the first line if needed):
   make install
   ```
 
+### Detailed source-build instructions
+
 The full explanation of this is given on the dedicated [source-build
 page](SRCBUILD.md)
 
 
-# Installation troubleshooting
+## Installation troubleshooting
 
 The possible problems during the HepMC3 installation can be caused by
 
@@ -213,7 +217,7 @@ The possible problems during the HepMC3 installation can be caused by
    will only work with these compilers.
 
 
-#  Examples
+##  Examples
 
 HepMC3 is shipped with multiple example programs. These can be
 compiled during installation as described above or after the
@@ -223,9 +227,9 @@ directory and run CMake, e.g.
 ```sh
 mkdir -p myexamples
 cd myexamples
-cp -r /usr/share/doc/HepMC3-3.2.6/examples ./
+cp -r /usr/share/doc/HepMC3-3.3.2/examples ./
 cd examples
-cmake -DUSE_INSTALLED_HEPMC3=ON CMakeLists.txt
+cmake -D USE_INSTALLED_HEPMC3=ON CMakeLists.txt
 make
 ```
 
@@ -238,7 +242,7 @@ them a full installation of HepMC3 (i.e. including ROOT MC event
 generator interfaces is needed).
 
 
-# Compatibility and deprecation notes
+## Compatibility and deprecation notes
 
 - The `IO_GenEvent` (HepMC2) and HEPEVT ASCII files produced by all
   HepMC3 versions should be readable by all HepMC3 versions and latest
@@ -280,7 +284,7 @@ generator interfaces is needed).
   3.2.8.
 
 
-# Building and Running the ConvertExample with the output EDM4HEP
+## Building and Running the ConvertExample with the output EDM4HEP
 
 Set up your favorite KEY4HEP nightly:
 ```sh

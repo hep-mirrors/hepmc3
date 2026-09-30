@@ -1,4 +1,4 @@
-## HepMC3 source-build instructions
+# HepMC3 source-build instructions
 
 1. The first step of the installation is to
   a) Check out HepMC3 from the `git` repository:
@@ -125,7 +125,7 @@
   Only a limited support can be offered for these systems.
 
 
-### Non-default Python bindings
+## Non-system Python bindings
 
 HepMC3 is supplied with Python-binding codes that can be build on
 multiple systems.  The number of potential combinations of compiler
@@ -166,11 +166,13 @@ HepMC3 modules, pass the `HEPMC3_PYTHON_VERSIONS` option to `cmake`, e.g.
 cmake ... -D HEPMC3_PYTHON_VERSIONS=3.6,3.12
 ```
 will build Python modules for versions Python 3.6 and Python 3.12.
-By default CMake will attempt to build the Python modules for Python version 3.
+By default CMake will attempt to build the Python modules for the latest
+installed Python version.
 
 
-### Modules for PyPy
-In addition to the standard CPython  modules, it is possible to build
+## Modules for PyPy
+
+In addition to the standard CPython modules, it is possible to build
 HepMC3 modules for PyPy. However, the PyPy support is experimental. To
 build the bindings against the `pypy-c` library use `pypy<version>`
 for the `HEPMC3_PYTHON_VERSIONS` option, e.g.
