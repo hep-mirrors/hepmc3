@@ -101,8 +101,7 @@ Direct pushes into master are forbidden; all contributions should be
 via merge requests.  Check success of CI jobs, and squash commits as
 standard (this is set in the GitLab config).
 
-By default only three jobs are executed, but it makes sense to test
-the builds with more.  To Do that add to the commit message "FedoraCI"
+To run a larger set of tests, add "FedoraCI" to the commit message
 to run all Fedora-based jobs and "CentOSCI" to run all CentOS-based
 jobs.
 
