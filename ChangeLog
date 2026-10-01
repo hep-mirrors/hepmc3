@@ -1,8 +1,10 @@
 --------------------------  HepMC3.3.2 --------------------------
+2026-09-26 Andy Buckley
+  * Make the translation of LHE weight structure to HepMC weight names more compliant with the arXiv:2203.08230 standard and downstream tools.
 2026-09-22 Andrii Verbytskyi
   * Added Fedora45 to CI
 2026-09-24 Andrii Verbytskyi
-  * Update the logic of defining thedard for each component.
+  * Update the logic of defining the C++ standard for each component.
 2026-09-24 Dmitri Konstantinov
   * Fix reading event positions in ReaderAscii by skipping the '@' marker.
   * Reset the event position before each read to avoid keeping the previous event's position.
@@ -13,7 +15,7 @@
 2026-09-10 Andrii Verbytskyi
   * Update installation of Python metadata
 2026-09-12 Andrii Verbytskyi
-  * Add pybind11 v3.1.0  headers as a separate directory to support the newest python. Move the old headers of v2.12.0 into a separate directory.
+  * Add pybind11 v3.1.0  headers as a separate directory to support the newest Python. Move the old headers of v2.12.0 into a separate directory.
 2026-09-01 Andrii Verbytskyi
   * Add Python compressed I/O helpers `ReaderGZ` and `WriterGZ` for binding compressed input/output streams through Python compression modules.
   * Increase default `pystreambuf` buffer size to improve performance for Python-based compressed stream I/O.
