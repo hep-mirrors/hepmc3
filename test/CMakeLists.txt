@@ -480,12 +480,11 @@ if(MEMORYCHECK_COMMAND)
     set( HepMC_memcheck_tests ${HepMC_memcheck_tests} ${HepMC_protobuf_tests} )
   endif()
   list(REMOVE_ITEM HepMC_memcheck_tests testFourVector )
-#The story behind is complicated. It seems that on some platforms valgind dislikes the comparison of infinities.
+  # The story behind this is complicated. It seems that on some platforms valgrind dislikes the comparison of infinities.
   foreach ( test ${HepMC_memcheck_tests} )
     add_memcheck_test( ${test} )
     set_tests_properties(memcheck_${test} PROPERTIES DEPENDS ${test})
   endforeach ( test ${HepMC_memcheck_tests} )
-
   set(io32_memcheck_command "${MEMORYCHECK_COMMAND} ${MEMORYCHECK_COMMAND_OPTIONS}")
   separate_arguments(io32_memcheck_command)
   foreach(case ${testIO32_cases})
@@ -493,4 +492,10 @@ if(MEMORYCHECK_COMMAND)
     hepmc_set_test_environment(memcheck_testIO32_${case} "${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/")
     set_tests_properties(memcheck_testIO32_${case} PROPERTIES DEPENDS testIO32_${case})
   endforeach()
+endif()
+
+
+# HepMC3-config tests
+if(NOT WIN32)
+  add_test(NAME testHepMC3config COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/testHepMC3config ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 endif()
