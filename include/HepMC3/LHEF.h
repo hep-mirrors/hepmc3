@@ -25,8 +25,11 @@
 #include <cstdlib>
 #include <cmath>
 #include <limits>
+#include <algorithm>
+#include <cctype>
+
 #ifndef M_PI
-/** @brief Pi constant used when not defined by the system math headers. */
+/** @brief pi constant used when not defined by the system math headers. */
 #define M_PI 3.14159265358979323846264338327950288
 #endif
 
@@ -1177,7 +1180,8 @@ struct WeightGroup : public TagBase {
 
   /**
    * The type.
-   * Deprecated legacy MadGraph 2 naming for weight groups.
+   *
+   * @deprecated Legacy MadGraph 2 naming for weight groups.
    */
   std::string type;
 
@@ -1803,11 +1807,26 @@ public:
    */
   std::string weightNameHepMC(int i) const {
     std::string name;
+
+    // Return empty name if outside the range
+    /// @todo Flag an error, or is the empty return enough?
     if ( i < 0 || i >= static_cast<int>(weightinfo.size()) ) return name;
-    if ( weightinfo[i].inGroup >= 0 )
-      name = weightgroup[weightinfo[i].inGroup].name + "/"
-        +  weightgroup[weightinfo[i].inGroup].combine + "/";
+
+    // Prefix with weight-group info if it exists, and combine is not None/none/NONE/...
+    if ( weightinfo[i].inGroup >= 0 ) {
+      const WeightGroup& wg = weightgroup[weightinfo[i].inGroup];
+      if (!wg.name.empty()) name +=  "GROUP=" + wg.name + "__";
+      if (!wg.combine.empty()) {
+        std::string comb_upper = wg.combine;
+        std::transform(comb_upper.begin(), comb_upper.end(), comb_upper.begin(),
+                       [](unsigned char c){ return std::toupper(c); });
+        if (comb_upper != "NONE") name += "COMBINE=" + wg.combine + "__";
+      }
+    }
+
+    // Add the specific variation name
     name += weightinfo[i].name;
+
     return name;
   }
 

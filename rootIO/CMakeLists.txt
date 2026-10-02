@@ -109,6 +109,9 @@ add_library(HepMC3rootIO SHARED ${EXTRA_SOURCES} ${CMAKE_CURRENT_SOURCE_DIR}/src
 target_compile_definitions(HepMC3rootIO PUBLIC HEPMC3_ROOTIO)
 set_property(TARGET HepMC3rootIO PROPERTY POSITION_INDEPENDENT_CODE 1)
 target_link_libraries(HepMC3rootIO PUBLIC ROOT::Tree ROOT::RIO ROOT::Core HepMC3::HepMC3)
+set_target_properties(HepMC3rootIO PROPERTIES CXX_STANDARD ${ROOT_CXX_STANDARD} CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS OFF)
+target_compile_features(HepMC3rootIO PUBLIC cxx_std_${ROOT_CXX_STANDARD})
+
 target_include_directories(HepMC3rootIO PUBLIC
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

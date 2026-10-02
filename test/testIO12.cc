@@ -3,6 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2024 The HepMC collaboration (see AUTHORS for details)
 //
+// -- Purpose: Verifies reading and writing of IO_GenEvent events with string streams.
+//
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMC3/WriterAsciiHepMC2.h"
