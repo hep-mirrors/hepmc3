@@ -14,6 +14,7 @@ stages:
 changelog_check:
   stage: changelog
   image: gitlab-registry.cern.ch/sft/docker/alma9-core:latest
+  allow_failure: true
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:

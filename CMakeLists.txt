@@ -462,7 +462,7 @@ endif()
 #This is for developers only
 find_program (ASTYLE NAMES astyle)
 if (ASTYLE)
-  message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formating of C++ code is possible.")
+  message(STATUS "HepMC3: Developers only: astyle found in ${ASTYLE}. Formatting of C++ code is possible.")
   ADD_CUSTOM_TARGET(beauty
     COMMAND ${ASTYLE}  --keep-one-line-blocks
     src/*cc

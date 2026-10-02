@@ -1,53 +1,55 @@
 --------------------------  HepMC3.3.2 --------------------------
+2026-09-29 Andrii Verbytskyi
+  * Add comments/documentation to C++ tests.
+2026-10-01 Andy Buckley
+  * Add rudimentary testing that the HepMC3-config script does not crash.
+2026-09-26 Andy Buckley
+  * Make the translation of LHE weight structure to HepMC weight names more compliant with the arXiv:2203.08230 standard and downstream tools.
 2026-09-22 Andrii Verbytskyi
-  * Added Fedora45 to CI
+  * Added Fedora45 jobs to CI.
 2026-09-24 Andrii Verbytskyi
-  * Update the logic of defining thedard for each component.
+  * Update the logic of defining the C++ standard for each component.
 2026-09-24 Dmitri Konstantinov
-  * Fix reading event positions in ReaderAscii by skipping the '@' marker.
+  * Fix reading event positions in ReaderAscii by skipping the `@` marker.
   * Reset the event position before each read to avoid keeping the previous event's position.
-  * Report event header parsing errors instead of returning an empty event as a success.
-  * Add ReaderAscii tests for event positions, position reset, invalid headers, and read/write round trips.
+  * Report event-header parsing errors instead of returning an empty event as a success.
+  * Add `ReaderAscii` tests for event positions, position reset, invalid headers, and read/write round trips.
 2026-09-19 Alexander Puck Neuwirth
-  * Add CI for gentoo linux which tests cmake configuration randomly.
+  * Add CI for Gentoo linux which tests the CMake configuration randomly.
 2026-09-10 Andrii Verbytskyi
-  * Update installation of Python metadata
+  * Update installation of Python metadata.
 2026-09-12 Andrii Verbytskyi
-  * Add pybind11 v3.1.0  headers as a separate directory to support the newest python. Move the old headers of v2.12.0 into a separate directory.
+  * Add pybind11 v3.1.0  headers as a separate directory to support the newest Python. Move the old headers of v2.12.0 into a separate directory.
 2026-09-01 Andrii Verbytskyi
   * Add Python compressed I/O helpers `ReaderGZ` and `WriterGZ` for binding compressed input/output streams through Python compression modules.
   * Increase default `pystreambuf` buffer size to improve performance for Python-based compressed stream I/O.
   * Add `python/test/test_IO8.py` and `python/test/inputIO8.hepmc` to validate gzip round-trip support and install the new test.
 2026-09-10 Leif Lonnblad
-  * Fix LHEF header init weight confusion
+  * Fix LHEF header init weight confusion.
 2026-09-07 Andrii Verbytskyi
-  * Avoid potentially empty  tag in Reader in LHEF.h
+  * Avoid potentially empty tag in `Reader` in `LHEF.h`.
 2026-09-03 Andrii Verbytskyi
-  * Implement suggestions from clang-tidy for tests.
-2026-09-03 Andrii Verbytskyi
-  * Follow suggestions of clang-tidy in examples.
-2026-09-03 Andrii Verbytskyi
-  * Follow suggestions of clang-tidy in the core library.
+  * Implement suggestions from `clang-tidy` for tests, examples, and the core library.
 2026-09-04 Andrii Verbytskyi
-  * Fixes to doxygen setup.
+  * Fixes to Doxygen setup.
 2026-09-02 Andrii Verbytskyi
-  * CMake fixes: Fix the way ENVORONMENT is set in tests, use canonical name for components in CMake config, checks for c++29
+  * CMake fixes: Fix the way `ENVIRONMENT` is set in tests, use canonical name for components in CMake config, checks for C++29.
 2026-09-02 Andrii Verbytskyi
-  * Add Python bindings for ReaderMT and its multithreaded event-reading support.
-  * Add a GitLab CI rule to require a ChangeLog entry before a merge request is considered ready.
+  * Add Python bindings for `ReaderMT` and its multithreaded event-reading support.
+  * Add a GitLab CI rule to require a `ChangeLog` entry before a merge request is considered ready.
 2025-10-02 Alexander Puck Neuwirth
-  * Fixes for ReaderLHEF to properly report beams from LHE init block instead of first particles in event record.
-    Further an error is raised now if there are fewer particles than beams in the event.
+  * Fixes for `ReaderLHEF` to properly report beams from LHE init block instead of first particles in event record.
+    Now raise an error if there are fewer particles than beams in the event.
 2025-07-11 Andrii Verbytskyi
-  * Require cmake>3.10 and allow for cmake policies to be in range that correspond 3.10.0...4.0.3. Add cmake version testing in CI.
-  * Thanks to  Matthew Feickert and Henry Schreiner.
+  * Allow for CMake policies to be in the range `3.10.0...4.0.3`. Add CMake version testing in CI.
+  * Thanks to Matthew Feickert and Henry Schreiner.
 2024-04-11 Luke Pickering
-  * Tweaks ReaderAscii logic to be more flexible about the number of space characters
+  * Tweak `ReaderAscii` logic to be more flexible about the number of space characters
 
 --------------------------  HepMC3.3.1 --------------------------
 
 2024-02-27 Andrii Verbytskyi
-         * Require cmake>3.10 for compatibility with cmake4.
+         * Require cmake > 3.10 for compatibility with cmake4.
            Thanks to Mattias Ellert
 	 * Multiple bugfixes and improvements.
            Mattias Ellert, Matthew Feickert

@@ -1,0 +1,27 @@
+#! /usr/bin/env bash
+
+BINDIR=${1:-..}
+
+set -e
+set -o pipefail
+
+tmp=$($BINDIR/HepMC3-config --prefix | tee testHepMC3configOutput1.txt)
+test -n "$tmp"
+
+tmp=$($BINDIR/HepMC3-config --includedir | tee testHepMC3configOutput2.txt)
+test -n "$tmp"
+
+tmp=$($BINDIR/HepMC3-config --libdir | tee testHepMC3configOutput3.txt)
+test -n "$tmp"
+
+tmp=$($BINDIR/HepMC3-config --cflags | tee testHepMC3configOutput4.txt)
+test -n "$tmp"
+
+tmp=$($BINDIR/HepMC3-config --libs | tee testHepMC3configOutput5.txt)
+test -n "$tmp"
+
+tmp=$($BINDIR/HepMC3-config --features | tee testHepMC3configOutput6.txt)
+test -n "$tmp"
+
+tmp=$($BINDIR/HepMC3-config --version | tee testHepMC3configOutput7.txt)
+test -n "$tmp"

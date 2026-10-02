@@ -1,4 +1,6 @@
 #if defined(__linux__) || defined(__darwin__) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__sun)
+// -- Purpose: Verifies reader factory behavior on UNIX platforms.
+//
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderFactory.h"
 #ifdef _LIBCPP_VERSION

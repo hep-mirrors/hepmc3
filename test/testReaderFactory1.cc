@@ -3,6 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+// -- Purpose: Verifies deducing reader for standard IO_GenEvent input.
+//
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/WriterAscii.h"
 #include "HepMC3/ReaderAsciiHepMC2.h"
