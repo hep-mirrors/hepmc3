@@ -22,9 +22,6 @@ You can send bug reports, feature requests and questions about HepMC3
 via the CERN GitLab repository https://gitlab.cern.ch/hepmc/HepMC3 or
 by email to hepmc-devATcern.ch .
 
-HepMC3 can be installed from multiple pre-built package repositories
-or installed from source, as described in the following sections.
-
 
 ## Installing pre-built HepMC3 packages
 
@@ -33,145 +30,21 @@ and package managers, including the [LHC Computing Grid
 (LCG)](https://home.cern/science/computing/grid/),
 [Conda](https://docs.conda.io/projects/conda/en/latest/index.html),
 several Linux-distribution package repositories, and installers for
-Mac OS X and Windows. The available HepMC3 version depends on the
-distribution or repository and may not include the latest version.
-
-### LCG platforms
-
-HepMC3 is included in several LCG software stacks distributed through
-CERN SFT CVMFS (`cvmfs-sft.cern.ch`). If your system has access to
-CVMFS, you can use HepMC3 by setting up an appropriate LCG view, for
-example:
-
-```sh
-$ . /cvmfs/sft.cern.ch/lcg/views/LCG_110/x86_64-el9-gcc16-opt/setup.sh
-$ HepMC3-config --version
-3.03.01
-```
-
-For linking against HepMC3 with CMake, the `.cmake` files are located
-under `$LCG_VIEW_DIR/share/HepMC3/cmake/`, e.g.
-`/cvmfs/sft.cern.ch/lcg/views/LCG_110/x86_64-el9-gcc16-opt/share/HepMC3/cmake/`.
-
-### Conda/Pixi
-
-Pre-built HepMC can be installed in a user-level Conda environment
-from the standard [conda-forge
-repository](https://anaconda.org/channels/conda-forge/packages/hepmc3/overview):
-
-```sh
-conda install hepmc3
-```
-
-or
-
-```sh
-pixi add hepmc3
-```
-
-### Linux package repositories
-
-HepMC3 is available from the standard package-repositories of multiple
-Linux distributions, currently Fedora, CentOS/EPEL, openSUSE, Arch,
-Gentoo. (Note, the Debian/Ubuntu package is outdated: prefer another
-source.)
-
-This approach usually requires system-administrator permissions. With
-appropriate permissions, the following commands will install HepMC3 in
-each system:
-
-#### Fedora
-HepMC3 is available from the standard repository. To install:
-
-```sh
-sudo dnf install HepMC3 HepMC3-devel HepMC3-search HepMC3-search-devel HepMC3-interfaces-devel HepMC3-doc
-```
-
-To have a full installation of the HepMC3-doc package, add the option `--setopt=tsflags=''`
-
-#### RHEL and compatible
-HepMC3 is available from the EPEL repository. To install:
-
-```sh
-sudo yum install epel-release
-sudo yum install HepMC3 HepMC3-devel HepMC3-search HepMC3-search-devel HepMC3-interfaces-devel HepMC3-doc
-```
-
-For Fedora and RHEL-compatible distributions, the ROOT-interface
-packages `HepMC3-rootIO` and `HepMC3-rootIO-devel` can be installed in
-the same way, but bring ROOT as a package-dependency.  The Python
-binding packages have different names depending on the platform. To
-install bindings for all the available Python versions, you can use:
-
-```sh
-sudo yum install python*-HepMC3
-```
-
-#### openSUSE/Leap
-HepMC3 is available from the standard repositories
-https://build.opensuse.org/package/show/openSUSE:Leap:15.2:Update/HepMC.
-To install:
-
-```sh
-sudo zypper install HepMC3
-```
-
-This package does not include the ROOT interface.
-
-#### Arch and compatible
-HepMC3 is available from
-https://aur.archlinux.org/packages/hepmc .  To
-install:
-
-```sh
-sudo pacman -Syu hepmc
-```
-
-The dependencies can vary.
-
-#### Gentoo
-HepMC3 is available in the standard repository
-https://packages.gentoo.org/packages/sci-physics/hepmc.
-To install:
-
-```sh
-sudo emerge --ask hepmc:3
-```
-
-### MacOSX
-
-HepMC3 is available in the ``homebrew-hep`` repository
-https://davidchall.github.io/homebrew-hep/.  To install:
-
-```sh
-brew tap davidchall/hep
-brew install hepmc3
-```
-
-The package optionally includes the ROOT interface.
-
-### Windows
-
-Precompiled HepMC3 packages are available for Windows and other
-platforms via PyPI. Windows users can use `pip` to install HepMC3:
-
-```sh
-pip install HepMC3
-```
-
-The packages from `pip` do not include the ROOT interface.
+Mac OS X and Windows. For full instructions, see [the dedicated
+package-installation page](PKGINSTALL.md).
 
 
-## Build from source
+## Installing HepMC3 from source
 
 If using pre-built HepMC3 installation from the repositories is not
 possible or is not desired, you can build HepMC3 from the source. For
-full instructions, see [the dedicated page](SRCBUILD.md).
+full instructions, see [the dedicated source-installation
+page](SRCINSTALL.md).
 
 
 ## Installation troubleshooting
 
-The possible problems during the HepMC3 installation can be caused by
+Problems during the HepMC3 installation can potentially be caused by
 
  - A C++ compiler that does not support C++11.
    The only solution is to use compiler with C++11 support
@@ -184,53 +57,16 @@ The possible problems during the HepMC3 installation can be caused by
 
 ##  Usage examples
 
-HepMC3 is shipped with multiple example programs. These can be
-compiled during installation as described above or after the
-installation (for HepMC3 > 3.1.0). To compile the examples after the
-installation copy the installed directory with examples to desired
-directory and run CMake, e.g.
-```sh
-mkdir -p myexamples
-cd myexamples
-cp -r /usr/share/doc/HepMC3-3.3.2/examples ./
-cd examples
-cmake -D USE_INSTALLED_HEPMC3=ON CMakeLists.txt
-make
-```
-
-If CMake cannot locate your HepMC3 installation automatically, add `-D
-HepMC3_DIR=/path/to/hepmc3/cmake` to your CMake configuration
-command. Replace the placeholder with the path to the directory
-containing the installed `HepMC3Config.cmake` file.
-
-The examples use different HepMC3 components and external
-dependencies. To build and run all examples, install the required
-optional HepMC3 components, including ROOT I/O and the search library,
-together with the external dependencies required by individual
-examples, such as ROOT and the relevant Monte Carlo event generators.
-
-### Building and Running the `ConvertExample` with the output EDM4HEP
-
-Set up your favorite Key4hep nightly:
-```sh
-source /cvmfs/sw-nightlies.hsf.org/key4hep/setup.sh
-```
-or release:
-```sh
-source /cvmfs/sw.hsf.org/key4hep/setup.sh
-```
-
-Then build with Key4hep by adding the following flag to the `cmake`
-command:
-```
--D HEPMC3_ENABLE_EDM4HEP=ON -D HEPMC3_BUILD_EXAMPLES=ON
-```
-This flag will initiate some sanity checks. The converter resides in
-the example programs, therefore these also have to be turned on during
-the build.
+HepMC3 is shipped with multiple example programs, useful both to
+exemplify the API and possibly direct solutions to some event-handling
+tasks. For information on building and using the example programs, see
+[the dedicated examples page](EXAMPLES.md).
 
 
 ## Compatibility and deprecation notes
+
+This section documents I/O-format and code compatibility issues for
+HepMC users to be aware of:
 
 - The `IO_GenEvent` (HepMC2) and HEPEVT ASCII files produced by all
   HepMC3 versions should be readable by all HepMC3 versions and latest
