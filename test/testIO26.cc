@@ -1,9 +1,9 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
 //
-// -- Purpose: Test that an event read from an ASCII input file can be
+// -- Purpose: Test that an event read from an IO_GenEvent input file can be
 // serialized to and from protobuf and still be matched to the same event
 //
 

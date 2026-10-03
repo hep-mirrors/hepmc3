@@ -3,6 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2024 The HepMC collaboration (see AUTHORS for details)
 //
+// -- Purpose: Verifies vector operations and utilities for the FourVector class.
+//
 #include <iostream>
 #include <fstream>
 #include <vector>

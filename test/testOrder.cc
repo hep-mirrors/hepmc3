@@ -1,5 +1,7 @@
 // This file is part of HepMC
-// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
+//
+// -- Purpose: Verifies ordering of particles and vertices within an event.
 //
 #include "HepMC3/Attribute.h"
 #include "HepMC3/GenEvent.h"

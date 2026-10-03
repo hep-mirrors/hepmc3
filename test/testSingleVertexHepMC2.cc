@@ -1,7 +1,9 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
+//
+// -- Purpose: Verifies handling of single-vertex events in IO_GenEvent format.
 //
 #include "HepMC3/Print.h"
 #include "HepMC3/GenEvent.h"

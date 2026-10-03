@@ -3,6 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+// -- Purpose: Verifies conversion from IO_GenEvent to ROOT format and back.
+//
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/ReaderRootTree.h"
 #include "HepMC3/WriterRootTree.h"

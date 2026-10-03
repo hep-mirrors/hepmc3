@@ -1,7 +1,9 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
+//
+// -- Purpose: Verifies multi-threaded reader factory usage.
 //
 #if defined(__linux__) || defined(__darwin__)|| defined(__APPLE__) || defined(__FreeBSD__) || defined(__sun)
 #include "HepMC3/GenEvent.h"

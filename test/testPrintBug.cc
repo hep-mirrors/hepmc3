@@ -1,4 +1,6 @@
 //
+// -- Purpose: Reproduces a reported printing bug scenario.
+//
 // Thanks to Bob McElrath and Frank Siegert for this test
 // andrii.verbytskyi@mpp.mpg.gov, Nov. 2018
 
