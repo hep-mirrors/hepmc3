@@ -65,6 +65,11 @@ The standard scheme is as follows, with "physical" codes boldened:
 - 200+: not currently used by generator models, may be used for
   simulation- or user-specific purposes.
 
+Notes on generator-specific codes can be found on generator pages,
+e.g. for [Pythia8](https://pythia8.web.cern.ch/manuals/pythia8318/ParticleProperties.html)
+and [Herwig](https://herwig.hepforge.org/tutorials/faq/general.html#which-hepmc-status-codes-are-used-what-do-they-mean).
+
+
 ### Note on the physical status=1,2,4 codes
 
 Status codes 1, 2, or 4 *must* be set on all physical `GenParticle`
