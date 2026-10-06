@@ -1,4 +1,6 @@
 --------------------------  HepMC3.3.2 --------------------------
+2026-10-06 Andrii Verbytskyi
+  * Improvements of CMake: linting and fixes of typos
 2026-09-29 Andrii Verbytskyi
   * Add comments/documentation to C++ tests.
 2026-10-01 Andy Buckley
