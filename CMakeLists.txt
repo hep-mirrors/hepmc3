@@ -513,8 +513,10 @@ set(CPACK_PACKAGE_RELEASE 0)
 set(CPACK_PACKAGE_FILE_NAME "HepMC3")
 set(CPACK_PACKAGE_DESCRIPTION "Event record library for high energy physics Monte Carlo")
 
-set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
-set(CPACK_INSTALL_PREFIX "/usr")
+if(UNIX AND NOT APPLE)
+  set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")
+  set(CPACK_INSTALL_PREFIX "/usr")
+endif()
 set(CPACK_OUTPUT_FILE_PREFIX binpackages)
 
 #NSIS-specific settings
