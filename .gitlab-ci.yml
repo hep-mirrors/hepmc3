@@ -641,10 +641,10 @@ CentOS10-GNU-oldcmake-ranges:
 
 cmake_lint:
   stage: lint
-  variables: { OS: CentOS, FREL: 9 }
+  variables: { OS: Fedora, FREL: 44 }
   image: gitlab-registry.cern.ch/hepmc/hepmc3:${OS}_${FREL}
   needs:
-    - job: build_image_CentOS9
+    - job: build_image_Fedora44
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
@@ -659,11 +659,11 @@ cmake_lint:
 # Non-blocking until the tree is reformatted once with `cmake-format -i`.
 cmake_format:
   stage: lint
-  variables: { OS: CentOS, FREL: 9 }
+  variables: { OS: Fedora, FREL: 44 }
   image: gitlab-registry.cern.ch/hepmc/hepmc3:${OS}_${FREL}
   allow_failure: true
   needs:
-    - job: build_image_CentOS9
+    - job: build_image_Fedora44
   only:
     variables:
      - $CI_SERVER_HOST=="gitlab.cern.ch"
