@@ -7,7 +7,6 @@ set(HEPMC3_VERSION_MAJOR  3)
 set(HEPMC3_VERSION_MINOR  3)
 set(HEPMC3_VERSION_PATCH  1)
 
-set(CMAKE_VERBOSE_MAKEFILE OFF)
 #This module respects HFS, e.g. defines lib or lib64 when it is needed.
 include("GNUInstallDirs")
 #---Setting HepMC3 Build type-----------------------------------------------
@@ -90,8 +89,6 @@ set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # (but later on when installing)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
-
 # add the automatically determined parts of the RPATH
 # which point to directories outside the build tree to the install RPATH
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
@@ -100,6 +97,8 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
 if("${isSystemDir}" STREQUAL "-1")
    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+else()
+   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_FULL_LIBDIR}")
 endif()
 
 
@@ -116,7 +115,6 @@ set(HEPMC3_COMPONENTS "")
 if(HEPMC3_ENABLE_ROOTIO)
   list(APPEND CMAKE_PREFIX_PATH $ENV{ROOTSYS})
   list(APPEND CMAKE_PREFIX_PATH ${ROOT_DIR})
-  set(ROOT_CXX_FLAGS_BEFORE_ROOT "${ROOT_CXX_FLAGS}")
   find_package(ROOT REQUIRED COMPONENTS Core RIO Tree)
   if(ROOT_FOUND)
     message(STATUS "HepMC3: ROOT_FOUND=${ROOT_FOUND}")
@@ -508,9 +506,9 @@ set(CPACK_PACKAGE_NAME "HepMC3")
 set(CPACK_PACKAGE_VENDOR "HepMC3 Developers")
 #Should the version be defined above?
 set(CPACK_PACKAGE_VERSION 3)
-set(CPACK_PACKAGE_VERSION_MAJOR 3)
-set(CPACK_PACKAGE_VERSION_MINOR 3)
-set(CPACK_PACKAGE_VERSION_PATCH 1)
+set(CPACK_PACKAGE_VERSION_MAJOR ${HEPMC3_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${HEPMC3_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${HEPMC3_VERSION_PATCH})
 set(CPACK_PACKAGE_RELEASE 0)
 set(CPACK_PACKAGE_FILE_NAME "HepMC3")
 set(CPACK_PACKAGE_DESCRIPTION "Event record library for high energy physics Monte Carlo")

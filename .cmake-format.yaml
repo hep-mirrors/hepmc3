@@ -10,3 +10,13 @@ lint:
     - W0105 # String statement has no effect
     - R0912 # Too many branches in function
     - R0915 # Too many statements in function
+
+format:
+  line_width: 300      # the default is 80
+  tab_size: 2
+  dangle_parens: false
+  command_case: unchanged
+  keyword_case: unchanged
+markup:
+  enable_markup: false   # stops comment reformatting
+  canonicalize_hashrulers: false
