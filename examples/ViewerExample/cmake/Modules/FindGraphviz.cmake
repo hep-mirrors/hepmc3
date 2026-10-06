@@ -30,8 +30,8 @@ if (Graphviz_SEARCH_DIRS)
   find_library(Graphviz_GVC_LIBRARY NAMES gvc PATHS ${Graphviz_SEARCH_DIRS}  PATH_SUFFIXES lib lib64 NO_DEFAULT_PATH)
 else()
   find_path(Graphviz_INCLUDE_DIR graphviz/gvc.h PATH_SUFFIXES include)
-  find_library(Graphviz_CGRAPH_LIBRARY NAMES cgraph PATHS_SUFFIXES lib lib64)
-  find_library(Graphviz_GVC_LIBRARY NAMES gvc PATHS_SUFFIXES lib lib64)
+  find_library(Graphviz_CGRAPH_LIBRARY NAMES cgraph PATH_SUFFIXES lib lib64)
+  find_library(Graphviz_GVC_LIBRARY NAMES gvc PATH_SUFFIXES lib lib64)
 endif()
 
 set(Graphviz_VERSION_MAJOR 0)
@@ -63,7 +63,7 @@ check_cxx_source_compiles("#define _PACKAGE_ast 1\n${TEST_SOURCE}" TEST_SOURCE_A
 if (TEST_SOURCE_AST_COMPILES AND (NOT TEST_SOURCE_NOAST_COMPILES))
   set(Graphviz_DEFINES "_PACKAGE_ast=1;GRAPHVIZ_VERSION_CODE=${Graphviz_VERSION_CODE}")
 else()
-  set(Graphviz_DEFINES "_UNUSED_DUMMY_DEFINE;GRAPHVIZ_VERSION_CODE=${Graphviz_VERSION_CODE}")  
+  set(Graphviz_DEFINES "_UNUSED_DUMMY_DEFINE;GRAPHVIZ_VERSION_CODE=${Graphviz_VERSION_CODE}")
 endif()
 
 INCLUDE(FindPackageHandleStandardArgs)
@@ -76,7 +76,7 @@ if(Graphviz_FOUND AND NOT TARGET Graphviz::CGRAPH)
     set_target_properties(Graphviz::CGRAPH PROPERTIES
         IMPORTED_LOCATION "${Graphviz_CGRAPH_LIBRARY}"
         INTERFACE_INCLUDE_DIRECTORIES "${Graphviz_INCLUDE_DIRS}"
-        INTERFACE_COMPILE_DEFINITIONS "${Graphviz_DEFINES}"        
+        INTERFACE_COMPILE_DEFINITIONS "${Graphviz_DEFINES}"
     )
 endif()
 if(Graphviz_FOUND AND NOT TARGET Graphviz::GVC)

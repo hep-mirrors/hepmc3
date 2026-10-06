@@ -47,7 +47,6 @@ if(PYTHIA8_INCLUDE_DIR AND PYTHIA8_XMLDOC_DIR)
   if (resHEPMC3)
     set(Pythia8_HepMC3_FOUND TRUE)
   endif()
-  
 endif()
 
 # handle the QUIETLY and REQUIRED arguments and set PYTHIA8_FOUND to TRUE if

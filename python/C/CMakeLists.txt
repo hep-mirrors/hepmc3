@@ -1,1 +1,1 @@
-    bindings(${MAJ} ${MIN} )
+bindings(${MAJ} ${MIN} )

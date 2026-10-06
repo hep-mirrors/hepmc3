@@ -62,9 +62,9 @@ if (USE_INSTALLED_HEPMC3)
           endif()
           if ("${fl}" MATCHES   ".*\\+\\+29$" OR "${fl}" MATCHES   ".*\\+\\+2d$" )
             set(ROOT_CXX_STANDARD 29)
-          endif()          
+          endif()
           set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
-        endforeach(fl ${ROOT_CXX_FLAGS_LIST})
+        endforeach()
       endif()
     endif()
   endif()
@@ -101,7 +101,7 @@ else()
   set (HEPMC3_LOADABLE_LIBRARIES_DIR ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/)
 endif()
 foreach(fl ${${CMAKE_CXX_COMPILER_ID}_CXX_FLAGS_TO_CHECK})
-  CHECK_CXX_COMPILER_FLAG(${fl} CXX_COMPILER_SUPPORTS_${fl})
+  check_cxx_compiler_flag(${fl} CXX_COMPILER_SUPPORTS_${fl})
     if(CXX_COMPILER_SUPPORTS_${fl})
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${fl}")
     endif()
@@ -152,12 +152,12 @@ if (RERUN_BINDER AND ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
   endif()
   set(INCARG "")
   execute_process(COMMAND ${CMAKE_CXX_COMPILER} -v /dev/null -S ERROR_VARIABLE GCCSPEC OUTPUT_QUIET)
-  STRING(REGEX REPLACE "\r?\n" ";" GCCSPECV2 "${GCCSPEC}")
-  FOREACH(line ${GCCSPECV2})
+  string(REGEX REPLACE "\r?\n" ";" GCCSPECV2 "${GCCSPEC}")
+  foreach(line ${GCCSPECV2})
     string(REGEX MATCH "^LIBRARY_PATH.*"  GCCSPECV3 "${line}")
     string(REPLACE "LIBRARY_PATH=/"  "/" GCCSPECV4 "${GCCSPECV3}")
     if (GCCSPECV4)
-      STRING(REPLACE ":" ";--extra-arg=-I" INCARG "--extra-arg=-I${GCCSPECV4}")
+      string(REPLACE ":" ";--extra-arg=-I" INCARG "--extra-arg=-I${GCCSPECV4}")
       message(STATUS "HepMC3 python: INCARG=${INCARG}")
     endif()
   endforeach()
@@ -168,7 +168,7 @@ if (RERUN_BINDER AND ${CMAKE_CXX_COMPILER_ID} MATCHES "GNU")
       if (${_comp} STREQUAL " ")
         set(_comp "")
       else()
-        STRING(TOUPPER ${_comp} _COMP)
+        string(TOUPPER ${_comp} _COMP)
         set(EARG "--extra-arg=-DHEPMC3_${_COMP}")
       endif()
       configure_file("${_comp}includes.hpp.in" "${_comp}includes.hpp" IMMEDIATE @ONLY)
@@ -224,8 +224,8 @@ print(f'{pytag}-{abitag}-{s}')"
 endfunction()
 
 macro(bindings verin verminor)
-SET( Python_VERSION_MAJOR "0")
-SET( Python_VERSION_MINOR "0")
+set( Python_VERSION_MAJOR "0")
+set( Python_VERSION_MINOR "0")
 string(REPLACE "pypy" "" ver "${verin}")
 if (${verin} MATCHES pypy* )
   set(Python3_FIND_IMPLEMENTATIONS PyPy)
@@ -258,13 +258,13 @@ if (${ver} STREQUAL 3)
     find_package (Python3 3.${verminor} EXACT COMPONENTS  Interpreter Development.Module)
   endif()
   if (Python3_VERSION AND Python3_INCLUDE_DIRS AND Python3_EXECUTABLE  ) #something is set
-    SET( Python_VERSION       ${Python3_VERSION})
-    SET( Python_VERSION_MAJOR ${Python3_VERSION_MAJOR})
-    SET( Python_VERSION_MINOR ${Python3_VERSION_MINOR})
-    SET( Python_LIBRARIES     ${Python3_LIBRARIES})
-    SET( Python_SITEARCH      ${Python3_SITEARCH})
-    SET( Python_EXECUTABLE    ${Python3_EXECUTABLE})
-    SET( Python_INCLUDE_DIRS  ${Python3_INCLUDE_DIRS})
+    set( Python_VERSION       ${Python3_VERSION})
+    set( Python_VERSION_MAJOR ${Python3_VERSION_MAJOR})
+    set( Python_VERSION_MINOR ${Python3_VERSION_MINOR})
+    set( Python_LIBRARIES     ${Python3_LIBRARIES})
+    set( Python_SITEARCH      ${Python3_SITEARCH})
+    set( Python_EXECUTABLE    ${Python3_EXECUTABLE})
+    set( Python_INCLUDE_DIRS  ${Python3_INCLUDE_DIRS})
     #PYTHON < 3.9 IS UNSUPPORTED by pybind11 3.1.0
     if (Python_VERSION VERSION_LESS "3.9")
       # De-facto this is for Python3.6-3.9
@@ -351,7 +351,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
         COMMAND ${CMAKE_COMMAND}  -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/${_comp}/${CMAKE_SHARED_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_SHARED_LIBRARY_SUFFIX}
         COMMAND ${CMAKE_COMMAND}  -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/test/${CMAKE_SHARED_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_SHARED_LIBRARY_SUFFIX}
         COMMAND ${CMAKE_COMMAND}  -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/${CMAKE_IMPORT_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_IMPORT_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/${Python_VERSION}/pyHepMC3/${_comp}/${CMAKE_IMPORT_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_IMPORT_LIBRARY_SUFFIX}
-        COMMAND ${CMAKE_COMMAND}  -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/${CMAKE_IMPORT_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_IMPORT_LIBRARY_SUFFIX} ${CMAKE_CURRENT_SBINARY_DIR}/test/${CMAKE_IMPORT_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_IMPORT_LIBRARY_SUFFIX}        DEPENDS HepMC3${_comp}
+        COMMAND ${CMAKE_COMMAND}  -E copy  ${HEPMC3_LOADABLE_LIBRARIES_DIR}/${CMAKE_IMPORT_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_IMPORT_LIBRARY_SUFFIX} ${CMAKE_CURRENT_BINARY_DIR}/test/${CMAKE_IMPORT_LIBRARY_PREFIX}HepMC3${_comp}${CMAKE_IMPORT_LIBRARY_SUFFIX} DEPENDS HepMC3${_comp}
                 )
       endforeach()
     endif()
@@ -406,7 +406,7 @@ if ( Python_INCLUDE_DIRS AND Python_EXECUTABLE
         RENAME RECORD
         COMPONENT python${_comp})
     #Wheel is version dependent
-    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3${_dotcomp}.wheel" 
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/pyHepMC3${_dotcomp}.wheel"
 "Wheel-Version: 1.0
 Generator: cmake
 Root-Is-Purelib: false
@@ -451,7 +451,7 @@ Tag: ${PYTHON_WHEEL_TAG}
   endif()
   if(HEPMC3_ENABLE_TEST)
     if(USE_INSTALLED_HEPMC3)
-      ENABLE_TESTING()
+      enable_testing()
     endif()
     file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/../test/Pythia8ToHepMC3.py" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/test/")
     file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/../test/pyHepMC3TestUtils.py" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/test/")
@@ -465,19 +465,19 @@ Tag: ${PYTHON_WHEEL_TAG}
       )
       if(HEPMC3_ENABLE_PROTOBUFIO AND Protobuf_FOUND AND NOT WIN32)
         get_filename_component(pcdir ${Protobuf_PROTOC_EXECUTABLE} DIRECTORY)
-        SET_TESTS_PROPERTIES(  ${IMPL}${Python_VERSION}_${ptest}
+        set_tests_properties(  ${IMPL}${Python_VERSION}_${ptest}
                   PROPERTIES
                   ENVIRONMENT
                   "PATH=${pcdir};${Protobuf_INCLUDE_DIR}/../lib;${Protobuf_INCLUDE_DIR}/../lib64;${Protobuf_INCLUDE_DIR}/../bin;$ENV{PATH}"
                   )
       endif()
-    endforeach ( ptest ${HepMC_python_tests} )
+    endforeach()
   endif()
 else()
   message(STATUS "HepMC3 python: Python version ${ver}.${verminor} not found. Python bindings for version ${ver}.${verminor} disabled.")
 endif()
 unset(HEPMC3_Python_SITEARCH)
-endmacro(bindings)
+endmacro()
 
 
 set(NN  "A" "B" "C" "D")
@@ -488,12 +488,12 @@ string(REPLACE "," ";" TEMPVERSIONS ${HEPMC3_PYTHON_VERSIONS})
 list(SORT TEMPVERSIONS)
 
 list(LENGTH TEMPVERSIONS LL)
-MATH(EXPR LL "${LL}-1")
+math(EXPR LL "${LL}-1")
 
 foreach( ind RANGE 0 ${LL})
-    LIST(GET TEMPVERSIONS ${ind} tempver_0)
+    list(GET TEMPVERSIONS ${ind} tempver_0)
     if (tempver_0)
-    LIST(GET NN ${ind} tempver_1)
+    list(GET NN ${ind} tempver_1)
     string(REPLACE "." ";" MAJMIN "${tempver_0}.X.Y")
     list(GET MAJMIN 0 MAJ)
     list(GET MAJMIN 1 MIN)

@@ -1,0 +1,19 @@
+# Disabled checks are grouped by reason; "one day" and C++14/17 groups are candidates to re-enable.
+Checks: >-
+  *,
+  -altera*,-abseil*,-llvmlibc*,-fuchsia*,-android*,-boost*,
+  -cppcoreguidelines-pro-type-vararg,-modernize-loop-convert,-readability-identifier-length,-misc-const-correctness,
+  -readability-braces-around-statements,-google-readability-casting,-cppcoreguidelines-avoid-non-const-global-variables,-readability-duplicate-include,-cppcoreguidelines-pro-type-cstyle-cast,
+  -modernize-make-unique,-modernize-use-nodiscard,-modernize-use-transparent-functors,-modernize-use-scoped-lock,
+  -cert-err33-c,-cert-err34-c,-cert-err58-cpp,-cert-msc30-c,-cert-msc50-cpp,
+  -clang-analyzer-core.CallAndMessage,-clang-analyzer-optin.cplusplus.VirtualCall,-clang-analyzer-core.NonNullParamChecker,
+  -hicpp-vararg,-hicpp-avoid-c-arrays,-hicpp-no-array-decay,-hicpp-braces-around-statements,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-type-reinterpret-cast,-cppcoreguidelines-avoid-c-arrays,
+  -cppcoreguidelines-prefer-member-initializer,-cppcoreguidelines-narrowing-conversions,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-constant-array-index,
+  -readability-implicit-bool-conversion,-readability-magic-numbers,-readability-function-cognitive-complexity,
+  -readability-math-missing-parentheses,-readability-avoid-nested-conditional-operator,-readability-avoid-return-with-void-value,
+  -bugprone-assignment-in-if-condition,-bugprone-easily-swappable-parameters,-bugprone-narrowing-conversions,-bugprone-exception-escape,-bugprone-implicit-widening-of-multiplication-result,
+  -modernize-avoid-c-arrays,-modernize-use-trailing-return-type,-modernize-pass-by-value,
+  -misc-include-cleaner,-misc-no-recursion,-misc-use-internal-linkage,-misc-non-private-member-variables-in-classes,-misc-use-anonymous-namespace,
+  -performance-unnecessary-value-param,-performance-avoid-endl,-google-default-arguments,-llvm-prefer-static-over-anonymous-namespace,-llvm-include-order,
+  -google-build-using-namespace,-google-runtime-int,-concurrency-mt-unsafe

@@ -35,7 +35,7 @@ find_package_handle_standard_args(HepPDT
   VERSION_VAR HEPPDT_VERSION
 )
 
-if(HEPPDT_FOUND) 
+if(HEPPDT_FOUND)
   if (NOT TARGET HepPDT::HepPDT)
     add_library(HepPDT::HepPDT INTERFACE IMPORTED)
     set_target_properties(HepPDT::HepPDT PROPERTIES

@@ -1,6 +1,6 @@
 protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS HepMC3.proto)
 
-FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/HepMC3)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/HepMC3)
 
 add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/HepMC3/HepMC3.pb.h
   COMMAND ${CMAKE_COMMAND} -E copy ${PROTO_HDRS} ${CMAKE_CURRENT_BINARY_DIR}/HepMC3/
@@ -22,7 +22,7 @@ target_include_directories(HepMC3protobufIO PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<BUILD_INTERFACE:${Protobuf_INCLUDE_DIRS}>
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-  $<INSTALL_INTERFACE:include>)
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 target_link_libraries(HepMC3protobufIO HepMC3 protobuf::libprotobuf)
 target_compile_features(HepMC3protobufIO PUBLIC cxx_std_${PROTOBUF_CXX_STANDARD})
@@ -34,13 +34,15 @@ set_target_properties(HepMC3protobufIO
     ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
     LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
     RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-    EXPORT_NAME HepMC3::protobufIO)
+    EXPORT_NAME protobufIO)
 
 #---Install shared build products---------------------------------------------------
 install(TARGETS HepMC3protobufIO
   EXPORT HepMC3protobufIOTargets
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  COMPONENT protobufIOlibs)
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT protobufIOlibs
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT protobufIOlibs
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT protobufIOlibs
+  INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/HepMC3.proto
   DESTINATION ${CMAKE_INSTALL_DATADIR}/HepMC3/protobufIO
@@ -70,7 +72,7 @@ if (HEPMC3_BUILD_STATIC_LIBS)
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${Protobuf_INCLUDE_DIRS}>
-    $<INSTALL_INTERFACE:include>)
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
   set_target_properties(HepMC3protobufIO_static
     PROPERTIES
@@ -78,14 +80,14 @@ if (HEPMC3_BUILD_STATIC_LIBS)
       ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
       LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
       RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/$<0:>
-      EXPORT_NAME HepMC3::protobufIO_static)
+      EXPORT_NAME protobufIO_static)
   target_compile_features(HepMC3protobufIO_static PUBLIC cxx_std_${PROTOBUF_CXX_STANDARD})
 
 #---Install static build products---------------------------------------------------
   install(TARGETS HepMC3protobufIO_static
     EXPORT HepMC3protobufIOTargets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    COMPONENT protobufIOlibs)
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT protobufIOlibs
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
   # Alias for packages that include this as a sub-project but
   # want to use the namespaced target names
@@ -94,5 +96,6 @@ endif()
 
 set(CONFIG_INSTALL_DIR ${CMAKE_INSTALL_DATADIR}/HepMC3/cmake)
 install(EXPORT HepMC3protobufIOTargets
+  NAMESPACE HepMC3::
   DESTINATION ${CONFIG_INSTALL_DIR}
   COMPONENT protobufIOlibs)

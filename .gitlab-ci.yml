@@ -6,6 +6,7 @@ stages:
   - changelog
   - check_if_dockerfile_updated
   - build_docker_image
+  - lint
   - build
   - LCG
   - packaging
@@ -637,6 +638,42 @@ CentOS10-GNU-oldcmake-ranges:
       - *oldcmake
       - *oldstandaloneexamples
       - *oldstandalonepython
+
+cmake_lint:
+  stage: lint
+  variables: { OS: CentOS, FREL: 9 }
+  image: gitlab-registry.cern.ch/hepmc/hepmc3:${OS}_${FREL}
+  needs:
+    - job: build_image_CentOS9
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch"
+  script:
+    - |
+      if ! command -v cmake-lint >/dev/null 2>&1; then
+        echo "cmake-lint is not available, skipping."
+        exit 0
+      fi
+      git ls-files -z -- 'CMakeLists.txt' '*/CMakeLists.txt' '*.cmake' '*.cmake.in' | xargs -0 cmake-lint
+
+# Non-blocking until the tree is reformatted once with `cmake-format -i`.
+cmake_format:
+  stage: lint
+  variables: { OS: CentOS, FREL: 9 }
+  image: gitlab-registry.cern.ch/hepmc/hepmc3:${OS}_${FREL}
+  allow_failure: true
+  needs:
+    - job: build_image_CentOS9
+  only:
+    variables:
+     - $CI_SERVER_HOST=="gitlab.cern.ch"
+  script:
+    - |
+      if ! command -v cmake-format >/dev/null 2>&1; then
+        echo "cmake-format is not available, skipping."
+        exit 0
+      fi
+      git ls-files -z -- 'CMakeLists.txt' '*/CMakeLists.txt' '*.cmake' '*.cmake.in' | xargs -0 cmake-format --check
 
 Gentoo-Portage:
   stage: packaging

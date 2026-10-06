@@ -76,7 +76,7 @@ unset(zstd_STATIC_LIBRARY_SUFFIX)
 
 
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(zstd REQUIRED_VARS zstd_INCLUDE_DIR zstd_LIBRARY
+find_package_handle_standard_args(zstd REQUIRED_VARS zstd_INCLUDE_DIR zstd_LIBRARY
                                VERSION_VAR zstd_VERSION
                                )
 
