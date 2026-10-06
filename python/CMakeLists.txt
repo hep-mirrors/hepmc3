@@ -456,7 +456,7 @@ Tag: ${PYTHON_WHEEL_TAG}
     file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/../test/Pythia8ToHepMC3.py" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/test/")
     file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/../test/pyHepMC3TestUtils.py" DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/test/")
     foreach ( ptest ${HepMC_python_tests} )
-      file(GLOB INPUT${ptest}  "${CMAKE_CURRENT_SOURCE_DIR}/../test/input${ptest}*" )
+      file(GLOB INPUT${ptest}  "${CMAKE_CURRENT_SOURCE_DIR}/../test/input${testname}*" )
       file(COPY ${INPUT${ptest}} DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/test")
       configure_file("${CMAKE_CURRENT_SOURCE_DIR}/../test/${ptest}.py" "${CMAKE_CURRENT_BINARY_DIR}/test/${ptest}.py" COPYONLY)
       add_test(NAME ${IMPL}${Python_VERSION}_${ptest}
