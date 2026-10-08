@@ -119,9 +119,7 @@ endif()
 
 
 add_subdirectory(ConvertExample)
-if (HEPMC3_ENABLE_HDF5IO)
-  add_subdirectory(ConvertExampleLHEF)
-endif()
+add_subdirectory(ConvertExampleLHEF)
 add_subdirectory(Pythia8Example)
 add_subdirectory(LHEFExample)
 if (HEPMC3_ENABLE_SEARCH)
