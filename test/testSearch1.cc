@@ -1,3 +1,5 @@
+// -- Purpose: Verifies search/Relatives functionality for locating related particles and vertices.
+//
 #include "HepMC3/GenEvent.h"
 #include "HepMC3/GenParticle.h"
 #include "HepMC3/GenVertex.h"

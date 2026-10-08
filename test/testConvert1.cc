@@ -3,6 +3,8 @@
 // This file is part of HepMC
 // Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
 //
+// -- Purpose: Verifies conversion of HepMC3::GenEvent to HepMC::GenEvent in memory
+//
 #include "HepMC3/ReaderAsciiHepMC2.h"
 #include "HepMCCompatibility.h"
 #include "HepMC3TestUtils.h"

@@ -14,23 +14,30 @@ stages:
 changelog_check:
   stage: changelog
   image: gitlab-registry.cern.ch/sft/docker/alma9-core:latest
+  allow_failure: true
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - ChangeLog
+      variables:
+        CHANGELOG_CHANGED: "true"
       when: always
     - if: '$CI_MERGE_REQUEST_IID'
       when: always
   script:
     - |
-      if [ -n "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" ]; then
-        git fetch --no-tags origin "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}" --depth=1
-        if git diff --name-only "origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}"...HEAD -- ChangeLog | grep -q .; then
-          echo "Changelog entry present."
-        else
-          echo "ERROR: Merge requests must include a ChangeLog entry before they are Ready."
-          exit 1
-        fi
+      if [ "${CHANGELOG_CHANGED:-}" = "true" ]; then
+        echo "This merge request changes the ChangeLog."
       else
-        echo "Not a merge request pipeline; skipping changelog enforcement."
+        case ",${CI_MERGE_REQUEST_LABELS:-}," in
+          *,skip-changelog,*)
+            echo "This merge request has the skip-changelog label, so no ChangeLog change is needed."
+            ;;
+          *)
+            echo "ERROR: Add a ChangeLog entry, or add the skip-changelog label if no entry is needed."
+            exit 1
+            ;;
+        esac
       fi
 
 LCG_x86_64-alma9:
@@ -273,6 +280,10 @@ EDM4HEP-CVMFS:
 
 ###########################################################################
 #Check commit messages
+check_commit_Fedora45:
+  variables: { OS: Fedora, FREL: 45}
+  extends: .check_commit
+
 check_commit_Gentoo:
   variables: { OS: Gentoo, FREL: 0}
   extends: .check_commit
@@ -335,6 +346,12 @@ check_commit_Archlinux0:
 
 ###########################################################################
 #Build images
+build_image_Fedora45:
+  variables: { OS: Fedora, FREL: 45}
+  extends: .build_image
+  needs:
+    - job: check_commit_Fedora45
+
 build_image_Gentoo:
   timeout: 2h
   variables: { OS: Gentoo, FREL: 0}
@@ -427,6 +444,12 @@ build_image_Archlinux0:
     - job: check_commit_Archlinux0
 
 ###########################################################################
+Fedora45-GNU-pypy:
+  variables: { OS: Fedora, FREL: 45, TOOLSET: GNU,  EXTRACMAKEFLAGS: "-DHEPMC3_PYTHON_VERSIONS=3,pypy3"}
+  extends: .any-cmake
+  needs:
+    - job: build_image_Fedora45
+
 Gentoo-GNU:
   variables: { OS: Gentoo, FREL: 0, TOOLSET: GNU, EXTRACMAKEFLAGS: -DHEPMC3_ENABLE_PROTOBUFIO=OFF}
   extends: .any-cmake

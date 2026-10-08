@@ -1,13 +1,13 @@
 // -*- C++ -*-
 //
 // This file is part of HepMC
-// Copyright (C) 2014-2023 The HepMC collaboration (see AUTHORS for details)
+// Copyright (C) 2014-2026 The HepMC collaboration (see AUTHORS for details)
 //
-// -- Purpose: Test that we can correctly read ASCII events with additional
-// whitespace
+// -- Purpose: Test that we can correctly read asciiv3 files with additional
+// whitespaces
 //
 
-// These are the only headers in ReaderPlugin, so including these firstmakes
+// These are the only headers in ReaderPlugin, so including these first makes
 // sure the hack below doesn't leak out of the ReaderPlugin header
 #include "HepMC3/Print.h"
 #include "HepMC3/Reader.h"

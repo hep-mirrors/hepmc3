@@ -443,6 +443,16 @@ if(MEMORYCHECK_COMMAND)
      file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/intelHepMC3.supp" "{\n<HepMC3_at_Linux_with_Intel_1>\nMemcheck:Addr32\nfun:__intel_*\n}\n{\n<HepMC3_at_Linux_with_Intel_2>\nMemcheck:Cond\nfun:*strchr\n}\n"  )
      set( MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --suppressions=${CMAKE_CURRENT_BINARY_DIR}/IntelHepMC3.supp")
   endif()
+  if (HEPMC3_ENABLE_PROTOBUFIO)
+#protobuf/abseil register their descriptor tables in library-load-time static initializers;
+#the "possibly lost" blocks they allocate live for the process lifetime and are not real leaks.
+     file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/protobufHepMC3.supp"
+"{\n<HepMC3_protobuf_possibly_lost_1>\nMemcheck:Leak\nmatch-leak-kinds: possible\nfun:_Znwm\nobj:*libabsl_raw_hash_set*\nobj:*libabsl_raw_hash_set*\nfun:*MessageFactory*InternalRegisterGeneratedFile*\nobj:*libprotobuf*\nfun:call_init\nfun:call_init\nfun:_dl_init\nobj:*ld-linux*\n}\n\
+{\n<HepMC3_protobuf_possibly_lost_2>\nMemcheck:Leak\nmatch-leak-kinds: possible\nfun:_Znwm\nobj:*libprotobuf*\nfun:*DescriptorPool*Tables*C1Ev\nfun:*DescriptorPool*C1E*\nfun:*DescriptorPool*internal_generated_pool*\nfun:*DescriptorPool*InternalAddGeneratedFile*\nfun:*AddDescriptors*\nobj:*libprotobuf*\nfun:call_init\nfun:call_init\nfun:_dl_init\nobj:*ld-linux*\n}\n\
+{\n<HepMC3_protobuf_possibly_lost_3>\nMemcheck:Leak\nmatch-leak-kinds: possible\nfun:_Znwm\nobj:*libabsl_raw_hash_set*\nobj:*libabsl_raw_hash_set*\nfun:*DescriptorPool*Tables*C1Ev\nfun:*DescriptorPool*C1E*\nfun:*DescriptorPool*internal_generated_pool*\nfun:*DescriptorPool*InternalAddGeneratedFile*\nfun:*AddDescriptors*\nobj:*libprotobuf*\nfun:call_init\nfun:call_init\nfun:_dl_init\nobj:*ld-linux*\n}\n"
+     )
+     set( MEMORYCHECK_COMMAND_OPTIONS  "${MEMORYCHECK_COMMAND_OPTIONS} --suppressions=${CMAKE_CURRENT_BINARY_DIR}/protobufHepMC3.supp")
+  endif()
 else()
   message(STATUS "HepMC3 test: valgrind package not found or disabled.  memory check tests disabled.")
 endif()
@@ -470,12 +480,11 @@ if(MEMORYCHECK_COMMAND)
     set( HepMC_memcheck_tests ${HepMC_memcheck_tests} ${HepMC_protobuf_tests} )
   endif()
   list(REMOVE_ITEM HepMC_memcheck_tests testFourVector )
-#The story behind is complicated. It seems that on some platforms valgind dislikes the comparison of infinities.
+  # The story behind this is complicated. It seems that on some platforms valgrind dislikes the comparison of infinities.
   foreach ( test ${HepMC_memcheck_tests} )
     add_memcheck_test( ${test} )
     set_tests_properties(memcheck_${test} PROPERTIES DEPENDS ${test})
   endforeach ( test ${HepMC_memcheck_tests} )
-
   set(io32_memcheck_command "${MEMORYCHECK_COMMAND} ${MEMORYCHECK_COMMAND_OPTIONS}")
   separate_arguments(io32_memcheck_command)
   foreach(case ${testIO32_cases})
@@ -483,4 +492,10 @@ if(MEMORYCHECK_COMMAND)
     hepmc_set_test_environment(memcheck_testIO32_${case} "${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_LIBDIR}/")
     set_tests_properties(memcheck_testIO32_${case} PROPERTIES DEPENDS testIO32_${case})
   endforeach()
+endif()
+
+
+# HepMC3-config tests
+if(NOT WIN32)
+  add_test(NAME testHepMC3config COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/testHepMC3config ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR})
 endif()
