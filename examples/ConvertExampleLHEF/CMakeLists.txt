@@ -39,6 +39,7 @@ set_target_properties(convert_example_LHEF.exe PROPERTIES RUNTIME_OUTPUT_DIRECTO
 if (USE_INSTALLED_HEPMC3)
   install(TARGETS convert_example_LHEF.exe DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
+
 #This option is for developers only
 if ( HEPMC3_USE_GENGETOPT )
   find_program(GENGETOPT gengetopt)

@@ -28,7 +28,6 @@ std::shared_ptr<T> get_input_file(const char* name, const bool input_is_stdin) {
     const std::string n(name);
     return (input_is_stdin?std::make_shared<T>(std::cin):std::make_shared<T>(n));
 }
-
 template <class T>
 std::shared_ptr<T> get_output_file(const char* name) {
     const std::string n(name);
@@ -41,9 +40,9 @@ int main(int argc, char** argv)
     if (cmdline_parser (argc, argv, &ai) != 0) {
         exit(1);
     }
-
     auto validarguments = ( ai.inputs_num == 2 &&  std::string(ai.output_format_arg) !=  "none") ||
                 ( ai.inputs_num == 1 && ( std::string(ai.output_format_arg) ==  "none"  ));
+
     if ( !validarguments )
     {
         printf("Exactly two arguments are requred: the name of input and output files if the output format in not \"none\"\n");
@@ -142,7 +141,6 @@ int main(int argc, char** argv)
         exit(2);
         break;
     }
-
     if (output_file)
     {
         output_file->heprup = input_file->heprup;
