@@ -117,6 +117,7 @@ endif()
 
 
 add_subdirectory(ConvertExample)
+add_subdirectory(ConvertExampleLHEF)
 add_subdirectory(Pythia8Example)
 add_subdirectory(LHEFExample)
 if (HEPMC3_ENABLE_SEARCH)
