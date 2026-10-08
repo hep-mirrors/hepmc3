@@ -32,6 +32,7 @@ if(zstd_FOUND)
   target_link_libraries(convert_example_LHEF.exe PRIVATE zstd::libzstd_shared)
   target_compile_definitions(convert_example_LHEF.exe PRIVATE HEPMC3_USE_COMPRESSION HEPMC3_ZSTD_SUPPORT=1)
 endif()
+
 set_target_properties(convert_example_LHEF.exe PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/outputs/${CMAKE_INSTALL_BINDIR}/$<0:>)
 
 # installs
@@ -57,4 +58,5 @@ if ( HEPMC3_USE_GENGETOPT )
   add_custom_target( cmdlineoptionsLHEF DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.h)
   add_dependencies(  convert_example_LHEF.exe cmdlineoptionsLHEF )
 endif()
+
 
