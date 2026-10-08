@@ -74,7 +74,6 @@ int main(int argc, char** argv)
     }
 #endif
 
-
     bool ignore_writer = false;
     switch (format_map.at(std::string(ai.input_format_arg)))
     {
