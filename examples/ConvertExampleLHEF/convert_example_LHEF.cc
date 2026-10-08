@@ -6,7 +6,6 @@
 /// @example convert_example_LHEF.cc
 /// @brief Utility to convert between different types of LHE event records.
 ///
-
 #include "HepMC3/LHEF.h"
 #if HEPMC3_USE_COMPRESSION
 #include "HepMC3/LHEFGZ.h"
