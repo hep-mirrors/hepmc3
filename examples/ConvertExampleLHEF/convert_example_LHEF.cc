@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 
     if ( !validarguments )
     {
-        printf("Exactly two arguments are requred: the name of input and output files if the output format in not \"none\"\n");
+        printf("Exactly two arguments are requred: the name of input and output files if the output format in not \"none\" \n");
         printf("In case the output format is \"none\" exactly one argument should be given: the name of input file.\n");
         exit(1);
     }
