@@ -1,11 +1,11 @@
 version "3.3.2"
 package "convert_example_LHEF"
-purpose "Convert between different file formats of LHE event records.
+purpose "Convert between different file formats of LHE event record.
 Example:
         convert_example_LHEF -i lhef -o lhefgz input.lhef output.lhefgz
         convert_example_LHEF -i lhef -o none input.lhef
 "
-option "input-format" i "Input format" string required values="lhef","lhefgz","lheflzma","lhefbz2","lhefzstd"
+option "input-format" i "Input format" string required values= "lhef","lhefgz","lheflzma","lhefbz2","lhefzstd"
 option "output-format" o "Output format" string required values="lhef","lhefgz","lheflzma","lhefbz2","lhefzstd","none"
 option "strict-read" -  "Exit in case of reading broken event." optional long default="0"
 option "events-limit" - "Limit of events to read from input" optional long default="100000000"

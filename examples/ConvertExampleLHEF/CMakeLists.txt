@@ -1,3 +1,4 @@
+
 set(basic_sources   ${CMAKE_CURRENT_SOURCE_DIR}/convert_example_LHEF.cc
                     ${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c )
 set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/cmdline.c PROPERTIES LANGUAGE CXX SKIP_LINTING ON)

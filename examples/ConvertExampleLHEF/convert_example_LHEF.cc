@@ -58,17 +58,18 @@ int main(int argc, char** argv)
         { "lhefzstd", formats::lhefzstd },
         { "none", formats::none }
     };
-    long int events_parsed = 0;
-    const long int events_limit = ai.events_limit_arg;
-    const long int first_event_number = ai.first_event_number_arg;
-    const long int last_event_number = ai.last_event_number_arg;
-    const long int print_each_events_parsed = ai.print_every_events_parsed_arg;
+
+    long int  events_parsed = 0;
+    const long int  events_limit = ai.events_limit_arg;
+    const long int  first_event_number = ai.first_event_number_arg;
+    const long int  last_event_number = ai.last_event_number_arg;
+    const long int  print_each_events_parsed = ai.print_every_events_parsed_arg;
 
     std::shared_ptr<ReaderBase>      input_file;
     const bool input_is_stdin = (std::string(ai.inputs[0]) == std::string("-"));
     if (input_is_stdin) std::ios_base::sync_with_stdio(false);
 #ifdef _LIBCPP_VERSION
-    if ( input_is_stdin ) {
+    if (input_is_stdin) {
         printf("The program cannot process inputs from standard input as std::ios_base::sync_with_stdio(bool) is not implemented in libc++, please use another C++ standard library.\n");
         exit(4);
     }
@@ -155,7 +156,7 @@ int main(int argc, char** argv)
     {
         const bool res_read = input_file->readEvent();
 
-        if ( !res_read ) {
+        if (!res_read) {
             printf("End of file reached. Exit.\n");
             break;
         }
@@ -172,7 +173,7 @@ int main(int argc, char** argv)
         }
         ++events_parsed;
         if( events_parsed%print_each_events_parsed == 0 ) printf("Events parsed: %li\n", events_parsed);
-        if ( events_parsed >= events_limit ) {
+        if( events_parsed >= events_limit ) {
             printf("Event limit reached:->events_parsed(%li) >= events_limit(%li)<-. Exit.\n", events_parsed, events_limit);
             break;
         }
