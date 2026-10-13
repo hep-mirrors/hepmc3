@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.10...4.4)
 #Because of LZMA targets
 if (HEPMC3_TEST_LZMA)
   if(${CMAKE_VERSION} VERSION_LESS "3.14")
