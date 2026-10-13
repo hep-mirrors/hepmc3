@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.10...4.4)
 add_executable(basic_tree.exe ${CMAKE_CURRENT_SOURCE_DIR}/basic_tree.cc)
 target_link_libraries(basic_tree.exe HepMC3::HepMC3 HepMC3::search ROOT::Tree ROOT::RIO ROOT::Core)
 target_compile_features(basic_tree.exe PUBLIC cxx_std_${ROOT_CXX_STANDARD})
