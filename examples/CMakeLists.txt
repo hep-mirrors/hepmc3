@@ -1,6 +1,6 @@
 # building examples
 #------------------
-cmake_minimum_required(VERSION 3.10.0...4.0.3)
+cmake_minimum_required(VERSION 3.10...4.4)
 include_directories(${PROJECT_SOURCE_DIR}/include )
 include(CheckIPOSupported)
 
@@ -117,6 +117,7 @@ endif()
 
 
 add_subdirectory(ConvertExample)
+add_subdirectory(ConvertExampleLHEF)
 add_subdirectory(Pythia8Example)
 add_subdirectory(LHEFExample)
 if (HEPMC3_ENABLE_SEARCH)
