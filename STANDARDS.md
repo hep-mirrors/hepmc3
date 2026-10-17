@@ -1,11 +1,18 @@
 # HepMC event-coding standards
 
 HepMC (all versions) is a general framework for encoding event graphs
-simulated/calculated via Monte-Carlo generators of all types. To be
-useful for further processing in "downstream" codes, though -- for
+simulated/calculated via Monte-Carlo generators of all types. However,
+to be useful for further processing in "downstream" codes -- for
 additions and amendments to the modelling, for connection to
 experimental detector-simulation, and for MC "truth" analysis --
-events must respect several standard conventions.
+events must respect several standard conventions established by the
+community over years via several rounds of consultation processes.
+
+We document these conventions here. Note that the HepMC library itself
+generally does not check or enforce these standards, due to both the
+computational cost of checks and, in many cases, their undecidability
+by automated means. Event-authoring codes are therefore generally
+responsible for appropriate standards-compliance.
 
 
 ## Graph structure
