@@ -161,14 +161,13 @@ undefined state. One historically agreed vertex-status numbering is:
 - 5: hadronic decays: vertices where unstable hadrons decay into
   further unstable or final-state particles.
 
-This scheme is notably incomplete, for example missing codes for
-pile-up interactions (HepMC is usually but not *necessarily* used for
-single beam-particle interactions) and electroweak
-corrections. Collider-physics users should not currently rely on vertex
-status being consistently set, or set at all, between generators.
+Implementation of this scheme is patchy across collider-physics
+generators and generally cannot be relied upon: we note it here as
+information as a starting point for any future attempts to establish a
+vertex-status standard. Note that the
+[NuHepMC](https://arxiv.org/abs/2310.13211) standard for neutrino
+physics uses an alternative and incompatible vertex-status scheme.
 
-Note that the [NuHepMC](https://arxiv.org/abs/2310.13211) standard for
-neutrino physics uses an alternative vertex-status scheme.
 
 Proposals for further standardisation should be made to the HepMC
 development team and/or community MC forums such as the [LPCC MC
