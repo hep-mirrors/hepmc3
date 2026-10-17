@@ -1,6 +1,6 @@
 #project(pyHepMC3 CXX)
 #Should be fixed
-cmake_minimum_required(VERSION 3.10.0...4.0.3)
+cmake_minimum_required(VERSION 3.10...4.4)
 if(${CMAKE_VERSION} VERSION_LESS "3.14.00")
   SET_PROPERTY (GLOBAL PROPERTY CMAKE_ROLE "PROJECT")
 endif()
