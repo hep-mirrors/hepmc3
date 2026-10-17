@@ -53,13 +53,16 @@ The standard scheme is as follows, with "physical" codes boldened:
 - **1:** a stable final-state particle from the perspective of the
   current generator (it may also include physically unstable particles
   that are to be decayed by later processing).
-- **2:** a decayed particle with well-defined momentum and flavour
+- **2:** a decayed particle with well-defined momentum and quantum
   state, i.e. which is consistent with further status=1,2 decay
   products.
-- 3: historically a "documentation entry", though this term was never
-  defined. It is often taken to mean a "matrix-element" particle
-  directly connected to the hard-process calculation. Particles with
-  this status should generally not be used in physics analysis.
+- 3: a legacy code, historically described as a "documentation entry".
+  This term was never defined in physics terms, though was used to
+  indicate "matrix-element" particles directly connected to the
+  hard-process calculation, in several legacy codes. As an unreliable
+  and physically undefined code, this is not generally for use in
+  physics analysis, and is not recommended for use by modern event
+  writers.
 - **4:** an incoming beam/collision particle. This status code should
   be set to disambiguate unusual beam configurations and cases where
   the beam particles cannot be the first two particles in the event
@@ -85,9 +88,11 @@ lab-frame momenta and a pure quantum or semi-classical state.
 
 Disjoint mass and lifetime eigenstates like $K^0_{S/L}$ vs
 $K^0/\bar{K^0}$ may both be given status=2, but may require care in
-downstream processing; event-writers should be aware of potential
+downstream processing. Event-writers should be aware of potential
 issues for users reliant on mass or mean-lifetime checks against the
-[PDG database](https://pdg.lbl.gov/).
+[PDG database](https://pdg.lbl.gov/). In specific case of neutral
+kaons, decays should proceed explicitly via the S/L eigenstates
+with defined species lifetime (and mass).
 
 ### Note on status=3
 
