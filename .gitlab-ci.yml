@@ -619,6 +619,39 @@ CentOS10-GNU-cmake-ranges:
       - *standalone
 
 
+# Build with the latest CMake release. CMake and all the dependencies come from
+# conda-forge (CI/conda-forge/pixi.toml) and are not locked, so this job follows
+# new CMake 4 releases without edits and tests the upper end of the policy range
+# given to cmake_minimum_required.
+conda-forge-GNU-cmake-latest:
+  variables: { OS: conda-forge, FREL: latest, TOOLSET: GNU,  EXTRACMAKEFLAGS: }
+  extends: .any
+  # Pull the image through the cache of the CERN registry.
+  # cf. https://kubernetes.docs.cern.ch/docs/registry/quickstart/#pull-through-caches
+  image: registry.cern.ch/ghcr.io/prefix-dev/pixi:latest
+  # The environment is not locked, so a new release of any dependency can break this job.
+  allow_failure: true
+  script:
+      # CMake rejects include directories of imported targets (e.g. ROOT) that are inside
+      # the source directory, so the environment cannot be in the default CI/conda-forge/.pixi.
+      - pixi config set --global detached-environments true
+      - eval "$(pixi shell-hook --manifest-path CI/conda-forge/pixi.toml)"
+      # FindPythia8.cmake looks in /usr unless told otherwise.
+      - export PYTHIA8_ROOT_DIR=$CONDA_PREFIX
+      - *ex
+      - *cmake
+      - *standalone
+
+
+# The same build on linux-aarch64. Pixi selects the platform of the runner.
+conda-forge-aarch64-GNU-cmake-latest:
+  extends: conda-forge-GNU-cmake-latest
+  # OS is part of the cache key, so the two architectures do not share a ccache.
+  variables: { OS: conda-forge-aarch64 }
+  tags:
+    - k8s-arm
+
+
 CentOS10-GNU-oldcmake-ranges:
   stage: LCG
   needs:

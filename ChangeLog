@@ -1,4 +1,8 @@
 --------------------------  HepMC3.3.2 --------------------------
+2026-10-01 Matthew Feickert
+  * Allow for CMake policies to be in the range `3.10...4.4` for all uses of `cmake_minimum_required` with a policy range.
+2026-10-02 Matthew Feickert
+  * Add a CI job that builds with the latest CMake release from conda-forge.
 2026-09-29 Andrii Verbytskyi
   * Add comments/documentation to C++ tests.
 2026-10-01 Andy Buckley
@@ -7,6 +11,9 @@
   * Make the translation of LHE weight structure to HepMC weight names more compliant with the arXiv:2203.08230 standard and downstream tools.
 2026-09-22 Andrii Verbytskyi
   * Added Fedora45 jobs to CI.
+  * Added Fedora45 to CI
+2026-09-25 Andrii Verbytskyi
+  * Add examples/convert_example_LHEF, the LHEF counterpart of examples/convert_example  to convert between (potentially multiple) LHEf foramts.
 2026-09-24 Andrii Verbytskyi
   * Update the logic of defining the C++ standard for each component.
 2026-09-24 Dmitri Konstantinov
