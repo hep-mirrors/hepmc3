@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [3.3.2] - Unreleased
 
 ### Added
+- Add a CI job that builds with the latest CMake release from conda-forge. (Matthew Feickert)
 - Add `ReaderAscii` tests for event positions, position reset, invalid headers, and read/write round trips. (Dmitri Konstantinov)
 - Add Python compressed I/O helpers `ReaderGZ` and `WriterGZ` for binding compressed input/output streams through Python compression modules. (Andrii Verbytskyi)
 - Add comments/documentation to C++ tests. (Andrii Verbytskyi)
@@ -23,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixes for `ReaderLHEF` to properly report beams from LHE init block instead of first particles in event record.  Now raise an error if there are fewer particles than beams in the event.
 
 ### Changed
+- Allow for CMake policies to be in the range `3.10...4.4` for all uses of `cmake_minimum_required` with a policy range. (Matthew Feickert)
 - Update the logic of defining the C++ standard for each component. (Andrii Verbytskyi)
 - Report event-header parsing errors instead of returning an empty event as a success. (Dmitri Konstantinov)
 - Add CI for Gentoo linux which tests the CMake configuration randomly. (Alexander Puck Neuwirth)
