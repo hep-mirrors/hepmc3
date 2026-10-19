@@ -9,6 +9,8 @@
 
 #include "HepMC3/Units.h"
 #include "HepMC3/GenEvent.h"
+#include "HepMC3/GenParticle.h"
+#include "HepMC3/GenVertex.h"
 using namespace HepMC3;
 double conversion_factor( Units::MomentumUnit from, Units::MomentumUnit  to )
 {
@@ -95,6 +97,33 @@ int main()
         ++err;
         std::cerr << "wrong conversion factor " << cf
                   << " for MM to CM - should be 0.1 \n";
+    }
+
+    // check that set_units also converts the event position (root vertex)
+    GenEvent evt2(Units::GEV, Units::CM);
+    GenParticlePtr beam = std::make_shared<GenParticle>(FourVector(0.0, 0.0, 7000.0, 7000.0), 2212, 4);
+    GenVertexPtr v1 = std::make_shared<GenVertex>(FourVector(0.0, 0.0, 2.0, 0.0));
+    v1->add_particle_in(beam);
+    evt2.add_vertex(v1);
+    evt2.shift_position_to(FourVector(0.0, 0.0, 1.0, 0.0));
+    evt2.set_units(Units::GEV, Units::MM);
+    if( neq(evt2.event_pos().z(), 10.0) )
+    {
+        ++err;
+        std::cerr << "wrong event position " << evt2.event_pos().z()
+                  << " after set_units from CM to MM - should be 10 \n";
+    }
+    if( neq(beam->production_vertex()->position().z(), 10.0) )
+    {
+        ++err;
+        std::cerr << "wrong beam production vertex position " << beam->production_vertex()->position().z()
+                  << " after set_units from CM to MM - should be 10 \n";
+    }
+    if( neq(v1->position().z(), 30.0) )
+    {
+        ++err;
+        std::cerr << "wrong vertex position " << v1->position().z()
+                  << " after set_units from CM to MM - should be 30 \n";
     }
 
     return err;

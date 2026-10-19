@@ -406,6 +406,10 @@ void GenEvent::set_units(Units::MomentumUnit new_momentum_unit, Units::LengthUni
     }
 
     if ( new_length_unit != m_length_unit ) {
+        // The root vertex holds the event position and is not in m_vertices
+        FourVector &rootpos = m_rootvertex->m_data.position;
+        if ( !rootpos.is_zero() ) Units::convert( rootpos, m_length_unit, new_length_unit );
+
         for (GenVertexPtr& v: m_vertices) {
             FourVector &fv = v->m_data.position;
             if ( !fv.is_zero() ) Units::convert( fv, m_length_unit, new_length_unit );

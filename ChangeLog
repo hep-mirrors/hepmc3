@@ -1,4 +1,6 @@
 --------------------------  HepMC3.3.2 --------------------------
+2026-10-16 Juan Miguel Carceller
+  * Fix GenEvent::set_units to convert the event position when changing length units.
 2026-10-01 Matthew Feickert
   * Allow for CMake policies to be in the range `3.10...4.4` for all uses of `cmake_minimum_required` with a policy range.
 2026-10-02 Matthew Feickert
