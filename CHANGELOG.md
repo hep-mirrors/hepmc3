@@ -164,9 +164,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Add Python test with attributes. (Andrii Verbytskyi)
 
 ### Fixed
-- ReaderLHEF was fixed for to treat correctly more complicated input. Inspired by discussion with Bryan Foo and Christopher Palmer.	(Andrii Verbytskyi)
+- `ReaderLHEF` was fixed for to treat correctly more complicated input. Inspired by discussion with Bryan Foo and Christopher Palmer.	(Andrii Verbytskyi)
 
 ### Changed
+- Documentation and copyright years updated. (Andrii Verbytskyi)
 - Python bindings regenerated with binder 1.1.0 and the pybind11 copy updated to 2.6.0. (Andrii Verbytskyi)
 - Removed `#ifdef`s around the functions that had to be excluded from bindings, but binder 1.0.0 was not doing. (Andrii Verbytskyi)
 - Updates to many CMake and Python scripts. (Marian Heil)
